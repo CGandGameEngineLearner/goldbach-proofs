@@ -1,10 +1,12 @@
 import Mathlib
 
+set_option maxRecDepth 200000 in
+set_option maxHeartbeats 400000 in
 theorem PEqualNP.Outside.L_quadratic_primes_dyadic_scale_gap :
     ∀ (x n : ℝ), (2 : ℝ) ^ (13230 : ℕ) < x → 0 ≤ n → n ≤ 2 * x → n ^ ((1323 : ℝ) / 1000) < x ^ ((13231 : ℝ) / 10000) := by
   intro x n hx hn hnx
   have hxpos : 0 < x := by
-    have h2pos : (0 : ℝ) < (2 : ℝ) ^ (13230 : ℕ) := by positivity
+    have h2pos : (0 : ℝ) < (2 : ℝ) ^ (13230 : ℕ) := pow_pos (by norm_num) 13230
     exact h2pos.trans hx
   have hpow : (2 : ℝ) ^ (13230 : ℝ) < x := by
     calc
