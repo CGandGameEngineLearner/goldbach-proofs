@@ -3,7 +3,7 @@ import Mathlib
 /-- The reflected residue adds back to the target residue.
 The offset by q ensures that the natural-number subtraction does not truncate. -/
 theorem PEqualNP.Outside.L_goldbach_residue_blocks_opposite_phase :
-    ∀ (q a n : ℕ), 0<q → a<q → ((n+q-a)%q+a)%q=n%q := by
+    ∀ (q a n : ℕ), 0<q → a<q → ((n+q-a)%q+a)%q=n % q := by
   intro q a n _hq ha
   have hle : a ≤ n + q := by omega
   calc
