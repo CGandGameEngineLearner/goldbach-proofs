@@ -3981,6 +3981,66 @@
       "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/54f3ab5/research/gaps.json",
       "track": "arc-perturbation",
       "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-odd-character-mixed-moment",
+      "file": "lean/PEqualNP/Outside/L_goldbach_odd_character_mixed_moment.lean",
+      "module": "PEqualNP.Outside.L_goldbach_odd_character_mixed_moment",
+      "statement": "∀ (N : ℕ) [NeZero N] (F G : (ZMod N)ˣ → ℂ), let oddChars := @Finset.filter (DirichletCharacter ℂ N) (fun χ => χ.Odd) (fun χ => Classical.propDecidable χ.Odd) Finset.univ; let T := fun (W : (ZMod N)ˣ → ℂ) (χ : DirichletCharacter ℂ N) => Finset.univ.sum (fun a : (ZMod N)ˣ => W a * χ (a : ZMod N)); 2 * oddChars.sum (fun χ => star (T F χ) * T G χ) = (N.totient : ℂ) * Finset.univ.sum (fun a : (ZMod N)ˣ => star (F a) * (G a - G (-a)))",
+      "plain_statement": {
+        "zh": "固定正模数 N 和单位群上的两组复权 F、G。取全部奇狄利克雷特征，混合矩的两倍等于 φ(N) 乘以 F 的共轭与 G(a)−G(−a) 的配对和。",
+        "en": "For each positive modulus N and complex weights F and G on its units, twice the mixed moment over all odd Dirichlet characters equals φ(N) times the sum of conjugate F(a) against G(a)−G(−a)."
+      },
+      "imports": [],
+      "program": "correlation",
+      "brief": {
+        "zh": "将同类与相反类的正交关系相减，再展开两组权的有限和。计入全部奇特征，包括非本原特征。这个等式保留了补数 N−n 对应的反射项。",
+        "en": "Subtract character orthogonality at equal and opposite unit classes, then expand the two weighted sums. Include imprimitive odd characters. The reflected term records the class of the complementary summand N−n."
+      },
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/DirichletCharacter/Orthogonality.lean",
+      "parallel": true,
+      "track": "fourier",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-mobius-complementary-cutoffs",
+      "file": "lean/PEqualNP/Outside/L_goldbach_mobius_complementary_cutoffs.lean",
+      "module": "PEqualNP.Outside.L_goldbach_mobius_complementary_cutoffs",
+      "statement": "∀ (n : ℕ) (t : ℝ), 1 < n → Squarefree n → let T := fun x : ℝ => n.divisors.sum (fun d => (ArithmeticFunction.moebius d : ℝ) * max (x - Real.log (d : ℝ)) 0); ArithmeticFunction.vonMangoldt n = T t - (ArithmeticFunction.moebius n : ℝ) * T (Real.log (n : ℝ) - t)",
+      "plain_statement": {
+        "zh": "对每个无平方因子的 n>1 和实数 t，若 T(t) 是对数截断的莫比乌斯除数和，则 Λ(n)=T(t)−μ(n)T(log n−t)。",
+        "en": "For each squarefree integer n>1 and real t, the logarithmically truncated Möbius divisor sum T satisfies Λ(n)=T(t)−μ(n)T(log n−t)."
+      },
+      "imports": [],
+      "program": "foundation",
+      "brief": {
+        "zh": "在阈值 t 处分拆莫比乌斯加权的对数和，并在长除数项中用 n/d 替换 d。在 t=(log n)/2 处，系数化为 1−μ(n)，给出筛权奇偶性的精确恒等式。",
+        "en": "Split the Möbius-weighted log sum at t and replace each long divisor d by n/d. Taking t=(log n)/2 gives the explicit parity factor 1−μ(n) in the truncated prime weight."
+      },
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/ArithmeticFunction/VonMangoldt.lean",
+      "parallel": true,
+      "track": "powers",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-twisted-cutoff-residual",
+      "file": "lean/PEqualNP/Outside/L_goldbach_twisted_cutoff_residual.lean",
+      "module": "PEqualNP.Outside.L_goldbach_twisted_cutoff_residual",
+      "statement": "∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (c : ℝ) (s : ℂ), 1 ≤ c → 1 < s.re → let w : ℕ → ℂ := fun n => if 1 ≤ n ∧ (n : ℝ) < c then ((Real.log c - Real.log (n : ℝ) : ℝ) : ℂ) else 0; let r : ℕ → ℂ := (Real.log c : ℂ) • LSeries.delta - LSeries.convolution (fun n : ℕ => (ArithmeticFunction.moebius n : ℂ)) w; LSeries (fun n : ℕ => χ (n : ZMod N) * r n) s = (Real.log c : ℂ) - LSeries (fun n : ℕ => χ (n : ZMod N) * w n) s / χ.LFunction s",
+      "plain_statement": {
+        "zh": "对每个正模数的狄利克雷特征 χ，令 w 为支于 1≤n<c 的对数权，r=(log c)δ−μ∗w。在 c≥1、Re(s)>1 时，r 的 χ 扭曲级数等于 log c 减去 w 的有限 χ 扭曲级数除以 L(s,χ)。",
+        "en": "For every Dirichlet character χ of positive modulus, let w be the logarithmic cutoff on 1≤n<c and r=(log c)δ−μ∗w. If c≥1 and Re(s)>1, the χ-twisted series of r equals log c minus the finite χ-twisted series of w divided by L(s,χ)."
+      },
+      "imports": [],
+      "program": "grh",
+      "brief": {
+        "zh": "对狄利克雷卷积作同一特征的扭曲，利用绝对收敛和扭曲莫比乌斯级数的倒数恒等式。该等式在实部大于一的区域成立，无需零点分布假设。",
+        "en": "Twist the Dirichlet convolution by the same character and use absolute convergence and the reciprocal identity for the twisted Möbius series. The half-plane Re(s)>1 suffices without a zero-location hypothesis."
+      },
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/LSeries/Dirichlet.lean",
+      "parallel": true,
+      "track": "progressions",
+      "role": "lemma"
     }
   ],
   "tracks": [
