@@ -11,12 +11,12 @@ theorem L_goldbach_strip_geometry_inverse_square_tail :
       calc
         T ≤ |z.im| := hheight z hz
         _ ≤ ‖z‖ := Complex.abs_im_le_norm z
+    have hz0 : 0 < ‖z‖ := lt_of_lt_of_le hT him
     have hnorm : ‖z⁻¹‖ ≤ 1 / T := by
-      rw [norm_inv]
-      have hz0 : 0 < ‖z‖ := lt_of_lt_of_le hT him
-      rw [div_le_iff₀ hT]
-      simpa [one_mul] using him
-    exact sq_le_sq₀ (norm_nonneg _) hnorm
+      have hinv : (‖z‖)⁻¹ ≤ T⁻¹ := by
+        exact (inv_le_inv₀ hT hz0).mpr him
+      simpa [norm_inv, one_div] using hinv
+    nlinarith [norm_nonneg (z⁻¹), one_div_nonneg.mpr hT.le]
   calc
     Finset.sum S (fun z => ‖z⁻¹‖ ^ 2)
         ≤ Finset.sum S (fun _ => (1 / T) ^ 2) :=
