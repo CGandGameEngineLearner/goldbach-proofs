@@ -3,8 +3,9 @@
 Status: proposed route additions, 2026-11-25. This note accompanies a catalogue-only change:
 two gaps are appended (`research/gaps.json`, `research/problems.json`), nothing else is modified.
 
-Both statements were type-checked under the repository's pinned Lean toolchain (`lean-toolchain`,
-Mathlib pin) before being posted. Their proofs are already prepared and machine-checked in the
+Both statements were type-checked under the pinned toolchain recorded in `lean/lean-toolchain` and
+`lean/lake-manifest.json` (Lean v4.36.0, Mathlib `fc4f59e5`), as an `example : <statement> := by
+sorry` scratch file, before being posted. Their proofs are already prepared and machine-checked in the
 contributors' working tree; they will be submitted through the normal claim / PR / authoritative
 check flow **after** the gaps are posted.
 
@@ -25,8 +26,9 @@ major-arc integral with the *unknown* prime-pair count. This is the interface th
 in step 3 (extract a pair from a positive coefficient), and it makes explicit what a successful
 minor-arc argument must deliver.
 
-- Dependencies: `L-goldbach-arc-coefficient-sum` (ACCEPTED) and `L-goldbach-arc-major-floor`
-  (ACCEPTED) provide the two sides; no new analytic input is needed for the *equivalence* itself.
+- Dependencies: the equivalence itself only needs `L-goldbach-arc-coefficient-sum` (ACCEPTED);
+  `L-goldbach-arc-major-floor` (ACCEPTED) is the ingredient that the equivalence then applies to.
+  No new analytic input is needed for the *equivalence* itself.
 - Proof plan: real parts of the accepted coefficient identity, rearrange both directions, expand
   the definitions (`w = prime log weight`, `E`, `S`, `Q`, `arcs`, `f`, `major`, `minor`, `conv`).
 - Natural-language check: the equivalence is a rearrangement, so the Chinese/English statements are
@@ -60,4 +62,7 @@ lemma about primes in the progression `1 mod 4`; no sieve or Dickman machinery i
 - dependencies: the goldbach gap's equivalence uses only the accepted coefficient identity;
   the qp gap uses only Mathlib;
 - no existing gap is touched, no file is renamed, and `research/test_catalogue.py` passes;
-- the two statements are distinct from every posted statement (checked against the registry).
+- the two statements are distinct from every posted statement (checked against the registry);
+- after this note was drafted, an independent second reviewer checked the posted statement texts
+  against the prepared Lean statements (whitespace-normalized equality; closed-`Prop` probes under the
+  pinned toolchain) and re-ran `research/test_catalogue.py`.
