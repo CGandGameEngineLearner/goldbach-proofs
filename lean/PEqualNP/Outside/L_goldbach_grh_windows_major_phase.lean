@@ -4248,9 +4248,9 @@ theorem weighted_delta (q a X : ℕ) (t : ℝ) :
     (∑ k ∈ Icc 1 X, (vonMangoldt k : ℂ)*E ((k : ℝ)*((a : ℝ)/q+t))) -
       M q a * (∑ k ∈ Icc 1 X, E ((k : ℝ)*t)) =
       ∑ k ∈ range (X+1), delta q a k * (E t)^k := by
-  have hs : insert 0 (Icc 1 X) = range (X+1) := by
+  have hs : insert 0 (Finset.Icc 1 X) = Finset.range (X+1) := by
     ext k
-    simp only [mem_insert, mem_Icc, mem_range]
+    simp only [Finset.mem_insert, Finset.mem_Icc, Finset.mem_range]
     omega
   have hd0 : delta q a 0 = 0 := by simp [delta]
   rw [← hs, sum_insert (by simp), hd0, zero_mul, zero_add]
