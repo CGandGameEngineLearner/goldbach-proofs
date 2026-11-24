@@ -3881,6 +3881,46 @@
       "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/dc76b2788ef7ad0a6d2d4575ca3320a677c72cd9/src/Main.lean",
       "track": "rh-grh-windows",
       "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-arc-coefficient",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_coefficient.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_coefficient",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); ∀ (n : ℕ) (w : ℕ → ℝ), intervalIntegral (fun t => (S n w t)^2*E (-(n:ℝ)*t)) (0:ℝ) 1 MeasureTheory.volume = ((Finset.sum (Finset.range (n+1)) (fun p => w p * w (n-p)) : ℝ) : ℂ)",
+      "plain_statement": {
+        "zh": "对任意权和 n，(S n w t)^2*E(-n t) 在 [0,1] 上的积分恰等于 n 处的加权卷积之和（实数和，按复数看待）。",
+        "en": "For any weight and any n, the integral of (S n w t)^2*E(-n t) over [0,1] equals the weighted convolution at n, taken as a complex number."
+      },
+      "brief": {
+        "zh": "把 S 的平方展成双求和，逐项积分，只有 p+q=n 的项留下；这是 fourth-energy 的线性版本。",
+        "en": "Expand the square into a double sum, integrate termwise, and only p+q=n survives; this is the linear counterpart of fourth-energy."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-bridge",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-split",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_split.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_split",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); ∀ n : ℕ, intervalIntegral (fun t => (arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume + intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume = intervalIntegral (f n) (0:ℝ) 1 MeasureTheory.volume",
+      "plain_statement": {
+        "zh": "主弧上的积分与其余部分上的积分之和，等于整个 [0,1] 上的积分。",
+        "en": "The integral over the major arcs plus the integral over their complement equals the integral over the whole of [0,1]."
+      },
+      "brief": {
+        "zh": "主弧集合可测，指示函数相加等于 1，于是积分可加。",
+        "en": "The major-arc set is measurable and the two indicators add to one, so the integrals add."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-bridge",
+      "role": "lemma"
     }
   ],
   "tracks": [
@@ -4135,6 +4175,18 @@
       "feeds": [
         "arc-budget"
       ]
+    },
+    {
+      "id": "arc-bridge",
+      "title": {
+        "zh": "弧贡献与卷积之间的桥",
+        "en": "The bridge between the arc contributions and the convolution"
+      },
+      "description": {
+        "zh": "两条弧目标各自给出一个数，而终点说的是卷积为正。这两件事之间缺两个环节：把圆周上的积分按主弧、次弧拆开（可加性），以及把 (S n w t)^2*E(-n t) 的积分认成 n 处的加权卷积（Fourier 系数抽取）。后者不涉及素数分布，只用到 exp(2*pi*i*m)=1。",
+        "en": "Each arc target supplies one number; the endpoint speaks about a convolution. Two links are missing between them: splitting the circle integral into the major and minor parts (additivity), and identifying the integral of (S n w t)^2*E(-n t) with the weighted convolution at n (Fourier coefficient extraction). The second involves no distribution of primes, only exp(2*pi*i*m)=1."
+      },
+      "feeds": []
     }
   ]
 }
