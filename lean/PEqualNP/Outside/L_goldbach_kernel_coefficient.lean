@@ -23,14 +23,17 @@ theorem PEqualNP.Outside.L_goldbach_kernel_coefficient :
       if i + j = s then (1 : ℂ) else 0 := by
     by_cases h : i + j = s
     · have hz : (i : ℤ) + j - s = 0 := by omega
-      simp [term, c, hz, h]
+      simp only [term, hz, if_pos h]
+      simp [c]
     · have hz : (i : ℤ) + j - s ≠ 0 := by omega
       have hc : c ((i : ℤ) + j - s) ≠ 0 := by
         unfold c
         exact mul_ne_zero (Int.cast_ne_zero.mpr hz)
           (mul_ne_zero (mul_ne_zero (by norm_num) (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero)) Complex.I_ne_zero)
       simp only [term, if_neg h, integral_exp_mul_complex hc]
-      simp [c, Complex.exp_int_mul_two_pi_mul_I]
+      have period (m : ℤ) : Complex.exp (c m) = 1 := Complex.exp_int_mul_two_pi_mul_I m
+      simp only [Complex.ofReal_one, Complex.ofReal_zero, mul_one, mul_zero,
+        period, Complex.exp_zero, sub_self, zero_div]
   have row (i : ℕ) : (∑ j ∈ Finset.range (N+1), if i+j=s then (1:ℂ) else 0) =
       if i ≤ s then 1 else 0 := by
     by_cases hi : i ≤ s
