@@ -1,3 +1,5 @@
+import Mathlib
+
 /-
 SPDX-License-Identifier: Apache-2.0
 
@@ -14,12 +16,11 @@ The two noncoprime prime-power estimates in GoldbachMajorPhase are reproduced
 from wzhxzkk, Goldbach PR #82, commit c071924486e0a79326bd7a415851d65c134cdec4,
 lean/PEqualNP/Outside/L_goldbach_grh_goldbach_exception_density.lean (Apache-2.0).
 
-New assembly: reduced-residue summation, a uniform bound for every prefix,
+New assembly: reduced-residue summation, a uniform bound for every initial segment,
 and discrete Abel summation with geometric phase weights. All GRH zero-location
-assumptions remain explicit. No theorem from the external RH project is imported.
+assumptions remain explicit. No theorem from the separate RH project is used.
 -/
 
-import Mathlib
 
 /-
 The averaged cutoff of width sqrt(X) has a Mellin transform with quadratic decay.
@@ -4029,12 +4030,12 @@ open ArithmeticFunction Finset
 
 noncomputable def units (q : ℕ) := (range q).filter (fun b => Nat.Coprime b q)
 noncomputable def A (q b Y : ℕ) : ℝ :=
-  ∑ k ∈ (range (Y+1)).filter (fun k => k%q=b%q), vonMangoldt k
+  ∑ k ∈ (range (Y+1)).filter (fun k => k % q=b % q), vonMangoldt k
 noncomputable def R (q a Y : ℕ) : ℂ :=
   ∑ k ∈ range (Y+1), (vonMangoldt k : ℂ) * phase q a k
 noncomputable def M (q a : ℕ) : ℂ := (∑ b ∈ units q, phase q a b)/(q.totient : ℂ)
 
-theorem coprime_mod (q k : ℕ) (hq : 0 < q) : (k%q).Coprime q ↔ k.Coprime q := by
+theorem coprime_mod (q k : ℕ) (hq : 0 < q) : (k % q).Coprime q ↔ k.Coprime q := by
   letI : NeZero q := ⟨hq.ne'⟩
   rw [← ZMod.isUnit_iff_coprime, ← ZMod.isUnit_iff_coprime]
   simp
@@ -4043,7 +4044,7 @@ theorem good_sum (q a Y : ℕ) (hq : 0 < q) :
     ∑ k ∈ (range (Y+1)).filter (fun k => k.Coprime q),
       (vonMangoldt k : ℂ) * phase q a k =
     ∑ b ∈ units q, (A q b Y : ℂ) * phase q a b := by
-  have hmaps : ∀ k ∈ (range (Y+1)).filter (fun k => k.Coprime q), k%q ∈ units q := by
+  have hmaps : ∀ k ∈ (range (Y+1)).filter (fun k => k.Coprime q), k % q ∈ units q := by
     intro k hk
     exact mem_filter.mpr ⟨mem_range.mpr (Nat.mod_lt _ hq),
       (coprime_mod q k hq).mpr (mem_filter.mp hk).2⟩
@@ -4051,9 +4052,9 @@ theorem good_sum (q a Y : ℕ) (hq : 0 < q) :
   apply sum_congr rfl
   intro b hb
   obtain ⟨hbq,hbc⟩ := mem_filter.mp hb
-  have hbmod : b%q=b := Nat.mod_eq_of_lt (mem_range.mp hbq)
-  have hset : ((range (Y+1)).filter (fun k => k.Coprime q)).filter (fun k => k%q=b) =
-      (range (Y+1)).filter (fun k => k%q=b%q) := by
+  have hbmod : b % q=b := Nat.mod_eq_of_lt (mem_range.mp hbq)
+  have hset : ((range (Y+1)).filter (fun k => k.Coprime q)).filter (fun k => k % q=b) =
+      (range (Y+1)).filter (fun k => k % q=b % q) := by
     ext k
     simp only [mem_filter, hbmod]
     constructor
@@ -4063,11 +4064,11 @@ theorem good_sum (q a Y : ℕ) (hq : 0 < q) :
       simpa only [h.2] using hbc
   rw [hset]
   calc
-    _ = ∑ k ∈ (range (Y+1)).filter (fun k => k%q=b%q),
+    _ = ∑ k ∈ (range (Y+1)).filter (fun k => k % q=b % q),
         (vonMangoldt k : ℂ)*phase q a b := by
       apply sum_congr rfl
       intro k hk
-      have hkmod : k%q=b := by simpa only [hbmod] using (mem_filter.mp hk).2
+      have hkmod : k % q=b := by simpa only [hbmod] using (mem_filter.mp hk).2
       rw [← phase_mod q a k hq, hkmod]
     _ = (A q b Y : ℂ)*phase q a b := by simp [A, sum_mul]
 
