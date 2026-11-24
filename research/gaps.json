@@ -3981,6 +3981,26 @@
       "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/54f3ab5/research/gaps.json",
       "track": "arc-perturbation",
       "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-saving-iff-major-upper",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_saving_iff_major_upper.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_saving_iff_major_upper",
+      "statement": "(let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; (∀ e : ℝ, 0<e → ∃ N : ℕ, ∀ n : ℕ, N≤n → Even n → -(e*(n:ℝ)) ≤ (minor n).re)) ↔ (let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let major := fun n : ℕ => intervalIntegral (fun t => (arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let conv := fun (u v : ℕ → ℝ) (n : ℕ) => Finset.sum (Finset.range (n+1)) (fun k => u k*v (n-k)); (∀ e : ℝ, 0<e → ∃ N : ℕ, ∀ n : ℕ, N≤n → Even n → (major n).re ≤ conv w w n + e*(n:ℝ)))",
+      "plain_statement": {
+        "zh": "次弧带符号下界目标等价于：主弧实部不超过真实素数对数权卷积加 εn。",
+        "en": "The signed minor-arc lower bound is equivalent to the major-arc real part being at most the exact prime-pair convolution plus εn."
+      },
+      "brief": {
+        "zh": "对已接受的 major+minor=conv 恒等式取实部并移项，双向重写目标；这是把目标接到主弧估计与未知计数比较的接口。",
+        "en": "Take real parts in the accepted major+minor identity and rearrange both ways. This exposes the target as a comparison between a major-arc estimate and the unknown weighted prime-pair count."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2607.27282",
+      "track": "arc-budget",
+      "role": "lemma"
     }
   ],
   "tracks": [
