@@ -1,7 +1,7 @@
 import Mathlib
 
 theorem PEqualNP.Outside.L_goldbach_ap_nonunit_prime :
-    ∀ q k : ℕ, Nat.Prime k → ¬ Nat.Coprime (k%q) q → k ∣ q := by
+    ∀ q k : ℕ, Nat.Prime k → ¬ Nat.Coprime (k % q) q → k ∣ q := by
   intro q k hk h
   apply (hk.dvd_iff_not_coprime).2
   intro hc
