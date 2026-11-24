@@ -48,6 +48,14 @@ The target is pointwise positivity of the convolution of the prime-supported log
 - **Work toward cancellation at each frequency.** A GRH estimate for primes in a progression can supply a major-arc input after the range of moduli and accumulated errors are justified. Split the coefficient at the same even integer into major and minor contributions. Prove a positive margin, or bound the real signed remainder directly. An absolute-value estimate over the full circle loses the cancellation. The alternative reflection and energy tasks expose different bounds on the same correlation. [Major-arc formula](https://arxiv.org/abs/2607.27282v2)
 - **Track every remaining quantifier.** A short-interval existence theorem and an exceptional-set bound each leave a pointwise gap. For an energy approach, bound oscillation of the actual correlation and its local energy. Record any threshold and the argument extending below it. Each submission is checked against its own frozen statement in GitHub Actions. [Conditional short intervals](https://arxiv.org/html/2512.23534v1#S5) · [Exceptional-set estimates](https://arxiv.org/html/2610.15559v1)
 
+## 三条可独立核验的恒等式 / Three independently checkable identities
+
+固定偶数的反射、素数权的除数截断和特征扭曲都可先写为精确等式。这三步各自只依赖 Mathlib。要由它们得到哥德巴赫表示，还需要同一个偶数上的相关下界。
+
+- **Odd-character mixed moment.** At a fixed positive modulus, the mixed moment of two weights over all odd Dirichlet characters detects the difference between equal and opposite unit classes. This retains the residue of the complementary summand. [Reference proof](reference-proofs/L_goldbach_odd_character_mixed_moment.lean)
+- **Complementary Möbius cutoffs.** For a squarefree integer greater than one, pairing divisors with their complements recovers the von Mangoldt weight from two logarithmic cutoffs. At the square-root cutoff their difference has the factor $1-\mu(n)$. [Reference proof](reference-proofs/L_goldbach_mobius_complementary_cutoffs.lean)
+- **Twisted cutoff residual.** In the half-plane $\Re s>1$, the twisted residual series equals $\log c$ minus a finite Dirichlet polynomial divided by the same character’s $L$-function. Absolute convergence suffices for this step. [Reference proof](reference-proofs/L_goldbach_twisted_cutoff_residual.lean)
+
 ## 核验预算 / Verification budget
 
 按 2,000 runner 分钟作预算，只计纯检查且每次分别固定 75、250、848 秒，可做 1,600、480、141 次。设三个独立并行槽并同时收到 300 份等时提交，清空用时分别为 2 小时 5 分、6 小时 56 分 40 秒、23 小时 33 分 20 秒。实际容量取决于完整 job 时长、队列、缓存和 runner 并发。These scenarios use fixed service times, and do not estimate the mean from a median or percentile.
