@@ -14,7 +14,7 @@ theorem L_goldbach_strip_geometry_inverse_square_tail :
     have hz0 : 0 < ‖z‖ := lt_of_lt_of_le hT him
     have hnorm : ‖z⁻¹‖ ≤ 1 / T := by
       have hinv : (‖z‖)⁻¹ ≤ T⁻¹ := by
-        exact (inv_le_inv₀ hT hz0).mpr him
+        exact (inv_le_inv₀ hz0 hT).mpr him
       simpa [norm_inv, one_div] using hinv
     nlinarith [norm_nonneg (z⁻¹), one_div_nonneg.mpr hT.le]
   calc
