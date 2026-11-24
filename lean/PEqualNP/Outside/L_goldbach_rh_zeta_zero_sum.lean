@@ -16,9 +16,9 @@ theorem PEqualNP.Outside.L_goldbach_rh_zeta_zero_sum :
             push_cast
             exact hn
           rw [he, Complex.ofReal_re] at hpos
-          linarith [Nat.cast_nonneg (R := ℝ) n]
+          linarith [Nat.cast_nonneg (α := ℝ) n]
         · rintro rfl
-          simpa using hlt
+          simp at hlt
       rw [norm_mul, Complex.norm_cpow_eq_rpow_re_of_pos hx s, hre, ← Real.sqrt_eq_rpow,
         mul_comm]
     _ = _ := (Finset.mul_sum ..).symm
