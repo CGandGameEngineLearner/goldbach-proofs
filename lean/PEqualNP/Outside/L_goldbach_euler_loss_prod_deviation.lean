@@ -7,7 +7,6 @@ theorem PEqualNP.Outside.L_goldbach_euler_loss_prod_deviation :
   | zero =>
     intro z
     rw [Fin.prod_univ_zero, Fin.prod_univ_zero, sub_self, sub_self, norm_zero]
-    exact le_rfl
   | succ m ih =>
     intro z
     rw [Fin.prod_univ_castSucc, Fin.prod_univ_castSucc]
