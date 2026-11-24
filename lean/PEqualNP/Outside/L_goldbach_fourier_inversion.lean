@@ -96,7 +96,8 @@ theorem PEqualNP.Outside.L_goldbach_fourier_inversion :
         calc
           (M : ℂ) * (((2 * Real.pi * (((l : ℝ) - (k : ℝ)) / (M : ℝ)) : ℝ) : ℂ) * Complex.I)
             = (((M : ℝ) * (2 * Real.pi * (((l : ℝ) - (k : ℝ)) / (M : ℝ))) : ℝ) : ℂ) * Complex.I := by
-              rw [Complex.ofReal_mul, Complex.ofReal_natCast, mul_assoc]
+              simp only [Complex.ofReal_mul, Complex.ofReal_natCast]
+              ring
           _ = (((((l : ℤ) - (k : ℤ) : ℤ) : ℝ) * (2 * Real.pi) : ℝ) : ℂ) * Complex.I := by
               rw [hreal]
           _ = (((l : ℤ) - (k : ℤ) : ℤ) : ℂ) * (2 * (Real.pi : ℂ) * Complex.I) := by
@@ -129,7 +130,6 @@ theorem PEqualNP.Outside.L_goldbach_fourier_inversion :
         exact him.trans (mul_comm (n : ℝ) (2 * Real.pi))
       have hmul : (l : ℝ) - (k : ℝ) = (n : ℝ) * (M : ℝ) := by
         have h3 := congrArg (fun x : ℝ => x * (M : ℝ)) hdiv
-        dsimp only at h3
         rw [div_mul_cancel₀ _ hM_real] at h3
         exact h3
       have hint_real : (((l : ℤ) - (k : ℤ) : ℤ) : ℝ) = ((n * (M : ℤ) : ℤ) : ℝ) := by
