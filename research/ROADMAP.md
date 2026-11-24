@@ -35,6 +35,18 @@
 3. **集中攻逐点的加法相关。** 固定同一个偶数 $n$，用平滑截断 $u$ 和 $1-u$ 将上述系数分成主弧 $A_n$ 与次弧 $B_n$。接口任务先证 $\Re A_n>\lVert B_n\rVert$ 足以提取素数对。研究时也可直接给有符号的 $\Re B_n$ 下界。第一次交叉审查应列出主项下界和每项误差如何依赖 $n$。例如，对整个频率区间先取绝对值只剩 $\int |S_n|^2=\sum w(k)^2$，在对数素数权下为 $n\log n$ 量级，会丢掉抵消。另一条独立路线用反射平方差表示同一个卷积，随后需要对实际素数权给出严格余量。逐点正性和二倍区间内的线性下界均是开放攻关目标。
 4. **量化例外，审查剩余缺口。** 可并行复现条件例外数结果；$E(X)\ll_\varepsilon X^{1/2+\varepsilon}$ 允许无穷多个稀疏例外。二阶矩路线要再证明真实误差在每个待判定点邻域中的振荡和能量预算。若结果只对充分大 $n$ 成立，必须列出阈值，并为余下范围提供统一数学论证。本轮任务台只发一般性定理。[例外集预印本](https://arxiv.org/html/2610.15559v1)
 
+## 补充提案：反射扰动与有限频率符号平衡 / Reflection perturbation and finite-grid sign balancing
+
+在固定偶数 n 处，将每对反射下标 j 和 n−j 的权分别乘以 1+ξ_j 和 1−ξ_j，其中 ξ_j 取 ±1，中央固定点置零。这会消去扰动权在 n 处的卷积。对任意有限频率网格，把每对反射权差的复指数和的实部、虚部拼接成一个实向量。拟增引理 `L-goldbach-finite-sign-balance` 通过平行四边形恒等式逐次选择符号，保证整组采样的平方误差总和不超过各反射对平方能量之和。
+
+依赖及界限：该引理只需 Mathlib；研究上接入 `rh-pair-errors` 的卷积扰动展开和 `arc-perturbation` 的平方误差估计。它是一个有限网格总能量控制接口，不提供逐点小误差。要获得网格最大误差的对数级损失，还需单独证明符号和的指数矩、并合界与网格离散化；这也不证明实际素数权的次弧下界。反射扰动构造依赖目标 n，并不构成原始哥德巴赫猜想的反例。
+
+For a fixed target n, assign opposite signs to the members of each reflected pair. The perturbed weights can destroy the coefficient at n. Concatenating real and imaginary Fourier contributions on a finite grid produces real vectors. The proposed finite sign-balancing lemma controls their total squared sampled error via greedy sign selection and the parallelogram identity. The formal statement has no dependencies on other outside proofs. It is a diagnostic interface, not a bound for the maximum error or a solution of the open pointwise minor-arc target. Exponential moments and discretization remain separate obligations. The proposed [proof candidate](https://github.com/Elm-Forest/goldbach-proofs/blob/1d64198e889b56fcc2906f3ac4a30d99b7e7b577/preflight-proofs/L_goldbach_finite_sign_balance.lean) is in a fork, and publication of the statement requires a second reviewer and a maintainer's approval.
+
+进一步的接口 `L-goldbach-reflection-grid-thinning` 直接将共同符号平衡应用到任意有限实观测矩阵，而非仅给出抽象向量界。它同时保证非负性、支撑不扩大、所有反射对乘积为零，并给出显式中央项修正后的平方误差预算。取观测为每个采样频率的余弦与正弦坐标，就得到反射扰动的有限傅里叶能量界。其独立 Lean 证明只导入 Mathlib（内部证明符号平衡与求和重排），数学上依赖前一条引理的方法。仍然需要指数矩和离散化才可能控制最大误差，并且没有解决真实素数权的相关下界。
+
+The companion `L-goldbach-reflection-grid-thinning` directly constructs a nonnegative, support-preserving-in-the-subset-sense perturbation with zero reflected products and an explicit central-term correction in the finite observation energy bound. Choose cosine and sine observations to specialize to a finite Fourier grid. The standalone proof imports Mathlib only, with sign balancing and finite reflection reindexing proved internally. This does not bound the Fourier supremum or establish Goldbach. [Proof candidate](https://github.com/Elm-Forest/goldbach-proofs/blob/311e25dd0415f0c1b333727061b3f8af8951bfec/preflight-proofs/L_goldbach_reflection_grid_thinning.lean).
+
 ## 如何并行与验收
 
 任务台优先覆盖空闲题。标记 parallel 的任务允许不同团队独立试证。新增的 100 条子命题分属十组。主弧下界与次弧逐点下界使用同一截断，合起来覆盖充分大偶数；阈值以下仍须证明。例外集的密度界独立列出。每组任务及其用途见[可领取的研究路线](https://www.goldbach.tech/?lang=zh#roadmap)。每份尝试有自己的工作目录、租约、分支和 PR；PR 说明写清采用的估计、常数依赖和仍需的假设。题目公开、命题类型检查通过和证明获得权威 ACCEPTED 是三个不同的状态。贡献者另行复核中英文陈述与 Lean 量词，原始核验日志给出证据清单。旧区间题的运行和署名继续保存在历史记录里。[旧目录](https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ac48ffd/research/gaps.json) · [验证日志](https://www.movan.tech/goldbach/#records)
