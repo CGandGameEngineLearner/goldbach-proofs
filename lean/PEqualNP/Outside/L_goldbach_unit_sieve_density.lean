@@ -5,23 +5,26 @@ open scoped BigOperators
 namespace PEqualNP.Outside
 
 theorem L_goldbach_unit_sieve_density :
-    let U := fun q n : ℕ => (Finset.range q).filter (fun a => Nat.Coprime a q ∧ Nat.Coprime (n+q-a) q); ∀ q n T, 0<q → ((Finset.range (q*T)).filter (fun a => a%q ∈ U q n)).card=T*(U q n).card := by
+    let U := fun q n : ℕ => (Finset.range q).filter (fun a => Nat.Coprime a q ∧ Nat.Coprime (n+q-a) q); ∀ q n T, 0<q → ((Finset.range (q*T)).filter (fun a => HMod.hMod a q ∈ U q n)).card=T*(U q n).card := by
   dsimp only
   intro q n T hq
   classical
   let U : ℕ → ℕ → Finset ℕ := fun q n =>
     (Finset.range q).filter (fun a => Nat.Coprime a q ∧ Nat.Coprime (n + q - a) q)
-  let p : ℕ → Prop := fun a => a % q ∈ U q n
+  let p : ℕ → Prop := fun a => HMod.hMod a q ∈ U q n
   change ((Finset.range (q * T)).filter p).card = T * (U q n).card
   have hfilter : (Finset.range q).filter p = U q n := by
     ext a
     by_cases ha : a < q
-    · simp [p, U, ha, Nat.mod_eq_of_lt ha]
+    · simp only [p, Finset.mem_filter, Finset.mem_range]
+      rw [Nat.mod_eq_of_lt ha]
+      simp [U, ha]
     · simp [p, U, ha]
   have hp : Function.Periodic p q := by
     intro a
     apply eq_iff_iff.mpr
-    simp only [p, Nat.add_mod_right]
+    change HMod.hMod (a + q) q ∈ U q n ↔ HMod.hMod a q ∈ U q n
+    rw [Nat.add_mod_right]
   have hmain : ∀ T : ℕ, ((Finset.range (q * T)).filter p).card =
       T * (U q n).card := by
     intro T
