@@ -4714,49 +4714,9 @@
         "role": "lemma",
         "parallel": true,
         "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-window-contamination",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_window_contamination.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_window_contamination",
-        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let v := fun (n : ℕ) => ArithmeticFunction.vonMangoldt n * ArithmeticFunction.vonMangoldt (n+2); let E := fun (X : ℕ) => ((w X).filter (fun n => ¬ (n.Prime ∧ (n+2).Prime))).sum v / (X : ℝ); let e := fun (X : ℕ) => Real.log (2+(X:ℝ))^3 / Real.sqrt X; ∃ C : ℝ, 0 < C ∧ ∀ X : ℕ, 2 ≤ X → E X ≤ C * e X",
-        "plain_statement": {
-          "zh": "新路线 · 差二窄窗 · TP-0002 · 同时控制平移前后的高次幂污染",
-          "en": "New route · Gap-two windows · TP-0002 · Bound contamination at either end of a shifted pair"
-        },
-        "brief": {
-          "zh": "把坏项送到 n 或 n+2 的真幂；任一幂至多收费两次，两项对数均有统一上界。",
-          "en": "Charge a bad summand to a proper power at either end. Each power is charged at most twice and both logarithms are bounded."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "foundation",
-        "role": "lemma",
-        "parallel": false,
-        "depends_on": [
-          "L-twin-primes-power-count"
-        ],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-window-extraction",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_window_extraction.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_window_extraction",
-        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let v := fun (n : ℕ) => ArithmeticFunction.vonMangoldt n * ArithmeticFunction.vonMangoldt (n+2); let M := fun (X : ℕ) => (w X).sum v / (X : ℝ); let E := fun (X : ℕ) => ((w X).filter (fun n => ¬ (n.Prime ∧ (n+2).Prime))).sum v / (X : ℝ); ∀ X : ℕ, 0 < X → E X < M X → ∃ n ∈ w X, n.Prime ∧ (n+2).Prime",
-        "plain_statement": {
-          "zh": "新路线 · 差二窄窗 · TP-0003 · 从严格余量抽取同窗真素数对",
-          "en": "New route · Gap-two windows · TP-0003 · Extract a genuine prime pair from a strict window surplus"
-        },
-        "brief": {
-          "zh": "按两端的素性切分同一个有限和，消去相同的归一化。",
-          "en": "Partition the same finite sum by the two primality tests and cancel the common normalization."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "foundation",
-        "role": "lemma",
-        "parallel": false,
-        "depends_on": [],
-        "imports": []
+        "imports": [],
+        "track": "01-gap-two-windows",
+        "route_source": "01-gap-two-windows"
       },
       {
         "id": "L-twin-primes-vanishing-error",
@@ -4776,28 +4736,9 @@
         "role": "lemma",
         "parallel": false,
         "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-window-surplus",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_window_surplus.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_window_surplus",
-        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let v := fun (n : ℕ) => ArithmeticFunction.vonMangoldt n * ArithmeticFunction.vonMangoldt (n+2); let M := fun (X : ℕ) => (w X).sum v / (X : ℝ); let e := fun (X : ℕ) => Real.log (2+(X:ℝ))^3 / Real.sqrt X; ∀ (K : ℝ) (B : ℕ), ∃ X : ℕ, B < X ∧ K * e X < M X",
-        "plain_statement": {
-          "zh": "新路线 · 差二窄窗 · TP-0005 · 沿无界窄窗超过任意固定污染倍数",
-          "en": "New route · Gap-two windows · TP-0005 · Exceed every fixed multiple of the power error on unbounded windows"
-        },
-        "brief": {
-          "zh": "在严格窗内给出带符号或单侧的下界，K 与要求的起点独立。",
-          "en": "Find a one-sided estimate inside the strict window for each multiplier K and lower cutoff."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "foundation",
-        "role": "target",
-        "parallel": true,
-        "depends_on": [],
         "imports": [],
-        "challenge_only": true
+        "track": "01-gap-two-windows",
+        "route_source": "01-gap-two-windows"
       },
       {
         "id": "L-twin-primes-window-bridge",
@@ -4820,27 +4761,78 @@
           "L-twin-primes-window-contamination",
           "L-twin-primes-window-surplus"
         ],
-        "imports": []
+        "imports": [],
+        "track": "01-gap-two-windows",
+        "route_source": "01-gap-two-windows"
       },
       {
-        "id": "L-twin-primes-unit-band",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_unit_band.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_unit_band",
-        "statement": "let f := fun (x n j : ℝ) => x * Real.log (1+j/n); ∀ x n : ℝ, 1000 ≤ x → x ≤ n → 50*n ≤ 51*x → 1/4 < f x n 1 ∧ f x n 1 < 7/4",
+        "id": "L-twin-primes-window-contamination",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_window_contamination.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_window_contamination",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let v := fun (n : ℕ) => ArithmeticFunction.vonMangoldt n * ArithmeticFunction.vonMangoldt (n+2); let E := fun (X : ℕ) => ((w X).filter (fun n => ¬ (n.Prime ∧ (n+2).Prime))).sum v / (X : ℝ); let e := fun (X : ℕ) => Real.log (2+(X:ℝ))^3 / Real.sqrt X; ∃ C : ℝ, 0 < C ∧ ∀ X : ℕ, 2 ≤ X → E X ≤ C * e X",
         "plain_statement": {
-          "zh": "新路线 · Fourier 选频 · TP-0007 · 排除相邻项的频率",
-          "en": "New route · Fourier isolation · TP-0007 · Exclude the frequency of adjacent indices"
+          "zh": "新路线 · 差二窄窗 · TP-0002 · 同时控制平移前后的高次幂污染",
+          "en": "New route · Gap-two windows · TP-0002 · Bound contamination at either end of a shifted pair"
         },
         "brief": {
-          "zh": "由 t/(1+t) ≤ log(1+t) ≤ t 对两端估计。",
-          "en": "Use t/(1+t) ≤ log(1+t) ≤ t at the endpoints."
+          "zh": "把坏项送到 n 或 n+2 的真幂；任一幂至多收费两次，两项对数均有统一上界。",
+          "en": "Charge a bad summand to a proper power at either end. Each power is charged at most twice and both logarithms are bounded."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-twin-primes-power-count"
+        ],
+        "imports": [],
+        "track": "01-gap-two-windows",
+        "route_source": "01-gap-two-windows"
+      },
+      {
+        "id": "L-twin-primes-window-extraction",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_window_extraction.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_window_extraction",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let v := fun (n : ℕ) => ArithmeticFunction.vonMangoldt n * ArithmeticFunction.vonMangoldt (n+2); let M := fun (X : ℕ) => (w X).sum v / (X : ℝ); let E := fun (X : ℕ) => ((w X).filter (fun n => ¬ (n.Prime ∧ (n+2).Prime))).sum v / (X : ℝ); ∀ X : ℕ, 0 < X → E X < M X → ∃ n ∈ w X, n.Prime ∧ (n+2).Prime",
+        "plain_statement": {
+          "zh": "新路线 · 差二窄窗 · TP-0003 · 从严格余量抽取同窗真素数对",
+          "en": "New route · Gap-two windows · TP-0003 · Extract a genuine prime pair from a strict window surplus"
+        },
+        "brief": {
+          "zh": "按两端的素性切分同一个有限和，消去相同的归一化。",
+          "en": "Partition the same finite sum by the two primality tests and cancel the common normalization."
         },
         "source": "https://arxiv.org/abs/2610.32672",
         "program": "foundation",
         "role": "lemma",
         "parallel": false,
         "depends_on": [],
-        "imports": []
+        "imports": [],
+        "track": "01-gap-two-windows",
+        "route_source": "01-gap-two-windows"
+      },
+      {
+        "id": "L-twin-primes-window-surplus",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_window_surplus.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_window_surplus",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let v := fun (n : ℕ) => ArithmeticFunction.vonMangoldt n * ArithmeticFunction.vonMangoldt (n+2); let M := fun (X : ℕ) => (w X).sum v / (X : ℝ); let e := fun (X : ℕ) => Real.log (2+(X:ℝ))^3 / Real.sqrt X; ∀ (K : ℝ) (B : ℕ), ∃ X : ℕ, B < X ∧ K * e X < M X",
+        "plain_statement": {
+          "zh": "新路线 · 差二窄窗 · TP-0005 · 沿无界窄窗超过任意固定污染倍数",
+          "en": "New route · Gap-two windows · TP-0005 · Exceed every fixed multiple of the power error on unbounded windows"
+        },
+        "brief": {
+          "zh": "在严格窗内给出带符号或单侧的下界，K 与要求的起点独立。",
+          "en": "Find a one-sided estimate inside the strict window for each multiplier K and lower cutoff."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "foundation",
+        "role": "target",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "challenge_only": true,
+        "track": "01-gap-two-windows",
+        "route_source": "01-gap-two-windows"
       },
       {
         "id": "L-twin-primes-double-band",
@@ -4860,67 +4852,9 @@
         "role": "lemma",
         "parallel": false,
         "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-outer-band",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_outer_band.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_outer_band",
-        "statement": "let f := fun (x n j : ℝ) => x * Real.log (1+j/n); ∀ (x n : ℝ) (j : ℕ), 1000 ≤ x → x ≤ n → 50*n ≤ 51*x → 3 ≤ j → 9/4 < f x n j",
-        "plain_statement": {
-          "zh": "新路线 · Fourier 选频 · TP-0009 · 一致排除全部更大间距",
-          "en": "New route · Fourier isolation · TP-0009 · Exclude all gaps of at least three uniformly"
-        },
-        "brief": {
-          "zh": "先用对数单调性缩至 j=3，再使用窄窗右端点。",
-          "en": "Reduce to j=3 by monotonicity and use the right endpoint of the window."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "foundation",
-        "role": "lemma",
-        "parallel": false,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-time-weights",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_time_weights.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_time_weights",
-        "statement": "∀ (l : ℝ → ℝ) (t : ℝ), let g := fun (σ : ℝ) => (l t)^2 * (1+σ*Real.cos (4*Real.pi*t)); 0 ≤ g 1 ∧ 0 ≤ g (-1) ∧ g 1 - g (-1) = 2*(l t)^2*Real.cos (4*Real.pi*t)",
-        "plain_statement": {
-          "zh": "新路线 · Fourier 选频 · TP-0010 · 构造同一基函数的两支非负权",
-          "en": "New route · Fourier isolation · TP-0010 · Prove positivity and the signed difference of the two time weights"
-        },
-        "brief": {
-          "zh": "使用余弦的取值区间，再在相减时保留因子二。",
-          "en": "Use the range of cosine and keep the factor two when subtracting."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "foundation",
-        "role": "lemma",
-        "parallel": false,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-kernel-support",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_kernel_support.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_kernel_support",
-        "statement": "∀ K : ℝ → ℝ, (∀ v, 1/20 ≤ |v| → K v = 0) → (∀ v, |v| < 1/20 → 0 < K v) → let H := fun (v : ℝ) => K v / 2 - K (v-1/5)/4 - K (v+1/5)/4; (∀ v, 1/4 ≤ |v| → H v = 0) ∧ (∀ v, |v| < 1/20 → 0 < H v)",
-        "plain_statement": {
-          "zh": "新路线 · Fourier 选频 · TP-0011 · 从三个卷积平移导出中心正性与支撑",
-          "en": "New route · Fourier isolation · TP-0011 · Recover central positivity and support from three translates"
-        },
-        "brief": {
-          "zh": "分别代入三个平移处的支撑界，注意支撑端点。",
-          "en": "Apply the support bound at all three translates, including the endpoints."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "foundation",
-        "role": "lemma",
-        "parallel": false,
-        "depends_on": [],
-        "imports": []
+        "imports": [],
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
       },
       {
         "id": "L-twin-primes-finite-band-sum",
@@ -4945,51 +4879,53 @@
           "L-twin-primes-outer-band",
           "L-twin-primes-kernel-support"
         ],
-        "imports": []
+        "imports": [],
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
       },
       {
-        "id": "L-twin-primes-two-moment-identity",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_two_moment_identity.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_two_moment_identity",
-        "statement": "let bump := fun (a b t : ℝ) => if a < t ∧ t < b then Real.exp (-1/((t-a)*(b-t))) else 0; let W := bump 1 (51/50); let b := bump (-1/40) (1/40); let K := fun (v : ℝ) => ∫ u : ℝ, b u * b (v-u); let H := fun (v : ℝ) => K v / 2 - K (v-1/5)/4 - K (v+1/5)/4; let k := fun (t : ℝ) => ∫ v : ℝ, b v * Real.cos (2*Real.pi*v*t); let l := fun (t : ℝ) => Real.sin (Real.pi*t/5)*k t; let T := fun (X : ℕ) => 2*Real.pi*(X:ℝ); let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let u := fun (X n : ℕ) => ArithmeticFunction.vonMangoldt n * W ((n:ℝ)/X) / Real.sqrt n; let P := fun (X : ℕ) (t : ℝ) => (w X).sum (fun n => (u X n : ℂ)*Complex.exp (-Complex.I*(t:ℂ)*(Real.log n : ℂ))); let I := fun (X : ℕ) (σ : ℝ) => ∫ t in Set.Ioi (0:ℝ), (l (t/T X))^2*(1+σ*Real.cos (4*Real.pi*t/T X))*‖P X t‖^2; let f := fun (x n j : ℝ) => x * Real.log (1+j/n); ∀ X : ℕ, 1000 ≤ X → I X 1 - I X (-1) = T X * ((w X).filter (fun n => n+2 ∈ w X)).sum (fun n => u X n*u X (n+2)*H (f X n 2 - 2))",
+        "id": "L-twin-primes-kernel-support",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_kernel_support.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_kernel_support",
+        "statement": "∀ K : ℝ → ℝ, (∀ v, 1/20 ≤ |v| → K v = 0) → (∀ v, |v| < 1/20 → 0 < K v) → let H := fun (v : ℝ) => K v / 2 - K (v-1/5)/4 - K (v+1/5)/4; (∀ v, 1/4 ≤ |v| → H v = 0) ∧ (∀ v, |v| < 1/20 → 0 < H v)",
         "plain_statement": {
-          "zh": "新路线 · Fourier 选频 · TP-0013 · 对实际多项式证明两支时间积分之差",
-          "en": "New route · Fourier isolation · TP-0013 · Compute the difference of the two actual polynomial moments"
+          "zh": "新路线 · Fourier 选频 · TP-0011 · 从三个卷积平移导出中心正性与支撑",
+          "en": "New route · Fourier isolation · TP-0011 · Recover central positivity and support from three translates"
         },
         "brief": {
-          "zh": "展开有限平方，偶性将全轴积分减半；用 Fourier 卷积公式和已分离的边带。",
-          "en": "Expand the finite square, halve the full integral by evenness and apply the convolution formula and frequency isolation."
+          "zh": "分别代入三个平移处的支撑界，注意支撑端点。",
+          "en": "Apply the support bound at all three translates, including the endpoints."
         },
         "source": "https://arxiv.org/abs/2610.32672",
         "program": "foundation",
         "role": "lemma",
-        "parallel": true,
-        "depends_on": [
-          "L-twin-primes-finite-band-sum",
-          "L-twin-primes-time-weights"
-        ],
-        "imports": []
+        "parallel": false,
+        "depends_on": [],
+        "imports": [],
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
       },
       {
-        "id": "L-twin-primes-signed-moment-margin",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_signed_moment_margin.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_signed_moment_margin",
-        "statement": "let bump := fun (a b t : ℝ) => if a < t ∧ t < b then Real.exp (-1/((t-a)*(b-t))) else 0; let W := bump 1 (51/50); let b := bump (-1/40) (1/40); let k := fun (t : ℝ) => ∫ v : ℝ, b v * Real.cos (2*Real.pi*v*t); let l := fun (t : ℝ) => Real.sin (Real.pi*t/5)*k t; let T := fun (X : ℕ) => 2*Real.pi*(X:ℝ); let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let u := fun (X n : ℕ) => ArithmeticFunction.vonMangoldt n * W ((n:ℝ)/X) / Real.sqrt n; let P := fun (X : ℕ) (t : ℝ) => (w X).sum (fun n => (u X n : ℂ)*Complex.exp (-Complex.I*(t:ℂ)*(Real.log n : ℂ))); let I := fun (X : ℕ) (σ : ℝ) => ∫ t in Set.Ioi (0:ℝ), (l (t/T X))^2*(1+σ*Real.cos (4*Real.pi*t/T X))*‖P X t‖^2; ∃ δ : ℝ, 0 < δ ∧ ∀ B : ℕ, ∃ X : ℕ, B < X ∧ δ*T X < I X 1-I X (-1)",
+        "id": "L-twin-primes-mean-threshold",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_mean_threshold.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_mean_threshold",
+        "statement": "∀ θ : ℝ, θ < 7/8 → ∃ ε : ℝ, 0 < ε ∧ Filter.Tendsto (fun x : ℝ => x ^ (θ+1/8+ε) / x) Filter.atTop (nhds 0)",
         "plain_statement": {
-          "zh": "新路线 · Fourier 选频 · TP-0014 · 在无界尺度取得实际双矩的线性余量",
-          "en": "New route · Fourier isolation · TP-0014 · Find a linear surplus in the two actual moments on unbounded scales"
+          "zh": "新路线 · Fourier 选频 · TP-0017 · 给出微分均值容许的 7/8 严格阈值",
+          "en": "New route · Fourier isolation · TP-0017 · Budget the strict seven-eighths threshold for the differentiated mean"
         },
         "brief": {
-          "zh": "保留同一 T=2πX、同一 W 的符号，研究 Lee 的微分均值或零点配对。",
-          "en": "Keep T=2πX and W fixed in both terms and study Lee’s differentiated mean or its zero-pair expansion."
+          "zh": "两条 Mellin 线共耗 1/8，除以 T 后选 ε；均值公式本身另需证明。",
+          "en": "Budget 1/8 for the two Mellin lines, divide by T and choose ε. The differentiated mean itself requires proof."
         },
         "source": "https://arxiv.org/abs/2610.32672",
         "program": "foundation",
-        "role": "target",
-        "parallel": true,
+        "role": "lemma",
+        "parallel": false,
         "depends_on": [],
         "imports": [],
-        "challenge_only": true
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
       },
       {
         "id": "L-twin-primes-moment-to-window",
@@ -5012,7 +4948,31 @@
           "L-twin-primes-two-moment-identity",
           "L-twin-primes-vanishing-error"
         ],
-        "imports": []
+        "imports": [],
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
+      },
+      {
+        "id": "L-twin-primes-outer-band",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_outer_band.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_outer_band",
+        "statement": "let f := fun (x n j : ℝ) => x * Real.log (1+j/n); ∀ (x n : ℝ) (j : ℕ), 1000 ≤ x → x ≤ n → 50*n ≤ 51*x → 3 ≤ j → 9/4 < f x n j",
+        "plain_statement": {
+          "zh": "新路线 · Fourier 选频 · TP-0009 · 一致排除全部更大间距",
+          "en": "New route · Fourier isolation · TP-0009 · Exclude all gaps of at least three uniformly"
+        },
+        "brief": {
+          "zh": "先用对数单调性缩至 j=3，再使用窄窗右端点。",
+          "en": "Reduce to j=3 by monotonicity and use the right endpoint of the window."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [],
+        "imports": [],
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
       },
       {
         "id": "L-twin-primes-rh-contour",
@@ -5032,47 +4992,101 @@
         "role": "conditional",
         "parallel": true,
         "depends_on": [],
-        "imports": []
+        "imports": [],
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
       },
       {
-        "id": "L-twin-primes-mean-threshold",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_mean_threshold.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_mean_threshold",
-        "statement": "∀ θ : ℝ, θ < 7/8 → ∃ ε : ℝ, 0 < ε ∧ Filter.Tendsto (fun x : ℝ => x ^ (θ+1/8+ε) / x) Filter.atTop (nhds 0)",
+        "id": "L-twin-primes-signed-moment-margin",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_signed_moment_margin.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_signed_moment_margin",
+        "statement": "let bump := fun (a b t : ℝ) => if a < t ∧ t < b then Real.exp (-1/((t-a)*(b-t))) else 0; let W := bump 1 (51/50); let b := bump (-1/40) (1/40); let k := fun (t : ℝ) => ∫ v : ℝ, b v * Real.cos (2*Real.pi*v*t); let l := fun (t : ℝ) => Real.sin (Real.pi*t/5)*k t; let T := fun (X : ℕ) => 2*Real.pi*(X:ℝ); let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let u := fun (X n : ℕ) => ArithmeticFunction.vonMangoldt n * W ((n:ℝ)/X) / Real.sqrt n; let P := fun (X : ℕ) (t : ℝ) => (w X).sum (fun n => (u X n : ℂ)*Complex.exp (-Complex.I*(t:ℂ)*(Real.log n : ℂ))); let I := fun (X : ℕ) (σ : ℝ) => ∫ t in Set.Ioi (0:ℝ), (l (t/T X))^2*(1+σ*Real.cos (4*Real.pi*t/T X))*‖P X t‖^2; ∃ δ : ℝ, 0 < δ ∧ ∀ B : ℕ, ∃ X : ℕ, B < X ∧ δ*T X < I X 1-I X (-1)",
         "plain_statement": {
-          "zh": "新路线 · Fourier 选频 · TP-0017 · 给出微分均值容许的 7/8 严格阈值",
-          "en": "New route · Fourier isolation · TP-0017 · Budget the strict seven-eighths threshold for the differentiated mean"
+          "zh": "新路线 · Fourier 选频 · TP-0014 · 在无界尺度取得实际双矩的线性余量",
+          "en": "New route · Fourier isolation · TP-0014 · Find a linear surplus in the two actual moments on unbounded scales"
         },
         "brief": {
-          "zh": "两条 Mellin 线共耗 1/8，除以 T 后选 ε；均值公式本身另需证明。",
-          "en": "Budget 1/8 for the two Mellin lines, divide by T and choose ε. The differentiated mean itself requires proof."
+          "zh": "保留同一 T=2πX、同一 W 的符号，研究 Lee 的微分均值或零点配对。",
+          "en": "Keep T=2πX and W fixed in both terms and study Lee’s differentiated mean or its zero-pair expansion."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "foundation",
+        "role": "target",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "challenge_only": true,
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
+      },
+      {
+        "id": "L-twin-primes-time-weights",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_time_weights.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_time_weights",
+        "statement": "∀ (l : ℝ → ℝ) (t : ℝ), let g := fun (σ : ℝ) => (l t)^2 * (1+σ*Real.cos (4*Real.pi*t)); 0 ≤ g 1 ∧ 0 ≤ g (-1) ∧ g 1 - g (-1) = 2*(l t)^2*Real.cos (4*Real.pi*t)",
+        "plain_statement": {
+          "zh": "新路线 · Fourier 选频 · TP-0010 · 构造同一基函数的两支非负权",
+          "en": "New route · Fourier isolation · TP-0010 · Prove positivity and the signed difference of the two time weights"
+        },
+        "brief": {
+          "zh": "使用余弦的取值区间，再在相减时保留因子二。",
+          "en": "Use the range of cosine and keep the factor two when subtracting."
         },
         "source": "https://arxiv.org/abs/2610.32672",
         "program": "foundation",
         "role": "lemma",
         "parallel": false,
         "depends_on": [],
-        "imports": []
+        "imports": [],
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
       },
       {
-        "id": "L-twin-primes-positive-curvature",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_positive_curvature.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_positive_curvature",
-        "statement": "∀ u c : ℝ, 0 < c → c < u → 1/(u+c)+1/(u-c)-2/u = 2*c^2/(u*(u^2-c^2)) ∧ 0 < 1/(u+c)+1/(u-c)-2/u",
+        "id": "L-twin-primes-two-moment-identity",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_two_moment_identity.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_two_moment_identity",
+        "statement": "let bump := fun (a b t : ℝ) => if a < t ∧ t < b then Real.exp (-1/((t-a)*(b-t))) else 0; let W := bump 1 (51/50); let b := bump (-1/40) (1/40); let K := fun (v : ℝ) => ∫ u : ℝ, b u * b (v-u); let H := fun (v : ℝ) => K v / 2 - K (v-1/5)/4 - K (v+1/5)/4; let k := fun (t : ℝ) => ∫ v : ℝ, b v * Real.cos (2*Real.pi*v*t); let l := fun (t : ℝ) => Real.sin (Real.pi*t/5)*k t; let T := fun (X : ℕ) => 2*Real.pi*(X:ℝ); let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let u := fun (X n : ℕ) => ArithmeticFunction.vonMangoldt n * W ((n:ℝ)/X) / Real.sqrt n; let P := fun (X : ℕ) (t : ℝ) => (w X).sum (fun n => (u X n : ℂ)*Complex.exp (-Complex.I*(t:ℂ)*(Real.log n : ℂ))); let I := fun (X : ℕ) (σ : ℝ) => ∫ t in Set.Ioi (0:ℝ), (l (t/T X))^2*(1+σ*Real.cos (4*Real.pi*t/T X))*‖P X t‖^2; let f := fun (x n j : ℝ) => x * Real.log (1+j/n); ∀ X : ℕ, 1000 ≤ X → I X 1 - I X (-1) = T X * ((w X).filter (fun n => n+2 ∈ w X)).sum (fun n => u X n*u X (n+2)*H (f X n 2 - 2))",
         "plain_statement": {
-          "zh": "新路线 · 零点对与相位 · TP-0018 · 计算谱对角核的严格正二阶差",
-          "en": "New route · Zero pairs and phases · TP-0018 · Compute the strictly positive second difference of the diagonal kernel"
+          "zh": "新路线 · Fourier 选频 · TP-0013 · 对实际多项式证明两支时间积分之差",
+          "en": "New route · Fourier isolation · TP-0013 · Compute the difference of the two actual polynomial moments"
         },
         "brief": {
-          "zh": "先清分母，再由 u>c 确定三个分母的符号。",
-          "en": "Clear denominators first and use u>c to determine their signs."
+          "zh": "展开有限平方，偶性将全轴积分减半；用 Fourier 卷积公式和已分离的边带。",
+          "en": "Expand the finite square, halve the full integral by evenness and apply the convolution formula and frequency isolation."
         },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
-        "program": "correlation",
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "foundation",
         "role": "lemma",
         "parallel": true,
+        "depends_on": [
+          "L-twin-primes-finite-band-sum",
+          "L-twin-primes-time-weights"
+        ],
+        "imports": [],
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
+      },
+      {
+        "id": "L-twin-primes-unit-band",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_unit_band.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_unit_band",
+        "statement": "let f := fun (x n j : ℝ) => x * Real.log (1+j/n); ∀ x n : ℝ, 1000 ≤ x → x ≤ n → 50*n ≤ 51*x → 1/4 < f x n 1 ∧ f x n 1 < 7/4",
+        "plain_statement": {
+          "zh": "新路线 · Fourier 选频 · TP-0007 · 排除相邻项的频率",
+          "en": "New route · Fourier isolation · TP-0007 · Exclude the frequency of adjacent indices"
+        },
+        "brief": {
+          "zh": "由 t/(1+t) ≤ log(1+t) ≤ t 对两端估计。",
+          "en": "Use t/(1+t) ≤ log(1+t) ≤ t at the endpoints."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": false,
         "depends_on": [],
-        "imports": []
+        "imports": [],
+        "track": "02-fourier-isolation",
+        "route_source": "02-fourier-isolation"
       },
       {
         "id": "L-twin-primes-diagonal-integral",
@@ -5094,67 +5108,9 @@
         "depends_on": [
           "L-twin-primes-positive-curvature"
         ],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-ordered-indices",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_ordered_indices.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_ordered_indices",
-        "statement": "∀ m : ℕ, ((Finset.univ : Finset (Fin m × Fin m)).filter (fun z => z.1 ≠ z.2)).card = m*(m-1)",
-        "plain_statement": {
-          "zh": "新路线 · 零点对与相位 · TP-0020 · 精确保留重零点中相等纵坐标的异编号",
-          "en": "New route · Zero pairs and phases · TP-0020 · Count off-diagonal labels at repeated ordinates"
-        },
-        "brief": {
-          "zh": "对同一重数 m 的零点逐个固定第一编号，数剩余编号。",
-          "en": "Fix the first of m labels at one zero and count the remaining labels."
-        },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-hermitian-pairs",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_hermitian_pairs.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_hermitian_pairs",
-        "statement": "∀ (n : ℕ) (A : Fin n → Fin n → ℂ), (∀ i j, A j i = star (A i j)) → ((Finset.univ : Finset (Fin n × Fin n)).filter (fun z => z.1 ≠ z.2) |>.sum (fun z => A z.1 z.2)).im = 0",
-        "plain_statement": {
-          "zh": "新路线 · 零点对与相位 · TP-0021 · 使有限有序非对角总和为实",
-          "en": "New route · Zero pairs and phases · TP-0021 · Show that the finite ordered off-diagonal sum is real"
-        },
-        "brief": {
-          "zh": "交换两个编号，复共轭使虚部成对消去。",
-          "en": "Swap the two labels and pair conjugate imaginary parts."
-        },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-mellin-tail",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_mellin_tail.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_mellin_tail",
-        "statement": "∀ C : ℝ, 0 ≤ C → ∃ D : ℝ, 0 ≤ D ∧ ∀ (L : ℕ) (m : ℕ → ℝ), (∀ n, 0 ≤ m n ∧ m n ≤ C*Real.log (2+(n:ℝ))) → (∑' n : ℕ, m (L+n)/(1+(L:ℝ)+n)^6) ≤ D/(1+(L:ℝ))^4",
-        "plain_statement": {
-          "zh": "新路线 · 零点对与相位 · TP-0022 · 由单位窗计数控制衰减核的远零点尾",
-          "en": "New route · Zero pairs and phases · TP-0022 · Bound the far-zero tail of a decaying kernel from unit counts"
-        },
-        "brief": {
-          "zh": "按距中心的整壳计数；以一个小幂吸收对数并控制收敛尾和。",
-          "en": "Group by integer distance from the center, absorb the logarithm and sum the tail."
-        },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [],
-        "imports": []
+        "imports": [],
+        "track": "03-zero-pairs",
+        "route_source": "03-zero-pairs"
       },
       {
         "id": "L-twin-primes-gap-one-control",
@@ -5174,7 +5130,9 @@
         "role": "lemma",
         "parallel": true,
         "depends_on": [],
-        "imports": []
+        "imports": [],
+        "track": "03-zero-pairs",
+        "route_source": "03-zero-pairs"
       },
       {
         "id": "L-twin-primes-gap-one-sum",
@@ -5196,32 +5154,97 @@
         "depends_on": [
           "L-twin-primes-gap-one-control"
         ],
-        "imports": []
+        "imports": [],
+        "track": "03-zero-pairs",
+        "route_source": "03-zero-pairs"
       },
       {
-        "id": "L-twin-primes-zero-pair-margin",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_zero_pair_margin.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_zero_pair_margin",
-        "statement": "let bump := fun (a b t : ℝ) => if a < t ∧ t < b then Real.exp (-1/((t-a)*(b-t))) else 0; let W := bump 1 (51/50); let b := bump (-1/40) (1/40); let K := fun (v : ℝ) => ∫ u : ℝ, b u * b (v-u); let d := fun (h : ℝ) => (∫ u : ℝ, (W u)^2/u)/16 * (∫ v : ℝ, K v*(1/(h+v+1/5)+1/(h+v-1/5)-2/(h+v))); let k := fun (t : ℝ) => ∫ v : ℝ, b v*Real.cos (2*Real.pi*v*t); let omega := fun (t : ℝ) => (Real.sin (Real.pi*t/5)*k t)^2 * Real.cos (4*Real.pi*t); let z := fun (g : ℝ) => (1/2 : ℂ) + Complex.I*(g:ℂ); let m := fun (g : ℝ) => analyticOrderNatAt riemannZeta (z g); let M := fun (v : ℝ) => ∫ u : ℝ, ((W u/u : ℝ):ℂ)*Complex.exp (Complex.I*(v*Real.log u : ℝ)); let R := fun (X : ℕ) => let T : ℝ := 2*Real.pi*X; let L := (Real.log (2+T))^2; (∫ t in Set.Icc (-T*L) (T*L), omega (t/T) * (‖∑' g : {g : ℝ // |g-t| ≤ L ∧ riemannZeta (z g) = 0}, (m g.val : ℂ)*Complex.exp (Complex.I*(g.val*Real.log X : ℝ))*M (g.val-t)‖^2 - ∑' g : {g : ℝ // |g-t| ≤ L ∧ riemannZeta (z g) = 0}, (m g.val : ℝ)*‖M (g.val-t)‖^2))/(2*T); ∃ κ : ℝ, 0 < κ ∧ ∀ B : ℕ, ∃ X : ℕ, B < X ∧ κ < d 2 + R X",
+        "id": "L-twin-primes-hermitian-pairs",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_hermitian_pairs.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_hermitian_pairs",
+        "statement": "∀ (n : ℕ) (A : Fin n → Fin n → ℂ), (∀ i j, A j i = star (A i j)) → ((Finset.univ : Finset (Fin n × Fin n)).filter (fun z => z.1 ≠ z.2) |>.sum (fun z => A z.1 z.2)).im = 0",
         "plain_statement": {
-          "zh": "新路线 · 零点对与相位 · TP-0025 · 检验 ζ 零点非对角能否在无界窗保留严格余量",
-          "en": "New route · Zero pairs and phases · TP-0025 · Seek a strict margin in the actual zeta zero pairs on unbounded windows"
+          "zh": "新路线 · 零点对与相位 · TP-0021 · 使有限有序非对角总和为实",
+          "en": "New route · Zero pairs and phases · TP-0021 · Show that the finite ordered off-diagonal sum is real"
         },
         "brief": {
-          "zh": "对每个 t 只保留对数平方距离内的零点；平方后扣除 m 个自配对，相同纵坐标仍有 m(m−1) 项。",
-          "en": "Truncate at squared logarithmic distance from t. Subtract m individual diagonals from the square, leaving m(m−1) pairs at a repeated ordinate."
+          "zh": "交换两个编号，复共轭使虚部成对消去。",
+          "en": "Swap the two labels and pair conjugate imaginary parts."
         },
         "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
         "program": "correlation",
-        "role": "target",
+        "role": "lemma",
         "parallel": true,
-        "depends_on": [
-          "L-twin-primes-ordered-indices",
-          "L-twin-primes-hermitian-pairs",
-          "L-twin-primes-diagonal-integral"
-        ],
+        "depends_on": [],
         "imports": [],
-        "challenge_only": true
+        "track": "03-zero-pairs",
+        "route_source": "03-zero-pairs"
+      },
+      {
+        "id": "L-twin-primes-mellin-tail",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_mellin_tail.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_mellin_tail",
+        "statement": "∀ C : ℝ, 0 ≤ C → ∃ D : ℝ, 0 ≤ D ∧ ∀ (L : ℕ) (m : ℕ → ℝ), (∀ n, 0 ≤ m n ∧ m n ≤ C*Real.log (2+(n:ℝ))) → (∑' n : ℕ, m (L+n)/(1+(L:ℝ)+n)^6) ≤ D/(1+(L:ℝ))^4",
+        "plain_statement": {
+          "zh": "新路线 · 零点对与相位 · TP-0022 · 由单位窗计数控制衰减核的远零点尾",
+          "en": "New route · Zero pairs and phases · TP-0022 · Bound the far-zero tail of a decaying kernel from unit counts"
+        },
+        "brief": {
+          "zh": "按距中心的整壳计数；以一个小幂吸收对数并控制收敛尾和。",
+          "en": "Group by integer distance from the center, absorb the logarithm and sum the tail."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "track": "03-zero-pairs",
+        "route_source": "03-zero-pairs"
+      },
+      {
+        "id": "L-twin-primes-ordered-indices",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_ordered_indices.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_ordered_indices",
+        "statement": "∀ m : ℕ, ((Finset.univ : Finset (Fin m × Fin m)).filter (fun z => z.1 ≠ z.2)).card = m*(m-1)",
+        "plain_statement": {
+          "zh": "新路线 · 零点对与相位 · TP-0020 · 精确保留重零点中相等纵坐标的异编号",
+          "en": "New route · Zero pairs and phases · TP-0020 · Count off-diagonal labels at repeated ordinates"
+        },
+        "brief": {
+          "zh": "对同一重数 m 的零点逐个固定第一编号，数剩余编号。",
+          "en": "Fix the first of m labels at one zero and count the remaining labels."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "track": "03-zero-pairs",
+        "route_source": "03-zero-pairs"
+      },
+      {
+        "id": "L-twin-primes-positive-curvature",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_positive_curvature.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_positive_curvature",
+        "statement": "∀ u c : ℝ, 0 < c → c < u → 1/(u+c)+1/(u-c)-2/u = 2*c^2/(u*(u^2-c^2)) ∧ 0 < 1/(u+c)+1/(u-c)-2/u",
+        "plain_statement": {
+          "zh": "新路线 · 零点对与相位 · TP-0018 · 计算谱对角核的严格正二阶差",
+          "en": "New route · Zero pairs and phases · TP-0018 · Compute the strictly positive second difference of the diagonal kernel"
+        },
+        "brief": {
+          "zh": "先清分母，再由 u>c 确定三个分母的符号。",
+          "en": "Clear denominators first and use u>c to determine their signs."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "track": "03-zero-pairs",
+        "route_source": "03-zero-pairs"
       },
       {
         "id": "L-twin-primes-spectral-comparison",
@@ -5248,69 +5271,36 @@
           "L-twin-primes-rh-contour"
         ],
         "imports": [],
-        "challenge_only": true
+        "challenge_only": true,
+        "track": "03-zero-pairs",
+        "route_source": "03-zero-pairs"
       },
       {
-        "id": "L-twin-primes-mangoldt-divisors",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_mangoldt_divisors.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_mangoldt_divisors",
-        "statement": "∀ n : ℕ, 0 < n → ArithmeticFunction.vonMangoldt n = n.divisors.sum (fun d => -(ArithmeticFunction.moebius d : ℝ)*Real.log d)",
+        "id": "L-twin-primes-zero-pair-margin",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_zero_pair_margin.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_zero_pair_margin",
+        "statement": "let bump := fun (a b t : ℝ) => if a < t ∧ t < b then Real.exp (-1/((t-a)*(b-t))) else 0; let W := bump 1 (51/50); let b := bump (-1/40) (1/40); let K := fun (v : ℝ) => ∫ u : ℝ, b u * b (v-u); let d := fun (h : ℝ) => (∫ u : ℝ, (W u)^2/u)/16 * (∫ v : ℝ, K v*(1/(h+v+1/5)+1/(h+v-1/5)-2/(h+v))); let k := fun (t : ℝ) => ∫ v : ℝ, b v*Real.cos (2*Real.pi*v*t); let omega := fun (t : ℝ) => (Real.sin (Real.pi*t/5)*k t)^2 * Real.cos (4*Real.pi*t); let z := fun (g : ℝ) => (1/2 : ℂ) + Complex.I*(g:ℂ); let m := fun (g : ℝ) => analyticOrderNatAt riemannZeta (z g); let M := fun (v : ℝ) => ∫ u : ℝ, ((W u/u : ℝ):ℂ)*Complex.exp (Complex.I*(v*Real.log u : ℝ)); let R := fun (X : ℕ) => let T : ℝ := 2*Real.pi*X; let L := (Real.log (2+T))^2; (∫ t in Set.Icc (-T*L) (T*L), omega (t/T) * (‖∑' g : {g : ℝ // |g-t| ≤ L ∧ riemannZeta (z g) = 0}, (m g.val : ℂ)*Complex.exp (Complex.I*(g.val*Real.log X : ℝ))*M (g.val-t)‖^2 - ∑' g : {g : ℝ // |g-t| ≤ L ∧ riemannZeta (z g) = 0}, (m g.val : ℝ)*‖M (g.val-t)‖^2))/(2*T); ∃ κ : ℝ, 0 < κ ∧ ∀ B : ℕ, ∃ X : ℕ, B < X ∧ κ < d 2 + R X",
         "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0027 · 验证 Mangoldt 的带符号除数公式",
-          "en": "New route · Short and long divisors · TP-0027 · Recover Mangoldt from the signed divisor sum"
+          "zh": "新路线 · 零点对与相位 · TP-0025 · 检验 ζ 零点非对角能否在无界窗保留严格余量",
+          "en": "New route · Zero pairs and phases · TP-0025 · Seek a strict margin in the actual zeta zero pairs on unbounded windows"
         },
         "brief": {
-          "zh": "对 log n 的除数分解作 Möbius 反演，检查 n=1。",
-          "en": "Apply Möbius inversion to the divisor decomposition of log n, including n=1."
+          "zh": "对每个 t 只保留对数平方距离内的零点；平方后扣除 m 个自配对，相同纵坐标仍有 m(m−1) 项。",
+          "en": "Truncate at squared logarithmic distance from t. Subtract m individual diagonals from the square, leaving m(m−1) pairs at a repeated ordinate."
         },
-        "source": "https://arxiv.org/abs/2610.32672",
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
         "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-divisor-split",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_divisor_split.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_divisor_split",
-        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let primes := fun X => (w X).filter Nat.Prime; let c := fun (d : ℕ) => -(ArithmeticFunction.moebius d : ℝ)*Real.log d; let short := fun (X D : ℕ) => (primes X).sum (fun p => Real.log p * (((p+2).divisors.filter (fun d => d ≤ D)).sum c))/(X:ℝ); let long := fun (X D : ℕ) => (primes X).sum (fun p => Real.log p * (((p+2).divisors.filter (fun d => D < d)).sum c))/(X:ℝ); ∀ X D : ℕ, short X D + long X D = (primes X).sum (fun p => Real.log p*ArithmeticFunction.vonMangoldt (p+2))/(X:ℝ)",
-        "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0028 · 对同一窗精确切分短长除数质量",
-          "en": "New route · Short and long divisors · TP-0028 · Split short and long divisor mass in the same window"
-        },
-        "brief": {
-          "zh": "用 d≤D 及其补集分割每个 p+2 的除数集。",
-          "en": "Partition the divisors of each p+2 at d≤D."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "correlation",
-        "role": "lemma",
+        "role": "target",
         "parallel": true,
         "depends_on": [
-          "L-twin-primes-mangoldt-divisors"
+          "L-twin-primes-ordered-indices",
+          "L-twin-primes-hermitian-pairs",
+          "L-twin-primes-diagonal-integral"
         ],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-unit-class",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_unit_class.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_unit_class",
-        "statement": "∀ d : ℕ, Odd d → Nat.Coprime 2 d ∧ ∀ p : ℕ, d ∣ p+2 ↔ ((p:ZMod d) = -(2:ZMod d))",
-        "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0029 · 确定 −2 是每个奇模数的约化类",
-          "en": "New route · Short and long divisors · TP-0029 · Certify minus two as a unit for every odd modulus"
-        },
-        "brief": {
-          "zh": "模 d 化整除关系，d=1 的平凡环亦包含在内。",
-          "en": "Reduce divisibility modulo d, including the trivial ring at d=1."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [],
-        "imports": []
+        "imports": [],
+        "challenge_only": true,
+        "track": "03-zero-pairs",
+        "route_source": "03-zero-pairs"
       },
       {
         "id": "L-twin-primes-ap-short-error",
@@ -5332,116 +5322,9 @@
         "depends_on": [
           "L-twin-primes-unit-class"
         ],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-euler-factor",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_euler_factor.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_euler_factor",
-        "statement": "∀ (p : ℕ) (u : ℝ), 2 < p → u ≠ (p:ℝ) → (1-u/((p:ℝ)-1))/(1-u/p) = 1-u/((p:ℝ)*((p:ℝ)-1)*(1-u/p))",
-        "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0031 · 拆开奇素数的修正 Euler 因子",
-          "en": "New route · Short and long divisors · TP-0031 · Factor the odd-prime Euler correction"
-        },
-        "brief": {
-          "zh": "通分后分子为 −u。代 u=1 得孪生素数的奇局部因子。",
-          "en": "Clear the denominators. Substituting u=1 gives the odd local twin factor."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-positive-product",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_positive_product.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_positive_product",
-        "statement": "let f := fun (p : ℕ) => if p.Prime ∧ 2 < p then 1-1/((p:ℝ)-1)^2 else 1; let twinC := ∏' p : ℕ, f p; 0 < twinC",
-        "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0032 · 证明奇素数局部因子的无限乘积严格为正",
-          "en": "New route · Short and long divisors · TP-0032 · Prove positivity of the product of odd local factors"
-        },
-        "brief": {
-          "zh": "先以倒数平方和控制 log，再从有限乘积过渡；p=2 因子单独处理。",
-          "en": "Control logarithms by a convergent reciprocal-square sum and pass from finite products. Treat 2 separately."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [
-          "L-twin-primes-euler-factor"
-        ],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-moebius-moments",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_moebius_moments.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_moebius_moments",
-        "statement": "RiemannHypothesis → Filter.Tendsto (fun N : ℕ => (Finset.Icc 1 N).sum (fun n => (ArithmeticFunction.moebius n : ℝ)/n)) Filter.atTop (nhds 0) ∧ Filter.Tendsto (fun N : ℕ => (Finset.Icc 1 N).sum (fun n => -(ArithmeticFunction.moebius n : ℝ)*Real.log n/n)) Filter.atTop (nhds 1)",
-        "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0033 · 求 Möbius 两个截断对数矩的极限",
-          "en": "New route · Short and long divisors · TP-0033 · Compute the two limiting logarithmic Möbius moments"
-        },
-        "brief": {
-          "zh": "对 Möbius 部分和分部求和，再用 1/ζ 在 1 的一阶展开识别两个常数。",
-          "en": "Apply partial summation to Möbius sums and use the first-order expansion of 1/ζ at one."
-        },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Main.lean#L43",
-        "program": "correlation",
-        "role": "conditional",
-        "parallel": true,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-hard-cutoff",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_hard_cutoff.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_hard_cutoff",
-        "statement": "let f := fun (p : ℕ) => if p.Prime ∧ 2 < p then 1-1/((p:ℝ)-1)^2 else 1; let twinC := ∏' p : ℕ, f p; RiemannHypothesis → Filter.Tendsto (fun D : ℕ => ((Finset.Icc 1 D).filter (fun n => n%2=1)).sum (fun n => -(ArithmeticFunction.moebius n : ℝ)*Real.log n / Nat.totient n)) Filter.atTop (nhds (2*twinC))",
-        "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0034 · 识别奇除数硬截断的 2C₂ 常数",
-          "en": "New route · Short and long divisors · TP-0034 · Identify the hard cutoff limit over odd divisors"
-        },
-        "brief": {
-          "zh": "卷积两个 Möbius 矩；p=2 的缺失提供因子 2。需控制截断尾部。",
-          "en": "Convolve the two Möbius moments and bound the cutoff tail. The omitted prime 2 supplies a factor of two."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "correlation",
-        "role": "conditional",
-        "parallel": true,
-        "depends_on": [
-          "L-twin-primes-moebius-moments",
-          "L-twin-primes-euler-factor"
-        ],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-unconditional-short",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_unconditional_short.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_unconditional_short",
-        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let primes := fun X => (w X).filter Nat.Prime; let c := fun (d : ℕ) => -(ArithmeticFunction.moebius d : ℝ)*Real.log d; let short := fun (X D : ℕ) => (primes X).sum (fun p => Real.log p * (((p+2).divisors.filter (fun d => d ≤ D)).sum c))/(X:ℝ); let D := fun (X : ℕ) => Nat.floor ((X:ℝ)^(1/3:ℝ)); let f := fun (p : ℕ) => if p.Prime ∧ 2 < p then 1-1/((p:ℝ)-1)^2 else 1; let twinC := ∏' p : ℕ, f p; Filter.Tendsto (fun X : ℕ => short X (D X)) Filter.atTop (nhds (2*twinC/50))",
-        "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0035 · 无条件求立方根截点的短除数主项",
-          "en": "New route · Short and long divisors · TP-0035 · Prove the unconditional short-divisor limit at the cube-root cutoff"
-        },
-        "brief": {
-          "zh": "已知定理的形式化里程碑。调用 Bombieri–Vinogradov 控制加权模数误差，再用定量素数定理导出的无条件 Möbius 矩识别硬截断常数。",
-          "en": "Formalize a consequence of known theorems. Use Bombieri–Vinogradov for the weighted error across moduli and unconditional Möbius moments from the quantitative prime number theorem for the cutoff constant."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "correlation",
-        "role": "target",
-        "parallel": false,
-        "depends_on": [
-          "L-twin-primes-divisor-split",
-          "L-twin-primes-euler-factor"
-        ],
         "imports": [],
-        "challenge_only": true
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
       },
       {
         "id": "L-twin-primes-cofactor-switch",
@@ -5461,53 +5344,9 @@
         "role": "lemma",
         "parallel": true,
         "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-semiprime-cancellation",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_semiprime_cancellation.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_semiprime_cancellation",
-        "statement": "∀ r q : ℕ, r.Prime → q.Prime → r ≠ q → (r*q).divisors.sum (fun d => -(ArithmeticFunction.moebius d : ℝ)*Real.log d) = 0",
-        "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0037 · 计算不同素数之积导致的精确抵消",
-          "en": "New route · Short and long divisors · TP-0037 · Compute exact Möbius cancellation at a product of distinct primes"
-        },
-        "brief": {
-          "zh": "分别写出 1、r、q、rq 四项并使用 log(rq)。",
-          "en": "List the four divisors 1, r, q and rq and expand log(rq)."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [
-          "L-twin-primes-mangoldt-divisors"
-        ],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-long-margin",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_long_margin.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_long_margin",
-        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let primes := fun X => (w X).filter Nat.Prime; let c := fun (d : ℕ) => -(ArithmeticFunction.moebius d : ℝ)*Real.log d; let long := fun (X D : ℕ) => (primes X).sum (fun p => Real.log p * (((p+2).divisors.filter (fun d => D < d)).sum c))/(X:ℝ); let D := fun (X : ℕ) => Nat.floor ((X:ℝ)^(1/3:ℝ)); let f := fun (p : ℕ) => if p.Prime ∧ 2 < p then 1-1/((p:ℝ)-1)^2 else 1; let twinC := ∏' p : ℕ, f p; ∃ κ : ℝ, 0 < κ ∧ ∀ B : ℕ, ∃ X : ℕ, B < X ∧ -2*twinC/50 + κ < long X (D X)",
-        "plain_statement": {
-          "zh": "新路线 · 短长除数与奇偶 · TP-0038 · 在同一立方根截点证明长除数的单侧增益",
-          "en": "New route · Short and long divisors · TP-0038 · Find a one-sided long-divisor gain at the same cube-root cutoff"
-        },
-        "brief": {
-          "zh": "分开 m=1 与 m>1，保留 μ(d) 和 md−2 的素性；需在同一 X 合并。",
-          "en": "Distinguish m=1 and m>1, retaining both μ(d) and primality of md−2. Recombine at the same X."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "correlation",
-        "role": "target",
-        "parallel": true,
-        "depends_on": [
-          "L-twin-primes-cofactor-switch",
-          "L-twin-primes-semiprime-cancellation"
-        ],
         "imports": [],
-        "challenge_only": true
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
       },
       {
         "id": "L-twin-primes-divisor-bridge",
@@ -5531,71 +5370,246 @@
           "L-twin-primes-long-margin",
           "L-twin-primes-window-contamination"
         ],
-        "imports": []
+        "imports": [],
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
       },
       {
-        "id": "L-twin-primes-overlap",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_overlap.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_overlap",
-        "statement": "∀ n m H : ℕ, n ≤ m → ((Finset.Ico n (n+H)) ∩ (Finset.Ico m (m+H))).card = H-(m-n)",
+        "id": "L-twin-primes-divisor-split",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_divisor_split.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_divisor_split",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let primes := fun X => (w X).filter Nat.Prime; let c := fun (d : ℕ) => -(ArithmeticFunction.moebius d : ℝ)*Real.log d; let short := fun (X D : ℕ) => (primes X).sum (fun p => Real.log p * (((p+2).divisors.filter (fun d => d ≤ D)).sum c))/(X:ℝ); let long := fun (X D : ℕ) => (primes X).sum (fun p => Real.log p * (((p+2).divisors.filter (fun d => D < d)).sum c))/(X:ℝ); ∀ X D : ℕ, short X D + long X D = (primes X).sum (fun p => Real.log p*ArithmeticFunction.vonMangoldt (p+2))/(X:ℝ)",
         "plain_statement": {
-          "zh": "新路线 · 有限跳跃 · TP-0040 · 数出两个离散窗口的交长",
-          "en": "New route · Finite increments · TP-0040 · Count the overlap of two discrete windows"
+          "zh": "新路线 · 短长除数与奇偶 · TP-0028 · 对同一窗精确切分短长除数质量",
+          "en": "New route · Short and long divisors · TP-0028 · Split short and long divisor mass in the same window"
         },
         "brief": {
-          "zh": "端点取半开区间，截断减法自然实现正部。",
-          "en": "Use half-open endpoints. Truncated subtraction gives the positive part."
+          "zh": "用 d≤D 及其补集分割每个 p+2 的除数集。",
+          "en": "Partition the divisors of each p+2 at d≤D."
         },
         "source": "https://arxiv.org/abs/2610.32672",
-        "program": "foundation",
+        "program": "correlation",
         "role": "lemma",
-        "parallel": false,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-second-difference",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_second_difference.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_second_difference",
-        "statement": "let v := fun (X n : ℕ) => if n ≤ X then ArithmeticFunction.vonMangoldt n else 0; let F := fun (X H : ℕ) => (Finset.range (X+H+1)).sum (fun t => ((Finset.range H).sum (fun j => if j ≤ t then v X (t-j) else 0))^2); let C := fun (X h : ℕ) => (Finset.range (X+1)).sum (fun n => v X n * v X (n+h)); ∀ X : ℕ, F X 3-2*F X 2+F X 1 = 2*C X 2",
-        "plain_statement": {
-          "zh": "新路线 · 有限跳跃 · TP-0041 · 用三个窗口的二阶差精确读出差二",
-          "en": "New route · Finite increments · TP-0041 · Extract gap two by the second difference of three window energies"
-        },
-        "brief": {
-          "zh": "对补零序列展开平方，用交长数各间距的系数。",
-          "en": "Expand the square of the zero-extended sequence and count each gap by interval overlap."
-        },
-        "source": "https://arxiv.org/abs/2610.32672",
-        "program": "foundation",
-        "role": "lemma",
-        "parallel": false,
+        "parallel": true,
         "depends_on": [
-          "L-twin-primes-overlap"
+          "L-twin-primes-mangoldt-divisors"
         ],
-        "imports": []
+        "imports": [],
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
       },
       {
-        "id": "L-twin-primes-rh-square-diagonal",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_rh_square_diagonal.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_rh_square_diagonal",
-        "statement": "let v := fun (X n : ℕ) => if n ≤ X then ArithmeticFunction.vonMangoldt n else 0; let C := fun (X h : ℕ) => (Finset.range (X+1)).sum (fun n => v X n * v X (n+h)); RiemannHypothesis → ∃ K : ℝ, 0 < K ∧ ∀ X : ℕ, 2 ≤ X → |C X 0-((X:ℝ)*Real.log X-X)| ≤ K*Real.sqrt X*Real.log (2+(X:ℝ))^3",
+        "id": "L-twin-primes-euler-factor",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_euler_factor.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_euler_factor",
+        "statement": "∀ (p : ℕ) (u : ℝ), 2 < p → u ≠ (p:ℝ) → (1-u/((p:ℝ)-1))/(1-u/p) = 1-u/((p:ℝ)*((p:ℝ)-1)*(1-u/p))",
         "plain_statement": {
-          "zh": "新路线 · 有限跳跃 · TP-0042 · 在 RH 下算出平方对角的主次两项",
-          "en": "New route · Finite increments · TP-0042 · Evaluate the first two terms of the squared diagonal under RH"
+          "zh": "新路线 · 短长除数与奇偶 · TP-0031 · 拆开奇素数的修正 Euler 因子",
+          "en": "New route · Short and long divisors · TP-0031 · Factor the odd-prime Euler correction"
         },
         "brief": {
-          "zh": "先对素数上的 log² 作分部求和，再补回高次幂。",
-          "en": "Use partial summation for log² on primes and restore proper powers."
+          "zh": "通分后分子为 −u。代 u=1 得孪生素数的奇局部因子。",
+          "en": "Clear the denominators. Substituting u=1 gives the odd local twin factor."
         },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Main.lean#L43",
-        "program": "foundation",
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
+      },
+      {
+        "id": "L-twin-primes-hard-cutoff",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_hard_cutoff.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_hard_cutoff",
+        "statement": "let f := fun (p : ℕ) => if p.Prime ∧ 2 < p then 1-1/((p:ℝ)-1)^2 else 1; let twinC := ∏' p : ℕ, f p; RiemannHypothesis → Filter.Tendsto (fun D : ℕ => ((Finset.Icc 1 D).filter (fun n => n%2=1)).sum (fun n => -(ArithmeticFunction.moebius n : ℝ)*Real.log n / Nat.totient n)) Filter.atTop (nhds (2*twinC))",
+        "plain_statement": {
+          "zh": "新路线 · 短长除数与奇偶 · TP-0034 · 识别奇除数硬截断的 2C₂ 常数",
+          "en": "New route · Short and long divisors · TP-0034 · Identify the hard cutoff limit over odd divisors"
+        },
+        "brief": {
+          "zh": "卷积两个 Möbius 矩；p=2 的缺失提供因子 2。需控制截断尾部。",
+          "en": "Convolve the two Möbius moments and bound the cutoff tail. The omitted prime 2 supplies a factor of two."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "correlation",
         "role": "conditional",
         "parallel": true,
         "depends_on": [
-          "L-twin-primes-power-count"
+          "L-twin-primes-moebius-moments",
+          "L-twin-primes-euler-factor"
         ],
-        "imports": []
+        "imports": [],
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
+      },
+      {
+        "id": "L-twin-primes-long-margin",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_long_margin.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_long_margin",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let primes := fun X => (w X).filter Nat.Prime; let c := fun (d : ℕ) => -(ArithmeticFunction.moebius d : ℝ)*Real.log d; let long := fun (X D : ℕ) => (primes X).sum (fun p => Real.log p * (((p+2).divisors.filter (fun d => D < d)).sum c))/(X:ℝ); let D := fun (X : ℕ) => Nat.floor ((X:ℝ)^(1/3:ℝ)); let f := fun (p : ℕ) => if p.Prime ∧ 2 < p then 1-1/((p:ℝ)-1)^2 else 1; let twinC := ∏' p : ℕ, f p; ∃ κ : ℝ, 0 < κ ∧ ∀ B : ℕ, ∃ X : ℕ, B < X ∧ -2*twinC/50 + κ < long X (D X)",
+        "plain_statement": {
+          "zh": "新路线 · 短长除数与奇偶 · TP-0038 · 在同一立方根截点证明长除数的单侧增益",
+          "en": "New route · Short and long divisors · TP-0038 · Find a one-sided long-divisor gain at the same cube-root cutoff"
+        },
+        "brief": {
+          "zh": "分开 m=1 与 m>1，保留 μ(d) 和 md−2 的素性；需在同一 X 合并。",
+          "en": "Distinguish m=1 and m>1, retaining both μ(d) and primality of md−2. Recombine at the same X."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "correlation",
+        "role": "target",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-cofactor-switch",
+          "L-twin-primes-semiprime-cancellation"
+        ],
+        "imports": [],
+        "challenge_only": true,
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
+      },
+      {
+        "id": "L-twin-primes-mangoldt-divisors",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_mangoldt_divisors.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_mangoldt_divisors",
+        "statement": "∀ n : ℕ, 0 < n → ArithmeticFunction.vonMangoldt n = n.divisors.sum (fun d => -(ArithmeticFunction.moebius d : ℝ)*Real.log d)",
+        "plain_statement": {
+          "zh": "新路线 · 短长除数与奇偶 · TP-0027 · 验证 Mangoldt 的带符号除数公式",
+          "en": "New route · Short and long divisors · TP-0027 · Recover Mangoldt from the signed divisor sum"
+        },
+        "brief": {
+          "zh": "对 log n 的除数分解作 Möbius 反演，检查 n=1。",
+          "en": "Apply Möbius inversion to the divisor decomposition of log n, including n=1."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
+      },
+      {
+        "id": "L-twin-primes-moebius-moments",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_moebius_moments.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_moebius_moments",
+        "statement": "RiemannHypothesis → Filter.Tendsto (fun N : ℕ => (Finset.Icc 1 N).sum (fun n => (ArithmeticFunction.moebius n : ℝ)/n)) Filter.atTop (nhds 0) ∧ Filter.Tendsto (fun N : ℕ => (Finset.Icc 1 N).sum (fun n => -(ArithmeticFunction.moebius n : ℝ)*Real.log n/n)) Filter.atTop (nhds 1)",
+        "plain_statement": {
+          "zh": "新路线 · 短长除数与奇偶 · TP-0033 · 求 Möbius 两个截断对数矩的极限",
+          "en": "New route · Short and long divisors · TP-0033 · Compute the two limiting logarithmic Möbius moments"
+        },
+        "brief": {
+          "zh": "对 Möbius 部分和分部求和，再用 1/ζ 在 1 的一阶展开识别两个常数。",
+          "en": "Apply partial summation to Möbius sums and use the first-order expansion of 1/ζ at one."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Main.lean#L43",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
+      },
+      {
+        "id": "L-twin-primes-positive-product",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_positive_product.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_positive_product",
+        "statement": "let f := fun (p : ℕ) => if p.Prime ∧ 2 < p then 1-1/((p:ℝ)-1)^2 else 1; let twinC := ∏' p : ℕ, f p; 0 < twinC",
+        "plain_statement": {
+          "zh": "新路线 · 短长除数与奇偶 · TP-0032 · 证明奇素数局部因子的无限乘积严格为正",
+          "en": "New route · Short and long divisors · TP-0032 · Prove positivity of the product of odd local factors"
+        },
+        "brief": {
+          "zh": "先以倒数平方和控制 log，再从有限乘积过渡；p=2 因子单独处理。",
+          "en": "Control logarithms by a convergent reciprocal-square sum and pass from finite products. Treat 2 separately."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-euler-factor"
+        ],
+        "imports": [],
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
+      },
+      {
+        "id": "L-twin-primes-semiprime-cancellation",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_semiprime_cancellation.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_semiprime_cancellation",
+        "statement": "∀ r q : ℕ, r.Prime → q.Prime → r ≠ q → (r*q).divisors.sum (fun d => -(ArithmeticFunction.moebius d : ℝ)*Real.log d) = 0",
+        "plain_statement": {
+          "zh": "新路线 · 短长除数与奇偶 · TP-0037 · 计算不同素数之积导致的精确抵消",
+          "en": "New route · Short and long divisors · TP-0037 · Compute exact Möbius cancellation at a product of distinct primes"
+        },
+        "brief": {
+          "zh": "分别写出 1、r、q、rq 四项并使用 log(rq)。",
+          "en": "List the four divisors 1, r, q and rq and expand log(rq)."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-mangoldt-divisors"
+        ],
+        "imports": [],
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
+      },
+      {
+        "id": "L-twin-primes-unconditional-short",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_unconditional_short.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_unconditional_short",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let primes := fun X => (w X).filter Nat.Prime; let c := fun (d : ℕ) => -(ArithmeticFunction.moebius d : ℝ)*Real.log d; let short := fun (X D : ℕ) => (primes X).sum (fun p => Real.log p * (((p+2).divisors.filter (fun d => d ≤ D)).sum c))/(X:ℝ); let D := fun (X : ℕ) => Nat.floor ((X:ℝ)^(1/3:ℝ)); let f := fun (p : ℕ) => if p.Prime ∧ 2 < p then 1-1/((p:ℝ)-1)^2 else 1; let twinC := ∏' p : ℕ, f p; Filter.Tendsto (fun X : ℕ => short X (D X)) Filter.atTop (nhds (2*twinC/50))",
+        "plain_statement": {
+          "zh": "新路线 · 短长除数与奇偶 · TP-0035 · 无条件求立方根截点的短除数主项",
+          "en": "New route · Short and long divisors · TP-0035 · Prove the unconditional short-divisor limit at the cube-root cutoff"
+        },
+        "brief": {
+          "zh": "已知定理的形式化里程碑。调用 Bombieri–Vinogradov 控制加权模数误差，再用定量素数定理导出的无条件 Möbius 矩识别硬截断常数。",
+          "en": "Formalize a consequence of known theorems. Use Bombieri–Vinogradov for the weighted error across moduli and unconditional Möbius moments from the quantitative prime number theorem for the cutoff constant."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "correlation",
+        "role": "target",
+        "parallel": false,
+        "depends_on": [
+          "L-twin-primes-divisor-split",
+          "L-twin-primes-euler-factor"
+        ],
+        "imports": [],
+        "challenge_only": true,
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
+      },
+      {
+        "id": "L-twin-primes-unit-class",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_unit_class.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_unit_class",
+        "statement": "∀ d : ℕ, Odd d → Nat.Coprime 2 d ∧ ∀ p : ℕ, d ∣ p+2 ↔ ((p:ZMod d) = -(2:ZMod d))",
+        "plain_statement": {
+          "zh": "新路线 · 短长除数与奇偶 · TP-0029 · 确定 −2 是每个奇模数的约化类",
+          "en": "New route · Short and long divisors · TP-0029 · Certify minus two as a unit for every odd modulus"
+        },
+        "brief": {
+          "zh": "模 d 化整除关系，d=1 的平凡环亦包含在内。",
+          "en": "Reduce divisibility modulo d, including the trivial ring at d=1."
+        },
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "track": "04-divisor-split",
+        "route_source": "04-divisor-split"
       },
       {
         "id": "L-twin-primes-increment-surplus",
@@ -5619,155 +5633,79 @@
           "L-twin-primes-gap-one-sum"
         ],
         "imports": [],
-        "challenge_only": true
+        "challenge_only": true,
+        "track": "05-finite-increments",
+        "route_source": "05-finite-increments"
       },
       {
-        "id": "L-twin-primes-zero-extension",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_zero_extension.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_zero_extension",
-        "statement": "∀ (N : ℕ) (b : ℤ → ℝ), (∀ n, n < 0 ∨ (N:ℤ) < n → b n = 0) → let S := Finset.Icc (-2:ℤ) (N:ℤ); S.sum (fun n => (b n+b (n+2))^2) - S.sum (fun n => (b n-b (n+2))^2) = 4*S.sum (fun n => b n*b (n+2))",
+        "id": "L-twin-primes-overlap",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_overlap.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_overlap",
+        "statement": "∀ n m H : ℕ, n ≤ m → ((Finset.Ico n (n+H)) ∩ (Finset.Ico m (m+H))).card = H-(m-n)",
         "plain_statement": {
-          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0044 · 在补零序列上极化平移二次型",
-          "en": "New route · Theta lift for a prescribed shift · TP-0044 · Polarize the shift on a zero-extended sequence"
+          "zh": "新路线 · 有限跳跃 · TP-0040 · 数出两个离散窗口的交长",
+          "en": "New route · Finite increments · TP-0040 · Count the overlap of two discrete windows"
         },
         "brief": {
-          "zh": "两个边界都用整数上的补零，逐项极化。",
-          "en": "Extend by zero at both boundaries on the integers and polarize term by term."
+          "zh": "端点取半开区间，截断减法自然实现正部。",
+          "en": "Use half-open endpoints. Truncated subtraction gives the positive part."
         },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/DecoratedLatticeProofs/ThetaKernelSplitPlacesEqJetClassicalThetaStatement.lean#L1335",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-local-residues",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_local_residues.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_local_residues",
-        "statement": "∀ p : ℕ, p.Prime → ((Finset.range p).filter (fun n => Nat.Coprime n p ∧ Nat.Coprime (n+2) p)).card = if p=2 then 1 else p-2",
-        "plain_statement": {
-          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0045 · 分别计算 2 处和奇素数处的平移单位掩码",
-          "en": "New route · Theta lift for a prescribed shift · TP-0045 · Count the shifted unit mask at two and at odd primes"
-        },
-        "brief": {
-          "zh": "排除 0 与 −2 两个余类。在 2 处它们重合。",
-          "en": "Remove the classes 0 and −2 and account for their coincidence at 2."
-        },
-        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-crt-mask",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_crt_mask.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_crt_mask",
-        "statement": "let A := fun (q : ℕ) => ((Finset.range q).filter (fun n => Nat.Coprime n q ∧ Nat.Coprime (n+2) q)).card; ∀ a b : ℕ, 0 < a → 0 < b → Nat.Coprime a b → A (a*b) = A a*A b",
-        "plain_statement": {
-          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0046 · 用 CRT 拼接互素模数的平移掩码",
-          "en": "New route · Theta lift for a prescribed shift · TP-0046 · Multiply the shifted masks over coprime moduli"
-        },
-        "brief": {
-          "zh": "用 CRT 给出有序余类对的双射，并分别运输两项互素条件。",
-          "en": "Use the CRT bijection on residue pairs and transport both coprimality conditions."
-        },
-        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
-        "depends_on": [
-          "L-twin-primes-local-residues"
-        ],
-        "imports": []
-      },
-      {
-        "id": "L-twin-primes-theta-error-budget",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_theta_error_budget.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_theta_error_budget",
-        "statement": "∀ (A P M Q N C E e f : ℝ), 0 < A → |(P-Q)/A-4*C| ≤ E → |P/A-M| ≤ e → |Q/A-N| ≤ f → (M-N-E-e-f)/4 ≤ C",
-        "plain_statement": {
-          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0047 · 在同一归一化下合并两支提升与算术误差",
-          "en": "New route · Theta lift for a prescribed shift · TP-0047 · Combine two lift errors and arithmetic matching in one normalization"
-        },
-        "brief": {
-          "zh": "参照 QP-0050 的一般绝对值误差界。取同一归一化和误差参数即可得到此单侧界。",
-          "en": "Specialize the shared absolute error bound QP-0050 to the same normalization and error parameters, then take one side."
-        },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
-        "program": "correlation",
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "foundation",
         "role": "lemma",
         "parallel": false,
         "depends_on": [],
         "imports": [],
-        "challenge_only": true
+        "track": "05-finite-increments",
+        "route_source": "05-finite-increments"
       },
       {
-        "id": "L-twin-primes-sifted-correlation",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_sifted_correlation.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_sifted_correlation",
-        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); ∀ X : ℕ, 9 ≤ X → let Q := ((Finset.range (Nat.sqrt (2*X+2)+1)).filter Nat.Prime).prod id; ((w X).filter (fun n => Nat.Coprime n Q ∧ Nat.Coprime (n+2) Q)) = ((w X).filter (fun n => n.Prime ∧ (n+2).Prime))",
+        "id": "L-twin-primes-rh-square-diagonal",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_rh_square_diagonal.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_rh_square_diagonal",
+        "statement": "let v := fun (X n : ℕ) => if n ≤ X then ArithmeticFunction.vonMangoldt n else 0; let C := fun (X h : ℕ) => (Finset.range (X+1)).sum (fun n => v X n * v X (n+h)); RiemannHypothesis → ∃ K : ℝ, 0 < K ∧ ∀ X : ℕ, 2 ≤ X → |C X 0-((X:ℝ)*Real.log X-X)| ≤ K*Real.sqrt X*Real.log (2+(X:ℝ))^3",
         "plain_statement": {
-          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0048 · 在平方根筛界准确识别真正的差二相关",
-          "en": "New route · Theta lift for a prescribed shift · TP-0048 · Identify the exact two-prime correlation at the square-root sieve cutoff"
+          "zh": "新路线 · 有限跳跃 · TP-0042 · 在 RH 下算出平方对角的主次两项",
+          "en": "New route · Finite increments · TP-0042 · Evaluate the first two terms of the squared diagonal under RH"
         },
         "brief": {
-          "zh": "合数有不大于平方根的素因子；窗中两端都超过筛界。可用作指定局部测试的精确算术参照。",
-          "en": "A composite has a prime divisor up to its square root. Both endpoints exceed the sieve cutoff. This gives an exact arithmetic test for the prescribed local data."
+          "zh": "先对素数上的 log² 作分部求和，再补回高次幂。",
+          "en": "Use partial summation for log² on primes and restore proper powers."
         },
-        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
-        "program": "correlation",
-        "role": "lemma",
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Main.lean#L43",
+        "program": "foundation",
+        "role": "conditional",
         "parallel": true,
         "depends_on": [
-          "L-twin-primes-crt-mask"
+          "L-twin-primes-power-count"
         ],
-        "imports": []
+        "imports": [],
+        "track": "05-finite-increments",
+        "route_source": "05-finite-increments"
       },
       {
-        "id": "L-twin-primes-shift-fourier-phase",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_shift_fourier_phase.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_shift_fourier_phase",
-        "statement": "∀ (N : ℕ) [NeZero N] (f : ZMod N → ℂ) (k : ZMod N), ZMod.dft (fun n => f (n+2)) k = ZMod.stdAddChar (N:=N) (2*k) * ZMod.dft f k",
+        "id": "L-twin-primes-second-difference",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_second_difference.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_second_difference",
+        "statement": "let v := fun (X n : ℕ) => if n ≤ X then ArithmeticFunction.vonMangoldt n else 0; let F := fun (X H : ℕ) => (Finset.range (X+H+1)).sum (fun t => ((Finset.range H).sum (fun j => if j ≤ t then v X (t-j) else 0))^2); let C := fun (X h : ℕ) => (Finset.range (X+1)).sum (fun n => v X n * v X (n+h)); ∀ X : ℕ, F X 3-2*F X 2+F X 1 = 2*C X 2",
         "plain_statement": {
-          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0049 · 证明平移二在指定 Fourier 频率的相位",
-          "en": "New route · Theta lift for a prescribed shift · TP-0049 · Compute the Fourier phase of translation by two at every prescribed frequency"
+          "zh": "新路线 · 有限跳跃 · TP-0041 · 用三个窗口的二阶差精确读出差二",
+          "en": "New route · Finite increments · TP-0041 · Extract gap two by the second difference of three window energies"
         },
         "brief": {
-          "zh": "参照 QP-0042 的任意平移公式，取平移量 2。使用 Mathlib DFT 的同一个负指数约定。",
-          "en": "Specialize the general shift formula QP-0042 to shift 2 under the same Mathlib DFT sign convention."
+          "zh": "对补零序列展开平方，用交长数各间距的系数。",
+          "en": "Expand the square of the zero-extended sequence and count each gap by interval overlap."
         },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/DecoratedLatticeProofs/ThetaKernelSplitPlacesEqJetClassicalThetaStatement.lean#L1335",
-        "program": "correlation",
+        "source": "https://arxiv.org/abs/2610.32672",
+        "program": "foundation",
         "role": "lemma",
         "parallel": false,
-        "depends_on": [],
-        "imports": [],
-        "challenge_only": true
-      },
-      {
-        "id": "L-twin-primes-no-wrap",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_no_wrap.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_no_wrap",
-        "statement": "∀ (N X : ℕ) [NeZero N] (f : ℕ → ℝ), X+2 < N → (∀ n, X < n → f n=0) → (∑ j : ZMod N, f j.val * f (j+2).val) = (Finset.range (X+1)).sum (fun n => f n*f (n+2))",
-        "plain_statement": {
-          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0050 · 用补零将整数平移配对嵌入有限循环模型",
-          "en": "New route · Theta lift for a prescribed shift · TP-0050 · Embed the integer shift pairing into a padded cyclic model"
-        },
-        "brief": {
-          "zh": "两项可能回绕时第一项已在支撑外，排除循环产生的伪素数对。",
-          "en": "At both wraparound positions the first factor is outside the support, so neither creates a spurious pair."
-        },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/DecoratedLatticeProofs/ThetaKernelSplitPlacesEqJetClassicalThetaStatement.lean#L1335",
-        "program": "correlation",
-        "role": "lemma",
-        "parallel": true,
         "depends_on": [
-          "L-twin-primes-zero-extension"
+          "L-twin-primes-overlap"
         ],
-        "imports": []
+        "imports": [],
+        "track": "05-finite-increments",
+        "route_source": "05-finite-increments"
       },
       {
         "id": "L-twin-primes-cosine-plancherel",
@@ -5790,54 +5728,33 @@
           "L-twin-primes-shift-fourier-phase",
           "L-twin-primes-no-wrap"
         ],
-        "imports": []
+        "imports": [],
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
       },
       {
-        "id": "L-twin-primes-prescribed-energy",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_prescribed_energy.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_prescribed_energy",
-        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let N := fun (X : ℕ) => 2*X+5; let f := fun (X n : ℕ) => if n ∈ w X ∧ n.Prime then Real.log n else 0; let energy := fun (X : ℕ) => letI : NeZero (N X) := ⟨by dsimp [N]; omega⟩; ∑ k : ZMod (N X), (ZMod.stdAddChar (N:=N X) (2*k)).re * ‖ZMod.dft (fun j : ZMod (N X) => ((f X j.val:ℝ):ℂ)) k‖^2; ∀ B : ℕ, ∃ X : ℕ, B<X ∧ 0<energy X",
+        "id": "L-twin-primes-crt-mask",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_crt_mask.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_crt_mask",
+        "statement": "let A := fun (q : ℕ) => ((Finset.range q).filter (fun n => Nat.Coprime n q ∧ Nat.Coprime (n+2) q)).card; ∀ a b : ℕ, 0 < a → 0 < b → Nat.Coprime a b → A (a*b) = A a*A b",
         "plain_statement": {
-          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0052 · 在无界尺度估计指定差二测试的谱能量",
-          "en": "New route · Theta lift for a prescribed shift · TP-0052 · Bound the signed energy of the prescribed gap-two test on unbounded scales"
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0046 · 用 CRT 拼接互素模数的平移掩码",
+          "en": "New route · Theta lift for a prescribed shift · TP-0046 · Multiply the shifted masks over coprime moduli"
         },
         "brief": {
-          "zh": "与 TP-0054 等价。由 TP-0050、TP-0051 将正能量化为同窗孪生对；反向取足够大的孪生对 p,p+2，并令 X=p−1。",
-          "en": "This is equivalent to TP-0054. TP-0050 and TP-0051 convert positive energy into a twin pair in the window. For the converse, choose a sufficiently large twin pair p,p+2 and set X=p−1."
+          "zh": "用 CRT 给出有序余类对的双射，并分别运输两项互素条件。",
+          "en": "Use the CRT bijection on residue pairs and transport both coprimality conditions."
         },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
         "program": "correlation",
-        "role": "target",
+        "role": "lemma",
         "parallel": true,
         "depends_on": [
-          "L-twin-primes-sifted-correlation",
-          "L-twin-primes-cosine-plancherel",
-          "L-twin-primes-theta-error-budget"
+          "L-twin-primes-local-residues"
         ],
         "imports": [],
-        "challenge_only": true
-      },
-      {
-        "id": "L-twin-primes-energy-bridge",
-        "file": "lean/PEqualNP/Outside/L_twin_primes_energy_bridge.lean",
-        "module": "PEqualNP.Outside.L_twin_primes_energy_bridge",
-        "statement": "(let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let N := fun (X : ℕ) => 2*X+5; let f := fun (X n : ℕ) => if n ∈ w X ∧ n.Prime then Real.log n else 0; let energy := fun (X : ℕ) => letI : NeZero (N X) := ⟨by dsimp [N]; omega⟩; ∑ k : ZMod (N X), (ZMod.stdAddChar (N:=N X) (2*k)).re * ‖ZMod.dft (fun j : ZMod (N X) => ((f X j.val:ℝ):ℂ)) k‖^2; ∀ B : ℕ, ∃ X : ℕ, B<X ∧ 0<energy X) → (∀ B : ℕ, ∃ p : ℕ, B < p ∧ p.Prime ∧ (p+2).Prime)",
-        "plain_statement": {
-          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0053 · 由指定 Θ 算术测试的正能量抽取孪生素数",
-          "en": "New route · Theta lift for a prescribed shift · TP-0053 · Extract twin primes from positive energy in the prescribed arithmetic test"
-        },
-        "brief": {
-          "zh": "对同一补零序列应用带符号 Parseval；能量严格正给出两端同窗的素数。",
-          "en": "Apply signed Parseval to the same padded sequence. Positive energy yields two primes in the same window."
-        },
-        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
-        "program": "correlation",
-        "role": "conditional",
-        "parallel": true,
-        "depends_on": [
-          "L-twin-primes-prescribed-energy"
-        ],
-        "imports": []
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
       },
       {
         "id": "L-twin-primes-endpoint",
@@ -5862,351 +5779,602 @@
           "L-twin-primes-energy-bridge"
         ],
         "imports": [],
-        "challenge_only": true
+        "challenge_only": true,
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-energy-bridge",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_energy_bridge.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_energy_bridge",
+        "statement": "(let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let N := fun (X : ℕ) => 2*X+5; let f := fun (X n : ℕ) => if n ∈ w X ∧ n.Prime then Real.log n else 0; let energy := fun (X : ℕ) => letI : NeZero (N X) := ⟨by dsimp [N]; omega⟩; ∑ k : ZMod (N X), (ZMod.stdAddChar (N:=N X) (2*k)).re * ‖ZMod.dft (fun j : ZMod (N X) => ((f X j.val:ℝ):ℂ)) k‖^2; ∀ B : ℕ, ∃ X : ℕ, B<X ∧ 0<energy X) → (∀ B : ℕ, ∃ p : ℕ, B < p ∧ p.Prime ∧ (p+2).Prime)",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0053 · 由指定 Θ 算术测试的正能量抽取孪生素数",
+          "en": "New route · Theta lift for a prescribed shift · TP-0053 · Extract twin primes from positive energy in the prescribed arithmetic test"
+        },
+        "brief": {
+          "zh": "对同一补零序列应用带符号 Parseval；能量严格正给出两端同窗的素数。",
+          "en": "Apply signed Parseval to the same padded sequence. Positive energy yields two primes in the same window."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-prescribed-energy"
+        ],
+        "imports": [],
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-local-residues",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_local_residues.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_local_residues",
+        "statement": "∀ p : ℕ, p.Prime → ((Finset.range p).filter (fun n => Nat.Coprime n p ∧ Nat.Coprime (n+2) p)).card = if p=2 then 1 else p-2",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0045 · 分别计算 2 处和奇素数处的平移单位掩码",
+          "en": "New route · Theta lift for a prescribed shift · TP-0045 · Count the shifted unit mask at two and at odd primes"
+        },
+        "brief": {
+          "zh": "排除 0 与 −2 两个余类。在 2 处它们重合。",
+          "en": "Remove the classes 0 and −2 and account for their coincidence at 2."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-no-wrap",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_no_wrap.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_no_wrap",
+        "statement": "∀ (N X : ℕ) [NeZero N] (f : ℕ → ℝ), X+2 < N → (∀ n, X < n → f n=0) → (∑ j : ZMod N, f j.val * f (j+2).val) = (Finset.range (X+1)).sum (fun n => f n*f (n+2))",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0050 · 用补零将整数平移配对嵌入有限循环模型",
+          "en": "New route · Theta lift for a prescribed shift · TP-0050 · Embed the integer shift pairing into a padded cyclic model"
+        },
+        "brief": {
+          "zh": "两项可能回绕时第一项已在支撑外，排除循环产生的伪素数对。",
+          "en": "At both wraparound positions the first factor is outside the support, so neither creates a spurious pair."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/DecoratedLatticeProofs/ThetaKernelSplitPlacesEqJetClassicalThetaStatement.lean#L1335",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-zero-extension"
+        ],
+        "imports": [],
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-prescribed-energy",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_prescribed_energy.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_prescribed_energy",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let N := fun (X : ℕ) => 2*X+5; let f := fun (X n : ℕ) => if n ∈ w X ∧ n.Prime then Real.log n else 0; let energy := fun (X : ℕ) => letI : NeZero (N X) := ⟨by dsimp [N]; omega⟩; ∑ k : ZMod (N X), (ZMod.stdAddChar (N:=N X) (2*k)).re * ‖ZMod.dft (fun j : ZMod (N X) => ((f X j.val:ℝ):ℂ)) k‖^2; ∀ B : ℕ, ∃ X : ℕ, B<X ∧ 0<energy X",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0052 · 在无界尺度估计指定差二测试的谱能量",
+          "en": "New route · Theta lift for a prescribed shift · TP-0052 · Bound the signed energy of the prescribed gap-two test on unbounded scales"
+        },
+        "brief": {
+          "zh": "与 TP-0054 等价。由 TP-0050、TP-0051 将正能量化为同窗孪生对；反向取足够大的孪生对 p,p+2，并令 X=p−1。",
+          "en": "This is equivalent to TP-0054. TP-0050 and TP-0051 convert positive energy into a twin pair in the window. For the converse, choose a sufficiently large twin pair p,p+2 and set X=p−1."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
+        "program": "correlation",
+        "role": "target",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-sifted-correlation",
+          "L-twin-primes-cosine-plancherel",
+          "L-twin-primes-theta-error-budget"
+        ],
+        "imports": [],
+        "challenge_only": true,
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-shift-fourier-phase",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_shift_fourier_phase.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_shift_fourier_phase",
+        "statement": "∀ (N : ℕ) [NeZero N] (f : ZMod N → ℂ) (k : ZMod N), ZMod.dft (fun n => f (n+2)) k = ZMod.stdAddChar (N:=N) (2*k) * ZMod.dft f k",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0049 · 证明平移二在指定 Fourier 频率的相位",
+          "en": "New route · Theta lift for a prescribed shift · TP-0049 · Compute the Fourier phase of translation by two at every prescribed frequency"
+        },
+        "brief": {
+          "zh": "参照 QP-0042 的任意平移公式，取平移量 2。使用 Mathlib DFT 的同一个负指数约定。",
+          "en": "Specialize the general shift formula QP-0042 to shift 2 under the same Mathlib DFT sign convention."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/DecoratedLatticeProofs/ThetaKernelSplitPlacesEqJetClassicalThetaStatement.lean#L1335",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [],
+        "imports": [],
+        "challenge_only": true,
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-sifted-correlation",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_sifted_correlation.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_sifted_correlation",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); ∀ X : ℕ, 9 ≤ X → let Q := ((Finset.range (Nat.sqrt (2*X+2)+1)).filter Nat.Prime).prod id; ((w X).filter (fun n => Nat.Coprime n Q ∧ Nat.Coprime (n+2) Q)) = ((w X).filter (fun n => n.Prime ∧ (n+2).Prime))",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0048 · 在平方根筛界准确识别真正的差二相关",
+          "en": "New route · Theta lift for a prescribed shift · TP-0048 · Identify the exact two-prime correlation at the square-root sieve cutoff"
+        },
+        "brief": {
+          "zh": "合数有不大于平方根的素因子；窗中两端都超过筛界。可用作指定局部测试的精确算术参照。",
+          "en": "A composite has a prime divisor up to its square root. Both endpoints exceed the sieve cutoff. This gives an exact arithmetic test for the prescribed local data."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-crt-mask"
+        ],
+        "imports": [],
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-theta-error-budget",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_theta_error_budget.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_theta_error_budget",
+        "statement": "∀ (A P M Q N C E e f : ℝ), 0 < A → |(P-Q)/A-4*C| ≤ E → |P/A-M| ≤ e → |Q/A-N| ≤ f → (M-N-E-e-f)/4 ≤ C",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0047 · 在同一归一化下合并两支提升与算术误差",
+          "en": "New route · Theta lift for a prescribed shift · TP-0047 · Combine two lift errors and arithmetic matching in one normalization"
+        },
+        "brief": {
+          "zh": "参照 QP-0050 的一般绝对值误差界。取同一归一化和误差参数即可得到此单侧界。",
+          "en": "Specialize the shared absolute error bound QP-0050 to the same normalization and error parameters, then take one side."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [],
+        "imports": [],
+        "challenge_only": true,
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-zero-extension",
+        "file": "lean/PEqualNP/Outside/L_twin_primes_zero_extension.lean",
+        "module": "PEqualNP.Outside.L_twin_primes_zero_extension",
+        "statement": "∀ (N : ℕ) (b : ℤ → ℝ), (∀ n, n < 0 ∨ (N:ℤ) < n → b n = 0) → let S := Finset.Icc (-2:ℤ) (N:ℤ); S.sum (fun n => (b n+b (n+2))^2) - S.sum (fun n => (b n-b (n+2))^2) = 4*S.sum (fun n => b n*b (n+2))",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0044 · 在补零序列上极化平移二次型",
+          "en": "New route · Theta lift for a prescribed shift · TP-0044 · Polarize the shift on a zero-extended sequence"
+        },
+        "brief": {
+          "zh": "两个边界都用整数上的补零，逐项极化。",
+          "en": "Extend by zero at both boundaries on the integers and polarize term by term."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/DecoratedLatticeProofs/ThetaKernelSplitPlacesEqJetClassicalThetaStatement.lean#L1335",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
       }
     ],
     "roadmap": [
       {
-        "zh": [
-          "差二窄窗",
-          "先量出假素数对和真素数对之间的差，再确定在哪些尺度需要下界。"
-        ],
         "en": [
           "Gap-two windows",
           "Measure the proper-power error and specify the scales on which a lower bound suffices."
+        ],
+        "zh": [
+          "差二窄窗",
+          "先量出假素数对和真素数对之间的差，再确定在哪些尺度需要下界。"
         ],
         "tasks": [
           {
             "id": "L-twin-primes-power-count",
             "zh": "新路线 · 差二窄窗 · TP-0001 · 计数不超过 Y 的高次素数幂",
-            "en": "New route · Gap-two windows · TP-0001 · Count proper prime powers up to Y"
-          },
-          {
-            "id": "L-twin-primes-window-contamination",
-            "zh": "新路线 · 差二窄窗 · TP-0002 · 同时控制平移前后的高次幂污染",
-            "en": "New route · Gap-two windows · TP-0002 · Bound contamination at either end of a shifted pair"
-          },
-          {
-            "id": "L-twin-primes-window-extraction",
-            "zh": "新路线 · 差二窄窗 · TP-0003 · 从严格余量抽取同窗真素数对",
-            "en": "New route · Gap-two windows · TP-0003 · Extract a genuine prime pair from a strict window surplus"
+            "en": "New route · Gap-two windows · TP-0001 · Count proper prime powers up to Y",
+            "route_source": "01-gap-two-windows"
           },
           {
             "id": "L-twin-primes-vanishing-error",
             "zh": "新路线 · 差二窄窗 · TP-0004 · 验证窄窗污染率趋零",
-            "en": "New route · Gap-two windows · TP-0004 · Show the normalized power error tends to zero"
-          },
-          {
-            "id": "L-twin-primes-window-surplus",
-            "zh": "新路线 · 差二窄窗 · TP-0005 · 沿无界窄窗超过任意固定污染倍数",
-            "en": "New route · Gap-two windows · TP-0005 · Exceed every fixed multiple of the power error on unbounded windows"
+            "en": "New route · Gap-two windows · TP-0004 · Show the normalized power error tends to zero",
+            "route_source": "01-gap-two-windows"
           },
           {
             "id": "L-twin-primes-window-bridge",
             "zh": "新路线 · 差二窄窗 · TP-0006 · 合成无条件窄窗归约",
-            "en": "New route · Gap-two windows · TP-0006 · Combine the unconditional window reduction"
+            "en": "New route · Gap-two windows · TP-0006 · Combine the unconditional window reduction",
+            "route_source": "01-gap-two-windows"
+          },
+          {
+            "id": "L-twin-primes-window-contamination",
+            "zh": "新路线 · 差二窄窗 · TP-0002 · 同时控制平移前后的高次幂污染",
+            "en": "New route · Gap-two windows · TP-0002 · Bound contamination at either end of a shifted pair",
+            "route_source": "01-gap-two-windows"
+          },
+          {
+            "id": "L-twin-primes-window-extraction",
+            "zh": "新路线 · 差二窄窗 · TP-0003 · 从严格余量抽取同窗真素数对",
+            "en": "New route · Gap-two windows · TP-0003 · Extract a genuine prime pair from a strict window surplus",
+            "route_source": "01-gap-two-windows"
+          },
+          {
+            "id": "L-twin-primes-window-surplus",
+            "zh": "新路线 · 差二窄窗 · TP-0005 · 沿无界窄窗超过任意固定污染倍数",
+            "en": "New route · Gap-two windows · TP-0005 · Exceed every fixed multiple of the power error on unbounded windows",
+            "route_source": "01-gap-two-windows"
           }
-        ]
+        ],
+        "route_source": "01-gap-two-windows"
       },
       {
-        "zh": [
-          "Fourier 选频",
-          "用同一个 Dirichlet 多项式和两支非负时间权隔离差二。"
-        ],
         "en": [
           "Fourier isolation",
           "Use the same Dirichlet polynomial and two nonnegative time weights to isolate gap two."
         ],
+        "zh": [
+          "Fourier 选频",
+          "用同一个 Dirichlet 多项式和两支非负时间权隔离差二。"
+        ],
         "tasks": [
-          {
-            "id": "L-twin-primes-unit-band",
-            "zh": "新路线 · Fourier 选频 · TP-0007 · 排除相邻项的频率",
-            "en": "New route · Fourier isolation · TP-0007 · Exclude the frequency of adjacent indices"
-          },
           {
             "id": "L-twin-primes-double-band",
             "zh": "新路线 · Fourier 选频 · TP-0008 · 保证差二频率落在开正带",
-            "en": "New route · Fourier isolation · TP-0008 · Place gap two in the open positive band"
-          },
-          {
-            "id": "L-twin-primes-outer-band",
-            "zh": "新路线 · Fourier 选频 · TP-0009 · 一致排除全部更大间距",
-            "en": "New route · Fourier isolation · TP-0009 · Exclude all gaps of at least three uniformly"
-          },
-          {
-            "id": "L-twin-primes-time-weights",
-            "zh": "新路线 · Fourier 选频 · TP-0010 · 构造同一基函数的两支非负权",
-            "en": "New route · Fourier isolation · TP-0010 · Prove positivity and the signed difference of the two time weights"
-          },
-          {
-            "id": "L-twin-primes-kernel-support",
-            "zh": "新路线 · Fourier 选频 · TP-0011 · 从三个卷积平移导出中心正性与支撑",
-            "en": "New route · Fourier isolation · TP-0011 · Recover central positivity and support from three translates"
+            "en": "New route · Fourier isolation · TP-0008 · Place gap two in the open positive band",
+            "route_source": "02-fourier-isolation"
           },
           {
             "id": "L-twin-primes-finite-band-sum",
             "zh": "新路线 · Fourier 选频 · TP-0012 · 在有限有序对和中只留下 n 与 n+2",
-            "en": "New route · Fourier isolation · TP-0012 · Isolate n and n+2 in the finite ordered-pair sum"
+            "en": "New route · Fourier isolation · TP-0012 · Isolate n and n+2 in the finite ordered-pair sum",
+            "route_source": "02-fourier-isolation"
           },
           {
-            "id": "L-twin-primes-two-moment-identity",
-            "zh": "新路线 · Fourier 选频 · TP-0013 · 对实际多项式证明两支时间积分之差",
-            "en": "New route · Fourier isolation · TP-0013 · Compute the difference of the two actual polynomial moments"
-          },
-          {
-            "id": "L-twin-primes-signed-moment-margin",
-            "zh": "新路线 · Fourier 选频 · TP-0014 · 在无界尺度取得实际双矩的线性余量",
-            "en": "New route · Fourier isolation · TP-0014 · Find a linear surplus in the two actual moments on unbounded scales"
-          },
-          {
-            "id": "L-twin-primes-moment-to-window",
-            "zh": "新路线 · Fourier 选频 · TP-0015 · 把双矩余量转为无权窄窗余量",
-            "en": "New route · Fourier isolation · TP-0015 · Transfer the two-moment surplus to the arithmetic window"
-          },
-          {
-            "id": "L-twin-primes-rh-contour",
-            "zh": "新路线 · Fourier 选频 · TP-0016 · 在 9/16 移线上排除临界带零点",
-            "en": "New route · Fourier isolation · TP-0016 · Exclude strip zeros on and to the right of the 9/16 contour"
+            "id": "L-twin-primes-kernel-support",
+            "zh": "新路线 · Fourier 选频 · TP-0011 · 从三个卷积平移导出中心正性与支撑",
+            "en": "New route · Fourier isolation · TP-0011 · Recover central positivity and support from three translates",
+            "route_source": "02-fourier-isolation"
           },
           {
             "id": "L-twin-primes-mean-threshold",
             "zh": "新路线 · Fourier 选频 · TP-0017 · 给出微分均值容许的 7/8 严格阈值",
-            "en": "New route · Fourier isolation · TP-0017 · Budget the strict seven-eighths threshold for the differentiated mean"
+            "en": "New route · Fourier isolation · TP-0017 · Budget the strict seven-eighths threshold for the differentiated mean",
+            "route_source": "02-fourier-isolation"
+          },
+          {
+            "id": "L-twin-primes-moment-to-window",
+            "zh": "新路线 · Fourier 选频 · TP-0015 · 把双矩余量转为无权窄窗余量",
+            "en": "New route · Fourier isolation · TP-0015 · Transfer the two-moment surplus to the arithmetic window",
+            "route_source": "02-fourier-isolation"
+          },
+          {
+            "id": "L-twin-primes-outer-band",
+            "zh": "新路线 · Fourier 选频 · TP-0009 · 一致排除全部更大间距",
+            "en": "New route · Fourier isolation · TP-0009 · Exclude all gaps of at least three uniformly",
+            "route_source": "02-fourier-isolation"
+          },
+          {
+            "id": "L-twin-primes-rh-contour",
+            "zh": "新路线 · Fourier 选频 · TP-0016 · 在 9/16 移线上排除临界带零点",
+            "en": "New route · Fourier isolation · TP-0016 · Exclude strip zeros on and to the right of the 9/16 contour",
+            "route_source": "02-fourier-isolation"
+          },
+          {
+            "id": "L-twin-primes-signed-moment-margin",
+            "zh": "新路线 · Fourier 选频 · TP-0014 · 在无界尺度取得实际双矩的线性余量",
+            "en": "New route · Fourier isolation · TP-0014 · Find a linear surplus in the two actual moments on unbounded scales",
+            "route_source": "02-fourier-isolation"
+          },
+          {
+            "id": "L-twin-primes-time-weights",
+            "zh": "新路线 · Fourier 选频 · TP-0010 · 构造同一基函数的两支非负权",
+            "en": "New route · Fourier isolation · TP-0010 · Prove positivity and the signed difference of the two time weights",
+            "route_source": "02-fourier-isolation"
+          },
+          {
+            "id": "L-twin-primes-two-moment-identity",
+            "zh": "新路线 · Fourier 选频 · TP-0013 · 对实际多项式证明两支时间积分之差",
+            "en": "New route · Fourier isolation · TP-0013 · Compute the difference of the two actual polynomial moments",
+            "route_source": "02-fourier-isolation"
+          },
+          {
+            "id": "L-twin-primes-unit-band",
+            "zh": "新路线 · Fourier 选频 · TP-0007 · 排除相邻项的频率",
+            "en": "New route · Fourier isolation · TP-0007 · Exclude the frequency of adjacent indices",
+            "route_source": "02-fourier-isolation"
           }
-        ]
+        ],
+        "route_source": "02-fourier-isolation"
       },
       {
-        "zh": [
-          "零点对与相位",
-          "在临界线上按重数编号，计算正对角并检验非对角能否抵消。"
-        ],
         "en": [
           "Zero pairs and phases",
           "Index critical-line zeros with multiplicity, compute the diagonal and test for cancellation."
         ],
+        "zh": [
+          "零点对与相位",
+          "在临界线上按重数编号，计算正对角并检验非对角能否抵消。"
+        ],
         "tasks": [
-          {
-            "id": "L-twin-primes-positive-curvature",
-            "zh": "新路线 · 零点对与相位 · TP-0018 · 计算谱对角核的严格正二阶差",
-            "en": "New route · Zero pairs and phases · TP-0018 · Compute the strictly positive second difference of the diagonal kernel"
-          },
           {
             "id": "L-twin-primes-diagonal-integral",
             "zh": "新路线 · 零点对与相位 · TP-0019 · 在两个对照频率计算正对角常数的符号",
-            "en": "New route · Zero pairs and phases · TP-0019 · Prove positivity of the diagonal integral at both test frequencies"
-          },
-          {
-            "id": "L-twin-primes-ordered-indices",
-            "zh": "新路线 · 零点对与相位 · TP-0020 · 精确保留重零点中相等纵坐标的异编号",
-            "en": "New route · Zero pairs and phases · TP-0020 · Count off-diagonal labels at repeated ordinates"
-          },
-          {
-            "id": "L-twin-primes-hermitian-pairs",
-            "zh": "新路线 · 零点对与相位 · TP-0021 · 使有限有序非对角总和为实",
-            "en": "New route · Zero pairs and phases · TP-0021 · Show that the finite ordered off-diagonal sum is real"
-          },
-          {
-            "id": "L-twin-primes-mellin-tail",
-            "zh": "新路线 · 零点对与相位 · TP-0022 · 由单位窗计数控制衰减核的远零点尾",
-            "en": "New route · Zero pairs and phases · TP-0022 · Bound the far-zero tail of a decaying kernel from unit counts"
+            "en": "New route · Zero pairs and phases · TP-0019 · Prove positivity of the diagonal integral at both test frequencies",
+            "route_source": "03-zero-pairs"
           },
           {
             "id": "L-twin-primes-gap-one-control",
             "zh": "新路线 · 零点对与相位 · TP-0023 · 证明相邻 Mangoldt 对中偶数端必为二的幂",
-            "en": "New route · Zero pairs and phases · TP-0023 · Show the even member of an adjacent Mangoldt pair is a power of two"
+            "en": "New route · Zero pairs and phases · TP-0023 · Show the even member of an adjacent Mangoldt pair is a power of two",
+            "route_source": "03-zero-pairs"
           },
           {
             "id": "L-twin-primes-gap-one-sum",
             "zh": "新路线 · 零点对与相位 · TP-0024 · 控制差一相关总量的平方对数上界",
-            "en": "New route · Zero pairs and phases · TP-0024 · Bound the entire gap-one correlation by a squared logarithm"
+            "en": "New route · Zero pairs and phases · TP-0024 · Bound the entire gap-one correlation by a squared logarithm",
+            "route_source": "03-zero-pairs"
           },
           {
-            "id": "L-twin-primes-zero-pair-margin",
-            "zh": "新路线 · 零点对与相位 · TP-0025 · 检验 ζ 零点非对角能否在无界窗保留严格余量",
-            "en": "New route · Zero pairs and phases · TP-0025 · Seek a strict margin in the actual zeta zero pairs on unbounded windows"
+            "id": "L-twin-primes-hermitian-pairs",
+            "zh": "新路线 · 零点对与相位 · TP-0021 · 使有限有序非对角总和为实",
+            "en": "New route · Zero pairs and phases · TP-0021 · Show that the finite ordered off-diagonal sum is real",
+            "route_source": "03-zero-pairs"
+          },
+          {
+            "id": "L-twin-primes-mellin-tail",
+            "zh": "新路线 · 零点对与相位 · TP-0022 · 由单位窗计数控制衰减核的远零点尾",
+            "en": "New route · Zero pairs and phases · TP-0022 · Bound the far-zero tail of a decaying kernel from unit counts",
+            "route_source": "03-zero-pairs"
+          },
+          {
+            "id": "L-twin-primes-ordered-indices",
+            "zh": "新路线 · 零点对与相位 · TP-0020 · 精确保留重零点中相等纵坐标的异编号",
+            "en": "New route · Zero pairs and phases · TP-0020 · Count off-diagonal labels at repeated ordinates",
+            "route_source": "03-zero-pairs"
+          },
+          {
+            "id": "L-twin-primes-positive-curvature",
+            "zh": "新路线 · 零点对与相位 · TP-0018 · 计算谱对角核的严格正二阶差",
+            "en": "New route · Zero pairs and phases · TP-0018 · Compute the strictly positive second difference of the diagonal kernel",
+            "route_source": "03-zero-pairs"
           },
           {
             "id": "L-twin-primes-spectral-comparison",
             "zh": "新路线 · 零点对与相位 · TP-0026 · 将带重数的实际谱余量接到双时间矩",
-            "en": "New route · Zero pairs and phases · TP-0026 · Transfer the actual multiplicity-weighted spectral margin to the signed moment"
+            "en": "New route · Zero pairs and phases · TP-0026 · Transfer the actual multiplicity-weighted spectral margin to the signed moment",
+            "route_source": "03-zero-pairs"
+          },
+          {
+            "id": "L-twin-primes-zero-pair-margin",
+            "zh": "新路线 · 零点对与相位 · TP-0025 · 检验 ζ 零点非对角能否在无界窗保留严格余量",
+            "en": "New route · Zero pairs and phases · TP-0025 · Seek a strict margin in the actual zeta zero pairs on unbounded windows",
+            "route_source": "03-zero-pairs"
           }
-        ]
+        ],
+        "route_source": "03-zero-pairs"
       },
       {
-        "zh": [
-          "短长除数与奇偶",
-          "保持带符号的 Möbius 导数；把模数平均与越过奇偶障碍的输入分开。"
-        ],
         "en": [
           "Short and long divisors",
           "Keep the signed Möbius derivative and identify exactly which long divisors can cancel the short main term."
         ],
+        "zh": [
+          "短长除数与奇偶",
+          "保持带符号的 Möbius 导数；把模数平均与越过奇偶障碍的输入分开。"
+        ],
         "tasks": [
-          {
-            "id": "L-twin-primes-mangoldt-divisors",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0027 · 验证 Mangoldt 的带符号除数公式",
-            "en": "New route · Short and long divisors · TP-0027 · Recover Mangoldt from the signed divisor sum"
-          },
-          {
-            "id": "L-twin-primes-divisor-split",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0028 · 对同一窗精确切分短长除数质量",
-            "en": "New route · Short and long divisors · TP-0028 · Split short and long divisor mass in the same window"
-          },
-          {
-            "id": "L-twin-primes-unit-class",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0029 · 确定 −2 是每个奇模数的约化类",
-            "en": "New route · Short and long divisors · TP-0029 · Certify minus two as a unit for every odd modulus"
-          },
           {
             "id": "L-twin-primes-ap-short-error",
             "zh": "新路线 · 短长除数与奇偶 · TP-0030 · 在 −2 类上取得随模数一致的 GRH 窄窗误差",
-            "en": "New route · Short and long divisors · TP-0030 · Obtain the GRH narrow-window error uniformly in the minus-two class"
-          },
-          {
-            "id": "L-twin-primes-euler-factor",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0031 · 拆开奇素数的修正 Euler 因子",
-            "en": "New route · Short and long divisors · TP-0031 · Factor the odd-prime Euler correction"
-          },
-          {
-            "id": "L-twin-primes-positive-product",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0032 · 证明奇素数局部因子的无限乘积严格为正",
-            "en": "New route · Short and long divisors · TP-0032 · Prove positivity of the product of odd local factors"
-          },
-          {
-            "id": "L-twin-primes-moebius-moments",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0033 · 求 Möbius 两个截断对数矩的极限",
-            "en": "New route · Short and long divisors · TP-0033 · Compute the two limiting logarithmic Möbius moments"
-          },
-          {
-            "id": "L-twin-primes-hard-cutoff",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0034 · 识别奇除数硬截断的 2C₂ 常数",
-            "en": "New route · Short and long divisors · TP-0034 · Identify the hard cutoff limit over odd divisors"
-          },
-          {
-            "id": "L-twin-primes-unconditional-short",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0035 · 无条件求立方根截点的短除数主项",
-            "en": "New route · Short and long divisors · TP-0035 · Prove the unconditional short-divisor limit at the cube-root cutoff"
+            "en": "New route · Short and long divisors · TP-0030 · Obtain the GRH narrow-window error uniformly in the minus-two class",
+            "route_source": "04-divisor-split"
           },
           {
             "id": "L-twin-primes-cofactor-switch",
             "zh": "新路线 · 短长除数与奇偶 · TP-0036 · 把长除数条件换成精确余因子界",
-            "en": "New route · Short and long divisors · TP-0036 · Switch a long divisor to an exact cofactor bound"
-          },
-          {
-            "id": "L-twin-primes-semiprime-cancellation",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0037 · 计算不同素数之积导致的精确抵消",
-            "en": "New route · Short and long divisors · TP-0037 · Compute exact Möbius cancellation at a product of distinct primes"
-          },
-          {
-            "id": "L-twin-primes-long-margin",
-            "zh": "新路线 · 短长除数与奇偶 · TP-0038 · 在同一立方根截点证明长除数的单侧增益",
-            "en": "New route · Short and long divisors · TP-0038 · Find a one-sided long-divisor gain at the same cube-root cutoff"
+            "en": "New route · Short and long divisors · TP-0036 · Switch a long divisor to an exact cofactor bound",
+            "route_source": "04-divisor-split"
           },
           {
             "id": "L-twin-primes-divisor-bridge",
             "zh": "新路线 · 短长除数与奇偶 · TP-0039 · 将短主项与长除数余量合成为真素数对",
-            "en": "New route · Short and long divisors · TP-0039 · Combine short and long divisor estimates to obtain true primes"
+            "en": "New route · Short and long divisors · TP-0039 · Combine short and long divisor estimates to obtain true primes",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-divisor-split",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0028 · 对同一窗精确切分短长除数质量",
+            "en": "New route · Short and long divisors · TP-0028 · Split short and long divisor mass in the same window",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-euler-factor",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0031 · 拆开奇素数的修正 Euler 因子",
+            "en": "New route · Short and long divisors · TP-0031 · Factor the odd-prime Euler correction",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-hard-cutoff",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0034 · 识别奇除数硬截断的 2C₂ 常数",
+            "en": "New route · Short and long divisors · TP-0034 · Identify the hard cutoff limit over odd divisors",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-long-margin",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0038 · 在同一立方根截点证明长除数的单侧增益",
+            "en": "New route · Short and long divisors · TP-0038 · Find a one-sided long-divisor gain at the same cube-root cutoff",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-mangoldt-divisors",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0027 · 验证 Mangoldt 的带符号除数公式",
+            "en": "New route · Short and long divisors · TP-0027 · Recover Mangoldt from the signed divisor sum",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-moebius-moments",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0033 · 求 Möbius 两个截断对数矩的极限",
+            "en": "New route · Short and long divisors · TP-0033 · Compute the two limiting logarithmic Möbius moments",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-positive-product",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0032 · 证明奇素数局部因子的无限乘积严格为正",
+            "en": "New route · Short and long divisors · TP-0032 · Prove positivity of the product of odd local factors",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-semiprime-cancellation",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0037 · 计算不同素数之积导致的精确抵消",
+            "en": "New route · Short and long divisors · TP-0037 · Compute exact Möbius cancellation at a product of distinct primes",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-unconditional-short",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0035 · 无条件求立方根截点的短除数主项",
+            "en": "New route · Short and long divisors · TP-0035 · Prove the unconditional short-divisor limit at the cube-root cutoff",
+            "route_source": "04-divisor-split"
+          },
+          {
+            "id": "L-twin-primes-unit-class",
+            "zh": "新路线 · 短长除数与奇偶 · TP-0029 · 确定 −2 是每个奇模数的约化类",
+            "en": "New route · Short and long divisors · TP-0029 · Certify minus two as a unit for every odd modulus",
+            "route_source": "04-divisor-split"
           }
-        ]
+        ],
+        "route_source": "04-divisor-split"
       },
       {
-        "zh": [
-          "有限跳跃",
-          "用整数长度 1、2、3 的窗口精确恢复差二，量化高次幂对累计质量的影响。"
-        ],
         "en": [
           "Finite increments",
           "Recover gap two with lengths one, two and three and control proper powers in the cumulative mass."
         ],
+        "zh": [
+          "有限跳跃",
+          "用整数长度 1、2、3 的窗口精确恢复差二，量化高次幂对累计质量的影响。"
+        ],
         "tasks": [
+          {
+            "id": "L-twin-primes-increment-surplus",
+            "zh": "新路线 · 有限跳跃 · TP-0043 · 寻求长度三跳跃的超平方根余量",
+            "en": "New route · Finite increments · TP-0043 · Seek a super-square-root gain for the length-three increment",
+            "route_source": "05-finite-increments"
+          },
           {
             "id": "L-twin-primes-overlap",
             "zh": "新路线 · 有限跳跃 · TP-0040 · 数出两个离散窗口的交长",
-            "en": "New route · Finite increments · TP-0040 · Count the overlap of two discrete windows"
-          },
-          {
-            "id": "L-twin-primes-second-difference",
-            "zh": "新路线 · 有限跳跃 · TP-0041 · 用三个窗口的二阶差精确读出差二",
-            "en": "New route · Finite increments · TP-0041 · Extract gap two by the second difference of three window energies"
+            "en": "New route · Finite increments · TP-0040 · Count the overlap of two discrete windows",
+            "route_source": "05-finite-increments"
           },
           {
             "id": "L-twin-primes-rh-square-diagonal",
             "zh": "新路线 · 有限跳跃 · TP-0042 · 在 RH 下算出平方对角的主次两项",
-            "en": "New route · Finite increments · TP-0042 · Evaluate the first two terms of the squared diagonal under RH"
+            "en": "New route · Finite increments · TP-0042 · Evaluate the first two terms of the squared diagonal under RH",
+            "route_source": "05-finite-increments"
           },
           {
-            "id": "L-twin-primes-increment-surplus",
-            "zh": "新路线 · 有限跳跃 · TP-0043 · 寻求长度三跳跃的超平方根余量",
-            "en": "New route · Finite increments · TP-0043 · Seek a super-square-root gain for the length-three increment"
+            "id": "L-twin-primes-second-difference",
+            "zh": "新路线 · 有限跳跃 · TP-0041 · 用三个窗口的二阶差精确读出差二",
+            "en": "New route · Finite increments · TP-0041 · Extract gap two by the second difference of three window energies",
+            "route_source": "05-finite-increments"
           }
-        ]
+        ],
+        "route_source": "05-finite-increments"
       },
       {
-        "zh": [
-          "指定平移的 Θ 提升",
-          "先在有限系数序列与局部掩码上固定 n↦n+2，再研究同一模型两支测试的混合项。"
-        ],
         "en": [
           "Theta lift for a prescribed shift",
           "Fix the shift n↦n+2 on finite coefficient sequences and local masks, then study the mixed term of two prescribed tests in one model."
         ],
+        "zh": [
+          "指定平移的 Θ 提升",
+          "先在有限系数序列与局部掩码上固定 n↦n+2，再研究同一模型两支测试的混合项。"
+        ],
         "tasks": [
           {
-            "id": "L-twin-primes-zero-extension",
-            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0044 · 在补零序列上极化平移二次型",
-            "en": "New route · Theta lift for a prescribed shift · TP-0044 · Polarize the shift on a zero-extended sequence"
-          },
-          {
-            "id": "L-twin-primes-local-residues",
-            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0045 · 分别计算 2 处和奇素数处的平移单位掩码",
-            "en": "New route · Theta lift for a prescribed shift · TP-0045 · Count the shifted unit mask at two and at odd primes"
+            "id": "L-twin-primes-cosine-plancherel",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0051 · 把指定间距写成 Fourier 能量的带符号余弦和",
+            "en": "New route · Theta lift for a prescribed shift · TP-0051 · Express the prescribed gap as a signed cosine sum of Fourier energies",
+            "route_source": "06-theta-for-shift"
           },
           {
             "id": "L-twin-primes-crt-mask",
             "zh": "新路线 · 指定平移的 Θ 提升 · TP-0046 · 用 CRT 拼接互素模数的平移掩码",
-            "en": "New route · Theta lift for a prescribed shift · TP-0046 · Multiply the shifted masks over coprime moduli"
-          },
-          {
-            "id": "L-twin-primes-theta-error-budget",
-            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0047 · 在同一归一化下合并两支提升与算术误差",
-            "en": "New route · Theta lift for a prescribed shift · TP-0047 · Combine two lift errors and arithmetic matching in one normalization"
-          },
-          {
-            "id": "L-twin-primes-sifted-correlation",
-            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0048 · 在平方根筛界准确识别真正的差二相关",
-            "en": "New route · Theta lift for a prescribed shift · TP-0048 · Identify the exact two-prime correlation at the square-root sieve cutoff"
-          },
-          {
-            "id": "L-twin-primes-shift-fourier-phase",
-            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0049 · 证明平移二在指定 Fourier 频率的相位",
-            "en": "New route · Theta lift for a prescribed shift · TP-0049 · Compute the Fourier phase of translation by two at every prescribed frequency"
-          },
-          {
-            "id": "L-twin-primes-no-wrap",
-            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0050 · 用补零将整数平移配对嵌入有限循环模型",
-            "en": "New route · Theta lift for a prescribed shift · TP-0050 · Embed the integer shift pairing into a padded cyclic model"
-          },
-          {
-            "id": "L-twin-primes-cosine-plancherel",
-            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0051 · 把指定间距写成 Fourier 能量的带符号余弦和",
-            "en": "New route · Theta lift for a prescribed shift · TP-0051 · Express the prescribed gap as a signed cosine sum of Fourier energies"
-          },
-          {
-            "id": "L-twin-primes-prescribed-energy",
-            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0052 · 在无界尺度估计指定差二测试的谱能量",
-            "en": "New route · Theta lift for a prescribed shift · TP-0052 · Bound the signed energy of the prescribed gap-two test on unbounded scales"
-          },
-          {
-            "id": "L-twin-primes-energy-bridge",
-            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0053 · 由指定 Θ 算术测试的正能量抽取孪生素数",
-            "en": "New route · Theta lift for a prescribed shift · TP-0053 · Extract twin primes from positive energy in the prescribed arithmetic test"
+            "en": "New route · Theta lift for a prescribed shift · TP-0046 · Multiply the shifted masks over coprime moduli",
+            "route_source": "06-theta-for-shift"
           },
           {
             "id": "L-twin-primes-endpoint",
             "zh": "新路线 · 指定平移的 Θ 提升 · TP-0054 · 在任意界外找到差恰为二的两个素数",
-            "en": "New route · Theta lift for a prescribed shift · TP-0054 · Find two primes exactly two apart beyond every bound"
+            "en": "New route · Theta lift for a prescribed shift · TP-0054 · Find two primes exactly two apart beyond every bound",
+            "route_source": "06-theta-for-shift"
+          },
+          {
+            "id": "L-twin-primes-energy-bridge",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0053 · 由指定 Θ 算术测试的正能量抽取孪生素数",
+            "en": "New route · Theta lift for a prescribed shift · TP-0053 · Extract twin primes from positive energy in the prescribed arithmetic test",
+            "route_source": "06-theta-for-shift"
+          },
+          {
+            "id": "L-twin-primes-local-residues",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0045 · 分别计算 2 处和奇素数处的平移单位掩码",
+            "en": "New route · Theta lift for a prescribed shift · TP-0045 · Count the shifted unit mask at two and at odd primes",
+            "route_source": "06-theta-for-shift"
+          },
+          {
+            "id": "L-twin-primes-no-wrap",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0050 · 用补零将整数平移配对嵌入有限循环模型",
+            "en": "New route · Theta lift for a prescribed shift · TP-0050 · Embed the integer shift pairing into a padded cyclic model",
+            "route_source": "06-theta-for-shift"
+          },
+          {
+            "id": "L-twin-primes-prescribed-energy",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0052 · 在无界尺度估计指定差二测试的谱能量",
+            "en": "New route · Theta lift for a prescribed shift · TP-0052 · Bound the signed energy of the prescribed gap-two test on unbounded scales",
+            "route_source": "06-theta-for-shift"
+          },
+          {
+            "id": "L-twin-primes-shift-fourier-phase",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0049 · 证明平移二在指定 Fourier 频率的相位",
+            "en": "New route · Theta lift for a prescribed shift · TP-0049 · Compute the Fourier phase of translation by two at every prescribed frequency",
+            "route_source": "06-theta-for-shift"
+          },
+          {
+            "id": "L-twin-primes-sifted-correlation",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0048 · 在平方根筛界准确识别真正的差二相关",
+            "en": "New route · Theta lift for a prescribed shift · TP-0048 · Identify the exact two-prime correlation at the square-root sieve cutoff",
+            "route_source": "06-theta-for-shift"
+          },
+          {
+            "id": "L-twin-primes-theta-error-budget",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0047 · 在同一归一化下合并两支提升与算术误差",
+            "en": "New route · Theta lift for a prescribed shift · TP-0047 · Combine two lift errors and arithmetic matching in one normalization",
+            "route_source": "06-theta-for-shift"
+          },
+          {
+            "id": "L-twin-primes-zero-extension",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0044 · 在补零序列上极化平移二次型",
+            "en": "New route · Theta lift for a prescribed shift · TP-0044 · Polarize the shift on a zero-extended sequence",
+            "route_source": "06-theta-for-shift"
           }
-        ]
+        ],
+        "route_source": "06-theta-for-shift"
       }
     ]
   },
