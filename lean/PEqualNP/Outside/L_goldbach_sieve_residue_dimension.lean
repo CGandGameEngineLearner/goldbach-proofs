@@ -1,7 +1,7 @@
 import Mathlib
 
 theorem PEqualNP.Outside.L_goldbach_sieve_residue_dimension :
-    ∀ n p : ℕ, p.Prime → ((Finset.range p).filter (fun k => k%p=0 ∨ k%p=n%p)).card = if p∣n then 1 else 2 := by
+    ∀ n p : ℕ, p.Prime → ((Finset.range p).filter (fun k => k % p=0 ∨ k % p=n % p)).card = if p∣n then 1 else 2 := by
   intro n p hp
   have hres : n % p < p := Nat.mod_lt n hp.pos
   have hclasses : (Finset.range p).filter (fun k => k % p = 0 ∨ k % p = n % p) =
