@@ -4,6 +4,7 @@ open scoped BigOperators
 
 namespace PEqualNP.Outside
 
+set_option maxRecDepth 8192 in
 set_option maxHeartbeats 3000000 in
 theorem L_goldbach_cert_95 :
     ∀ a:ℕ, Nat.Coprime a 95 → (∑ b ∈ (Finset.range 95).filter (fun b => Nat.Coprime b 95), Complex.exp (((2*Real.pi*(a:ℝ)*b/95:ℝ):ℂ)*Complex.I))/(72:ℂ)=(1:ℂ)/72 := by
