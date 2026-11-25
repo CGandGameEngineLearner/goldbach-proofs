@@ -22,6 +22,7 @@ theorem PEqualNP.Outside.L_hash_collision_lab_cert_8_12
             _ ≤ Nat.choose k 8 + 9009 + Nat.choose k 7 := hstep
             _ = Nat.choose (k + 1) 8 + 9009 := by
               rw [Nat.choose_succ_succ]
+              rw [show Nat.succ 7 = 8 from rfl]
               omega
     by_cases hn : n ≤ 12
     · interval_cases n <;> norm_num [Nat.choose]
