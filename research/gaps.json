@@ -11464,6 +11464,746 @@
       "track": "odd-character-interference",
       "role": "lemma",
       "depends_on": []
+    },
+    {
+      "id": "L-goldbach-frontier-three-zone-split",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_three_zone_split.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_three_zone_split",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let midArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let medCore := fun n : ℕ => intervalIntegral (fun t => (midArcs n \\ arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let medSkirt := fun n : ℕ => intervalIntegral (fun t => (wideArcs n \\ midArcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; ∃ N₀ : ℕ, ∀ n : ℕ, N₀ ≤ n → minor n = (medCore n + medSkirt n) + deepMinor n",
+      "plain_statement": {
+        "zh": "无条件三带分解：对充分大的 n，次弧积分精确等于中弧核、中弧裙边与深次弧之和。",
+        "en": "Unconditional three-zone split: eventually minor n = (medCore n + medSkirt n) + deepMinor n."
+      },
+      "brief": {
+        "zh": "可证分析基石：因 Q₀(n) ≤ Q₁(n) 最终成立，arcs ⊆ midArcs ⊆ wideArcs，由可测指示函数拆分积分即得。",
+        "en": "Provable analytic foundation: once Q₀(n) ≤ Q₁(n), nested inclusion arcs ⊆ midArcs ⊆ wideArcs splits the integral."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-medium-arc-scales",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-frontier-medcore-model-floor",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_medcore_model_floor.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_medcore_model_floor",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let K := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.range (n+1), E ((k:ℝ)*β); let modelBand := fun (n A B : ℕ) => ∑ q ∈ Finset.Ioc A B, ∑ a ∈ (Finset.range (q+1)).filter (fun a => Nat.Coprime a q), intervalIntegral (fun t => (((∑ r ∈ (Finset.range q).filter (fun r => Nat.Coprime r q), E ((r:ℝ)*(a:ℝ)/(q:ℝ))) / (Nat.totient q : ℂ)) * K n (t - (a:ℝ)/(q:ℝ)))^2 * E (-(n:ℝ)*t)) ((a:ℝ)/(q:ℝ) - (Q n:ℝ)/((q:ℝ)*(n:ℝ))) ((a:ℝ)/(q:ℝ) + (Q n:ℝ)/((q:ℝ)*(n:ℝ))) MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (modelBand n (Q n) (Q₁ n)).re",
+      "plain_statement": {
+        "zh": "无条件中弧模型非负下界：中弧核的 Ramanujan-Fejér 近似模型对所有充分大偶数恒至少为 −εn。",
+        "en": "Unconditional medium-core model floor: the Ramanujan-Fejér model over Q(n) < q ≤ ⌊n^(1/3)⌋ satisfies Re(modelBand) ≥ −εn."
+      },
+      "brief": {
+        "zh": "可证分析基石：由 K_n(β)² e(-nβ) ≥ 0 且偶数处 c_q(n)·c_q(1)² ≥ 0（或平方因子展开后单边可控），模型实部实际上非负。",
+        "en": "Provable foundation: since K_n(β)² e(-nβ) ≥ 0 and c_q(a)² e(-na/q) sums symmetrically for even n, the model is actually nonnegative."
+      },
+      "source": "https://arxiv.org/abs/2607.27282v2",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-medium-arc-scales",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-frontier-medcore-siegel-band",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_medcore_siegel_band.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_medcore_siegel_band",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Qqp := fun n : ℕ => ⌊Real.exp (Real.sqrt (Real.log (n:ℝ)))⌋₊; let K := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.range (n+1), E ((k:ℝ)*β); let medCoreBand := fun (n A B : ℕ) => intervalIntegral (fun t => {u : ℝ | ∃ q a : ℕ, A < q ∧ q ≤ B ∧ a ≤ q ∧ Nat.Coprime a q ∧ |u - (a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let modelBand := fun (n A B : ℕ) => ∑ q ∈ Finset.Ioc A B, ∑ a ∈ (Finset.range (q+1)).filter (fun a => Nat.Coprime a q), intervalIntegral (fun t => (((∑ r ∈ (Finset.range q).filter (fun r => Nat.Coprime r q), E ((r:ℝ)*(a:ℝ)/(q:ℝ))) / (Nat.totient q : ℂ)) * K n (t - (a:ℝ)/(q:ℝ)))^2 * E (-(n:ℝ)*t)) ((a:ℝ)/(q:ℝ) - (Q n:ℝ)/((q:ℝ)*(n:ℝ))) ((a:ℝ)/(q:ℝ) + (Q n:ℝ)/((q:ℝ)*(n:ℝ))) MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖medCoreBand n (Q n) (Qqp n) - modelBand n (Q n) (Qqp n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "开放子猜想（中弧 Siegel 准多项式带）：在模数带 (log₂ n)² < q ≤ exp(√(log n)) 内，真实中弧核与模型之差为 o(n)。",
+        "en": "Open sub-conjecture (Siegel band): for (log₂ n)² < q ≤ exp(√(log n)), medCoreBand matches modelBand up to o(n)."
+      },
+      "brief": {
+        "zh": "超出 Siegel-Walfisz 多项式对数界但仍远小于任意幂次；突破需排除 Siegel 零点或用 Deuring-Heilbronn 排斥精细控制。",
+        "en": "Beyond Siegel-Walfisz polylog moduli yet sub-polynomial; resolving it centers on ruling out or isolating Landau-Siegel zeros."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-medium-arc-scales",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-medcore-gallagher-band",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_medcore_gallagher_band.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_medcore_gallagher_band",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Qqp := fun n : ℕ => ⌊Real.exp (Real.sqrt (Real.log (n:ℝ)))⌋₊; let Qzf := fun n : ℕ => ⌊(n:ℝ)^(1/10:ℝ)⌋₊; let K := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.range (n+1), E ((k:ℝ)*β); let medCoreBand := fun (n A B : ℕ) => intervalIntegral (fun t => {u : ℝ | ∃ q a : ℕ, A < q ∧ q ≤ B ∧ a ≤ q ∧ Nat.Coprime a q ∧ |u - (a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let modelBand := fun (n A B : ℕ) => ∑ q ∈ Finset.Ioc A B, ∑ a ∈ (Finset.range (q+1)).filter (fun a => Nat.Coprime a q), intervalIntegral (fun t => (((∑ r ∈ (Finset.range q).filter (fun r => Nat.Coprime r q), E ((r:ℝ)*(a:ℝ)/(q:ℝ))) / (Nat.totient q : ℂ)) * K n (t - (a:ℝ)/(q:ℝ)))^2 * E (-(n:ℝ)*t)) ((a:ℝ)/(q:ℝ) - (Q n:ℝ)/((q:ℝ)*(n:ℝ))) ((a:ℝ)/(q:ℝ) + (Q n:ℝ)/((q:ℝ)*(n:ℝ))) MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖medCoreBand n (Qqp n) (Qzf n) - modelBand n (Qqp n) (Qzf n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "开放子猜想（中弧零点密度带）：在 exp(√(log n)) < q ≤ n^(1/10) 内，真实中弧核与模型之差为 o(n)。",
+        "en": "Open sub-conjecture (zero-density band): for exp(√(log n)) < q ≤ n^(1/10), medCoreBand matches modelBand up to o(n)."
+      },
+      "brief": {
+        "zh": "恰好位于 Gallagher 无对数零点密度定理的适用域边缘；难度集中在处理坏模数 q 并保留相位求和的均方抵消。",
+        "en": "Sits in the log-free zero-density / Linnik regime; requires uniform control over rare bad moduli with phase oscillation."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-medium-arc-scales",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-medcore-bv-band",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_medcore_bv_band.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_medcore_bv_band",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let Qzf := fun n : ℕ => ⌊(n:ℝ)^(1/10:ℝ)⌋₊; let K := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.range (n+1), E ((k:ℝ)*β); let medCoreBand := fun (n A B : ℕ) => intervalIntegral (fun t => {u : ℝ | ∃ q a : ℕ, A < q ∧ q ≤ B ∧ a ≤ q ∧ Nat.Coprime a q ∧ |u - (a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let modelBand := fun (n A B : ℕ) => ∑ q ∈ Finset.Ioc A B, ∑ a ∈ (Finset.range (q+1)).filter (fun a => Nat.Coprime a q), intervalIntegral (fun t => (((∑ r ∈ (Finset.range q).filter (fun r => Nat.Coprime r q), E ((r:ℝ)*(a:ℝ)/(q:ℝ))) / (Nat.totient q : ℂ)) * K n (t - (a:ℝ)/(q:ℝ)))^2 * E (-(n:ℝ)*t)) ((a:ℝ)/(q:ℝ) - (Q n:ℝ)/((q:ℝ)*(n:ℝ))) ((a:ℝ)/(q:ℝ) + (Q n:ℝ)/((q:ℝ)*(n:ℝ))) MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖medCoreBand n (Qzf n) (Q₁ n) - modelBand n (Qzf n) (Q₁ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "开放子猜想（中弧 BV 越界带）：在 n^(1/10) < q ≤ n^(1/3) 内，真实中弧核与模型之差为 o(n)。",
+        "en": "Open sub-conjecture (BV-range band): for n^(1/10) < q ≤ n^(1/3), medCoreBand matches modelBand up to o(n)."
+      },
+      "brief": {
+        "zh": "此处模数数量约 n^(2/3) 个区间、每个区间短至 n^(2/3)，需要比 Bombieri-Vinogradov 更强的短区间或逐点频率-模数相关性估计。",
+        "en": "Each arc has length ~ n^(2/3)/(q) down to n^(2/3); requires sharp progression control with phase cancellation across q ≤ n^(1/3)."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-medium-arc-scales",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-skirt-polylog-moduli",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_skirt_polylog_moduli.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowSkirt := fun n : ℕ => intervalIntegral (fun t => (lowWideArcs n \\ arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (lowSkirt n).re",
+      "plain_statement": {
+        "zh": "开放子猜想（低模主弧裙边）：围绕 q ≤ (log₂ n)² 主弧外扩至宽弧半径 H/(qn) 的裙边带满足单侧下界 −εn。",
+        "en": "Open sub-conjecture (polylog-modulus skirt): the annulus around q ≤ (log₂ n)² out to radius H/(qn) has real part ≥ −εn."
+      },
+      "brief": {
+        "zh": "由于半径比主弧大了 Q₁ ≈ n^(1/3) 倍，在远离中心处 |S_n(t)| 缺乏 L¹ 绝对可和性，需在裙边内利用 Fejér 衰减与振荡。",
+        "en": "Extends well past the main lobe of K_n; requires balancing the 1/(q|β|) Jordan tail with prime progression errors."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-medium-arc-scales",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-skirt-medium-moduli",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_skirt_medium_moduli.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_skirt_medium_moduli",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let midArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let remSkirt := fun n : ℕ => intervalIntegral (fun t => ((wideArcs n \\ midArcs n) \\ (lowWideArcs n \\ arcs n)).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (remSkirt n).re",
+      "plain_statement": {
+        "zh": "开放子猜想（中模宽弧裙边）：扣除低模裙边后的剩余中弧裙边带满足单侧下界 −εn。",
+        "en": "Open sub-conjecture (medium-modulus skirt): the remaining wide-arc minus mid-arc skirt satisfies real part ≥ −εn."
+      },
+      "brief": {
+        "zh": "模数上至 n^(1/3) 且宽弧可能发生部分重叠，需要处理重叠容斥与远离有理中心的核衰减。",
+        "en": "Covers q ≤ n^(1/3) at wide radius H/(qn) where arcs may overlap and kernel tails interact."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-medium-arc-scales",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-medium-assembly-bridge",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_medium_assembly_bridge.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_medium_assembly_bridge",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let midArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let medCore := fun n : ℕ => intervalIntegral (fun t => (midArcs n \\ arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let medSkirt := fun n : ℕ => intervalIntegral (fun t => (wideArcs n \\ midArcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let Qqp := fun n : ℕ => ⌊Real.exp (Real.sqrt (Real.log (n:ℝ)))⌋₊; let Qzf := fun n : ℕ => ⌊(n:ℝ)^(1/10:ℝ)⌋₊; let K := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.range (n+1), E ((k:ℝ)*β); let medCoreBand := fun (n A B : ℕ) => intervalIntegral (fun t => {u : ℝ | ∃ q a : ℕ, A < q ∧ q ≤ B ∧ a ≤ q ∧ Nat.Coprime a q ∧ |u - (a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let modelBand := fun (n A B : ℕ) => ∑ q ∈ Finset.Ioc A B, ∑ a ∈ (Finset.range (q+1)).filter (fun a => Nat.Coprime a q), intervalIntegral (fun t => (((∑ r ∈ (Finset.range q).filter (fun r => Nat.Coprime r q), E ((r:ℝ)*(a:ℝ)/(q:ℝ))) / (Nat.totient q : ℂ)) * K n (t - (a:ℝ)/(q:ℝ)))^2 * E (-(n:ℝ)*t)) ((a:ℝ)/(q:ℝ) - (Q n:ℝ)/((q:ℝ)*(n:ℝ))) ((a:ℝ)/(q:ℝ) + (Q n:ℝ)/((q:ℝ)*(n:ℝ))) MeasureTheory.volume; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowSkirt := fun n : ℕ => intervalIntegral (fun t => (lowWideArcs n \\ arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let remSkirt := fun n : ℕ => intervalIntegral (fun t => ((wideArcs n \\ midArcs n) \\ (lowWideArcs n \\ arcs n)).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; (∃ N₀ : ℕ, ∀ n : ℕ, N₀ ≤ n → medCore n = medCoreBand n (Q n) (Qqp n) + medCoreBand n (Qqp n) (Qzf n) + medCoreBand n (Qzf n) (Q₁ n) ∧ modelBand n (Q n) (Q₁ n) = modelBand n (Q n) (Qqp n) + modelBand n (Qqp n) (Qzf n) + modelBand n (Qzf n) (Q₁ n) ∧ medSkirt n = lowSkirt n + remSkirt n) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (modelBand n (Q n) (Q₁ n)).re) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖medCoreBand n (Q n) (Qqp n) - modelBand n (Q n) (Qqp n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖medCoreBand n (Qqp n) (Qzf n) - modelBand n (Qqp n) (Qzf n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖medCoreBand n (Qzf n) (Q₁ n) - modelBand n (Qzf n) (Q₁ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (lowSkirt n).re) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (remSkirt n).re) → ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (medCore n + medSkirt n).re",
+      "plain_statement": {
+        "zh": "中弧合成归约桥：三个模数带的模型逼近界、模型正性下界与两项裙边下界共同推出整个中弧区单侧下界 −εn。",
+        "en": "Medium-zone assembly bridge: combining the model floor, three modulus-band approximations, and two skirt floors yields the medium-zone floor."
+      },
+      "brief": {
+        "zh": "以 ε/6 预算分配给模型下界、三条误差带与两条裙边带，已可由 Lean 4 内核严格证完。",
+        "en": "Allocates ε/6 to each of the six bounds and closes by triangle/real-part arithmetic."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-medium-arc-scales",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-frontier-deep-mangoldt-swap",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_deep_mangoldt_swap.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_deep_mangoldt_swap",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let Λ := ArithmeticFunction.vonMangoldt; let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → ‖Jdeep n Λ Λ - deepMinor n‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "无条件深次弧换权基石：在深次弧上将素数对数权替换为冯·芒戈尔特权所产生的积分差严格为 o(n)。",
+        "en": "Unconditional deep-minor swap: replacing prime-log weights with Λ on deepMinor changes the integral by at most o(n)."
+      },
+      "brief": {
+        "zh": "可证分析基石：对 (S_n(Λ)² - S_n(w)²) 因子分解后在单位圆做 L² Parseval + Cauchy-Schwarz，误差 ≤ 2 n^(3/4)(log n)²。",
+        "en": "Provable via L² Parseval and Cauchy-Schwarz on [0,1], bounding the difference by O(n^(3/4) (log n)²)."
+      },
+      "source": "https://arxiv.org/abs/2607.27282v2",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-frontier-vaughan-type1-elimination",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_vaughan_type1_elimination.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_vaughan_type1_elimination",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let typeII := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → ‖Jdeep n Λ Λ - Jdeep n (typeII n) (typeII n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "无条件 Type-I 消去基石：取截断 U = ⌊n^(1/16)⌋₊，在深次弧上初段与所有 Type-I 交叉积分贡献之和为 o(n)。",
+        "en": "Unconditional Type-I elimination: at U = V = ⌊n^(1/16)⌋, all non-(Type-II × Type-II) Vaughan terms contribute o(n) on deepMinor."
+      },
+      "brief": {
+        "zh": "可证分析基石：在 wideArcsᶜ 上有 q > n^(1/3) 逼近，使 Type-I 和满足 ‖S_I(t)‖ ≪ n^(11/12 + o(1))，再结合 Parseval 得平方 L¹ 界为 o(n)。",
+        "en": "Provable foundation: deepMinor forces q > n^(1/3), giving power-saving on Type-I sums that pairs with L² Parseval for o(n)."
+      },
+      "source": "https://arxiv.org/abs/2607.27282v2",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b1-b1",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b1_b1.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b1_b1",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let τ₁ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₁ n) (τ₁ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "Type-II 矩阵格点 (1,1)：双因子均在平衡前缘带 (n^(1/16), n^(1/4)] 时，深次弧积分范数为 o(n)。",
+        "en": "Type-II cell (1,1): deep-minor integral of τ₁ × τ₁ (both variables in (n^(1/16), n^(1/4)]) is o(n)."
+      },
+      "brief": {
+        "zh": "可独立攻关格点：该带内因子规模仍远离 √n，单变量指数和尚可控至 n^(15/16+o(1))，重点在于在积分内榨干交叉保存。",
+        "en": "Most tractable corner cell; factors stay below n^(1/4), leaving room for pointwise or L⁴ dispersion savings."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b1-b2",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b1_b2.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b1_b2",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let B₂ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let τ₁ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₂ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₁ n < a ∧ a ≤ B₂ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₁ n) (τ₂ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "Type-II 矩阵格点 (1,2)：(n^(1/16), n^(1/4)] 与 (n^(1/4), n^(1/3)] 交叉项在深次弧积分范数为 o(n)。",
+        "en": "Type-II cell (1,2): deep-minor cross integral of τ₁ × τ₂ is o(n)."
+      },
+      "brief": {
+        "zh": "一侧带具有强色散保存，可用 Cauchy-Schwarz 配对另一侧的全周期 L² 能量攻击。",
+        "en": "Pairs a sub-n^(1/4) band with the (n^(1/4), n^(1/3)] band via dispersion and L² energy."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b1-b4",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b1_b4.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b1_b4",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let B₃ := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)⌋₊; let τ₁ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₄ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₃ n < a ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₁ n) (τ₄ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "Type-II 矩阵格点 (1,4)：(n^(1/16), n^(1/4)] 与对称高带 (n^(2/3), n/U] 交叉项在深次弧积分范数为 o(n)。",
+        "en": "Type-II cell (1,4): deep-minor cross integral of τ₁ × τ₄ is o(n)."
+      },
+      "brief": {
+        "zh": "τ₄ 中共轭因子 m/a 落回 (n^(1/16), n^(1/3))，双侧皆含短变量，可尝试对偶角色互换。",
+        "en": "In τ₄ the complementary factor m/a is small, giving short-factor bilinear dispersion on both sides."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b4-b4",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b4_b4.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b4_b4",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₃ := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)⌋₊; let τ₄ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₃ n < a ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₄ n) (τ₄ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "Type-II 矩阵格点 (4,4)：双因子均在高带 (n^(2/3), n/U] 时，深次弧积分范数为 o(n)。",
+        "en": "Type-II cell (4,4): deep-minor integral of τ₄ × τ₄ (co-factor ≤ n^(1/3)) is o(n)."
+      },
+      "brief": {
+        "zh": "由于 τ₄ 的共轭除数 m/a < n^(1/3)，本质上是带光滑素权重 Λ(r) 的反对称双线性块。",
+        "en": "Complementary divisor r = m/a < n^(1/3) makes this dual to small-factor bilinear dispersion."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b2-b2",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b2_b2.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b2_b2",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let B₂ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let τ₂ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₁ n < a ∧ a ≤ B₂ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₂ n) (τ₂ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "Type-II 矩阵格点 (2,2)：双因子均在关键过渡带 (n^(1/4), n^(1/3)] 时，深次弧积分范数为 o(n)。",
+        "en": "Type-II cell (2,2): deep-minor integral of τ₂ × τ₂ (factors in (n^(1/4), n^(1/3)]) is o(n)."
+      },
+      "brief": {
+        "zh": "在宽弧半径 H/(qn) ≈ n^(1/3) Q₀ / (qn) 下，Vinogradov 逐点界刚好在 q ≈ n^(1/3) 处丧失强幂节省，需额外四次矩或 Kloosterman 增益。",
+        "en": "Right at the boundary of wide-arc denominator cutoff n^(1/3); needs bilinear or Kloosterman cancellation."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b2-b4",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b2_b4.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b2_b4",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let B₂ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let B₃ := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)⌋₊; let τ₂ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₁ n < a ∧ a ≤ B₂ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₄ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₃ n < a ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₂ n) (τ₄ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "Type-II 矩阵格点 (2,4)：过渡带 (n^(1/4), n^(1/3)] 与高带 (n^(2/3), n/U] 交叉项深次弧积分范数为 o(n)。",
+        "en": "Type-II cell (2,4): deep-minor cross integral of τ₂ × τ₄ is o(n)."
+      },
+      "brief": {
+        "zh": "非对称过渡与高带交叉项，可利用两段尺度错位寻求比对角项更弱的双线性界。",
+        "en": "Asymmetric cross-term pairing (n^(1/4), n^(1/3)] against co-factors ≤ n^(1/3)."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b1-b3",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b1_b3.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b1_b3",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let B₂ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let B₃ := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)⌋₊; let τ₁ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₃ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₂ n < a ∧ a ≤ B₃ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₁ n) (τ₃ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "Type-II 矩阵格点 (1,3)：(n^(1/16), n^(1/4)] 与奇偶性核心带 (n^(1/3), n^(2/3)] 的交叉积分范数为 o(n)。",
+        "en": "Type-II cell (1,3): deep-minor cross integral pairing τ₁ with the parity core τ₃ is o(n)."
+      },
+      "brief": {
+        "zh": "利用 τ₁ 侧小因子带来非平凡次线性节约，单独压制 τ₃ 的奇偶性核心噪声。",
+        "en": "Tests whether dispersion from the (n^(1/16), n^(1/4)] side tames cross-correlation with the parity core."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b2-b3",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b2_b3.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b2_b3",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let B₂ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let B₃ := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)⌋₊; let τ₂ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₁ n < a ∧ a ≤ B₂ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₃ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₂ n < a ∧ a ≤ B₃ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₂ n) (τ₃ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "Type-II 矩阵格点 (2,3)：过渡带 (n^(1/4), n^(1/3)] 与核心带 (n^(1/3), n^(2/3)] 交叉积分范数为 o(n)。",
+        "en": "Type-II cell (2,3): deep-minor cross integral of τ₂ × τ₃ is o(n)."
+      },
+      "brief": {
+        "zh": "连接过渡带与中心奇偶核心的交叉耦合项。",
+        "en": "Couples the transition band (n^(1/4), n^(1/3)] to the central parity core."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b3-b4",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b3_b4.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b3_b4",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₂ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let B₃ := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)⌋₊; let τ₃ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₂ n < a ∧ a ≤ B₃ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₄ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₃ n < a ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₃ n) (τ₄ n)‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "Type-II 矩阵格点 (3,4)：核心带 (n^(1/3), n^(2/3)] 与高带 (n^(2/3), n/U] 交叉积分范数为 o(n)。",
+        "en": "Type-II cell (3,4): deep-minor cross integral of τ₃ × τ₄ is o(n)."
+      },
+      "brief": {
+        "zh": "耦合奇偶核心与小共轭因子带，与 (2,3) 互为共轭镜像。",
+        "en": "Dual counterpart to cell (2,3), coupling the parity core with small complementary divisors."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b3-b3-parity",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b3_b3_parity.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b3_b3_parity",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₂ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let B₃ := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)⌋₊; let τ₃ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₂ n < a ∧ a ≤ B₃ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (Jdeep n (τ₃ n) (τ₃ n)).re",
+      "plain_statement": {
+        "zh": "Type-II 矩阵核心格点 (3,3)（筛法奇偶性障碍本源）：双因子均处于中心带 (n^(1/3), n^(2/3)] 时，深次弧积分实部至少为 −εn。",
+        "en": "Type-II parity core (3,3): deep-minor signed floor for τ₃ × τ₃ with both factors in (n^(1/3), n^(2/3)]."
+      },
+      "brief": {
+        "zh": "整个哥德巴赫次弧问题的最深核心——四元除数移位卷积 a₁b₁ + a₂b₂ = n（a_i, b_i ≈ n^(1/2)）的真实带符号单侧抵消，无法仅靠绝对值克服。",
+        "en": "The irreducible parity-barrier core: signed one-sided cancellation of balanced bilinear convolution a₁b₁ + a₂b₂ = n."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-matrix-bridge",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_matrix_bridge.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_matrix_bridge",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let B₂ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let B₃ := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)⌋₊; let typeII := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₁ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₂ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₁ n < a ∧ a ≤ B₂ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₃ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₂ n < a ∧ a ≤ B₃ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let τ₄ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₃ n < a ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → ‖Jdeep n Λ Λ - deepMinor n‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → ‖Jdeep n Λ Λ - Jdeep n (typeII n) (typeII n)‖ ≤ e * (n : ℝ)) → (∃ N₀ : ℕ, ∀ n : ℕ, N₀ ≤ n → Jdeep n (typeII n) (typeII n) = Jdeep n (τ₁ n) (τ₁ n) + 2 * Jdeep n (τ₁ n) (τ₂ n) + 2 * Jdeep n (τ₁ n) (τ₃ n) + 2 * Jdeep n (τ₁ n) (τ₄ n) + Jdeep n (τ₂ n) (τ₂ n) + 2 * Jdeep n (τ₂ n) (τ₃ n) + 2 * Jdeep n (τ₂ n) (τ₄ n) + Jdeep n (τ₃ n) (τ₃ n) + 2 * Jdeep n (τ₃ n) (τ₄ n) + Jdeep n (τ₄ n) (τ₄ n)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₁ n) (τ₁ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₁ n) (τ₂ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₁ n) (τ₄ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₄ n) (τ₄ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₂ n) (τ₂ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₂ n) (τ₄ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₁ n) (τ₃ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₂ n) (τ₃ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → ‖Jdeep n (τ₃ n) (τ₄ n)‖ ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (Jdeep n (τ₃ n) (τ₃ n)).re) → ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (deepMinor n).re",
+      "plain_statement": {
+        "zh": "Type-II 矩阵归约桥：由无条件换权、Type-I 消去及十个双线性元胞猜测推出深次弧单侧下界。",
+        "en": "Type-II matrix bridge: combining the unconditional swap, Type-I elimination, and all 10 dyadic Type-II cells yields the deepMinor floor."
+      },
+      "brief": {
+        "zh": "以 ε/18 均分给换权、Type-I 消去及展开后的 16 份双线性项，可在 Lean 4 中直接闭合。",
+        "en": "Splits ε into 18 pieces across the swap, Type-I elimination, and all 16 expanded bilinear weights."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-frontier-uncond-deep-second-moment",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_uncond_deep_second_moment.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_uncond_deep_second_moment",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ η : ℝ, 0 < η → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → (∑ m ∈ Finset.Icc n (2 * n), ‖deepCoeff n m‖ ^ 2) ≤ (n : ℝ) ^ (8 / 3 + η)",
+      "plain_statement": {
+        "zh": "无条件二倍区间深次弧二阶矩：对固定宽弧遮罩 (wideArcs n)ᶜ，在 [n, 2n] 上的傅里叶系数平方和至多为 n^(8/3+η)。",
+        "en": "Unconditional deep-minor second moment: for the fixed mask (wideArcs n)ᶜ, ∑_{m=n}^{2n} ‖deepCoeff n m‖² ≤ n^(8/3+η)."
+      },
+      "brief": {
+        "zh": "可证分析基石：由 Bessel 不等式得平方和 ≤ ∫_{(wideArcs n)ᶜ} |S_n|⁴ dt ≤ (sup |S_n|)² · ∫₀¹ |S_n|² dt ≪ (n^(5/6+η/4))² · n log n。",
+        "en": "Provable via Bessel's inequality bounded by (sup_{deep} |S_n|)² · L²(S_n) ≪ n^(5/3 + η/2) · n log n."
+      },
+      "source": "https://arxiv.org/html/2610.15559v1",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-moment-antispike",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-frontier-deep-fourth-moment-conjecture",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_deep_fourth_moment_conjecture.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_deep_fourth_moment_conjecture",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; ∀ η : ℝ, 0 < η → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => ‖S n w u‖ ^ 4) t) (0 : ℝ) 1 MeasureTheory.volume ≤ (n : ℝ) ^ (2 + η)",
+      "plain_statement": {
+        "zh": "开放子猜想（深次弧拟最优四阶矩）：S_n(w) 在深次弧 (wideArcs n)ᶜ 上的四次积分至多为 n^(2+η)。",
+        "en": "Open sub-conjecture (deep-minor fourth moment): ∫_{(wideArcs n)ᶜ} |S_n(w, t)|⁴ dt ≤ n^(2+η)."
+      },
+      "brief": {
+        "zh": "全圆 ∫₀¹ |S_n|⁴ dt ≈ n² (log n)⁴ 本身已知在主弧处占主导，此猜想断言扣除宽主弧后剩下的四阶矩仍不超过 n^(2+η) 且比平凡 n^(8/3) 强得多。",
+        "en": "Improves the trivial n^(8/3+η) fourth-moment cap down to the square-root cancellation threshold n^(2+η) on deepMinor."
+      },
+      "source": "https://arxiv.org/html/2610.15559v1",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-moment-antispike",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-deep-three-quarters-saving",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_deep_three_quarters_saving.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_deep_three_quarters_saving",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; ∀ η : ℝ, 0 < η → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → ∀ t ∈ Set.Icc (0 : ℝ) 1, t ∉ wideArcs n → ‖S n w t‖ ≤ (n : ℝ) ^ (3 / 4 + η)",
+      "plain_statement": {
+        "zh": "开放子猜想（深次弧 3/4 幂逐点估计）：在宽弧补集上将已知的 5/6 幂节省推进至 n^(3/4+η)。",
+        "en": "Open sub-conjecture (3/4-power saving on deepMinor): improve the unconditional 5/6 bound to ‖S_n(w,t)‖ ≤ n^(3/4+η) outside wideArcs."
+      },
+      "brief": {
+        "zh": "将无条件指数 5/6 降至 3/4 虽仍不足以用绝对值直接得 o(n)（需 < 1/2），但能立刻把二倍区间例外数压至 X^(1/2+ε)（无条件接近 GRH 水平）。",
+        "en": "Stronger than the unconditional 5/6 exponent and matches the 3/4 circle-model regime yielding √X exceptions."
+      },
+      "source": "https://arxiv.org/abs/2607.27282v2",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-moment-antispike",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-antispike-shift-transfer",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_antispike_shift_transfer.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_antispike_shift_transfer",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ (η : ℝ) (N : ℕ), 0 < η ∧ ∀ n : ℕ, N ≤ n → Even n → ∃ ω : ℕ → ℝ, (∀ m : ℕ, 0 ≤ ω m) ∧ ((∑ m ∈ Finset.Icc n (2 * n), (ω m) ^ 2) * (n : ℝ) ^ (8 / 3 + η) ≤ ((e / 2) * (n : ℝ)) ^ 2) ∧ (∑ m ∈ Finset.Icc n (2 * n), ω m * (deepCoeff n m).re) - (e / 2) * (n : ℝ) ≤ (deepMinor n).re",
+      "plain_statement": {
+        "zh": "开放子猜想（反尖峰局部加权平滑）：任意坏偶数 n 处深次弧贡献不显著低于 [n, 2n] 内的局部非负加权平均（权 L² 范数 ≤ (ε/2)² n^(-2/3-η)）。",
+        "en": "Open sub-conjecture (anti-spike local smoothing): Re(deepMinor n) is bounded below by a localized nonnegative average on [n, 2n] of L²-weight ≤ (ε/2)² n^(-2/3-η) minus (ε/2)n."
+      },
+      "brief": {
+        "zh": "把“防止单个偶数出现孤立负尖峰”定量化：只要存在支撑长度 ≫ n^(2/3+η) 的平滑核把邻近偶数传递到 n，即可直接与无条件二阶矩相乘闭合。",
+        "en": "Quantifies anti-spike oscillation: any nonnegative smoothing kernel of effective width ≫ n^(2/3+η) closes via the unconditional second moment."
+      },
+      "source": "https://arxiv.org/html/2610.15559v1",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-moment-antispike",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-moment-antispike-bridge",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_moment_antispike_bridge.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_moment_antispike_bridge",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; (∀ η : ℝ, 0 < η → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → (∑ m ∈ Finset.Icc n (2 * n), ‖deepCoeff n m‖ ^ 2) ≤ (n : ℝ) ^ (8 / 3 + η)) → (∀ e : ℝ, 0 < e → ∃ (η : ℝ) (N : ℕ), 0 < η ∧ ∀ n : ℕ, N ≤ n → Even n → ∃ ω : ℕ → ℝ, (∀ m : ℕ, 0 ≤ ω m) ∧ ((∑ m ∈ Finset.Icc n (2 * n), (ω m) ^ 2) * (n : ℝ) ^ (8 / 3 + η) ≤ ((e / 2) * (n : ℝ)) ^ 2) ∧ (∑ m ∈ Finset.Icc n (2 * n), ω m * (deepCoeff n m).re) - (e / 2) * (n : ℝ) ≤ (deepMinor n).re) → ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (deepMinor n).re",
+      "plain_statement": {
+        "zh": "二阶矩-反尖峰归约桥：无条件 X^(8/3+η) 二阶矩与反尖峰平滑转移猜想直接推出深次弧单侧下界 −εn。",
+        "en": "Second-moment anti-spike bridge: the unconditional X^(8/3+η) second moment plus anti-spike smoothing imply the deepMinor floor."
+      },
+      "brief": {
+        "zh": "对平滑核与 deepCoeff 实部直接应用有限和 Cauchy-Schwarz（Finset.sum_mul_sq_le_sq_mul_sq），Lean 内核零难度通过。",
+        "en": "Applies finite Cauchy-Schwarz between ω and Re(deepCoeff) against the unconditional X^(8/3+η) energy bound."
+      },
+      "source": "https://arxiv.org/html/2610.15559v1",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-moment-antispike",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-frontier-grh-medium-zones",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_grh_medium_zones.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_grh_medium_zones",
+      "statement": "(∀ (Q : ℕ) [NeZero Q] (χ : DirichletCharacter ℂ Q) (s : ℂ), 0 < s.re → s.re < 1 → DirichletCharacter.LFunction χ s = 0 → s.re = 1 / 2) → let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let midArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let medCore := fun n : ℕ => intervalIntegral (fun t => (midArcs n \\ arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let medSkirt := fun n : ℕ => intervalIntegral (fun t => (wideArcs n \\ midArcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (medCore n + medSkirt n).re",
+      "plain_statement": {
+        "zh": "条件定理（GRH 彻底清除中弧区）：在所有 Dirichlet L 函数 GRH 下，中弧核与中弧裙边之和恒满足单侧下界 −εn。",
+        "en": "Conditional theorem (GRH clears medium zones): assuming GRH for all Dirichlet L-functions, medCore n + medSkirt n ≥ −εn eventually."
+      },
+      "brief": {
+        "zh": "验证 GRH 已足以完全解决第一前沿（所有中弧带），从而证明即便假设 GRH，哥德巴赫余下全部障碍皆集中于 deepMinor。",
+        "en": "Establishes that GRH resolves all medium zones completely, isolating the remaining Goldbach difficulty inside deepMinor."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "grh",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-grh-and-zero-chains",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-frontier-grh-deep-equivalence",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_grh_deep_equivalence.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_grh_deep_equivalence",
+      "statement": "(∀ (Q : ℕ) [NeZero Q] (χ : DirichletCharacter ℂ Q) (s : ℂ), 0 < s.re → s.re < 1 → DirichletCharacter.LFunction χ s = 0 → s.re = 1 / 2) → let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let midArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let medCore := fun n : ℕ => intervalIntegral (fun t => (midArcs n \\ arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let medSkirt := fun n : ℕ => intervalIntegral (fun t => (wideArcs n \\ midArcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; (∃ N₀ : ℕ, ∀ n : ℕ, N₀ ≤ n → minor n = (medCore n + medSkirt n) + deepMinor n) → ((∀ (Q₀ : ℕ) [NeZero Q₀] (χ : DirichletCharacter ℂ Q₀) (s : ℂ), 0 < s.re → s.re < 1 → DirichletCharacter.LFunction χ s = 0 → s.re = 1 / 2) → ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (medCore n + medSkirt n).re) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (deepMinor n).re) → ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (minor n).re",
+      "plain_statement": {
+        "zh": "GRH 深次弧等价归约桥：在 GRH 与三带分解下，整个次弧目标完全等价于深次弧单个区域的单侧下界。",
+        "en": "GRH deep-minor reduction bridge: under GRH, L-goldbach-arc-minor-saving reduces solely to the deepMinor signed floor."
+      },
+      "brief": {
+        "zh": "将 GRH 下的中弧定理、三带拆分与深次弧下界合并输出父命题。",
+        "en": "Combines GRH medium-zone clearance with the deepMinor floor to deduce L-goldbach-arc-minor-saving."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "grh",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-grh-and-zero-chains",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-frontier-master-zone-bridge",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_master_zone_bridge.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_master_zone_bridge",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let midArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let medCore := fun n : ℕ => intervalIntegral (fun t => (midArcs n \\ arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let medSkirt := fun n : ℕ => intervalIntegral (fun t => (wideArcs n \\ midArcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; (∃ N₀ : ℕ, ∀ n : ℕ, N₀ ≤ n → minor n = (medCore n + medSkirt n) + deepMinor n) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (medCore n + medSkirt n).re) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (deepMinor n).re) → ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (minor n).re",
+      "plain_statement": {
+        "zh": "无条件主归约桥：只要三带分解、中弧合成区下界与深次弧下界同时成立，即可无条件推出 L-goldbach-arc-minor-saving。",
+        "en": "Master unconditional zone bridge: the three-zone split, medium-zone floor, and deepMinor floor jointly imply L-goldbach-arc-minor-saving."
+      },
+      "brief": {
+        "zh": "把前沿一、二、三三条无条件路线统一收束到最终父命题。",
+        "en": "Master junction connecting Tracks 1, 2, and 3 to the parent target."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-grh-and-zero-chains",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-frontier-no-siegel-zero",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_no_siegel_zero.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_no_siegel_zero",
+      "statement": "∃ c : ℝ, 0 < c ∧ ∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q) (β : ℝ), χ ^ 2 = 1 → 1 - c / Real.log ((q : ℝ) + 2) < β → β < 1 → DirichletCharacter.LFunction χ (β : ℂ) ≠ 0",
+      "plain_statement": {
+        "zh": "经典开放前沿猜想（无 Landau-Siegel 实零点）：存在一致常数 c > 0，使所有实特征在 1 − c/log(q+2) 右侧无实零点。",
+        "en": "Classic open frontier (no Landau-Siegel zeros): real Dirichlet L-functions have no real zeros in (1 − c/log(q+2), 1)."
+      },
+      "brief": {
+        "zh": "有效化 Siegel 定理并消除中弧 Siegel 带异常零点障碍的独立数论终极子猜想。",
+        "en": "Standalone classical barrier underlying effective Siegel-band progression control."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "grh",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-grh-and-zero-chains",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-bv-three-fifths-level",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_bv_three_fifths_level.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_bv_three_fifths_level",
+      "statement": "∀ A : ℝ, 0 < A → ∃ (C : ℝ) (X₀ : ℕ), 0 < C ∧ ∀ X : ℕ, X₀ ≤ X → ∃ B : ℕ → ℝ, (∀ q ∈ Finset.Icc 1 ⌊(X : ℝ) ^ (3 / 5 : ℝ)⌋₊, ∀ a : ℕ, Nat.Coprime a q → |(∑ k ∈ (Finset.Icc 1 X).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (X : ℝ) / (Nat.totient q : ℝ)| ≤ B q) ∧ (∑ q ∈ Finset.Icc 1 ⌊(X : ℝ) ^ (3 / 5 : ℝ)⌋₊, B q) ≤ C * (X : ℝ) / (Real.log (X : ℝ)) ^ A",
+      "plain_statement": {
+        "zh": "开放前沿猜想（突破 1/2 障壁至水平 3/5 的 Bombieri-Vinogradov）：分布水平超过 X^(1/2) 达 X^(3/5)（比完整 Elliott-Halberstam 弱）。",
+        "en": "Open frontier (level-3/5 Bombieri-Vinogradov): prime progression errors average to O(X/(log X)^A) up to q ≤ X^(3/5), strictly weaker than full Elliott-Halberstam."
+      },
+      "brief": {
+        "zh": "用各模数的最坏互素余类误差 B(q) 在 q ≤ X^(3/5) 上求和；能将中弧核边界推越 n^(1/2)。",
+        "en": "Strictly weaker than Elliott-Halberstam (θ < 1), yet breaks the 1/2 Bombieri-Vinogradov barrier for medium arcs."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-grh-and-zero-chains",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-sqrt-modulus-arc-band",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_sqrt_modulus_arc_band.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_sqrt_modulus_arc_band",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Q₂ := fun n : ℕ => ⌊Real.sqrt (n : ℝ) / ((Nat.log 2 (n + 2) : ℝ) ^ 4)⌋₊; let sqrtArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q₂ n ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t - (a : ℝ) / (q : ℝ)| ≤ ((256 * Q₂ n * Q n : ℕ) : ℝ) / ((q : ℝ) * (n : ℝ))}; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (intervalIntegral (fun t => (sqrtArcs n \\ wideArcs n).indicator (f n) t) (0 : ℝ) 1 MeasureTheory.volume).re",
+      "plain_statement": {
+        "zh": "开放子猜想（推进至 √n 模数的扩展次弧带）：在 n^(1/3) < q ≤ √n / (log₂ n)⁴ 带域上单侧贡献至少 −εn。",
+        "en": "Open sub-conjecture (√n-scale extended arc band): the annulus between wideArcs (n^(1/3)) and sqrtArcs (√n / (log n)⁴) has real part ≥ −εn."
+      },
+      "brief": {
+        "zh": "位于 1/3 立方根截断与 1/2 平方根不相交上限之间；能把深次弧的模数门槛由 n^(1/3) 抬高至接近 n^(1/2)。",
+        "en": "Bridges the gap from n^(1/3) up to the √n/(log n)⁴ disjointness frontier before deepMinor."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-grh-and-zero-chains",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-spatial-exact-split",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_spatial_exact_split.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_spatial_exact_split",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let L₀ := fun n : ℕ => Nat.log 2 (n + 2); let M₀ := fun n : ℕ => ⌊(n:ℝ) / Real.sqrt (L₀ n : ℝ)⌋₊; let diagTerm := fun n : ℕ => (MeasureTheory.volume ((arcs n)ᶜ ∩ Set.Ioc (0:ℝ) 1)).toReal * (∑ p ∈ Finset.range (n+1), w p * w (n - p)); let sincKernel := fun (n q : ℕ) (m : ℤ) => (∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), Real.cos (2 * Real.pi * (m:ℝ) * (a:ℝ) / (q:ℝ))) * (Real.sin (2 * Real.pi * (m:ℝ) * ((Q n:ℝ) / ((q:ℝ)*(n:ℝ)))) / (Real.pi * (m:ℝ))); let offLowNear := fun n : ℕ => ∑ j ∈ Finset.range (n+1), ∑ k ∈ (Finset.range (n+1)).filter (fun k : ℕ => j + k ≠ n ∧ Int.natAbs ((j:ℤ) + (k:ℤ) - (n:ℤ)) ≤ M₀ n), w j * w k * ∑ q ∈ Finset.Icc 1 (L₀ n), sincKernel n q ((j:ℤ) + (k:ℤ) - (n:ℤ)); let offLowFar := fun n : ℕ => ∑ j ∈ Finset.range (n+1), ∑ k ∈ (Finset.range (n+1)).filter (fun k : ℕ => M₀ n < Int.natAbs ((j:ℤ) + (k:ℤ) - (n:ℤ))), w j * w k * ∑ q ∈ Finset.Icc 1 (L₀ n), sincKernel n q ((j:ℤ) + (k:ℤ) - (n:ℤ)); let offHighMod := fun n : ℕ => ∑ j ∈ Finset.range (n+1), ∑ k ∈ (Finset.range (n+1)).filter (fun k : ℕ => j + k ≠ n), w j * w k * ∑ q ∈ Finset.Ioc (L₀ n) (Q n), sincKernel n q ((j:ℤ) + (k:ℤ) - (n:ℤ)); ∃ N₀ : ℕ, ∀ n : ℕ, N₀ ≤ n → (minor n).re = diagTerm n - offLowNear n - offLowFar n - offHighMod n",
+      "plain_statement": {
+        "zh": "无条件物理空间四分恒等式：在主弧不相交尺度下，次弧贡献实部精确等于对角主项减去低模近带、低模远带与高模带三项之和。",
+        "en": "Unconditional spatial 4-part identity: eventually Re(minor n) = diagTerm n − offLowNear n − offLowFar n − offHighMod n."
+      },
+      "brief": {
+        "zh": "可证分析基石：在 2 Q(n)² < n 后主弧两两不相交且 q=1 边界回卷合并，逐项计算 E((j+k-n)t) 的傅里叶积分即得。",
+        "en": "Provable foundation: once 2 Q(n)² < n, evaluate the Fourier integrals of arcs(n) and group modes by |j+k-n| and q."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-spatial-sinc-conjectures",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-frontier-spatial-macro-sinc-tail",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_spatial_macro_sinc_tail.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_spatial_macro_sinc_tail",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let L₀ := fun n : ℕ => Nat.log 2 (n + 2); let M₀ := fun n : ℕ => ⌊(n:ℝ) / Real.sqrt (L₀ n : ℝ)⌋₊; let sincKernel := fun (n q : ℕ) (m : ℤ) => (∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), Real.cos (2 * Real.pi * (m:ℝ) * (a:ℝ) / (q:ℝ))) * (Real.sin (2 * Real.pi * (m:ℝ) * ((Q n:ℝ) / ((q:ℝ)*(n:ℝ)))) / (Real.pi * (m:ℝ))); let offLowFar := fun n : ℕ => ∑ j ∈ Finset.range (n+1), ∑ k ∈ (Finset.range (n+1)).filter (fun k : ℕ => M₀ n < Int.natAbs ((j:ℤ) + (k:ℤ) - (n:ℤ))), w j * w k * ∑ q ∈ Finset.Icc 1 (L₀ n), sincKernel n q ((j:ℤ) + (k:ℤ) - (n:ℤ)); ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → |offLowFar n| ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "开放子猜想（空间宏偏移 sinc 振荡尾部）：对于 1 ≤ q ≤ log₂ n 且偏移 |j+k−n| > n/√(log₂ n) 的低模远带贡献为 o(n)。",
+        "en": "Open sub-conjecture (macro-shift sinc tail): for q ≤ log₂ n and large spatial shifts |j+k−n| > n/√(log₂ n), |offLowFar n| = o(n)."
+      },
+      "brief": {
+        "zh": "注意 sinc(2πmQ/(qn)) 在 |m| ≈ n 处仍以 O(1/m) 缓慢衰减，需利用 R(n+m) 关于 m 的光滑规律与 sin 的符号抵消。",
+        "en": "Since R_q = Q/(qn), the sinc kernel oscillates over shifts |m| up to n; requires cancellation across R(n+m) · sin(2πmR_q)/m."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-spatial-sinc-conjectures",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-spatial-lowmod-model-match",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_spatial_lowmod_model_match.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_spatial_lowmod_model_match",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let L₀ := fun n : ℕ => Nat.log 2 (n + 2); let M₀ := fun n : ℕ => ⌊(n:ℝ) / Real.sqrt (L₀ n : ℝ)⌋₊; let sincKernel := fun (n q : ℕ) (m : ℤ) => (∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), Real.cos (2 * Real.pi * (m:ℝ) * (a:ℝ) / (q:ℝ))) * (Real.sin (2 * Real.pi * (m:ℝ) * ((Q n:ℝ) / ((q:ℝ)*(n:ℝ)))) / (Real.pi * (m:ℝ))); let offLowNear := fun n : ℕ => ∑ j ∈ Finset.range (n+1), ∑ k ∈ (Finset.range (n+1)).filter (fun k : ℕ => j + k ≠ n ∧ Int.natAbs ((j:ℤ) + (k:ℤ) - (n:ℤ)) ≤ M₀ n), w j * w k * ∑ q ∈ Finset.Icc 1 (L₀ n), sincKernel n q ((j:ℤ) + (k:ℤ) - (n:ℤ)); let seriesLow := fun n : ℕ => (n:ℝ) * ∑ q ∈ Finset.Icc 1 (L₀ n), ((((ArithmeticFunction.moebius q : ℤ) : ℝ) ^ 2) / ((Nat.totient q : ℝ) ^ 2)) * (∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), Real.cos (2 * Real.pi * (n:ℝ) * (a:ℝ) / (q:ℝ))); ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → |offLowNear n - seriesLow n| ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "开放子猜想（空间近对角低模与奇异级数截断吻合）：在短偏移 |j+k−n| ≤ n/√(log₂ n) 上低模和以 o(n) 精度逼近截断奇异级数模型 seriesLow n。",
+        "en": "Open sub-conjecture (near-diagonal low-mod match): for |j+k−n| ≤ n/√(log₂ n), offLowNear n equals seriesLow n up to o(n)."
+      },
+      "brief": {
+        "zh": "反映在固定小模数 q ≤ log₂ n 下，平均素数对数卷积 R(n+m) 绕 n 的局部平均行为是否严格恢复主弧对偶奇异级数主项。",
+        "en": "Captures whether local averages of R(n+m) over |m| ≤ n/√(log₂ n) recover the truncated singular series seriesLow n."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-spatial-sinc-conjectures",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-spatial-diag-series-margin",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_spatial_diag_series_margin.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_spatial_diag_series_margin",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let L₀ := fun n : ℕ => Nat.log 2 (n + 2); let diagTerm := fun n : ℕ => (MeasureTheory.volume ((arcs n)ᶜ ∩ Set.Ioc (0:ℝ) 1)).toReal * (∑ p ∈ Finset.range (n+1), w p * w (n - p)); let sincKernel := fun (n q : ℕ) (m : ℤ) => (∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), Real.cos (2 * Real.pi * (m:ℝ) * (a:ℝ) / (q:ℝ))) * (Real.sin (2 * Real.pi * (m:ℝ) * ((Q n:ℝ) / ((q:ℝ)*(n:ℝ)))) / (Real.pi * (m:ℝ))); let offHighMod := fun n : ℕ => ∑ j ∈ Finset.range (n+1), ∑ k ∈ (Finset.range (n+1)).filter (fun k : ℕ => j + k ≠ n), w j * w k * ∑ q ∈ Finset.Ioc (L₀ n) (Q n), sincKernel n q ((j:ℤ) + (k:ℤ) - (n:ℤ)); let seriesLow := fun n : ℕ => (n:ℝ) * ∑ q ∈ Finset.Icc 1 (L₀ n), ((((ArithmeticFunction.moebius q : ℤ) : ℝ) ^ 2) / ((Nat.totient q : ℝ) ^ 2)) * (∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), Real.cos (2 * Real.pi * (n:ℝ) * (a:ℝ) / (q:ℝ))); ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → offHighMod n + seriesLow n - diagTerm n ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "zh": "开放子猜想（对角主项与高模 Ramanujan-sinc 差额单侧界）：高模带与截断奇异级数之和超出对角零模项的余量至多为 εn。",
+        "en": "Open sub-conjecture (diagonal vs high-modulus margin): offHighMod n + seriesLow n − diagTerm n ≤ εn for all large even n."
+      },
+      "brief": {
+        "zh": "对角零模 diagTerm n ≈ (1 − O(Q²/n)) R(n) 恰好与 seriesLow n + offHighMod n 同阶且正负相抵；控制该单侧差额即可避开中/深弧划分。",
+        "en": "Balances the zero-mode diagTerm n against high-modulus Ramanujan-sinc correlations and seriesLow n."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-spatial-sinc-conjectures",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-frontier-spatial-assembly-bridge",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_spatial_assembly_bridge.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_spatial_assembly_bridge",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let L₀ := fun n : ℕ => Nat.log 2 (n + 2); let M₀ := fun n : ℕ => ⌊(n:ℝ) / Real.sqrt (L₀ n : ℝ)⌋₊; let diagTerm := fun n : ℕ => (MeasureTheory.volume ((arcs n)ᶜ ∩ Set.Ioc (0:ℝ) 1)).toReal * (∑ p ∈ Finset.range (n+1), w p * w (n - p)); let sincKernel := fun (n q : ℕ) (m : ℤ) => (∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), Real.cos (2 * Real.pi * (m:ℝ) * (a:ℝ) / (q:ℝ))) * (Real.sin (2 * Real.pi * (m:ℝ) * ((Q n:ℝ) / ((q:ℝ)*(n:ℝ)))) / (Real.pi * (m:ℝ))); let offLowNear := fun n : ℕ => ∑ j ∈ Finset.range (n+1), ∑ k ∈ (Finset.range (n+1)).filter (fun k : ℕ => j + k ≠ n ∧ Int.natAbs ((j:ℤ) + (k:ℤ) - (n:ℤ)) ≤ M₀ n), w j * w k * ∑ q ∈ Finset.Icc 1 (L₀ n), sincKernel n q ((j:ℤ) + (k:ℤ) - (n:ℤ)); let offLowFar := fun n : ℕ => ∑ j ∈ Finset.range (n+1), ∑ k ∈ (Finset.range (n+1)).filter (fun k : ℕ => M₀ n < Int.natAbs ((j:ℤ) + (k:ℤ) - (n:ℤ))), w j * w k * ∑ q ∈ Finset.Icc 1 (L₀ n), sincKernel n q ((j:ℤ) + (k:ℤ) - (n:ℤ)); let offHighMod := fun n : ℕ => ∑ j ∈ Finset.range (n+1), ∑ k ∈ (Finset.range (n+1)).filter (fun k : ℕ => j + k ≠ n), w j * w k * ∑ q ∈ Finset.Ioc (L₀ n) (Q n), sincKernel n q ((j:ℤ) + (k:ℤ) - (n:ℤ)); let seriesLow := fun n : ℕ => (n:ℝ) * ∑ q ∈ Finset.Icc 1 (L₀ n), ((((ArithmeticFunction.moebius q : ℤ) : ℝ) ^ 2) / ((Nat.totient q : ℝ) ^ 2)) * (∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), Real.cos (2 * Real.pi * (n:ℝ) * (a:ℝ) / (q:ℝ))); (∃ N₀ : ℕ, ∀ n : ℕ, N₀ ≤ n → (minor n).re = diagTerm n - offLowNear n - offLowFar n - offHighMod n) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → |offLowFar n| ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → |offLowNear n - seriesLow n| ≤ e * (n : ℝ)) → (∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → offHighMod n + seriesLow n - diagTerm n ≤ e * (n : ℝ)) → ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (minor n).re",
+      "plain_statement": {
+        "zh": "物理空间对偶归约桥：结合空间四分恒等式与三条空间 Ramanujan-sinc 子猜想直接推出 L-goldbach-arc-minor-saving。",
+        "en": "Spatial assembly bridge: combining the 4-part spatial split with the 3 spatial sinc sub-conjectures implies L-goldbach-arc-minor-saving."
+      },
+      "brief": {
+        "zh": "将 ε 三等分为 ε/3 分别代入三条空间估计，由 Lean 4 内核严格证完。",
+        "en": "Allocates ε/3 to each of the three spatial bounds and closes via abs_le and linarith."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-spatial-sinc-conjectures",
+      "role": "conditional"
     }
   ],
   "tracks": [
@@ -11785,6 +12525,78 @@
       "description": {
         "zh": "保持原题的弧和频率；先用低段长度与 Parseval 控制低低、低高项，再单独攻高高项的有符号下界。",
         "en": "Keep the original arcs and frequency. Use the short support and Parseval on the small terms, then study the signed bulk."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "frontier-medium-arc-scales",
+      "title": {
+        "zh": "前沿一：中弧 Siegel/Gallagher/BV 模数带子猜想",
+        "en": "Frontier 1: Medium-arc Siegel, Gallagher, and BV modulus-band sub-conjectures"
+      },
+      "description": {
+        "zh": "将主弧补集分为中弧核、中弧裙边与深次弧，无条件证明 Ramanujan-Fejér 模型非负性，并将中弧按模数尺度精细拆分为 Siegel 准多项式带、Gallagher 无对数零点密度带与 Bombieri-Vinogradov 越界带五个开放子猜想。",
+        "en": "Partition minor arcs into medium core, skirt, and deep zones; prove unconditional Fejér model positivity; and split medium-arc approximation into 5 open sub-conjectures across Siegel, Gallagher, and BV modulus bands."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "frontier-type2-dyadic-matrix",
+      "title": {
+        "zh": "前沿二：深次弧 Vaughan 双线性 Type-II 十格点猜想矩阵",
+        "en": "Frontier 2: Ten-cell dyadic Type-II × Type-II bilinear conjecture matrix"
+      },
+      "description": {
+        "zh": "在深次弧上先无条件完成 L² Parseval 换权并消去所有初段与 Type-I 交叉项，将未知核心压缩为四段 Type-II 二分带交织出的十个双线性元胞，精准分离可攻克角格点与真正的奇偶性核心 (n^(1/3), n^(2/3)]。",
+        "en": "Unconditionally swap to Λ and eliminate all Type-I terms on deep minor arcs, compressing the open core to 10 dyadic Type-II × Type-II cells that isolate the parity core (n^(1/3), n^(2/3)]."
+      },
+      "feeds": [
+        "frontier-medium-arc-scales",
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "frontier-moment-antispike",
+      "title": {
+        "zh": "前沿三：四阶矩、3/4 幂 saving 与反尖峰平滑传递猜想",
+        "en": "Frontier 3: Fourth-moment, 3/4 power-saving, and anti-spike transfer conjectures"
+      },
+      "description": {
+        "zh": "结合无条件 X^(8/3+η) 二阶矩，提出四阶矩、3/4 逐点幂节省以及局部加权反尖峰传递三条独立攻关路径，绕开逐点绝对值与双线性分解，直接以均值能量消灭孤立坏偶数。",
+        "en": "Pair the unconditional X^(8/3+η) second moment with fourth-moment, 3/4-saving, and anti-spike local averaging conjectures to rule out isolated worst-case even spikes."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "frontier-grh-and-zero-chains",
+      "title": {
+        "zh": "前沿四：GRH 压缩等价链、无 Siegel 零点与 3/5-BV 水平",
+        "en": "Frontier 4: GRH equivalence chain, no Siegel zeros, and 3/5-BV level"
+      },
+      "description": {
+        "zh": "用 GRH 将中弧彻底消去并把深次弧的开放困难隔离出来，同时独立刻画排除 Siegel 零点、水平 3/5 的 Bombieri-Vinogradov 分布与扩展至 √n 尺度的次弧带等经典前沿猜想。",
+        "en": "Use GRH to clear the medium zones and isolate deepMinor, while formalizing classic frontier conjectures on Siegel zeros, level-3/5 BV distribution, and √n-scale arcs."
+      },
+      "feeds": [
+        "frontier-medium-arc-scales",
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "frontier-spatial-sinc-conjectures",
+      "title": {
+        "zh": "前沿五：物理空间素数关联与 Ramanujan-sinc 核子猜想",
+        "en": "Frontier 5: Spatial prime correlation and Ramanujan-sinc kernel sub-conjectures"
+      },
+      "description": {
+        "zh": "完全脱离指数和平方估计，将次弧积分精确拆解为对角主项与低模近带、低模远带、高模带三个空间 Ramanujan-sinc 卷积和，提供纯物理空间攻关接口。",
+        "en": "Bypass exponential-sum squaring by splitting the minor-arc integral into the diagonal prime-pair term minus three explicit spatial Ramanujan-sinc regimes."
       },
       "feeds": [
         "arc-budget"
