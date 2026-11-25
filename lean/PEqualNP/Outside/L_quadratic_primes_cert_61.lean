@@ -1,7 +1,7 @@
 import Mathlib
 
 theorem PEqualNP.Outside.L_quadratic_primes_cert_61 :
-    ∀ n:ℕ, 61∣n^2+1 ↔ n%61=11 ∨ n%61=50 := by
+    ∀ n : ℕ, 61 ∣ n ^ 2 + 1 ↔ n % 61 = 11 ∨ n % 61 = 50 := by
   intro n
   letI : Fact (Nat.Prime 61) := ⟨by decide⟩
   have ha : ((n : ZMod 61) = 11) ↔ n % 61 = 11 :=
