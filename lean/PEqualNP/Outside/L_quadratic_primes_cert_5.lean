@@ -17,7 +17,7 @@ theorem L_quadratic_primes_cert_5 :
     have h2 : (n ^ 2 + 1) % 5 = (n ^ 2 % 5 + 1 % 5) % 5 := Nat.add_mod (n ^ 2) 1 5
     have h3 : (r ^ 2 + 1) % 5 = (r ^ 2 % 5 + 1 % 5) % 5 := Nat.add_mod (r ^ 2) 1 5
     rw [h2, h1, h3]
-  rw [Nat.dvd_iff_mod_eq_zero, hmod, ← hr]
+  rw [Nat.dvd_iff_mod_eq_zero, hmod]
   interval_cases r <;> decide
 
 end PEqualNP.Outside
