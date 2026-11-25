@@ -11100,6 +11100,92 @@
         "L-goldbach-mellin-log-identification",
         "L-goldbach-mellin-phase-regularity"
       ]
+    },
+    {
+      "id": "L-goldbach-full-prime-cutoff-loss",
+      "file": "lean/PEqualNP/Outside/L_goldbach_full_prime_cutoff_loss.lean",
+      "module": "PEqualNP.Outside.L_goldbach_full_prime_cutoff_loss",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k : ℝ) else 0; let high := fun m k : ℕ => if k ≤ m then 0 else w k; let R := fun (a : ℕ → ℝ) (n : ℕ) => Finset.sum (Finset.range (n + 1)) (fun k => a k * a (n - k)); ∀ n m : ℕ, 2 * m < n → R w n - R (high m) n = 2 * Finset.sum (Finset.range (m + 1)) (fun k => w k * w (n - k)) ∧ 0 ≤ R w n - R (high m) n ∧ R w n - R (high m) n ≤ 2 * Real.log 4 * (m : ℝ) * Real.log (n : ℝ)",
+      "plain_statement": {
+        "zh": "对满足 2m<n 的自然数 n、m，删去不超过 m 的素数后，完整对数权卷积的损失恰为首端小素数贡献的两倍，介于零和 2 log(4) m log(n) 之间。",
+        "en": "For natural n,m with 2m<n, removing primes at most m costs exactly twice the low-end contribution to the full logarithmic convolution. This loss lies between zero and 2 log(4) m log(n)."
+      },
+      "imports": [],
+      "program": "correlation",
+      "brief": {
+        "zh": "用 k ↦ n−k 配对两个不相交的端点区间。用 log(n) 控制另一素数的权重，再对小端使用切比雪夫 θ 的显式线性上界。",
+        "en": "Reflect k about n/2 to match the two disjoint endpoint ranges. Bound the partner weight by log(n) and use the explicit linear Chebyshev theta bound at the small end."
+      },
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/Chebyshev.lean",
+      "parallel": true,
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": []
+    },
+    {
+      "id": "L-goldbach-masked-prime-cutoff-loss",
+      "file": "lean/PEqualNP/Outside/L_goldbach_masked_prime_cutoff_loss.lean",
+      "module": "PEqualNP.Outside.L_goldbach_masked_prime_cutoff_loss",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k : ℝ) else 0; let high := fun m k : ℕ => if k ≤ m then 0 else w k; let E := fun x : ℝ => Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S := fun (n : ℕ) (a : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n + 1)) (fun k => (a k : ℂ) * E ((k : ℝ) * t)); let I := fun (A : Set ℝ) (j : ℝ) (n : ℕ) (a : ℕ → ℝ) => intervalIntegral (A.indicator (fun t => (S n a t)^2 * E (-j * t))) (0 : ℝ) 1 MeasureTheory.volume; ∀ n m : ℕ, 2 ≤ n → m ≤ n → ∀ A : Set ℝ, MeasurableSet A → ∀ j : ℝ, ‖I A j n w - I A j n (high m)‖ ≤ 2 * Real.log 4 * Real.log (n : ℝ) * Real.sqrt ((m : ℝ) * n)",
+      "plain_statement": {
+        "zh": "对自然数 n≥2、m≤n，在 [0,1] 内任意可测区域和任意实解调频率上，删去不超过 m 的素数后，平方指数和积分的复数变化量的模至多为 2 log(4) log(n) √(mn)。",
+        "en": "For natural n≥2 and m≤n, deleting primes at most m changes the demodulated square integral by at most 2 log(4) log(n) sqrt(mn) in complex norm, uniformly over all measurable regions of the unit interval and real demodulation frequencies."
+      },
+      "imports": [],
+      "program": "correlation",
+      "brief": {
+        "zh": "将两平方之差分解为两多项式的差与和的乘积。去掉模长为一的相位，对两因子用柯西–施瓦茨和完整单位区间上的 Parseval。分别在 m 和 n 处用切比雪夫 θ 控制系数能量。",
+        "en": "Factor the difference of squares. Apply Cauchy–Schwarz and full-interval Parseval after taking the modulus of the unit phase. Use Chebyshev theta at m and n to control the two coefficient energies."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/495",
+      "parallel": true,
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-continuous-parseval"
+      ]
+    },
+    {
+      "id": "L-goldbach-fixed-cutoff-arc-shell",
+      "file": "lean/PEqualNP/Outside/L_goldbach_fixed_cutoff_arc_shell.lean",
+      "module": "PEqualNP.Outside.L_goldbach_fixed_cutoff_arc_shell",
+      "statement": "∀ (Q N n : ℕ), 1 ≤ N → N ≤ n → let r := fun (x q : ℕ) => (Q : ℝ) / ((q : ℝ) * (x : ℝ)); let A := fun (x : ℕ) => {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t - (a : ℝ) / (q : ℝ)| ≤ r x q}; A n ⊆ A N ∧ (∀ t ∈ A N \\ A n, ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q ∧ a ≤ q ∧ Nat.Coprime a q ∧ r n q < |t - (a : ℝ) / (q : ℝ)| ∧ |t - (a : ℝ) / (q : ℝ)| ≤ r N q) ∧ (∑ q ∈ Finset.Icc 1 Q, ((q : ℝ) + 1) * (2 * (r N q - r n q))) ≤ 4 * (Q : ℝ)^2 * ((n : ℝ) - (N : ℝ)) / ((N : ℝ) * (n : ℝ))",
+      "plain_statement": {
+        "zh": "固定自然数 Q，取 1≤N≤n。以 Q/(qx) 为半径的有理主弧 Aₓ 随 x 收缩。属于 A_N 而落在 A_n 外的每点都位于某个最简分数的边界带内。按所有分母和分子计，两侧边界带的总长度至多为 4Q²(n−N)/(Nn)。",
+        "en": "At fixed natural Q and 1≤N≤n, the rational arcs of radii Q/(qx) shrink with x. Every point lost from A_N lies in a boundary shell of a reduced fraction. Counting both sides and all numerators with multiplicity gives total width at most 4Q²(n−N)/(Nn)."
+      },
+      "imports": [],
+      "program": "correlation",
+      "brief": {
+        "zh": "沿用同一个分数作包含关系的见证。新旧半径之差含因子 1/q，而分子数至多为 q+1。逐分母求和，无需弧互不相交。",
+        "en": "Keep the same rational witness for nesting. Each loss of radius has a factor 1/q and at most q+1 numerators occur. Sum both sides over the denominators, allowing overlaps."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/316",
+      "parallel": true,
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": []
+    },
+    {
+      "id": "L-goldbach-frozen-minor-bessel",
+      "file": "lean/PEqualNP/Outside/L_goldbach_frozen_minor_bessel.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frozen_minor_bessel",
+      "statement": "∀ (x : ℕ) (b : ℕ → ℝ) (A : Set ℝ), MeasurableSet A → let H := fun t : ℝ => ∑ k ∈ Finset.range (x+1), (b k : ℂ) * Complex.exp (((2 * Real.pi * ((k : ℝ) * t) : ℝ) : ℂ) * Complex.I); let f := A.indicator (fun t => H t ^ 2); let c := fun j : ℤ => fourierCoeffOn (zero_lt_one : (0 : ℝ) < 1) f j; ∀ (F : Finset ℤ) (T : ℝ), 0 < T → (((F.filter fun j => (c j).re ≤ -T).card : ℝ) * T ^ 2) ≤ intervalIntegral (A.indicator (fun t => ‖H t‖^4)) 0 1 MeasureTheory.volume",
+      "plain_statement": {
+        "zh": "固定实系数三角多项式 H 和单位区间内的可测区域 A。任取有限整数频率集 F 和 T>0，A 上 H² 的傅里叶系数实部至多为 −T 的频率个数乘以 T²，不超过 A 上 |H|⁴ 的积分。",
+        "en": "Fix a trigonometric polynomial H with real coefficients and a measurable mask A on the unit interval. For any finite integer frequency set F and T>0, T² times the number of frequencies in F where the masked Fourier coefficient of H² has real part at most −T is bounded by the integral of |H|⁴ on A."
+      },
+      "imports": [],
+      "program": "correlation",
+      "brief": {
+        "zh": "将可测截断的平方多项式置于单位区间的 L² 中。对选定的整数频率用有限 Bessel 不等式，再用傅里叶系数的模控制负实部。所有频率共用同一组系数和同一区域。",
+        "en": "Put the masked square of the polynomial in L² on the unit interval. Apply finite Bessel to the selected integer frequencies and dominate the negative real part by the modulus. The coefficients and region are fixed across frequencies."
+      },
+      "source": "https://arxiv.org/html/2610.26756v1#S8.L8",
+      "parallel": true,
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": []
     }
   ],
   "tracks": [
@@ -11419,8 +11505,8 @@
         "en": "Minor arcs after removing small primes"
       },
       "description": {
-        "zh": "保持原题的弧和频率；先用低段长度与 Parseval 控制低低、低高项，再单独攻高高项的有符号下界。",
-        "en": "Keep the original arcs and frequency. Use the short support and Parseval on the small terms, then study the signed bulk."
+        "zh": "在原次弧上分离小素数贡献，并量化任意截断的频域与全系数误差。对冻结尺度的研究须跟踪弧、权重和目标频率；高高项的逐点有符号下界仍开放。",
+        "en": "Isolate small primes on the original minor arcs and quantify truncation in both the spectrum and the full coefficient. Frozen-scale arguments must track the mask, weights and target frequency. The signed pointwise bulk bound remains open."
       },
       "feeds": [
         "arc-budget"
