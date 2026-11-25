@@ -47,8 +47,9 @@ theorem PEqualNP.Outside.L_goldbach_mellin_weight_tail :
       _ = Real.log y + u k * Real.log 2 := by
         rw [Real.log_mul hy.ne' (by positivity), Real.log_pow]
         simp [u]
-      _ ≤ Real.log y + u k * Real.log y :=
-        add_le_add le_rfl (mul_le_mul_of_nonneg_left hlogtwo (hu k).le)
+      _ ≤ Real.log y + u k * Real.log y := by
+        have hmul := mul_le_mul_of_nonneg_left hlogtwo (hu k).le
+        linarith only [hmul]
       _ ≤ 2 * u k * Real.log y := by
         have h := mul_le_mul_of_nonneg_right (hu_one k) hlogy
         linarith only [h]
@@ -78,7 +79,7 @@ theorem PEqualNP.Outside.L_goldbach_mellin_weight_tail :
     have hdom : u H ≤ u k := by
       dsimp [u]
       have hcast : (H:ℝ) ≤ (k:ℝ) := by exact_mod_cast (Finset.mem_Ico.mp hk).1
-      exact add_le_add hcast le_rfl
+      linarith only [hcast]
     have hpow : u H^(a+1)*u k^2 ≤ u k^(a+3) := calc
       _ ≤ u k^(a+1)*u k^2 :=
         mul_le_mul_of_nonneg_right (pow_le_pow_left₀ (hu H).le hdom _) (sq_nonneg _)
