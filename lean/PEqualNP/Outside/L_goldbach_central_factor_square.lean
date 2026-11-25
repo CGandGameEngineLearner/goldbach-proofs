@@ -17,7 +17,7 @@ private theorem increment_nonneg {p : ℕ} (hp : 3 ≤ p) : 0 ≤ increment p :=
   unfold increment
   nlinarith [sq_nonneg (1 / ((p : ℝ) - 2))]
 
-/-- The averaged Euler factors at integers from 5 onwards admit a rational telescoping bound. -/
+/-- A telescoping rational product bounds the averaged Euler factors at integers from 5 onwards. -/
 private theorem tail_product (N : ℕ) (hN : 4 ≤ N) :
     ∏ p ∈ Icc 5 N, (1 + increment p / (p : ℝ)) ≤ 2 * ((N : ℝ) - 2) / N := by
   induction N, hN using Nat.le_induction with
