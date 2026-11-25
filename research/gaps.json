@@ -7461,6 +7461,26 @@
       "imports": [],
       "track": "minor-truncation",
       "role": "target"
+    },
+    {
+      "id": "L-goldbach-minor-assembly",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_assembly.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_assembly",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; let I := fun (n:ℕ) (a b:ℕ→ℝ) => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => S n a u*S n b u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun t => (S n w t)^2*E (-(n:ℝ)*t)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ (e : ℝ), 0 < e → ∀ n : ℕ, Even n → I n w w = I n (low n) (low n) + 2 * I n (low n) (high n) + I n (high n) (high n) → ‖I n (low n) (low n)‖ ≤ e*(n:ℝ)/8 → ‖I n (low n) (high n)‖ ≤ e*(n:ℝ)/8 → -(e*(n:ℝ)/2) ≤ (I n (high n) (high n)).re → -(e*(n:ℝ)) ≤ (minor n).re",
+      "plain_statement": {
+        "zh": "若次弧系数按低低、低高、高高三项拆分（已证），前两项的绝对值不超过 εn/8，且高高项的实部至少为 −εn/2，则整个次弧的带符号实贡献至少为 −εn。",
+        "en": "If the minor-arc coefficient splits into low-low, low-high and high-high terms (already proved), the first two are bounded by εn/8 in absolute value, and the high-high real part is at least −εn/2, then the signed real contribution of the whole minor arc is at least −εn."
+      },
+      "brief": {
+        "zh": "把 minor-bilinear-split 与 small-small / small-bulk / bulk-signed-floor 接到目标 arc-minor-saving 上的那一步；全部内容是常数账 1/8+1/4+1/2<1。",
+        "en": "The step connecting minor-bilinear-split plus small-small / small-bulk / bulk-signed-floor to the target arc-minor-saving; the content is the constant bookkeeping 1/8+1/4+1/2<1."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2607.27282",
+      "track": "minor-truncation",
+      "role": "lemma"
     }
   ],
   "tracks": [
