@@ -26,14 +26,18 @@ theorem L_goldbach_cert_106 :
     IsPrimitiveRoot.pow (a := 2) (b := 53) (by decide) hz (by decide)
   have h₂ : IsPrimitiveRoot (z ^ 53) 2 :=
     IsPrimitiveRoot.pow (a := 53) (b := 2) (by decide) hz (by decide)
-  let odd : ℕ ↪ ℕ := ⟨fun j => 2 * j + 1, by intro j k h; omega⟩
+  let odd : ℕ ↪ ℕ := ⟨fun j => 2 * j + 1, by
+    intro j k h
+    change 2 * j + 1 = 2 * k + 1 at h
+    omega⟩
   let odds := (Finset.range 53).map odd
   have residues : (Finset.range 106).filter (fun b => Nat.Coprime b 106) = odds.erase 53 := by
     decide
   have odds_sum : (∑ b ∈ odds, z ^ b) = 0 := by
     dsimp only [odds]
     rw [Finset.sum_map]
-    simp only [odd, Function.Embedding.coeFn_mk, pow_add, pow_mul, pow_one]
+    change (∑ j ∈ Finset.range 53, z ^ (2 * j + 1)) = 0
+    simp_rw [pow_succ, pow_mul]
     rw [← Finset.sum_mul, h₅₃.geom_sum_eq_zero (by decide), zero_mul]
   have units_sum : (∑ b ∈ odds.erase 53, z ^ b) = 1 := by
     have h := Finset.sum_erase_add odds (fun b => z ^ b) (show 53 ∈ odds by decide)
