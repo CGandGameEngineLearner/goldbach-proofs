@@ -162,7 +162,7 @@ function messageRow(label, link) {
 }
 
 function programOf(gap) {
-  return gap.program || 'foundation';
+  return programs.has(gap.track) ? gap.track : gap.program || 'foundation';
 }
 
 function programName(key) {
@@ -343,7 +343,7 @@ function drawNetwork() {
   function caption(p, text, color) {
     ctx.font = w < 460 ? '550 11px system-ui, sans-serif' : '550 13px system-ui, sans-serif';
     ctx.textAlign = 'center';
-    const width = ctx.measureText(text).width;
+    const width = Math.min(ctx.measureText(text).width, w * (selectedProgram ? .85 : .44));
     ctx.beginPath();
     if (ctx.roundRect) ctx.roundRect(p.x - width / 2 - 8, p.y - 12, width + 16, 24, 4);
     else ctx.rect(p.x - width / 2 - 8, p.y - 12, width + 16, 24);
@@ -352,19 +352,19 @@ function drawNetwork() {
     ctx.strokeStyle = color + '90';
     ctx.stroke();
     ctx.fillStyle = color;
-    ctx.fillText(text, p.x, p.y + 4);
+    ctx.fillText(text, p.x, p.y + 4, width);
   }
   const keys = selectedProgram ? [selectedProgram] : [...programs.keys()];
   keys.forEach((key, index) => {
     const gaps = graphGaps.filter(gap => programOf(gap) === key);
     if (!gaps.length) return;
     const hub = selectedProgram ? center : {
-      x: w * (index % 2 ? 0.75 : 0.25), y: h * (keys.length <= 2 ? 0.5 : index < 2 ? 0.25 : 0.75)
+      x: w * (index % 2 ? 0.75 : 0.25), y: h * (Math.floor(index / 2) + 0.5) / Math.ceil(keys.length / 2)
     };
-    const tint = programPalette[key];
+    const tint = programPalette[key] || ['#8ed9ca', '#ecac93'][index % 2];
     if (!selectedProgram) edge(center, hub, tint + '66');
     const radiusX = w * (selectedProgram ? .44 : .19);
-    const radiusY = h * (selectedProgram ? .43 : .20);
+    const radiusY = h * (selectedProgram ? .43 : .40 / Math.ceil(keys.length / 2));
     gaps.forEach((gap, i) => {
       const angle = i * Math.PI * (3 - Math.sqrt(5));
       const radius = Math.sqrt((i + 1) / gaps.length);
@@ -742,7 +742,12 @@ async function loadStatus() {
       signal: request.signal,
     });
     if (!response.ok) throw new Error('Status request failed');
-    const { gaps, counts, results, desk, lpf_record } = await response.json();
+    const { gaps, counts, results, desk, lpf_record, catalogue_revision } = await response.json();
+    const pageRevision = document.querySelector('meta[name="catalogue-revision"]')?.content;
+    if (pageRevision && catalogue_revision && pageRevision !== catalogue_revision) {
+      window.location.reload();
+      return;
+    }
     renderExponent(lpf_record);
     assignments = desk?.assignments ?? assignments;
     document.getElementById('hero-available').textContent = gaps.filter(canClaim).length;

@@ -12,15 +12,7 @@ description: 为哥德巴赫研究台及其并列问题设计或调整研究路�
 1. **读取**：从研究台快照取得父题 ID、冻结声明和基线 Git SHA。对原声明 UTF-8 字节计算 SHA-256。读取父题、已完成输入和在途任务，先查重。
 2. **拆解**：将数学家的意图写入 `motivation`。每条子题给出独立 Lean 声明、显式前提、中英文解释、证明提示、所属路线、来源和依赖 ID。用 `links` 指向下游：`input` 提供必要步骤或可复用输入，`exploration` 是探索，`sufficient_reduction` 要列全输入并提供组合引理 `bridge`。检查组合引理的类型确实把这些输入推到父题。证明状态始终读取权威流水线裁决。
 3. **校验**：先用 Draft 2020-12 验证 JSON 结构，再验证父题哈希、ID 唯一性、引用在本台存在、路线存在、依赖无环和双语语义。服务端从 ID 派生固定文件名与模块名；v1 新题使用 Mathlib 并遵循该台的 program/role 规则。新路线或新增允许导入项需要扩展协议；v1 的 `route_note` 更新父题对应路线的双语说明。仅调整说明时允许空任务列表。最后运行仓库目录测试和固定版本 Lean。
-4. **发布**：以下 HTTP 路径为网站对接约定，当前尚未实现。已授权的仓库维护流程仍见下文。普通数学家会话可生成变更集；未来的 AI 发布客户端遇到未实现接口或鉴权失败时仅返回草稿，不自动改用 Git 或 SSH 发布。
-
-| 接口 | 输入与返回 |
-| --- | --- |
-| `GET /api/research/v1/problems/{slug}/snapshot` | 返回该台 `base_revision`、任务及声明哈希、路线、依赖和在途状态。当前公开任务可从该台 `api/status` 读取。 |
-| `POST /api/research/v1/problems/{slug}/changes` | 正文为变更集；URL 与正文的问题必须一致。使用 lifesize 通过知乎 OAuth 授予本 AI 会话的限时、分问题凭据。服务端按稳定知乎 ID 验证管理员，校验成功后返回 202 和 `change_id`。同一授权主体、问题和 `request_id` 对相同正文返回原记录。 |
-| `GET /api/research/v1/changes/{change_id}` | 返回 `status`（queued、validating、publishing、published、failed 或 conflict）、候选 SHA、CI 链接、发布 SHA、线上任务链接和错误详情。仅在生产回读与候选版本一致后报告 published。 |
-
-正文无效或引用错误返回 422，基线冲突或同一请求 ID 被用于不同正文返回 409，缺少有效会话返回 401，越权返回 403。冲突时重新读取快照，复核数学意图，生成新的请求 ID。服务端在激活前再次核对授权与基线。管理员网页只读展示变更记录；凭据留在受控会话中，变更集和日志只记录授权主体与变更内容。
+4. **交付变更 PR**：将变更集落实到对应目录，在功能分支提交并推送。用 PR 正文记录父题、数学动机、新增命题、依赖关系、声明变化和待解决输入。把 PR 链接交给 lifesize 审核；不代替管理员合并。网站部署器读取 GitHub 的合并身份和 main 上对应 SHA 的 CI 结果。变更集是 skill 的逐题交换格式；发布入口是 GitHub PR。
 
 ## 定位缺口
 
@@ -41,6 +33,6 @@ description: 为哥德巴赫研究台及其并列问题设计或调整研究路�
 
 1. 运行 `python -B -m unittest research.test_catalogue deploy.test_landau` 和 `git diff --check`。人工核对中英文描述与 Lean 类型是否一致，尤其是自然数减法、整除、求和括号和存在量词。若实际需要导入其他已证引理，核对它已存在于受信基线，提交者能够按导入规则使用。
 2. 参照 [Desk 测试](../../../deploy/test_desk.py)，用临时 SQLite 初始化各受影响的 Desk，调用 `/api/desk/claim`，逐一验证新增 ID 返回 201 且领取对应题目。验证过程使用隔离租约。
-3. 任务要求发布时，提交并推送本次目录和路线变更。核对指定 SHA 的 `catalogue.yml` 运行，例如 `gh run list --workflow catalogue.yml --commit <SHA>`，随后 `gh run watch <run-id> --exit-status`。若命题解析失败，按日志定位任务并修正，核对修正提交的结果。纯路线文档变更可按实际变更范围验收。
-4. 按 [$goldbach-deploy](../goldbach-deploy/SKILL.md) 发布已验证的清单。线上目录和 Git 基线有差异时逐项核对，保留既有任务与历史。通过中英文页面检查路线顺序和任务链接，通过对应研究台的公开状态接口核对新增 ID、声明、开放状态。检查 `?lang=zh&lemma=<ID>#roadmap` 能打开目标题。
-5. 告知用户各分支新增数量、建议首先领取的关键题、剩余核心难点、入口和 CI 链接。目录 CI 通过表示命题声明可解析并通过类型检查；贡献者提交的证明由 `authoritative.yml` 单独裁决。
+3. 创建 PR 后核对目录 CI，修正在预检中发现的问题。管理员审核后用项目所有者的 GitHub 账号合并到 main。
+4. 合并后查看该 SHA 的 push 目录 CI 和网站 `research-changes`，检查生产快照里的新增 ID 和冻结声明。需要诊断发布时参见[自动发布运维](../../../deploy/catalogue-release.md)。不要把 PR 检查通过或合并动作单独报告为已上线。
+5. 给出 PR、CI、受影响研究台与任务链接。区分声明通过类型检查与提交的证明通过权威核验。

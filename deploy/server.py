@@ -25,16 +25,21 @@ import sponsors
 SPONSOR_UPLOAD_SLOT = BoundedSemaphore(1)
 
 ROOT = Path(__file__).resolve().parent
+SITE_REVISION_FILE = ROOT / ".site-revision"
+SITE_REVISION = SITE_REVISION_FILE.read_text(encoding="ascii").strip() if SITE_REVISION_FILE.is_file() else None
 CREDS = Path(os.environ["CREDENTIALS_DIRECTORY"])
 SECRET = (CREDS / "webhook").read_bytes().strip()
 DB = Path(os.environ["STATE_DIRECTORY"]) / "verdicts.sqlite3"
 oauth_credential = CREDS / "zhihu-oauth"
 ZHIHU = ZhihuOAuth(DB.with_name("contributor-links.sqlite3"), json.loads(oauth_credential.read_bytes())
                    if oauth_credential.is_file() else None)
-GOLDBACH_CATALOGUE = json.loads((ROOT / "gaps.json").read_text(encoding="utf-8"))
+LIVE_RELEASE = Path("/opt/goldbach-catalogues/current")
+CATALOGUE_ROOT = LIVE_RELEASE.resolve(strict=True) if LIVE_RELEASE.is_symlink() else ROOT
+RELEASE_SHA = (CATALOGUE_ROOT / "revision").read_text() if CATALOGUE_ROOT != ROOT else None
+GOLDBACH_CATALOGUE = json.loads((CATALOGUE_ROOT / "gaps.json").read_text(encoding="utf-8"))
 GAPS = GOLDBACH_CATALOGUE["gaps"]
 DESK = Desk(DB, GAPS, SECRET)
-PROBLEM_FILE = ROOT / "problems.json"
+PROBLEM_FILE = CATALOGUE_ROOT / "problems.json"
 PROBLEMS = json.loads(PROBLEM_FILE.read_text(encoding="utf-8")) if PROBLEM_FILE.exists() else {}
 PUBLIC_SITE = "https://www.movan.tech/goldbach/"
 problem_ids = set(gap["id"] for gap in GAPS)
@@ -89,14 +94,14 @@ def discussion_widget(lang, prefix):
         return ""
     zh = lang == "zh"
     label = "扫码进群 讨论进度" if zh else "Join WeChat group"
-    name = "知乎 AI4S 讨论组（哥猜）" if zh else "Zhihu AI4S Goldbach discussion group"
+    name = "知乎 AI4S 讨论组（哥猜 3 群）" if zh else "Zhihu AI4S Goldbach discussion group 3"
     instructions = "微信扫码，讨论研究进度" if zh else "Scan in WeChat to discuss research progress"
     cutoff = DISCUSSION_EXPIRES.date()
     validity = f"{cutoff.month} 月 {cutoff.day} 日前有效" if zh else f"Valid before {cutoff:%Y-%m-%d} (UTC+8)"
-    alt = "知乎 AI4S 讨论组（哥猜）微信群二维码" if zh else "WeChat QR code for the Zhihu AI4S Goldbach discussion group"
+    alt = "知乎 AI4S 讨论组（哥猜 3 群）微信群二维码" if zh else "WeChat QR code for the Zhihu AI4S Goldbach discussion group 3"
     return f"""<details class="discussion-widget" id="wechat-discussion" name="research-qr" aria-label="{name}"><summary><img class="wechat-mark" src="{prefix}wechat.svg" width="34" height="34" alt="">{label}<span aria-hidden="true"></span></summary>
 <div class="discussion-body"><strong>{name}</strong><p>{instructions}</p>
-<div class="discussion-code"><img src="{prefix}discussion-qr.png" alt="{alt}" width="360" height="544"></div>
+<div class="discussion-code"><img src="{prefix}discussion-qr.png" alt="{alt}" width="360" height="566"></div>
 <small>{validity}</small></div></details>"""
 
 
@@ -196,6 +201,7 @@ def research_status(desk=DESK):
             row["zhihu"] = profile
     return {
         **extra,
+        "catalogue_revision": RELEASE_SHA,
         "gaps": gaps,
         "results": results,
         "desk": desk_status,
@@ -210,11 +216,8 @@ def research_status(desk=DESK):
 def goldbach_task_routes(lang):
     zh = lang == "zh"
     heading = "按子命题领取" if zh else "Choose a proof task"
-    note = ("对每个偶数证明素数卷积为正，就是最终猜想。下列工作线可分别领取。"
-            "主弧下界与次弧逐点抵消仍待证明；即使两者成立，阈值以下也要单独覆盖。" if zh else
-            "Prime convolution positivity at every even target is the final conjecture. "
-            "The major-arc floor and pointwise minor-arc cancellation are research targets. "
-            "Even with both, values below the resulting threshold need separate coverage.")
+    note = ("展开路线，查看每个子命题的声明和领取入口。" if zh else
+            "Expand a track to inspect its statements and choose a task.")
     tracks = GOLDBACH_CATALOGUE.get("tracks", [])
     names = {track["id"]: track["title"][lang] for track in tracks}
     sections = []
@@ -234,6 +237,26 @@ def goldbach_task_routes(lang):
                         f'<p>{escape(track["description"][lang])}</p>{next_steps}<div class="roadmap-tasks">'
                         f'{"".join(links)}</div></details>')
     return f'<div class="goldbach-tracks"><h3>{heading}</h3><p>{note}</p>{"".join(sections)}</div>'
+
+
+def goldbach_roadmap_page(page, lang):
+    # Catalogue order sets the two featured tracks; all tracks remain in the task list.
+    if RELEASE_SHA:
+        page = page.replace("</head>", f'<meta name="catalogue-revision" content="{escape(RELEASE_SHA)}"></head>', 1)
+    featured = GOLDBACH_CATALOGUE.get("tracks", [])[:2]
+    cards, stages = [], []
+    for track in featured:
+        key = escape(track["id"])
+        title = escape(track["title"][lang])
+        summary = escape(track["description"][lang])
+        count = sum(g.get("track") == track["id"] for g in GAPS)
+        tasks = f"{count} 个子命题" if lang == "zh" else f"{count} proof tasks"
+        cards.append(f'<button type="button" class="map-program-button" data-program="{key}" aria-pressed="false">'
+                     f'<strong class="program-name">{title}</strong><span class="program-count">{tasks}</span></button>')
+        stages.append(f'<li><h3>{title}</h3><p>{summary}</p><a href="#track-{key}">{tasks}</a></li>')
+    overview = '<ul class="roadmap topic-roadmap">' + "".join(stages) + '</ul>'
+    return page.replace("<!-- catalogue filters -->", "".join(cards)).replace(
+        "<!-- catalogue roadmap -->", overview + goldbach_task_routes(lang))
 
 
 def problem_page(page, slug, lang):
@@ -584,7 +607,26 @@ class Handler(BaseHTTPRequestHandler):
         if desk is None:
             return self.reply(404, b'{}')
         if path == "/health":
-            return self.reply(200, b'{"status":"ok"}')
+            return self.reply(200, json.dumps({
+                "status": "ok", "catalogue_revision": RELEASE_SHA,
+                "site_revision": SITE_REVISION,
+            }).encode())
+        if path == "/research-changes":
+            zh = self.language(url) == "zh"
+            title = "研究路线变更记录" if zh else "Research change history"
+            entries = json.loads((CATALOGUE_ROOT / "history.json").read_bytes()) if RELEASE_SHA else []
+            repo = "https://github.com/CGandGameEngineLearner/goldbach-proofs"
+            rows = "".join(
+                f'<li><time>{escape(row["at"])}</time> · <a href="{repo}/pull/{int(row["pr"])}">'
+                f'{escape(row["title"])}</a> · {escape(row["actor"])} · '
+                f'<a href="{repo}/actions/runs/{int(row["run"])}">CI</a></li>'
+                for row in reversed(entries))
+            empty = "尚无自动发布记录。" if zh else "No automated releases yet."
+            page = (f'<!doctype html><html lang="{"zh" if zh else "en"}"><meta charset="utf-8">'
+                    f'<meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title>'
+                    f'<link rel="stylesheet" href="site.css"><main class="shell"><h1>{title}</h1>'
+                    f'{("<ol>"+rows+"</ol>") if rows else empty}</main></html>')
+            return self.reply(200, page.encode(), "text/html")
         if path == "/api/status":
             try:
                 status = research_status(desk)
@@ -648,8 +690,7 @@ class Handler(BaseHTTPRequestHandler):
         if slug != "goldbach":
             page = problem_page(page, slug, lang)
         else:
-            page = re.sub(r'(<ol class="roadmap">.*?</ol>)',
-                          lambda match: match[0] + goldbach_task_routes(lang), page, count=1, flags=re.S)
+            page = goldbach_roadmap_page(page, lang)
         prefix = "" if slug == "goldbach" else "../../"
         page = page.replace("<!-- account -->", ZHIHU.account_link(self.headers, lang), 1)
         hero = '<section class="hero" aria-labelledby="page-title">'

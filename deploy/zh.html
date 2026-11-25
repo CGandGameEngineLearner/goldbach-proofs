@@ -174,6 +174,7 @@
       <div class="program-map">
         <div class="map-heading"><h3 id="map-context">全部路线</h3><button type="button" id="map-reset" hidden>← 查看全部路线</button></div>
         <div class="map-programs" role="group" aria-label="研究路线">
+            <!-- catalogue filters -->
             <button type="button" class="map-program-button" data-program="foundation" aria-pressed="false">
               <strong class="program-name">素数权重</strong>
               <span class="program-description">从卷积正性推出两个素数的存在</span>
@@ -257,15 +258,11 @@
 
     <section class="section road-section" id="roadmap" aria-labelledby="road-title">
       <div class="section-heading">
-        <div><h2 id="road-title">研究路线与尚待解决的问题</h2><p>把上游证明的每个输入分开审查，再研究足以保证每个偶数都有素数对的误差界。</p></div>
+        <div><h2 id="road-title">研究路线与尚待解决的问题</h2><p>以下是当前重点路线，可展开各路线领取子命题。</p></div>
+        <a class="text-link" href="research-changes?lang=zh">研究路线变更记录</a>
         <a class="text-link" href="https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/ROADMAP.md">查看完整路线 <span aria-hidden="true">↗</span></a>
       </div>
-      <ol class="roadmap">
-        <li><span class="stage-marker" aria-hidden="true">1</span><h3>把正性翻译为素数对</h3><p>仅在素数上赋予对数权重，证明它的加法卷积在 n 处为正恰好意味着 n 有两个素数之和的表示。</p></li>
-        <li><span class="stage-marker" aria-hidden="true">2</span><h3>追踪莱文特的 Lean 证明</h3><p>从 everyCharacter 追到原始特征、函数方程和局部到整体的输入，标明哪些零点结论可用于算术级数。<a href="https://github.com/leanprover-community/riemann-hypothesis/blob/dc76b2788ef7ad0a6d2d4575ca3320a677c72cd9/src/Main.lean">查看上游定理</a></p></li>
-        <li><span class="stage-marker" aria-hidden="true">3</span><h3>比较主弧与次弧</h3><p>固定 n 的傅里叶系数，估计主弧的正贡献，并为该 n 的次弧有符号误差寻找严格上界。</p></li>
-        <li><span class="stage-marker" aria-hidden="true">4</span><h3>排除残余例外</h3><p>用二阶矩估计例外集，再研究真实卷积的局部振荡。对所有偶数给出严格正下界仍是开放问题。</p></li>
-      </ol>
+      <!-- catalogue roadmap -->
       <article class="goldbach-story" id="research-story" aria-labelledby="story-title">
         <header class="section-heading"><div><h2 id="story-title">给定一个偶数，两个素数在哪里？</h2>
           <p>把 30 拆成两个素数，有 7 + 23、11 + 19 和 13 + 17 三种拆法。换成任何一个大于 2 的偶数，我们还能保证至少有一对吗？</p></div></header>

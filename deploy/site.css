@@ -1077,8 +1077,8 @@ body:not([data-problem]) .hero .open-status { vertical-align: middle; }
 .discussion-body p, .discussion-body small { display: block; font: 400 .78rem/1.4 var(--sans); color: var(--body); }
 .discussion-code { width: 216px; max-width: 100%; aspect-ratio: 1; overflow: hidden; position: relative; margin: .5rem auto; }
 .discussion-code img {
-  /* Frame the 264px QR square at (48, 184) in the original 360px screenshot. */
+  /* Frame the 264px QR square at (48, 201) in the original 360px screenshot. */
   position: absolute; width: 136.363636%; max-width: none; height: auto;
-  left: -18.181818%; top: -69.696970%;
+  left: -18.181818%; top: -76.136364%;
 }
 @media print { .discussion-dock { display: none; } }

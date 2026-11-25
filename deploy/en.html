@@ -135,6 +135,7 @@
       <div class="program-map">
         <div class="map-heading"><h3 id="map-context">All programs</h3><button type="button" id="map-reset" hidden>← All programs</button></div>
         <div class="map-programs" role="group" aria-label="Research programs">
+            <!-- catalogue filters -->
             <button type="button" class="map-program-button" data-program="foundation" aria-pressed="false">
               <strong class="program-name">Prime weights</strong>
               <span class="program-description">Extract two primes from a positive convolution</span>
@@ -218,15 +219,11 @@
 
     <section class="section road-section" id="roadmap" aria-labelledby="road-title">
       <div class="section-heading">
-        <div><h2 id="road-title">Research programs and open barriers</h2><p>Audit each input from the upstream proof, then seek an error bound strong enough to guarantee a prime pair at each even integer.</p></div>
+        <div><h2 id="road-title">Research programs and open barriers</h2><p>Explore the current research priorities and choose a proof task below.</p></div>
+        <a class="text-link" href="research-changes?lang=en">Research change history</a>
         <a class="text-link" href="https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/ROADMAP.md">Read the full roadmap <span aria-hidden="true">↗</span></a>
       </div>
-      <ol class="roadmap">
-        <li><span class="stage-marker" aria-hidden="true">1</span><h3>Extract a pair from positivity</h3><p>Weight each prime by its logarithm. Prove that the additive convolution at n is positive exactly when n is a sum of two primes.</p></li>
-        <li><span class="stage-marker" aria-hidden="true">2</span><h3>Trace Levent’s Lean proof</h3><p>Follow everyCharacter through primitive characters, the functional equation and the local-to-global inputs. Identify which zero estimates govern arithmetic progressions. <a href="https://github.com/leanprover-community/riemann-hypothesis/blob/dc76b2788ef7ad0a6d2d4575ca3320a677c72cd9/src/Main.lean">Read the upstream theorems</a></p></li>
-        <li><span class="stage-marker" aria-hidden="true">3</span><h3>Compare major and minor arcs</h3><p>Fix the Fourier coefficient at n, bound the positive major-arc contribution, then seek cancellation in the signed minor-arc contribution at that same n.</p></li>
-        <li><span class="stage-marker" aria-hidden="true">4</span><h3>Exclude remaining exceptions</h3><p>Use second moments to bound exceptions, then study local oscillation of the actual correlation. Strict positivity at every even input remains open.</p></li>
-      </ol>
+      <!-- catalogue roadmap -->
       <article class="goldbach-story" id="research-story" aria-labelledby="story-title">
         <header class="section-heading"><div><h2 id="story-title">Given an even number, where are its two primes?</h2>
           <p>There are three ways to make 30 from two primes. They are 7 + 23, 11 + 19 and 13 + 17. Can we always find at least one pair for any even number greater than 2?</p></div></header>

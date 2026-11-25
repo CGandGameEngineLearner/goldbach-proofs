@@ -4,6 +4,32 @@
 
 对每个偶数 $n\ge4$，要证明存在素数 $p,q$ 使 $p+q=n$。取素数权 $w(p)=\log p$，非素数处令 $w=0$。定义 $R(n)=\sum_{p=0}^n w(p)w(n-p)$。每项非负，每个真正的素数对贡献严格正值，故目标精确地等价于 $R(n)>0$。这给出了所有分析任务共用的终点。[强哥德巴赫命题](strong-goldbach.lean)
 
+## 2026-11-25 · 两条可检验的新路线 / Two proposed routes
+
+**Theta 反射。** 令真实素数权在区间外为零，区间内取反射 k ↦ N−k。先证明能量差恒等式、傅里叶相位公式和支撑截断公式。下一关是显式构造两组 theta 测试数据，使其对应同一个素数权的正、负反射组合，并核对局部因子、测度与共同的正归一化。仅有某个提升非零无法推出这两个指定范数之差为正。算术匹配误差、两侧谱误差与污染项扣除后仍须有严格正裕量。测试数据和谱界目前都未构造；应先提交定义与匹配证明，再冻结相应分析命题。[Rallis 内积相关 Lean 源文件](https://github.com/leanprover-community/riemann-hypothesis/blob/dc76b2788ef7ad0a6d2d4575ca3320a677c72cd9/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/BigThetaNormEqRallisInnerProduct.lean)
+
+**奇特征交叉项。** 对每个偶模数 N 使用中心对称光滑权及除以 N 的 Mangoldt 卷积。固定奇特征的原始诱导特征，截取导子 d⁴>N³ 和高度 |γ|≤log(2N)，按索引删去对角；相同零点的不同副本仍需计数。每项保留频差乘 log N 的相位，以及权 W(γⱼ) 与 W(γₗ) 的共轭乘积。整个和取实部并乘 2/φ(N)。第一批任务锁定指标、相位及分母。研究瓶颈是按给定权函数推导 Kφ(N)，在所有充分大的偶数上一致证明截断交叉项 ≤ Kφ(N)−2κ，其中 κ>0 固定，并独立控制截断误差和素数幂污染。涉及 GRH 的公式须保留假设。二次幂的中心素数质量是可独立攻关的无限子族；一般偶数和小于有效阈值的输入仍需覆盖。若使用分析稿的圆法分解，主弧取圆周距离、分母上限 Q=⌊N^(1/40)⌋、宽度 Q/N，须另证与所用积分的匹配。
+
+**优先领取的中间里程碑：中心表示质量的正密度。** 对 x≤n≤2x 的偶数，C(n) 只累计 n/3≤p≤2n/3 的真素数对数权。先把 [x/2,2x/3] 的一维素数质量平方，按两素数的和重排，得到 ∑C(n) ≥ c x²。另一支用上界筛得到 C(n) ≤ K n S(n)，并按平方自由因子展开证明 ∑S(n)² ≤ K′x，推出 ∑C(n)² ≤ K″x³。两支通过二阶矩法汇合，可得至少 bx 个偶数满足 C(n) ≥ ax。这个里程碑测量质量是否集中；它允许剩余偶数全部落在例外集，不能替代逐个偶数的证明。可先独立攻一维素数块、上界筛、局部因子均值三路。对照任务 TH 编号，按任务标题和依赖 ID 接续。
+
+**Intermediate milestone.** Seek linear central prime mass on a positive proportion of even targets in each sufficiently large dyadic interval. An interior prime block supplies the first moment; an upper-bound sieve and the mean square of the local factor control the second. The remaining exceptional set needs a separate pointwise argument.
+
+**奇特征路线可先完成一个不依赖 GRH 的算术里程碑。** 给定偶数 N>2，把每个奇特征的 log(N/dχ) 按 N 的素因子和缺失的导子层展开。在商模 N/pʲ>2 时，通过提升双射计算该层的奇特征数；商模为 1 或 2 时该层为空。交换两个有限和，即得到一般偶模数的平均导子修正。这个量决定零点截断舍弃了多少低导子特征。进一步控制这些特征所承载的零点振幅仍需独立估计。可同时领取素数层展开、低导子提升计数、二幂塔独立复核三组任务。
+
+**如何评价进展。** 领题者应能说清命题削弱了哪个量词、隔离了哪个误差，或把哪个谱量化为可计算的算术量。首页路线中的配套恒等式服务于这些里程碑。正比例结果、零密度例外集和指定偶数的正性分别统计和解释。经典哥德巴赫例外集论文可用于审读均值方法；本台中心窗、权重和量词须在 Lean 中另行核对。[Montgomery–Vaughan 原论文](https://doi.org/10.4064/aa-27-1-353-370)
+
+**模数增大后，局部信息能看见什么？** TH-0059 起比较两种精度。固定 h 后，对 q≤(log n)ʰ 要求逐模数控制；在 Q=⌊n/⌊log₂ n⌋⁸⌋ 的区间 Q<q≤2Q 上则只要求模数平均。两边共用按真实余类大小加权的误差传递公式。后一分支可借鉴等差数列素数方差估计，同时要处理非单位类、真素数幂和端点取整。[等差数列中素数分布的方差研究](https://personal.science.psu.edu/rcv4/personal/Publications/vrprapg.pdf)
+
+即使对每个大偶数 n，都能在大多数模数上看到正投影质量，这个信号仍可能完全来自和为 n±hq 的其他素数对。任务要求算清原目标的权重、剥离所有非零偏移，并利用互补除数将其变成可审计的邻和表达式。逐点谱隙目前仍是待证的核心输入。
+
+**Growing moduli.** Seek uniform control in the logarithmic range and mean-square control in a larger dyadic block. Separate exact target sums from neighboring aliases before interpreting the model's positive mass as arithmetic evidence.
+
+**一组可单独验收的测试窗。** 先构造支撑于 [1/3,2/3]、在 [5/12,7/12] 恒为 1 的对称光滑窗。这样对角权积分至少为 1/6，参与者不能用零窗完成归一化。固定版本 Mathlib 的最高阶 ContDiff 表示实解析；本组命题显式量化每个有限微分阶。对数坐标下支撑长度为 log 2，平移恰好 log 2 时仅可能在端点相交。证明端点的自相关积分也消失，才能严格消去显式公式中素数 2 的贡献。[固定版本 Mathlib 的微分阶定义](https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/Analysis/Calculus/ContDiff/Defs.lean)
+
+**提交顺序。** 两组有限恒等式可并行领取；条件性误差合成任务可同步进行。随后提交具体测试向量或零点权的 Lean 定义及其算术解释，最后再攻逐偶数估计。终点始终要求每个偶数 n≥4 都是两个可相同素数之和，包含 4=2+2。目录 CI 将冻结终点与该自然数陈述的等价证明一同交给 Lean 检查。
+
+**English.** The theta track requires a common normalized realization of both reflected vectors and a strict spectral gap after all errors. The character track keeps indexed multiplicities, phases and the full odd-character denominator. Its open analytic input is a uniform one-sided margin after conductor and height truncation. A dyadic result or a GRH-conditional estimate would be an intermediate result.
+
 ## 从莱文特的 Lean 工程学什么
 
 ### 新任务如何接回二元素数相关
