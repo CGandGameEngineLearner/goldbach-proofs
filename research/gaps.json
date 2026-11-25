@@ -3883,6 +3883,146 @@
       "role": "conditional"
     },
     {
+      "id": "L-goldbach-vaughan-cutoff-identity",
+      "file": "lean/PEqualNP/Outside/L_goldbach_vaughan_cutoff_identity.lean",
+      "module": "PEqualNP.Outside.L_goldbach_vaughan_cutoff_identity",
+      "statement": "let cut (h : ℕ) (f : ArithmeticFunction ℝ) : ArithmeticFunction ℝ := ⟨fun k => if k ≤ h then f k else 0, (ite_eq_left (Nat.zero_le h)).trans f.map_zero⟩; let L := ArithmeticFunction.vonMangoldt; let m : ArithmeticFunction ℝ := ArithmeticFunction.moebius; let z : ArithmeticFunction ℝ := ArithmeticFunction.zeta; ∀ U V : ℕ, let a := cut U m; let b := cut V L; L = b + a * ArithmeticFunction.log - a * b * z + (m-a) * ((L-b) * z)",
+      "plain_statement": {
+        "en": "Four-term Vaughan identity with independent cutoffs",
+        "zh": "两个独立截断下的四项沃恩恒等式"
+      },
+      "brief": {
+        "en": "Use Dirichlet convolution, Möbius inversion and the identity Λ * ζ = log.",
+        "zh": "用狄利克雷卷积、莫比乌斯反演和 Λ * ζ = log 展开。"
+      },
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://personal.science.psu.edu/rcv4/Vol2/Vol2.pdf",
+      "track": "vaughan-bilinear",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-type-i-hyperbola-bound",
+      "file": "lean/PEqualNP/Outside/L_goldbach_type_i_hyperbola_bound.lean",
+      "module": "PEqualNP.Outside.L_goldbach_type_i_hyperbola_bound",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let cap (H : ℕ) (x : ℝ) := if E x = 1 then (H : ℝ) else min (H : ℝ) (2 / ‖1 - E x‖); ∀ (N D : ℕ) (a : ℕ → ℂ) (t : ℝ), ‖∑ d ∈ Finset.Icc 1 D, a d * ∑ k ∈ Finset.Icc 1 (N / d), E ((d : ℝ) * (k : ℝ) * t)‖ ≤ ∑ d ∈ Finset.Icc 1 D, ‖a d‖ * cap (N / d) ((d : ℝ) * t)",
+      "plain_statement": {
+        "en": "Type I bound with the product cutoff and resonant terms",
+        "zh": "保留乘积截断与共振项的一类和估计"
+      },
+      "brief": {
+        "en": "For each divisor length N / d use both the geometric-series bound and the number of terms.",
+        "zh": "按 d 固定求和长度，同时使用几何级数界与项数界。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://personal.science.psu.edu/rcv4/Vol2/Vol2.pdf",
+      "track": "vaughan-bilinear",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-type-ii-spacing-bound",
+      "file": "lean/PEqualNP/Outside/L_goldbach_type_ii_spacing_bound.lean",
+      "module": "PEqualNP.Outside.L_goldbach_type_ii_spacing_bound",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let cap (H : ℕ) (x : ℝ) := if E x = 1 then (H : ℝ) else min (H : ℝ) (2 / ‖1 - E x‖); ∀ (N M H : ℕ) (K : Finset ℕ) (a b : ℕ → ℂ) (t : ℝ), let I := Finset.Ico M (M+H); ‖∑ m ∈ I, a m * ∑ k ∈ K, (if m*k ≤ N then b k * E ((m : ℝ) * (k : ℝ) * t) else 0)‖ ^ 2 ≤ (∑ m ∈ I, ‖a m‖ ^ 2) * (∑ k ∈ K, ∑ l ∈ K, ‖b k‖ * ‖b l‖ * cap H (((k : ℝ) - (l : ℝ)) * t))",
+      "plain_statement": {
+        "en": "Type II bound in terms of frequency differences",
+        "zh": "由频率差控制的二类和估计"
+      },
+      "brief": {
+        "en": "Use Cauchy–Schwarz in the first factor. Two product cutoffs intersect in an initial segment of the row interval.",
+        "zh": "对第一个因子用柯西不等式，两道乘积截断把行区间截成一个初始子段。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://personal.science.psu.edu/rcv4/Vol2/Vol2.pdf",
+      "track": "vaughan-bilinear",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-masked-weight-ltwo",
+      "file": "lean/PEqualNP/Outside/L_goldbach_masked_weight_ltwo.lean",
+      "module": "PEqualNP.Outside.L_goldbach_masked_weight_ltwo",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (n : ℕ) (u : ℕ → ℝ) (t : ℝ) := ∑ k ∈ Finset.range (n+1), (u k : ℂ) * E ((k : ℝ)*t); let C (A : Set ℝ) (n : ℕ) (u : ℕ → ℝ) := intervalIntegral (A.indicator (fun t => (S n u t)^2 * E (-(n : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume; ∀ (A : Set ℝ) (n : ℕ) (u v : ℕ → ℝ), MeasurableSet A → ‖C A n u - C A n v‖ ≤ Real.sqrt (∑ k ∈ Finset.range (n+1), (u k-v k)^2) * Real.sqrt (∑ k ∈ Finset.range (n+1), (u k+v k)^2)",
+      "plain_statement": {
+        "en": "Discrete ℓ² bound for changing the weights in any masked square coefficient",
+        "zh": "任意可测掩膜下平方系数的离散二范数换权界"
+      },
+      "brief": {
+        "en": "Factor the difference of squares and apply integral Cauchy–Schwarz and Parseval on the full period.",
+        "zh": "将平方差分解，用积分柯西不等式和整周期的帕塞瓦尔等式。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/138",
+      "track": "integrals",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-masked-mangoldt-transfer",
+      "file": "lean/PEqualNP/Outside/L_goldbach_masked_mangoldt_transfer.lean",
+      "module": "PEqualNP.Outside.L_goldbach_masked_mangoldt_transfer",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (n : ℕ) (u : ℕ → ℝ) (t : ℝ) := ∑ k ∈ Finset.range (n+1), (u k : ℂ) * E ((k : ℝ)*t); let C (A : Set ℝ) (n : ℕ) (u : ℕ → ℝ) := intervalIntegral (A.indicator (fun t => (S n u t)^2 * E (-(n : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume; let w (k : ℕ) := if Nat.Prime k then Real.log (k : ℝ) else 0; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n ≥ N, ∀ A : Set ℝ, MeasurableSet A → ‖C A n ArithmeticFunction.vonMangoldt - C A n w‖ ≤ e * (n : ℝ)",
+      "plain_statement": {
+        "en": "Uniform sublinear cost of removing proper prime powers on measurable frequency sets",
+        "zh": "在可测频率集上剔除真素数幂的一致次线性代价"
+      },
+      "brief": {
+        "en": "Only proper prime powers contribute to Λ − w. Bound their count by a base–exponent box and use the discrete ℓ² inequality.",
+        "zh": "Λ − w 仅支撑于真素数幂。用底数和指数的范围估计个数，再应用离散二范数界。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/178",
+      "track": "integrals",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-vaughan-signed-budget",
+      "file": "lean/PEqualNP/Outside/L_goldbach_vaughan_signed_budget.lean",
+      "module": "PEqualNP.Outside.L_goldbach_vaughan_signed_budget",
+      "statement": "let cut (h : ℕ) (f : ArithmeticFunction ℝ) : ArithmeticFunction ℝ := ⟨fun k => if k ≤ h then f k else 0, (ite_eq_left (Nat.zero_le h)).trans f.map_zero⟩; let L := ArithmeticFunction.vonMangoldt; let m : ArithmeticFunction ℝ := ArithmeticFunction.moebius; let z : ArithmeticFunction ℝ := ArithmeticFunction.zeta; let h (n : ℕ) := Nat.sqrt (Nat.sqrt n); let a (n : ℕ) := cut (h n) m; let b (n : ℕ) := cut (h n) L; let I (n : ℕ) := a n * ArithmeticFunction.log - a n * b n * z; let J (n : ℕ) := (m-a n) * ((L-b n) * z); let w (k : ℕ) := if Nat.Prime k then Real.log (k : ℝ) else 0; let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (n : ℕ) (u : ℕ → ℝ) (t : ℝ) := ∑ k ∈ Finset.range (n+1), (u k : ℂ) * E ((k : ℝ)*t); let Q (n : ℕ) := (Nat.log 2 (n+2))^2; let A (n : ℕ) := {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let B (n : ℕ) (u v : ℕ → ℝ) := (intervalIntegral ((A n)ᶜ.indicator (fun t => S n u t * S n v t * E (-(n : ℝ)*t))) (0:ℝ) 1 MeasureTheory.volume).re; let lower (F : ℕ → ℝ) := ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n ≥ N, Even n → -(e*(n:ℝ)) ≤ F n; lower (fun n => B n (I n) L) → lower (fun n => B n (J n) L) → lower (fun n => B n w w)",
+      "plain_statement": {
+        "en": "Two signed Vaughan coefficient estimates imply the published minor-arc saving",
+        "zh": "两类沃恩带符号系数估计推出已公布的次弧下界"
+      },
+      "brief": {
+        "en": "Use the four-term identity with fourth-root cutoffs. Bound the short term by Parseval and Cauchy–Schwarz, then replace Λ by the prime-only weight. Both signed hypotheses remain analytic obligations.",
+        "zh": "采用四次方根截断分解。用帕塞瓦尔等式和柯西不等式处理短项，再换成仅支撑于素数的权重。两项带符号假设仍需解析估计。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://personal.science.psu.edu/rcv4/Vol2/Vol2.pdf",
+      "track": "arc-budget",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-segmented-prime-bitset",
+      "file": "lean/PEqualNP/Outside/L_goldbach_segmented_prime_bitset.lean",
+      "module": "PEqualNP.Outside.L_goldbach_segmented_prime_bitset",
+      "statement": "∀ (bits : ℕ) (ps : List ℕ) (lo j : ℕ), (∀ p ∈ ps, Nat.Prime p) → (∀ r ≤ j, bits.testBit r = true ↔ Nat.Prime (lo+r)) → ((ps.foldl (fun (acc p : ℕ) => acc ||| (bits <<< p)) 0).testBit j = true ↔ ∃ p ∈ ps, ∃ q : ℕ, lo ≤ q ∧ Nat.Prime p ∧ Nat.Prime q ∧ p+q=lo+j)",
+      "plain_statement": {
+        "en": "Soundness and completeness of a segmented prime-pair bitset for listed shifts",
+        "zh": "素数对分段位图对给定平移列表的可靠性与完备性"
+      },
+      "brief": {
+        "en": "Induct on the shift list using testBit for OR and left shift. Interpret each set bit against the certified prime segment.",
+        "zh": "对平移列表归纳，使用按位或和左移的取位公式，再用已验证的分段素数表解释置位位置。"
+      },
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/Data/Nat/Bitwise.lean",
+      "track": "arc-budget",
+      "role": "lemma"
+    },
+    {
       "id": "L-goldbach-square-norm",
       "file": "lean/PEqualNP/Outside/L_goldbach_square_norm.lean",
       "module": "PEqualNP.Outside.L_goldbach_square_norm",
@@ -7591,6 +7731,20 @@
       "description": {
         "zh": "在中央窗口做集合计数；将密度输入同真正的逐点配对输入分开。",
         "en": "Count candidates on the central window. Distinguish marginal density from a pointwise overlap bound."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "vaughan-bilinear",
+      "title": {
+        "en": "Vaughan’s identity and bilinear exponential sums",
+        "zh": "沃恩恒等式与双线性指数和"
+      },
+      "description": {
+        "en": "Retain product cutoffs and frequency spacing in the Type I and Type II sums that enter the minor-arc coefficient.",
+        "zh": "在次弧系数的一类和二类指数和中保留乘积截断与频率间距。"
       },
       "feeds": [
         "arc-budget"
