@@ -31,7 +31,7 @@ python tools/goldbach.py claim
 
 3. 证明已冻结的命题
 
-只新增 gap.file 指定的 Lean 文件。定理名采用 gap.module，类型使用 gap.statement 中的原文。导入 Mathlib，并按任务清单使用允许的附加导入。写出完整证明，权威检查会独立核验命题、导入项和依赖。如果本地已有锁定版本的 Lean 与 Mathlib，可先在 lean/ 下构建指定模块。
+只新增 gap.file 指定的 Lean 文件。定理名采用 gap.module，类型使用 gap.statement 中的原文。导入 Mathlib，并按任务清单使用允许的附加导入。允许的导入只有 Mathlib 本身加上 gap.imports 字段逐一列出的模块；PEqualNP.Defs 和任何未列出的项目模块都不在其中，写了会在编译开始前被 REFUSED，而不是在证明里被判错。lean/PEqualNP/Outside 下已有文件的 import 行不得照抄，那些文件按旧规则写成。写出完整证明，权威检查会独立核验命题、导入项和依赖。如果本地已有锁定版本的 Lean 与 Mathlib，可先在 lean/ 下构建指定模块。
 
 用 git status 检查改动，确认只有指定的新 Lean 文件，再按准确路径暂存该文件并提交，提交消息注明引理编号。
 
@@ -62,6 +62,17 @@ gh pr create --repo CGandGameEngineLearner/goldbach-proofs --base main --head HA
 python tools/goldbach.py submit PR_NUMBER
 
 工具会核对 PR 作者和确切的 head，登记到研究台，并用 PR 作者身份发布触发验证的评论。核验期间请保持 PR head 固定。若因临时错误失败，修复后重试同一条提交命令。
+
+若判定是 REJECTED 或 REFUSED，重试同一条提交命令会报 lease_already_submitted：一个租约只绑定一个 head，改过文件就是另一个 head。此时按下列顺序重新登记，注意重领必须从默认分支出发，submit 会核对 base 到 head 只多一个文件：
+
+python tools/goldbach.py release superseded
+git switch <默认分支>
+python tools/goldbach.py claim <GAP_ID> --problem <PROBLEM>
+（把改好的文件放回 gap.file，提交）
+git push --force https://github.com/OWNER/FORK.git HEAD:refs/heads/BRANCH
+python tools/goldbach.py submit PR_NUMBER
+
+REFUSED 在编译之前给出，表示文件不合规（例如导入不在白名单里），不代表证明有错，也不消耗命题；REJECTED 才是证明没通过。
 
 用下面的命令查找名称为 Goldbach PR #PR_NUMBER 的运行：
 
