@@ -2063,6 +2063,126 @@
       "role": "conditional"
     },
     {
+      "id": "L-goldbach-dirichlet-minor-approximation",
+      "file": "lean/PEqualNP/Outside/L_goldbach_dirichlet_minor_approximation.lean",
+      "module": "PEqualNP.Outside.L_goldbach_dirichlet_minor_approximation",
+      "statement": "let Q (n : ℕ) := (Nat.log 2 (n + 2)) ^ 2; let arcs (n : ℕ) := {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q n ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t - (a : ℝ) / q| ≤ (Q n : ℝ) / ((q : ℝ) * n)}; ∀ (n : ℕ) (t : ℝ), 1 ≤ Q n → Q n ≤ n → t ∈ Set.Icc (0 : ℝ) 1 → t ∉ arcs n → ∃ q a : ℕ, Q n < q ∧ q ≤ n / Q n ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t - (a : ℝ) / q| ≤ 1 / ((q : ℝ) * (((n / Q n : ℕ) : ℝ) + 1))",
+      "plain_statement": {
+        "en": "Each point in [0,1] outside the Goldbach major arcs has a reduced approximation a/q with Q < q ≤ H and error at most 1/(q(H+1)), where H = ⌊n/Q⌋.",
+        "zh": "令 H = ⌊n/Q⌋。区间 [0,1] 内的每个次弧点都有既约逼近 a/q，满足 Q < q ≤ H、0 ≤ a ≤ q，且误差至多为 1/(q(H+1))。"
+      },
+      "brief": {
+        "en": "Use Dirichlet’s theorem of order H. The inequality n < Q(H+1) puts any candidate with q ≤ Q inside the posted major arc of radius Q/(qn).",
+        "zh": "应用 H 阶狄利克雷逼近定理。由 n < Q(H+1)，若候选分母 q ≤ Q，则该点必落入目录定义的半径为 Q/(qn) 的主弧。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/DiophantineApproximation/Basic.lean#L144-L160",
+      "track": "bilinear-minor-dispersion",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-reciprocal-chord-sum",
+      "file": "lean/PEqualNP/Outside/L_goldbach_reciprocal_chord_sum.lean",
+      "module": "PEqualNP.Outside.L_goldbach_reciprocal_chord_sum",
+      "statement": "let E (y : ℝ) := Complex.exp (((2 * Real.pi * y : ℝ) : ℂ) * Complex.I); let cap (H y : ℝ) := if E y = 1 then H else min H (2 / ‖1 - E y‖); ∀ (a q : ℕ) (t x H : ℝ), 1 ≤ q → Nat.Coprime a q → 0 ≤ H → |t - (a : ℝ) / q| ≤ 1 / (q : ℝ)^2 → (∑ r ∈ Finset.range q, cap H (x + (r : ℝ)*t)) ≤ 6 * (H + (q : ℝ) * Real.log (2 * q))",
+      "plain_statement": {
+        "en": "If |t−a/q| ≤ q⁻² with a/q reduced, the capped reciprocal-chord sum over x, x+t, …, x+(q−1)t is at most 6(H + q log(2q)), uniformly in x. A resonant term contributes H.",
+        "zh": "若既约分数 a/q 满足 |t−a/q| ≤ q⁻²，则在 x, x+t, …, x+(q−1)t 上的截断倒弦长之和不超过 6(H + q log(2q))，该界与 x 无关。共振项取 H。"
+      },
+      "brief": {
+        "en": "Associate to each sample the integer round(qx)+ar−q round(x+rt). Coprimality makes these indices distinct. Bound each term with absolute index below 3 by H. For the other indices, the sine chord inequality bounds each term by q divided by the absolute index.",
+        "zh": "给第 r 项配以整数 round(qx)+ar−q round(x+rt)。互素性保证这些整数两两不同。绝对值小于 3 的项用 H 控制，其余项由正弦弦长不等式以 q 除以指标绝对值控制。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "bilinear-minor-dispersion",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-ternary-minor-saving",
+      "file": "lean/PEqualNP/Outside/L_goldbach_ternary_minor_saving.lean",
+      "module": "PEqualNP.Outside.L_goldbach_ternary_minor_saving",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (n : ℕ) (w : ℕ → ℝ) (t : ℝ) := ∑ k ∈ Finset.range (n+1), (w k : ℂ) * E ((k : ℝ)*t); ∀ (n : ℕ) (u v : ℕ → ℝ) (A : Set ℝ) (U : ℝ), MeasurableSet A → 0 ≤ U → (∀ t ∈ Set.Icc (0 : ℝ) 1, t ∉ A → ‖S n u t‖ ≤ U) → ‖intervalIntegral (Aᶜ.indicator (fun t => S n u t * (S n v t)^2 * E (-(n : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume‖ ≤ U * ∑ k ∈ Finset.range (n+1), (v k)^2",
+      "plain_statement": {
+        "en": "A bound U on |Sᵤ| off a measurable arc set gives a bound U∑v(k)² for the norm of the complementary ternary coefficient SᵤSᵥ².",
+        "zh": "若在可测弧集的补集上有 |Sᵤ| ≤ U，则 SᵤSᵥ² 在该补集上的三元系数的模不超过 U∑v(k)²。"
+      },
+      "brief": {
+        "en": "In the integral, the phase has norm one and |Sᵤ| costs at most U. Integrating |Sᵥ|² over the full period gives the discrete coefficient energy by Parseval.",
+        "zh": "积分中的相位因子模为 1，|Sᵤ| 至多为 U。再由帕塞瓦尔恒等式，|Sᵥ|² 在整周期上的积分等于离散系数的平方和。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1312.7748",
+      "track": "bilinear-minor-dispersion",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-masked-bessel-variance",
+      "file": "lean/PEqualNP/Outside/L_goldbach_masked_bessel_variance.lean",
+      "module": "PEqualNP.Outside.L_goldbach_masked_bessel_variance",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (X : ℕ) (u : ℕ → ℝ) (t : ℝ) := ∑ k ∈ Finset.range (X+1), (u k : ℂ) * E ((k : ℝ)*t); ∀ (X M : ℕ) (u : ℕ → ℝ) (A : Set ℝ), MeasurableSet A → (∑ m ∈ Finset.range M, ‖intervalIntegral (A.indicator (fun t => (S X u t)^2 * E (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume‖^2) ≤ intervalIntegral (A.indicator (fun t => ‖S X u t‖^4)) (0 : ℝ) 1 MeasureTheory.volume",
+      "plain_statement": {
+        "en": "For the square of a trigonometric sum restricted to any measurable set A, the sum of the first M squared Fourier coefficient norms is at most the integral of |S|⁴ on A within [0,1].",
+        "zh": "将三角和的平方限制在任意可测集 A 上，其前 M 个傅里叶系数的模平方和不超过 |S|⁴ 在 A 与 [0,1] 交集上的积分。"
+      },
+      "brief": {
+        "en": "Apply interval Parseval to the square multiplied by the indicator of A. The chosen natural frequencies embed injectively into the integers, so their nonnegative terms form a finite subsum.",
+        "zh": "对乘以 A 的指示函数的三角和平方应用区间帕塞瓦尔恒等式。所选自然数频率单射到整数频率中，相应的非负项构成有限子和。"
+      },
+      "program": "exceptions",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/Analysis/Fourier/AddCircle.lean#L457-L475",
+      "track": "exception-density-bridge",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-sup-fourth-moment",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_sup_fourth_moment.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_sup_fourth_moment",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (X : ℕ) (u : ℕ → ℝ) (t : ℝ) := ∑ k ∈ Finset.range (X+1), (u k : ℂ) * E ((k : ℝ)*t); ∀ (X M : ℕ) (u : ℕ → ℝ) (A : Set ℝ) (U : ℝ), MeasurableSet A → 0 ≤ U → (∀ t ∈ Set.Icc (0 : ℝ) 1, t ∉ A → ‖S X u t‖ ≤ U) → (∑ m ∈ Finset.range M, ‖intervalIntegral (Aᶜ.indicator (fun t => (S X u t)^2 * E (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume‖^2) ≤ U^2 * ∑ k ∈ Finset.range (X+1), (u k)^2",
+      "plain_statement": {
+        "en": "If |S| ≤ U off A in [0,1], the squared norms of the first M minor-arc Fourier coefficients of S² sum to at most U² times the squared coefficient norm of S.",
+        "zh": "若 [0,1] 中 A 以外的点满足 |S| ≤ U，则 S² 的前 M 个次弧系数的模平方和不超过 U² 乘以 S 的系数模平方和。"
+      },
+      "brief": {
+        "en": "Use the masked Bessel bound on the complement, dominate |S|⁴ there by U²|S|², and evaluate the full-period second moment exactly.",
+        "zh": "在补集上应用贝塞尔不等式，再以 U²|S|² 控制 |S|⁴，最后精确计算整周期二阶矩。"
+      },
+      "program": "exceptions",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2607.27282",
+      "track": "exception-density-bridge",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-almost-all-exception-density",
+      "file": "lean/PEqualNP/Outside/L_goldbach_almost_all_exception_density.lean",
+      "module": "PEqualNP.Outside.L_goldbach_almost_all_exception_density",
+      "statement": "let w (k : ℕ) := if Nat.Prime k then Real.log (k : ℝ) else 0; let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (Y : ℕ) (t : ℝ) := ∑ k ∈ Finset.range (Y+1), (w k : ℂ) * E ((k : ℝ)*t); let D (X : ℕ) := (Finset.Ico X (2*X)).filter (fun n => 4 ≤ n ∧ Even n); let G (n : ℕ) := ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p + q = n; let bad (X : ℕ) := @Finset.filter ℕ (fun n => ¬ G n) (Classical.decPred _) (D X); ∀ (X : ℕ) (A : Set ℝ) (c U : ℝ), MeasurableSet A → 0 < c → 0 ≤ U → (∀ n ∈ D X, c * (X : ℝ) ≤ (intervalIntegral (A.indicator (fun t => (S (2*X) t)^2 * E (-(n : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume).re) → (∀ t ∈ Set.Icc (0 : ℝ) 1, t ∉ A → ‖S (2*X) t‖ ≤ U) → ((bad X).card : ℝ) * (c * (X : ℝ))^2 ≤ U^2 * ∑ k ∈ Finset.range (2*X+1), (w k)^2",
+      "plain_statement": {
+        "en": "In [X,2X), the number of even Goldbach exceptions from 4 onward, multiplied by (cX)², is at most U² times the prime-log squared weight sum through 2X, assuming a major-coefficient floor cX and a minor-arc supremum U.",
+        "zh": "在主弧系数下界为 cX、次弧指数和上界为 U 的假设下，[X,2X) 中不小于 4 的哥德巴赫例外偶数个数乘以 (cX)²，不超过 U² 乘以截至 2X 的素数对数权平方和。"
+      },
+      "brief": {
+        "en": "At a missing prime pair the full Fourier coefficient vanishes, so the two masked coefficients are negatives of one another. Each exception contributes at least (cX)² to the minor-arc second moment at the common cutoff 2X.",
+        "zh": "若某个偶数没有素数对表示，则其完整傅里叶系数为零，主弧与次弧系数互为相反数。因此，在统一截断 2X 下，每个例外对次弧系数平方和至少贡献 (cX)²。"
+      },
+      "program": "exceptions",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2607.27282",
+      "track": "exception-density-bridge",
+      "role": "conditional"
+    },
+    {
       "id": "L-goldbach-exception-zero-weight",
       "file": "lean/PEqualNP/Outside/L_goldbach_exception_zero_weight.lean",
       "module": "PEqualNP.Outside.L_goldbach_exception_zero_weight",
@@ -4111,6 +4231,35 @@
         "en": "Both research targets use the same arcs and weights. Together they would cover sufficiently large evens. Values below the resulting threshold require a separate proof."
       },
       "feeds": []
+    },
+    {
+      "id": "bilinear-minor-dispersion",
+      "title": {
+        "en": "Rational approximation and minor-arc sums",
+        "zh": "有理逼近与次弧指数和"
+      },
+      "description": {
+        "en": "Locate a reduced rational on each minor arc, bound a block of reciprocal chords near that rational, and turn a uniform exponential-sum estimate into a ternary coefficient bound.",
+        "zh": "为每个次弧点找到既约有理逼近，控制该逼近下一个分母长度区间上的倒弦长之和，并将指数和的一致估计转化为三元傅里叶系数的上界。"
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "exception-density-bridge",
+      "title": {
+        "en": "Minor-arc moments and binary Goldbach exceptions",
+        "zh": "次弧矩与二元哥德巴赫例外数"
+      },
+      "description": {
+        "en": "Sum the squared Fourier coefficients of the masked prime square. A lower bound on each major coefficient and an upper bound on the minor-arc sum then bound the number of exceptions in a dyadic interval.",
+        "zh": "对指示函数截取的素数指数和平方，其傅里叶系数的模平方可求和估计。结合各主弧系数的下界与次弧指数和的上界，可控制倍增区间内的例外数。"
+      },
+      "feeds": [
+        "exceptions",
+        "arc-budget"
+      ]
     },
     {
       "id": "exceptions",
