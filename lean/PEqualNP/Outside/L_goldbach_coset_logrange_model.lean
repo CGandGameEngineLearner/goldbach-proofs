@@ -4259,7 +4259,7 @@ private theorem uniformAll (h b : ℕ) :
     simpa using hnb1
   calc
     _ ≤ M*n/(Real.log n)^b + 2*n/(Real.log n)^b + 2*n/(Real.log n)^b + n/(Real.log n)^b :=
-      add_le_add (add_le_add (add_le_add main ec) er) e1
+      by linarith only [main, ec, er, e1]
     _ = _ := by ring
 
 private noncomputable def density (q r : ℕ) : ℝ := if r.Coprime q then 1/(q.totient:ℝ) else 0
@@ -4297,7 +4297,7 @@ open Finset
 private def fiber (N q r : ℕ) := (range N).filter (fun k => k % q = r)
 
 private lemma fiber_card_exact (N q r : ℕ) (hq : 0<q) (hr : r<q) :
-    (fiber N q r).card = N/q + if r < N%q then 1 else 0 := by
+    (fiber N q r).card = N/q + if r < N % q then 1 else 0 := by
   have he := Nat.count_modEq_card_eq_ceil N hq r
   rw [Nat.count_eq_card_filter_range, Nat.mod_eq_of_lt hr] at he
   have hf : (range N).filter (fun k => k ≡ r [MOD q]) = fiber N q r := by
@@ -4305,28 +4305,28 @@ private lemma fiber_card_exact (N q r : ℕ) (hq : 0<q) (hr : r<q) :
   rw [hf] at he
   have hrQ : (r:ℚ)<q := by exact_mod_cast hr
   have hqQ : 0<(q:ℚ) := by exact_mod_cast hq
-  have hm : ((N%q : ℕ):ℚ)<q := by exact_mod_cast Nat.mod_lt N hq
-  have hde : (N:ℚ) = (q:ℚ)*((N/q : ℕ):ℚ) + ((N%q:ℕ):ℚ) := by
+  have hm : ((N % q : ℕ):ℚ)<q := by exact_mod_cast Nat.mod_lt N hq
+  have hde : (N:ℚ) = (q:ℚ)*((N/q : ℕ):ℚ) + ((N % q:ℕ):ℚ) := by
     exact_mod_cast (Nat.div_add_mod N q).symm
-  have hval : ((N:ℚ)-r)/q = (((N%q:ℕ):ℚ)-r)/q + ((N/q:ℕ):ℚ) := by rw [hde]; field_simp; ring
+  have hval : ((N:ℚ)-r)/q = (((N % q:ℕ):ℚ)-r)/q + ((N/q:ℕ):ℚ) := by rw [hde]; field_simp; ring
   rw [hval, Int.ceil_add_natCast] at he
   split_ifs with h
-  · have h0 : (0:ℚ)<(((N%q:ℕ):ℚ)-r)/q := div_pos (sub_pos.mpr (by exact_mod_cast h)) hqQ
-    have h1 : (((N%q:ℕ):ℚ)-r)/q ≤ 1 := (div_le_one hqQ).mpr (by linarith [Nat.cast_nonneg (α:=ℚ) r])
-    have hc : ⌈(((N%q:ℕ):ℚ)-r)/q⌉ = 1 := Int.ceil_eq_iff.mpr ⟨by norm_num; exact h0,h1⟩
+  · have h0 : (0:ℚ)<(((N % q:ℕ):ℚ)-r)/q := div_pos (sub_pos.mpr (by exact_mod_cast h)) hqQ
+    have h1 : (((N % q:ℕ):ℚ)-r)/q ≤ 1 := (div_le_one hqQ).mpr (by linarith [Nat.cast_nonneg (α:=ℚ) r])
+    have hc : ⌈(((N % q:ℕ):ℚ)-r)/q⌉ = 1 := Int.ceil_eq_iff.mpr ⟨by norm_num; exact h0,h1⟩
     rw [hc] at he
     omega
-  · have h1 : (((N%q:ℕ):ℚ)-r)/q ≤ 0 := div_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr (by exact_mod_cast le_of_not_gt h)) hqQ.le
-    have h0 : -1 < (((N%q:ℕ):ℚ)-r)/q := (lt_div_iff₀ hqQ).mpr (by linarith [Nat.cast_nonneg (α:=ℚ) (N%q)])
-    have hc : ⌈(((N%q:ℕ):ℚ)-r)/q⌉ = 0 := Int.ceil_eq_zero_iff.mpr ⟨h0,h1⟩
+  · have h1 : (((N % q:ℕ):ℚ)-r)/q ≤ 0 := div_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr (by exact_mod_cast le_of_not_gt h)) hqQ.le
+    have h0 : -1 < (((N % q:ℕ):ℚ)-r)/q := (lt_div_iff₀ hqQ).mpr (by linarith [Nat.cast_nonneg (α:=ℚ) (N % q)])
+    have hc : ⌈(((N % q:ℕ):ℚ)-r)/q⌉ = 0 := Int.ceil_eq_zero_iff.mpr ⟨h0,h1⟩
     rw [hc] at he
     omega
 
 private lemma fiber_error (N q r : ℕ) (hq : 0<q) (hr : r<q) :
     |((fiber N q r).card : ℝ)*q - N| ≤ q := by
-  have he : (N:ℝ) = (q:ℝ)*((N/q : ℕ):ℝ) + ((N%q:ℕ):ℝ) := by exact_mod_cast (Nat.div_add_mod N q).symm
-  have hm : ((N%q:ℕ):ℝ) < q := by exact_mod_cast Nat.mod_lt N hq
-  have hz := Nat.cast_nonneg (α:=ℝ) (N%q)
+  have he : (N:ℝ) = (q:ℝ)*((N/q : ℕ):ℝ) + ((N % q:ℕ):ℝ) := by exact_mod_cast (Nat.div_add_mod N q).symm
+  have hm : ((N % q:ℕ):ℝ) < q := by exact_mod_cast Nat.mod_lt N hq
+  have hz := Nat.cast_nonneg (α:=ℝ) (N % q)
   rw [fiber_card_exact N q r hq hr]
   split_ifs <;> push_cast <;> apply abs_le.mpr <;> constructor <;> nlinarith only [he,hm.le,hz]
 
@@ -4391,14 +4391,14 @@ private lemma denom_estimate (n q r : ℕ) (hq : 0<q) (hr : r<q) (hsize : 2*q≤
       _ ≤ (2*(q:ℝ))*(2*c*q) := mul_le_mul_of_nonneg_left hc (by positivity)
       _ = _ := by ring
 
-private noncomputable def reflected (n q r : ℕ) := (n+q-r)%q
+private noncomputable def reflected (n q r : ℕ) := (n+q-r) % q
 
 private lemma model_sum_identity (n q : ℕ) :
     (∑ r ∈ range q, density q r * density q (reflected n q r) * q) =
-      (q:ℝ)*(((range q).filter (fun r => r.Coprime q ∧ ((n+q-r)%q).Coprime q)).card:ℝ)/(q.totient:ℝ)^2 := by
+      (q:ℝ)*(((range q).filter (fun r => r.Coprime q ∧ ((n+q-r) % q).Coprime q)).card:ℝ)/(q.totient:ℝ)^2 := by
   classical
-  rw [show (q:ℝ)*(((range q).filter (fun r => r.Coprime q ∧ ((n+q-r)%q).Coprime q)).card:ℝ)/(q.totient:ℝ)^2 =
-    ((((range q).filter (fun r => r.Coprime q ∧ ((n+q-r)%q).Coprime q)).card:ℝ)*(q/(q.totient:ℝ)^2)) by ring]
+  rw [show (q:ℝ)*(((range q).filter (fun r => r.Coprime q ∧ ((n+q-r) % q).Coprime q)).card:ℝ)/(q.totient:ℝ)^2 =
+    ((((range q).filter (fun r => r.Coprime q ∧ ((n+q-r) % q).Coprime q)).card:ℝ)*(q/(q.totient:ℝ)^2)) by ring]
   rw [← nsmul_eq_mul,←sum_const, sum_filter]
   apply sum_congr rfl
   intro r _
@@ -4409,7 +4409,7 @@ private lemma model_sum_identity (n q : ℕ) :
 private noncomputable def gram (n q : ℕ) : ℝ := ∑ r ∈ range q, classMass (n+1) q r *
   classMass (n+1) q (reflected n q r) / ((fiber (n+1) q r).card:ℝ)
 private noncomputable def target (n q : ℕ) : ℝ :=
-  (q:ℝ)*(((range q).filter (fun r => r.Coprime q ∧ ((n+q-r)%q).Coprime q)).card:ℝ)/(q.totient:ℝ)^2
+  (q:ℝ)*(((range q).filter (fun r => r.Coprime q ∧ ((n+q-r) % q).Coprime q)).card:ℝ)/(q.totient:ℝ)^2
 
 private theorem gramBound (n q : ℕ) (t : ℝ) (hq : 0<q) (hsize : 2*q≤n) (ht : t≤1)
     (he : ∀ r<q, |classMass (n+1) q r/(n:ℝ) - density q r| ≤ t) :
@@ -4466,6 +4466,6 @@ private theorem uniformModel (h : ℕ) (ε : ℝ) (hε : 0<ε) :
     _ ≤ 6*((Real.log n)^h)^2*t + 4*((Real.log n)^h)^3/n := by gcongr
     _ = _ := by dsimp [t]; rw [← pow_mul,← pow_mul, Nat.mul_comm 2 h,pow_succ]; field_simp
 theorem PEqualNP.Outside.L_goldbach_coset_logrange_model :
-    let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k%q=r); let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; let j := fun n q r : ℕ => (n+q-r)%q; let G := fun n q => ∑ r ∈ Finset.range q, A n q r*A n q (j n q r)/((F n q r).card:ℝ); let R := fun n q : ℕ => ((Finset.range q).filter (fun r => r.Coprime q ∧ ((n+q-r)%q).Coprime q)).card; ∀ h : ℕ, ∀ ε : ℝ, 0<ε → ∃ X : ℕ, ∀ n≥X, ∀ q : ℕ, 0<q → (q:ℝ) ≤ (Real.log (n:ℝ))^h → |G n q/(n:ℝ) - (q:ℝ)*(R n q:ℝ)/(q.totient:ℝ)^2| < ε := by
+    let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k % q=r); let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; let j := fun n q r : ℕ => (n+q-r) % q; let G := fun n q => ∑ r ∈ Finset.range q, A n q r*A n q (j n q r)/((F n q r).card:ℝ); let R := fun n q : ℕ => ((Finset.range q).filter (fun r => r.Coprime q ∧ ((n+q-r) % q).Coprime q)).card; ∀ h : ℕ, ∀ ε : ℝ, 0<ε → ∃ X : ℕ, ∀ n≥X, ∀ q : ℕ, 0<q → (q:ℝ) ≤ (Real.log (n:ℝ))^h → |G n q/(n:ℝ) - (q:ℝ)*(R n q:ℝ)/(q.totient:ℝ)^2| < ε := by
   intro F w A j G R h ε hε
   exact eventually_atTop.mp (uniformModel h ε hε)
