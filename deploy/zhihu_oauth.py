@@ -4,6 +4,7 @@ import hashlib
 import hmac
 import http.client
 import json
+import os
 import re
 import secrets
 import sqlite3
@@ -15,6 +16,7 @@ from urllib.parse import urlencode
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from github_identity import GithubProofError, PROOF_FILENAME, new_challenge, proof_text, verify_gist
+import sponsors
 
 
 ORIGIN = "https://www.goldbach.tech"
@@ -94,6 +96,7 @@ class ZhihuOAuth:
                     subject TEXT PRIMARY KEY, github_id INTEGER UNIQUE NOT NULL, handle TEXT UNIQUE NOT NULL,
                     name TEXT NOT NULL, avatar_url TEXT NOT NULL, profile_url TEXT NOT NULL);
             """)
+            sponsors.setup(db)
 
     def public_profiles(self, handles=None):
         if handles is not None and not handles:
@@ -117,6 +120,42 @@ class ZhihuOAuth:
                     profile["subject"] if profile else None, json.dumps(profile) if profile else None))
         return token
 
+    @staticmethod
+    def session_id(headers):
+        cookies = SimpleCookie()
+        try:
+            cookies.load(headers.get("Cookie", ""))
+        except CookieError:
+            return ""
+        cookie = cookies.get(COOKIE)
+        return digest(cookie.value) if cookie else ""
+
+    def account_link(self, headers, lang):
+        zh = lang == "zh"
+        url = f"{ORIGIN}{sponsors.DESK}?lang={lang}"
+        sid = self.session_id(headers) if headers.get("Host","").lower() in ("www.goldbach.tech","www.goldbach.tech:443") else ""
+        if sid:
+            with closing(sqlite3.connect(self.db)) as db:
+                record = db.execute("SELECT profile FROM sessions WHERE sid=? AND expires>? AND subject IS NOT NULL",
+                                    (sid,int(time.time()))).fetchone()
+            if record:
+                profile = json.loads(record[0])
+                name = escape(profile["name"])
+                avatar = (f'<img referrerpolicy="no-referrer" src="{escape(profile["avatar_url"])}" width="30" height="30" alt="">' if profile["avatar_url"]
+                          else f'<b aria-hidden="true">{escape(profile["name"][:1])}</b>')
+                return f'<a class="account-link" href="{url}" title="{name}">{avatar}{"设置" if zh else "Settings"}</a>'
+        return f'<a class="account-link" href="{url}&amp;entry=home">{"知乎登录" if zh else "Zhihu login"}</a>'
+
+    def can_upload_sponsor(self, headers):
+        if not self.config or headers.get("Host", "").lower() not in ("www.goldbach.tech", "www.goldbach.tech:443"):
+            return False
+        sid = self.session_id(headers)
+        if not sid:
+            return False
+        with closing(sqlite3.connect(self.db, timeout=5)) as db:
+            return db.execute("SELECT 1 FROM sessions WHERE sid=? AND expires>? AND subject IS NOT NULL",
+                              (sid, int(time.time()))).fetchone() is not None
+
     def handle(self, method, path, params, headers):
         lang = "en" if params.get("lang") == "en" else "zh"
         canonical = headers.get("Host", "").lower() in ("www.goldbach.tech", "www.goldbach.tech:443")
@@ -128,13 +167,7 @@ class ZhihuOAuth:
             return page(400, "Invalid callback host", "")
         if not self.config:
             return page(503, "OAuth unavailable", "")
-        cookies = SimpleCookie()
-        try:
-            cookies.load(headers.get("Cookie", ""))
-        except CookieError:
-            pass
-        cookie = cookies.get(COOKIE)
-        sid = digest(cookie.value) if cookie else ""
+        sid = self.session_id(headers)
         with closing(sqlite3.connect(self.db, timeout=5)) as db, db:
             db.row_factory = sqlite3.Row
             row = db.execute("SELECT * FROM sessions WHERE sid=? AND expires>?", (sid, int(time.time()))).fetchone()
@@ -142,6 +175,20 @@ class ZhihuOAuth:
                 lang = row["lang"]
             def err(status, zh, en):
                 return page(status, en if lang == "en" else zh, f'<a href="{BASE}?lang={lang}">返回 / Return</a>', lang)
+            if path == sponsors.DESK or path.startswith(sponsors.DESK + "/"):
+                fresh = None
+                if not row:
+                    if method == "POST" and path == sponsors.DESK + "/upload":
+                        message = "Your session expired. Sign in with Zhihu and retry." if lang == "en" else "登录已过期，请重新登录知乎后提交。"
+                        return sponsors.upload_notice(403, lang, message)
+                    if method != "GET" or path != sponsors.DESK:
+                        return err(403, "请先登录知乎", "Sign in with Zhihu")
+                    fresh = self.session(db, lang)
+                    row = db.execute("SELECT * FROM sessions WHERE sid=?", (digest(fresh),)).fetchone()
+                result = sponsors.handle(method,path,params,headers,db,row,lang,redirect)
+                if fresh:
+                    result[1]["Set-Cookie"] = redirect(BASE, fresh)[1]["Set-Cookie"]
+                return result
             if method == "GET" and path == BASE:
                 fresh = None
                 if not row:
@@ -153,7 +200,7 @@ class ZhihuOAuth:
                 return response
             if method == "GET" and path == BASE + "/callback":
                 state, code = params.get("state", ""), params.get("authorization_code", "")
-                if not (row and row["state"] and hmac.compare_digest(digest(state), row["state"])):
+                if not (row and row["state"] and hmac.compare_digest(digest(state), row["state"].split(":")[-1])):
                     return err(400, "授权未能关联到本次浏览器会话", "Authorization did not match this browser session")
                 if not db.execute("UPDATE sessions SET state=NULL WHERE sid=? AND state=?", (sid, row["state"])).rowcount:
                     return err(400, "授权请求已使用", "Authorization already used")
@@ -165,7 +212,10 @@ class ZhihuOAuth:
                 except (OSError, ValueError, http.client.HTTPException, RecursionError):
                     return err(502, "知乎未返回可用于绑定的基础身份", "Zhihu did not return a usable basic identity")
                 db.execute("DELETE FROM sessions WHERE sid=?", (sid,))
-                return redirect(BASE, self.session(db, lang, profile))
+                sponsors.bootstrap(db, profile, os.environ.get("GOLDBACH_INITIAL_ADMIN_PROFILE"),
+                                   os.environ.get("GOLDBACH_INITIAL_ADMIN_UID"))
+                dest = {"s": sponsors.DESK, "h": "/?lang="+lang}.get(row["state"].split(":")[0],BASE)
+                return redirect(dest, self.session(db, lang, profile))
             if method != "POST" or path not in (BASE+"/start", BASE+"/challenge", BASE+"/bind", BASE+"/unlink"):
                 return err(404, "此页面不存在", "Page not found")
             if (not row or headers.get("Origin") != ORIGIN or
@@ -173,7 +223,8 @@ class ZhihuOAuth:
                 return err(403, "请重新打开绑定页面", "Reopen the account linking page")
             if path.endswith("/start"):
                 token = secrets.token_urlsafe(32)
-                db.execute("UPDATE sessions SET state=? WHERE sid=?", (digest(token), sid))
+                prefix = {"sponsors":"s:", "home":"h:"}.get(params.get("next"), "")
+                db.execute("UPDATE sessions SET state=? WHERE sid=?", (prefix + digest(token), sid))
                 query = urlencode({"app_id": self.config["app_id"], "redirect_uri": CALLBACK,
                                    "response_type": "code", "state": token})
                 return redirect("https://openapi.zhihu.com/authorize?" + query)

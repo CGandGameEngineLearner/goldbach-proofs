@@ -129,6 +129,65 @@ class ZhihuLinkTests(unittest.TestCase):
         self.assertEqual(self.exchange.call_count, 1)
         return self.page(rotated)
 
+    def test_sponsor_moderation_and_authenticated_header(self):
+        from PIL import Image
+        import sponsors
+        desk = sponsors.DESK
+        owner_url = "https://www.zhihu.com/people/cg-22-2"
+        self.enterContext(patch.dict("os.environ", {"GOLDBACH_INITIAL_ADMIN_PROFILE": owner_url, "GOLDBACH_INITIAL_ADMIN_UID": ""}))
+        self.exchange.return_value.update(name="lifesize", avatar_url="https://picx.zhimg.com/a.jpg")
+        user, csrf = self.login()
+        head = self.app.account_link({"Host":"www.goldbach.tech","Cookie":user},"zh")
+        self.assertIn("设置",head)
+        self.assertIn("https://picx.zhimg.com/a.jpg",head)
+        self.assertNotIn("设置",self.app.account_link({"Host":"www.goldbach.tech"},"zh"))
+        png = io.BytesIO()
+        Image.new("RGB",(4,2)).save(png,"PNG")
+        url = "https://example.org/research?a=1&b=2"
+        upload = {"csrf":csrf,"name":"Example <Org>","logo":png.getvalue(),"website":url}
+        self.assertFalse(self.app.can_upload_sponsor({"Host":"www.goldbach.tech"}))
+        self.assertTrue(self.app.can_upload_sponsor({"Host":"www.goldbach.tech","Cookie":user}))
+        status, _, failure = self.request("POST",desk+"/upload",{**upload,"logo":b"<svg/>"},user)
+        self.assertEqual(status, 400)
+        self.assertIn("图片无法读取", failure.decode())
+        for bad_url in ("javascript:alert(1)", "https://other.org@example.org", "https://127.0.0.1/"):
+            self.assertEqual(self.request("POST",desk+"/upload",{**upload,"website":bad_url},user)[0],400)
+        self.assertEqual(self.request("POST",desk+"/upload",upload,user,origin="https://invalid.example")[0],403)
+        self.assertEqual(self.request("POST",desk+"/upload",upload,user)[0],303)
+        self.assertIsNone(sponsors.public_logo(self.app.db,1))
+        self.assertNotIn("example.org", sponsors.wall(self.app.db,"zh",""))
+        decision = {"csrf":csrf,"id":"1","decision":"approved"}
+        self.assertEqual(self.request("POST",desk+"/review",decision,user)[0],403)
+        self.exchange.reset_mock()
+        self.exchange.return_value.update(subject="456",profile_url=owner_url)
+        admin, token = self.login()
+        pending = self.request("GET",desk,{"view":"pending"},admin)[2].decode()
+        self.assertIn('/sponsor-settings.css',pending)
+        self.assertIn('class="status pending"',pending)
+        self.assertIn('value="approved"',pending)
+        self.assertIn('https://example.org/research?a=1&amp;b=2', pending)
+        self.assertEqual(self.request("POST",desk+"/review",{**decision,"csrf":token},admin)[0],303)
+        self.assertNotIn('Example &lt;Org&gt;', self.request("GET",desk,{"view":"pending"},admin)[2].decode())
+        self.assertIn("Example &lt;Org&gt;",sponsors.wall(self.app.db,"zh",""))
+        self.assertIn('href="https://example.org/research?a=1&amp;b=2"', sponsors.wall(self.app.db,"zh",""))
+        self.assertTrue(sponsors.public_logo(self.app.db,1).startswith(b"\x89PNG"))
+        self.assertEqual(self.request("POST",desk+"/upload",{**upload,"name":"Second Lab"},user)[0],303)
+        self.assertEqual(self.request("POST",desk+"/review",{**decision,"csrf":token,"id":"2"},admin)[0],303)
+        sort = {"csrf":token,"original":"1,2","order":"2,1"}
+        self.assertNotIn(b'sponsor-sort-list',self.request("GET",desk,{"view":"approved"},user)[2])
+        self.assertIn(b'sponsor-sort-list',self.request("GET",desk,{"view":"approved"},admin)[2])
+        self.assertEqual(self.request("POST",desk+"/order",{**sort,"csrf":csrf},user)[0],403)
+        self.assertEqual(self.request("POST",desk+"/order",{**sort,"order":"1,1"},admin)[0],400)
+        self.assertEqual(self.request("POST",desk+"/order",sort,admin)[0],303)
+        rendered = sponsors.wall(self.app.db,"zh","")
+        self.assertLess(rendered.index("Second Lab"),rendered.index("Example &lt;Org&gt;"))
+        self.assertEqual(self.request("POST",desk+"/order",sort,admin)[0],409)
+        self.assertEqual(self.request("POST",desk+"/review",{**decision,"csrf":token},admin)[0],409)
+        self.assertEqual(self.request("POST",desk+"/review",{**decision,"csrf":token,"decision":"withdrawn"},admin)[0],303)
+        self.assertIsNone(sponsors.public_logo(self.app.db,1))
+        self.assertEqual(self.request("POST",desk+"/logout",{"csrf":token},admin)[0],303)
+        self.assertNotIn("设置",self.app.account_link({"Host":"www.goldbach.tech","Cookie":admin},"zh"))
+
     def test_unrelated_session_missing_or_wrong_state_do_not_exchange(self):
         cookie, state = self.start()
         other, _ = self.page()

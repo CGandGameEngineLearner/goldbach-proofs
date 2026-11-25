@@ -20,6 +20,14 @@
 
 `china-apnic.txt` 保存本次线上核对的 10,845 条 APNIC 分配记录。更新时，从 APNIC 的标准 `delegated-apnic-latest` 中选取注册机构为 `apnic`、国家代码为 `CN`、类型为 `ipv4` 或 `ipv6`、状态为 `allocated` 或 `assigned` 的完整记录，保留竖线分隔格式。国家代码表示地址资源登记分配地，本站将其用作默认语言提示。APNIC 对数据准确性不作保证，使用者按其发布条件承担使用风险。[APNIC 数据与格式说明](https://ftp.apnic.net/stats/apnic/)
 
+### 知乎账号与赞助单位
+
+生产站的初始 lifesize 账号配置见 `deploy/sponsor-admin.conf`，安装到 goldbach-web.service.d/ 后重载 systemd 并重启 goldbach-web。
+
+右上角的知乎入口使用已登记的 www.goldbach.tech 回调域名。登录后从头像旁的「设置」投稿，管理员在同页审核或撤展。服务器用 Pillow 解码后重新生成静态 PNG。请在运行服务的 Python 环境安装 Pillow。投稿、审核人和状态保存在现有状态目录的 contributor-links.sqlite3。
+
+在 goldbach-web 的 systemd 环境中配置 `GOLDBACH_INITIAL_ADMIN_UID` 为经核实的知乎 OAuth 数字 UID。若尚待首次登录，也可指定 `GOLDBACH_INITIAL_ADMIN_PROFILE` 为已核实的完整知乎个人主页；只有知乎 OAuth 返回匹配主页时才会认领初始席位。首次匹配后权限绑定数据库中的 UID。昵称不参与授权。更多管理员须由运维将经核实的知乎 UID 加入 site_admins（slot 为 NULL），各管理员仍须通过知乎登录。
+
 ### 在线统计
 
 浮窗中的累计浏览量汇总两个域名下首页、问题目录和各问题页的成功 GET 请求，刷新计一次。服务将计数保存在 `StateDirectory/page-views.sqlite3`，浏览量只保存总数。独立 IP 跨域名去重，包含用时间（精确到秒）、完整请求路径及成功响应的记录数匹配本站服务日志和入口日志后确认的历史来源，统计库仅保存地址的 HMAC 摘要。备份和恢复时须一并保留同一状态目录下的 ip-count.key。健康检查、静态资源、API 和心跳都不会增加浏览量。首次上线时，历史基数按同一口径从本站服务保留的访问日志汇总。

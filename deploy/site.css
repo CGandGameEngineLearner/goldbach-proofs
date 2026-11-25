@@ -388,6 +388,31 @@ button, a, input, select { -webkit-tap-highlight-color: transparent; }
   font-size: .82rem;
 }
 .footer a { white-space: nowrap; }
+.sponsor-wall { padding-block: .85rem; border-block: 1px solid var(--line); }
+main > .sponsor-wall { width: 100%; margin-top: 1.25rem; }
+.account-link { display: inline-flex; align-items: center; justify-self: end; gap: .32rem; white-space: nowrap; padding: .25rem .48rem; border: 1px solid var(--line); border-radius: 5px; }
+.account-link img, .account-link b { width: 1.75rem; height: 1.75rem; border-radius: 50%; object-fit: cover; background: var(--line); text-align: center; }
+@media (max-width: 600px) {
+  .masthead .masthead-inner:has(> .account-link) { grid-template-columns: 1fr auto auto; }
+  .masthead-actions { flex-wrap: wrap; justify-content: flex-end; }
+}
+.sponsor-heading { display: flex; align-items: baseline; flex-wrap: wrap; gap: .25rem 1.2rem; }
+.sponsor-heading h2 { font: 650 1.15rem var(--serif); margin: 0; }
+.sponsor-heading a { font-size: .88rem; }
+.sponsor-grid { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .6rem; }
+.sponsor-grid figure { display: grid; place-items: center; gap: .25rem; margin: 0; padding: .48rem .75rem; max-width: 100%; border: 1px solid var(--line); border-radius: .35rem; background: white; text-align: center; }
+.sponsor-grid img { width: 7rem; height: 3rem; object-fit: contain; }
+.sponsor-grid figure > a { display: block; border-radius: .2rem; }
+.sponsor-grid figure > a:hover { outline: 1px solid var(--desk-gold); outline-offset: 3px; }
+.sponsor-grid figcaption { font-size: .8rem; overflow-wrap: anywhere; }
+.core-team-signup {
+  width: min(18rem, calc(100vw - 2rem)); padding: .85rem;
+  font: 400 .85rem/1.5 var(--sans); color: var(--ink);
+}
+.core-team-signup p + p { margin-top: .4rem; }
+.core-team-signup figure { margin: .65rem 0 0; text-align: center; }
+.core-team-signup img { display: block; width: 140px; height: 140px; margin-inline: auto; padding: 10px; background: white; image-rendering: pixelated; }
+.core-team-signup figcaption { margin-top: .2rem; font-size: .8rem; }
 .platform-credit { display: flex; align-items: center; gap: .65rem; }
 .platform-credit img { flex: none; }
 .footer:has(.platform-credit) { flex-wrap: wrap; gap: 1rem; }
@@ -1047,8 +1072,13 @@ body:not([data-problem]) .hero .open-status { vertical-align: middle; }
 .discussion-widget summary span { margin-inline-start: auto; }
 .discussion-widget summary span::after { content: "+"; font-size: 1.25rem; }
 .discussion-widget[open] summary span::after { content: "−"; }
-.discussion-body { width: 224px; padding: .8rem; text-align: center; color: var(--ink); }
+.discussion-body { width: 244px; max-width: 100%; padding: .8rem; text-align: center; color: var(--ink); }
 .discussion-body strong { font-size: .95rem; }
 .discussion-body p, .discussion-body small { display: block; font: 400 .78rem/1.4 var(--sans); color: var(--body); }
-.discussion-body img { display: block; width: 180px; max-width: 100%; height: auto; margin: .5rem auto; image-rendering: pixelated; }
+.discussion-code { width: 216px; max-width: 100%; aspect-ratio: 1; overflow: hidden; position: relative; margin: .5rem auto; }
+.discussion-code img {
+  /* Frame the 264px QR square at (48, 184) in the original 360px screenshot. */
+  position: absolute; width: 136.363636%; max-width: none; height: auto;
+  left: -18.181818%; top: -69.696970%;
+}
 @media print { .discussion-dock { display: none; } }

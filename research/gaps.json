@@ -3981,6 +3981,3486 @@
       "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/54f3ab5/research/gaps.json",
       "track": "arc-perturbation",
       "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-2",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_2.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_2",
+      "statement": "∀ a:ℕ, Nat.Coprime a 2 → (∑ b ∈ (Finset.range 2).filter (fun b => Nat.Coprime b 2), Complex.exp (((2*Real.pi*(a:ℝ)*b/2:ℝ):ℂ)*Complex.I))/(1:ℂ)=(-1:ℂ)/1",
+      "plain_statement": {
+        "zh": "模 2 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 2"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-3",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_3.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_3",
+      "statement": "∀ a:ℕ, Nat.Coprime a 3 → (∑ b ∈ (Finset.range 3).filter (fun b => Nat.Coprime b 3), Complex.exp (((2*Real.pi*(a:ℝ)*b/3:ℝ):ℂ)*Complex.I))/(2:ℂ)=(-1:ℂ)/2",
+      "plain_statement": {
+        "zh": "模 3 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 3"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-4",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_4.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_4",
+      "statement": "∀ a:ℕ, Nat.Coprime a 4 → (∑ b ∈ (Finset.range 4).filter (fun b => Nat.Coprime b 4), Complex.exp (((2*Real.pi*(a:ℝ)*b/4:ℝ):ℂ)*Complex.I))/(2:ℂ)=(0:ℂ)/2",
+      "plain_statement": {
+        "zh": "模 4 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 4"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-5",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_5.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_5",
+      "statement": "∀ a:ℕ, Nat.Coprime a 5 → (∑ b ∈ (Finset.range 5).filter (fun b => Nat.Coprime b 5), Complex.exp (((2*Real.pi*(a:ℝ)*b/5:ℝ):ℂ)*Complex.I))/(4:ℂ)=(-1:ℂ)/4",
+      "plain_statement": {
+        "zh": "模 5 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 5"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-6",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_6.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_6",
+      "statement": "∀ a:ℕ, Nat.Coprime a 6 → (∑ b ∈ (Finset.range 6).filter (fun b => Nat.Coprime b 6), Complex.exp (((2*Real.pi*(a:ℝ)*b/6:ℝ):ℂ)*Complex.I))/(2:ℂ)=(1:ℂ)/2",
+      "plain_statement": {
+        "zh": "模 6 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 6"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-7",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_7.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_7",
+      "statement": "∀ a:ℕ, Nat.Coprime a 7 → (∑ b ∈ (Finset.range 7).filter (fun b => Nat.Coprime b 7), Complex.exp (((2*Real.pi*(a:ℝ)*b/7:ℝ):ℂ)*Complex.I))/(6:ℂ)=(-1:ℂ)/6",
+      "plain_statement": {
+        "zh": "模 7 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 7"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-8",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_8.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_8",
+      "statement": "∀ a:ℕ, Nat.Coprime a 8 → (∑ b ∈ (Finset.range 8).filter (fun b => Nat.Coprime b 8), Complex.exp (((2*Real.pi*(a:ℝ)*b/8:ℝ):ℂ)*Complex.I))/(4:ℂ)=(0:ℂ)/4",
+      "plain_statement": {
+        "zh": "模 8 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 8"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-9",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_9.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_9",
+      "statement": "∀ a:ℕ, Nat.Coprime a 9 → (∑ b ∈ (Finset.range 9).filter (fun b => Nat.Coprime b 9), Complex.exp (((2*Real.pi*(a:ℝ)*b/9:ℝ):ℂ)*Complex.I))/(6:ℂ)=(0:ℂ)/6",
+      "plain_statement": {
+        "zh": "模 9 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 9"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-10",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_10.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_10",
+      "statement": "∀ a:ℕ, Nat.Coprime a 10 → (∑ b ∈ (Finset.range 10).filter (fun b => Nat.Coprime b 10), Complex.exp (((2*Real.pi*(a:ℝ)*b/10:ℝ):ℂ)*Complex.I))/(4:ℂ)=(1:ℂ)/4",
+      "plain_statement": {
+        "zh": "模 10 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 10"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-11",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_11.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_11",
+      "statement": "∀ a:ℕ, Nat.Coprime a 11 → (∑ b ∈ (Finset.range 11).filter (fun b => Nat.Coprime b 11), Complex.exp (((2*Real.pi*(a:ℝ)*b/11:ℝ):ℂ)*Complex.I))/(10:ℂ)=(-1:ℂ)/10",
+      "plain_statement": {
+        "zh": "模 11 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 11"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-12",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_12.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_12",
+      "statement": "∀ a:ℕ, Nat.Coprime a 12 → (∑ b ∈ (Finset.range 12).filter (fun b => Nat.Coprime b 12), Complex.exp (((2*Real.pi*(a:ℝ)*b/12:ℝ):ℂ)*Complex.I))/(4:ℂ)=(0:ℂ)/4",
+      "plain_statement": {
+        "zh": "模 12 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 12"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-13",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_13.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_13",
+      "statement": "∀ a:ℕ, Nat.Coprime a 13 → (∑ b ∈ (Finset.range 13).filter (fun b => Nat.Coprime b 13), Complex.exp (((2*Real.pi*(a:ℝ)*b/13:ℝ):ℂ)*Complex.I))/(12:ℂ)=(-1:ℂ)/12",
+      "plain_statement": {
+        "zh": "模 13 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 13"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-14",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_14.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_14",
+      "statement": "∀ a:ℕ, Nat.Coprime a 14 → (∑ b ∈ (Finset.range 14).filter (fun b => Nat.Coprime b 14), Complex.exp (((2*Real.pi*(a:ℝ)*b/14:ℝ):ℂ)*Complex.I))/(6:ℂ)=(1:ℂ)/6",
+      "plain_statement": {
+        "zh": "模 14 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 14"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-15",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_15.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_15",
+      "statement": "∀ a:ℕ, Nat.Coprime a 15 → (∑ b ∈ (Finset.range 15).filter (fun b => Nat.Coprime b 15), Complex.exp (((2*Real.pi*(a:ℝ)*b/15:ℝ):ℂ)*Complex.I))/(8:ℂ)=(1:ℂ)/8",
+      "plain_statement": {
+        "zh": "模 15 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 15"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-16",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_16.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_16",
+      "statement": "∀ a:ℕ, Nat.Coprime a 16 → (∑ b ∈ (Finset.range 16).filter (fun b => Nat.Coprime b 16), Complex.exp (((2*Real.pi*(a:ℝ)*b/16:ℝ):ℂ)*Complex.I))/(8:ℂ)=(0:ℂ)/8",
+      "plain_statement": {
+        "zh": "模 16 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 16"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-17",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_17.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_17",
+      "statement": "∀ a:ℕ, Nat.Coprime a 17 → (∑ b ∈ (Finset.range 17).filter (fun b => Nat.Coprime b 17), Complex.exp (((2*Real.pi*(a:ℝ)*b/17:ℝ):ℂ)*Complex.I))/(16:ℂ)=(-1:ℂ)/16",
+      "plain_statement": {
+        "zh": "模 17 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 17"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-18",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_18.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_18",
+      "statement": "∀ a:ℕ, Nat.Coprime a 18 → (∑ b ∈ (Finset.range 18).filter (fun b => Nat.Coprime b 18), Complex.exp (((2*Real.pi*(a:ℝ)*b/18:ℝ):ℂ)*Complex.I))/(6:ℂ)=(0:ℂ)/6",
+      "plain_statement": {
+        "zh": "模 18 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 18"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-19",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_19.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_19",
+      "statement": "∀ a:ℕ, Nat.Coprime a 19 → (∑ b ∈ (Finset.range 19).filter (fun b => Nat.Coprime b 19), Complex.exp (((2*Real.pi*(a:ℝ)*b/19:ℝ):ℂ)*Complex.I))/(18:ℂ)=(-1:ℂ)/18",
+      "plain_statement": {
+        "zh": "模 19 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 19"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-20",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_20.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_20",
+      "statement": "∀ a:ℕ, Nat.Coprime a 20 → (∑ b ∈ (Finset.range 20).filter (fun b => Nat.Coprime b 20), Complex.exp (((2*Real.pi*(a:ℝ)*b/20:ℝ):ℂ)*Complex.I))/(8:ℂ)=(0:ℂ)/8",
+      "plain_statement": {
+        "zh": "模 20 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 20"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-21",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_21.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_21",
+      "statement": "∀ a:ℕ, Nat.Coprime a 21 → (∑ b ∈ (Finset.range 21).filter (fun b => Nat.Coprime b 21), Complex.exp (((2*Real.pi*(a:ℝ)*b/21:ℝ):ℂ)*Complex.I))/(12:ℂ)=(1:ℂ)/12",
+      "plain_statement": {
+        "zh": "模 21 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 21"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-22",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_22.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_22",
+      "statement": "∀ a:ℕ, Nat.Coprime a 22 → (∑ b ∈ (Finset.range 22).filter (fun b => Nat.Coprime b 22), Complex.exp (((2*Real.pi*(a:ℝ)*b/22:ℝ):ℂ)*Complex.I))/(10:ℂ)=(1:ℂ)/10",
+      "plain_statement": {
+        "zh": "模 22 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 22"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-23",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_23.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_23",
+      "statement": "∀ a:ℕ, Nat.Coprime a 23 → (∑ b ∈ (Finset.range 23).filter (fun b => Nat.Coprime b 23), Complex.exp (((2*Real.pi*(a:ℝ)*b/23:ℝ):ℂ)*Complex.I))/(22:ℂ)=(-1:ℂ)/22",
+      "plain_statement": {
+        "zh": "模 23 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 23"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-24",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_24.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_24",
+      "statement": "∀ a:ℕ, Nat.Coprime a 24 → (∑ b ∈ (Finset.range 24).filter (fun b => Nat.Coprime b 24), Complex.exp (((2*Real.pi*(a:ℝ)*b/24:ℝ):ℂ)*Complex.I))/(8:ℂ)=(0:ℂ)/8",
+      "plain_statement": {
+        "zh": "模 24 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 24"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-25",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_25.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_25",
+      "statement": "∀ a:ℕ, Nat.Coprime a 25 → (∑ b ∈ (Finset.range 25).filter (fun b => Nat.Coprime b 25), Complex.exp (((2*Real.pi*(a:ℝ)*b/25:ℝ):ℂ)*Complex.I))/(20:ℂ)=(0:ℂ)/20",
+      "plain_statement": {
+        "zh": "模 25 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 25"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-26",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_26.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_26",
+      "statement": "∀ a:ℕ, Nat.Coprime a 26 → (∑ b ∈ (Finset.range 26).filter (fun b => Nat.Coprime b 26), Complex.exp (((2*Real.pi*(a:ℝ)*b/26:ℝ):ℂ)*Complex.I))/(12:ℂ)=(1:ℂ)/12",
+      "plain_statement": {
+        "zh": "模 26 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 26"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-27",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_27.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_27",
+      "statement": "∀ a:ℕ, Nat.Coprime a 27 → (∑ b ∈ (Finset.range 27).filter (fun b => Nat.Coprime b 27), Complex.exp (((2*Real.pi*(a:ℝ)*b/27:ℝ):ℂ)*Complex.I))/(18:ℂ)=(0:ℂ)/18",
+      "plain_statement": {
+        "zh": "模 27 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 27"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-28",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_28.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_28",
+      "statement": "∀ a:ℕ, Nat.Coprime a 28 → (∑ b ∈ (Finset.range 28).filter (fun b => Nat.Coprime b 28), Complex.exp (((2*Real.pi*(a:ℝ)*b/28:ℝ):ℂ)*Complex.I))/(12:ℂ)=(0:ℂ)/12",
+      "plain_statement": {
+        "zh": "模 28 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 28"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-29",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_29.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_29",
+      "statement": "∀ a:ℕ, Nat.Coprime a 29 → (∑ b ∈ (Finset.range 29).filter (fun b => Nat.Coprime b 29), Complex.exp (((2*Real.pi*(a:ℝ)*b/29:ℝ):ℂ)*Complex.I))/(28:ℂ)=(-1:ℂ)/28",
+      "plain_statement": {
+        "zh": "模 29 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 29"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-30",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_30.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_30",
+      "statement": "∀ a:ℕ, Nat.Coprime a 30 → (∑ b ∈ (Finset.range 30).filter (fun b => Nat.Coprime b 30), Complex.exp (((2*Real.pi*(a:ℝ)*b/30:ℝ):ℂ)*Complex.I))/(8:ℂ)=(-1:ℂ)/8",
+      "plain_statement": {
+        "zh": "模 30 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 30"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-31",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_31.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_31",
+      "statement": "∀ a:ℕ, Nat.Coprime a 31 → (∑ b ∈ (Finset.range 31).filter (fun b => Nat.Coprime b 31), Complex.exp (((2*Real.pi*(a:ℝ)*b/31:ℝ):ℂ)*Complex.I))/(30:ℂ)=(-1:ℂ)/30",
+      "plain_statement": {
+        "zh": "模 31 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 31"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-32",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_32.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_32",
+      "statement": "∀ a:ℕ, Nat.Coprime a 32 → (∑ b ∈ (Finset.range 32).filter (fun b => Nat.Coprime b 32), Complex.exp (((2*Real.pi*(a:ℝ)*b/32:ℝ):ℂ)*Complex.I))/(16:ℂ)=(0:ℂ)/16",
+      "plain_statement": {
+        "zh": "模 32 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 32"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-33",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_33.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_33",
+      "statement": "∀ a:ℕ, Nat.Coprime a 33 → (∑ b ∈ (Finset.range 33).filter (fun b => Nat.Coprime b 33), Complex.exp (((2*Real.pi*(a:ℝ)*b/33:ℝ):ℂ)*Complex.I))/(20:ℂ)=(1:ℂ)/20",
+      "plain_statement": {
+        "zh": "模 33 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 33"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-34",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_34.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_34",
+      "statement": "∀ a:ℕ, Nat.Coprime a 34 → (∑ b ∈ (Finset.range 34).filter (fun b => Nat.Coprime b 34), Complex.exp (((2*Real.pi*(a:ℝ)*b/34:ℝ):ℂ)*Complex.I))/(16:ℂ)=(1:ℂ)/16",
+      "plain_statement": {
+        "zh": "模 34 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 34"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-35",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_35.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_35",
+      "statement": "∀ a:ℕ, Nat.Coprime a 35 → (∑ b ∈ (Finset.range 35).filter (fun b => Nat.Coprime b 35), Complex.exp (((2*Real.pi*(a:ℝ)*b/35:ℝ):ℂ)*Complex.I))/(24:ℂ)=(1:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 35 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 35"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-36",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_36.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_36",
+      "statement": "∀ a:ℕ, Nat.Coprime a 36 → (∑ b ∈ (Finset.range 36).filter (fun b => Nat.Coprime b 36), Complex.exp (((2*Real.pi*(a:ℝ)*b/36:ℝ):ℂ)*Complex.I))/(12:ℂ)=(0:ℂ)/12",
+      "plain_statement": {
+        "zh": "模 36 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 36"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-37",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_37.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_37",
+      "statement": "∀ a:ℕ, Nat.Coprime a 37 → (∑ b ∈ (Finset.range 37).filter (fun b => Nat.Coprime b 37), Complex.exp (((2*Real.pi*(a:ℝ)*b/37:ℝ):ℂ)*Complex.I))/(36:ℂ)=(-1:ℂ)/36",
+      "plain_statement": {
+        "zh": "模 37 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 37"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-38",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_38.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_38",
+      "statement": "∀ a:ℕ, Nat.Coprime a 38 → (∑ b ∈ (Finset.range 38).filter (fun b => Nat.Coprime b 38), Complex.exp (((2*Real.pi*(a:ℝ)*b/38:ℝ):ℂ)*Complex.I))/(18:ℂ)=(1:ℂ)/18",
+      "plain_statement": {
+        "zh": "模 38 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 38"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-39",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_39.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_39",
+      "statement": "∀ a:ℕ, Nat.Coprime a 39 → (∑ b ∈ (Finset.range 39).filter (fun b => Nat.Coprime b 39), Complex.exp (((2*Real.pi*(a:ℝ)*b/39:ℝ):ℂ)*Complex.I))/(24:ℂ)=(1:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 39 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 39"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-40",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_40.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_40",
+      "statement": "∀ a:ℕ, Nat.Coprime a 40 → (∑ b ∈ (Finset.range 40).filter (fun b => Nat.Coprime b 40), Complex.exp (((2*Real.pi*(a:ℝ)*b/40:ℝ):ℂ)*Complex.I))/(16:ℂ)=(0:ℂ)/16",
+      "plain_statement": {
+        "zh": "模 40 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 40"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-41",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_41.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_41",
+      "statement": "∀ a:ℕ, Nat.Coprime a 41 → (∑ b ∈ (Finset.range 41).filter (fun b => Nat.Coprime b 41), Complex.exp (((2*Real.pi*(a:ℝ)*b/41:ℝ):ℂ)*Complex.I))/(40:ℂ)=(-1:ℂ)/40",
+      "plain_statement": {
+        "zh": "模 41 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 41"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-42",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_42.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_42",
+      "statement": "∀ a:ℕ, Nat.Coprime a 42 → (∑ b ∈ (Finset.range 42).filter (fun b => Nat.Coprime b 42), Complex.exp (((2*Real.pi*(a:ℝ)*b/42:ℝ):ℂ)*Complex.I))/(12:ℂ)=(-1:ℂ)/12",
+      "plain_statement": {
+        "zh": "模 42 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 42"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-43",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_43.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_43",
+      "statement": "∀ a:ℕ, Nat.Coprime a 43 → (∑ b ∈ (Finset.range 43).filter (fun b => Nat.Coprime b 43), Complex.exp (((2*Real.pi*(a:ℝ)*b/43:ℝ):ℂ)*Complex.I))/(42:ℂ)=(-1:ℂ)/42",
+      "plain_statement": {
+        "zh": "模 43 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 43"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-44",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_44.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_44",
+      "statement": "∀ a:ℕ, Nat.Coprime a 44 → (∑ b ∈ (Finset.range 44).filter (fun b => Nat.Coprime b 44), Complex.exp (((2*Real.pi*(a:ℝ)*b/44:ℝ):ℂ)*Complex.I))/(20:ℂ)=(0:ℂ)/20",
+      "plain_statement": {
+        "zh": "模 44 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 44"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-45",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_45.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_45",
+      "statement": "∀ a:ℕ, Nat.Coprime a 45 → (∑ b ∈ (Finset.range 45).filter (fun b => Nat.Coprime b 45), Complex.exp (((2*Real.pi*(a:ℝ)*b/45:ℝ):ℂ)*Complex.I))/(24:ℂ)=(0:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 45 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 45"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-46",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_46.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_46",
+      "statement": "∀ a:ℕ, Nat.Coprime a 46 → (∑ b ∈ (Finset.range 46).filter (fun b => Nat.Coprime b 46), Complex.exp (((2*Real.pi*(a:ℝ)*b/46:ℝ):ℂ)*Complex.I))/(22:ℂ)=(1:ℂ)/22",
+      "plain_statement": {
+        "zh": "模 46 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 46"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-47",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_47.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_47",
+      "statement": "∀ a:ℕ, Nat.Coprime a 47 → (∑ b ∈ (Finset.range 47).filter (fun b => Nat.Coprime b 47), Complex.exp (((2*Real.pi*(a:ℝ)*b/47:ℝ):ℂ)*Complex.I))/(46:ℂ)=(-1:ℂ)/46",
+      "plain_statement": {
+        "zh": "模 47 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 47"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-48",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_48.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_48",
+      "statement": "∀ a:ℕ, Nat.Coprime a 48 → (∑ b ∈ (Finset.range 48).filter (fun b => Nat.Coprime b 48), Complex.exp (((2*Real.pi*(a:ℝ)*b/48:ℝ):ℂ)*Complex.I))/(16:ℂ)=(0:ℂ)/16",
+      "plain_statement": {
+        "zh": "模 48 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 48"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-49",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_49.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_49",
+      "statement": "∀ a:ℕ, Nat.Coprime a 49 → (∑ b ∈ (Finset.range 49).filter (fun b => Nat.Coprime b 49), Complex.exp (((2*Real.pi*(a:ℝ)*b/49:ℝ):ℂ)*Complex.I))/(42:ℂ)=(0:ℂ)/42",
+      "plain_statement": {
+        "zh": "模 49 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 49"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-50",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_50.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_50",
+      "statement": "∀ a:ℕ, Nat.Coprime a 50 → (∑ b ∈ (Finset.range 50).filter (fun b => Nat.Coprime b 50), Complex.exp (((2*Real.pi*(a:ℝ)*b/50:ℝ):ℂ)*Complex.I))/(20:ℂ)=(0:ℂ)/20",
+      "plain_statement": {
+        "zh": "模 50 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 50"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-51",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_51.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_51",
+      "statement": "∀ a:ℕ, Nat.Coprime a 51 → (∑ b ∈ (Finset.range 51).filter (fun b => Nat.Coprime b 51), Complex.exp (((2*Real.pi*(a:ℝ)*b/51:ℝ):ℂ)*Complex.I))/(32:ℂ)=(1:ℂ)/32",
+      "plain_statement": {
+        "zh": "模 51 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 51"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-52",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_52.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_52",
+      "statement": "∀ a:ℕ, Nat.Coprime a 52 → (∑ b ∈ (Finset.range 52).filter (fun b => Nat.Coprime b 52), Complex.exp (((2*Real.pi*(a:ℝ)*b/52:ℝ):ℂ)*Complex.I))/(24:ℂ)=(0:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 52 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 52"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-53",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_53.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_53",
+      "statement": "∀ a:ℕ, Nat.Coprime a 53 → (∑ b ∈ (Finset.range 53).filter (fun b => Nat.Coprime b 53), Complex.exp (((2*Real.pi*(a:ℝ)*b/53:ℝ):ℂ)*Complex.I))/(52:ℂ)=(-1:ℂ)/52",
+      "plain_statement": {
+        "zh": "模 53 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 53"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-54",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_54.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_54",
+      "statement": "∀ a:ℕ, Nat.Coprime a 54 → (∑ b ∈ (Finset.range 54).filter (fun b => Nat.Coprime b 54), Complex.exp (((2*Real.pi*(a:ℝ)*b/54:ℝ):ℂ)*Complex.I))/(18:ℂ)=(0:ℂ)/18",
+      "plain_statement": {
+        "zh": "模 54 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 54"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-55",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_55.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_55",
+      "statement": "∀ a:ℕ, Nat.Coprime a 55 → (∑ b ∈ (Finset.range 55).filter (fun b => Nat.Coprime b 55), Complex.exp (((2*Real.pi*(a:ℝ)*b/55:ℝ):ℂ)*Complex.I))/(40:ℂ)=(1:ℂ)/40",
+      "plain_statement": {
+        "zh": "模 55 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 55"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-56",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_56.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_56",
+      "statement": "∀ a:ℕ, Nat.Coprime a 56 → (∑ b ∈ (Finset.range 56).filter (fun b => Nat.Coprime b 56), Complex.exp (((2*Real.pi*(a:ℝ)*b/56:ℝ):ℂ)*Complex.I))/(24:ℂ)=(0:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 56 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 56"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-57",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_57.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_57",
+      "statement": "∀ a:ℕ, Nat.Coprime a 57 → (∑ b ∈ (Finset.range 57).filter (fun b => Nat.Coprime b 57), Complex.exp (((2*Real.pi*(a:ℝ)*b/57:ℝ):ℂ)*Complex.I))/(36:ℂ)=(1:ℂ)/36",
+      "plain_statement": {
+        "zh": "模 57 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 57"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-58",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_58.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_58",
+      "statement": "∀ a:ℕ, Nat.Coprime a 58 → (∑ b ∈ (Finset.range 58).filter (fun b => Nat.Coprime b 58), Complex.exp (((2*Real.pi*(a:ℝ)*b/58:ℝ):ℂ)*Complex.I))/(28:ℂ)=(1:ℂ)/28",
+      "plain_statement": {
+        "zh": "模 58 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 58"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-59",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_59.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_59",
+      "statement": "∀ a:ℕ, Nat.Coprime a 59 → (∑ b ∈ (Finset.range 59).filter (fun b => Nat.Coprime b 59), Complex.exp (((2*Real.pi*(a:ℝ)*b/59:ℝ):ℂ)*Complex.I))/(58:ℂ)=(-1:ℂ)/58",
+      "plain_statement": {
+        "zh": "模 59 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 59"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-60",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_60.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_60",
+      "statement": "∀ a:ℕ, Nat.Coprime a 60 → (∑ b ∈ (Finset.range 60).filter (fun b => Nat.Coprime b 60), Complex.exp (((2*Real.pi*(a:ℝ)*b/60:ℝ):ℂ)*Complex.I))/(16:ℂ)=(0:ℂ)/16",
+      "plain_statement": {
+        "zh": "模 60 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 60"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-61",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_61.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_61",
+      "statement": "∀ a:ℕ, Nat.Coprime a 61 → (∑ b ∈ (Finset.range 61).filter (fun b => Nat.Coprime b 61), Complex.exp (((2*Real.pi*(a:ℝ)*b/61:ℝ):ℂ)*Complex.I))/(60:ℂ)=(-1:ℂ)/60",
+      "plain_statement": {
+        "zh": "模 61 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 61"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-62",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_62.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_62",
+      "statement": "∀ a:ℕ, Nat.Coprime a 62 → (∑ b ∈ (Finset.range 62).filter (fun b => Nat.Coprime b 62), Complex.exp (((2*Real.pi*(a:ℝ)*b/62:ℝ):ℂ)*Complex.I))/(30:ℂ)=(1:ℂ)/30",
+      "plain_statement": {
+        "zh": "模 62 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 62"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-63",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_63.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_63",
+      "statement": "∀ a:ℕ, Nat.Coprime a 63 → (∑ b ∈ (Finset.range 63).filter (fun b => Nat.Coprime b 63), Complex.exp (((2*Real.pi*(a:ℝ)*b/63:ℝ):ℂ)*Complex.I))/(36:ℂ)=(0:ℂ)/36",
+      "plain_statement": {
+        "zh": "模 63 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 63"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-64",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_64.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_64",
+      "statement": "∀ a:ℕ, Nat.Coprime a 64 → (∑ b ∈ (Finset.range 64).filter (fun b => Nat.Coprime b 64), Complex.exp (((2*Real.pi*(a:ℝ)*b/64:ℝ):ℂ)*Complex.I))/(32:ℂ)=(0:ℂ)/32",
+      "plain_statement": {
+        "zh": "模 64 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 64"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-65",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_65.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_65",
+      "statement": "∀ a:ℕ, Nat.Coprime a 65 → (∑ b ∈ (Finset.range 65).filter (fun b => Nat.Coprime b 65), Complex.exp (((2*Real.pi*(a:ℝ)*b/65:ℝ):ℂ)*Complex.I))/(48:ℂ)=(1:ℂ)/48",
+      "plain_statement": {
+        "zh": "模 65 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 65"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-66",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_66.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_66",
+      "statement": "∀ a:ℕ, Nat.Coprime a 66 → (∑ b ∈ (Finset.range 66).filter (fun b => Nat.Coprime b 66), Complex.exp (((2*Real.pi*(a:ℝ)*b/66:ℝ):ℂ)*Complex.I))/(20:ℂ)=(-1:ℂ)/20",
+      "plain_statement": {
+        "zh": "模 66 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 66"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-67",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_67.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_67",
+      "statement": "∀ a:ℕ, Nat.Coprime a 67 → (∑ b ∈ (Finset.range 67).filter (fun b => Nat.Coprime b 67), Complex.exp (((2*Real.pi*(a:ℝ)*b/67:ℝ):ℂ)*Complex.I))/(66:ℂ)=(-1:ℂ)/66",
+      "plain_statement": {
+        "zh": "模 67 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 67"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-68",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_68.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_68",
+      "statement": "∀ a:ℕ, Nat.Coprime a 68 → (∑ b ∈ (Finset.range 68).filter (fun b => Nat.Coprime b 68), Complex.exp (((2*Real.pi*(a:ℝ)*b/68:ℝ):ℂ)*Complex.I))/(32:ℂ)=(0:ℂ)/32",
+      "plain_statement": {
+        "zh": "模 68 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 68"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-69",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_69.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_69",
+      "statement": "∀ a:ℕ, Nat.Coprime a 69 → (∑ b ∈ (Finset.range 69).filter (fun b => Nat.Coprime b 69), Complex.exp (((2*Real.pi*(a:ℝ)*b/69:ℝ):ℂ)*Complex.I))/(44:ℂ)=(1:ℂ)/44",
+      "plain_statement": {
+        "zh": "模 69 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 69"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-70",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_70.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_70",
+      "statement": "∀ a:ℕ, Nat.Coprime a 70 → (∑ b ∈ (Finset.range 70).filter (fun b => Nat.Coprime b 70), Complex.exp (((2*Real.pi*(a:ℝ)*b/70:ℝ):ℂ)*Complex.I))/(24:ℂ)=(-1:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 70 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 70"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-71",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_71.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_71",
+      "statement": "∀ a:ℕ, Nat.Coprime a 71 → (∑ b ∈ (Finset.range 71).filter (fun b => Nat.Coprime b 71), Complex.exp (((2*Real.pi*(a:ℝ)*b/71:ℝ):ℂ)*Complex.I))/(70:ℂ)=(-1:ℂ)/70",
+      "plain_statement": {
+        "zh": "模 71 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 71"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-72",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_72.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_72",
+      "statement": "∀ a:ℕ, Nat.Coprime a 72 → (∑ b ∈ (Finset.range 72).filter (fun b => Nat.Coprime b 72), Complex.exp (((2*Real.pi*(a:ℝ)*b/72:ℝ):ℂ)*Complex.I))/(24:ℂ)=(0:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 72 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 72"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-73",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_73.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_73",
+      "statement": "∀ a:ℕ, Nat.Coprime a 73 → (∑ b ∈ (Finset.range 73).filter (fun b => Nat.Coprime b 73), Complex.exp (((2*Real.pi*(a:ℝ)*b/73:ℝ):ℂ)*Complex.I))/(72:ℂ)=(-1:ℂ)/72",
+      "plain_statement": {
+        "zh": "模 73 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 73"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-74",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_74.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_74",
+      "statement": "∀ a:ℕ, Nat.Coprime a 74 → (∑ b ∈ (Finset.range 74).filter (fun b => Nat.Coprime b 74), Complex.exp (((2*Real.pi*(a:ℝ)*b/74:ℝ):ℂ)*Complex.I))/(36:ℂ)=(1:ℂ)/36",
+      "plain_statement": {
+        "zh": "模 74 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 74"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-75",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_75.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_75",
+      "statement": "∀ a:ℕ, Nat.Coprime a 75 → (∑ b ∈ (Finset.range 75).filter (fun b => Nat.Coprime b 75), Complex.exp (((2*Real.pi*(a:ℝ)*b/75:ℝ):ℂ)*Complex.I))/(40:ℂ)=(0:ℂ)/40",
+      "plain_statement": {
+        "zh": "模 75 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 75"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-76",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_76.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_76",
+      "statement": "∀ a:ℕ, Nat.Coprime a 76 → (∑ b ∈ (Finset.range 76).filter (fun b => Nat.Coprime b 76), Complex.exp (((2*Real.pi*(a:ℝ)*b/76:ℝ):ℂ)*Complex.I))/(36:ℂ)=(0:ℂ)/36",
+      "plain_statement": {
+        "zh": "模 76 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 76"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-77",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_77.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_77",
+      "statement": "∀ a:ℕ, Nat.Coprime a 77 → (∑ b ∈ (Finset.range 77).filter (fun b => Nat.Coprime b 77), Complex.exp (((2*Real.pi*(a:ℝ)*b/77:ℝ):ℂ)*Complex.I))/(60:ℂ)=(1:ℂ)/60",
+      "plain_statement": {
+        "zh": "模 77 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 77"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-78",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_78.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_78",
+      "statement": "∀ a:ℕ, Nat.Coprime a 78 → (∑ b ∈ (Finset.range 78).filter (fun b => Nat.Coprime b 78), Complex.exp (((2*Real.pi*(a:ℝ)*b/78:ℝ):ℂ)*Complex.I))/(24:ℂ)=(-1:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 78 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 78"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-79",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_79.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_79",
+      "statement": "∀ a:ℕ, Nat.Coprime a 79 → (∑ b ∈ (Finset.range 79).filter (fun b => Nat.Coprime b 79), Complex.exp (((2*Real.pi*(a:ℝ)*b/79:ℝ):ℂ)*Complex.I))/(78:ℂ)=(-1:ℂ)/78",
+      "plain_statement": {
+        "zh": "模 79 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 79"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-80",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_80.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_80",
+      "statement": "∀ a:ℕ, Nat.Coprime a 80 → (∑ b ∈ (Finset.range 80).filter (fun b => Nat.Coprime b 80), Complex.exp (((2*Real.pi*(a:ℝ)*b/80:ℝ):ℂ)*Complex.I))/(32:ℂ)=(0:ℂ)/32",
+      "plain_statement": {
+        "zh": "模 80 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 80"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-81",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_81.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_81",
+      "statement": "∀ a:ℕ, Nat.Coprime a 81 → (∑ b ∈ (Finset.range 81).filter (fun b => Nat.Coprime b 81), Complex.exp (((2*Real.pi*(a:ℝ)*b/81:ℝ):ℂ)*Complex.I))/(54:ℂ)=(0:ℂ)/54",
+      "plain_statement": {
+        "zh": "模 81 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 81"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-82",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_82.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_82",
+      "statement": "∀ a:ℕ, Nat.Coprime a 82 → (∑ b ∈ (Finset.range 82).filter (fun b => Nat.Coprime b 82), Complex.exp (((2*Real.pi*(a:ℝ)*b/82:ℝ):ℂ)*Complex.I))/(40:ℂ)=(1:ℂ)/40",
+      "plain_statement": {
+        "zh": "模 82 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 82"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-83",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_83.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_83",
+      "statement": "∀ a:ℕ, Nat.Coprime a 83 → (∑ b ∈ (Finset.range 83).filter (fun b => Nat.Coprime b 83), Complex.exp (((2*Real.pi*(a:ℝ)*b/83:ℝ):ℂ)*Complex.I))/(82:ℂ)=(-1:ℂ)/82",
+      "plain_statement": {
+        "zh": "模 83 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 83"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-84",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_84.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_84",
+      "statement": "∀ a:ℕ, Nat.Coprime a 84 → (∑ b ∈ (Finset.range 84).filter (fun b => Nat.Coprime b 84), Complex.exp (((2*Real.pi*(a:ℝ)*b/84:ℝ):ℂ)*Complex.I))/(24:ℂ)=(0:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 84 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 84"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-85",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_85.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_85",
+      "statement": "∀ a:ℕ, Nat.Coprime a 85 → (∑ b ∈ (Finset.range 85).filter (fun b => Nat.Coprime b 85), Complex.exp (((2*Real.pi*(a:ℝ)*b/85:ℝ):ℂ)*Complex.I))/(64:ℂ)=(1:ℂ)/64",
+      "plain_statement": {
+        "zh": "模 85 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 85"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-86",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_86.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_86",
+      "statement": "∀ a:ℕ, Nat.Coprime a 86 → (∑ b ∈ (Finset.range 86).filter (fun b => Nat.Coprime b 86), Complex.exp (((2*Real.pi*(a:ℝ)*b/86:ℝ):ℂ)*Complex.I))/(42:ℂ)=(1:ℂ)/42",
+      "plain_statement": {
+        "zh": "模 86 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 86"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-87",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_87.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_87",
+      "statement": "∀ a:ℕ, Nat.Coprime a 87 → (∑ b ∈ (Finset.range 87).filter (fun b => Nat.Coprime b 87), Complex.exp (((2*Real.pi*(a:ℝ)*b/87:ℝ):ℂ)*Complex.I))/(56:ℂ)=(1:ℂ)/56",
+      "plain_statement": {
+        "zh": "模 87 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 87"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-88",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_88.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_88",
+      "statement": "∀ a:ℕ, Nat.Coprime a 88 → (∑ b ∈ (Finset.range 88).filter (fun b => Nat.Coprime b 88), Complex.exp (((2*Real.pi*(a:ℝ)*b/88:ℝ):ℂ)*Complex.I))/(40:ℂ)=(0:ℂ)/40",
+      "plain_statement": {
+        "zh": "模 88 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 88"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-89",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_89.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_89",
+      "statement": "∀ a:ℕ, Nat.Coprime a 89 → (∑ b ∈ (Finset.range 89).filter (fun b => Nat.Coprime b 89), Complex.exp (((2*Real.pi*(a:ℝ)*b/89:ℝ):ℂ)*Complex.I))/(88:ℂ)=(-1:ℂ)/88",
+      "plain_statement": {
+        "zh": "模 89 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 89"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-90",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_90.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_90",
+      "statement": "∀ a:ℕ, Nat.Coprime a 90 → (∑ b ∈ (Finset.range 90).filter (fun b => Nat.Coprime b 90), Complex.exp (((2*Real.pi*(a:ℝ)*b/90:ℝ):ℂ)*Complex.I))/(24:ℂ)=(0:ℂ)/24",
+      "plain_statement": {
+        "zh": "模 90 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 90"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-91",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_91.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_91",
+      "statement": "∀ a:ℕ, Nat.Coprime a 91 → (∑ b ∈ (Finset.range 91).filter (fun b => Nat.Coprime b 91), Complex.exp (((2*Real.pi*(a:ℝ)*b/91:ℝ):ℂ)*Complex.I))/(72:ℂ)=(1:ℂ)/72",
+      "plain_statement": {
+        "zh": "模 91 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 91"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-92",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_92.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_92",
+      "statement": "∀ a:ℕ, Nat.Coprime a 92 → (∑ b ∈ (Finset.range 92).filter (fun b => Nat.Coprime b 92), Complex.exp (((2*Real.pi*(a:ℝ)*b/92:ℝ):ℂ)*Complex.I))/(44:ℂ)=(0:ℂ)/44",
+      "plain_statement": {
+        "zh": "模 92 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 92"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-93",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_93.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_93",
+      "statement": "∀ a:ℕ, Nat.Coprime a 93 → (∑ b ∈ (Finset.range 93).filter (fun b => Nat.Coprime b 93), Complex.exp (((2*Real.pi*(a:ℝ)*b/93:ℝ):ℂ)*Complex.I))/(60:ℂ)=(1:ℂ)/60",
+      "plain_statement": {
+        "zh": "模 93 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 93"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-94",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_94.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_94",
+      "statement": "∀ a:ℕ, Nat.Coprime a 94 → (∑ b ∈ (Finset.range 94).filter (fun b => Nat.Coprime b 94), Complex.exp (((2*Real.pi*(a:ℝ)*b/94:ℝ):ℂ)*Complex.I))/(46:ℂ)=(1:ℂ)/46",
+      "plain_statement": {
+        "zh": "模 94 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 94"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-95",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_95.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_95",
+      "statement": "∀ a:ℕ, Nat.Coprime a 95 → (∑ b ∈ (Finset.range 95).filter (fun b => Nat.Coprime b 95), Complex.exp (((2*Real.pi*(a:ℝ)*b/95:ℝ):ℂ)*Complex.I))/(72:ℂ)=(1:ℂ)/72",
+      "plain_statement": {
+        "zh": "模 95 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 95"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-96",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_96.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_96",
+      "statement": "∀ a:ℕ, Nat.Coprime a 96 → (∑ b ∈ (Finset.range 96).filter (fun b => Nat.Coprime b 96), Complex.exp (((2*Real.pi*(a:ℝ)*b/96:ℝ):ℂ)*Complex.I))/(32:ℂ)=(0:ℂ)/32",
+      "plain_statement": {
+        "zh": "模 96 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 96"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-97",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_97.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_97",
+      "statement": "∀ a:ℕ, Nat.Coprime a 97 → (∑ b ∈ (Finset.range 97).filter (fun b => Nat.Coprime b 97), Complex.exp (((2*Real.pi*(a:ℝ)*b/97:ℝ):ℂ)*Complex.I))/(96:ℂ)=(-1:ℂ)/96",
+      "plain_statement": {
+        "zh": "模 97 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 97"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-98",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_98.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_98",
+      "statement": "∀ a:ℕ, Nat.Coprime a 98 → (∑ b ∈ (Finset.range 98).filter (fun b => Nat.Coprime b 98), Complex.exp (((2*Real.pi*(a:ℝ)*b/98:ℝ):ℂ)*Complex.I))/(42:ℂ)=(0:ℂ)/42",
+      "plain_statement": {
+        "zh": "模 98 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 98"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-99",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_99.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_99",
+      "statement": "∀ a:ℕ, Nat.Coprime a 99 → (∑ b ∈ (Finset.range 99).filter (fun b => Nat.Coprime b 99), Complex.exp (((2*Real.pi*(a:ℝ)*b/99:ℝ):ℂ)*Complex.I))/(60:ℂ)=(0:ℂ)/60",
+      "plain_statement": {
+        "zh": "模 99 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 99"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-100",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_100.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_100",
+      "statement": "∀ a:ℕ, Nat.Coprime a 100 → (∑ b ∈ (Finset.range 100).filter (fun b => Nat.Coprime b 100), Complex.exp (((2*Real.pi*(a:ℝ)*b/100:ℝ):ℂ)*Complex.I))/(40:ℂ)=(0:ℂ)/40",
+      "plain_statement": {
+        "zh": "模 100 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 100"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-101",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_101.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_101",
+      "statement": "∀ a:ℕ, Nat.Coprime a 101 → (∑ b ∈ (Finset.range 101).filter (fun b => Nat.Coprime b 101), Complex.exp (((2*Real.pi*(a:ℝ)*b/101:ℝ):ℂ)*Complex.I))/(100:ℂ)=(-1:ℂ)/100",
+      "plain_statement": {
+        "zh": "模 101 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 101"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-102",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_102.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_102",
+      "statement": "∀ a:ℕ, Nat.Coprime a 102 → (∑ b ∈ (Finset.range 102).filter (fun b => Nat.Coprime b 102), Complex.exp (((2*Real.pi*(a:ℝ)*b/102:ℝ):ℂ)*Complex.I))/(32:ℂ)=(-1:ℂ)/32",
+      "plain_statement": {
+        "zh": "模 102 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 102"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-103",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_103.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_103",
+      "statement": "∀ a:ℕ, Nat.Coprime a 103 → (∑ b ∈ (Finset.range 103).filter (fun b => Nat.Coprime b 103), Complex.exp (((2*Real.pi*(a:ℝ)*b/103:ℝ):ℂ)*Complex.I))/(102:ℂ)=(-1:ℂ)/102",
+      "plain_statement": {
+        "zh": "模 103 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 103"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-104",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_104.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_104",
+      "statement": "∀ a:ℕ, Nat.Coprime a 104 → (∑ b ∈ (Finset.range 104).filter (fun b => Nat.Coprime b 104), Complex.exp (((2*Real.pi*(a:ℝ)*b/104:ℝ):ℂ)*Complex.I))/(48:ℂ)=(0:ℂ)/48",
+      "plain_statement": {
+        "zh": "模 104 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 104"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-105",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_105.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_105",
+      "statement": "∀ a:ℕ, Nat.Coprime a 105 → (∑ b ∈ (Finset.range 105).filter (fun b => Nat.Coprime b 105), Complex.exp (((2*Real.pi*(a:ℝ)*b/105:ℝ):ℂ)*Complex.I))/(48:ℂ)=(-1:ℂ)/48",
+      "plain_statement": {
+        "zh": "模 105 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 105"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-106",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_106.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_106",
+      "statement": "∀ a:ℕ, Nat.Coprime a 106 → (∑ b ∈ (Finset.range 106).filter (fun b => Nat.Coprime b 106), Complex.exp (((2*Real.pi*(a:ℝ)*b/106:ℝ):ℂ)*Complex.I))/(52:ℂ)=(1:ℂ)/52",
+      "plain_statement": {
+        "zh": "模 106 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 106"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-107",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_107.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_107",
+      "statement": "∀ a:ℕ, Nat.Coprime a 107 → (∑ b ∈ (Finset.range 107).filter (fun b => Nat.Coprime b 107), Complex.exp (((2*Real.pi*(a:ℝ)*b/107:ℝ):ℂ)*Complex.I))/(106:ℂ)=(-1:ℂ)/106",
+      "plain_statement": {
+        "zh": "模 107 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 107"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-108",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_108.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_108",
+      "statement": "∀ a:ℕ, Nat.Coprime a 108 → (∑ b ∈ (Finset.range 108).filter (fun b => Nat.Coprime b 108), Complex.exp (((2*Real.pi*(a:ℝ)*b/108:ℝ):ℂ)*Complex.I))/(36:ℂ)=(0:ℂ)/36",
+      "plain_statement": {
+        "zh": "模 108 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 108"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-109",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_109.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_109",
+      "statement": "∀ a:ℕ, Nat.Coprime a 109 → (∑ b ∈ (Finset.range 109).filter (fun b => Nat.Coprime b 109), Complex.exp (((2*Real.pi*(a:ℝ)*b/109:ℝ):ℂ)*Complex.I))/(108:ℂ)=(-1:ℂ)/108",
+      "plain_statement": {
+        "zh": "模 109 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 109"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-110",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_110.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_110",
+      "statement": "∀ a:ℕ, Nat.Coprime a 110 → (∑ b ∈ (Finset.range 110).filter (fun b => Nat.Coprime b 110), Complex.exp (((2*Real.pi*(a:ℝ)*b/110:ℝ):ℂ)*Complex.I))/(40:ℂ)=(-1:ℂ)/40",
+      "plain_statement": {
+        "zh": "模 110 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 110"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-111",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_111.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_111",
+      "statement": "∀ a:ℕ, Nat.Coprime a 111 → (∑ b ∈ (Finset.range 111).filter (fun b => Nat.Coprime b 111), Complex.exp (((2*Real.pi*(a:ℝ)*b/111:ℝ):ℂ)*Complex.I))/(72:ℂ)=(1:ℂ)/72",
+      "plain_statement": {
+        "zh": "模 111 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 111"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-112",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_112.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_112",
+      "statement": "∀ a:ℕ, Nat.Coprime a 112 → (∑ b ∈ (Finset.range 112).filter (fun b => Nat.Coprime b 112), Complex.exp (((2*Real.pi*(a:ℝ)*b/112:ℝ):ℂ)*Complex.I))/(48:ℂ)=(0:ℂ)/48",
+      "plain_statement": {
+        "zh": "模 112 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 112"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-113",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_113.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_113",
+      "statement": "∀ a:ℕ, Nat.Coprime a 113 → (∑ b ∈ (Finset.range 113).filter (fun b => Nat.Coprime b 113), Complex.exp (((2*Real.pi*(a:ℝ)*b/113:ℝ):ℂ)*Complex.I))/(112:ℂ)=(-1:ℂ)/112",
+      "plain_statement": {
+        "zh": "模 113 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 113"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-114",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_114.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_114",
+      "statement": "∀ a:ℕ, Nat.Coprime a 114 → (∑ b ∈ (Finset.range 114).filter (fun b => Nat.Coprime b 114), Complex.exp (((2*Real.pi*(a:ℝ)*b/114:ℝ):ℂ)*Complex.I))/(36:ℂ)=(-1:ℂ)/36",
+      "plain_statement": {
+        "zh": "模 114 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 114"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-115",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_115.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_115",
+      "statement": "∀ a:ℕ, Nat.Coprime a 115 → (∑ b ∈ (Finset.range 115).filter (fun b => Nat.Coprime b 115), Complex.exp (((2*Real.pi*(a:ℝ)*b/115:ℝ):ℂ)*Complex.I))/(88:ℂ)=(1:ℂ)/88",
+      "plain_statement": {
+        "zh": "模 115 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 115"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-116",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_116.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_116",
+      "statement": "∀ a:ℕ, Nat.Coprime a 116 → (∑ b ∈ (Finset.range 116).filter (fun b => Nat.Coprime b 116), Complex.exp (((2*Real.pi*(a:ℝ)*b/116:ℝ):ℂ)*Complex.I))/(56:ℂ)=(0:ℂ)/56",
+      "plain_statement": {
+        "zh": "模 116 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 116"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-117",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_117.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_117",
+      "statement": "∀ a:ℕ, Nat.Coprime a 117 → (∑ b ∈ (Finset.range 117).filter (fun b => Nat.Coprime b 117), Complex.exp (((2*Real.pi*(a:ℝ)*b/117:ℝ):ℂ)*Complex.I))/(72:ℂ)=(0:ℂ)/72",
+      "plain_statement": {
+        "zh": "模 117 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 117"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-118",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_118.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_118",
+      "statement": "∀ a:ℕ, Nat.Coprime a 118 → (∑ b ∈ (Finset.range 118).filter (fun b => Nat.Coprime b 118), Complex.exp (((2*Real.pi*(a:ℝ)*b/118:ℝ):ℂ)*Complex.I))/(58:ℂ)=(1:ℂ)/58",
+      "plain_statement": {
+        "zh": "模 118 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 118"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-119",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_119.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_119",
+      "statement": "∀ a:ℕ, Nat.Coprime a 119 → (∑ b ∈ (Finset.range 119).filter (fun b => Nat.Coprime b 119), Complex.exp (((2*Real.pi*(a:ℝ)*b/119:ℝ):ℂ)*Complex.I))/(96:ℂ)=(1:ℂ)/96",
+      "plain_statement": {
+        "zh": "模 119 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 119"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-120",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_120.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_120",
+      "statement": "∀ a:ℕ, Nat.Coprime a 120 → (∑ b ∈ (Finset.range 120).filter (fun b => Nat.Coprime b 120), Complex.exp (((2*Real.pi*(a:ℝ)*b/120:ℝ):ℂ)*Complex.I))/(32:ℂ)=(0:ℂ)/32",
+      "plain_statement": {
+        "zh": "模 120 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 120"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-121",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_121.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_121",
+      "statement": "∀ a:ℕ, Nat.Coprime a 121 → (∑ b ∈ (Finset.range 121).filter (fun b => Nat.Coprime b 121), Complex.exp (((2*Real.pi*(a:ℝ)*b/121:ℝ):ℂ)*Complex.I))/(110:ℂ)=(0:ℂ)/110",
+      "plain_statement": {
+        "zh": "模 121 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 121"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-122",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_122.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_122",
+      "statement": "∀ a:ℕ, Nat.Coprime a 122 → (∑ b ∈ (Finset.range 122).filter (fun b => Nat.Coprime b 122), Complex.exp (((2*Real.pi*(a:ℝ)*b/122:ℝ):ℂ)*Complex.I))/(60:ℂ)=(1:ℂ)/60",
+      "plain_statement": {
+        "zh": "模 122 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 122"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-123",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_123.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_123",
+      "statement": "∀ a:ℕ, Nat.Coprime a 123 → (∑ b ∈ (Finset.range 123).filter (fun b => Nat.Coprime b 123), Complex.exp (((2*Real.pi*(a:ℝ)*b/123:ℝ):ℂ)*Complex.I))/(80:ℂ)=(1:ℂ)/80",
+      "plain_statement": {
+        "zh": "模 123 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 123"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-124",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_124.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_124",
+      "statement": "∀ a:ℕ, Nat.Coprime a 124 → (∑ b ∈ (Finset.range 124).filter (fun b => Nat.Coprime b 124), Complex.exp (((2*Real.pi*(a:ℝ)*b/124:ℝ):ℂ)*Complex.I))/(60:ℂ)=(0:ℂ)/60",
+      "plain_statement": {
+        "zh": "模 124 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 124"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-125",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_125.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_125",
+      "statement": "∀ a:ℕ, Nat.Coprime a 125 → (∑ b ∈ (Finset.range 125).filter (fun b => Nat.Coprime b 125), Complex.exp (((2*Real.pi*(a:ℝ)*b/125:ℝ):ℂ)*Complex.I))/(100:ℂ)=(0:ℂ)/100",
+      "plain_statement": {
+        "zh": "模 125 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 125"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-126",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_126.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_126",
+      "statement": "∀ a:ℕ, Nat.Coprime a 126 → (∑ b ∈ (Finset.range 126).filter (fun b => Nat.Coprime b 126), Complex.exp (((2*Real.pi*(a:ℝ)*b/126:ℝ):ℂ)*Complex.I))/(36:ℂ)=(0:ℂ)/36",
+      "plain_statement": {
+        "zh": "模 126 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 126"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-127",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_127.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_127",
+      "statement": "∀ a:ℕ, Nat.Coprime a 127 → (∑ b ∈ (Finset.range 127).filter (fun b => Nat.Coprime b 127), Complex.exp (((2*Real.pi*(a:ℝ)*b/127:ℝ):ℂ)*Complex.I))/(126:ℂ)=(-1:ℂ)/126",
+      "plain_statement": {
+        "zh": "模 127 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 127"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-128",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_128.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_128",
+      "statement": "∀ a:ℕ, Nat.Coprime a 128 → (∑ b ∈ (Finset.range 128).filter (fun b => Nat.Coprime b 128), Complex.exp (((2*Real.pi*(a:ℝ)*b/128:ℝ):ℂ)*Complex.I))/(64:ℂ)=(0:ℂ)/64",
+      "plain_statement": {
+        "zh": "模 128 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 128"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-129",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_129.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_129",
+      "statement": "∀ a:ℕ, Nat.Coprime a 129 → (∑ b ∈ (Finset.range 129).filter (fun b => Nat.Coprime b 129), Complex.exp (((2*Real.pi*(a:ℝ)*b/129:ℝ):ℂ)*Complex.I))/(84:ℂ)=(1:ℂ)/84",
+      "plain_statement": {
+        "zh": "模 129 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 129"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-130",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_130.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_130",
+      "statement": "∀ a:ℕ, Nat.Coprime a 130 → (∑ b ∈ (Finset.range 130).filter (fun b => Nat.Coprime b 130), Complex.exp (((2*Real.pi*(a:ℝ)*b/130:ℝ):ℂ)*Complex.I))/(48:ℂ)=(-1:ℂ)/48",
+      "plain_statement": {
+        "zh": "模 130 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 130"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-131",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_131.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_131",
+      "statement": "∀ a:ℕ, Nat.Coprime a 131 → (∑ b ∈ (Finset.range 131).filter (fun b => Nat.Coprime b 131), Complex.exp (((2*Real.pi*(a:ℝ)*b/131:ℝ):ℂ)*Complex.I))/(130:ℂ)=(-1:ℂ)/130",
+      "plain_statement": {
+        "zh": "模 131 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 131"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-132",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_132.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_132",
+      "statement": "∀ a:ℕ, Nat.Coprime a 132 → (∑ b ∈ (Finset.range 132).filter (fun b => Nat.Coprime b 132), Complex.exp (((2*Real.pi*(a:ℝ)*b/132:ℝ):ℂ)*Complex.I))/(40:ℂ)=(0:ℂ)/40",
+      "plain_statement": {
+        "zh": "模 132 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 132"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-133",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_133.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_133",
+      "statement": "∀ a:ℕ, Nat.Coprime a 133 → (∑ b ∈ (Finset.range 133).filter (fun b => Nat.Coprime b 133), Complex.exp (((2*Real.pi*(a:ℝ)*b/133:ℝ):ℂ)*Complex.I))/(108:ℂ)=(1:ℂ)/108",
+      "plain_statement": {
+        "zh": "模 133 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 133"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-134",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_134.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_134",
+      "statement": "∀ a:ℕ, Nat.Coprime a 134 → (∑ b ∈ (Finset.range 134).filter (fun b => Nat.Coprime b 134), Complex.exp (((2*Real.pi*(a:ℝ)*b/134:ℝ):ℂ)*Complex.I))/(66:ℂ)=(1:ℂ)/66",
+      "plain_statement": {
+        "zh": "模 134 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 134"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-135",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_135.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_135",
+      "statement": "∀ a:ℕ, Nat.Coprime a 135 → (∑ b ∈ (Finset.range 135).filter (fun b => Nat.Coprime b 135), Complex.exp (((2*Real.pi*(a:ℝ)*b/135:ℝ):ℂ)*Complex.I))/(72:ℂ)=(0:ℂ)/72",
+      "plain_statement": {
+        "zh": "模 135 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 135"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-136",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_136.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_136",
+      "statement": "∀ a:ℕ, Nat.Coprime a 136 → (∑ b ∈ (Finset.range 136).filter (fun b => Nat.Coprime b 136), Complex.exp (((2*Real.pi*(a:ℝ)*b/136:ℝ):ℂ)*Complex.I))/(64:ℂ)=(0:ℂ)/64",
+      "plain_statement": {
+        "zh": "模 136 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 136"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-137",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_137.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_137",
+      "statement": "∀ a:ℕ, Nat.Coprime a 137 → (∑ b ∈ (Finset.range 137).filter (fun b => Nat.Coprime b 137), Complex.exp (((2*Real.pi*(a:ℝ)*b/137:ℝ):ℂ)*Complex.I))/(136:ℂ)=(-1:ℂ)/136",
+      "plain_statement": {
+        "zh": "模 137 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 137"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-138",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_138.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_138",
+      "statement": "∀ a:ℕ, Nat.Coprime a 138 → (∑ b ∈ (Finset.range 138).filter (fun b => Nat.Coprime b 138), Complex.exp (((2*Real.pi*(a:ℝ)*b/138:ℝ):ℂ)*Complex.I))/(44:ℂ)=(-1:ℂ)/44",
+      "plain_statement": {
+        "zh": "模 138 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 138"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-139",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_139.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_139",
+      "statement": "∀ a:ℕ, Nat.Coprime a 139 → (∑ b ∈ (Finset.range 139).filter (fun b => Nat.Coprime b 139), Complex.exp (((2*Real.pi*(a:ℝ)*b/139:ℝ):ℂ)*Complex.I))/(138:ℂ)=(-1:ℂ)/138",
+      "plain_statement": {
+        "zh": "模 139 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 139"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-140",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_140.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_140",
+      "statement": "∀ a:ℕ, Nat.Coprime a 140 → (∑ b ∈ (Finset.range 140).filter (fun b => Nat.Coprime b 140), Complex.exp (((2*Real.pi*(a:ℝ)*b/140:ℝ):ℂ)*Complex.I))/(48:ℂ)=(0:ℂ)/48",
+      "plain_statement": {
+        "zh": "模 140 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 140"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-141",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_141.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_141",
+      "statement": "∀ a:ℕ, Nat.Coprime a 141 → (∑ b ∈ (Finset.range 141).filter (fun b => Nat.Coprime b 141), Complex.exp (((2*Real.pi*(a:ℝ)*b/141:ℝ):ℂ)*Complex.I))/(92:ℂ)=(1:ℂ)/92",
+      "plain_statement": {
+        "zh": "模 141 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 141"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-142",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_142.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_142",
+      "statement": "∀ a:ℕ, Nat.Coprime a 142 → (∑ b ∈ (Finset.range 142).filter (fun b => Nat.Coprime b 142), Complex.exp (((2*Real.pi*(a:ℝ)*b/142:ℝ):ℂ)*Complex.I))/(70:ℂ)=(1:ℂ)/70",
+      "plain_statement": {
+        "zh": "模 142 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 142"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-143",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_143.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_143",
+      "statement": "∀ a:ℕ, Nat.Coprime a 143 → (∑ b ∈ (Finset.range 143).filter (fun b => Nat.Coprime b 143), Complex.exp (((2*Real.pi*(a:ℝ)*b/143:ℝ):ℂ)*Complex.I))/(120:ℂ)=(1:ℂ)/120",
+      "plain_statement": {
+        "zh": "模 143 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 143"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-144",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_144.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_144",
+      "statement": "∀ a:ℕ, Nat.Coprime a 144 → (∑ b ∈ (Finset.range 144).filter (fun b => Nat.Coprime b 144), Complex.exp (((2*Real.pi*(a:ℝ)*b/144:ℝ):ℂ)*Complex.I))/(48:ℂ)=(0:ℂ)/48",
+      "plain_statement": {
+        "zh": "模 144 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 144"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-145",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_145.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_145",
+      "statement": "∀ a:ℕ, Nat.Coprime a 145 → (∑ b ∈ (Finset.range 145).filter (fun b => Nat.Coprime b 145), Complex.exp (((2*Real.pi*(a:ℝ)*b/145:ℝ):ℂ)*Complex.I))/(112:ℂ)=(1:ℂ)/112",
+      "plain_statement": {
+        "zh": "模 145 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 145"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-146",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_146.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_146",
+      "statement": "∀ a:ℕ, Nat.Coprime a 146 → (∑ b ∈ (Finset.range 146).filter (fun b => Nat.Coprime b 146), Complex.exp (((2*Real.pi*(a:ℝ)*b/146:ℝ):ℂ)*Complex.I))/(72:ℂ)=(1:ℂ)/72",
+      "plain_statement": {
+        "zh": "模 146 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 146"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-147",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_147.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_147",
+      "statement": "∀ a:ℕ, Nat.Coprime a 147 → (∑ b ∈ (Finset.range 147).filter (fun b => Nat.Coprime b 147), Complex.exp (((2*Real.pi*(a:ℝ)*b/147:ℝ):ℂ)*Complex.I))/(84:ℂ)=(0:ℂ)/84",
+      "plain_statement": {
+        "zh": "模 147 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 147"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-148",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_148.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_148",
+      "statement": "∀ a:ℕ, Nat.Coprime a 148 → (∑ b ∈ (Finset.range 148).filter (fun b => Nat.Coprime b 148), Complex.exp (((2*Real.pi*(a:ℝ)*b/148:ℝ):ℂ)*Complex.I))/(72:ℂ)=(0:ℂ)/72",
+      "plain_statement": {
+        "zh": "模 148 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 148"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-149",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_149.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_149",
+      "statement": "∀ a:ℕ, Nat.Coprime a 149 → (∑ b ∈ (Finset.range 149).filter (fun b => Nat.Coprime b 149), Complex.exp (((2*Real.pi*(a:ℝ)*b/149:ℝ):ℂ)*Complex.I))/(148:ℂ)=(-1:ℂ)/148",
+      "plain_statement": {
+        "zh": "模 149 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 149"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-150",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_150.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_150",
+      "statement": "∀ a:ℕ, Nat.Coprime a 150 → (∑ b ∈ (Finset.range 150).filter (fun b => Nat.Coprime b 150), Complex.exp (((2*Real.pi*(a:ℝ)*b/150:ℝ):ℂ)*Complex.I))/(40:ℂ)=(0:ℂ)/40",
+      "plain_statement": {
+        "zh": "模 150 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 150"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-151",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_151.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_151",
+      "statement": "∀ a:ℕ, Nat.Coprime a 151 → (∑ b ∈ (Finset.range 151).filter (fun b => Nat.Coprime b 151), Complex.exp (((2*Real.pi*(a:ℝ)*b/151:ℝ):ℂ)*Complex.I))/(150:ℂ)=(-1:ℂ)/150",
+      "plain_statement": {
+        "zh": "模 151 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 151"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-152",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_152.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_152",
+      "statement": "∀ a:ℕ, Nat.Coprime a 152 → (∑ b ∈ (Finset.range 152).filter (fun b => Nat.Coprime b 152), Complex.exp (((2*Real.pi*(a:ℝ)*b/152:ℝ):ℂ)*Complex.I))/(72:ℂ)=(0:ℂ)/72",
+      "plain_statement": {
+        "zh": "模 152 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 152"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-153",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_153.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_153",
+      "statement": "∀ a:ℕ, Nat.Coprime a 153 → (∑ b ∈ (Finset.range 153).filter (fun b => Nat.Coprime b 153), Complex.exp (((2*Real.pi*(a:ℝ)*b/153:ℝ):ℂ)*Complex.I))/(96:ℂ)=(0:ℂ)/96",
+      "plain_statement": {
+        "zh": "模 153 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 153"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-154",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_154.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_154",
+      "statement": "∀ a:ℕ, Nat.Coprime a 154 → (∑ b ∈ (Finset.range 154).filter (fun b => Nat.Coprime b 154), Complex.exp (((2*Real.pi*(a:ℝ)*b/154:ℝ):ℂ)*Complex.I))/(60:ℂ)=(-1:ℂ)/60",
+      "plain_statement": {
+        "zh": "模 154 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 154"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-155",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_155.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_155",
+      "statement": "∀ a:ℕ, Nat.Coprime a 155 → (∑ b ∈ (Finset.range 155).filter (fun b => Nat.Coprime b 155), Complex.exp (((2*Real.pi*(a:ℝ)*b/155:ℝ):ℂ)*Complex.I))/(120:ℂ)=(1:ℂ)/120",
+      "plain_statement": {
+        "zh": "模 155 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 155"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-156",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_156.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_156",
+      "statement": "∀ a:ℕ, Nat.Coprime a 156 → (∑ b ∈ (Finset.range 156).filter (fun b => Nat.Coprime b 156), Complex.exp (((2*Real.pi*(a:ℝ)*b/156:ℝ):ℂ)*Complex.I))/(48:ℂ)=(0:ℂ)/48",
+      "plain_statement": {
+        "zh": "模 156 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 156"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-157",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_157.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_157",
+      "statement": "∀ a:ℕ, Nat.Coprime a 157 → (∑ b ∈ (Finset.range 157).filter (fun b => Nat.Coprime b 157), Complex.exp (((2*Real.pi*(a:ℝ)*b/157:ℝ):ℂ)*Complex.I))/(156:ℂ)=(-1:ℂ)/156",
+      "plain_statement": {
+        "zh": "模 157 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 157"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-158",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_158.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_158",
+      "statement": "∀ a:ℕ, Nat.Coprime a 158 → (∑ b ∈ (Finset.range 158).filter (fun b => Nat.Coprime b 158), Complex.exp (((2*Real.pi*(a:ℝ)*b/158:ℝ):ℂ)*Complex.I))/(78:ℂ)=(1:ℂ)/78",
+      "plain_statement": {
+        "zh": "模 158 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 158"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-159",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_159.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_159",
+      "statement": "∀ a:ℕ, Nat.Coprime a 159 → (∑ b ∈ (Finset.range 159).filter (fun b => Nat.Coprime b 159), Complex.exp (((2*Real.pi*(a:ℝ)*b/159:ℝ):ℂ)*Complex.I))/(104:ℂ)=(1:ℂ)/104",
+      "plain_statement": {
+        "zh": "模 159 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 159"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-160",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_160.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_160",
+      "statement": "∀ a:ℕ, Nat.Coprime a 160 → (∑ b ∈ (Finset.range 160).filter (fun b => Nat.Coprime b 160), Complex.exp (((2*Real.pi*(a:ℝ)*b/160:ℝ):ℂ)*Complex.I))/(64:ℂ)=(0:ℂ)/64",
+      "plain_statement": {
+        "zh": "模 160 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 160"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-161",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_161.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_161",
+      "statement": "∀ a:ℕ, Nat.Coprime a 161 → (∑ b ∈ (Finset.range 161).filter (fun b => Nat.Coprime b 161), Complex.exp (((2*Real.pi*(a:ℝ)*b/161:ℝ):ℂ)*Complex.I))/(132:ℂ)=(1:ℂ)/132",
+      "plain_statement": {
+        "zh": "模 161 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 161"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-162",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_162.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_162",
+      "statement": "∀ a:ℕ, Nat.Coprime a 162 → (∑ b ∈ (Finset.range 162).filter (fun b => Nat.Coprime b 162), Complex.exp (((2*Real.pi*(a:ℝ)*b/162:ℝ):ℂ)*Complex.I))/(54:ℂ)=(0:ℂ)/54",
+      "plain_statement": {
+        "zh": "模 162 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 162"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-163",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_163.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_163",
+      "statement": "∀ a:ℕ, Nat.Coprime a 163 → (∑ b ∈ (Finset.range 163).filter (fun b => Nat.Coprime b 163), Complex.exp (((2*Real.pi*(a:ℝ)*b/163:ℝ):ℂ)*Complex.I))/(162:ℂ)=(-1:ℂ)/162",
+      "plain_statement": {
+        "zh": "模 163 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 163"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-164",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_164.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_164",
+      "statement": "∀ a:ℕ, Nat.Coprime a 164 → (∑ b ∈ (Finset.range 164).filter (fun b => Nat.Coprime b 164), Complex.exp (((2*Real.pi*(a:ℝ)*b/164:ℝ):ℂ)*Complex.I))/(80:ℂ)=(0:ℂ)/80",
+      "plain_statement": {
+        "zh": "模 164 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 164"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-165",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_165.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_165",
+      "statement": "∀ a:ℕ, Nat.Coprime a 165 → (∑ b ∈ (Finset.range 165).filter (fun b => Nat.Coprime b 165), Complex.exp (((2*Real.pi*(a:ℝ)*b/165:ℝ):ℂ)*Complex.I))/(80:ℂ)=(-1:ℂ)/80",
+      "plain_statement": {
+        "zh": "模 165 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 165"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-166",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_166.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_166",
+      "statement": "∀ a:ℕ, Nat.Coprime a 166 → (∑ b ∈ (Finset.range 166).filter (fun b => Nat.Coprime b 166), Complex.exp (((2*Real.pi*(a:ℝ)*b/166:ℝ):ℂ)*Complex.I))/(82:ℂ)=(1:ℂ)/82",
+      "plain_statement": {
+        "zh": "模 166 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 166"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-167",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_167.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_167",
+      "statement": "∀ a:ℕ, Nat.Coprime a 167 → (∑ b ∈ (Finset.range 167).filter (fun b => Nat.Coprime b 167), Complex.exp (((2*Real.pi*(a:ℝ)*b/167:ℝ):ℂ)*Complex.I))/(166:ℂ)=(-1:ℂ)/166",
+      "plain_statement": {
+        "zh": "模 167 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 167"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-168",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_168.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_168",
+      "statement": "∀ a:ℕ, Nat.Coprime a 168 → (∑ b ∈ (Finset.range 168).filter (fun b => Nat.Coprime b 168), Complex.exp (((2*Real.pi*(a:ℝ)*b/168:ℝ):ℂ)*Complex.I))/(48:ℂ)=(0:ℂ)/48",
+      "plain_statement": {
+        "zh": "模 168 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 168"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-cert-169",
+      "file": "lean/PEqualNP/Outside/L_goldbach_cert_169.lean",
+      "module": "PEqualNP.Outside.L_goldbach_cert_169",
+      "statement": "∀ a:ℕ, Nat.Coprime a 169 → (∑ b ∈ (Finset.range 169).filter (fun b => Nat.Coprime b 169), Complex.exp (((2*Real.pi*(a:ℝ)*b/169:ℝ):ℂ)*Complex.I))/(156:ℂ)=(0:ℂ)/156",
+      "plain_statement": {
+        "zh": "模 169 主弧的精确归一化系数",
+        "en": "Normalized major-arc coefficient modulo 169"
+      },
+      "brief": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ebb95f6/research/gaps.json",
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "track": "modulus-certificates",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-bilinear-split",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_bilinear_split.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_bilinear_split",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; let I := fun (n:ℕ) (a b:ℕ→ℝ) => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => S n a u*S n b u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ n:ℕ,I n w w=I n (low n) (low n)+2*I n (low n) (high n)+I n (high n) (high n)",
+      "plain_statement": {
+        "zh": "次弧系数精确分成低低、低高、高高三项",
+        "en": "Exact three-term minor-arc decomposition"
+      },
+      "brief": {
+        "zh": "保持原题的弧和频率；先用低段长度与 Parseval 控制低低、低高项，再单独攻高高项的有符号下界。 对应原题 L-goldbach-arc-minor-saving。",
+        "en": "Keep the original arcs and frequency. Use the short support and Parseval on the small terms, then study the signed bulk. Parent: L-goldbach-arc-minor-saving."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-small-spectrum-cap",
+      "file": "lean/PEqualNP/Outside/L_goldbach_small_spectrum_cap.lean",
+      "module": "PEqualNP.Outside.L_goldbach_small_spectrum_cap",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; let I := fun (n:ℕ) (a b:ℕ→ℝ) => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => S n a u*S n b u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ (n:ℕ) (t:ℝ), 2≤n → ‖S n (low n) t‖≤((n:ℝ)^(1/3:ℝ)+1)*Real.log (n:ℝ)",
+      "plain_statement": {
+        "zh": "低段指数和逐点受立方根尺度约束",
+        "en": "Pointwise cube-root bound for the small spectrum"
+      },
+      "brief": {
+        "zh": "保持原题的弧和频率；先用低段长度与 Parseval 控制低低、低高项，再单独攻高高项的有符号下界。 对应原题 L-goldbach-arc-minor-saving。",
+        "en": "Keep the original arcs and frequency. Use the short support and Parseval on the small terms, then study the signed bulk. Parent: L-goldbach-arc-minor-saving."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-bulk-energy-cap",
+      "file": "lean/PEqualNP/Outside/L_goldbach_bulk_energy_cap.lean",
+      "module": "PEqualNP.Outside.L_goldbach_bulk_energy_cap",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; let I := fun (n:ℕ) (a b:ℕ→ℝ) => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => S n a u*S n b u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ n:ℕ,2≤n → intervalIntegral (fun t => ‖S n (high n) t‖^2) (0:ℝ) 1 MeasureTheory.volume≤((n:ℝ)+1)*(Real.log (n:ℝ))^2",
+      "plain_statement": {
+        "zh": "高段单位周期二阶能量预算",
+        "en": "Full-period energy bound for the bulk"
+      },
+      "brief": {
+        "zh": "保持原题的弧和频率；先用低段长度与 Parseval 控制低低、低高项，再单独攻高高项的有符号下界。 对应原题 L-goldbach-arc-minor-saving。",
+        "en": "Keep the original arcs and frequency. Use the short support and Parseval on the small terms, then study the signed bulk. Parent: L-goldbach-arc-minor-saving."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-small-small-saving",
+      "file": "lean/PEqualNP/Outside/L_goldbach_small_small_saving.lean",
+      "module": "PEqualNP.Outside.L_goldbach_small_small_saving",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; let I := fun (n:ℕ) (a b:ℕ→ℝ) => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => S n a u*S n b u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e:ℝ, 0<e → ∃ N:ℕ, ∀ n≥N, ‖I n (low n) (low n)‖≤e*(n:ℝ)",
+      "plain_statement": {
+        "zh": "低低项绝对值为次线性",
+        "en": "Sublinear small–small contribution"
+      },
+      "brief": {
+        "zh": "保持原题的弧和频率；先用低段长度与 Parseval 控制低低、低高项，再单独攻高高项的有符号下界。 对应原题 L-goldbach-arc-minor-saving。",
+        "en": "Keep the original arcs and frequency. Use the short support and Parseval on the small terms, then study the signed bulk. Parent: L-goldbach-arc-minor-saving."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-small-bulk-saving",
+      "file": "lean/PEqualNP/Outside/L_goldbach_small_bulk_saving.lean",
+      "module": "PEqualNP.Outside.L_goldbach_small_bulk_saving",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; let I := fun (n:ℕ) (a b:ℕ→ℝ) => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => S n a u*S n b u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e:ℝ, 0<e → ∃ N:ℕ, ∀ n≥N, ‖I n (low n) (high n)‖≤e*(n:ℝ)",
+      "plain_statement": {
+        "zh": "低高项绝对值为次线性",
+        "en": "Sublinear mixed contribution"
+      },
+      "brief": {
+        "zh": "保持原题的弧和频率；先用低段长度与 Parseval 控制低低、低高项，再单独攻高高项的有符号下界。 对应原题 L-goldbach-arc-minor-saving。",
+        "en": "Keep the original arcs and frequency. Use the short support and Parseval on the small terms, then study the signed bulk. Parent: L-goldbach-arc-minor-saving."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-bulk-signed-floor",
+      "file": "lean/PEqualNP/Outside/L_goldbach_bulk_signed_floor.lean",
+      "module": "PEqualNP.Outside.L_goldbach_bulk_signed_floor",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; let I := fun (n:ℕ) (a b:ℕ→ℝ) => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => S n a u*S n b u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e:ℝ,0<e → ∃ N:ℕ,∀ n≥N, Even n → -(e*(n:ℝ))≤(I n (high n) (high n)).re",
+      "plain_statement": {
+        "zh": "只对高高项证明逐偶数单侧抵消",
+        "en": "One-sided bulk cancellation for each even target"
+      },
+      "brief": {
+        "zh": "保持原题的弧和频率；先用低段长度与 Parseval 控制低低、低高项，再单独攻高高项的有符号下界。 对应原题 L-goldbach-arc-minor-saving。",
+        "en": "Keep the original arcs and frequency. Use the short support and Parseval on the small terms, then study the signed bulk. Parent: L-goldbach-arc-minor-saving."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "target"
     }
   ],
   "tracks": [
@@ -4245,6 +7725,34 @@
       "description": {
         "zh": "沿用有理频率附近的 Λ 指数和估计，量化平方、积分和多个弧段累加的损失。最后仍须单独证明逐点次弧下界。",
         "en": "Start with the Mangoldt estimate near a rational frequency. Track the cost of squaring and integrating across arcs; pointwise minor-arc cancellation remains open."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "modulus-certificates",
+      "title": {
+        "zh": "为主弧模型建立模数系数表",
+        "en": "Build the major-arc coefficient table"
+      },
+      "description": {
+        "zh": "调用一般 Ramanujan 和，再核对 Möbius 值与单位类数；频率分子保持任意互素。",
+        "en": "Apply the Ramanujan sum identity and certify the totient and Möbius coefficient."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "minor-truncation",
+      "title": {
+        "zh": "次弧：先剔除立方根以下的素数",
+        "en": "Minor arcs after removing small primes"
+      },
+      "description": {
+        "zh": "保持原题的弧和频率；先用低段长度与 Parseval 控制低低、低高项，再单独攻高高项的有符号下界。",
+        "en": "Keep the original arcs and frequency. Use the short support and Parseval on the small terms, then study the signed bulk."
       },
       "feeds": [
         "arc-budget"

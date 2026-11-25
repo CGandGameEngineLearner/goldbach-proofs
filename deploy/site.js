@@ -735,9 +735,9 @@ async function loadStatus() {
   if (loading || document.hidden) return;
   loading = true;
   const request = new AbortController();
-  const timeout = window.setTimeout(() => request.abort(), 10000);
+  const timeout = window.setTimeout(() => request.abort(), 30000);
   try {
-    const response = await fetch('api/status', {
+    const response = await fetch('api/status?view=web-gzip', {
       headers: { Accept: 'application/json' },
       signal: request.signal,
     });

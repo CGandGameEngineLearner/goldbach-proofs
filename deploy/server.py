@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import ipaddress
 import json
+import gzip
 import os
 import re
 import sqlite3
@@ -19,6 +20,9 @@ from desk import Desk, QUEUE_BATCH
 from landau import BASELINE, exponent_record
 from presence import SitePresence
 from zhihu_oauth import BASE as ZHIHU_PATH, ZhihuOAuth
+import sponsors
+
+SPONSOR_UPLOAD_SLOT = BoundedSemaphore(1)
 
 ROOT = Path(__file__).resolve().parent
 CREDS = Path(os.environ["CREDENTIALS_DIRECTORY"])
@@ -63,6 +67,9 @@ with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn, conn:
     conn.execute("INSERT OR IGNORE INTO page_views VALUES ('live', 0)")
 
 ASSETS = {
+    "/core-team-signup.png": "image/png",
+    sponsors.STYLE: "text/css",
+    sponsors.SCRIPT: "text/javascript",
     "/wechat.svg": "image/svg+xml",
     "/discussion-qr.png": "image/png",
     "/discussion.js": "text/javascript",
@@ -74,7 +81,7 @@ ASSETS = {
     "/join-zh.txt": "text/plain",
 }
 
-DISCUSSION_EXPIRES = datetime.fromisoformat("2026-12-01T00:00:00+08:00")
+DISCUSSION_EXPIRES = datetime.fromisoformat("2026-12-02T00:00:00+08:00")
 
 
 def discussion_widget(lang, prefix):
@@ -82,16 +89,36 @@ def discussion_widget(lang, prefix):
         return ""
     zh = lang == "zh"
     label = "扫码进群 讨论进度" if zh else "Join WeChat group"
-    name = "知乎 AI4S 讨论组" if zh else "Zhihu AI4S discussion group"
+    name = "知乎 AI4S 讨论组（哥猜）" if zh else "Zhihu AI4S Goldbach discussion group"
     instructions = "微信扫码，讨论研究进度" if zh else "Scan in WeChat to discuss research progress"
     cutoff = DISCUSSION_EXPIRES.date()
     validity = f"{cutoff.month} 月 {cutoff.day} 日前有效" if zh else f"Valid before {cutoff:%Y-%m-%d} (UTC+8)"
-    alt = "知乎 AI4S 讨论组微信群二维码" if zh else "WeChat QR code for the Zhihu AI4S discussion group"
-    return f"""<details class="discussion-widget" aria-label="{name}"><summary><img class="wechat-mark" src="{prefix}wechat.svg" width="34" height="34" alt="">{label}<span aria-hidden="true"></span></summary>
+    alt = "知乎 AI4S 讨论组（哥猜）微信群二维码" if zh else "WeChat QR code for the Zhihu AI4S Goldbach discussion group"
+    return f"""<details class="discussion-widget" id="wechat-discussion" name="research-qr" aria-label="{name}"><summary><img class="wechat-mark" src="{prefix}wechat.svg" width="34" height="34" alt="">{label}<span aria-hidden="true"></span></summary>
 <div class="discussion-body"><strong>{name}</strong><p>{instructions}</p>
-<img src="{prefix}discussion-qr.png" alt="{alt}" width="180" height="180">
-<small>{validity}</small></div></details>
-<script src="{prefix}discussion.js" defer></script>"""
+<div class="discussion-code"><img src="{prefix}discussion-qr.png" alt="{alt}" width="360" height="544"></div>
+<small>{validity}</small></div></details>"""
+
+
+def core_team_signup(lang, prefix):
+    if lang == "zh":
+        title = "中心组报名"
+        intro = "中心组由数学界专业人士和软件开发者组成。"
+        research = "数学专业研究者负责制定研究路线、拆解子命题证明任务，并动态调整证明路线。"
+        development = "软件开发者负责维护网站的基础设施。"
+        caption = "扫码报名中心组"
+    else:
+        title = "Join the core team"
+        intro = "The core team brings together professional mathematics researchers and software developers."
+        research = "Mathematics researchers set the research direction, break it into proof tasks, and adjust the roadmap as results come in."
+        development = "Software developers maintain the website infrastructure."
+        caption = "Scan to apply"
+    return f"""<details class="discussion-widget" id="core-team" name="research-qr">
+<summary>{title}<span aria-hidden="true"></span></summary>
+<div class="core-team-signup"><p>{intro}</p>
+<p><strong>{research}</strong> {development}</p>
+<figure><img src="{prefix}core-team-signup.png" width="176" height="176" alt="{caption}">
+<figcaption>{caption}</figcaption></figure></div></details>"""
 
 
 def site_dock(lang, prefix):
@@ -114,7 +141,8 @@ def site_dock(lang, prefix):
 <span class="total-views">{views} <b data-count="page_views">—</b></span>
 <span class="total-views">{ips} <b data-count="unique_ips">—</b></span></summary>
 <p>{detail}</p></details>
-{discussion_widget(lang, prefix)}</aside><script src="{prefix}presence.js" defer></script>"""
+{discussion_widget(lang, prefix)}{core_team_signup(lang, prefix)}</aside>
+<script src="{prefix}discussion.js" defer></script><script src="{prefix}presence.js" defer></script>"""
 
 
 def research_status(desk=DESK):
@@ -385,6 +413,10 @@ class Handler(BaseHTTPRequestHandler):
     def zhihu_request(self, path, query=""):
         if self.command == "HEAD":
             return self.reply(405, b'{}')
+        if self.command == "GET" and path == sponsors.DESK + "/upload-limit":
+            return self.oauth_response(path, sponsors.upload_error(self.language(urlsplit(self.path))))
+        if self.command == "POST" and path == sponsors.DESK + "/upload":
+            return self.sponsor_upload(path)
         try:
             if self.command == "POST":
                 size = int(self.headers.get("Content-Length", "0"))
@@ -400,6 +432,57 @@ class Handler(BaseHTTPRequestHandler):
             status, headers, body = ZHIHU.handle(self.command, path, {k: v[0] for k, v in fields.items()}, self.headers)
         except (ValueError, OSError, sqlite3.Error):
             return self.reply(400, b'{}')
+        return self.oauth_response(path, (status, headers, body))
+
+    def sponsor_upload(self, path):
+        lang = self.language(urlsplit(self.path))
+        def notice(status, zh, en):
+            return self.oauth_response(path, sponsors.upload_notice(status, lang, zh if lang == "zh" else en))
+
+        self.connection.settimeout(8)
+        try:
+            size = int(self.headers.get("Content-Length", "0"))
+            if size > sponsors.LIMIT:
+                self.discard_upload(size)
+                return self.oauth_response(path, sponsors.upload_error(lang))
+            if self.headers.get("Origin") != sponsors.ORIGIN:
+                self.discard_upload(size)
+                return notice(403, "请从本站设置页重新提交。", "Resubmit from the site settings page.")
+            if not ZHIHU.can_upload_sponsor(self.headers):
+                self.discard_upload(size)
+                return notice(403, "登录已过期，请重新登录知乎后提交。", "Your session expired. Sign in with Zhihu and retry.")
+            if not SPONSOR_UPLOAD_SLOT.acquire(blocking=False):
+                self.discard_upload(size)
+                return self.oauth_response(path, sponsors.upload_error(lang, busy=True))
+            try:
+                raw = self.rfile.read(size) if size > 0 else b""
+                if len(raw) != size or self.headers.get_content_type() != "multipart/form-data":
+                    raise ValueError("incomplete upload")
+                fields = sponsors.upload_fields(self.headers["Content-Type"], raw)
+                fields["lang"] = lang
+                result = ZHIHU.handle("POST", path, fields, self.headers)
+            finally:
+                SPONSOR_UPLOAD_SLOT.release()
+        except (ValueError, RecursionError):
+            return notice(400, "上传表单不完整，请重新选择图片后再试。", "The upload was incomplete. Select the image again and retry.")
+        except TimeoutError:
+            return notice(408, "上传超时，请重新提交。", "The upload timed out. Try again.")
+        except sqlite3.Error:
+            self.log_error("Sponsor submission database unavailable")
+            return notice(503, "暂时无法保存投稿，请稍后重试。", "Submission could not be saved. Try again shortly.")
+        return self.oauth_response(path, result)
+
+    def discard_upload(self, size):
+        # Drain a buffered proxy request so closing the TLS connection keeps the error response.
+        remaining = min(size, 5 * 1024 * 1024)
+        while remaining > 0:
+            chunk = self.rfile.read(min(remaining, 64 * 1024))
+            if not chunk:
+                break
+            remaining -= len(chunk)
+
+    def oauth_response(self, path, result):
+        status, headers, body = result
         self.send_response(status)
         for name, value in headers.items():
             self.send_header(name, value)
@@ -407,13 +490,13 @@ class Handler(BaseHTTPRequestHandler):
         # Form pages must preserve Origin on same-site POSTs for CSRF validation.
         policy = "same-origin" if path != ZHIHU_PATH + "/callback" else "no-referrer"
         self.send_header("Referrer-Policy", policy)
-        self.send_header("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; form-action 'self' https://openapi.zhihu.com https://www.zhihu.com; frame-ancestors 'none'; base-uri 'none'")
+        self.send_header("Content-Security-Policy", "default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; form-action 'self' https://openapi.zhihu.com https://www.zhihu.com; frame-ancestors 'none'; base-uri 'none'")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
 
-    def reply(self, status, body, content_type="application/json", language=None):
+    def reply(self, status, body, content_type="application/json", language=None, encoding=None):
         if status == 200 and self.command == "GET" and content_type == "text/html":
             try:
                 with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn, conn:
@@ -429,6 +512,8 @@ class Handler(BaseHTTPRequestHandler):
         if content_type == "application/json" or content_type.startswith("text/"):
             content_type += "; charset=utf-8"
         self.send_header("Content-Type", content_type)
+        if encoding:
+            self.send_header("Content-Encoding", encoding)
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Content-Length", str(len(body)))
@@ -477,6 +562,10 @@ class Handler(BaseHTTPRequestHandler):
         url = urlsplit(self.path)
         if url.path == "/api/presence":
             return self.reply_presence()
+        logo = re.fullmatch(r"/sponsors/logo/([1-9][0-9]{0,15})\.png", url.path)
+        if logo:
+            image = sponsors.public_logo(ZHIHU.db, logo[1])
+            return self.reply(200, image, "image/png") if image else self.reply(404, b'{}')
         if url.path == ZHIHU_PATH or url.path.startswith(ZHIHU_PATH + "/"):
             return self.zhihu_request(url.path, url.query)
         if url.path == "/problems" or url.path.removeprefix("/problems/") in PROBLEMS:
@@ -488,7 +577,9 @@ class Handler(BaseHTTPRequestHandler):
             return
         if url.path == "/problems/":
             lang = self.language(url)
-            return self.reply(200, directory_page(lang).encode(), "text/html", lang)
+            directory = directory_page(lang).replace("</main>", "</main>" + sponsors.wall(ZHIHU.db,lang,"../"), 1)
+            directory = directory.replace('</a></div></header>', '</a>'+ZHIHU.account_link(self.headers,lang)+'</div></header>',1)
+            return self.reply(200, directory.encode(), "text/html", lang)
         desk, path, slug = self.scope(url.path)
         if desk is None:
             return self.reply(404, b'{}')
@@ -496,10 +587,18 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, b'{"status":"ok"}')
         if path == "/api/status":
             try:
-                body = json.dumps(research_status(desk), ensure_ascii=False, separators=(",", ":")).encode()
+                status = research_status(desk)
+                web_view = parse_qs(url.query).get("view") == ["web-gzip"]
+                if web_view:
+                    for gap in status["gaps"]:
+                        if gap["latest"]:
+                            gap["latest"] = {k: v for k, v in gap["latest"].items() if k != "manifest"}
+                body = json.dumps(status, ensure_ascii=False, separators=(",", ":")).encode()
             except sqlite3.Error as error:
                 self.log_error("Unable to read verdicts: %s", error)
                 return self.reply(503, b'{"error":"verdicts unavailable"}')
+            if web_view:
+                return self.reply(200, gzip.compress(body, compresslevel=3), encoding="gzip")
             return self.reply(200, body)
         if path == "/platform-logo.svg":
             path = "/goldbach-icon.svg"
@@ -549,8 +648,13 @@ class Handler(BaseHTTPRequestHandler):
         if slug != "goldbach":
             page = problem_page(page, slug, lang)
         else:
-            page = page.replace('<ol class="roadmap">', goldbach_task_routes(lang) + '<ol class="roadmap">', 1)
-        page = page.replace("</body>", site_dock(lang, "" if slug == "goldbach" else "../../") + "</body>", 1)
+            page = re.sub(r'(<ol class="roadmap">.*?</ol>)',
+                          lambda match: match[0] + goldbach_task_routes(lang), page, count=1, flags=re.S)
+        prefix = "" if slug == "goldbach" else "../../"
+        page = page.replace("<!-- account -->", ZHIHU.account_link(self.headers, lang), 1)
+        hero = '<section class="hero" aria-labelledby="page-title">'
+        page = page.replace(hero, sponsors.wall(ZHIHU.db, lang, prefix) + hero, 1)
+        page = page.replace("</body>", site_dock(lang, prefix) + "</body>", 1)
         self.reply(200, page.encode(), "text/html", lang)
 
     do_HEAD = do_GET
