@@ -96,7 +96,14 @@ Write `det3(P,Q,R) = (Q1-P1)(R2-P2) - (Q2-P2)(R1-P1)`, and for two distinct fibr
   (constraint graph components, `S = 6` on edges, forbidden-set tables) hold with no
   exception; 8.4 million individual Lemma-3 checks for `p <= 200` give zero violations.
 * Exhaustive `16^4` search of all masks for `p = 5` gives maximum `12 = 3(p-1)`.
-* The HJSW construction attains `3(p-1)` for every tested prime `p <= 293`.
+* The HJSW construction attains `3(p-1)` for every tested prime `p <= 293`.  The deletion rule
+  used in these checks is: with `hh = (p-1)/2` and `t = hh`, remove from the `x`-fibre the corner
+  `(dI, dJ)` where `dI = 0` if `x <= hh` and `1` otherwise, and `dJ = 0` if `x^{-1} > hh` and `1`
+  otherwise.  (An earlier draft in our notes had the `dJ` half of this rule inverted; with the
+  inverted version the configuration has a collinear triple for every odd `p >= 7`, e.g.
+  `x = 2`, `x' = hh`, corners `(0,0),(1,1)` and `(0,0)`.  The corrected rule above has been
+  re-checked by brute force for all shifts/triples for every prime `p <= 200` with no violation.
+  This concerns only the equality side; the upper bound proved here is independent of it.)
 
 ## Lean formalisation
 
