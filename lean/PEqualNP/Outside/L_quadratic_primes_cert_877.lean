@@ -1,7 +1,7 @@
 import Mathlib
 
 theorem PEqualNP.Outside.L_quadratic_primes_cert_877 :
-    ∀ n:ℕ, 877∣n^2+1 ↔ n%877=151 ∨ n%877=726 := by
+    ∀ n : ℕ, 877 ∣ n ^ 2 + 1 ↔ n % 877 = 151 ∨ n % 877 = 726 := by
   intro n
   let : Fact (Nat.Prime 877) := ⟨by norm_num⟩
   have factor (x : ZMod 877) : x ^ 2 + 1 = (x - 151) * (x - 726) := by
