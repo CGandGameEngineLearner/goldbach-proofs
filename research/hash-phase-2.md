@@ -35,3 +35,14 @@
 | 1729 | 25, 32, 37, 40, 43, 45, 47, 48 | 43, 45, 47, 48 |
 
 复算时遍历 0≤z≤⌊√(4S/3)⌋，仅当 4S−3z² 是非负平方 d²、d≤3z 且 d+z 为偶数时保留 z。第三列另要求 d+z≤2m。这些数值是校验样例。研究成果以覆盖整族参数的定理为准。
+
+## 有容量截断的分裂素数范数族（待独立审阅）
+
+取素数 \(S\equiv1\bmod3\)，令 \(m=\lceil2\sqrt{S/3}\rceil\)、\(c=\lfloor\sqrt S\rfloor\)、\(B=m+c\)。总样本数为 \(3m\)，有序两两计数固定为 \(3m(m-1)+2S\)。每个范数都是原始的，容量恰排除两个整数排列轨道中的一个。设 \(1\le r<s\) 为唯一满足 \(S=r^2+rs+s^2\) 的数对。实数与整数三重计数的最大值之差有精确公式
+\[
+R-I=3\{rs(r+s)-c(S-c^2)\}.
+\]
+
+素数在 Eisenstein 整数环中分裂，整数偏移三元组是 \((-(r+s),r,s)\) 的排列及它们的负数。由于 \(s\le c<r+s\)，整数最优点的最大偏移为 \(s\)。实数域内，随最大偏移 \(z\) 变化的是 \(3(z^3-Sz)\)，在可行区间上递增，故实数最优点取 \(z=c\)。例如 \(S=19\) 时两种最大值相差 54。
+
+写 \(\phi=\arg(s+r e^{i\pi/3})\)，则 \((R-I)/S^{3/2}=(2/\sqrt3)\sin(3\phi)+O(S^{-1/2})\)。由 Marmon 定理 35 的素理想角等分布，归一化差值沿这些素数的下极限为 0，上极限为 \(2/\sqrt3\)。对 \(0\le t\le2/\sqrt3\)，差值不超过 \(t\)（归一化后）的极限比例为 \((2/\pi)\arcsin(\sqrt3\,t/2)\)。这里处理的是指定容量与素数范数族；多素因子范数及两侧同时起作用的情形仍待研究。[完整推导与整数枚举复核](https://github.com/LonelyQuantum/goldbach-proofs/blob/f56cbe64ecf72f8ea67931c6296239334dceb3aa/research/diagnostics/PrimeShellCollisionGap.md) · [Marmon，第 5 节，定理 35](https://people.kth.se/~kurlberg/eprints/marmon.pdf#page=45)
