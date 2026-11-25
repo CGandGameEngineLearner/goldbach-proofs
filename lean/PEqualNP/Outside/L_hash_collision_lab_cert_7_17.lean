@@ -9,7 +9,6 @@ theorem PEqualNP.Outside.L_hash_collision_lab_cert_7_17 :
     induction k with
     | zero =>
       rw [Nat.add_zero, h17_7]
-      omega
     | succ k ih =>
       have hsucc : Nat.choose (17 + (k + 1)) 7 = Nat.choose (17 + k) 6 + Nat.choose (17 + k) 7 := by
         rw [show 17 + (k + 1) = (17 + k) + 1 by omega]
@@ -17,15 +16,15 @@ theorem PEqualNP.Outside.L_hash_collision_lab_cert_7_17 :
       have hmono : 12376 ≤ Nat.choose (17 + k) 6 := by
         rw [← h17_6]
         exact Nat.choose_le_choose 6 (Nat.le_add_right 17 k)
-      have hmul : 12376 * (17 + (k + 1)) = 12376 * (17 + k) + 12376 := by ring
-      rw [hsucc, hmul]
-      omega
+      calc 19448 + 12376 * (17 + (k + 1))
+        _ = (19448 + 12376 * (17 + k)) + 12376 := by ring
+        _ ≤ (Nat.choose (17 + k) 7 + 210392) + Nat.choose (17 + k) 6 := Nat.add_le_add ih hmono
+        _ = Nat.choose (17 + (k + 1)) 7 + 210392 := by rw [hsucc]; ring
   have hle : ∀ k : ℕ, k ≤ 17 → 19448 + 12376 * (17 - k) ≤ Nat.choose (17 - k) 7 + 210392 := by
     intro k hk
     induction k with
     | zero =>
       rw [Nat.sub_zero, h17_7]
-      omega
     | succ k ih =>
       have ih' := ih (Nat.le_of_succ_le hk)
       have hsub : 17 - k = (17 - (k + 1)) + 1 := by omega
