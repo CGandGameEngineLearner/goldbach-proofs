@@ -14,7 +14,7 @@ theorem PEqualNP.Outside.L_hash_collision_lab_cert_11_11 :
   -- `choose (k+1) 10 = choose k 9 + choose k 10` makes this monotone.
   have hlow : ∀ k : ℕ, 11 ≤ k → 11 ≤ Nat.choose k 10 := by
     intro k hk
-    refine Nat.le_induction ?base ?step k hk
+    refine Nat.le_induction ?low_base ?low_step k hk
     · decide
     · intro n _ ih
       have hrec : Nat.choose (n + 1) 10 = Nat.choose n 9 + Nat.choose n 10 :=
@@ -26,7 +26,7 @@ theorem PEqualNP.Outside.L_hash_collision_lab_cert_11_11 :
     intro m
     rcases Nat.lt_or_ge m 11 with hm | hm
     · interval_cases m <;> decide
-    · refine Nat.le_induction ?base ?step m hm
+    · refine Nat.le_induction ?term_base ?term_step m hm
       · decide
       · intro k hk ih
         have hrec : Nat.choose (k + 1) 11 = Nat.choose k 10 + Nat.choose k 11 :=
