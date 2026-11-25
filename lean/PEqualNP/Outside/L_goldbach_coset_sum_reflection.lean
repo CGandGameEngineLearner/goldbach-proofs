@@ -1,7 +1,9 @@
 import Mathlib
 
 theorem PEqualNP.Outside.L_goldbach_coset_sum_reflection :
-    let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k%q=r); let j := fun n q r : ℕ => (n+q-r)%q; ∀ n q r : ℕ, 0<q → r<q → (F n q r).card=(F n q (j n q r)).card := by
+    let F := fun n q r : ℕ => (Finset.range (n + 1)).filter (fun k => k % q = r);
+    let j := fun n q r : ℕ => (n + q - r) % q;
+    ∀ n q r : ℕ, 0 < q → r < q → (F n q r).card = (F n q (j n q r)).card := by
   dsimp only
   intro n q r _hq hr
   have base : n ≡ n + q [MOD q] := (Nat.add_mod_right n q).symm
