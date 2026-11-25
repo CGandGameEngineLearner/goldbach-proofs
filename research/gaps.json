@@ -1663,6 +1663,126 @@
       "role": "conditional"
     },
     {
+      "id": "L-goldbach-ramanujan-coprime-moebius",
+      "file": "lean/PEqualNP/Outside/L_goldbach_ramanujan_coprime_moebius.lean",
+      "module": "PEqualNP.Outside.L_goldbach_ramanujan_coprime_moebius",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let ram (q h : ℕ) := ∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), E ((h : ℝ) * (a : ℝ) / q); ∀ q h : ℕ, 1 ≤ q → Nat.Coprime h q → ram q h = (ArithmeticFunction.moebius q : ℂ)",
+      "plain_statement": {
+        "en": "At every frequency h coprime to a positive modulus q, the sum of exp(2πiha/q) over reduced residues a modulo q equals μ(q).",
+        "zh": "若 h 与正整数 q 互素，则 exp(2πiha/q) 在模 q 的简化剩余系上的和等于 μ(q)。"
+      },
+      "brief": {
+        "en": "The coprime powers of a primitive q-th root run through all primitive q-th roots. Partition the full root sum by exact order and apply Möbius inversion.",
+        "zh": "本原 q 次单位根的互素次幂恰遍历全部本原 q 次单位根。按阶划分所有单位根，再作莫比乌斯反演。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/ArithmeticFunction/Moebius.lean#L256-L262",
+      "track": "major-arc-model-assembly",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-major-arc-abel-approximation",
+      "file": "lean/PEqualNP/Outside/L_goldbach_major_arc_abel_approximation.lean",
+      "module": "PEqualNP.Outside.L_goldbach_major_arc_abel_approximation",
+      "statement": "let w (k : ℕ) := if Nat.Prime k then Real.log (k : ℝ) else 0; let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (n : ℕ) (t : ℝ) := ∑ k ∈ Finset.range (n + 1), (w k : ℂ) * E ((k : ℝ) * t); let ap (q r m : ℕ) := ∑ k ∈ (Finset.range (m + 1)).filter (fun k => k % q = r), w k; let K1 (n : ℕ) (b : ℝ) := ∑ k ∈ Finset.Icc 1 n, E ((k : ℝ) * b); ∀ (n q a : ℕ) (β e : ℝ), 1 ≤ q → Nat.Coprime a q → 0 ≤ e → (∀ m : ℕ, 1 ≤ m → m ≤ n → ∀ r < q, Nat.Coprime r q → |ap q r m - (m : ℝ) / (Nat.totient q : ℝ)| ≤ e) → ‖S n ((a : ℝ) / q + β) - ((ArithmeticFunction.moebius q : ℂ) / (Nat.totient q : ℂ)) * K1 n β‖ ≤ Real.log (q : ℝ) + (Nat.totient q : ℝ) * e * (1 + 2 * Real.pi * (n : ℝ) * |β|)",
+      "plain_statement": {
+        "en": "If every reduced residue class has prime-log discrepancy at most e through n, then the error in the μ(q)/φ(q) Dirichlet model at a/q + β is at most log q + φ(q)e(1 + 2πn|β|).",
+        "zh": "若直到 n 的每个前缀上，各简化剩余类的素数对数权偏差都至多为 e，则 a/q + β 处的 μ(q)/φ(q) 狄利克雷模型误差至多为 log q + φ(q)e(1 + 2πn|β|)。"
+      },
+      "brief": {
+        "en": "Apply discrete Abel summation in each reduced class. Primes in the other classes divide q, so their total log weight is bounded by log q independently of β.",
+        "zh": "逐个简化剩余类应用离散阿贝尔求和。其余类中的素数均整除 q，故它们的对数权之和至多为 log q，与 β 无关。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/7f44a36351316045d58882f5e9cfe4eeeeb826e3/research/gaps.json#L1545-L1624",
+      "track": "major-arc-model-assembly",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-truncated-fejer-arc-floor",
+      "file": "lean/PEqualNP/Outside/L_goldbach_truncated_fejer_arc_floor.lean",
+      "module": "PEqualNP.Outside.L_goldbach_truncated_fejer_arc_floor",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let K (N : ℕ) (b : ℝ) := ∑ k ∈ Finset.range (N + 1), E ((k : ℝ) * b); ∀ (N : ℕ) (W : ℝ), 0 < W → W ≤ 1 / 2 → ((N + 1 : ℕ) : ℝ) - 1 / (2 * W) ≤ (intervalIntegral (fun b => (K N b)^2 * E (-(N : ℝ) * b)) (-W) W MeasureTheory.volume).re",
+      "plain_statement": {
+        "en": "For 0 < W ≤ 1/2, the real part of the twisted square-kernel integral on [−W,W] is at least N+1 − 1/(2W).",
+        "zh": "若 0 < W ≤ 1/2，则扭转后的核平方在 [−W,W] 上的积分实部至少为 N+1 − 1/(2W)。"
+      },
+      "brief": {
+        "en": "Reflection of the frequencies identifies the twisted square with the squared norm. Its period mass is N+1. On each omitted tail use the geometric sum and the sine chord bound.",
+        "zh": "反射频率将扭转平方化为模平方，其完整周期积分为 N+1。在两段被截去的区间上，以几何级数公式及正弦弦长不等式估计尾项。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/7f44a36351316045d58882f5e9cfe4eeeeb826e3/research/gaps.json#L1805-L1844",
+      "track": "major-arc-model-assembly",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-positivity-million",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_positivity_million.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_positivity_million",
+      "statement": "∀ n : ℕ, 4 ≤ n → n ≤ 1000000 → Even n → ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p + q = n",
+      "plain_statement": {
+        "en": "Every even integer from 4 through 1,000,000 inclusive is a sum of two primes.",
+        "zh": "从 4 到 1,000,000（含两端）的每个偶数都可表示为两个素数之和。"
+      },
+      "brief": {
+        "en": "Mark odd composites in a bitset by arithmetic progressions. A kernel-checked union of shifts by certified primes covers every target above 4. The pair 2+2 covers 4.",
+        "zh": "用等差数列在位集中标记奇合数。由内核核验的素数平移并集覆盖全部大于 4 的目标，4 由 2+2 给出。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/Data/Nat/Prime/Basic.lean",
+      "track": "finite-and-ternary-bridges",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-ternary-circle-positivity",
+      "file": "lean/PEqualNP/Outside/L_goldbach_ternary_circle_positivity.lean",
+      "module": "PEqualNP.Outside.L_goldbach_ternary_circle_positivity",
+      "statement": "let w (k : ℕ) := if Nat.Prime k then Real.log (k : ℝ) else 0; let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (n : ℕ) (t : ℝ) := ∑ k ∈ Finset.range (n + 1), (w k : ℂ) * E ((k : ℝ) * t); ∀ (n : ℕ) (A : Set ℝ) (U : ℝ), MeasurableSet A → 0 ≤ U → (∀ t ∈ Set.Icc (0 : ℝ) 1, t ∉ A → ‖S n t‖ ≤ U) → U * (∑ k ∈ Finset.range (n + 1), (w k)^2) < (intervalIntegral (A.indicator (fun t => (S n t)^3 * E (-(n : ℝ) * t))) (0 : ℝ) 1 MeasureTheory.volume).re → ∃ p q r : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ Nat.Prime r ∧ p + q + r = n",
+      "plain_statement": {
+        "en": "A cubic major-arc coefficient with real part greater than U times the prime-log square sum forces a three-prime representation of n, provided the complementary supremum is at most U.",
+        "zh": "若补弧上的指数和上确界至多为 U，且三次主弧系数的实部大于 U 乘以素数对数权的平方和，则 n 有三元素数表示。"
+      },
+      "brief": {
+        "en": "Bound the complementary cubic integral by the supremum and Parseval. Fourier orthogonality makes the full coefficient zero in the absence of a prime triple, contradicting the strict floor.",
+        "zh": "以上确界和帕塞瓦尔等式控制补弧上的三次积分。若无三元素数表示，傅里叶正交性使完整系数为零，与严格下界矛盾。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/7f44a36351316045d58882f5e9cfe4eeeeb826e3/research/gaps.json#L1365-L1384",
+      "track": "finite-and-ternary-bridges",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-dyadic-exception-density-transfer",
+      "file": "lean/PEqualNP/Outside/L_goldbach_dyadic_exception_density_transfer.lean",
+      "module": "PEqualNP.Outside.L_goldbach_dyadic_exception_density_transfer",
+      "statement": "let reps (n : ℕ) := (Finset.range (n + 1)).filter (fun p => Nat.Prime p ∧ Nat.Prime (n - p)); let D (X : ℕ) := (Finset.Ico X (2 * X)).filter (fun n => 4 ≤ n ∧ Even n); let bad (X : ℕ) := (D X).filter (fun n => (reps n).card = 0); let exc (N : ℕ) := (Finset.range (N + 1)).filter (fun n => 4 ≤ n ∧ Even n ∧ (reps n).card = 0); ∀ (K N : ℕ) (ε : ℝ), 0 ≤ ε → (∀ n : ℕ, 4 ≤ n → n < 2 ^ K → Even n → (reps n).Nonempty) → (∀ j : ℕ, K ≤ j → ((bad (2 ^ j)).card : ℝ) ≤ ε * ((2 ^ j : ℕ) : ℝ)) → ((exc N).card : ℝ) ≤ 2 * ε * (N : ℝ)",
+      "plain_statement": {
+        "en": "If every eligible even number below 2ᴷ has a representation and each later block [2ʲ,2ʲ⁺¹) has at most ε2ʲ exceptions, then there are at most 2εN exceptions through N.",
+        "zh": "若所有小于 2ᴷ 且至少为 4 的偶数都有表示，且此后的每个区间 [2ʲ,2ʲ⁺¹) 至多有 ε2ʲ 个例外，则直到 N 的例外数至多为 2εN。"
+      },
+      "brief": {
+        "en": "Count an exception when the finite set of prime summands p with n−p prime is empty. Split at each dyadic midpoint, then use the least power of two strictly above N, which is at most 2N for positive N.",
+        "zh": "若所有满足 n−p 也为素数的素数加数 p 构成的有限集为空，则将 n 计为例外。逐个倍增区间在中点拆分。对正整数 N，严格大于 N 的最小二次幂至多为 2N。"
+      },
+      "program": "exceptions",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/7f44a36351316045d58882f5e9cfe4eeeeb826e3/research/gaps.json#L2165-L2184",
+      "track": "finite-and-ternary-bridges",
+      "role": "conditional"
+    },
+    {
       "id": "L-goldbach-ram-zero",
       "file": "lean/PEqualNP/Outside/L_goldbach_ram_zero.lean",
       "module": "PEqualNP.Outside.L_goldbach_ram_zero",
@@ -7564,6 +7684,37 @@
       },
       "feeds": [
         "rational-model"
+      ]
+    },
+    {
+      "id": "major-arc-model-assembly",
+      "title": {
+        "en": "The major-arc model",
+        "zh": "主弧模型"
+      },
+      "description": {
+        "en": "Identify the reduced-frequency Ramanujan factor, control the prime sum near a rational center by progression discrepancies, and give an explicit floor for the truncated kernel integral.",
+        "zh": "确定既约频率处的拉马努金因子，以等差数列上的偏差估计有理中心附近的素数指数和，并给出截断核积分的显式下界。"
+      },
+      "feeds": [
+        "rational-model",
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "finite-and-ternary-bridges",
+      "title": {
+        "en": "Finite verification, ternary representations, and exceptions",
+        "zh": "有限验证、三元素数表示与例外集"
+      },
+      "description": {
+        "en": "Verify binary Goldbach through one million, turn a ternary major-arc lower bound into a representation, and pass from dyadic exception counts to a cumulative bound.",
+        "zh": "验证一百万以内的二元哥德巴赫命题，将三元主弧下界转化为素数表示，并由倍增区间内的例外数推出累积上界。"
+      },
+      "feeds": [
+        "arc-budget",
+        "exceptions",
+        "representations"
       ]
     },
     {
