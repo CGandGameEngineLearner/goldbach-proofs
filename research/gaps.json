@@ -1903,6 +1903,126 @@
       "role": "lemma"
     },
     {
+      "id": "L-goldbach-farey-spacing-lower",
+      "file": "lean/PEqualNP/Outside/L_goldbach_farey_spacing_lower.lean",
+      "module": "PEqualNP.Outside.L_goldbach_farey_spacing_lower",
+      "statement": "∀ (Q a b q r : ℕ), 1 ≤ q → q ≤ Q → 1 ≤ r → r ≤ Q → Nat.Coprime a q → Nat.Coprime b r → (q ≠ r ∨ a % q ≠ b % r) → ∀ m : ℤ, 1 / (Q : ℝ) ^ 2 ≤ |(a : ℝ) / q - (b : ℝ) / r - (m : ℝ)|",
+      "plain_statement": {
+        "en": "Distinct reduced fractions with denominators at most Q are at least 1/Q² apart modulo one, including across the end of the period.",
+        "zh": "分母不超过 Q 的两个不同既约分数在模 1 意义下至少相距 1/Q²，跨越周期端点时也成立。"
+      },
+      "brief": {
+        "en": "Clear the denominators after an arbitrary integer translation. A zero determinant would force equal denominators by coprimality and then equal numerator residues.",
+        "zh": "对任意整数平移清除分母。若所得行列式为零，互素性迫使两分母相等，进而两分子的余数也相等。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://personal.science.psu.edu/rcv4/Vol2/Vol2.pdf",
+      "track": "large-sieve-dispersion",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-sobolev-gallagher-window",
+      "file": "lean/PEqualNP/Outside/L_goldbach_sobolev_gallagher_window.lean",
+      "module": "PEqualNP.Outside.L_goldbach_sobolev_gallagher_window",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); ∀ (M N : ℕ) (c : ℕ → ℂ) (a δ : ℝ), 0 < δ → let S (t : ℝ) := ∑ k ∈ Finset.Ico M (M + N), c k * E ((k : ℝ) * t); ‖S a‖ ^ 2 ≤ (intervalIntegral (fun t => ‖S t‖ ^ 2) (a-δ) (a+δ) MeasureTheory.volume) / (2 * δ) + intervalIntegral (fun t => ‖S t‖ * ‖deriv S t‖) (a-δ) (a+δ) MeasureTheory.volume",
+      "plain_statement": {
+        "en": "At the midpoint of a window of radius δ, the squared norm of a trigonometric sum is bounded by its mean squared norm plus the integral of |S| |S′| on that window.",
+        "zh": "在半径为 δ 的窗口中点，三角和的模平方不超过窗口上的模平方均值加上 |S| |S′| 的积分。"
+      },
+      "brief": {
+        "en": "Integrate the variation estimate on each half of the window. Each half has length δ, giving coefficient one for the derivative term after averaging.",
+        "zh": "在窗口左右两半分别积分变差估计。每半段长度均为 δ，取平均后导数项的系数为 1。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://personal.science.psu.edu/rcv4/Vol2/Vol2.pdf",
+      "track": "large-sieve-dispersion",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-analytic-large-sieve",
+      "file": "lean/PEqualNP/Outside/L_goldbach_analytic_large_sieve.lean",
+      "module": "PEqualNP.Outside.L_goldbach_analytic_large_sieve",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); ∀ (M N Q : ℕ) (c : ℕ → ℂ), let S (t : ℝ) := ∑ k ∈ Finset.Ico M (M + N), c k * E ((k : ℝ) * t); (∑ q ∈ Finset.Icc 1 Q, ∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), ‖S ((a : ℝ) / q)‖ ^ 2) ≤ (Real.pi * (N : ℝ) + (Q : ℝ) ^ 2) * ∑ k ∈ Finset.Ico M (M + N), ‖c k‖ ^ 2",
+      "plain_statement": {
+        "en": "For N consecutive frequencies, the sum of |S(a/q)|² over all reduced residues with q ≤ Q is at most (πN + Q²) times the squared coefficient norm.",
+        "zh": "对 N 个连续频率，在所有分母 q ≤ Q 的既约剩余类上求和，|S(a/q)|² 的总和不超过系数模平方和的 πN + Q² 倍。"
+      },
+      "brief": {
+        "en": "Center the frequencies and apply the midpoint bound on disjoint windows of length 1/Q². Parseval on a translated unit interval and Cauchy–Schwarz bound the derivative contribution by πN times the coefficient energy.",
+        "zh": "将频率移至以零为中心的位置，在长度为 1/Q² 的不交窗口上应用中点估计。用平移后的单位区间上的帕塞瓦尔恒等式和柯西–施瓦茨不等式，将导数贡献控制在系数模平方和的 πN 倍以内。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://personal.science.psu.edu/rcv4/Vol2/Vol2.pdf",
+      "track": "large-sieve-dispersion",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-disjoint-explicit-cutoff",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_disjoint_explicit_cutoff.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_disjoint_explicit_cutoff",
+      "statement": "∀ n : ℕ, 1000000 ≤ n → 2 * ((Nat.log 2 (n + 2)) ^ 2) ^ 2 < n",
+      "plain_statement": {
+        "en": "Every n ≥ 1,000,000 satisfies the strict disjointness criterion for the catalogue cutoff Q = ⌊log₂(n+2)⌋².",
+        "zh": "对于目录中的截断 Q = ⌊log₂(n+2)⌋²，每个 n ≥ 1,000,000 都满足弧不相交所需的严格不等式。"
+      },
+      "brief": {
+        "en": "For k ≥ 19, prove 2k⁴ + 3 ≤ 2ᵏ by induction. At k = ⌊log₂(n+2)⌋, the extra three units give the strict bound 2k⁴ < n.",
+        "zh": "用归纳法证明 k ≥ 19 时有 2k⁴ + 3 ≤ 2ᵏ。取 k = ⌊log₂(n+2)⌋，预留的 3 保证严格不等式 2k⁴ < n。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/de62db1e00c16ab20880e4628bbec6d4d0e25887/research/gaps.json#L1906",
+      "track": "effective-threshold-bridge",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-segmented-ladder-coverage",
+      "file": "lean/PEqualNP/Outside/L_goldbach_segmented_ladder_coverage.lean",
+      "module": "PEqualNP.Outside.L_goldbach_segmented_ladder_coverage",
+      "statement": "let G (n : ℕ) := ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p + q = n; let w (k : ℕ) := if Nat.Prime k then Real.log (k : ℝ) else 0; ∀ (B : ℕ) (ends : List ℕ), (∀ n, 4 ≤ n → n ≤ B → Even n → G n) → ((B :: ends).IsChain (fun lo hi => lo ≤ hi ∧ ∀ n, lo < n → n ≤ hi → Even n → G n)) → ∀ n, 4 ≤ n → n ≤ ends.getLastD B → Even n → G n ∧ 0 < Finset.sum (Finset.range (n + 1)) (fun p => w p * w (n - p))",
+      "plain_statement": {
+        "en": "A certified initial interval and a finite list of contiguous certified blocks give a prime pair and positive log-weighted convolution for every even integer from 4 through the final endpoint.",
+        "zh": "给定已验证的初始区间与一列首尾相接的已验证分块，可为从 4 到末端点的每个偶数同时得到素数对与对数加权卷积的正性。"
+      },
+      "brief": {
+        "en": "The list stores successive right endpoints. Each neighboring pair certifies (lo, hi], and the empty list ends at B. A prime pair supplies a strictly positive summand among nonnegative summands.",
+        "zh": "列表依次记录右端点，相邻两项验证 (lo, hi]。空列表的末端点为 B。素数对在所有非负卷积项中提供一个严格正项。"
+      },
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://sweet.ua.pt/tos/goldbach.html",
+      "track": "effective-threshold-bridge",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-effective-arc-endpoint-bridge",
+      "file": "lean/PEqualNP/Outside/L_goldbach_effective_arc_endpoint_bridge.lean",
+      "module": "PEqualNP.Outside.L_goldbach_effective_arc_endpoint_bridge",
+      "statement": "let w (k : ℕ) := if Nat.Prime k then Real.log (k : ℝ) else 0; let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let S (n : ℕ) (t : ℝ) := ∑ k ∈ Finset.range (n+1), (w k : ℂ) * E ((k : ℝ)*t); let Q (n : ℕ) := (Nat.log 2 (n+2))^2; let arcs (n : ℕ) := {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f (n : ℕ) (t : ℝ) := (S n t)^2 * E (-(n:ℝ)*t); let major (n : ℕ) := intervalIntegral ((arcs n).indicator (f n)) (0:ℝ) 1 MeasureTheory.volume; let minor (n : ℕ) := intervalIntegral ((arcs n)ᶜ.indicator (f n)) (0:ℝ) 1 MeasureTheory.volume; ∀ (B : ℕ) (c : ℝ), 4 ≤ B → 0 < c → (∀ n : ℕ, 4 ≤ n → n ≤ B → Even n → 0 < Finset.sum (Finset.range (n + 1)) (fun p => w p * w (n - p))) → (∀ n : ℕ, B < n → Even n → c * (n : ℝ) ≤ (major n).re) → (∀ n : ℕ, B < n → Even n → -(c / 2 * (n : ℝ)) ≤ (minor n).re) → ∀ n : ℕ, 4 ≤ n → Even n → let w : ℕ → ℝ := fun k => if Nat.Prime k then Real.log (k : ℝ) else 0; 0 < Finset.sum (Finset.range (n + 1)) (fun p => w p * w (n - p))",
+      "plain_statement": {
+        "en": "Finite positivity through B and signed major- and minor-arc floors above B imply positive prime-log convolution at every even n ≥ 4.",
+        "zh": "若已验证截至 B 的卷积正性，且在 B 以上有带符号的主弧、次弧下界，则对每个 n ≥ 4 的偶数，素数对数权卷积均为正。"
+      },
+      "brief": {
+        "en": "The two masked integrals recover the exact prime convolution by Fourier orthogonality. Above B their real parts sum to at least cn/2, and the finite premise includes B.",
+        "zh": "由傅里叶正交性，两个带掩膜的积分相加恰好还原素数权卷积。在 B 以上二者实部之和至少为 cn/2，端点 B 则由有限范围的假设覆盖。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/de62db1e00c16ab20880e4628bbec6d4d0e25887/research/gaps.json#L2006",
+      "track": "effective-threshold-bridge",
+      "role": "conditional"
+    },
+    {
       "id": "L-goldbach-arc-cutoff-scale",
       "file": "lean/PEqualNP/Outside/L_goldbach_arc_cutoff_scale.lean",
       "module": "PEqualNP.Outside.L_goldbach_arc_cutoff_scale",
@@ -4095,6 +4215,34 @@
       "description": {
         "zh": "从单位根和与几何核出发，建立主弧近似的可计算模型。",
         "en": "Combine unit-root sums with the geometric kernel to model the main arcs."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "large-sieve-dispersion",
+      "title": {
+        "en": "Farey spacing and the analytic large sieve",
+        "zh": "法里分数间距与解析大筛"
+      },
+      "description": {
+        "en": "Bound the total squared size of a trigonometric sum sampled at reduced fractions with denominator at most Q. The estimate is uniform in the starting frequency.",
+        "zh": "估计三角和在分母不超过 Q 的既约分数处的模平方总和。该估计对起始频率一致成立。"
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "effective-threshold-bridge",
+      "title": {
+        "en": "Effective cutoffs and the Goldbach endpoint",
+        "zh": "显式截断与哥德巴赫终点"
+      },
+      "description": {
+        "en": "Make the arc-disjointness cutoff numerical, join consecutive finite certificates, and connect finite positivity to major- and minor-arc bounds at a common threshold.",
+        "zh": "给出保证弧不相交的数值阈值，拼接连续区间的有限证书，并在同一阈值处衔接有限范围的正性与主弧、次弧估计。"
       },
       "feeds": [
         "arc-budget"
