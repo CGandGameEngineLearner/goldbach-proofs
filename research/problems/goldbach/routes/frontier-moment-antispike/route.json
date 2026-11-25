@@ -1,0 +1,14 @@
+{
+  "id": "frontier-moment-antispike",
+  "title": {
+    "zh": "前沿三：四阶矩、3/4 幂 saving 与反尖峰平滑传递猜想",
+    "en": "Frontier 3: Fourth-moment, 3/4 power-saving, and anti-spike transfer conjectures"
+  },
+  "description": {
+    "zh": "结合无条件 X^(8/3+η) 二阶矩，提出四阶矩、3/4 逐点幂节省以及局部加权反尖峰传递三条独立攻关路径，绕开逐点绝对值与双线性分解，直接以均值能量消灭孤立坏偶数。",
+    "en": "Pair the unconditional X^(8/3+η) second moment with fourth-moment, 3/4-saving, and anti-spike local averaging conjectures to rule out isolated worst-case even spikes."
+  },
+  "feeds": [
+    "arc-budget"
+  ]
+}
