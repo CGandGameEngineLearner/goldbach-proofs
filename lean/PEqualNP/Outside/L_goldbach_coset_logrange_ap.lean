@@ -4204,11 +4204,11 @@ private theorem uniformAP (h b : ℕ) :
       _ = _ := by nlinarith only [Real.sq_sqrt hn.le]
   calc
     _ ≤ M*n/(Real.log n)^b + 2*n/(Real.log n)^b + 2*n/(Real.log n)^b :=
-      add_le_add (add_le_add main ec) er
+      by linarith only [main, ec, er]
     _ = _ := by ring
 
 theorem PEqualNP.Outside.L_goldbach_coset_logrange_ap :
-    let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k%q=r); let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; ∀ h b : ℕ, ∃ C : ℝ, 0<C ∧ ∃ X : ℕ, ∀ n≥X, ∀ q : ℕ, 0<q → (q:ℝ) ≤ (Real.log (n:ℝ))^h → ∀ r<q, r.Coprime q → |A n q r - (n:ℝ)/(q.totient:ℝ)| ≤ C*(n:ℝ)/(Real.log (n:ℝ))^b := by
+    let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k % q=r); let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; ∀ h b : ℕ, ∃ C : ℝ, 0<C ∧ ∃ X : ℕ, ∀ n≥X, ∀ q : ℕ, 0<q → (q:ℝ) ≤ (Real.log (n:ℝ))^h → ∀ r<q, r.Coprime q → |A n q r - (n:ℝ)/(q.totient:ℝ)| ≤ C*(n:ℝ)/(Real.log (n:ℝ))^b := by
   intro F w A h b
   obtain ⟨C,hC,he⟩ := uniformAP h b
   obtain ⟨X,hX⟩ := eventually_atTop.mp he
