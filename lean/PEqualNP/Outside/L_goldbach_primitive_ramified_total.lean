@@ -4,7 +4,7 @@ import Mathlib.Tactic.Positivity
 
 open ArithmeticFunction
 
-theorem L_goldbach_primitive_ramified_total :
+theorem PEqualNP.Outside.L_goldbach_primitive_ramified_total :
     ∀ n : ℕ, 2≤n → (∑ k ∈ (Finset.range (n+1)).filter (fun k => n≤3*k ∧ 3*k≤2*n ∧ ¬k.Coprime n), ArithmeticFunction.vonMangoldt k) ≤ 2*Real.log (n:ℝ) := by
   intro n hn
   classical
