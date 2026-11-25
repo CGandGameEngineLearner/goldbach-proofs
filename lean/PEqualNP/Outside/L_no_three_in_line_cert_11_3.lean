@@ -9,10 +9,22 @@ theorem PEqualNP.Outside.L_no_three_in_line_cert_11_3 :
       (Finset.range (n - 22)).product (Finset.range (n - 6)) := by
     apply Finset.ext
     intro z
-    simp only [Finset.mem_filter, Finset.mem_product, Finset.mem_range]
     constructor
-    · rintro ⟨_, hx, hy⟩
-      exact ⟨by omega, by omega⟩
-    · rintro ⟨hx, hy⟩
-      exact ⟨⟨by omega, by omega⟩, by omega, by omega⟩
-  simp only [h, Finset.card_product, Finset.card_range]
+    · intro hz
+      obtain ⟨_, hx, hy⟩ := Finset.mem_filter.mp hz
+      exact Finset.mem_product.mpr
+        ⟨Finset.mem_range.mpr (by omega), Finset.mem_range.mpr (by omega)⟩
+    · intro hz
+      obtain ⟨hx, hy⟩ := Finset.mem_product.mp hz
+      have hx' := Finset.mem_range.mp hx
+      have hy' := Finset.mem_range.mp hy
+      exact Finset.mem_filter.mpr
+        ⟨Finset.mem_product.mpr
+          ⟨Finset.mem_range.mpr (by omega), Finset.mem_range.mpr (by omega)⟩,
+          by omega, by omega⟩
+  rw [h]
+  calc
+    ((Finset.range (n - 22)).product (Finset.range (n - 6))).card =
+        (Finset.range (n - 22)).card * (Finset.range (n - 6)).card :=
+      Finset.card_product _ _
+    _ = (n - 22) * (n - 6) := by simp only [Finset.card_range]
