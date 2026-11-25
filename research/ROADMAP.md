@@ -54,6 +54,10 @@
 | [MainConclusion.lean](https://github.com/leanprover-community/riemann-hypothesis/blob/dc76b2788ef7ad0a6d2d4575ca3320a677c72cd9/src/Development/AutomorphicArithmetic/CharacterBoxes/MainConclusion.lean#L973-L995) | everyCharacter_of_row 显式接收局部到整体相容性，再同 vwin_of_row 一起送入汇总定理；everyCharacter 最后填入已证输入。 | 把“若主弧超过次弧则存在素数对”与“本问题的主次弧确实满足此界”分别冻结。前一条通过后，后一条仍然开放。 |
 | [EveryCharacterOfLiteratureOfVWin.lean](https://github.com/leanprover-community/riemann-hypothesis/blob/dc76b2788ef7ad0a6d2d4575ca3320a677c72cd9/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/ThirdPlaceSeries/EveryCharacterOfLiteratureOfVWin.lean#L1739-L1745) 与 [VwinOfRow.lean](https://github.com/leanprover-community/riemann-hypothesis/blob/dc76b2788ef7ad0a6d2d4575ca3320a677c72cd9/src/Development/AutomorphicArithmetic/AutomorphicVarieties/ModularityArgument/ThresholdArguments/DenseThresholdCases/VwinOfRow.lean#L1669-L1671) | 深层合并了 theta 积分、局部匹配、自守输入和窗口估计。 | 可迁移的是定位与验证关键输入的方法。要把任何特定估计用于哥德巴赫，需要写出两边函数、参数范围和常数间的数学桥梁。 |
 
+## 有限范围与充分大偶数的并行拆分
+
+有限范围以 $4\le n<\exp(\exp 50)$ 为目标，先用原型网格核对已发表验证端点和显式陈氏阈值。领取者可分别推进局部见证、粗数因子预算、有理相位的显式误差或例外集覆盖。每个区域须留下素数对或逐点严格正余量，才能计入 $G_1$ 覆盖。充分大偶数部分同时拆出四窗谱截断和反射除数、冻结高段 Vaughan 误差的独立输入。实际有符号次弧和远频差的逐点节省仍开放。[小偶数 RFC](RFC1-小偶数上的Goldbach.md) · [充分大偶数进度审计](<checkpoint/进度审计1(2026-11-25).md>)
+
 ## 研究顺序
 
 1. **先连通目标。** 领 `L-goldbach-prime-weight-extraction` 或 `L-goldbach-log-correlation-iff`。前者对任意支撑在素数上的实权成立，后者固定对数权并给出双向等价。随后证明 `L-goldbach-circle-coefficient`。令 $S_n(t)=\sum_{k\le n}w(k)e^{2\pi i kt}$，应提取 $S_n(t)^2$ 的第 $n$ 个系数。展开后留下 $k+j=n$；绝对值平方的展开给出 $k-j=n$，对应另一个计数。
@@ -68,6 +72,8 @@
 ## English
 
 The target is pointwise positivity of the convolution of the prime-supported logarithmic weight at every even $n\ge4$. The active catalogue consists of two foundations, three RH/GRH tasks, six correlation tasks and four tasks on exceptions. Six research problems admit parallel independent approaches. Each frozen proposition has an English brief, a Chinese brief, and a source. The strongest entries are open problems. [Task catalogue](gaps.json)
+
+- **Finite-range work.** Verify local covers using prime witnesses or an explicit pointwise margin. Keep rough-factor bounds and the Chen threshold as separate milestones. The large-even branch can independently verify the four-scale, divisor-switching, and high-segment error estimates. A signed pointwise bound is still needed. [Finite-range proposal](RFC1-小偶数上的Goldbach.md)
 
 - **Read the upstream proof from the conclusion backwards.** Follow the nonvanishing theorem from Main through the reduction to primitive characters and reflection. Follow everyCharacter_of_row into the local-to-global and window inputs. Sutherland’s audit covers the published 4.33.1 project. Our conditional estimates expose their hypotheses until we can check the required dependencies under our own pinned toolchain. [Upstream statements](https://github.com/leanprover-community/riemann-hypothesis/blob/dc76b2788ef7ad0a6d2d4575ca3320a677c72cd9/src/Statements.lean) · [Dependency closure](https://github.com/leanprover-community/riemann-hypothesis/blob/dc76b2788ef7ad0a6d2d4575ca3320a677c72cd9/src/Development/AutomorphicArithmetic/CharacterBoxes/MainConclusion.lean#L973-L995) · [Independent audit](https://math.mit.edu/~drew/grh/)
 - **Build the interfaces first.** Extract a pair from a positive prime-weighted convolution. Prove the equivalence for logarithmic weights and the Fourier identity for the square of the exponential sum. Check that the frequency selects a sum of two primes. Prove the proper-prime-power correction whenever the argument uses von Mangoldt weights.

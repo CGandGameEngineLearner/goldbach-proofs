@@ -11539,6 +11539,1196 @@
         "L-goldbach-minor-shift-downward-transfer"
       ],
       "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
+    },
+    {
+      "id": "L-goldbach-four-window-support-congruences",
+      "statement": "∀ (n j a b : ℕ), 0 < n → j ≤ 3 → (n:ℝ)/(3*2^j) ≤ a → (a:ℝ) ≤ 2*n/(3*2^j) → (n:ℝ)/(3*2^j) ≤ b → (b:ℝ) ≤ 2*n/(3*2^j) → (a % n = b % n ↔ a = b) ∧ (n ∣ a+b ↔ j = 0 ∧ a+b = n)",
+      "plain_statement": {
+        "zh": "新路线 · OC-7001 · 固定模数的四窗同余",
+        "en": "OC-7001 · Congruences at four scales with a fixed modulus"
+      },
+      "brief": {
+        "zh": "先由支撑界定和与差，再分别处理 j=0 和 j>0。容许 8 不整除 n。",
+        "en": "Bound the sum and difference using the support, then split j=0 from j>0. No divisibility by 8 is required."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_four_window_support_congruences.lean",
+      "module": "PEqualNP.Outside.L_goldbach_four_window_support_congruences",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-four-window-bad-base-square",
+      "statement": "∀ (n : ℕ) (X : ℝ), 2 ≤ n → 0 < X → X ≤ n → (∑ k ∈ (Finset.range (n+1)).filter (fun k => ¬ Nat.Coprime k n ∧ X/3 ≤ (k:ℝ) ∧ (k:ℝ) ≤ 2*X/3), (ArithmeticFunction.vonMangoldt k)^2) ≤ 2*(Real.log n)^2",
+      "plain_statement": {
+        "zh": "新路线 · OC-7002 · 固定模数坏素数的窗内平方质量",
+        "en": "OC-7002 · Square mass of ramified prime bases in a window"
+      },
+      "brief": {
+        "zh": "按底数分组。每个底数的两个相邻指数已占满长度比为 2 的窗，再用素因子对数和。",
+        "en": "Group by prime base. The window has endpoint ratio 2. Bound the sum of the logarithms of the prime divisors."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_four_window_bad_base_square.lean",
+      "module": "PEqualNP.Outside.L_goldbach_four_window_bad_base_square",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-four-window-cubic-power-kernel",
+      "statement": "∀ (z : ℂ), (1:ℂ)-3*z+3*z^2-z^3=(1-z)^3 ∧ ‖1-3*z+3*z^2-z^3‖=‖1-z‖^3",
+      "plain_statement": {
+        "zh": "新路线 · OC-7003 · 四尺度核的三次消去",
+        "en": "OC-7003 · Cubic cancellation in the four-scale kernel"
+      },
+      "brief": {
+        "zh": "将尺度相位视为同一个复比值。等高项对应比值为 1。",
+        "en": "Use the same complex ratio for all four scales. Equal heights give ratio 1."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_four_window_cubic_power_kernel.lean",
+      "module": "PEqualNP.Outside.L_goldbach_four_window_cubic_power_kernel",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-four-window-resonant-budget",
+      "statement": "∀ {ι : Type} (s : Finset ι) (w z : ι → ℂ) (δ L : ℝ), 0 ≤ δ → 0 ≤ L → (∑ i ∈ s, ‖w i‖) ≤ L → (∀ i ∈ s, ‖1-z i‖ ≤ δ) → ‖∑ i ∈ s, w i * (1-z i)^3‖ ≤ L*δ^3",
+      "plain_statement": {
+        "zh": "新路线 · OC-7004 · 共振带可以用同一总权预算",
+        "en": "OC-7004 · Total-weight budget for a union of resonant bands"
+      },
+      "brief": {
+        "zh": "一次三角不等式覆盖全部选定指标，预算与共振带数无关。",
+        "en": "Apply the triangle inequality to the entire selected set. The bound is independent of the number of bands."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-four-window-cubic-power-kernel"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_four_window_resonant_budget.lean",
+      "module": "PEqualNP.Outside.L_goldbach_four_window_resonant_budget",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-four-window-two-tail-budget",
+      "statement": "∀ {ι : Type} [DecidableEq ι] (s t : Finset ι) (w : ι → ℝ), t ⊆ s → (∀ i, 0 ≤ w i) → (∑ ij ∈ (s.product s).filter (fun ij => ij.1 ∈ t ∨ ij.2 ∈ t), w ij.1*w ij.2) ≤ 2*(∑ i ∈ s, w i)*(∑ i ∈ t, w i)",
+      "plain_statement": {
+        "zh": "新路线 · OC-7005 · 零点对的单尾并集预算",
+        "en": "OC-7005 · Product-weight bound for either coordinate in the tail"
+      },
+      "brief": {
+        "zh": "由两个子矩形的积估计，允许两坐标同时进入尾部。",
+        "en": "Dominate the union by two product rectangles, allowing both coordinates to lie in the tail."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_four_window_two_tail_budget.lean",
+      "module": "PEqualNP.Outside.L_goldbach_four_window_two_tail_budget",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-four-window-gap-tail-cover",
+      "statement": "∀ a b H : ℝ, 0 ≤ H → 2*H < |a-b| → H < |a| ∨ H < |b|",
+      "plain_statement": {
+        "zh": "新路线 · OC-7006 · 远频差强制至少一个高度过线",
+        "en": "OC-7006 · Large gaps force one large height"
+      },
+      "brief": {
+        "zh": "和零点对预算配合，使频差尾依赖单个高度尾。",
+        "en": "Combine with the product-weight bound to use only a one-coordinate height tail."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_four_window_gap_tail_cover.lean",
+      "module": "PEqualNP.Outside.L_goldbach_four_window_gap_tail_cover",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-four-window-folding-collision",
+      "statement": "∀ (h g t : ℝ) (m : ℤ) (k : ℕ), h-g=2*Real.pi*(m:ℝ) → Complex.exp (Complex.I * ((((k:ℝ)+t)*h:ℝ):ℂ)) = Complex.exp (Complex.I * ((((k:ℝ)+t)*g:ℝ):ℂ)) * Complex.exp (Complex.I * ((2*Real.pi*(m:ℝ)*t:ℝ):ℂ))",
+      "plain_statement": {
+        "zh": "新路线 · OC-7007 · 折叠到圆周后的绕数修正",
+        "en": "OC-7007 · Winding correction when folding a phase"
+      },
+      "brief": {
+        "zh": "用指数加法拆掉整数绕数项。非二次幂由小数尺度保留额外相位。",
+        "en": "Split the exponential and remove the integer winding term. Fractional logarithmic scales retain the extra phase."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_four_window_folding_collision.lean",
+      "module": "PEqualNP.Outside.L_goldbach_four_window_folding_collision",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-hardy-central-positive-tail-margin",
+      "statement": "∀ {ι : Type} (s : Finset ι) (λ w : ι → ℝ) (A B Q : ℝ), 0 ≤ A → 0 ≤ B → 0 ≤ Q → (∀ i ∈ s, 0 ≤ w i ∧ λ i ≤ B) → (∑ i ∈ s, w i) ≤ Q → (∑ i ∈ s.filter (fun i => A < λ i), w i) ≤ A*Q/(2*(B+1)) → (∑ i ∈ s, λ i*w i) ≤ (3/2)*A*Q",
+      "plain_statement": {
+        "zh": "新路线 · OC-7008 · 指定向量的正谱尾预算",
+        "en": "OC-7008 · Positive spectral tail budget for one vector"
+      },
+      "brief": {
+        "zh": "在阈值 A 切分谱和，只界该向量的谱质量。连续或无限谱还需极限适配。",
+        "en": "Split at A and use only the spectral mass of the chosen vector. A limit argument is still needed for an infinite spectrum."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_hardy_central_positive_tail_margin.lean",
+      "module": "PEqualNP.Outside.L_goldbach_hardy_central_positive_tail_margin",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-odd-conductor-divisor-budget",
+      "statement": "∀ (n : ℕ) (Y : ℝ), (∑ d ∈ n.divisors.filter (fun d => (d:ℝ) ≤ Y), (Nat.totient d:ℝ)) ≤ max 0 Y * (n.divisors.card:ℝ)",
+      "plain_statement": {
+        "zh": "新路线 · OC-7009 · 一般偶模的低导子总容量",
+        "en": "OC-7009 · Capacity of small conductor layers"
+      },
+      "brief": {
+        "zh": "先界每层 φ(d)≤d，再用除数总数。奇特征比例还需对 φ(n) 归一化。",
+        "en": "Apply φ(d)≤d in each layer, then count divisors. The odd-character proportion still needs normalization by φ(n)."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_odd_conductor_divisor_budget.lean",
+      "module": "PEqualNP.Outside.L_goldbach_odd_conductor_divisor_budget",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-four-window-cubic-scale-log-cancel",
+      "statement": "∀ X a b : ℝ, 0 < X → (a*Real.log X+b)-3*(a*Real.log (X/2)+b)+3*(a*Real.log (X/4)+b)-(a*Real.log (X/8)+b)=0",
+      "plain_statement": {
+        "zh": "新路线 · OC-7010 · 四尺度精确消去对角的对数基线",
+        "en": "OC-7010 · Exact cancellation of the logarithmic diagonal baseline"
+      },
+      "brief": {
+        "zh": "将各对数改写为 log X−j log 2。该基线可用于隔离每个窗的解析误差。",
+        "en": "Rewrite each logarithm as log X−j log 2 to isolate the analytic remainder in each window."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_four_window_cubic_scale_log_cancel.lean",
+      "module": "PEqualNP.Outside.L_goldbach_four_window_cubic_scale_log_cancel",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-four-window-square-asymmetric-error",
+      "statement": "∀ (x y : ℂ) (M E : ℝ), 0 ≤ M → 0 ≤ E → ‖y‖ ≤ M → ‖x-y‖ ≤ E → |‖x‖^2-‖y‖^2| ≤ E*(2*M+E)",
+      "plain_statement": {
+        "zh": "新路线 · OC-7011 · 四窗同时更换振幅的平方误差",
+        "en": "OC-7011 · Square error when replacing an amplitude in the four windows"
+      },
+      "brief": {
+        "zh": "用逆三角不等式，允许误差项对实际和与本原谱和非对称。",
+        "en": "Use the reverse triangle inequality so that the actual and primitive spectral sums can have asymmetric bounds."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-central-prime-mass",
+      "program": "grh",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_four_window_square_asymmetric_error.lean",
+      "module": "PEqualNP.Outside.L_goldbach_four_window_square_asymmetric_error",
+      "imports": [],
+      "track": "odd-character-interference",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-neighbor-odd-support",
+      "statement": "∀ (n r a b : ℕ), 8 ≤ n → Even n → ¬ Even r → Nat.Prime a → Nat.Prime b → n < a^3 → n < b^3 → a+b ≠ n+r ∧ a+b ≠ n-r",
+      "plain_statement": {
+        "zh": "冻结高段的奇偏移消失",
+        "en": "Odd shifts vanish for the frozen high segment"
+      },
+      "brief": {
+        "zh": "高段排除素数 2，两个余项都是奇素数。自然数减法下溢时另用和为正。",
+        "en": "The high segment excludes 2, leaving two odd primes. For truncated subtraction use positivity of the sum."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_neighbor_odd_support.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_neighbor_odd_support",
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-cosine-window-coefficient",
+      "statement": "∀ a H u : ℝ, 0 ≤ H → u ≠ 0 → intervalIntegral (fun x => Real.cos (u*x)) (a-H) (a+H) MeasureTheory.volume = 2*Real.cos (u*a)*Real.sin (u*H)/u",
+      "plain_statement": {
+        "zh": "对称弧的单个实 Fourier 系数",
+        "en": "Real Fourier coefficient of a symmetric arc"
+      },
+      "brief": {
+        "zh": "先求原函数，再用正弦差角恒等式。用于逐弧求和并保留真实邻和。",
+        "en": "Integrate a single cosine and apply the sine subtraction identity before summing across arcs."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_cosine_window_coefficient.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_cosine_window_coefficient",
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-sine-kernel-origin-bound",
+      "statement": "∀ x : ℝ, |Real.sin x| ≤ min 1 |x|",
+      "plain_statement": {
+        "zh": "正弦核同时保留短弧和远偏移界",
+        "en": "Two simultaneous bounds for the sine kernel"
+      },
+      "brief": {
+        "zh": "短弧用 Lipschitz，远偏移用正弦绝对值上界。",
+        "en": "Use the Lipschitz bound for short arcs and the absolute bound for far shifts."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_sine_kernel_origin_bound.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_sine_kernel_origin_bound",
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-type-two-tail-divisor-majorant",
+      "statement": "∀ U R : ℕ, |∑ d ∈ R.divisors.filter (fun d => U < d), (ArithmeticFunction.moebius d:ℝ)| ≤ (R.divisors.card:ℝ)",
+      "plain_statement": {
+        "zh": "Vaughan 双线性尾系数的逐点界",
+        "en": "Pointwise bound for the Vaughan tail coefficient"
+      },
+      "brief": {
+        "zh": "逐除数使用 |μ|≤1，交给除数二次矩任务使用。",
+        "en": "Apply |μ|≤1 divisor by divisor before taking the second moment."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_type_two_tail_divisor_majorant.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_type_two_tail_divisor_majorant",
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-type-two-divisor-intersection",
+      "statement": "∀ (d e Y : ℕ), 0 < d → 0 < e → ((Finset.Icc 1 Y).filter (fun r => d ∣ r ∧ e ∣ r)).card = Y / (Nat.lcm d e)",
+      "plain_statement": {
+        "zh": "双除数二次矩的精确交集",
+        "en": "Exact divisor intersection in a second moment"
+      },
+      "brief": {
+        "zh": "展开平方后用最小公倍数代替两条整除约束。",
+        "en": "Expand the square and replace both divisibility constraints by their least common multiple."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_type_two_divisor_intersection.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_type_two_divisor_intersection",
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-type-two-lcm-gcd-budget",
+      "statement": "∀ (Y : ℕ), (∑ d ∈ Finset.Icc 1 Y, ∑ e ∈ Finset.Icc 1 Y, (1:ℝ)/(Nat.lcm d e:ℝ)) ≤ (1+Real.log (max 1 Y))^3",
+      "plain_statement": {
+        "zh": "双除数二次矩的三重对数预算",
+        "en": "Cubic logarithmic budget for the divisor second moment"
+      },
+      "brief": {
+        "zh": "以 gcd(d,e) 分层，再丢掉约去公因子后的互素条件并使用调和和。",
+        "en": "Group by gcd, drop the coprimality restriction on the reduced pair, and bound three harmonic sums."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_type_two_lcm_gcd_budget.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_type_two_lcm_gcd_budget",
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-type-two-tail-second-moment",
+      "statement": "∀ (U Y : ℕ), (∑ r ∈ Finset.Icc 1 Y, (∑ d ∈ r.divisors.filter (fun d => U < d), (ArithmeticFunction.moebius d:ℝ))^2) ≤ (Y:ℝ)*(1+Real.log (max 1 Y))^3",
+      "plain_statement": {
+        "zh": "高段 Vaughan 尾的统一二次矩",
+        "en": "Uniform second moment of the high-segment Vaughan tail"
+      },
+      "brief": {
+        "zh": "用逐点除数上界，再交换关于 r,d,e 的有限和。",
+        "en": "Use the pointwise divisor bound, then interchange the three finite sums."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-minor-type-two-tail-divisor-majorant",
+        "L-goldbach-minor-type-two-divisor-intersection",
+        "L-goldbach-minor-type-two-lcm-gcd-budget"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_type_two_tail_second_moment.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_type_two_tail_second_moment",
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-reflected-divisor-unit-progression",
+      "statement": "∀ n p d : ℕ, p < n → Nat.Coprime p n → d ∣ n-p → Nat.Coprime n d ∧ p % d = n % d",
+      "plain_statement": {
+        "zh": "反射除数只进入单位剩余类",
+        "en": "Reflected divisors land in unit residue classes"
+      },
+      "brief": {
+        "zh": "把 p 加回 n−p，在共同因子和取模两处使用。",
+        "en": "Add p back to n−p to handle both common divisors and modular equality."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-correlation-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_reflected_divisor_unit_progression.lean",
+      "module": "PEqualNP.Outside.L_goldbach_reflected_divisor_unit_progression",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-reflected-long-complement-window",
+      "statement": "∀ (n p d m D : ℕ), p < n → D < d → d*m = n-p → (n:ℝ)/3 ≤ p → (p:ℝ) ≤ 2*n/3 → D*m < n ∧ (n:ℝ)/3 ≤ d*m ∧ (d*m:ℝ) ≤ 2*n/3",
+      "plain_statement": {
+        "zh": "长除数转置后的互补变量窗",
+        "en": "Complementary factor window after switching long divisors"
+      },
+      "brief": {
+        "zh": "保留同一中央窗两端和严格的 Dm<n，以便枚举较短外层。",
+        "en": "Keep both central-window endpoints and the strict bound Dm<n for the shorter outer variable."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-correlation-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_reflected_long_complement_window.lean",
+      "module": "PEqualNP.Outside.L_goldbach_reflected_long_complement_window",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-reflected-short-main-error-budget",
+      "statement": "∀ {ι : Type} (s : Finset ι) (a f g : ι → ℝ) (E : ℝ), 0 ≤ E → (∀ j ∈ s, |f j-g j| ≤ E) → |∑ j ∈ s, a j*(f j-g j)| ≤ E*(∑ j ∈ s, |a j|)",
+      "plain_statement": {
+        "zh": "反射短除数逐模误差的合成",
+        "en": "Accumulate separate progression errors in the short-divisor sum"
+      },
+      "brief": {
+        "zh": "对 Möbius 对数权逐项取绝对值。主项须用同一单位类归一化。",
+        "en": "Take absolute values against the Möbius log weights. Keep the same unit-class normalization."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-correlation-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-reflected-divisor-unit-progression"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_reflected_short_main_error_budget.lean",
+      "module": "PEqualNP.Outside.L_goldbach_reflected_short_main_error_budget",
+      "imports": [],
+      "track": "representations",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-reflected-euler-local-cancellation",
+      "statement": "∀ p u : ℝ, 1 < p → u ≠ p → (1-u/(p-1))/(1-u/p) = 1-u/((p-1)*(p-u))",
+      "plain_statement": {
+        "zh": "反射除数 Euler 因子的首阶抵消",
+        "en": "First-order cancellation in a reflected-divisor Euler factor"
+      },
+      "brief": {
+        "zh": "把 zeta 因子除出后通分，显露对 p 的二阶损失。",
+        "en": "Divide out the zeta factor and combine fractions to expose a second-order loss."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-correlation-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_reflected_euler_local_cancellation.lean",
+      "module": "PEqualNP.Outside.L_goldbach_reflected_euler_local_cancellation",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-reflected-euler-allowed-local-series",
+      "statement": "∀ p u : ℝ, 1 < p → |u| < p → HasSum (fun k : ℕ => (u/p)^k/(p-1)) (p/((p-1)*(p-u)))",
+      "plain_statement": {
+        "zh": "反射 Euler 尾的显式几何级数",
+        "en": "Explicit geometric series for a reflected Euler tail"
+      },
+      "brief": {
+        "zh": "把除数局部系数写成同一比值的几何级数，再将常量提出。",
+        "en": "Factor out the constant from a geometric series with ratio u/p."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-correlation-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_reflected_euler_allowed_local_series.lean",
+      "module": "PEqualNP.Outside.L_goldbach_reflected_euler_allowed_local_series",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-reflected-short-singular-prime-tail",
+      "statement": "∀ (y n : ℕ), 2 ≤ y → (∑ p ∈ n.primeFactors.filter (fun p => y < p), (1:ℝ)/((p:ℝ)-1)) ≤ Real.log n / ((y:ℝ)*Real.log (y+1))",
+      "plain_statement": {
+        "zh": "奇异主项坏素因子尾的逐整数预算",
+        "en": "Pointwise budget for large ramified primes"
+      },
+      "brief": {
+        "zh": "对每个 p>y 用 (p−1)log p≥y log(y+1)，再用素因子对数和≤log n。",
+        "en": "Use (p−1)log p≥y log(y+1) for each large factor, then bound the prime-divisor log sum by log n."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-dyadic-correlation-floor",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_reflected_short_singular_prime_tail.lean",
+      "module": "PEqualNP.Outside.L_goldbach_reflected_short_singular_prime_tail",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-loglog-band-unique",
+      "statement": "∀ n : ℕ, 4 ≤ n → (n:ℝ) < Real.exp (Real.exp 50) → ∃! j : ℕ, j < 1000 ∧ (j:ℝ)/20 ≤ Real.log (Real.log n) ∧ Real.log (Real.log n) < ((j:ℝ)+1)/20",
+      "plain_statement": {
+        "zh": "双对数网格的唯一覆盖",
+        "en": "Unique coverage by the log-log grid"
+      },
+      "brief": {
+        "zh": "对 20 log log n 取自然数下取整，证明两个对数输入都在正半轴。",
+        "en": "Take the natural floor of 20 log log n after proving the log inputs are positive."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_loglog_band_unique.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_loglog_band_unique",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-loglog-published-boundary",
+      "statement": "let C : ℝ := 4*10^18; (75:ℝ)/20 < Real.log (Real.log C) ∧ Real.log (Real.log C) < (76:ℝ)/20",
+      "plain_statement": {
+        "zh": "已发表计算端点位于第 75 带",
+        "en": "The published verification endpoint lies in band 75"
+      },
+      "brief": {
+        "zh": "逆用两次 exp 的单调性。可用 Taylor 有理包围先比较 42.6 与 43。",
+        "en": "Invert both logarithms. Rational Taylor bounds can use 42.6 and 43 as intermediate comparisons."
+      },
+      "source": "https://doi.org/10.1090/S0025-5718-2013-02787-1",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_loglog_published_boundary.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_loglog_published_boundary",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-even-ceiling-handoff",
+      "statement": "∀ (X : ℝ) (n : ℕ), 0 ≤ X → Even n → X ≤ n → 2*⌈X/2⌉₊ ≤ n",
+      "plain_statement": {
+        "zh": "有限端点与大偶数阈值的拼接",
+        "en": "Even ceiling at the finite-range handoff"
+      },
+      "brief": {
+        "zh": "写 n=2k，再由自然数上取整的最小性得结论。",
+        "en": "Write n=2k and apply minimality of the natural ceiling."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_even_ceiling_handoff.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_even_ceiling_handoff",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-residue-rough-210",
+      "statement": "∀ a : ℕ, a < 210 → Even a → ∃ p ∈ ({3,5,7,11,19} : Finset ℕ), Nat.Coprime ((a+210-p)%210) 210",
+      "plain_statement": {
+        "zh": "模 210 的粗数候选覆盖",
+        "en": "Rough candidate coverage modulo 210"
+      },
+      "brief": {
+        "zh": "核验 105 个偶剩余类。输出只保证第二项没有小于 11 的素因子。",
+        "en": "Check the 105 even residues. The output excludes prime factors below 11 from the second summand."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_residue_rough_210.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_residue_rough_210",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-rough-factor-power",
+      "statement": "∀ s y : ℕ, 2 ≤ s → 2 ≤ y → (∀ p, Nat.Prime p → p ∣ s → y ≤ p) → y^(s.primeFactorsList.length) ≤ s",
+      "plain_statement": {
+        "zh": "粗数门槛给素因子个数界",
+        "en": "A roughness threshold bounds the number of factors"
+      },
+      "brief": {
+        "zh": "对带重数的素因子列表乘积应用逐因子下界。",
+        "en": "Apply the lower bound factorwise to the prime factor list with multiplicity."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_factor_power.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_factor_power",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-rough-candidate-lift",
+      "statement": "∀ n : ℕ, 22 ≤ n → Even n → ∃ p : ℕ, Nat.Prime p ∧ p < n ∧ 2 ≤ n-p ∧ Nat.Coprime (n-p) 210",
+      "plain_statement": {
+        "zh": "把剩余类候选提升到每个实际偶数",
+        "en": "Lift the residue witnesses to actual even targets"
+      },
+      "brief": {
+        "zh": "取 a=n%210，证明 a+210−p 的余类与 n−p 相同。",
+        "en": "Use a=n%210 and identify the residue of a+210−p with that of n−p."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-residue-rough-210"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_candidate_lift.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_candidate_lift",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-rough-prototype-constants",
+      "statement": "Real.exp (19/5) < 19*Real.log 11 ∧ Real.exp 5 < 62*Real.log 11",
+      "plain_statement": {
+        "zh": "原型的 18 和 61 因子界所需比较",
+        "en": "Endpoint inequalities behind the 18 and 61 factor bounds"
+      },
+      "brief": {
+        "zh": "将 log 11 从下包围到 2397/1000，再分开估计两个指数。",
+        "en": "Bound log 11 below by 2397/1000, then bound each exponential separately."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_prototype_constants.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_prototype_constants",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-rough-prototype-18",
+      "statement": "∀ n : ℕ, 4 ≤ n → Even n → (n:ℝ) < Real.exp (Real.exp (19/5)) → ∃ p : ℕ, Nat.Prime p ∧ 2 ≤ n-p ∧ (n-p).primeFactorsList.length ≤ 18",
+      "plain_statement": {
+        "zh": "第 75 带末端前的十八因子表示",
+        "en": "An eighteen-factor representation below the end of band 75"
+      },
+      "brief": {
+        "zh": "用模 210 候选和 11 的幂下界。4 至 20 使用真素数对。",
+        "en": "Use the modulo-210 witness and the powers of 11. Supply prime pairs for 4 through 20."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-rough-candidate-lift",
+        "L-goldbach-finite-rough-factor-power",
+        "L-goldbach-finite-rough-prototype-constants"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_prototype_18.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_prototype_18",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-rough-prototype-61",
+      "statement": "∀ n : ℕ, 4 ≤ n → Even n → (n:ℝ) < Real.exp (Real.exp 5) → ∃ p : ℕ, Nat.Prime p ∧ 2 ≤ n-p ∧ (n-p).primeFactorsList.length ≤ 61",
+      "plain_statement": {
+        "zh": "原型全域的六十一因子表示",
+        "en": "A sixty-one-factor representation on the full prototype"
+      },
+      "brief": {
+        "zh": "用另一端点的有理比较，同一粗数证书覆盖原型全域。",
+        "en": "Apply the other endpoint comparison to the same roughness certificate."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-rough-candidate-lift",
+        "L-goldbach-finite-rough-factor-power",
+        "L-goldbach-finite-rough-prototype-constants"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_prototype_61.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_prototype_61",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-radical-cells-lower",
+      "statement": "∀ n d : ℕ, Nat.gcd n 105 = d → d = 1 ∨ d = 3 ∨ d = 5 ∨ d = 7 ∨ d = 15 ∨ d = 21 ∨ d = 35 ∨ d = 105",
+      "plain_statement": {
+        "zh": "原型小素因子类型的八类穷尽",
+        "en": "Exhaust the eight small-prime patterns"
+      },
+      "brief": {
+        "zh": "用 d∣105 将任意整数归入其中一个小素因子类型。",
+        "en": "Use d∣105 to assign each target to a small-prime pattern."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_radical_cells_lower.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_radical_cells_lower",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-singular-product-lower",
+      "statement": "∀ (S : Finset ℕ), (∀ p ∈ S, Nat.Prime p ∧ 2 < p) → ({3,5,7} : Finset ℕ) ⊆ S → (75/128:ℝ) ≤ ∏ p ∈ S, (1-(1:ℝ)/((p:ℝ)-1)^2)",
+      "plain_statement": {
+        "zh": "奇异级数底乘积的有理下界",
+        "en": "Rational lower bound for the singular-series base product"
+      },
+      "brief": {
+        "zh": "保留 3、5、7。其余用整数乘积望远镜界 6/7。",
+        "en": "Retain 3, 5, and 7 and use the telescoping integer-product lower bound 6/7 for the tail."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_singular_product_lower.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_singular_product_lower",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-sieve-probe-crt",
+      "statement": "∀ n d e : ℕ, 0 < d → 0 < e → (∃ p : ℕ, p % d = n % d ∧ p % e = 1 % e) ↔ n % (Nat.gcd d e) = 1 % (Nat.gcd d e)",
+      "plain_statement": {
+        "zh": "p−1 辅助权的广义 CRT",
+        "en": "Generalized CRT for the p−1 probe"
+      },
+      "brief": {
+        "zh": "先仅处理相容性，不把两个模数当成独立；之后按 lcm 进入分布估计。",
+        "en": "Establish compatibility before applying progression estimates modulo the lcm."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_sieve_probe_crt.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_sieve_probe_crt",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-sieve-probe-nonunit",
+      "statement": "∀ n d e p : ℕ, Nat.Prime p → p % d = n % d → p % e = 1 % e → p ∣ Nat.lcm d e → p ∣ d ∧ p ∣ n",
+      "plain_statement": {
+        "zh": "辅助权中的非单位素数",
+        "en": "Non-unit primes in the auxiliary probe"
+      },
+      "brief": {
+        "zh": "若 p 整除 e，余类条件会迫使 p 整除 1。剩下 p 整除 d 及 n。",
+        "en": "Divisibility by e would force p to divide 1. The remaining exceptional bases divide both d and n."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_sieve_probe_nonunit.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_sieve_probe_nonunit",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-weighted-liouville-selector",
+      "statement": "∀ (S : Finset ℕ) (n : ℕ) (w : ℕ → ℝ), (∀ p ∈ S, 2 ≤ n-p ∧ (n-p).primeFactorsList.length ≤ 2) → (∑ p ∈ S, w p) - (∑ p ∈ S, w p*(-1:ℝ)^(n-p).primeFactorsList.length) = 2*(∑ p ∈ S.filter (fun p => Nat.Prime (n-p)), w p)",
+      "plain_statement": {
+        "zh": "陈氏权重的奇偶选择恒等式",
+        "en": "Weighted parity selector for Chen candidates"
+      },
+      "brief": {
+        "zh": "按长度为一或二分开，用相同权重核对符号。逐点半素数消去仍开放。",
+        "en": "Split the factor-list length into one and two and keep identical weights. Pointwise semiprime cancellation remains open."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_weighted_liouville_selector.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_weighted_liouville_selector",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-exception-witness-cover",
+      "statement": "∀ (D U : Finset ℕ) (m R : ℕ → ℝ) (b : ℝ), 0 < b → (∀ n ∈ D, b ≤ m n) → (∀ n ∈ D, 0 ≤ R n) → (∀ n ∈ U, 0 < R n) → (∑ n ∈ D.filter (fun n => n ∉ U), (R n-m n)^2) < b^2 → ∀ n ∈ D, 0 < R n",
+      "plain_statement": {
+        "zh": "在已验证见证之外使用局部能量",
+        "en": "Local energy outside the set of verified witnesses"
+      },
+      "brief": {
+        "zh": "先从误差和剔除有见证的集合。单点若为零，则耗尽残余能量预算。",
+        "en": "Remove witnessed targets before measuring energy. A single zero would exhaust the residual budget."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "exceptions",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-exception-second-moment"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_exception_witness_cover.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_exception_witness_cover",
+      "imports": [],
+      "track": "exceptions",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-finite-exception-cover-refinement",
+      "statement": "∀ (D U V : Finset ℕ) (G : ℕ → Prop), (∀ n ∈ D, n ∉ U → G n) → (∀ n ∈ U, n ∉ V → G n) → ∀ n ∈ D, n ∉ V → G n",
+      "plain_statement": {
+        "zh": "剩余集合逐轮收紧",
+        "en": "Refine the remaining exceptional set"
+      },
+      "brief": {
+        "zh": "该接口让各组只在上一轮未覆盖集合上交付本轮结果。",
+        "en": "Each team needs to certify only the portion left by the earlier stage."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "exceptions",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_exception_cover_refinement.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_exception_cover_refinement",
+      "imports": [],
+      "track": "exceptions",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-finite-witness-translate-bitset",
+      "statement": "∀ (P Q D : Finset ℕ), (∀ p ∈ P, Nat.Prime p) → (∀ q ∈ Q, Nat.Prime q) → D ⊆ P.biUnion (fun p => Q.image (fun q => p+q)) → ∀ n ∈ D, ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n",
+      "plain_statement": {
+        "zh": "平移位图的素数见证与覆盖",
+        "en": "Prime witnesses from translated bitsets"
+      },
+      "brief": {
+        "zh": "展开有限并的见证，两个素数表分别核验，再按位映射。",
+        "en": "Extract witnesses from the finite union after verifying each of the two prime tables."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_witness_translate_bitset.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_witness_translate_bitset",
+      "imports": [],
+      "track": "representations",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-finite-witness-translate-through-98",
+      "statement": "let P : Finset ℕ := {2,3,5,7,19}; let Q := (Finset.range 100).filter Nat.Prime; ((Finset.Ico 4 100).filter Even) ⊆ P.biUnion (fun p => Q.image (fun q => p+q))",
+      "plain_statement": {
+        "zh": "验证小样本位图并保留第 98 点",
+        "en": "Verify the prototype bitset including 98"
+      },
+      "brief": {
+        "zh": "先算前四个候选缺 98，再加入 19+79。位图可直接核验。",
+        "en": "The first four candidates miss 98. Add 19+79 and check the full bitset."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-witness-translate-bitset"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_witness_translate_through_98.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_witness_translate_through_98",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-power-contamination-budget",
+      "statement": "∀ (n : ℕ), 4*10^18 < n → Real.log (Real.log n) < (76:ℝ)/20 → 2*((Nat.sqrt n:ℝ)+(Nat.log 2 n:ℝ)*(n:ℝ)^(1/3:ℝ))*(Real.log n)^2 < (n:ℝ)/10^5",
+      "plain_statement": {
+        "zh": "第 75 带的显式真素数幂预算",
+        "en": "Explicit prime-power budget in band 75"
+      },
+      "brief": {
+        "zh": "用 log n<45 和 log 2>1/2，下界化 sqrt n 与 n^(2/3)。",
+        "en": "Use log n<45 and log 2>1/2, then bound the two denominator powers below."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_power_contamination_budget.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_power_contamination_budget",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-power-count-via-exponent",
+      "statement": "∀ n : ℕ, ((Finset.Icc 1 n).filter (fun k => 0 < ((Finset.Icc 2 (Nat.log 2 k)).filter (fun a => k.minFac^a=k)).card)).card ≤ Nat.sqrt n + (Nat.log 2 n) * (Finset.Icc 1 n |>.filter (fun p => p^3 ≤ n)).card",
+      "plain_statement": {
+        "zh": "按平方与高次幂计污染支撑",
+        "en": "Count proper prime powers by exponent"
+      },
+      "brief": {
+        "zh": "平方按底数单列，其余底数满足立方界，指数不超过 log₂n。",
+        "en": "Count squares separately. Higher powers have cube-bounded bases and exponents at most log₂n."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_power_count_via_exponent.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_power_count_via_exponent",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-band-fixed-loss-bridge",
+      "statement": "∀ A B P n a b : ℝ, 0 < n → a-b > 1/10^5 → a*n ≤ A → B ≤ b*n → P ≤ n/10^5 → 0 < A-B-P",
+      "plain_statement": {
+        "zh": "局部主弧余量与污染预算的严格拼接",
+        "en": "Combine explicit local budgets into a strict margin"
+      },
+      "brief": {
+        "zh": "把带上有理余量乘以同一个 n，再扣除幂污染。",
+        "en": "Multiply the fixed rational margin by the same n before removing the contamination."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-power-contamination-budget"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_band_fixed_loss_bridge.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_band_fixed_loss_bridge",
+      "imports": [],
+      "track": "representations",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-finite-fixed-progression-unit-error",
+      "statement": "∀ (q a n : ℕ), 1 ≤ q → q ≤ 105 → Nat.Coprime a q → 10^16 ≤ n → (n:ℝ) < Real.exp (Real.exp (19/5)) → |(∑ k ∈ (Finset.range (n+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/Nat.totient q| ≤ (n:ℝ)/100",
+      "plain_statement": {
+        "zh": "原型小模数上无条件的等差数列误差",
+        "en": "Unconditional progression error for small prototype moduli"
+      },
+      "brief": {
+        "zh": "从显式等差数列界取得一个百分比的绝对预算。逐项核对 x≥10¹⁶ 和 q≤105，并把可能的例外零点纳入常数。此题提供一元输入，尚需把多个剩余类误差传过主弧积分。",
+        "en": "Extract an absolute one-percent budget from explicit progression estimates. Check the numerical range and the treatment of possible exceptional zeros. Arc integration still needs its own error transfer."
+      },
+      "source": "https://arxiv.org/abs/2003.01925v4",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_fixed_progression_unit_error.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_fixed_progression_unit_error",
+      "imports": [],
+      "track": "representations",
+      "role": "target"
+    },
+    {
+      "id": "L-goldbach-finite-fixed-nonunit-mangoldt",
+      "statement": "∀ q n : ℕ, 1 ≤ q → 1 ≤ n → (∑ k ∈ (Finset.range (n+1)).filter (fun k => ¬ Nat.Coprime k q), ArithmeticFunction.vonMangoldt k) ≤ (q.primeFactors.card:ℝ)*Real.log n",
+      "plain_statement": {
+        "zh": "主弧非单位类的显式总质量",
+        "en": "Explicit Mangoldt mass of nonunit classes"
+      },
+      "brief": {
+        "zh": "按底数 p∣q 分组，单个底数贡献 floor(log_p n)log p≤log n。",
+        "en": "Group by prime bases dividing q. Each base contributes at most log n."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_fixed_nonunit_mangoldt.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_fixed_nonunit_mangoldt",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-fixed-chi-constant-mode",
+      "statement": "∀ a q : ℕ, 0 < q → Nat.Coprime a q → (∑ r ∈ (Finset.range q).filter (fun r => Nat.Coprime r q), Complex.exp (Complex.I*((2*Real.pi*(a:ℝ)*(r:ℝ)/(q:ℝ):ℝ):ℂ))) = (ArithmeticFunction.moebius q:ℂ)",
+      "plain_statement": {
+        "zh": "真单位类的有理相位常数项",
+        "en": "Constant mode of the rational phase on units"
+      },
+      "brief": {
+        "zh": "先做 Möbius 反演，再求整圈几何和。用于将单位类计数传给每条主要弧。",
+        "en": "Apply Möbius inversion and sum complete geometric progressions before transferring progression counts to the major arcs."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-ram-crt",
+        "L-goldbach-ram-prime-power"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_fixed_chi_constant_mode.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_fixed_chi_constant_mode",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-fixed-progression-phase-loss",
+      "statement": "∀ (N : ℕ) (b : ℕ → ℂ) (θ : ℝ) (E : ℝ), 0 ≤ E → (∀ m ≤ N, ‖∑ k ∈ Finset.range m, b k‖ ≤ E) → ‖∑ k ∈ Finset.range N, b k * Complex.exp (Complex.I*((2*Real.pi*θ*(k:ℝ):ℝ):ℂ))‖ ≤ E*(1+2*Real.pi*N*|θ|)",
+      "plain_statement": {
+        "zh": "显式等差数列误差传到邻近相位",
+        "en": "Transfer a progression error to nearby phases"
+      },
+      "brief": {
+        "zh": "用前缀和分部求和，把相邻复指数的差界成 2π|θ|。",
+        "en": "Apply summation by parts to the prefix errors. Bound consecutive phase differences by 2π|θ|."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-abel-total-variation"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_fixed_progression_phase_loss.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_fixed_progression_phase_loss",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-fixed-prime-table-crt-obstruction",
+      "statement": "∀ (P : Finset ℕ) (A : ℕ), (∀ p ∈ P, Nat.Prime p) → ∃ n : ℕ, A < n ∧ Even n ∧ ∀ p ∈ P, p < n ∧ ¬ Nat.Prime (n-p)",
+      "plain_statement": {
+        "zh": "固定候选素数表存在任意大的遗漏",
+        "en": "Arbitrarily large misses for any fixed prime table"
+      },
+      "brief": {
+        "zh": "为每个 p 选互异奇素数 ℓp，再用 CRT 同时使 n≡p mod ℓp，令全部 n−p 大于对应素因子。可用来判断固定表方案何处必须增加输入。",
+        "en": "Assign a distinct odd prime modulus to each candidate. Use CRT and take a large representative so each difference has a proper prime divisor."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_fixed_prime_table_crt_obstruction.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_fixed_prime_table_crt_obstruction",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-factor-window-switch",
+      "statement": "∀ (n p a b : ℕ), Nat.Prime a → Nat.Prime b → 2 ≤ n-p → a*b=n-p → a ≤ b → a^2 ≤ n-p ∧ n-p ≤ b^2 ∧ p % a = n % a",
+      "plain_statement": {
+        "zh": "半素数按最小因子交给双线性组",
+        "en": "Least-factor window for semiprime switching"
+      },
+      "brief": {
+        "zh": "固定最小因子后，交给双线性组的是同一剩余类上截断的素数和。保留 a=b 的平方边界。",
+        "en": "After fixing the least factor, the target is a truncated prime sum in one residue class. Keep the square case a=b."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_factor_window_switch.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_factor_window_switch",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-residue-rough-2310",
+      "statement": "∀ a : ℕ, a < 2310 → Even a → ∃ p ∈ ({3,5,7,11,29,61,79} : Finset ℕ), Nat.Coprime ((a+2310-p)%2310) 2310",
+      "plain_statement": {
+        "zh": "七个候选覆盖模 2310 的偶数类",
+        "en": "Seven candidates cover even residues modulo 2310"
+      },
+      "brief": {
+        "zh": "逐类检查。在上一层已避开 2、3、5、7 后，再避开 11。这给出 13 粗的候选。",
+        "en": "Check all even residues. Excluding 11 in addition to 2, 3, 5, and 7 gives a 13-rough candidate."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_residue_rough_2310.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_residue_rough_2310",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-residue-rough-30030",
+      "statement": "∀ a : ℕ, a < 30030 → Even a → ∃ p ∈ ({3,5,7,11,31,43,61,79,149,197} : Finset ℕ), Nat.Coprime ((a+30030-p)%30030) 30030",
+      "plain_statement": {
+        "zh": "十个候选覆盖模 30030 的偶数类",
+        "en": "Ten candidates cover even residues modulo 30030"
+      },
+      "brief": {
+        "zh": "可用 CRT 分列复核 15015 个偶类。避开素数 13 后得到 17 粗的候选。",
+        "en": "Use CRT to verify all 15015 even residues. Excluding 13 gives a 17-rough candidate."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_residue_rough_30030.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_residue_rough_30030",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-rough-prototype-15",
+      "statement": "∀ n : ℕ, 4 ≤ n → Even n → (n:ℝ) < Real.exp (Real.exp (19/5)) → ∃ p : ℕ, Nat.Prime p ∧ 2 ≤ n-p ∧ (n-p).primeFactorsList.length ≤ 15",
+      "plain_statement": {
+        "zh": "将第 75 带的因子上界降至十五",
+        "en": "Reduce the factor bound in band 75 to fifteen"
+      },
+      "brief": {
+        "zh": "对 n≥200 用 17 粗候选与 exp(3.8)<16 log 17。更小偶数可以用有限素数表。",
+        "en": "For n≥200 use a 17-rough witness and exp(3.8)<16 log 17. Check smaller even targets with a finite prime table."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-residue-rough-30030",
+        "L-goldbach-finite-rough-factor-power"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_prototype_15.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_prototype_15",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-rough-prototype-52",
+      "statement": "∀ n : ℕ, 4 ≤ n → Even n → (n:ℝ) < Real.exp (Real.exp 5) → ∃ p : ℕ, Nat.Prime p ∧ 2 ≤ n-p ∧ (n-p).primeFactorsList.length ≤ 52",
+      "plain_statement": {
+        "zh": "将原型全域因子上界降至五十二",
+        "en": "Reduce the full prototype factor bound to fifty-two"
+      },
+      "brief": {
+        "zh": "使用同一 17 粗候选和 exp(5)<53 log 17。",
+        "en": "Use the same 17-rough witness and exp(5)<53 log 17."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-residue-rough-30030",
+        "L-goldbach-finite-rough-factor-power"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_prototype_52.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_prototype_52",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma"
     }
   ],
   "tracks": [
