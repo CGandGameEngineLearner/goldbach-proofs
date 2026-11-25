@@ -1363,6 +1363,126 @@
       "role": "lemma"
     },
     {
+      "id": "L-goldbach-selberg-sharp-large-sieve",
+      "file": "lean/PEqualNP/Outside/L_goldbach_selberg_sharp_large_sieve.lean",
+      "module": "PEqualNP.Outside.L_goldbach_selberg_sharp_large_sieve",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); ∀ (M N : ℕ) (x : Fin M → ℝ) (δ : ℝ) (a : ℕ → ℂ), 0 < δ → (∀ i j : Fin M, i ≠ j → δ ≤ |x i - x j - ((round (x i - x j) : ℤ) : ℝ)|) → (∑ i : Fin M, ‖∑ k ∈ Finset.range (N + 1), a k * E ((k : ℝ) * x i)‖ ^ 2) ≤ ((N : ℝ) + max 1 (2 / δ)) * ∑ k ∈ Finset.range (N + 1), ‖a k‖ ^ 2",
+      "plain_statement": {
+        "en": "For M points separated modulo one by δ > 0, the squared samples of a trigonometric polynomial on frequencies 0 through N sum to at most (N + max(1, 2/δ)) times its coefficient energy.",
+        "zh": "对模一间距至少为 δ > 0 的 M 个点，频率从 0 至 N 的三角多项式在这些点上的取值模平方之和至多为系数平方和的 N + max(1, 2/δ) 倍。"
+      },
+      "brief": {
+        "en": "Average the dual sum over translates of the frequency interval. A reciprocal-square bound on each row controls the off-diagonal terms, and duality gives coefficient one on N.",
+        "zh": "在频率区间的平移上平均对偶和，以每行的倒数平方和控制非对角项，再由对偶性得到 N 项的系数一。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1112/S0025579300004708",
+      "track": "selberg-large-sieve-and-power-saving",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-unconditional-minor-five-sixths",
+      "file": "lean/PEqualNP/Outside/L_goldbach_unconditional_minor_five_sixths.lean",
+      "module": "PEqualNP.Outside.L_goldbach_unconditional_minor_five_sixths",
+      "statement": "∀ ε : ℝ, 0 < ε → let e := fun u : ℝ => Complex.exp (((2 * Real.pi * u : ℝ) : ℂ) * Complex.I); let w := fun k : ℕ => if Nat.Prime k then Real.log (k : ℝ) else 0; let Q := fun n : ℕ => ⌊(n : ℝ) ^ (1 / 3 : ℝ)⌋₊; let H : ℕ → ℕ := fun n => 256 * Q n * (Nat.log 2 (n + 2)) ^ 2; ∃ N : ℕ, ∀ n : ℕ, N ≤ n → ∀ t ∈ Set.Icc (0 : ℝ) 1, (¬ ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q n ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t - (a : ℝ) / q| ≤ (H n : ℝ) / ((q : ℝ) * n)) → ‖∑ k ∈ Finset.range (n + 1), (w k : ℂ) * e ((k : ℝ) * t)‖ ≤ (n : ℝ) ^ (5 / 6 + ε)",
+      "plain_statement": {
+        "en": "For every ε > 0 and all sufficiently large n, the prime-log sum on the minor arcs has norm at most n^(5/6 + ε). The denominator cutoff is the floor of the cube root of n, and the windows have the stated logarithmic width.",
+        "zh": "对任意 ε > 0 及充分大的 n，次弧上素数对数指数和的范数至多为 n^(5/6 + ε)。分母上限为 n 的立方根的下取整，窗口宽度含有给定的对数因子。"
+      },
+      "brief": {
+        "en": "Apply the rational-approximation bound outside the windows of width 256 Q (log₂(n+2))²/(q n), with the integral dyadic logarithm. Absorb the remaining logarithmic factors into n^ε.",
+        "zh": "在宽度为 256 Q (log₂(n+2))²/(q n) 的窗口之外应用有理逼近估计，其中对数取整数部分，再将其余对数因子吸收到 n^ε 中。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/5c12780c17ea2303bdcca2226443828da679b137/research/gaps.json#L1985-L2004",
+      "track": "selberg-large-sieve-and-power-saving",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-three-quarters-model-sqrt-exceptions",
+      "file": "lean/PEqualNP/Outside/L_goldbach_three_quarters_model_sqrt_exceptions.lean",
+      "module": "PEqualNP.Outside.L_goldbach_three_quarters_model_sqrt_exceptions",
+      "statement": "let e := fun u : ℝ => Complex.exp (((2 * Real.pi * u : ℝ) : ℂ) * Complex.I); let w := fun k : ℕ => if Nat.Prime k then Real.log (k : ℝ) else 0; let S := fun (n : ℕ) (t : ℝ) => ∑ k ∈ Finset.range (n + 1), (w k : ℂ) * e ((k : ℝ) * t); let L := fun n : ℕ => (Nat.log 2 (n + 2) : ℝ); let Q := fun n : ℕ => ⌊((n : ℝ) ^ (1 / 6 : ℝ)) ^ 2⌋₊; let H : ℕ → ℕ := fun n => 256 * Q n * (Nat.log 2 (n + 2)) ^ 2; let center := fun q a : ℕ => (a : ℝ) / q; let width := fun n q : ℕ => (H n : ℝ) / ((q : ℝ) * n); let mean := fun q a : ℕ => (∑ r ∈ (Finset.range q).filter (fun r => Nat.Coprime r q), e ((r : ℝ) * center q a)) / (q.totient : ℂ); let K := fun (n : ℕ) (t : ℝ) => ∑ k ∈ Finset.range (n + 1), e ((k : ℝ) * t); let model := fun (n : ℕ) (t : ℝ) => ∑ q ∈ Finset.Icc 1 (Q n), ∑ a ∈ (Finset.range (q + 1)).filter (fun a => Nat.Coprime a q), (Set.Icc (center q a - width n q) (center q a + width n q)).indicator (fun u => mean q a * K n (u - center q a)) t; (∃ (C : ℝ) (k : ℕ), 0 < C ∧ Filter.Eventually (fun n : ℕ => ∀ t ∈ Set.Icc (0 : ℝ) 1, ‖S n t - model n t‖ ≤ C * (n : ℝ) ^ (3 / 4 : ℝ) * L n ^ k) Filter.atTop) → ∀ ε : ℝ, 0 < ε → let reps := fun n : ℕ => (Finset.range (n + 1)).filter (fun p => Nat.Prime p ∧ Nat.Prime (n - p)); ∃ N : ℕ, ∀ X : ℕ, N ≤ X → (((Finset.range (X + 1)).filter (fun n => 4 ≤ n ∧ Even n ∧ (reps n).card = 0)).card : ℝ) ≤ (X : ℝ) ^ (1 / 2 + ε)",
+      "plain_statement": {
+        "en": "Assume that on the whole unit interval the specified circle model approximates the prime-log sum with error at most C n^(3/4) L(n)^k eventually. For each ε > 0, at most X^(1/2 + ε) even integers from 4 through X then lack a two-prime representation, for all sufficiently large X.",
+        "zh": "设所给圆法模型在整个单位区间对素数对数和的误差最终至多为 C n^(3/4) L(n)^k。则对任意 ε > 0，当 X 充分大时，4 至 X 中至多有 X^(1/2 + ε) 个偶数不能表示为两素数之和。"
+      },
+      "brief": {
+        "en": "Apply the variance bound to the uniform model hypothesis, pass from dyadic blocks to the cumulative count, and recognize an exception by the empty computable set of prime summands.",
+        "zh": "对全区间的模型假设应用方差界，从二进区间推广到累积计数，并用可计算的素数加数集合是否为空判定例外。"
+      },
+      "program": "exceptions",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/5c12780c17ea2303bdcca2226443828da679b137/research/gaps.json#L2165-L2184",
+      "track": "selberg-large-sieve-and-power-saving",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-quadratic-gauss-norm-prime",
+      "file": "lean/PEqualNP/Outside/L_goldbach_quadratic_gauss_norm_prime.lean",
+      "module": "PEqualNP.Outside.L_goldbach_quadratic_gauss_norm_prime",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); ∀ p a : ℕ, Nat.Prime p → 2 < p → Nat.Coprime a p → ‖∑ b ∈ Finset.range p, (jacobiSym (b : ℤ) p : ℂ) * E ((b : ℝ) * ((a : ℝ) / p))‖ = Real.sqrt (p : ℝ)",
+      "plain_statement": {
+        "en": "For every odd prime p and every natural a coprime to p, the complex Fourier sum of the Jacobi symbol at frequency a has norm exactly √p.",
+        "zh": "对每个奇素数 p 和每个与 p 互素的自然数 a，雅可比符号在频率 a 的复傅里叶和的范数恰为 √p。"
+      },
+      "brief": {
+        "en": "Identify the phase with the standard additive character on ℤ/pℤ. Twisting by the unit a preserves the Gauss norm, and the quadratic Gauss sum identity gives √p.",
+        "zh": "将相位识别为模 p 剩余类环的标准加法特征。单位元 a 的扭转保持高斯和范数，再由二次高斯和恒等式得到 √p。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/GaussSum.lean#L234-L240",
+      "track": "deuring-heilbronn-and-25b-cert",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-no-uniform-conductor-threshold",
+      "file": "lean/PEqualNP/Outside/L_goldbach_no_uniform_conductor_threshold.lean",
+      "module": "PEqualNP.Outside.L_goldbach_no_uniform_conductor_threshold",
+      "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); let Q (n : ℕ) := (Nat.log 2 (n + 2)) ^ 2; let numerators (q : ℕ) := (Finset.range (q + 1)).filter (fun a => Nat.Coprime a q); let center (q a : ℕ) := (a : ℝ) / q; let width (n q : ℕ) := (Q n : ℝ) / ((q : ℝ) * n); let K (n : ℕ) (t : ℝ) := ∑ k ∈ Finset.range (n + 1), E ((k : ℝ) * t); let unitMean (q a : ℕ) := (∑ b ∈ (Finset.range q).filter (fun b => Nat.Coprime b q), E ((b : ℝ) * center q a)) / (q.totient : ℂ); let finiteFourier (q a : ℕ) (v : ℕ → ℝ) := ∑ b ∈ Finset.range q, (v b : ℂ) * E ((b : ℝ) * center q a); let secondary (d : ℕ) (c : ℕ → ℕ → ℝ) (ψ : ℕ → ℝ) (m q b : ℕ) := if d ∣ q then c q b * ψ m / q.totient else 0; let profileSize (n d : ℕ) (c : ℕ → ℕ → ℝ) (ψ : ℕ → ℝ) (q a : ℕ) := (Finset.range (n + 2)).sup' ⟨0, Finset.mem_range.mpr (Nat.zero_lt_succ (n + 1))⟩ (fun m => ‖finiteFourier q a (secondary d c ψ m q)‖); let amplified (n : ℕ) (D β : ℝ) := D * (1 + 2 * Real.pi * n * |β|); let prefixCost (n q a : ℕ) (D β : ℝ) := amplified n D β * (2 * ‖unitMean q a * K n β‖ + amplified n D β); let leftEnd (n q a : ℕ) := max (center q a - width n q) 0 - center q a; let rightEnd (n q a : ℕ) := min (center q a + width n q) 1 - center q a; let exceptionalBudget (n d : ℕ) (D : ℕ → ℕ → ℝ) := ∑ q ∈ (Finset.Icc 1 (Q n)).filter (fun q => d ∣ q), ∑ a ∈ numerators q, intervalIntegral (prefixCost n q a (D q a)) (leftEnd n q a) (rightEnd n q a) MeasureTheory.volume; ∀ Q₀ : ℕ, ∃ (d n : ℕ) (c : ℕ → ℕ → ℝ) (β : ℝ), Nat.Prime d ∧ Q₀ ≤ d ∧ d ≤ Q n ∧ 100000000000 < n ∧ Even n ∧ 0 < β ∧ β < 1 ∧ (∀ m : ℕ, m ≤ n + 1 → |(m : ℝ) ^ β| ≤ m) ∧ (∀ q ∈ Finset.Icc 1 (Q n), d ∣ q → ∀ a ∈ numerators q, ‖finiteFourier q a (c q)‖ ≤ Real.sqrt (d : ℝ)) ∧ (n : ℝ) / 288 < exceptionalBudget n d (profileSize n d c (fun m => (m : ℝ) ^ β))",
+      "plain_statement": {
+        "en": "Above every proposed conductor cutoff there is a prime d and an even n > 10¹¹ for which every reduced-numerator Fourier norm obeys the √d cap and the power profile obeys its envelope, yet the exceptional arc budget exceeds n/288.",
+        "zh": "对每个给定的导子下限，存在素数导子 d 和偶数 n > 10¹¹，使每个既约分子对应的傅里叶范数均不超过 √d，幂函数也满足包络界，而例外弧预算仍大于 n/288。"
+      },
+      "brief": {
+        "en": "Choose a sufficiently large prime conductor and construct the profile from its quadratic character. The exact Gauss norm and the integrated prefix costs give a lower bound for the exceptional budget.",
+        "zh": "选取充分大的素数导子，用二次特征构造剖面，由精确的高斯和范数与前缀代价的积分给出例外预算的下界。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/5c12780c17ea2303bdcca2226443828da679b137/research/gaps.json#L1845-L1864",
+      "track": "deuring-heilbronn-and-25b-cert",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-finite-positivity-25b",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_positivity_25b.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_positivity_25b",
+      "statement": "∀ n : ℕ, 4 ≤ n → n ≤ 25000000000 → Even n → let w : ℕ → ℝ := fun k => if Nat.Prime k then Real.log (k : ℝ) else 0; 0 < Finset.sum (Finset.range (n + 1)) (fun p => w p * w (n - p))",
+      "plain_statement": {
+        "en": "The prime-only logarithmic convolution is strictly positive at every even integer from 4 through 25,000,000,000 inclusive.",
+        "zh": "从 4 至 25,000,000,000（含两端）的每个偶数处，素数对数权加法卷积均严格为正。"
+      },
+      "brief": {
+        "en": "The kernel checks a segmented wheel certificate covering the even targets. Each certified prime pair contributes a strictly positive term to the convolution.",
+        "zh": "内核核验覆盖这些偶数的分段轮筛证书。每对经验证的素数都为该卷积贡献一个严格正项。"
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/5c12780c17ea2303bdcca2226443828da679b137/research/gaps.json#L142-L160",
+      "track": "deuring-heilbronn-and-25b-cert",
+      "role": "lemma"
+    },
+    {
       "id": "L-goldbach-continuous-parseval",
       "file": "lean/PEqualNP/Outside/L_goldbach_continuous_parseval.lean",
       "module": "PEqualNP.Outside.L_goldbach_continuous_parseval",
@@ -7521,6 +7641,37 @@
       },
       "feeds": [
         "arc-budget"
+      ]
+    },
+    {
+      "id": "selberg-large-sieve-and-power-saving",
+      "title": {
+        "en": "Sharp large sieve and power-saving minor arcs",
+        "zh": "尖锐大筛不等式与次弧幂次节省"
+      },
+      "description": {
+        "en": "Control exponential sums at separated points and on minor arcs. Relate a stronger uniform circle-model estimate to the cumulative number of binary Goldbach exceptions.",
+        "zh": "控制分离点上的指数和及次弧素数指数和，并将更强的全圆模型误差估计转化为二元哥德巴赫例外的累积计数界。"
+      },
+      "feeds": [
+        "arc-budget",
+        "exceptions"
+      ]
+    },
+    {
+      "id": "deuring-heilbronn-and-25b-cert",
+      "title": {
+        "en": "Quadratic Gauss sums and a 25-billion certificate",
+        "zh": "二次高斯和与二百五十亿验证"
+      },
+      "description": {
+        "en": "Evaluate the prime-modulus quadratic Gauss norm, exhibit the obstruction to a uniform conductor cutoff in the exceptional budget, and certify finite prime-log positivity.",
+        "zh": "计算素数模二次高斯和的范数，展示例外误差预算中统一导子阈值的障碍，并以有限证书验证素数对数卷积的正性。"
+      },
+      "feeds": [
+        "rational-model",
+        "arc-budget",
+        "representations"
       ]
     },
     {
