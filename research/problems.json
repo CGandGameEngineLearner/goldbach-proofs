@@ -196,7 +196,7 @@
         "id": "L-no-three-in-line-repeated-residue-direction",
         "file": "lean/PEqualNP/Outside/L_no_three_in_line_repeated_residue_direction.lean",
         "module": "PEqualNP.Outside.L_no_three_in_line_repeated_residue_direction",
-        "statement": "∀ (p x y u v s t : ℤ), 0 < p → ((x+p*u)-x)*(t-y) = ((y+p*v)-y)*(s-x) ↔ u*(t-y) = v*(s-x)",
+        "statement": "∀ (p x y u v s t : ℤ), 0 < p → (((x+p*u)-x)*(t-y) = ((y+p*v)-y)*(s-x) ↔ u*(t-y) = v*(s-x))",
         "plain_statement": {
           "zh": "两个提升点相差 p(u,v) 时，第三点与它们共线当且仅当 u(t−y)=v(s−x)。",
           "en": "For a pair separated by p(u,v), a third point (s,t) lies on its line exactly when u(t−y)=v(s−x)."
