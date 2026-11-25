@@ -3,7 +3,7 @@ import Mathlib
 theorem PEqualNP.Outside.L_quadratic_primes_cert_181 :
     ∀ n : ℕ, 181 ∣ n ^ 2 + 1 ↔ n % 181 = 19 ∨ n % 181 = 162 := by
   intro n
-  letI : Fact (Nat.Prime 181) := ⟨by decide⟩
+  letI : Fact (Nat.Prime 181) := ⟨by norm_num⟩
   have ha : ((n : ZMod 181) = 19) ↔ n % 181 = 19 :=
     ZMod.natCast_eq_natCast_iff' n 19 181
   have hb : ((n : ZMod 181) = 162) ↔ n % 181 = 162 :=
