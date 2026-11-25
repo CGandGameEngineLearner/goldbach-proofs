@@ -1,7 +1,7 @@
 import Mathlib
 
 theorem PEqualNP.Outside.L_goldbach_coset_nonunit_l2 :
-    let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k%q=r); let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; ∀ n q : ℕ, 0<q → (∑ r ∈ (Finset.range q).filter (fun r => ¬r.Coprime q), (A n q r)^2) ≤ (∑ p ∈ q.primeFactors, Real.log (p:ℝ))^2 := by
+    let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k % q = r); let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; ∀ n q : ℕ, 0<q → (∑ r ∈ (Finset.range q).filter (fun r => ¬r.Coprime q), (A n q r)^2) ≤ (∑ p ∈ q.primeFactors, Real.log (p:ℝ))^2 := by
   intro F w A n q hq
   let bad := (Finset.range q).filter (fun r => ¬r.Coprime q)
   let hits := (Finset.range (n + 1)).filter (fun k => k % q ∈ bad)
