@@ -6,7 +6,10 @@ theorem PEqualNP.Outside.L_goldbach_dyadic_conductor_ratio :
   have hdiv : 2 ^ k / 2 ^ j = 2 ^ (k - j) := by
     have hk : k = (k - j) + j := by omega
     have hpos : 0 < 2 ^ j := pow_pos (by decide) j
-    rw [hk, pow_add, Nat.mul_div_cancel _ hpos]
+    calc
+      2 ^ k / 2 ^ j = 2 ^ ((k - j) + j) / 2 ^ j := congrArg (fun m => 2 ^ m / 2 ^ j) hk
+      _ = (2 ^ (k - j) * 2 ^ j) / 2 ^ j := by rw [pow_add]
+      _ = 2 ^ (k - j) := Nat.mul_div_cancel _ hpos
   have ht1 : Nat.totient (2 ^ (k - j)) = 2 ^ (k - j - 1) := by
     rw [Nat.totient_prime_pow Nat.prime_two (by omega)]
     norm_num
