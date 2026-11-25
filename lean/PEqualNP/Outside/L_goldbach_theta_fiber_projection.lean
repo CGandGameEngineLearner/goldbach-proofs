@@ -7,15 +7,9 @@ theorem PEqualNP.Outside.L_goldbach_theta_fiber_projection :
     intro f
     symm
     rw [← Finset.sum_fiberwise_of_maps_to (g := c) (t := Finset.univ)]
-    · apply Finset.sum_congr rfl
-      intro j _
-      apply Finset.sum_congr _ (fun _ _ => rfl)
-      ext i
-      simp [F]
-    · intro _ _
-      exact Finset.mem_univ _
+    intro _ _
+    exact Finset.mem_univ _
   rw [← hfib (fun i => (a i - μ (c i)) ^ 2), ← hfib (fun i => (a i - b (c i)) ^ 2)]
-  dsimp only
   apply Finset.sum_le_sum
   intro j _
   have hdiff : ∑ i ∈ F j, ((a i - b (c i)) ^ 2 - (a i - μ (c i)) ^ 2) =
