@@ -11,7 +11,6 @@ theorem PEqualNP.Outside.L_quadratic_primes_cert_1877 :
   have hroots : ∀ x : ZMod 1877, x ^ 2 + 1 = 0 ↔
       x = ((137 : ℕ) : ZMod 1877) ∨ x = ((1740 : ℕ) : ZMod 1877) := by
     intro x
-    set_option linter.style.haveILetI false in
     haveI : Fact (Nat.Prime 1877) := ⟨hq⟩
     constructor
     · intro h
