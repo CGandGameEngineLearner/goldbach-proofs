@@ -5,6 +5,7 @@ on:
     paths:
       - deploy/publish_catalogue.py
       - deploy/test_publish_catalogue.py
+      - research/strong-goldbach.lean
       - research/ROADMAP.md
       - research/gaps.json
       - research/problems.json
@@ -14,6 +15,7 @@ on:
     paths:
       - deploy/publish_catalogue.py
       - deploy/test_publish_catalogue.py
+      - research/strong-goldbach.lean
       - research/ROADMAP.md
       - research/gaps.json
       - research/problems.json
@@ -56,7 +58,10 @@ jobs:
           gaps.extend(gap for problem in problems.values() for gap in problem['gaps'])
           # All current gaps are independent and can be stated using Mathlib alone.
           assert all(not gap["imports"] for gap in gaps)
-          lines = ["import Mathlib", "set_option autoImplicit false"]
+          endpoint = next(g["statement"] for g in gaps if g["id"] == "L-goldbach-binary-pointwise-positivity")
+          lines = [Path("../research/strong-goldbach.lean").read_text(),
+                   f"example : StrongGoldbach ↔ ({endpoint}) := strongGoldbach_iff_primeMass",
+                   "set_option autoImplicit false"]
           for gap in gaps:
               lines.extend(("", "-- " + gap["id"], "example : Prop := (" + gap["statement"] + ")"))
           (Path(os.environ["RUNNER_TEMP"]) / "Catalogue.lean").write_text("\n".join(lines) + "\n")
