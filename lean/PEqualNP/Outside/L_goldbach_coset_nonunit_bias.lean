@@ -2,7 +2,7 @@ import Mathlib
 
 /-- A prime in a nonunit residue class must divide the modulus. -/
 theorem PEqualNP.Outside.L_goldbach_coset_nonunit_bias :
-    let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k%q=r); let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; ∀ n q r : ℕ, 0<q → r<q → ¬r.Coprime q → A n q r ≤ ∑ p ∈ q.primeFactors, Real.log (p:ℝ) := by
+    let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k % q = r); let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; ∀ n q r : ℕ, 0<q → r<q → ¬r.Coprime q → A n q r ≤ ∑ p ∈ q.primeFactors, Real.log (p:ℝ) := by
   classical
   dsimp only
   intro n q r hq _hr hnonunit
