@@ -59,7 +59,12 @@ theorem PEqualNP.Outside.L_goldbach_coset_phase_fiber_factor :
     constructor
     · intro heq
       have h1 : q * ((a + b) / q) = q * (a / q + b / q) + b % q := by nlinarith
-      have hle : a / q + b / q ≤ (a + b) / q := by nlinarith
+      have hle : a / q + b / q ≤ (a + b) / q := by
+        by_contra hlt
+        have hstep : (a + b) / q + 1 ≤ a / q + b / q := by omega
+        have hmul := Nat.mul_le_mul_left q hstep
+        have hdist : q * ((a + b) / q + 1) = q * ((a + b) / q) + q := by ring
+        omega
       have hge : (a + b) / q ≤ a / q + b / q := by
         by_contra hgt
         have hstep : a / q + b / q + 1 ≤ (a + b) / q := by omega
@@ -85,7 +90,11 @@ theorem PEqualNP.Outside.L_goldbach_coset_phase_fiber_factor :
       by_cases hdvd : (M + 1) % q = 0
       · rw [if_pos hdvd]
         have hdiv : (M + 1) / q = M / q + 1 := by
-          have h1 : M / q < (M + 1) / q := by nlinarith
+          have h1 : M / q < (M + 1) / q := by
+            by_contra hle
+            have hstep : (M + 1) / q ≤ M / q := by omega
+            have hmul := Nat.mul_le_mul_left q hstep
+            omega
           have h2 : (M + 1) / q ≤ M / q + 1 := by
             by_contra hgt
             have hstep : M / q + 2 ≤ (M + 1) / q := by omega
@@ -135,7 +144,10 @@ theorem PEqualNP.Outside.L_goldbach_coset_phase_fiber_factor :
           have hinv : (u ^ q) ^ h * ((u ^ q)⁻¹) ^ h = 1 := by
             rw [← mul_pow, mul_inv_cancel₀ huq, one_pow]
           have hpow : u ^ n = u ^ (n - h * q) * (u ^ q) ^ h := by
-            rw [hn, pow_add, ← pow_mul, mul_comm q h]
+            calc
+              u ^ n = u ^ ((n - h * q) + h * q) := congrArg (fun m => u ^ m) hn
+              _ = u ^ (n - h * q) * u ^ (h * q) := pow_add u _ _
+              _ = u ^ (n - h * q) * (u ^ q) ^ h := by rw [← pow_mul, mul_comm q h]
           calc
             u ^ n * ((B n (n - h * q) : ℂ) * ((u ^ q)⁻¹) ^ h)
                 = (B n (n - h * q) : ℂ) * u ^ (n - h * q) * ((u ^ q) ^ h * ((u ^ q)⁻¹) ^ h) := by
