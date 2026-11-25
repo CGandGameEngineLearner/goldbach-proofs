@@ -1,7 +1,7 @@
 import Mathlib
 
 theorem PEqualNP.Outside.L_goldbach_residual_test_approximation :
-    let C := fun (x : ℕ) (a b : ℕ → ℝ) s => ∑ k ∈ (Finset.range (x+1)).filter (fun k => k ≤ s ∧ s-k ≤ x), a k*b (s-k); ∀ (x q c : ℕ) (a b g p : ℕ → ℝ) (δ : ℝ), let S := (Finset.range (2*x+1)).filter (fun s => s%q=c); (∀ s ∈ S, |g s-p s|≤δ) → 0≤δ → (∑ s ∈ S, p s*C x a b s)=0 → |∑ s ∈ S, g s*C x a b s| ≤ δ*(∑ i ∈ Finset.range (x+1), |a i|)*(∑ j ∈ Finset.range (x+1), |b j|) := by
+    let C := fun (x : ℕ) (a b : ℕ → ℝ) s => ∑ k ∈ (Finset.range (x+1)).filter (fun k => k ≤ s ∧ s-k ≤ x), a k*b (s-k); ∀ (x q c : ℕ) (a b g p : ℕ → ℝ) (δ : ℝ), let S := (Finset.range (2*x+1)).filter (fun s => s % q = c); (∀ s ∈ S, |g s-p s|≤δ) → 0≤δ → (∑ s ∈ S, p s*C x a b s)=0 → |∑ s ∈ S, g s*C x a b s| ≤ δ*(∑ i ∈ Finset.range (x+1), |a i|)*(∑ j ∈ Finset.range (x+1), |b j|) := by
   intro C x q c a b g p δ S hsup hδ hz
   let I := Finset.range (x+1)
   have hC (s : ℕ) : |C x a b s| ≤ ∑ i ∈ I, if i ≤ s ∧ s-i ≤ x then |a i| * |b (s-i)| else 0 := by
