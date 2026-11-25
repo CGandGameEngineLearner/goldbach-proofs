@@ -16,8 +16,10 @@ theorem PEqualNP.Outside.L_hash_collision_lab_cert_7_15 :
     | succ m hm ih =>
       have hs := Nat.choose_le_choose 6 hm
       rw [centerSlope] at hs
-      have hp := pascal m
-      omega
+      calc
+        _ = (6435 + 5005 * m) + 5005 := by rw [Nat.mul_succ] <;> ac_rfl
+        _ ≤ (Nat.choose m 7 + 75075) + Nat.choose m 6 := Nat.add_le_add ih hs
+        _ = _ := by rw [pascal] <;> ac_rfl
   have below : ∀ d m : ℕ, m + d = 15 →
       6435 + 5005 * m ≤ Nat.choose m 7 + 75075 := by
     intro d
@@ -41,4 +43,4 @@ theorem PEqualNP.Outside.L_hash_collision_lab_cert_7_15 :
   have total := Finset.sum_le_sum (s := Finset.univ)
     (fun (i : Fin q) _ => point (b i))
   simpa only [Finset.sum_add_distrib, Finset.sum_const, Finset.card_univ,
-    Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum] using total
+    Fintype.card_fin, nsmul_eq_mul, Nat.cast_id, ← Finset.mul_sum] using total
