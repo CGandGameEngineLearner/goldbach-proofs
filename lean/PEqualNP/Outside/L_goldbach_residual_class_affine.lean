@@ -1,7 +1,7 @@
 import Mathlib
 
 theorem PEqualNP.Outside.L_goldbach_residual_class_affine :
-    let F := fun x q r : ℕ => (Finset.range (x+1)).filter (fun k => k%q=r); let e := fun (x q : ℕ) (a : ℕ → ℝ) k => let f := F x q (k%q); a k-(∑ i ∈ f, a i)/(f.card:ℝ); let C := fun (x : ℕ) (a b : ℕ → ℝ) s => ∑ k ∈ (Finset.range (x+1)).filter (fun k => k ≤ s ∧ s-k ≤ x), a k*b (s-k); ∀ (x q c : ℕ) (a b : ℕ → ℝ) (u v : ℝ), 0<q → (∑ s ∈ (Finset.range (2*x+1)).filter (fun s => s%q=c), (u+v*(s:ℝ))*C x (e x q a) (e x q b) s)=0 := by
+    let F := fun x q r : ℕ => (Finset.range (x+1)).filter (fun k => k % q = r); let e := fun (x q : ℕ) (a : ℕ → ℝ) k => let f := F x q (k % q); a k-(∑ i ∈ f, a i)/(f.card:ℝ); let C := fun (x : ℕ) (a b : ℕ → ℝ) s => ∑ k ∈ (Finset.range (x+1)).filter (fun k => k ≤ s ∧ s-k ≤ x), a k*b (s-k); ∀ (x q c : ℕ) (a b : ℕ → ℝ) (u v : ℝ), 0<q → (∑ s ∈ (Finset.range (2*x+1)).filter (fun s => s % q = c), (u+v*(s:ℝ))*C x (e x q a) (e x q b) s)=0 := by
   intro F e C x q c a b u v hq
   have hzero : ∀ (g : ℕ → ℝ) (r : ℕ), ∑ k ∈ F x q r, e x q g k = 0 := by
     intro g r
