@@ -1,7 +1,6 @@
 import Mathlib
 
 set_option maxRecDepth 3000 in
-set_option exponentiation.threshold 400 in
 theorem PEqualNP.Outside.L_goldbach_finite_rough_prototype_61 :
     ∀ n : ℕ, 4 ≤ n → Even n → (n:ℝ) < Real.exp (Real.exp 5) → ∃ p : ℕ, Nat.Prime p ∧ 2 ≤ n-p ∧ (n-p).primeFactorsList.length ≤ 61 := by
   intro n hn heven htop
@@ -24,7 +23,7 @@ theorem PEqualNP.Outside.L_goldbach_finite_rough_prototype_61 :
   have hp_lt := p.isLt
   have hs : 2 ≤ n - p.val := by omega
   have hmod : Nat.ModEq 210 (n-p.val) (r.val+210-p.val) := by
-    change (n-p.val)%210 = (n%210+210-p.val)%210
+    change (n - p.val) % 210 = (n % 210 + 210 - p.val) % 210
     omega
   have hcop' : Nat.Coprime (n-p.val) 210 := hmod.gcd_eq.trans hcop
   have rough : ∀ q ∈ (n-p.val).primeFactorsList, 11 ≤ q := by
@@ -62,7 +61,8 @@ theorem PEqualNP.Outside.L_goldbach_finite_rough_prototype_61 :
     _ = (11:ℝ)^62 := by
       have hlogpow := Real.log_pow (11:ℝ) 62
       norm_num only [Nat.cast_ofNat] at hlogpow
-      rw [← hlogpow, Real.exp_log (by positivity)] <;> norm_num
+      rw [← hlogpow, Real.exp_log (by positivity)]
+      norm_num
   refine ⟨p.val, hp, hs, ?_⟩
   by_contra! hlong
   have hpow62 : (11:ℕ)^62 ≤ 11^(n-p.val).primeFactorsList.length :=
