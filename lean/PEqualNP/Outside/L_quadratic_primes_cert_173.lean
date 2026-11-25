@@ -3,7 +3,7 @@ import Mathlib
 theorem PEqualNP.Outside.L_quadratic_primes_cert_173 :
     ∀ n:ℕ, 173∣n^2+1 ↔ n % 173=80 ∨ n % 173=93 := by
   intro n
-  letI : Fact (Nat.Prime 173) := ⟨by decide⟩
+  let : Fact (Nat.Prime 173) := ⟨by norm_num⟩
   have hsum : (80 + 93 : ZMod 173) = 0 := by decide
   have hprod : (80 * 93 : ZMod 173) = 1 := by decide
   have factor (z : ZMod 173) : (z - 80) * (z - 93) = z ^ 2 + 1 := by
