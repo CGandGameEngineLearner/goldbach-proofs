@@ -11541,6 +11541,69 @@
       "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
     },
     {
+      "id": "L-goldbach-plateau-arc-shell",
+      "file": "lean/PEqualNP/Outside/L_goldbach_plateau_arc_shell.lean",
+      "module": "PEqualNP.Outside.L_goldbach_plateau_arc_shell",
+      "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; ∀ n h : ℕ, 0<n → Q (n+h)=Q n → MeasureTheory.volume ((arcs n) \\ (arcs (n+h))) ≤ ENNReal.ofReal (4*(Q n:ℝ)^2*(h:ℝ)/((n:ℝ)*((n+h:ℕ):ℝ)))",
+      "plain_statement": {
+        "zh": "同导子截断时移动主弧的薄壳测度",
+        "en": "Measure of the moving arc shell on a cutoff plateau"
+      },
+      "brief": {
+        "zh": "对每个既约分数比较半径。每个分母 q 至多 q+1 个中心，用两侧半径差作有限并上界。对数截断跳跃处需另作估计。 用于高高项的移位比较。",
+        "en": "Bound the two lost strips at each rational center and sum over denominators. Changes of cutoff remain outside this estimate. Downstream: shifted bulk minor-arc comparisons."
+      },
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": [],
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
+    },
+    {
+      "id": "L-goldbach-bulk-shift-spectrum-cost",
+      "file": "lean/PEqualNP/Outside/L_goldbach_bulk_shift_spectrum_cost.lean",
+      "module": "PEqualNP.Outside.L_goldbach_bulk_shift_spectrum_cost",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; ∀ n h : ℕ, 1≤n → (∫ t in (0:ℝ)..1, ‖S (n+h) (high (n+h)) t - S n (high n) t‖^2) ≤ 2*(h:ℝ)*Real.log ((n+h:ℕ):ℝ)^2",
+      "plain_statement": {
+        "zh": "移动素数谱截断的无条件均方代价",
+        "en": "Unconditional mean-square cost of shifting the prime cutoff"
+      },
+      "brief": {
+        "zh": "用整数频率正交性化成系数平方和。新增频率至多 h 个；原有频率中退出的底数满足 n<k³≤n+h，由立方映射的单射性也至多 h 个。 用于高高项的移位比较。",
+        "en": "Apply orthogonality. Count the entering top frequencies and the exiting cubic-cutoff bases separately, using injectivity of cubing. Downstream: shifted bulk minor-arc comparisons."
+      },
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": [],
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
+    },
+    {
+      "id": "L-goldbach-even-shift-phase-filter",
+      "file": "lean/PEqualNP/Outside/L_goldbach_even_shift_phase_filter.lean",
+      "module": "PEqualNP.Outside.L_goldbach_even_shift_phase_filter",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (H : ℕ) (t : ℝ), 0<H → Real.sin (2*Real.pi*t) ≠ 0 → ‖(∑ j ∈ Finset.range H, E (-2*(j:ℝ)*t))/(H:ℂ)‖ ≤ min 1 (1/((H:ℝ)*|Real.sin (2*Real.pi*t)|))",
+      "plain_statement": {
+        "zh": "偶移平均的频率衰减与半整数共振",
+        "en": "Frequency attenuation and half-integer resonance under even shifts"
+      },
+      "brief": {
+        "zh": "用有限几何级数和三角不等式分别给出两个界。冻结谱与弧后可直接估计移频平均；接近半整数时不能指望此界给强衰减。 用于高高项的移位比较。",
+        "en": "Bound the geometric sum both trivially and by the chord length. Apply to a frozen spectrum and mask; the bound deteriorates near half-integers. Downstream: shifted bulk minor-arc comparisons."
+      },
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": [],
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
+    },
+    {
       "id": "L-goldbach-four-window-support-congruences",
       "statement": "∀ (n j a b : ℕ), 0 < n → j ≤ 3 → (n:ℝ)/(3*2^j) ≤ a → (a:ℝ) ≤ 2*n/(3*2^j) → (n:ℝ)/(3*2^j) ≤ b → (b:ℝ) ≤ 2*n/(3*2^j) → (a % n = b % n ↔ a = b) ∧ (n ∣ a+b ↔ j = 0 ∧ a+b = n)",
       "plain_statement": {
@@ -11691,7 +11754,7 @@
     },
     {
       "id": "L-goldbach-hardy-central-positive-tail-margin",
-      "statement": "∀ {ι : Type} (s : Finset ι) (λ w : ι → ℝ) (A B Q : ℝ), 0 ≤ A → 0 ≤ B → 0 ≤ Q → (∀ i ∈ s, 0 ≤ w i ∧ λ i ≤ B) → (∑ i ∈ s, w i) ≤ Q → (∑ i ∈ s.filter (fun i => A < λ i), w i) ≤ A*Q/(2*(B+1)) → (∑ i ∈ s, λ i*w i) ≤ (3/2)*A*Q",
+      "statement": "∀ {ι : Type} (s : Finset ι) (eigen w : ι → ℝ) (A B Q : ℝ), 0 ≤ A → 0 ≤ B → 0 ≤ Q → (∀ i ∈ s, 0 ≤ w i ∧ eigen i ≤ B) → (∑ i ∈ s, w i) ≤ Q → (∑ i ∈ s.filter (fun i => A < eigen i), w i) ≤ A*Q/(2*(B+1)) → (∑ i ∈ s, eigen i*w i) ≤ (3/2)*A*Q",
       "plain_statement": {
         "zh": "新路线 · OC-7008 · 指定向量的正谱尾预算",
         "en": "OC-7008 · Positive spectral tail budget for one vector"
@@ -11712,7 +11775,7 @@
     },
     {
       "id": "L-goldbach-odd-conductor-divisor-budget",
-      "statement": "∀ (n : ℕ) (Y : ℝ), (∑ d ∈ n.divisors.filter (fun d => (d:ℝ) ≤ Y), (Nat.totient d:ℝ)) ≤ max 0 Y * (n.divisors.card:ℝ)",
+      "statement": "∀ (n : ℕ) (Y : ℝ), (∑ d ∈ n.divisors.filter (fun d : ℕ => (d:ℝ) ≤ Y), (Nat.totient d:ℝ)) ≤ max 0 Y * (n.divisors.card:ℝ)",
       "plain_statement": {
         "zh": "新路线 · OC-7009 · 一般偶模的低导子总容量",
         "en": "OC-7009 · Capacity of small conductor layers"
