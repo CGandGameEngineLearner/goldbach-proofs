@@ -20,7 +20,7 @@ private theorem residual_mass (n : ℕ) :
     simp
 
 theorem PEqualNP.Outside.L_goldbach_coset_primepower_ap_energy :
-    let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k%q=r); let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; ∃ C : ℝ, 0<C ∧ ∀ n q : ℕ, 2≤n → 0<q → (∑ r ∈ Finset.range q, ((∑ k ∈ F n q r, ArithmeticFunction.vonMangoldt k)-A n q r)^2) ≤ C*(n:ℝ)*(Real.log (2*(n:ℝ)))^4 := by
+    let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k % q=r); let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; ∃ C : ℝ, 0<C ∧ ∀ n q : ℕ, 2≤n → 0<q → (∑ r ∈ Finset.range q, ((∑ k ∈ F n q r, ArithmeticFunction.vonMangoldt k)-A n q r)^2) ≤ C*(n:ℝ)*(Real.log (2*(n:ℝ)))^4 := by
   intro F w A
   obtain ⟨K, hK⟩ := Chebyshev.psi_sub_theta_le_mul_sqrt
   let B := max K 1
