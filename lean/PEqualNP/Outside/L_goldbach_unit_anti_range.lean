@@ -1,5 +1,3 @@
-import Lean
-
 theorem L_goldbach_unit_anti_range :
     ∀ n a b : Nat, 0 < a → a < n → 0 < b → b < n →
       (n ∣ a + b ↔ a + b = n) := by
