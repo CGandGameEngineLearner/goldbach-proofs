@@ -404,6 +404,24 @@
         "imports": [],
         "parallel": true,
         "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/54f3ab5/research/problems.json"
+      },
+      {
+        "id": "L-no-three-in-line-hjsw-fold-upper-bound",
+        "file": "lean/PEqualNP/Outside/L_no_three_in_line_hjsw_fold_upper_bound.lean",
+        "module": "PEqualNP.Outside.L_no_three_in_line_hjsw_fold_upper_bound",
+        "statement": "∀ (p : ℕ) [NeZero p] (hp : Nat.Prime p), p ≠ 2 →\n  (let det3 : ℤ × ℤ → ℤ × ℤ → ℤ × ℤ → ℤ :=\n     fun P Q R => (Q.1 - P.1) * (R.2 - P.2) - (Q.2 - P.2) * (R.1 - P.1)\n   let cap : ZMod p → ZMod p → ZMod p × ZMod p := fun t x => (x + t, x⁻¹)\n   let lift : ZMod p → ZMod p → Fin 2 → Fin 2 → ℤ × ℤ :=\n     fun t x i j =>\n       (((cap t x).1.val : ℤ) + (i.val : ℤ) * (p : ℤ),\n        ((cap t x).2.val : ℤ) + (j.val : ℤ) * (p : ℤ))\n   let Mask : Type := ZMod p → Finset (Fin 2 × Fin 2)\n   let points : ZMod p → Mask → Finset (ℤ × ℤ) :=\n     fun t R =>\n       (Finset.univ.filter (fun x : ZMod p => x ≠ 0)).biUnion\n         (fun x => (R x).image (fun ij => lift t x ij.1 ij.2))\n   let NoThreeCollinear : Finset (ℤ × ℤ) → Prop :=\n     fun S => ∀ a ∈ S, ∀ b ∈ S, ∀ c ∈ S, a ≠ b → a ≠ c → b ≠ c → det3 a b c ≠ 0\n   ∀ (t : ZMod p) (R : Mask), NoThreeCollinear (points t R) →\n     (∑ x ∈ Finset.univ.filter (fun x : ZMod p => x ≠ 0), (R x).card) ≤ 3 * (p - 1))",
+        "plain_statement": {
+          "zh": "对任意奇素数 p、任意平移 t 与任意每剩余 mask：若平移双曲线 cap 的 2-周期提升点无三点共线，则总点数不超过 3(p−1)。即 HJSW 的 3(p−1) 是该折叠族的上界，该族无净增。",
+          "en": "For every odd prime p, every shift t and every mask: if the 2-period lift of the shifted hyperbola cap has no three collinear points, the total number of points is at most 3(p−1). Thus HJSW's 3(p−1) is an upper bound within this fold family, which admits no net gain."
+        },
+        "brief": {
+          "zh": "平移双曲线 cap 的 2-周期折叠族的 3(p−1) 最优性（对一切奇素数 p）。先用行列式展开与模 p 条件把纤维对约束刻画为 xx'≡±1，再证边对 S=6、约束图是 C2/C4 之并，最后用独立集/邻域计数得 Σ≤3(p−1)。",
+          "en": "Optimality of 3(p−1) for the 2-period fold family of the shifted hyperbola cap (all odd primes). Fibre-pair constraints are characterised by xx'≡±1 via a determinant expansion; edge pairs have S=6; the constraint graph is a union of C2/C4; an independent-set/neighbour count gives Σ≤3(p−1)."
+        },
+        "program": "correlation",
+        "imports": [],
+        "parallel": true,
+        "source": "https://doi.org/10.1016/0097-3165(75)90043-6"
       }
     ],
     "roadmap": [
@@ -470,6 +488,11 @@
             "id": "L-no-three-in-line-two-period-lift",
             "zh": "两周期点阵构造",
             "en": "The two-period construction"
+          },
+          {
+            "id": "L-no-three-in-line-hjsw-fold-upper-bound",
+            "zh": "HJSW 折叠族的 3(p−1) 上界",
+            "en": "HJSW fold-family 3(p−1) upper bound"
           }
         ]
       },
@@ -1677,6 +1700,24 @@
         "imports": [],
         "parallel": true,
         "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/54f3ab5/research/problems.json"
+      },
+      {
+        "id": "L-quadratic-primes-middle-coarse",
+        "file": "lean/PEqualNP/Outside/L_quadratic_primes_middle_coarse.lean",
+        "module": "PEqualNP.Outside.L_quadratic_primes_middle_coarse",
+        "statement": "let wgt := fun (n p : ℕ) => (((n ^ 2 + 1).factorization p : ℕ) : ℝ) * Real.log (p : ℝ); let middle := fun (x : ℕ) => Finset.sum (Finset.Ioc x (2 * x)) (fun n => Finset.sum ((n ^ 2 + 1).primeFactors.filter (fun p => x < p ∧ p ^ 100000 ≤ n ^ 132301)) (fun (p : ℕ) => wgt n p)); let apTheta := fun (x : ℕ) => Finset.sum ((Finset.range ((2 * x) ^ 132301 + 1)).filter (fun p => p.Prime ∧ p % 4 = 1)) (fun p => Real.log (p : ℝ)); ∀ x : ℕ, 1 ≤ x → middle x ≤ 4 * apTheta x",
+        "plain_statement": {
+          "zh": "存在常数 4：对每个 x ≥ 1，中段质量（n 取遍 (x,2x]、p 取遍 n²+1 的素因子且满足 x<p、p^100000≤n^132301，按 v_p(n²+1)·log p 加权求和）不超过 4 倍的 apTheta(x)=Σ log p（p 取遍 ≤(2x)^132301 且 p≡1 (mod 4) 的素数）。",
+          "en": "For every x ≥ 1, the middle mass — the sum of v_p(n^2+1)·log p over n in (x,2x] and prime divisors p of n^2+1 with x < p and p^100000 ≤ n^132301 — is at most 4 times apTheta(x), the sum of log p over primes p ≤ (2x)^132301 with p ≡ 1 (mod 4)."
+        },
+        "brief": {
+          "zh": "把中段质量按素数纤维重排：每个中段素数的根数≤2、重数≤2，故单素数贡献≤4 log p，从而 middle x ≤ 4·apTheta x。这是「粗计数路线无法在 x log x 预算内闭合」的障碍钉死（常数 2 不成立，见反例）。",
+          "en": "Regroup the middle mass by prime fibres: each middle prime has at most two roots and multiplicity at most two, hence contributes at most 4 log p, so middle x ≤ 4·apTheta x. This pins down the obstruction that crude counting cannot close within an x log x budget (constant 2 is false; see the counterexample)."
+        },
+        "program": "correlation",
+        "imports": [],
+        "parallel": true,
+        "source": "https://arxiv.org/abs/1908.08816"
       }
     ],
     "roadmap": [
@@ -1844,6 +1885,11 @@
             "id": "L-quadratic-primes-middle-root-cap",
             "zh": "每个中段奇素数在短窗口至多命中两次",
             "en": "At most two hits per odd middle prime in a short window"
+          },
+          {
+            "id": "L-quadratic-primes-middle-coarse",
+            "zh": "中段质量的粗上界（常数 4）",
+            "en": "A coarse upper bound on the middle mass (constant 4)"
           }
         ]
       }
