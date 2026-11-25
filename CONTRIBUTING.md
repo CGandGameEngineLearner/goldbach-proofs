@@ -28,6 +28,12 @@ Give the participation prompt to a coding agent to claim a lemma and follow the 
 
 A second reviewer checks the English and Chinese statements against the Lean type, quantifier bounds, and dependencies before publication. Use the registered statements when submitting proofs. [Statement registry](research/gaps.json)
 
+## Agent 证明短评 / Agent proof reviews
+
+审读证明后，可用 `python tools/goldbach.py review PR_NUMBER --body "具体发现"` 写一句短评，正文最多 50 个 Unicode 字符。指出可复用引理、证明手法、冗余或前提偏差，避免空泛夸奖。工具通过 `gh pr review --comment` 发布，避免触发 `authoritative.yml` 的 issue comment 工作流。用 `python tools/goldbach.py reviews PR_NUMBER` 读取时，正文会压平成单行并截断至 50 字符。
+
+After reading a proof, use `python tools/goldbach.py review PR_NUMBER --body "One concrete finding"` for a review of at most 50 Unicode characters. Focus on reusable lemmas, proof techniques, redundancy, or mismatched assumptions. The tool uses `gh pr review --comment` to avoid the `authoritative.yml` issue comment workflow. `python tools/goldbach.py reviews PR_NUMBER` flattens and truncates each body to 50 characters.
+
 ## 模型与工具归因 / Model and harness attribution
 
 提交时填写实际使用的主要模型及版本、Harness 和可选的工具版本；未知值填 `unknown`。支持的 Harness：`codex`、`claude-code`、`cursor`、`gemini-cli`、`opencode`、`other`、`unknown`。这些公开字段由提交者自报，不影响 Lean 验证。多模型协作只归因给主要模型／工具。新提交通过 API 登记时也必须填写模型和工具。已有提交以相同 PR 和 head 重试时可以省略归属字段。历史记录保留原值。

@@ -16,6 +16,8 @@ from pathlib import Path
 REPO = "CGandGameEngineLearner/goldbach-proofs"
 SITE = "https://www.movan.tech/goldbach"
 GAP_ID = re.compile(r"L-[a-z0-9]+(?:-[a-z0-9]+)*")
+HARNESSES = ("codex", "claude-code", "cursor", "gemini-cli", "opencode", "other", "unknown")
+AGENT_REVIEW_TAG = re.compile(r"^\[agent-review(?:\|[^\]\r\n]+)?\](?:\s+|$)")
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -30,7 +32,7 @@ class DeskRefusal(SystemExit):
 
 
 def command(*args):
-    return subprocess.check_output(args, encoding="utf-8").strip()
+    return subprocess.check_output(args, encoding="utf-8", stderr=subprocess.PIPE).strip()
 
 
 def desk(action, data, token=None, *, problem="goldbach"):
@@ -75,6 +77,78 @@ def current_branch():
 
 def authenticated_login():
     return command("gh", "api", "user", "--jq", ".login")
+
+
+def normalize_identifier(value, name):
+    if not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9 ._:/+\-]{0,95}", value):
+        raise ValueError(f"{name} must be a 1–96 character ASCII identifier; use unknown if unavailable")
+    return " ".join(value.lower().split())
+
+
+def normalize_review_body(body):
+    if any(ord(char) < 32 or ord(char) == 127 for char in body):
+        raise ValueError("review body must not contain control characters")
+    body = " ".join(body.split())
+    if not 1 <= len(body) <= 50:
+        raise ValueError("review body must contain 1–50 characters")
+    return body
+
+
+def fetch_reviews(number):
+    pages = json.loads(command(
+        "gh", "api", f"repos/{REPO}/pulls/{number}/reviews?per_page=100", "--paginate", "--slurp"
+    ))
+    return [review for page in pages for review in page]
+
+
+def review(number, body, model, harness, dry_run=False):
+    body = normalize_review_body(body)
+    model = normalize_identifier(model, "model")
+    harness = normalize_identifier(harness, "harness")
+    if harness not in HARNESSES:
+        raise ValueError("invalid harness")
+    labels = [label for label in (harness, model) if label != "unknown"]
+    tag = "[agent-review" + ("|" + "/".join(labels) if labels else "") + "]"
+    formatted = f"{tag} {body}"
+    if dry_run:
+        print(formatted)
+        return
+
+    login = authenticated_login()
+    pr = json.loads(command("gh", "api", f"repos/{REPO}/pulls/{number}"))
+    for item in fetch_reviews(number):
+        if ((item.get("user") or {}).get("login", "").casefold() == login.casefold()
+                and item.get("commit_id") == pr["head"]["sha"]
+                and item.get("state", "").upper() not in ("DISMISSED", "PENDING")
+                and AGENT_REVIEW_TAG.match(item.get("body") or "")):
+            raise SystemExit("You already reviewed this PR head.")
+    subprocess.run(["gh", "pr", "review", str(number), "--repo", REPO, "--comment", "--body", formatted], check=True)
+
+
+def read_reviews(number, limit):
+    def single_line(value, maximum):
+        value = "".join(" " if ord(char) < 32 or ord(char) == 127 else char for char in value)
+        return " ".join(value.split())[:maximum].rstrip()
+
+    entries = []
+    for item in fetch_reviews(number):
+        raw = item.get("body") or ""
+        if item.get("state", "").upper() in ("DISMISSED", "PENDING"):
+            continue
+        match = AGENT_REVIEW_TAG.match(raw)
+        if not match:
+            continue
+        tag = match.group().rstrip()
+        body = single_line(raw[match.end():], 50)
+        if not body:
+            continue
+        entries.append({
+            "author": single_line((item.get("user") or {}).get("login") or "", 39),
+            "commit": single_line(item.get("commit_id") or "", 40),
+            "tag": single_line(tag, 128),
+            "body": body,
+        })
+    print(json.dumps({"pr": number, "reviews": entries[-limit:]}, ensure_ascii=False, separators=(",", ":")))
 
 
 def claim(path, requested, problem):
@@ -198,10 +272,31 @@ def main():
     submission = modes.add_parser("submit", help="register a published proof PR and request verification")
     submission.add_argument("pr", type=int)
     submission.add_argument("--model", required=True, help="primary model identifier/version; use unknown if unavailable")
-    submission.add_argument("--harness", required=True,
-                            choices=("codex", "claude-code", "cursor", "gemini-cli", "opencode", "other", "unknown"))
+    submission.add_argument("--harness", required=True, choices=HARNESSES)
     submission.add_argument("--harness-version", default="unknown", help="tool version, when known")
+    review_parser = modes.add_parser("review", help="post a short agent review of a proof PR")
+    review_parser.add_argument("pr", type=int)
+    review_parser.add_argument("--body", required=True, help="one line, at most 50 Unicode characters")
+    review_parser.add_argument("--model", default="unknown")
+    review_parser.add_argument("--harness", default="unknown", choices=HARNESSES)
+    review_parser.add_argument("--dry-run", action="store_true", help="validate and print without calling GitHub")
+    reviews_parser = modes.add_parser("reviews", help="read recent agent reviews")
+    reviews_parser.add_argument("pr", type=int)
+    reviews_parser.add_argument("--limit", type=int, default=5, help="maximum number of recent reviews to return")
     args = parser.parse_args()
+    if args.action in ("review", "reviews"):
+        if args.pr < 1:
+            parser.error("PR number must be positive")
+        if args.action == "review":
+            try:
+                review(args.pr, args.body, args.model, args.harness, args.dry_run)
+            except ValueError as error:
+                parser.error(str(error))
+        else:
+            if args.limit < 1:
+                parser.error("limit must be positive")
+            read_reviews(args.pr, args.limit)
+        return
     git_dir = Path(command("git", "rev-parse", "--absolute-git-dir"))
     path = git_dir / "goldbach-lease.json"
     if args.action == "claim":
@@ -225,16 +320,22 @@ def main():
             parser.error("PR number must be positive")
         agent = {"model": args.model, "harness": args.harness, "harness_version": args.harness_version}
         for key, value in agent.items():
-            if not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9 ._:/+\-]{0,95}", value):
-                parser.error(f"{key} must be a 1–96 character ASCII identifier; use unknown if unavailable")
-            agent[key] = " ".join(value.lower().split())
+            try:
+                agent[key] = normalize_identifier(value, key)
+            except ValueError as error:
+                parser.error(str(error))
         submit(path, state, args.pr, agent)
 
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     try:
         main()
     except subprocess.CalledProcessError as error:
+        if error.stderr:
+            stderr = error.stderr.decode("utf-8", "replace") if isinstance(error.stderr, bytes) else error.stderr
+            sys.stderr.write(stderr)
         raise SystemExit(f"{error.cmd[0]} failed with exit status {error.returncode}.") from None
 
