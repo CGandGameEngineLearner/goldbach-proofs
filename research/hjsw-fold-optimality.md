@@ -102,7 +102,7 @@ Write `det3(P,Q,R) = (Q1-P1)(R2-P2) - (Q2-P2)(R1-P1)`, and for two distinct fibr
   otherwise.  (An earlier draft in our notes had the `dJ` half of this rule inverted; with the
   inverted version the configuration has a collinear triple for every odd `p >= 7`, e.g.
   `x = 2`, `x' = hh`, corners `(0,0),(1,1)` and `(0,0)`.  The corrected rule above has been
-  re-checked by brute force for all shifts/triples for every prime `p <= 200` with no violation.
+  re-checked by brute force for all shifts/triples for every prime `p <= 293` (61 primes) with no violation.
   This concerns only the equality side; the upper bound proved here is independent of it.)
 
 ## Lean formalisation
