@@ -123,7 +123,11 @@ private theorem mu_105 : ArithmeticFunction.moebius 105 = -1 := by
     ArithmeticFunction.moebius_apply_prime (by decide : Nat.Prime 7)]
   norm_num
 
-theorem _root_.PEqualNP.Outside.L_goldbach_cert_105 :
+end GoldbachCert105
+
+open GoldbachCert105 Finset
+
+theorem PEqualNP.Outside.L_goldbach_cert_105 :
     ∀ a:ℕ, Nat.Coprime a 105 → (∑ b ∈ (Finset.range 105).filter (fun b => Nat.Coprime b 105),
       Complex.exp (((2*Real.pi*(a:ℝ)*b/105:ℝ):ℂ)*Complex.I))/(48:ℂ)=(-1:ℂ)/48 := by
   intro a ha
@@ -135,5 +139,3 @@ theorem _root_.PEqualNP.Outside.L_goldbach_cert_105 :
     exact and_congr_right (fun _ => Nat.coprime_comm)
   simpa only [hfilter, center, Nat.cast_ofNat, Int.cast_neg, Int.cast_one] using
     congrArg (fun z : ℂ => z/48) H
-
-end GoldbachCert105
