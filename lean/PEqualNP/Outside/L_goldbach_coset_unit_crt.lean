@@ -11,7 +11,7 @@ theorem PEqualNP.Outside.L_goldbach_coset_unit_crt :
   have hra : ∀ r : ℕ, r % a < a := fun r => Nat.mod_lt r ha
   have hrb : ∀ r : ℕ, r % b < b := fun r => Nat.mod_lt r hb
   -- the two CRT residue transfers for the reflected partner
-  have hrefa : ∀ r : ℕ, r < a*b → ((n+a*b-r) % (a*b)) % a = (n+a-r%a) % a := by
+  have hrefa : ∀ r : ℕ, r < a*b → ((n+a*b-r) % (a*b)) % a = (n+a-r  % a) % a := by
     intro r hr
     have h1 : (n+a*b-r) % (a*b) ≡ n+a*b-r [MOD a] :=
       (Nat.mod_modEq (n+a*b-r) (a*b)).of_dvd (Nat.dvd_mul_right a b)
@@ -21,10 +21,10 @@ theorem PEqualNP.Outside.L_goldbach_coset_unit_crt :
     have habm : n+a*b ≡ n+a [MOD a] :=
       ((Nat.modEq_iff_dvd' hle).mpr (by
         rw [hsub]; exact Nat.dvd_sub (Nat.dvd_mul_right a b) (Nat.dvd_refl a))).symm
-    have h2 : n+a*b-r ≡ n+a-r%a [MOD a] :=
+    have h2 : n+a*b-r ≡ n+a-r  % a [MOD a] :=
       Nat.ModEq.sub (by omega) (by have := hra r; omega) habm (Nat.mod_modEq r a).symm
     exact h1.trans h2
-  have hrefb : ∀ r : ℕ, r < a*b → ((n+a*b-r) % (a*b)) % b = (n+b-r%b) % b := by
+  have hrefb : ∀ r : ℕ, r < a*b → ((n+a*b-r) % (a*b)) % b = (n+b-r  % b) % b := by
     intro r hr
     have h1 : (n+a*b-r) % (a*b) ≡ n+a*b-r [MOD b] :=
       (Nat.mod_modEq (n+a*b-r) (a*b)).of_dvd (Nat.dvd_mul_left b a)
@@ -34,14 +34,14 @@ theorem PEqualNP.Outside.L_goldbach_coset_unit_crt :
     have habm : n+a*b ≡ n+b [MOD b] :=
       ((Nat.modEq_iff_dvd' hle).mpr (by
         rw [hsub]; exact Nat.dvd_sub (Nat.dvd_mul_left b a) (Nat.dvd_refl b))).symm
-    have h2 : n+a*b-r ≡ n+b-r%b [MOD b] :=
+    have h2 : n+a*b-r ≡ n+b-r  % b [MOD b] :=
       Nat.ModEq.sub (by omega) (by have := hrb r; omega) habm (Nat.mod_modEq r b).symm
     exact h1.trans h2
   -- condition transport under the CRT map
   have key : ∀ r : ℕ, r < a*b →
       ((r.Coprime (a*b) ∧ ((n+a*b-r) % (a*b)).Coprime (a*b) ↔
-      ((r % a).Coprime a ∧ ((n+a-r%a) % a).Coprime a) ∧
-      ((r % b).Coprime b ∧ ((n+b-r%b) % b).Coprime b))) := by
+      ((r % a).Coprime a ∧ ((n+a-r  % a) % a).Coprime a) ∧
+      ((r % b).Coprime b ∧ ((n+b-r  % b) % b).Coprime b))) := by
     intro r hr
     constructor
     · intro h
