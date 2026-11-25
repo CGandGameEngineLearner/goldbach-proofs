@@ -139,6 +139,7 @@ theorem PEqualNP.Outside.L_goldbach_residual_quadratic_signal :
       · rw [if_neg hlt]
         have heq : r1 + r2 = (r1 + r2 - q) + q := by omega
         rw [heq, Nat.add_mod_right, Nat.mod_eq_of_lt (by omega)]
+        omega
     rw [hstar, hsum]
     by_cases hle : r1 ≤ c <;> by_cases hlt : r1 + r2 < q
     · rw [if_pos hle, if_pos hlt]; omega
