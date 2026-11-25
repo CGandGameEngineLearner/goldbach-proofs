@@ -16,8 +16,16 @@ theorem PEqualNP.Outside.L_goldbach_finite_singular_product_lower :
     rw [Finset.mem_sdiff, Finset.mem_insert, Finset.mem_insert, Finset.mem_singleton] at hp
     have ⟨hprime, hgt2⟩ := hS p hp.1
     by_contra hlt
-    push_neg at hlt
-    interval_cases p <;> norm_num at hprime hp
+    have hlt' : p < 11 := Nat.lt_of_not_ge hlt
+    interval_cases p
+    · exact hp.2 (Or.inl rfl)
+    · exact absurd hprime (by decide)
+    · exact hp.2 (Or.inr (Or.inl rfl))
+    · exact absurd hprime (by decide)
+    · exact hp.2 (Or.inr (Or.inr rfl))
+    · exact absurd hprime (by decide)
+    · exact absurd hprime (by decide)
+    · exact absurd hprime (by decide)
   have hg_bounds : ∀ k : ℕ, 11 ≤ k → 0 ≤ g k ∧ g k ≤ 1 := by
     intro k hk
     have hk1 : (10 : ℝ) ≤ (k : ℝ) - 1 := by
@@ -40,7 +48,6 @@ theorem PEqualNP.Outside.L_goldbach_finite_singular_product_lower :
     induction m with
     | zero =>
       simp
-      norm_num
     | succ m ih =>
       rw [show 11 + (m + 1) = (11 + m) + 1 by omega]
       rw [Finset.prod_Ico_succ_top (by omega : 11 ≤ 11 + m), ih]
@@ -59,7 +66,8 @@ theorem PEqualNP.Outside.L_goldbach_finite_singular_product_lower :
     refine ⟨hge11 p hp, ?_⟩
     have hle : p ≤ S'.sup id := Finset.le_sup (f := id) hp
     omega
-  have hsplit := Finset.prod_sdiff hsub'
+  have hsplit : (∏ x ∈ Finset.Ico 11 (11 + m) \ S', g x) * ∏ x ∈ S', g x =
+      ∏ x ∈ Finset.Ico 11 (11 + m), g x := Finset.prod_sdiff hsub'
   have hrest_le : ∏ x ∈ Finset.Ico 11 (11 + m) \ S', g x ≤ 1 := by
     apply Finset.prod_le_one
     · intro x hx
@@ -72,14 +80,15 @@ theorem PEqualNP.Outside.L_goldbach_finite_singular_product_lower :
     exact (hg_bounds x (hge11 x hx)).1
   have hico_le : ∏ x ∈ Finset.Ico 11 (11 + m), g x ≤ ∏ x ∈ S', g x := by
     rw [← hsplit]
-    nlinarith
+    nlinarith [hrest_le, hS'_nonneg]
   have hratio : (1 : ℝ) ≤ ((m + 10 : ℕ) : ℝ) / ((m + 9 : ℕ) : ℝ) := by
     rw [le_div_iff₀ (by positivity : (0 : ℝ) < ((m + 9 : ℕ) : ℝ))]
     push_cast
     linarith
   have hico_ge : (9 / 10 : ℝ) ≤ ∏ x ∈ Finset.Ico 11 (11 + m), g x := by
     rw [htel m]
-    nlinarith
-  have hmain := Finset.prod_sdiff hsub
+    linarith [hratio]
+  have hmain : (∏ p ∈ S', g p) * ∏ p ∈ ({3, 5, 7} : Finset ℕ), g p = ∏ p ∈ S, g p :=
+    Finset.prod_sdiff hsub
   rw [← hmain, h357]
-  linarith
+  linarith [hico_ge, hico_le]
