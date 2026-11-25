@@ -18756,12 +18756,12 @@
         "module": "PEqualNP.Outside.L_joshi_abc_five_volume_obstruction",
         "statement": "∀ (V : ℤ → ℝ), ¬ (V 5 = (1:ℝ)/5 ∧ V 5 = (1:ℝ)/25)",
         "plain_statement": {
-          "zh": "新路线 · 原文反例与 Haar 体积 · JA-0005 · 用 5⁻¹ 与 5⁻² 排除张量格的带权赋值",
-          "en": "New route · Printed comparisons and Haar volume · JA-0005 · Rule out a weighted tensor-lattice volume using 5⁻¹ and 5⁻²"
+          "zh": "新路线 · 原文反例与 Haar 体积 · JA-0005 · 检验同一个格若被赋予两种体积会产生矛盾",
+          "en": "New route · Printed comparisons and Haar volume · JA-0005 · Check the contradiction from two values assigned to the same lattice"
         },
         "brief": {
-          "zh": "两种表示给同一格 5M；把局部次数 1、2 代入后检查二值不等。",
-          "en": "Use both presentations of 5M and substitute residue degrees 1 and 2."
+          "zh": "此声明只检查 1/5 与 1/25 不等。两个槽是否给出同一个实际格及其次数权重，须由 JA-0002、JA-0004 和局部格构造核对。",
+          "en": "This checks the numerical contradiction between 1/5 and 1/25. Use JA-0002, JA-0004 and the local lattice construction to verify the identification and the weights."
         },
         "source": "https://arxiv.org/abs/2401.13508v4",
         "program": "foundation",
@@ -19243,12 +19243,12 @@
         "module": "PEqualNP.Outside.L_joshi_abc_local_theta_generation",
         "statement": "letI : Fact (Nat.Prime 29) := ⟨by decide⟩; ∀ (K : Type) [NontriviallyNormedField K] [NormedAlgebra (Padic 29) K] [CompleteSpace K] [IsUltrametricDist K] [CharZero K], let theta := fun (q u : K) => ∑' n : ℤ, q^(n*(n+1)/2) * u^(2*n+1); let embed := fun (a : PadicInt 29) => algebraMap (Padic 29) K (a:Padic 29); let t := fun (x : K) => (∑' k : ℕ, (-1:K)^k*((29:K)*x)^(k+1)/((k+1:ℕ):K))/(29:K); ∀ (r z : K), r^14=(29:K) → 0 < ‖r‖ → ‖r‖<1 → z^7=1 → ‖z‖=1 → ‖1+z^2‖=1 → (∀ n : ℕ, 0<n → ‖(n:K)‖ = ‖r‖^(14*multiplicity 29 n)) → (∀ u : K, ‖u‖ ≤ 1 → ∃ a : PadicInt 29, ‖u-embed a‖ ≤ ‖r‖) → let ξ := theta (r^14) z / theta (r^14) (r^2*z); let u := theta (r^14) (r*z) / theta (r^14) (r^2*z); ∀ x : K, ‖x‖ ≤ ‖r‖ → ∃ a b c : PadicInt 29, ‖x - (embed a*t r + embed b*t ξ + embed c*t u)‖ ≤ ‖r‖^4",
         "plain_statement": {
-          "zh": "新路线 · 29 进生成与反例族 · JA-0028 · 用实际 Theta 级数和缩放对数生成局部一次幂格",
-          "en": "New route · 29-adic generation and counterfamilies · JA-0028 · Generate the local first-power lattice with actual theta and logarithm series"
+          "zh": "新路线 · 29 进生成与反例族 · JA-0028 · 在指定 29 进局部模型中用实际 Θ 级数生成一次幂格",
+          "en": "New route · 29-adic generation and counterfamilies · JA-0028 · Generate the first-power lattice in the specified 29-adic model"
         },
         "brief": {
-          "zh": "用三个已计算的喷射依次消去一、二、三阶。剩余类代表来自 Z₂₉，余项落进 π⁴。",
-          "en": "Use the three computed jets to eliminate degrees one, two and three. Choose residue representatives in Z₂₉ and place the remainder in π⁴."
+          "zh": "按一、二、三阶消元，余项落到 π⁴。此局部结论使用显式剩余类假设；实际 ATS 标签下的允许像成员资格是独立输入。",
+          "en": "Eliminate the coefficients of degrees one, two and three. The remainder lies in π⁴. The residue hypothesis is explicit. Membership in the allowed image at an ATS label is a separate input."
         },
         "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/joshi-abc.md",
         "program": "correlation",
@@ -19546,12 +19546,12 @@
         "module": "PEqualNP.Outside.L_joshi_abc_marked_jet_certificate",
         "statement": "let z : ZMod 29 := 7; let v : Fin 3 → Fin 3 → ZMod 29 := ![![1,0,0],![0,1+z^2,0],![1,0,z^2]]; ∀ (I : Type) (allowed : I → Set (Fin 3 → ZMod 29)) (i : I), (∀ j, v j ∈ allowed i) → Submodule.span (ZMod 29) (allowed i)=⊤",
         "plain_statement": {
-          "zh": "新路线 · 指定 Kummer 像与 Θ 测试 · JA-0042 · 给同标签允许像建立 29 进生成证书",
-          "en": "New route · Marked Kummer images and theta tests · JA-0042 · Certify generation from three prescribed residues in one marked 29-adic image"
+          "zh": "新路线 · 指定 Kummer 像与 Θ 测试 · JA-0042 · 由已给出的同标签三个成员资格推出满生成",
+          "en": "New route · Marked Kummer images and theta tests · JA-0042 · Deduce full span from the three given memberships at one label"
         },
         "brief": {
-          "zh": "像数据必须在一个固定 i 处给出三个见证。提交泛型证书后，实际 ATS 成员资格仍须独立提供。",
-          "en": "Supply all three memberships at one fixed i. The generic certificate leaves actual ATS membership as a separate geometric input."
+          "zh": "线性代数引理。三个向量的同标签成员资格均为前提。实际 ATS/Kummer 映射中能否取得这些见证需要独立证明。",
+          "en": "Use the three membership assumptions at the same label to prove full span. Constructing these witnesses in the actual ATS/Kummer image requires a separate proof."
         },
         "source": "https://arxiv.org/abs/2401.13508v4",
         "program": "correlation",
@@ -19833,12 +19833,12 @@
         "module": "PEqualNP.Outside.L_joshi_abc_bounded_local_szpiro",
         "statement": "∀ (a b M : ℕ) (S : Finset ℕ), 0<a → 0<b → Nat.Coprime a b → (∀ p ∈ S, p.Prime ∧ Odd p ∧ multiplicity p (a*b*(a+b)) ≤ M) → S.sum (fun p => (multiplicity p (16*a^2*b^2*(a+b)^2):ℝ)*Real.log p) ≤ 2*(M:ℝ)*S.sum (fun p => Real.log p)",
         "plain_statement": {
-          "zh": "新路线 · 同一包络与局部 Szpiro · JA-0055 · 对有界重数坏处族给出局部 Szpiro 估计",
-          "en": "New route · Common hull and local Szpiro · JA-0055 · Prove a local Szpiro bound for a bounded-multiplicity family"
+          "zh": "新路线 · 同一包络与局部 Szpiro · JA-0055 · 给已知重数上界的奇素数集合计算局部判别式界",
+          "en": "New route · Common hull and local Szpiro · JA-0055 · Bound the local discriminant sum for odd primes with a given multiplicity bound"
         },
         "brief": {
-          "zh": "奇坏处的判别式阶是 2vₚ(abc)，逐处估计再求和。S 与 M 均显式。",
-          "en": "At an odd place the discriminant order is 2vₚ(abc). Bound each summand on the stated S and add."
+          "zh": "对已有 vₚ(abc)≤M 的每个奇素数，用 vₚ(Δ)=2vₚ(abc) 后求和。任务中的 M 是输入。",
+          "en": "Use vₚ(Δ)=2vₚ(abc) at each odd prime and sum the bounds. The hypothesis supplies M."
         },
         "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/joshi-abc.md",
         "program": "foundation",
@@ -19941,12 +19941,12 @@
         "module": "PEqualNP.Outside.L_joshi_abc_frey_hull_transfer",
         "statement": "let rad := fun (n : ℕ) => n.primeFactors.prod id; let r := fun (a b : ℕ) => Real.log (rad (a*b*(a+b))); ∀ (l : ℕ) (K : ℝ) (Q R U δ A : ℕ → ℕ → ℝ), 7 ≤ l → let k := 4*(l:ℝ)/(((l:ℝ)-3)*(l+1)); let H := fun (a b : ℕ) => Real.log (16*((a:ℝ)^2+a*b+(b:ℝ)^2))/2; (∀ a b : ℕ, 0<a → 0<b → Nat.Coprime a b → -(((l:ℝ)+1)/4)*Q a b-δ a b ≤ R a b ∧ R a b ≤ -((l:ℝ)*(l+1)/12)*Q a b+U a b ∧ H a b ≤ 2*l*Q a b/6+A a b ∧ A a b + k*(U a b+δ a b) ≤ (1+k)*r a b+K) → ∀ a b : ℕ, 0<a → 0<b → Nat.Coprime a b → H a b ≤ (1+k)*r a b+K",
         "plain_statement": {
-          "zh": "新路线 · 全局高度与 abc · JA-0060 · 把同一 Frey 族的实际包络比较转成统一高度界",
-          "en": "New route · Global heights and abc · JA-0060 · Transfer same-hull comparisons on a Frey family to a uniform height bound"
+          "zh": "新路线 · 全局高度与 abc · JA-0060 · 从四条显式不等式推出统一 Frey 高度界",
+          "en": "New route · Global heights and abc · JA-0060 · Deduce a uniform Frey height bound from four stated inequalities"
         },
         "brief": {
-          "zh": "前两式作用于同一标记包络，第三式计入无穷处高度，第四式要求对全部三元组统一的根基预算。",
-          "en": "Apply both volume bounds to one marked hull, relate the archimedean height to Q, and charge the remaining terms to the radical with one constant."
+          "zh": "这是对实值函数的消元。应用于 Joshi 对象时须构造同一个标记包络，并另证两端体积界、高度比较和统一根基预算。",
+          "en": "Eliminate the real-valued functions using the four inequalities. An application to Joshi data requires a common marked hull and separate proofs of both volume bounds, the height comparison and the uniform radical budget."
         },
         "source": "https://arxiv.org/abs/2403.10430",
         "program": "correlation",
@@ -19970,8 +19970,8 @@
           "en": "New route · Global heights and abc · JA-0061 · Obtain a uniform Frey-height bound at each auxiliary prime"
         },
         "brief": {
-          "zh": "把实际包络的上下界、无穷处、取整和例外素数都计入。K 可依赖 ℓ，不能依赖三元组。",
-          "en": "Include both actual hull bounds, the archimedean term, rounding and exceptional places. K may depend on ℓ alone."
+          "zh": "与完整有理 abc 等价。正向用 JA-0062、JA-0058、JA-0063；反向固定 ℓ 并在 abc 取 ε=kℓ，用 H≤log(a+b)+log 4。",
+          "en": "This is equivalent to rational abc. The forward direction uses JA-0062, JA-0058 and JA-0063. For the converse, fix ℓ, apply abc with ε=kℓ, and use H≤log(a+b)+log 4."
         },
         "source": "https://arxiv.org/abs/2403.10430",
         "program": "correlation",
@@ -20031,20 +20031,21 @@
         "id": "L-joshi-abc-weak-from-frey",
         "file": "lean/PEqualNP/Outside/L_joshi_abc_weak_from_frey.lean",
         "module": "PEqualNP.Outside.L_joshi_abc_weak_from_frey",
-        "statement": "(let rad := fun (n : ℕ) => n.primeFactors.prod id; let r := fun (a b : ℕ) => Real.log (rad (a*b*(a+b))); ∀ l : ℕ, l.Prime → 7 ≤ l → ∃ K : ℝ, ∀ a b : ℕ, 0<a → 0<b → Nat.Coprime a b → Real.log (16*((a:ℝ)^2+a*b+(b:ℝ)^2))/2 ≤ (1+4*(l:ℝ)/(((l:ℝ)-3)*(l+1)))*r a b+K) → let rad := fun (n : ℕ) => n.primeFactors.prod id; let h := fun (a b : ℕ) => Real.log ((a:ℝ)+b); let r := fun (a b : ℕ) => Real.log (rad (a*b*(a+b))); ∃ C : ℝ, ∀ a b : ℕ, 0<a → 0<b → Nat.Coprime a b → h a b ≤ (15/8)*r a b+C",
+        "statement": "(let rad := fun (n : ℕ) => n.primeFactors.prod id; let r := fun (a b : ℕ) => Real.log (rad (a*b*(a+b))); ∃ K : ℝ, ∀ a b : ℕ, 0<a → 0<b → Nat.Coprime a b → Real.log (16*((a:ℝ)^2+a*b+(b:ℝ)^2))/2 ≤ (15/8 : ℝ)*r a b+K) → let rad := fun (n : ℕ) => n.primeFactors.prod id; let h := fun (a b : ℕ) => Real.log ((a:ℝ)+b); let r := fun (a b : ℕ) => Real.log (rad (a*b*(a+b))); ∃ C : ℝ, ∀ a b : ℕ, 0<a → 0<b → Nat.Coprime a b → h a b ≤ (15/8)*r a b+C",
         "plain_statement": {
-          "zh": "新路线 · 全局高度与 abc · JA-0064 · 在 ℓ=7 截取具体弱指数 15/8",
-          "en": "New route · Global heights and abc · JA-0064 · Specialize at seven for a weak exponent of fifteen eighths"
+          "zh": "新路线 · 全局高度与 abc · JA-0064 · 从 ℓ=7 的高度界推出固定弱指数 15/8",
+          "en": "New route · Global heights and abc · JA-0064 · Deduce the fixed exponent 15/8 from the height bound at ℓ=7"
         },
         "brief": {
-          "zh": "在 ℓ=7 时误差系数为 7/8，用 c₄ 下界吸收常数。",
-          "en": "At ℓ=7 the extra coefficient is 7/8. Use the c₄ lower bound and absorb the constant."
+          "zh": "仅假设 JA-0066 的单点高度界。用 JA-0058 将 Frey 高度换成 log(a+b) 并吸收常数；在 JA-0059 可取 B=15/8。",
+          "en": "Use the single-prime height bound JA-0066. Apply JA-0058 to pass from the Frey height to log(a+b) and absorb the constant. This gives B=15/8 in JA-0059."
         },
         "source": "https://arxiv.org/abs/2403.10430",
         "program": "correlation",
         "role": "conditional",
         "parallel": true,
         "depends_on": [
+          "L-joshi-abc-frey-upper-at-seven",
           "L-joshi-abc-frey-height"
         ],
         "imports": []
@@ -20069,6 +20070,27 @@
         "depends_on": [
           "L-joshi-abc-height-bridge"
         ],
+        "imports": [],
+        "challenge_only": true
+      },
+      {
+        "id": "L-joshi-abc-frey-upper-at-seven",
+        "file": "lean/PEqualNP/Outside/L_joshi_abc_frey_upper_at_seven.lean",
+        "module": "PEqualNP.Outside.L_joshi_abc_frey_upper_at_seven",
+        "statement": "let rad := fun (n : ℕ) => n.primeFactors.prod id; let r := fun (a b : ℕ) => Real.log (rad (a*b*(a+b))); ∃ K : ℝ, ∀ a b : ℕ, 0<a → 0<b → Nat.Coprime a b → Real.log (16*((a:ℝ)^2+a*b+(b:ℝ)^2))/2 ≤ (15/8 : ℝ)*r a b+K",
+        "plain_statement": {
+          "zh": "新路线 · 全局高度与 abc · JA-0066 · 在 ℓ=7 取得独立于三元组的 Frey 高度上界",
+          "en": "New route · Global heights and abc · JA-0066 · Obtain a Frey height bound at ℓ=7 uniformly over triples"
+        },
+        "brief": {
+          "zh": "该开放界等价于指数 15/8 的具体弱 abc 界，并经 JA-0064 蕴含 JA-0059。常数必须统一于全部互素正整数对。",
+          "en": "This open bound is equivalent to the fixed exponent 15/8 and implies JA-0059 via JA-0064. Use one constant for all coprime positive pairs."
+        },
+        "source": "https://arxiv.org/abs/2403.10430",
+        "program": "correlation",
+        "role": "target",
+        "parallel": false,
+        "depends_on": [],
         "imports": [],
         "challenge_only": true
       }
@@ -20106,8 +20128,8 @@
           },
           {
             "id": "L-joshi-abc-five-volume-obstruction",
-            "zh": "新路线 · 原文反例与 Haar 体积 · JA-0005 · 用 5⁻¹ 与 5⁻² 排除张量格的带权赋值",
-            "en": "New route · Printed comparisons and Haar volume · JA-0005 · Rule out a weighted tensor-lattice volume using 5⁻¹ and 5⁻²"
+            "zh": "新路线 · 原文反例与 Haar 体积 · JA-0005 · 检验同一个格若被赋予两种体积会产生矛盾",
+            "en": "New route · Printed comparisons and Haar volume · JA-0005 · Check the contradiction from two values assigned to the same lattice"
           },
           {
             "id": "L-joshi-abc-kronecker-determinant",
@@ -20245,8 +20267,8 @@
           },
           {
             "id": "L-joshi-abc-local-theta-generation",
-            "zh": "新路线 · 29 进生成与反例族 · JA-0028 · 用实际 Theta 级数和缩放对数生成局部一次幂格",
-            "en": "New route · 29-adic generation and counterfamilies · JA-0028 · Generate the local first-power lattice with actual theta and logarithm series"
+            "zh": "新路线 · 29 进生成与反例族 · JA-0028 · 在指定 29 进局部模型中用实际 Θ 级数生成一次幂格",
+            "en": "New route · 29-adic generation and counterfamilies · JA-0028 · Generate the first-power lattice in the specified 29-adic model"
           }
         ]
       },
@@ -20339,8 +20361,8 @@
           },
           {
             "id": "L-joshi-abc-marked-jet-certificate",
-            "zh": "新路线 · 指定 Kummer 像与 Θ 测试 · JA-0042 · 给同标签允许像建立 29 进生成证书",
-            "en": "New route · Marked Kummer images and theta tests · JA-0042 · Certify generation from three prescribed residues in one marked 29-adic image"
+            "zh": "新路线 · 指定 Kummer 像与 Θ 测试 · JA-0042 · 由已给出的同标签三个成员资格推出满生成",
+            "en": "New route · Marked Kummer images and theta tests · JA-0042 · Deduce full span from the three given memberships at one label"
           },
           {
             "id": "L-joshi-abc-finite-affine-transform",
@@ -20416,8 +20438,8 @@
           },
           {
             "id": "L-joshi-abc-bounded-local-szpiro",
-            "zh": "新路线 · 同一包络与局部 Szpiro · JA-0055 · 对有界重数坏处族给出局部 Szpiro 估计",
-            "en": "New route · Common hull and local Szpiro · JA-0055 · Prove a local Szpiro bound for a bounded-multiplicity family"
+            "zh": "新路线 · 同一包络与局部 Szpiro · JA-0055 · 给已知重数上界的奇素数集合计算局部判别式界",
+            "en": "New route · Common hull and local Szpiro · JA-0055 · Bound the local discriminant sum for odd primes with a given multiplicity bound"
           },
           {
             "id": "L-joshi-abc-rounding-radical",
@@ -20453,8 +20475,8 @@
           },
           {
             "id": "L-joshi-abc-frey-hull-transfer",
-            "zh": "新路线 · 全局高度与 abc · JA-0060 · 把同一 Frey 族的实际包络比较转成统一高度界",
-            "en": "New route · Global heights and abc · JA-0060 · Transfer same-hull comparisons on a Frey family to a uniform height bound"
+            "zh": "新路线 · 全局高度与 abc · JA-0060 · 从四条显式不等式推出统一 Frey 高度界",
+            "en": "New route · Global heights and abc · JA-0060 · Deduce a uniform Frey height bound from four stated inequalities"
           },
           {
             "id": "L-joshi-abc-uniform-frey-upper",
@@ -20473,13 +20495,18 @@
           },
           {
             "id": "L-joshi-abc-weak-from-frey",
-            "zh": "新路线 · 全局高度与 abc · JA-0064 · 在 ℓ=7 截取具体弱指数 15/8",
-            "en": "New route · Global heights and abc · JA-0064 · Specialize at seven for a weak exponent of fifteen eighths"
+            "zh": "新路线 · 全局高度与 abc · JA-0064 · 从 ℓ=7 的高度界推出固定弱指数 15/8",
+            "en": "New route · Global heights and abc · JA-0064 · Deduce the fixed exponent 15/8 from the height bound at ℓ=7"
           },
           {
             "id": "L-joshi-abc-endpoint",
             "zh": "新路线 · 全局高度与 abc · JA-0065 · 对每个 ε 证明统一的有理 abc 不等式",
             "en": "New route · Global heights and abc · JA-0065 · Prove a uniform rational abc inequality for every ε"
+          },
+          {
+            "id": "L-joshi-abc-frey-upper-at-seven",
+            "zh": "新路线 · 全局高度与 abc · JA-0066 · 在 ℓ=7 取得独立于三元组的 Frey 高度上界",
+            "en": "New route · Global heights and abc · JA-0066 · Obtain a Frey height bound at ℓ=7 uniformly over triples"
           }
         ]
       }

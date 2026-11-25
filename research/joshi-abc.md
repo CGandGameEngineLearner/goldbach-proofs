@@ -12,7 +12,7 @@
 | JA-0029–0039 | 计算整层取迹、取整损失、Fourier 零化子和次数加权总误差。 Compute whole-lattice traces, rounding, Fourier annihilators and the degree-weighted loss. |
 | JA-0040–0045 | 核对标记运输、有限层 Kummer 类、给定陪集测试与 Haar 占比。 Check marked transport, finite-level Kummer classes, prescribed coset tests and Haar density. |
 | JA-0046–0056 | 对同一包络消元，比较两种见证系数，检验 Frey 局部 Szpiro 族。 Eliminate the common hull volume, compare witness coefficients and test a local Szpiro family. |
-| JA-0057–0065 | 连接无穷处高度与根基，分别冻结固定指数及全部 ε 的目标。 Relate archimedean height to the radical and distinguish the fixed exponent from the full ε-family. |
+| JA-0057–0066 | 连接无穷处高度与根基，分别冻结固定指数及全部 ε 的目标。 Relate archimedean height to the radical and distinguish the fixed exponent from the full ε-family. |
 
 ## 为什么需要新包络
 
@@ -37,10 +37,20 @@ $$
   k_\ell=\frac{4\ell}{(\ell-3)(\ell+1)} .
 $$
 
-JA-0055 可先在奇坏处重数至多为 $M$ 的族上证明判别式的局部对数和至多为 $2M\sum_{p\in S}\log p$。JA-0060 则逐项列明升级到 Frey 高度所需的同一包络比较、无穷处误差和根基预算。JA-0061 要对每个辅助素数 $\ell\ge7$ 取得统一于**所有三元组**的上界。选择 $\ell=7$ 给出 JA-0064 的指数 $15/8$。允许按 $\varepsilon$ 先选 $\ell$ 并固定常数，再使用 $c_4$ 高度比较，才得到 JA-0063 通往父题的归约。高重数坏处的补偿、上界对实际包络的适用性和统一的高度估计均需新的证明。
+JA-0055 可先在奇坏处重数至多为 $M$ 的族上证明判别式的局部对数和至多为 $2M\sum_{p\in S}\log p$。JA-0060 则逐项列明升级到 Frey 高度所需的同一包络比较、无穷处误差和根基预算。JA-0061 要对每个辅助素数 $\ell\ge7$ 取得统一于**所有三元组**的上界。单点输入 JA-0066 固定 $\ell=7$。JA-0064 由此推出指数 $15/8$。允许按 $\varepsilon$ 先选 $\ell$ 并固定常数，再使用 $c_4$ 高度比较，才得到 JA-0063 通往父题的归约。高重数坏处的补偿、上界对实际包络的适用性和统一的高度估计均需新的证明。
 
 ## Working from the English task queue
 
 Independent starting points include the sign test JA-0001, the local log dominance estimate JA-0009, the fixed 29-adic residue pivots JA-0019, the trace-ideal exponent JA-0029 and the Frey discriminant JA-0052. JA-0028 uses the actual theta and logarithm series and states the residue-lifting hypothesis explicitly. JA-0042 specifies the further membership evidence needed at a common ATS label.
 
 The sufficient reduction JA-0063 uses JA-0061, JA-0062 and JA-0058. It first fixes an auxiliary prime depending on ε, then uses one constant for every coprime positive triple. JA-0059 asks only for one fixed exponent. To obtain either estimate from ATS, contributions at finite and infinite places must be controlled on the same marked hull, with a global bound in terms of the full radical.
+
+## 逻辑强度与待验证的桥 / Logical strength and missing bridges
+
+令 $H=\tfrac12\log(16(a^2+ab+b^2))$。JA-0061 与完整 abc 等价。正向使用 JA-0063。反向固定 $\ell$，对 abc 取 $\varepsilon=k_\ell>0$，并用 $H\le\log(a+b)+\log4$。JA-0066 只要求 $\ell=7$ 的高度界，依同样的高度比较，它与固定指数 $15/8$ 的 abc 界等价。JA-0064 只使用这个单点输入和 JA-0058，因此可独立接到 JA-0059。
+
+Let $H=\tfrac12\log(16(a^2+ab+b^2))$. JA-0061 is equivalent to full abc. For the forward direction, use JA-0063. For the converse at a fixed $\ell$, apply abc with $\varepsilon=k_\ell>0$ and use $H\le\log(a+b)+\log4$. JA-0066 asks for the height bound at $\ell=7$. The same height comparison makes it equivalent to the abc bound with fixed exponent $15/8$. JA-0064 uses this one input and JA-0058, and gives a route to JA-0059.
+
+第一座桥须在实际 ATS/Kummer 数据上选定一个标签和一个允许像，构造三个 Θ 见证的成员资格，再调用 JA-0042。应先在 $\ell=7,p=29$ 的模型检查这些成员资格，同时用 JA-0027 的深层秩亏测试构造的适用范围。第二座桥须在实际 Frey 家族定义同一个标记包络，用两条体积界估计它，并对高度和取整误差证明统一的根基预算。JA-0060 的实值函数消元可用于最后一步。
+
+For the first bridge, fix a label and an allowed image in the actual ATS/Kummer data. Construct the three theta memberships, then apply JA-0042. Start with the model at $\ell=7,p=29$. Use the rank deficit in JA-0027 to test where this construction applies. For the second bridge, define one marked hull for the actual Frey family. Prove both volume bounds for that hull and a uniform radical budget for the height and rounding losses. Use the elimination in JA-0060 once these inputs are available.
