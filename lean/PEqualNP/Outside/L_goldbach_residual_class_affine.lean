@@ -91,10 +91,10 @@ theorem PEqualNP.Outside.L_goldbach_residual_class_affine :
       omega
     dsimp only [G]
     by_cases hsq : (k + j) % q = c
-    · rw [if_pos hsq, if_pos (by omega)]
+    · rw [if_pos hsq, if_pos hsq, if_pos (by omega)]
       have hsub : k + j - k = j := by omega
       rw [hsub]
-    · rw [if_neg hsq]
+    · rw [if_neg hsq, if_neg hsq]
   rw [hreidx]
   have hfib : ∀ f : ℕ → ℝ, ∑ r ∈ Finset.range q, ∑ k ∈ F x q r, f k = ∑ k ∈ Finset.range (x + 1), f k := by
     intro f
