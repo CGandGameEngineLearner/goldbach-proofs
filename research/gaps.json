@@ -7757,6 +7757,628 @@
       "feeds": [
         "arc-budget"
       ]
+    },
+    {
+      "id": "L-goldbach-arc-window-measure",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_window_measure.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_window_measure",
+      "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; ∀ (n q : ℕ) (c : ℝ), 1≤q → 1≤n → MeasureTheory.volume (Set.Icc (c-((Q n:ℝ)/((q:ℝ)*(n:ℝ)))) (c+((Q n:ℝ)/((q:ℝ)*(n:ℝ))))) = ENNReal.ofReal (2*((Q n:ℝ)/((q:ℝ)*(n:ℝ))))",
+      "plain_statement": {
+        "zh": "单条主弧是一个对称窗口，其长度恰为弧宽的两倍。",
+        "en": "A single major arc is a symmetric window whose length is exactly twice its half-width."
+      },
+      "brief": {
+        "zh": "先把手上的集合换成可计算的长度，后面的测度预算才有依据。",
+        "en": "Replace membership in the arc set by an explicit length, so the later measure budget has a footing."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-mass-bound",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_mass_bound.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_mass_bound",
+      "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; ∀ n : ℕ, 1≤n → MeasureTheory.volume (arcs n) ≤ ENNReal.ofReal (4*((Q n:ℝ))^2/(n:ℝ))",
+      "plain_statement": {
+        "zh": "全部主弧的总测度不超过 4Q²/n，因而随 n 趋于零。",
+        "en": "The total measure of all major arcs is at most 4Q²/n, hence tends to zero."
+      },
+      "brief": {
+        "zh": "主弧占掉的圆周比例必须趋于零，否则主项无法压过次弧。",
+        "en": "The share of the circle eaten by major arcs must tend to zero, or the main term cannot dominate."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-archimedean",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_archimedean.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_archimedean",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let V := fun (n : ℕ) (b : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => E ((k:ℝ)*b)); let arch := fun (n : ℕ) => intervalIntegral (fun b => (V n b)^2*E (-(n:ℝ)*b)) (-((Q n:ℝ)/(n:ℝ))) ((Q n:ℝ)/(n:ℝ)) MeasureTheory.volume; ∃ C N : ℕ, ∀ n : ℕ, N≤n → ‖arch n - (((n:ℝ)+1 : ℝ) : ℂ)‖ ≤ (C:ℝ)*(n:ℝ)/(Real.log (n:ℝ))^2",
+      "plain_statement": {
+        "zh": "阿基米德积分（截断到弧宽的完整周期指数和平方积分）等于 n+1 加不超过 Cn/log²n 的误差。",
+        "en": "The archimedean integral — the squared complete-period exponential sum truncated to the arc width — equals n+1 up to an error of size Cn/log²n."
+      },
+      "brief": {
+        "zh": "这是主项真正的来源：整条主弧的贡献由它承重，而它只依赖实变量。",
+        "en": "This is where the main term actually comes from; it carries the whole major-arc gain and depends on a real variable only."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-singular-one",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_singular_one.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_singular_one",
+      "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let sing := fun (n : ℕ) => Finset.prod ((Finset.range (Q n + 1)).filter (fun p => Nat.Prime p)) (fun p => if p ∣ n then (p:ℝ)/((p:ℝ)-1) else 1-1/((p:ℝ)-1)^2); ∀ n : ℕ, 2≤n → Even n → (1:ℝ) ≤ sing n",
+      "plain_statement": {
+        "zh": "对不小于 2 的偶数 n，含模二因子的截断奇异级数乘积至少为 1。",
+        "en": "For every even n at least 2, the truncated singular-series product, including the modulus-two factor, is at least 1."
+      },
+      "brief": {
+        "zh": "把已证的「二倍乘积不小于一」改写成下游直接可用的形式。",
+        "en": "Rewrite the established two-times-product bound into the form the downstream estimate consumes."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-major-upper",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_major_upper.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_major_upper",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let major := fun n : ℕ => intervalIntegral (fun t => (arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; ∃ C N : ℕ, ∀ n : ℕ, N≤n → ‖major n‖ ≤ (C:ℝ)*(n:ℝ)*(Real.log (n:ℝ))^4",
+      "plain_statement": {
+        "zh": "主弧贡献的模不超过 Cn(log n)⁴。",
+        "en": "The major-arc contribution is at most Cn(log n)⁴ in modulus."
+      },
+      "brief": {
+        "zh": "下界之外还要有上界，否则无法判断主弧是否吃掉了全部质量。",
+        "en": "An upper bound is needed beside the lower one, or one cannot tell whether the major arcs absorbed all the mass."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-window-phase-shift",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_window_phase_shift.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_window_phase_shift",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let V := fun (n : ℕ) (b : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => E ((k:ℝ)*b)); ∀ (n q a : ℕ), 1≤q → 0<n → intervalIntegral (fun t => (V n (t-(a:ℝ)/(q:ℝ)))^2*E (-(n:ℝ)*t)) ((a:ℝ)/(q:ℝ)-((Q n:ℝ)/((q:ℝ)*(n:ℝ)))) ((a:ℝ)/(q:ℝ)+((Q n:ℝ)/((q:ℝ)*(n:ℝ)))) MeasureTheory.volume = E (-(n:ℝ)*(a:ℝ)/(q:ℝ)) * intervalIntegral (fun b => (V n b)^2*E (-(n:ℝ)*b)) (-((Q n:ℝ)/((q:ℝ)*(n:ℝ)))) (((Q n:ℝ)/((q:ℝ)*(n:ℝ)))) MeasureTheory.volume",
+      "plain_statement": {
+        "zh": "把一条主弧上的模型积分平移到原点，相位只留下一个与 q、a 有关的因子。",
+        "en": "Shifting a model integral on one major arc back to the origin leaves a single phase factor depending on q and a."
+      },
+      "brief": {
+        "zh": "平移之后每条弧的贡献都归约到同一个实数积分，弧与弧之间只差相位。",
+        "en": "After the shift every arc reduces to the same real integral, and arcs differ only by a phase."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-model-positive",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_model_positive.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_model_positive",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let V := fun (n : ℕ) (b : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => E ((k:ℝ)*b)); let arch := fun (n : ℕ) => intervalIntegral (fun b => (V n b)^2*E (-(n:ℝ)*b)) (-((Q n:ℝ)/(n:ℝ))) ((Q n:ℝ)/(n:ℝ)) MeasureTheory.volume; let sing := fun (n : ℕ) => Finset.prod ((Finset.range (Q n + 1)).filter (fun p => Nat.Prime p)) (fun p => if p ∣ n then (p:ℝ)/((p:ℝ)-1) else 1-1/((p:ℝ)-1)^2); ∀ n : ℕ, 2≤n → Even n → (1:ℝ) ≤ sing n → (n:ℝ)/2 ≤ (arch n).re → (n:ℝ)/2 ≤ ((sing n:ℂ)*arch n).re",
+      "plain_statement": {
+        "zh": "奇异级数至少为一且阿基米德积分实部至少为 n/2 时，二者乘积的实部至少为 n/2。",
+        "en": "If the singular series is at least one and the archimedean integral has real part at least n/2, their product has real part at least n/2."
+      },
+      "brief": {
+        "zh": "把「局部密度为正」和「实积分有下界」合成主项下界，纯代数。",
+        "en": "Combine positive local density with a lower bound on the real integral into a main-term lower bound; pure algebra."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-model-error-accumulation",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_model_error_accumulation.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_model_error_accumulation",
+      "statement": "\n∀ (u v : ℝ → ℂ) (s : Set ℝ) (d : ℝ), 0≤d → IntervalIntegrable (fun t => s.indicator u t) MeasureTheory.volume 0 1 → IntervalIntegrable (fun t => s.indicator v t) MeasureTheory.volume 0 1 → (∀ t ∈ s, ‖u t - v t‖ ≤ d*‖v t‖) → ‖intervalIntegral (fun t => s.indicator u t) (0:ℝ) 1 MeasureTheory.volume - intervalIntegral (fun t => s.indicator v t) (0:ℝ) 1 MeasureTheory.volume‖ ≤ d*intervalIntegral (fun t => s.indicator (fun t => ‖v t‖) t) (0:ℝ) 1 MeasureTheory.volume",
+      "plain_statement": {
+        "zh": "若在两个指示函数均可积的弧段上逐点相对误差不超过 d，则整条弧上的积分相对误差也不超过 d。可积性假设不可省：Mathlib 把不可积函数的积分定义为 0，缺了它会出反例（Vitali 集，见 PR #244 评论）。",
+        "en": "If the pointwise relative error on an arc is at most d, so is the relative error of the integral over that arc. Integrability of both indicators is required: Mathlib defines the integral of a non-integrable function to be zero, and without it a Vitali-set counterexample refutes the statement (see the PR #244 review)."
+      },
+      "brief": {
+        "zh": "修正版。原表述漏了可积性，已被反例推翻；本步只把逐点误差搬到积分上，真正的分析工作仍是把 d 压到小于一半。",
+        "en": "Corrected form. The earlier version omitted integrability and was refuted by a Vitali-set counterexample; this step only transports pointwise error to the integral, the analytic work is still pushing d below one half."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-model-to-floor",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_model_to_floor.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_model_to_floor",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let major := fun n : ℕ => intervalIntegral (fun t => (arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let V := fun (n : ℕ) (b : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => E ((k:ℝ)*b)); let arch := fun (n : ℕ) => intervalIntegral (fun b => (V n b)^2*E (-(n:ℝ)*b)) (-((Q n:ℝ)/(n:ℝ))) ((Q n:ℝ)/(n:ℝ)) MeasureTheory.volume; let sing := fun (n : ℕ) => Finset.prod ((Finset.range (Q n + 1)).filter (fun p => Nat.Prime p)) (fun p => if p ∣ n then (p:ℝ)/((p:ℝ)-1) else 1-1/((p:ℝ)-1)^2); (∀ n : ℕ, 2≤n → Even n → (1:ℝ) ≤ sing n) → (∃ C N : ℕ, ∀ n : ℕ, N≤n → ‖arch n - (((n:ℝ)+1 : ℝ) : ℂ)‖ ≤ (C:ℝ)*(n:ℝ)/(Real.log (n:ℝ))^2) → (∃ N : ℕ, ∀ n : ℕ, N≤n → Even n → ‖major n - (sing n:ℂ)*arch n‖ ≤ (1/2)*((sing n)*((arch n).re))) → ∃ c : ℝ, ∃ N : ℕ, 0<c ∧ ∀ n : ℕ, N≤n → Even n → c*(n:ℝ) ≤ (major n).re",
+      "plain_statement": {
+        "zh": "奇异级数为正、阿基米德积分为 n 加小误差、且主弧与其模型相对误差不超过一半时，主弧有统一正线性下界。",
+        "en": "Positive singular series, an archimedean integral equal to n up to a small error, and a relative model error of at most one half together give a uniform positive linear lower bound for the major arcs."
+      },
+      "brief": {
+        "zh": "这是主弧任务的全部内容：把三个可独立攻击的输入拼成研究目标。",
+        "en": "This is the entire content of the major-arc target: three independently attackable inputs assembled into it."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-arc-threshold-explicit",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_threshold_explicit.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_threshold_explicit",
+      "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; ∀ n : ℕ, 1000000 ≤ n → 2*((Q n)^2) < n",
+      "plain_statement": {
+        "zh": "从一百万起，2Q²<n 具体成立，弧互不重叠的尺度条件因此是有效的。",
+        "en": "From one million on, 2Q²<n holds concretely, so the non-overlap condition is effective."
+      },
+      "brief": {
+        "zh": "任务台原先把这一步留成存在量词，这里给出可写出的下界。",
+        "en": "The desk previously left this step as an existential; here is a writable lower bound."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-arc-budget-ratio",
+      "file": "lean/PEqualNP/Outside/L_goldbach_arc_budget_ratio.lean",
+      "module": "PEqualNP.Outside.L_goldbach_arc_budget_ratio",
+      "statement": "∀ A B c e n : ℝ, c*n ≤ A → -(e*n) ≤ B → e<c → 0<n → 0 < A+B",
+      "plain_statement": {
+        "zh": "主弧至少 cn、次弧至少 −en 且 e<c 时，两者之和严格为正。",
+        "en": "If the major arcs contribute at least cn, the minor arcs at least −en, and e<c, the sum is strictly positive."
+      },
+      "brief": {
+        "zh": "把最终合成写成带 n 缩放的算术形式，便于逐条对齐参数。",
+        "en": "Write the final assembly with explicit n-scaling so the parameters line up line by line."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1205.5252",
+      "track": "arc-model",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-complement",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_complement.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_complement",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let major := fun n : ℕ => intervalIntegral (fun t => (arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let cv := fun (u v : ℕ → ℝ) (n : ℕ) => Finset.sum (Finset.range (n+1)) (fun k => u k*v (n-k)); ∀ n : ℕ, minor n = (cv w w n : ℂ) - major n",
+      "plain_statement": {
+        "zh": "次弧贡献等于目标卷积减去主弧贡献。",
+        "en": "The minor-arc contribution is the target convolution minus the major-arc contribution."
+      },
+      "brief": {
+        "zh": "次弧不需要独立模型，它由主弧和目标量之差确定。",
+        "en": "The minor arcs need no model of their own; they are fixed by the major arcs and the target."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1305.2897",
+      "track": "minor-machinery",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-trivial",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_trivial.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_trivial",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; ∀ n : ℕ, ‖minor n‖ ≤ Finset.sum (Finset.range (n+1)) (fun k => (w k)^2)",
+      "plain_statement": {
+        "zh": "次弧贡献的模不超过素数权平方和。",
+        "en": "The minor-arc contribution is bounded in modulus by the sum of squared prime weights."
+      },
+      "brief": {
+        "zh": "这是不使用任何抵消信息能拿到的最好界，也是次弧难点的起点。",
+        "en": "This is the best bound available without any cancellation input, and it is where the minor-arc difficulty starts."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1305.2897",
+      "track": "minor-machinery",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-gap-scale",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_gap_scale.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_gap_scale",
+      "statement": "∀ n : ℕ, 100 ≤ n → 2*(n:ℝ) ≤ Finset.sum (Finset.range (n+1)) (fun k => if Nat.Prime k then (Real.log (k:ℝ))^2 else 0)",
+      "plain_statement": {
+        "zh": "从一百起，素数权平方和至少是 2n，因而平凡界比所需的 o(n) 高出一个量级。",
+        "en": "From one hundred on, the squared prime weights sum to at least 2n, so the trivial bound exceeds the required o(n) by a full order."
+      },
+      "brief": {
+        "zh": "这条说明单靠 L² 能量永远压不住次弧：必须用到符号抵消，而不只是大小。",
+        "en": "This shows that L² energy alone can never control the minor arcs: signed cancellation, not size, must enter."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1305.2897",
+      "track": "minor-machinery",
+      "role": "lemma"
+    },
+    {
+      "id": "L-goldbach-minor-l1-sufficient",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_l1_sufficient.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_l1_sufficient",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; (∀ e : ℝ, 0<e → ∃ N : ℕ, ∀ n : ℕ, N≤n → intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun t => ‖f n t‖) t) (0:ℝ) 1 MeasureTheory.volume ≤ e*(n:ℝ)) → (∀ e : ℝ, 0<e → ∃ N : ℕ, ∀ n : ℕ, N≤n → Even n → -(e*(n:ℝ)) ≤ (minor n).re)",
+      "plain_statement": {
+        "zh": "若次弧上被积函数绝对值的积分是 o(n)，则次弧的带符号实贡献不低于 −εn。",
+        "en": "If the integral of the modulus of the integrand over the minor arcs is o(n), the signed real minor-arc contribution is at least −εn."
+      },
+      "brief": {
+        "zh": "给次弧任务一个充分条件：只需控制绝对积分，不必控制符号。",
+        "en": "Give the minor-arc target a sufficient condition: control the absolute integral, not the sign."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1305.2897",
+      "track": "minor-machinery",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-minor-sup-sufficient",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_sup_sufficient.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_sup_sufficient",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let minor := fun n : ℕ => intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; (∀ e : ℝ, 0<e → ∃ N : ℕ, ∀ n : ℕ, N≤n → ∀ t : ℝ, t ∉ arcs n → ‖S n w t‖^2 ≤ e*(n:ℝ)) → (∀ e : ℝ, 0<e → ∃ N : ℕ, ∀ n : ℕ, N≤n → Even n → -(e*(n:ℝ)) ≤ (minor n).re)",
+      "plain_statement": {
+        "zh": "若次弧上指数和平方逐点为 o(n)，则次弧任务成立。",
+        "en": "If the squared exponential sum is pointwise o(n) on the minor arcs, the minor-arc target holds."
+      },
+      "brief": {
+        "zh": "把次弧难点精确落到一个逐点上界上，这是可以单独攻击的形式。",
+        "en": "Pin the minor-arc difficulty onto a single pointwise bound, which is a separately attackable form."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1305.2897",
+      "track": "minor-machinery",
+      "role": "conditional"
+    },
+    {
+      "id": "L-goldbach-minor-type-split",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_type_split.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_type_split",
+      "statement": "∀ (z A B : ℂ) (a b : ℝ), z = A+B → ‖A‖≤a → ‖B‖≤b → ‖z‖^2 ≤ 2*a^2+2*b^2",
+      "plain_statement": {
+        "zh": "把指数和拆成两类并分别控制时，平方界由两者的平方和的两倍给出。",
+        "en": "When an exponential sum splits into two types, each controlled separately, the squared bound is twice the sum of their squares."
+      },
+      "brief": {
+        "zh": "这是 Vaughan 分解进入次弧估计的唯一入口：之后只剩两类和各自的界。",
+        "en": "This is the only entry point of Vaughan's decomposition into the minor-arc estimate; afterwards only the two bounds remain."
+      },
+      "program": "correlation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/1305.2897",
+      "track": "minor-machinery",
+      "role": "lemma"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "representations",
+      "title": {
+        "zh": "把素数对变成可估计的量",
+        "en": "From prime pairs to a weighted sum"
+      },
+      "description": {
+        "zh": "为傅里叶系数提取和换权误差提供有限卷积恒等式。",
+        "en": "Finite convolution identities for coefficient extraction and changes of weight."
+      },
+      "feeds": [
+        "powers",
+        "integrals",
+        "exceptions"
+      ]
+    },
+    {
+      "id": "powers",
+      "title": {
+        "zh": "剔除真素数幂",
+        "en": "Remove higher prime powers"
+      },
+      "description": {
+        "zh": "将 Λ 卷积换回只含素数的卷积，并定量控制误差。",
+        "en": "Convert the Mangoldt correlation to primes and bound the correction."
+      },
+      "feeds": [
+        "progressions"
+      ]
+    },
+    {
+      "id": "residues",
+      "title": {
+        "zh": "计算每个模数的局部障碍",
+        "en": "Count admissible residue pairs"
+      },
+      "description": {
+        "zh": "给奇异级数提供可证明的局部因子，从素模数推广到合数。",
+        "en": "Supply local factors for the singular series, from primes through composite moduli."
+      },
+      "feeds": [
+        "series",
+        "rational-model"
+      ]
+    },
+    {
+      "id": "series",
+      "title": {
+        "zh": "给局部修正乘积建立下界",
+        "en": "Lower-bound the local product"
+      },
+      "description": {
+        "zh": "把有限局部计数归一化，控制乘积截断，以便估计主弧主项。",
+        "en": "Normalize local counts and control truncated products for the major-arc main term."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "fourier",
+      "title": {
+        "zh": "建立有限傅里叶变换",
+        "en": "Build the finite Fourier transform"
+      },
+      "description": {
+        "zh": "在有限循环群上验证正交性、反演与能量公式，为检查圆法系数提供独立模型。",
+        "en": "Use character orthogonality, inversion and energy on a finite cyclic group as an independent coefficient model."
+      },
+      "feeds": [
+        "integrals"
+      ]
+    },
+    {
+      "id": "integrals",
+      "title": {
+        "zh": "提取圆法积分系数",
+        "en": "Extract continuous Fourier coefficients"
+      },
+      "description": {
+        "zh": "逐项验证单位圆、截断权和主次弧分割的积分操作。",
+        "en": "Verify integration on the unit interval, truncated weights, and the partition into arcs."
+      },
+      "feeds": [
+        "arc-budget",
+        "exceptions"
+      ]
+    },
+    {
+      "id": "progressions",
+      "title": {
+        "zh": "从同余类到主弧指数和",
+        "en": "From progressions to rational frequencies"
+      },
+      "description": {
+        "zh": "先组织剩余类上的 Λ 质量，再通过分部求和传递误差。若采用 GRH，各结论保留该假设。",
+        "en": "Organize Mangoldt mass by residue and transport errors by partial summation. Keep GRH explicit where used."
+      },
+      "feeds": [
+        "rational-model"
+      ]
+    },
+    {
+      "id": "rational-model",
+      "title": {
+        "zh": "计算有理频率的主项",
+        "en": "Evaluate rational main terms"
+      },
+      "description": {
+        "zh": "从单位根和与几何核出发，建立主弧近似的可计算模型。",
+        "en": "Combine unit-root sums with the geometric kernel to model the main arcs."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "arc-budget",
+      "title": {
+        "zh": "主弧下界与次弧抵消",
+        "en": "Major-arc gain and minor-arc cancellation"
+      },
+      "description": {
+        "zh": "两条攻关任务采用同一套弧宽、权和阈值定义。两项估计若都成立，可得到充分大偶数的结论，阈值以下仍需另证。",
+        "en": "Both research targets use the same arcs and weights. Together they would cover sufficiently large evens. Values below the resulting threshold require a separate proof."
+      },
+      "feeds": []
+    },
+    {
+      "id": "exceptions",
+      "title": {
+        "zh": "估计例外集合并识别平均界的局限",
+        "en": "Control exceptional sets and track what averages imply"
+      },
+      "description": {
+        "zh": "这些任务可给出几乎处处的结果。要排除最后一个例外，还需要逐点输入或把整数计数严格压到一以下。",
+        "en": "These estimates can give almost-all results. Eliminating the last exception needs pointwise information or an exceptional count strictly below one."
+      },
+      "feeds": []
+    },
+    {
+      "id": "rh-strip-geometry",
+      "title": {
+        "zh": "临界带与反射零点",
+        "en": "Strip geometry and reflected zeros"
+      },
+      "description": {
+        "zh": "对照 prim_reflect 和 strip；把所需的零点条件写在前提中。",
+        "en": "Trace prim_reflect and strip; keep the zero-location input explicit."
+      },
+      "feeds": [
+        "progressions"
+      ]
+    },
+    {
+      "id": "rh-zero-blocks",
+      "title": {
+        "zh": "带重数的截断零点和",
+        "en": "Truncated zero sums with multiplicity"
+      },
+      "description": {
+        "zh": "以有限指标记录重数；从 LFunction_eq_zero_re 只取实部信息，再处理各块系数。",
+        "en": "Index multiplicities separately; extract real parts from LFunction_eq_zero_re and estimate the coefficients."
+      },
+      "feeds": [
+        "progressions"
+      ]
+    },
+    {
+      "id": "rh-euler-loss",
+      "title": {
+        "zh": "从本原特征转回原模数",
+        "en": "Euler-factor losses under change of modulus"
+      },
+      "description": {
+        "zh": "从 prim_zero 的有限欧拉因子出发，区分单个因子的非消失、有限乘积的误差与总预算。",
+        "en": "Follow prim_zero; separate nonvanishing, product stability and the total cost."
+      },
+      "feeds": [
+        "progressions"
+      ]
+    },
+    {
+      "id": "rh-residue-blocks",
+      "title": {
+        "zh": "把剩余类的估计合并成频率估计",
+        "en": "From residue-class errors to frequency bounds"
+      },
+      "description": {
+        "zh": "借鉴 everyCharacter_of_row 逐块归并；保持模数、权函数与频率统一。",
+        "en": "Use the block assembly in everyCharacter_of_row; keep the modulus, weight and frequency fixed."
+      },
+      "feeds": [
+        "progressions"
+      ]
+    },
+    {
+      "id": "rh-moving-weights",
+      "title": {
+        "zh": "把区间误差转成平滑权误差",
+        "en": "Transfer interval bounds to smooth weights"
+      },
+      "description": {
+        "zh": "先控制权的离散差分，再用已知的前缀和误差做分部求和。",
+        "en": "Bound discrete variation before summation by parts against prefix discrepancies."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "rh-pair-errors",
+      "title": {
+        "zh": "将单侧素数误差传给二元卷积",
+        "en": "Propagate one-variable errors into binary convolution"
+      },
+      "description": {
+        "zh": "固定同一个目标偶数；在有限反射卷积内展开两个输入，保留交叉项的符号。",
+        "en": "Keep the target fixed, expand both inputs in the reflected convolution, and track the cross term."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "rh-grh-windows",
+      "title": {
+        "zh": "从 GRH 分布估计到区间主项",
+        "en": "GRH progression estimates on moving windows"
+      },
+      "description": {
+        "zh": "先核对上游任意模数的零点命题，再从本项目 grh-progression-error 的单端点界推导；保留 GRH 前提。",
+        "en": "Check the upstream all-moduli zero statement and derive from the project's grh-progression-error endpoint bound. Keep GRH explicit."
+      },
+      "feeds": [
+        "progressions"
+      ]
+    },
+    {
+      "id": "rh-central-support",
+      "title": {
+        "zh": "中央表示的支撑、重数和逐点缺口",
+        "en": "Central support, multiplicity and pointwise gaps"
+      },
+      "description": {
+        "zh": "在中央窗口做集合计数；将密度输入同真正的逐点配对输入分开。",
+        "en": "Count candidates on the central window. Distinguish marginal density from a pointwise overlap bound."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "arc-model",
+      "title": {
+        "zh": "主弧的模型与主项",
+        "en": "The major-arc model and its main term"
+      },
+      "description": {
+        "zh": "把主弧任务拆成三件可独立处理的事：弧的几何（长度、总测度、平移）、阿基米德积分（主项的真实来源）、以及奇异级数的正性。三者合成后即得主弧下界，这一段不再需要关于素数分布的进一步输入。",
+        "en": "Split the major-arc target into three separable jobs: the geometry of the arcs (length, total measure, translation), the archimedean integral where the main term actually lives, and the positivity of the singular series. Together they give the major-arc lower bound, and this half needs no further input about prime distribution."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
+    },
+    {
+      "id": "minor-machinery",
+      "title": {
+        "zh": "次弧的指数和机械",
+        "en": "Exponential-sum machinery on the minor arcs"
+      },
+      "description": {
+        "zh": "次弧不需要独立模型：它等于目标卷积减去主弧。剩下的全部困难是一个逐点抵消上界。这一组把该上界与次弧任务之间的推理补齐，并记录平凡界为何差一个量级。",
+        "en": "The minor arcs need no model of their own: they are the target convolution minus the major arcs. All remaining difficulty is one pointwise cancellation bound. This group supplies the reasoning from that bound to the target and records why the trivial bound misses by a full order."
+      },
+      "feeds": [
+        "arc-budget"
+      ]
     }
   ]
 }
