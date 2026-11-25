@@ -65,6 +65,12 @@
 3. **集中攻逐点的加法相关。** 固定同一个偶数 $n$，用平滑截断 $u$ 和 $1-u$ 将上述系数分成主弧 $A_n$ 与次弧 $B_n$。接口任务先证 $\Re A_n>\lVert B_n\rVert$ 足以提取素数对。研究时也可直接给有符号的 $\Re B_n$ 下界。第一次交叉审查应列出主项下界和每项误差如何依赖 $n$。例如，对整个频率区间先取绝对值只剩 $\int |S_n|^2=\sum w(k)^2$，在对数素数权下为 $n\log n$ 量级，会丢掉抵消。另一条独立路线用反射平方差表示同一个卷积，随后需要对实际素数权给出严格余量。逐点正性和二倍区间内的线性下界均是开放攻关目标。
 4. **量化例外，审查剩余缺口。** 可并行复现条件例外数结果；$E(X)\ll_\varepsilon X^{1/2+\varepsilon}$ 允许无穷多个稀疏例外。二阶矩路线要再证明真实误差在每个待判定点邻域中的振荡和能量预算。若结果只对充分大 $n$ 成立，必须列出阈值，并为余下范围提供统一数学论证。本轮任务台只发一般性定理。[例外集预印本](https://arxiv.org/html/2610.15559v1)
 
+## 反尖峰权重消元 / Anti-spike weight elimination
+
+针对 `L-goldbach-frontier-antispike-shift-transfer`，补充有限二范数预算的非负权精确最小化引理 `L-goldbach-antispike-optimal-weight`。固定 n，记 c_m 为 deepCoeff 的实部，I=[n,2n]∩ℕ，R 为 c 在 I 上负部的二范数。取 B=(e/2)n / n^((8/3+η)/2)（n>0）。原权重条件恰等价于 deepMinor 的实部不小于 −(e/2)n−BR。这个消元明确了原命题并没有额外的权重归一化或支撑长度约束，剩下的困难在于控制真实傅里叶系数，不在于搜索权函数。
+
+For fixed n>0 let c_m=Re(deepCoeff n m), I=[n,2n]∩ℕ, R=||max(0,-c)||_2 and B=(e/2)n/n^((8/3+η)/2). The proposed independent Mathlib-only lemma identifies the exact attainable minimum of the nonnegative weighted sum as -B R. Consequently the current anti-spike transfer weight-existence condition is equivalent to Re(deepMinor n) ≥ -(e/2)n-BR. The published statement does not require normalized or diffuse weights; those would be additional assumptions. The finite optimization step does not prove the remaining uniform analytic inequality. The proof uses Cauchy–Schwarz and the explicit negative-part optimizer. [Standalone proof candidate](https://github.com/Elm-Forest/goldbach-proofs/blob/30f7bf767c4e9cbdcd7f00b14f02838cd6b5d785/antispike-proof/L_goldbach_antispike_optimal_weight.lean).
+
 ## 如何并行与验收
 
 任务台优先覆盖空闲题。标记 parallel 的任务允许不同团队独立试证。新增的 100 条子命题分属十组。主弧下界与次弧逐点下界使用同一截断，合起来覆盖充分大偶数；阈值以下仍须证明。例外集的密度界独立列出。每组任务及其用途见[可领取的研究路线](https://www.goldbach.tech/?lang=zh#roadmap)。每份尝试有自己的工作目录、租约、分支和 PR；PR 说明写清采用的估计、常数依赖和仍需的假设。题目公开、命题类型检查通过和证明获得权威 ACCEPTED 是三个不同的状态。贡献者另行复核中英文陈述与 Lean 量词，原始核验日志给出证据清单。旧区间题的运行和署名继续保存在历史记录里。[旧目录](https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ac48ffd/research/gaps.json) · [验证日志](https://www.movan.tech/goldbach/#records)
