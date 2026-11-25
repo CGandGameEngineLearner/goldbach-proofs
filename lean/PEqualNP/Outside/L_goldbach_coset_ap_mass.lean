@@ -3,7 +3,11 @@ import Mathlib
 open Filter Finset Topology
 
 theorem PEqualNP.Outside.L_goldbach_coset_ap_mass :
-    let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let F := fun n q r : ℕ => (Finset.range (n+1)).filter (fun k => k%q=r); let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k; ∀ q : ℕ, 0<q → ∀ ε : ℝ, 0<ε → ∃ X : ℕ, ∀ n≥X, ∀ r<q, r.Coprime q → |A n q r/(n:ℝ)-1/(q.totient:ℝ)| ≤ ε := by
+    let w := fun k : ℕ => if k.Prime then Real.log (k : ℝ) else 0
+    let F := fun n q r : ℕ => (Finset.range (n + 1)).filter (fun k => k % q = r)
+    let A := fun n q r : ℕ => ∑ k ∈ F n q r, w k
+    ∀ q : ℕ, 0 < q → ∀ ε : ℝ, 0 < ε → ∃ X : ℕ, ∀ n ≥ X, ∀ r < q, r.Coprime q →
+      |A n q r / (n : ℝ) - 1 / (q.totient : ℝ)| ≤ ε := by
   intro weight fiber mass modulus hmod tolerance htol
   let : NeZero modulus := ⟨hmod.ne'⟩
   let residues := (range modulus).filter (fun residue => residue.Coprime modulus)
