@@ -1,5 +1,7 @@
 import Mathlib
 
+noncomputable section
+
 private def goldbachCert40Term (a b : Nat) : Complex :=
   Complex.exp (((2 * Real.pi * (a : Real) * b / 40 : Real) : Complex) * Complex.I)
 
@@ -7,8 +9,8 @@ private lemma goldbachCert40Shift (a : Nat) (ha : Odd a) (b : Nat) :
     goldbachCert40Term a (b + 20) = -goldbachCert40Term a b := by
   unfold goldbachCert40Term
   have harg :
-      (((2 * Real.pi * (a : Real) * (b + 20) / 40 : Real) : Complex) * Complex.I) =
-        (((2 * Real.pi * (a : Real) * b / 40 : Real) : Complex) * Complex.I) +
+      (((2 * Real.pi * (a : Real) * ((b + 20 : Nat) : Real) / 40 : Real) : Complex) * Complex.I) =
+        (((2 * Real.pi * (a : Real) * (b : Real) / 40 : Real) : Complex) * Complex.I) +
           (((Real.pi * (a : Real) : Real) : Complex) * Complex.I) := by
     push_cast
     ring
@@ -28,6 +30,8 @@ private lemma goldbachCert40Shift (a : Nat) (ha : Odd a) (b : Nat) :
   rw [harg, Complex.exp_add, hphase]
   ring
 
+end
+
 theorem PEqualNP.Outside.L_goldbach_cert_40 :
     forall a : Nat, Nat.Coprime a 40 ->
       Finset.sum ((Finset.range 40).filter (fun b => Nat.Coprime b 40))
@@ -36,7 +40,7 @@ theorem PEqualNP.Outside.L_goldbach_cert_40 :
   intro a ha
   have haOdd : Odd a := by
     by_contra hNotOdd
-    have hEven : Even a := (even_or_odd a).resolve_right hNotOdd
+    have hEven : Even a := (Nat.even_or_odd a).resolve_right hNotOdd
     cases hEven with
     | intro k hk =>
       have hdiv : Dvd.dvd 2 a := Exists.intro k (by omega)
