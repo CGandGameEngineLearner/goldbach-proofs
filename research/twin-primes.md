@@ -38,3 +38,13 @@ TP-0053 使用 TP-0052。将窄窗的素数对数权补零到 $\mathbb Z/(2X+5)$
 For an independent start, TP-0001 bounds proper powers, TP-0008 isolates the frequency of a gap of two, TP-0020 counts repeated-zero labels and TP-0045 computes the local mask at a prime.
 
 Three explicit reductions reach TP-0054. TP-0006 subtracts the proper-power contribution on an unbounded sequence. TP-0039 adds the short-divisor limit to a strict signed lower bound for long divisors before removing proper powers. TP-0053 uses signed Parseval and zero padding to turn positive prescribed energy into two actual primes. A spectral proof still needs a construction of the prescribed tests and control of their mixed term at the same gap and scale. The Lean statements include the RH or Dirichlet GRH hypotheses wherever the reduction uses them.
+
+## 逻辑强度与领取 / Logical strength and task selection
+
+TP-0052 与 TP-0054 等价。补零消掉回绕后，能量为正当且仅当窗口含有孪生素数。反向给定任意足够大的孪生对 $p,p+2$，取 $X=p-1$。当 $p>151$ 时，$50(p+2)<51X$，两端都落在窗口内。自守路线若要推进，须构造匹配同一算术序列的两支测试，并控制两支比较误差及其差的符号。
+
+TP-0052 is equivalent to TP-0054. Zero padding removes wraparound, so the energy is positive precisely when a twin pair lies in the window. For the converse, take a sufficiently large twin pair $p,p+2$ and set $X=p-1$. If $p>151$, then $50(p+2)<51X$ and both primes lie in the window. An automorphic approach needs two tests for the same arithmetic sequence and control of their comparison errors and the sign of their difference.
+
+TP-0035 是已知工具的形式化里程碑。Bombieri–Vinogradov 在 $D=\lfloor X^{1/3}floor$ 控制加权进程误差，定量素数定理给出无条件 Möbius 矩，再经绝对收敛的卷积识别硬截断极限。TP-0034 的 RH 版本不能直接作为无条件输入。TP-0026 则要在 RH 和 TP-0025 的条件下验证实际谱与双矩的比较。这两题须显式领取。TP-0001 可复用主站的有限计数 L-goldbach-power-index-count。TP-0047、0049 保留为组合路线中的引用，分别由一般形式 QP-0050、0042 特化。
+
+TP-0035 is a formalization milestone. Bombieri–Vinogradov controls the weighted progression error at $D=\lfloor X^{1/3}floor$. The quantitative prime number theorem supplies unconditional Möbius moments. An absolutely convergent convolution then gives the cutoff limit. TP-0034 gives the version under RH. TP-0026 compares the actual spectrum with the moments under RH and TP-0025. Both tasks require explicit selection. For TP-0001, reuse the finite count L-goldbach-power-index-count. In the reduction, TP-0047 and TP-0049 are references to special cases of QP-0050 and QP-0042.

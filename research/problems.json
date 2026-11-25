@@ -4706,8 +4706,8 @@
           "en": "New route · Gap-two windows · TP-0001 · Count proper prime powers up to Y"
         },
         "brief": {
-          "zh": "按指数分组；每个底数至多为 √Y，指数至多为 log₂ Y。",
-          "en": "Group by exponent. Each base is at most √Y and each exponent is at most log₂ Y."
+          "zh": "按底数和指数计数。主站 L-goldbach-power-index-count 已给出 Mangoldt 非零真幂的有限计数形式，可复用再作渐近简化。",
+          "en": "Count by base and exponent. Reuse the finite proper-power count in L-goldbach-power-index-count, then derive the asymptotic bound."
         },
         "source": "https://arxiv.org/abs/2610.32672",
         "program": "foundation",
@@ -5233,13 +5233,13 @@
           "en": "New route · Zero pairs and phases · TP-0026 · Transfer the actual multiplicity-weighted spectral margin to the signed moment"
         },
         "brief": {
-          "zh": "按重数取留数，用 Riemann–von Mangoldt 主项求 d₂；单位窗计数只用于截尾，须给出趋零误差。",
-          "en": "Take residues with multiplicity and use the Riemann–von Mangoldt main term for d₂. Use unit counts for the tails and prove a vanishing error."
+          "zh": "重型条件比较。RH 和 TP-0025 的谱余量均是前提。需证明移动零点截断与实际双矩的比较，计入留数、对角主项、截尾和极点误差。",
+          "en": "This comparison assumes RH and the margin from TP-0025. A proof must compare the moving zero cutoff with the actual moments and bound the residue, diagonal, tail and pole terms."
         },
         "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean",
         "program": "correlation",
         "role": "conditional",
-        "parallel": true,
+        "parallel": false,
         "depends_on": [
           "L-twin-primes-diagonal-integral",
           "L-twin-primes-ordered-indices",
@@ -5247,7 +5247,8 @@
           "L-twin-primes-mellin-tail",
           "L-twin-primes-rh-contour"
         ],
-        "imports": []
+        "imports": [],
+        "challenge_only": true
       },
       {
         "id": "L-twin-primes-mangoldt-divisors",
@@ -5428,18 +5429,19 @@
           "en": "New route · Short and long divisors · TP-0035 · Prove the unconditional short-divisor limit at the cube-root cutoff"
         },
         "brief": {
-          "zh": "用 Bombieri–Vinogradov 的平均误差处理 log d 权；用素数定理的 Möbius 矩完成硬截断。窗长为 X/50。",
-          "en": "Use Bombieri–Vinogradov with the log d weight and unconditional Möbius moments at the hard cutoff. The window length is X/50."
+          "zh": "已知定理的形式化里程碑。调用 Bombieri–Vinogradov 控制加权模数误差，再用定量素数定理导出的无条件 Möbius 矩识别硬截断常数。",
+          "en": "Formalize a consequence of known theorems. Use Bombieri–Vinogradov for the weighted error across moduli and unconditional Möbius moments from the quantitative prime number theorem for the cutoff constant."
         },
         "source": "https://arxiv.org/abs/2610.32672",
         "program": "correlation",
         "role": "target",
-        "parallel": true,
+        "parallel": false,
         "depends_on": [
           "L-twin-primes-divisor-split",
           "L-twin-primes-euler-factor"
         ],
-        "imports": []
+        "imports": [],
+        "challenge_only": true
       },
       {
         "id": "L-twin-primes-cofactor-switch",
@@ -5691,15 +5693,16 @@
           "en": "New route · Theta lift for a prescribed shift · TP-0047 · Combine two lift errors and arithmetic matching in one normalization"
         },
         "brief": {
-          "zh": "同一正 Haar 常数 A 归一两支，把误差均保留到相减之后。",
-          "en": "Normalize both signs by the same positive Haar constant A and carry all three errors through the subtraction."
+          "zh": "参照 QP-0050 的一般绝对值误差界。取同一归一化和误差参数即可得到此单侧界。",
+          "en": "Specialize the shared absolute error bound QP-0050 to the same normalization and error parameters, then take one side."
         },
         "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
         "program": "correlation",
         "role": "lemma",
-        "parallel": true,
+        "parallel": false,
         "depends_on": [],
-        "imports": []
+        "imports": [],
+        "challenge_only": true
       },
       {
         "id": "L-twin-primes-sifted-correlation",
@@ -5733,15 +5736,16 @@
           "en": "New route · Theta lift for a prescribed shift · TP-0049 · Compute the Fourier phase of translation by two at every prescribed frequency"
         },
         "brief": {
-          "zh": "用 DFT 的负指数约定，代 m=n+2，逐项取出正相位。",
-          "en": "For the DFT with negative exponent set m=n+2 and factor out the positive phase."
+          "zh": "参照 QP-0042 的任意平移公式，取平移量 2。使用 Mathlib DFT 的同一个负指数约定。",
+          "en": "Specialize the general shift formula QP-0042 to shift 2 under the same Mathlib DFT sign convention."
         },
         "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/DecoratedLatticeProofs/ThetaKernelSplitPlacesEqJetClassicalThetaStatement.lean#L1335",
         "program": "correlation",
         "role": "lemma",
-        "parallel": true,
+        "parallel": false,
         "depends_on": [],
-        "imports": []
+        "imports": [],
+        "challenge_only": true
       },
       {
         "id": "L-twin-primes-no-wrap",
@@ -5798,8 +5802,8 @@
           "en": "New route · Theta lift for a prescribed shift · TP-0052 · Bound the signed energy of the prescribed gap-two test on unbounded scales"
         },
         "brief": {
-          "zh": "将零补齐的素数系数送入同一 Θ 模型，比较固定两测试，再估计 Rallis 局部项的符号。有限等式提供逐尺度检验。",
-          "en": "Match the padded prime coefficients to a single theta model, compare the two prescribed tests and estimate the signs of the local Rallis terms. The finite identity checks each scale."
+          "zh": "与 TP-0054 等价。由 TP-0050、TP-0051 将正能量化为同窗孪生对；反向取足够大的孪生对 p,p+2，并令 X=p−1。",
+          "en": "This is equivalent to TP-0054. TP-0050 and TP-0051 convert positive energy into a twin pair in the window. For the converse, choose a sufficiently large twin pair p,p+2 and set X=p−1."
         },
         "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
         "program": "correlation",
