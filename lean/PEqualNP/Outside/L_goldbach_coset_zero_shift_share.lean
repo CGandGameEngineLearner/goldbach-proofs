@@ -1,7 +1,7 @@
 import Mathlib
 
 theorem PEqualNP.Outside.L_goldbach_coset_zero_shift_share :
-    let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let B := fun n s : ℕ => ∑ k ∈ (Finset.range (n+1)).filter (fun k => k ≤ s ∧ s-k ≤ n), w k*w (s-k); let Z := fun n q : ℕ => ∑ s ∈ (Finset.range (2*n+1)).filter (fun s => s%q=n%q), B n s; ∀ n q : ℕ, 0<q → Z n q-B n n = (∑ h ∈ Finset.Icc 1 (n/q), (B n (n-h*q)+B n (n+h*q))) := by
+    let w := fun k : ℕ => if k.Prime then Real.log (k:ℝ) else 0; let B := fun n s : ℕ => ∑ k ∈ (Finset.range (n+1)).filter (fun k => k ≤ s ∧ s-k ≤ n), w k*w (s-k); let Z := fun n q : ℕ => ∑ s ∈ (Finset.range (2*n+1)).filter (fun s => s % q = n % q), B n s; ∀ n q : ℕ, 0<q → Z n q-B n n = (∑ h ∈ Finset.Icc 1 (n/q), (B n (n-h*q)+B n (n+h*q))) := by
   dsimp only
   intro n q hq
   let S := (Finset.range (2 * n + 1)).filter (fun s => s % q = n % q)
