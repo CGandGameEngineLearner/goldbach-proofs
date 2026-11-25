@@ -4,7 +4,7 @@ import Mathlib.Tactic.Positivity
 
 open ArithmeticFunction
 
-theorem L_goldbach_primitive_ramified_square :
+theorem PEqualNP.Outside.L_goldbach_primitive_ramified_square :
     ∀ n : ℕ, 2≤n → (∑ k ∈ (Finset.range (n+1)).filter (fun k => n≤3*k ∧ 3*k≤2*n ∧ ¬k.Coprime n), (ArithmeticFunction.vonMangoldt k)^2) ≤ 2*(Real.log (n:ℝ))^2 := by
   intro n hn
   have htotal : (∑ k ∈ (Finset.range (n+1)).filter (fun k => n≤3*k ∧ 3*k≤2*n ∧ ¬k.Coprime n), vonMangoldt k) ≤ 2*Real.log (n:ℝ) := by
