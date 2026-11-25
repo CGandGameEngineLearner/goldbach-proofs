@@ -245,7 +245,8 @@ function renderGapDetail() {
     target: lang === 'zh' ? '待突破的解析估计' : 'Open analytic target',
     conditional: lang === 'zh' ? '需使用命题中所列假设' : 'Conditional on the stated hypotheses'
   }[gap.role];
-  const context = [programName(programOf(gap)), role].filter(Boolean).join(' · ');
+  const challenge = gap.challenge_only && (lang === 'zh' ? '核心开放难题 · 仅按 ID 主动挑战' : 'Open research challenge · claim explicitly by ID');
+  const context = [programName(programOf(gap)), role, challenge].filter(Boolean).join(' · ');
   detailContent.replaceChildren(
     identity,
     element('h3', gap.plain_statement[lang]),

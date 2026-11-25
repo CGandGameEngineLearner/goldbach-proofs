@@ -193,7 +193,8 @@ class Desk:
 
             load = Counter(lease["gap"] for lease in active)
             proved = self.proved_gaps(conn)
-            candidates = self.gaps if requested_gap is None else (requested_gap,)
+            candidates = ((key for key, gap in self.gaps.items() if not gap.get("challenge_only"))
+                          if requested_gap is None else (requested_gap,))
             if fleet is None and owned:
                 candidates = (gap for gap in candidates if gap != owned[0]["gap"])
             program_load = Counter(self.gaps[row["gap"]].get("program", "foundation")

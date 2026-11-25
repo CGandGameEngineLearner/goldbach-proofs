@@ -156,7 +156,8 @@
       },
       "source": "https://arxiv.org/abs/2607.27282v2",
       "parallel": true,
-      "role": "endpoint"
+      "role": "endpoint",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-dyadic-correlation-floor",
@@ -1980,7 +1981,8 @@
       "parallel": true,
       "source": "https://arxiv.org/abs/2607.27282",
       "track": "arc-budget",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-arc-minor-saving",
@@ -2000,7 +2002,8 @@
       "parallel": true,
       "source": "https://arxiv.org/abs/2607.27282",
       "track": "arc-budget",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-arc-budget-transfer",
@@ -7460,7 +7463,11 @@
       "parallel": true,
       "imports": [],
       "track": "minor-truncation",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true,
+      "depends_on": [
+        "L-goldbach-minor-shift-window-budget"
+      ]
     },
     {
       "id": "L-goldbach-reflection-energy",
@@ -7649,7 +7656,8 @@
       "imports": [],
       "track": "odd-character-interference",
       "role": "target",
-      "depends_on": []
+      "depends_on": [],
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-reflect-half",
@@ -9144,7 +9152,8 @@
         "L-goldbach-bulk-overlap-floor",
         "L-goldbach-bulk-no-alias",
         "L-goldbach-bulk-exception-budget"
-      ]
+      ],
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-characters-odd-card",
@@ -11464,6 +11473,135 @@
       "track": "odd-character-interference",
       "role": "lemma",
       "depends_on": []
+    },
+    {
+      "id": "L-goldbach-minor-shift-energy-anchor",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_shift_energy_anchor.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_shift_energy_anchor",
+      "statement": "∀ (r : ℕ → ℝ) (n H : ℕ) (e : ℝ), 0<H → 0<e → (∑ j ∈ Finset.range H, (r (n+2*j))^2) < (H:ℝ)*e^2 → ∃ j < H, |r (n+2*j)|<e",
+      "plain_statement": {
+        "zh": "在偶移窗口内选取一个小误差锚点",
+        "en": "Select a small-error anchor among even shifts"
+      },
+      "brief": {
+        "zh": "反证：每个点的平方若都达到阈值，则窗口总能量达到阈值乘以点数。",
+        "en": "Argue by contradiction and sum the squared lower bounds."
+      },
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": [],
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
+    },
+    {
+      "id": "L-goldbach-minor-shift-downward-transfer",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_shift_downward_transfer.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_shift_downward_transfer",
+      "statement": "∀ (r : ℕ → ℝ) (n j : ℕ), r (n+2*j)-r n ≤ ∑ i ∈ Finset.range j, max 0 (r (n+2*(i+1))-r (n+2*i))",
+      "plain_statement": {
+        "zh": "用单侧增量预算将窗口锚点带回目标偶数",
+        "en": "Transfer an anchor to the target using only upward increments"
+      },
+      "brief": {
+        "zh": "望远镜展开，只保留向上的增量。这样即使个别增量为负也能向起点传递下界。",
+        "en": "Telescope from the target to its anchor and bound increments by their positive parts."
+      },
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": [],
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
+    },
+    {
+      "id": "L-goldbach-minor-shift-window-budget",
+      "file": "lean/PEqualNP/Outside/L_goldbach_minor_shift_window_budget.lean",
+      "module": "PEqualNP.Outside.L_goldbach_minor_shift_window_budget",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; let I := fun (n:ℕ) (a b:ℕ→ℝ) => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => S n a u*S n b u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; let r := fun n : ℕ => (I n (high n) (high n)).re/(n:ℝ); ∀ n H : ℕ, ∀ e : ℝ, 0<n → 0<H → 0<e → (∑ j ∈ Finset.range H, (r (n+2*j))^2) < (H:ℝ)*e^2 → (∑ i ∈ Finset.range (H-1), max 0 (r (n+2*(i+1))-r (n+2*i))) ≤ e → -(2*e*(n:ℝ)) ≤ (I n (high n) (high n)).re",
+      "plain_statement": {
+        "zh": "同窗局部能量与正变差推出次弧高高项下界",
+        "en": "Recover a bulk minor-arc floor from compatible local budgets"
+      },
+      "brief": {
+        "zh": "取窗口锚点并累加直到锚点的正增量。应用到父题需对每个充分大的偶数找到同一个满足两项预算的窗口，这一解析输入仍开放。",
+        "en": "Select an anchor and sum positive increments. The open analytic input is a common window satisfying both budgets at every sufficiently large even target."
+      },
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "conditional",
+      "depends_on": [
+        "L-goldbach-minor-shift-energy-anchor",
+        "L-goldbach-minor-shift-downward-transfer"
+      ],
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
+    },
+    {
+      "id": "L-goldbach-plateau-arc-shell",
+      "file": "lean/PEqualNP/Outside/L_goldbach_plateau_arc_shell.lean",
+      "module": "PEqualNP.Outside.L_goldbach_plateau_arc_shell",
+      "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; ∀ n h : ℕ, 0<n → Q (n+h)=Q n → MeasureTheory.volume ((arcs n) \\ (arcs (n+h))) ≤ ENNReal.ofReal (4*(Q n:ℝ)^2*(h:ℝ)/((n:ℝ)*((n+h:ℕ):ℝ)))",
+      "plain_statement": {
+        "zh": "同导子截断时移动主弧的薄壳测度",
+        "en": "Measure of the moving arc shell on a cutoff plateau"
+      },
+      "brief": {
+        "zh": "对每个既约分数比较半径。每个分母 q 至多 q+1 个中心，用两侧半径差作有限并上界。对数截断跳跃处需另作估计。 用于高高项的移位比较。",
+        "en": "Bound the two lost strips at each rational center and sum over denominators. Changes of cutoff remain outside this estimate. Downstream: shifted bulk minor-arc comparisons."
+      },
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": [],
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
+    },
+    {
+      "id": "L-goldbach-bulk-shift-spectrum-cost",
+      "file": "lean/PEqualNP/Outside/L_goldbach_bulk_shift_spectrum_cost.lean",
+      "module": "PEqualNP.Outside.L_goldbach_bulk_shift_spectrum_cost",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; ∀ n h : ℕ, 1≤n → (∫ t in (0:ℝ)..1, ‖S (n+h) (high (n+h)) t - S n (high n) t‖^2) ≤ 2*(h:ℝ)*Real.log ((n+h:ℕ):ℝ)^2",
+      "plain_statement": {
+        "zh": "移动素数谱截断的无条件均方代价",
+        "en": "Unconditional mean-square cost of shifting the prime cutoff"
+      },
+      "brief": {
+        "zh": "用整数频率正交性化成系数平方和。新增频率至多 h 个；原有频率中退出的底数满足 n<k³≤n+h，由立方映射的单射性也至多 h 个。 用于高高项的移位比较。",
+        "en": "Apply orthogonality. Count the entering top frequencies and the exiting cubic-cutoff bases separately, using injectivity of cubing. Downstream: shifted bulk minor-arc comparisons."
+      },
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": [],
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
+    },
+    {
+      "id": "L-goldbach-even-shift-phase-filter",
+      "file": "lean/PEqualNP/Outside/L_goldbach_even_shift_phase_filter.lean",
+      "module": "PEqualNP.Outside.L_goldbach_even_shift_phase_filter",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (H : ℕ) (t : ℝ), 0<H → Real.sin (2*Real.pi*t) ≠ 0 → ‖(∑ j ∈ Finset.range H, E (-2*(j:ℝ)*t))/(H:ℂ)‖ ≤ min 1 (1/((H:ℝ)*|Real.sin (2*Real.pi*t)|))",
+      "plain_statement": {
+        "zh": "偶移平均的频率衰减与半整数共振",
+        "en": "Frequency attenuation and half-integer resonance under even shifts"
+      },
+      "brief": {
+        "zh": "用有限几何级数和三角不等式分别给出两个界。冻结谱与弧后可直接估计移频平均；接近半整数时不能指望此界给强衰减。 用于高高项的移位比较。",
+        "en": "Bound the geometric sum both trivially and by the chord length. Apply to a frozen spectrum and mask; the bound deteriorates near half-integers. Downstream: shifted bulk minor-arc comparisons."
+      },
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "minor-truncation",
+      "role": "lemma",
+      "depends_on": [],
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-bulk-signed-floor"
     },
     {
       "id": "L-goldbach-frontier-three-zone-split",

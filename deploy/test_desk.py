@@ -26,6 +26,16 @@ class DeskTests(unittest.TestCase):
         self.db = Path(folder) / "verdicts.sqlite3"
         self.desk = Desk(self.db, GAPS, SECRET)
 
+    def test_challenges_require_explicit_claim(self):
+        self.desk.gaps = {g["id"]: {**g, "challenge_only": True} for g in GAPS}
+        automatic = {"handle": "alice"}
+        self.assertEqual(self.request("claim", automatic)[0], 409)
+        self.desk.gaps[GAPS[2]["id"]]["challenge_only"] = False
+        code, result = self.request("claim", automatic)
+        self.assertEqual(code, 201)
+        self.assertEqual(result["gap"]["id"], GAPS[2]["id"])
+        self.assertEqual(self.request("claim", {"handle": "bob", "gap": GAPS[0]["id"]})[0], 201)
+
     def request(self, path, body, *, token=None, sign=False, now=START, ip="2001:db8::1"):
         content = json.dumps(body, separators=(",", ":")).encode()
         headers = {}
