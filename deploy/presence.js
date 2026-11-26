@@ -41,7 +41,7 @@
       views.textContent = Number.isSafeInteger(value.page_views) ? format.format(value.page_views) : '—';
       ips.textContent = Number.isSafeInteger(value.unique_ips) ? format.format(value.unique_ips) : '—';
     } catch {
-      visitors.textContent = agents.textContent = views.textContent = ips.textContent = '—';
+      // Keep the last snapshot visible until the next heartbeat succeeds.
     } finally {
       clearTimeout(timeout);
       pending = false;

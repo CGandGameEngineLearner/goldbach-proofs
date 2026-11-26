@@ -14,7 +14,7 @@ from functools import lru_cache
 from html import escape
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from threading import BoundedSemaphore
+from threading import Thread, BoundedSemaphore
 from urllib.parse import parse_qs, urlsplit
 
 from desk import Desk, QUEUE_BATCH
@@ -71,6 +71,31 @@ with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn, conn:
     conn.execute("CREATE TABLE IF NOT EXISTS visitor_ips (digest BLOB PRIMARY KEY) WITHOUT ROWID")
     conn.execute("CREATE TABLE IF NOT EXISTS page_views (source TEXT PRIMARY KEY, total INTEGER NOT NULL)")
     conn.execute("INSERT OR IGNORE INTO page_views VALUES ('live', 0)")
+
+def read_presence_counts():
+    counts = PRESENCE.snapshot()
+    try:
+        with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn:
+            counts["page_views"] = conn.execute("SELECT sum(total) FROM page_views").fetchone()[0]
+            counts["unique_ips"] = conn.execute("SELECT count(*) FROM visitor_ips").fetchone()[0]
+    except sqlite3.Error:
+        counts["page_views"] = counts["unique_ips"] = None
+    return counts
+
+
+# Publish complete snapshots so neither HTML rendering nor a heartbeat waits for SQLite.
+PRESENCE_COUNTS = read_presence_counts()
+
+
+def refresh_presence_counts():
+    global PRESENCE_COUNTS
+    while True:
+        time.sleep(10)
+        PRESENCE_COUNTS = read_presence_counts()
+
+
+Thread(target=refresh_presence_counts, name="presence-counts", daemon=True).start()
+
 
 ASSETS = {
     "/agent-icons.png": "image/png",
@@ -135,6 +160,11 @@ def core_team_signup(lang, prefix):
 
 def site_dock(lang, prefix):
     zh = lang == "zh"
+    counts = {**PRESENCE_COUNTS, "visitors": PRESENCE.visitor_count()}
+    def number(key):
+        value = counts[key]
+        return f"{value:,}" if isinstance(value, int) else "—"
+
     visitors = "在线访客" if zh else "Visitors online"
     agents = "在研 Agent" if zh else "Working agents"
     views = "累计浏览量" if zh else "Total page views"
@@ -147,11 +177,11 @@ def site_dock(lang, prefix):
               "Unique IPs include historical page visits matched to access logs. Each source IP counts once across both domains. "
               "Each active, unsubmitted research lease counts as one agent seat. Updates every 30 seconds.")
     return f"""<aside class="discussion-dock" aria-label="{'研究台动态' if zh else 'Research desk activity'}">
-<details class="presence-widget" data-endpoint="{prefix}api/presence" hidden>
-<summary><span><i aria-hidden="true"></i>{visitors} <b data-count="visitors">—</b></span>
-<span>{agents} <b data-count="agents">—</b></span>
-<span class="total-views">{views} <b data-count="page_views">—</b></span>
-<span class="total-views">{ips} <b data-count="unique_ips">—</b></span></summary>
+<details class="presence-widget" data-endpoint="{prefix}api/presence">
+<summary><span><i aria-hidden="true"></i>{visitors} <b data-count="visitors">{number('visitors')}</b></span>
+<span>{agents} <b data-count="agents">{number('agents')}</b></span>
+<span class="total-views">{views} <b data-count="page_views">{number('page_views')}</b></span>
+<span class="total-views">{ips} <b data-count="unique_ips">{number('unique_ips')}</b></span></summary>
 <p>{detail}</p></details>
 {discussion_widget(lang, prefix)}{core_team_signup(lang, prefix)}</aside>
 <script src="{prefix}discussion.js" defer></script><script src="{prefix}presence.js" defer></script>"""
@@ -684,13 +714,7 @@ class Handler(BaseHTTPRequestHandler):
         return DESK, path, "goldbach"
 
     def reply_presence(self, visitor=None):
-        counts = PRESENCE.snapshot(visitor)
-        try:
-            with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn:
-                counts["page_views"] = conn.execute("SELECT sum(total) FROM page_views").fetchone()[0]
-                counts["unique_ips"] = conn.execute("SELECT count(*) FROM visitor_ips").fetchone()[0]
-        except sqlite3.Error:
-            counts["page_views"] = counts["unique_ips"] = None
+        counts = {**PRESENCE_COUNTS, "visitors": PRESENCE.visitor_count(visitor)}
         return self.reply(200, json.dumps(counts).encode())
 
     def do_GET(self):
