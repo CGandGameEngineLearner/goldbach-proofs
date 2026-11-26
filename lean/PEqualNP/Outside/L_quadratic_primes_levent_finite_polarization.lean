@@ -14,7 +14,7 @@ theorem PEqualNP.Outside.L_quadratic_primes_levent_finite_polarization :
         rfl
   have hpoint (a b : ℂ) :
       ‖a + b‖ ^ 2 - ‖a - b‖ ^ 2 = 4 * (a * star b).re := by
-    rw [norm_add_sq, norm_sub_sq, hinner]
+    rw [norm_add_sq (𝕜 := ℂ), norm_sub_sq (𝕜 := ℂ), hinner]
     ring
   rw [← Finset.sum_sub_distrib]
   simp_rw [hpoint]
