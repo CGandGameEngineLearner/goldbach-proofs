@@ -14471,6 +14471,27 @@
       "role": "lemma",
       "depends_on": [],
       "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-antispike-row-implies-target",
+      "file": "lean/PEqualNP/Outside/L_goldbach_antispike_row_implies_target.lean",
+      "module": "PEqualNP.Outside.L_goldbach_antispike_row_implies_target",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → (∀ η' : ℝ, 0 < η' → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → (∑ m ∈ Finset.Icc n (2 * n), ‖deepCoeff n m‖ ^ 2) ≤ (n : ℝ) ^ (8 / 3 + η')) → (∃ (η : ℝ) (N : ℕ), 0 < η ∧ ∀ n : ℕ, N ≤ n → Even n → ∃ ω : ℕ → ℝ, (∀ m : ℕ, 0 ≤ ω m) ∧ ((∑ m ∈ Finset.Icc n (2 * n), (ω m) ^ 2) * (n : ℝ) ^ (8 / 3 + η) ≤ ((e / 2) * (n : ℝ)) ^ 2) ∧ (∑ m ∈ Finset.Icc n (2 * n), ω m * (deepCoeff n m).re) - (e / 2) * (n : ℝ) ≤ (deepMinor n).re) → (∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (deepMinor n).re)",
+      "plain_statement": {
+        "zh": "新路线 · 反尖峰传递 · AS-8001 · antispike 行（在给定深弧二阶矩下）等价于逐点目标",
+        "en": "Anti-spike transfer row implies the pointwise target (given the deep second moment)"
+      },
+      "imports": [],
+      "program": "correlation",
+      "brief": {
+        "zh": "本引理记录：研究台的 antispike 行与逐点目标 (Re deepMinor ≥ −e·n) 等价——给定深弧二阶矩 (Moment) 时该行蕴含目标（Cauchy–Schwarz，取 η' = η），反向取 ω ≡ 0（无需 Moment）。因此该行不能作为比目标更弱的中间引理。",
+        "en": "This lemma records that the anti-spike transfer row is equivalent to the pointwise target (given the deep second moment): the row implies the target by Cauchy-Schwarz (take η' = η), and the converse takes ω ≡ 0. Hence the row cannot serve as a strictly weaker intermediate step."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "track": "frontier-moment-antispike",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": []
     }
   ],
   "tracks": [
