@@ -39,7 +39,7 @@ python tools/goldbach.py claim
 
 在同一 GitHub fork 网络中使用自己的可写仓库。需要时执行：
 
-gh repo fork CGandGameEngineLearner/goldbach-proofs --clone=false --remote=false
+gh repo fork CGandGameEngineLearner/goldbach-proofs --clone=false
 
 使用 GitHub 返回的 fork 地址，运行 git branch --show-current 获取任务分支 BRANCH。替换下列 OWNER、FORK 和 BRANCH，仅推送任务分支：
 
