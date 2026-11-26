@@ -1,5 +1,7 @@
 import Mathlib
 
+open RCLike
+
 theorem PEqualNP.Outside.L_quadratic_primes_levent_finite_polarization :
     ∀ (S : Finset ℕ) (u v : ℕ → ℂ),
       (∑ k ∈ S, ‖u k + v k‖ ^ 2) - (∑ k ∈ S, ‖u k - v k‖ ^ 2) =
