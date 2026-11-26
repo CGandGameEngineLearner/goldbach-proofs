@@ -3682,7 +3682,7 @@ private theorem norm_flag_pole_le {q : ℕ} (χ : DirichletCharacter ℂ q) {z :
   rw [norm_div]
   exact (div_le_div_of_nonneg_right hFlag (norm_nonneg _)).trans (one_div_le_one_div_of_le hd hz)
 
-set_option maxHeartbeats 6000000 in
+set_option maxHeartbeats 50000000 in
 theorem contourLog_continuous_left {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q)
     (hGRH : GRH) : Continuous (fun t : ℝ => contourLog χ (((9 / 20 : ℝ) : ℂ) + (t : ℂ) * I)) := by
   let z (t : ℝ) : ℂ := ((9 / 20 : ℝ) : ℂ) + (t : ℂ) * I
@@ -10739,7 +10739,7 @@ theorem grh_theorem :
   intro q inst χ s h0 h1 hz
   exact CheckerSuite.GRHConsumer.2.2.2.1 q χ s h0 h1 hz
 
-set_option maxHeartbeats 6000000 in
+set_option maxHeartbeats 50000000 in
 theorem frozen_signed_error (hGRH : Goldbach.GRH) (ε : ℝ) (hε : 0 < ε) :
     ∀ᶠ n : ℕ in atTop,
       ‖(∑ i ∈ GoldbachGRHArcs.centers (GoldbachGRHBudget.narrow n),
@@ -10753,6 +10753,7 @@ theorem frozen_signed_error (hGRH : Goldbach.GRH) (ε : ℝ) (hε : 0 < ε) :
     GoldbachGRHYoungBudget.eventually_young_budget ε hε] with n hgeo hErr hYoung
   obtain ⟨hn,hQ,hQU,_,_,hbudget⟩ := hgeo
   obtain ⟨hη,hYoung⟩ := hYoung
+  let η : ℝ := (n:ℝ)^(-1/12:ℝ)
   have hQH : GoldbachGRHBudget.narrow n ≤ GoldbachGRHBudget.width n :=
     hQU.trans (GoldbachGRHBudget.width_ge_cutoff n hQ)
   have hbudgetQ : 2 * GoldbachGRHBudget.width n * GoldbachGRHBudget.narrow n < n := by
@@ -10779,14 +10780,22 @@ theorem frozen_signed_error (hGRH : Goldbach.GRH) (ε : ℝ) (hε : 0 < ε) :
         (GoldbachGRHArcs.cell n (GoldbachGRHBudget.narrow n) (GoldbachGRHBudget.width n) i) volume :=
       (hm.intervalIntegrable 0 1).1.mono_set hpart
     rw [← integral_sub h₁ h₂]
-    dsimp only [F, osc]
     congr 1
     funext t
     ring
-  dsimp only [osc] at hsplit
-  dsimp only [F]
   rw [← Finset.sum_sub_distrib]
-  simp_rw [hsplit]
+  have hsumsplit :
+      (∑ i ∈ GoldbachGRHArcs.centers (GoldbachGRHBudget.narrow n),
+        ((∫ t in GoldbachGRHArcs.cell n (GoldbachGRHBudget.narrow n) (GoldbachGRHBudget.width n) i, F t) -
+         (∫ t in GoldbachGRHArcs.cell n (GoldbachGRHBudget.narrow n) (GoldbachGRHBudget.width n) i,
+           GoldbachGRHModel.model n i t ^ 2 * osc t))) =
+      ∑ i ∈ GoldbachGRHArcs.centers (GoldbachGRHBudget.narrow n),
+        ∫ t in GoldbachGRHArcs.cell n (GoldbachGRHBudget.narrow n) (GoldbachGRHBudget.width n) i,
+          (GoldbachFourthMoment.primeSum n t ^ 2 - GoldbachGRHModel.model n i t ^ 2) * osc t := by
+    apply Finset.sum_congr rfl
+    intro i hi
+    exact hsplit i
+  rw [hsumsplit]
   apply (norm_sum_le _ _).trans
   apply (GoldbachGRHWindowEnergy.sum_setIntegral_square_difference_le
     (GoldbachGRHArcs.centers (GoldbachGRHBudget.narrow n))
@@ -10796,12 +10805,17 @@ theorem frozen_signed_error (hGRH : Goldbach.GRH) (ε : ℝ) (hε : 0 < ε) :
     (GoldbachFourthMoment.primeSum n) (GoldbachGRHModel.model n) osc hS
     (fun i _ => GoldbachGRHModel.model_continuous n i) hOsc
     (fun t => le_of_eq (Complex.norm_exp_ofReal_mul_I (2 * Real.pi * (-(n:ℝ)*t)))) hη).trans
-  apply (add_le_add (mul_le_mul_of_nonneg_left hErr (by positivity : 0≤1+1/η))
+  have hErrN : (∑ i ∈ GoldbachGRHArcs.centers (GoldbachGRHBudget.narrow n),
+        ∫ t in GoldbachGRHArcs.cell n (GoldbachGRHBudget.narrow n) (GoldbachGRHBudget.width n) i,
+          ‖GoldbachFourthMoment.primeSum n t - GoldbachGRHModel.model n i t‖ ^ 2) ≤ (n:ℝ)^(5/6:ℝ) := by
+    exact (Finset.sum_le_sum_of_subset_of_nonneg (GoldbachGRHArcs.centers_mono hQU)
+      (by intro i hi hiNot; positivity)).trans hErr
+  apply (add_le_add (mul_le_mul_of_nonneg_left hErrN (by positivity : 0≤1+1/η))
     (mul_le_mul_of_nonneg_left (GoldbachGRHAnalytic.prime_sum_energy_le n hn) hη.le)).trans
   simpa only [η, mul_assoc] using hYoung
 
 
-set_option maxHeartbeats 6000000 in
+set_option maxHeartbeats 50000000 in
 theorem PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowSkirt := fun n : ℕ => intervalIntegral (fun t => (lowWideArcs n \ arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n : ℝ)) ≤ (lowSkirt n).re := by
   dsimp only
   intro e he
