@@ -13765,6 +13765,465 @@
       "route_source": "deep-moment-refutation"
     },
     {
+      "id": "L-goldbach-character-window-fiber-energy",
+      "statement": "∀ (m : ℕ) [NeZero m] (N : ℕ) (w : ℕ → ℂ) (s : Finset (DirichletCharacter ℂ m)),\n  (∑ χ ∈ s, ‖(∑ n ∈ Finset.range (N+1), w n * star (χ (n : ZMod m))) /\n      (Real.sqrt (m.totient : ℝ) : ℂ)‖^2) ≤\n    (1 + (N/m : ℕ) : ℝ) * ∑ n ∈ Finset.range (N+1), ‖w n‖^2",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0015 · 按整数纤维长度控制任意特征频段的权能量",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0015 · Bound character-band energy by the integer fiber length"
+      },
+      "brief": {
+        "zh": "先在长度 N+1 的整数窗中逐同余类用 Cauchy–Schwarz，再用单位群 Parseval。显式因子 1+⌊N/m⌋ 允许细层模数超过 N。",
+        "en": "Apply Cauchy–Schwarz to each residue fiber of the N+1 integers, then use Parseval on the unit group. The factor 1+⌊N/m⌋ also covers a modulus above N."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/CharacterWindowFiberEnergy.lean",
+      "module": "Conjectures.Goldbach.CharacterWindowFiberEnergy",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-carry-increment",
+      "statement": "∀ (N q M : ℕ) (w : ℕ → ℝ), 0 < q → 0 < M →\n  let A := fun (d r : ℕ) => ∑ n ∈ (Finset.range (N+1)).filter (fun n => n % d = r), w n\n  let R := fun d : ℕ => (d : ℝ) / M * ∑ r ∈ Finset.range d, A d r * A d ((N+d-r)%d)\n  let D := fun r : ℕ => A (2*q) r - A (2*q) (r+q)\n  R (2*q) - R q = (q : ℝ) / M * ∑ r ∈ Finset.range q,\n    (if (N+2*q-r)%(2*q) < q then (1 : ℝ) else -1) * D r * D ((N+q-r)%q)",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0001 · 计算反射相关在一次二进细分中的带符号增量",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0001 · Compute the signed increment of a reflected correlation across one dyadic refinement"
+      },
+      "brief": {
+        "zh": "展开同一粗类的两个子类。目标减去代表后是否落在上半模，决定反射是否交换两个子类。该公式供 DR-0002 和 DR-0012 使用。",
+        "en": "Expand the two children of each coarse class. The upper-half residue of the target minus its representative determines whether reflection swaps the children. DR-0002 and DR-0012 use this formula."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/dyadic-reflection/README.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-coset-sum-reflection",
+        "L-goldbach-theta-fiber-projection"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicCarryIncrement.lean",
+      "module": "Conjectures.Goldbach.DyadicCarryIncrement",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-carry-telescope",
+      "statement": "∀ (N K : ℕ) (w : ℕ → ℝ), N < 2^K →\n  let M : ℕ := 2^K\n  let A := fun (d r : ℕ) => ∑ n ∈ (Finset.range (N+1)).filter (fun n => n % d = r), w n\n  let C := fun k : ℕ =>\n    let q : ℕ := 2^k\n    let D := fun r : ℕ => A (2*q) r - A (2*q) (r+q)\n    (q : ℝ) / M * ∑ r ∈ Finset.range q,\n      (if (N+2*q-r)%(2*q) < q then (1 : ℝ) else -1) * D r * D ((N+q-r)%q)\n  (∑ n ∈ Finset.range (N+1), w n * w (N-n)) =\n    (∑ n ∈ Finset.range (N+1), w n)^2 / M + ∑ k ∈ Finset.range K, C k",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0002 · 从逐层反射增量还原指定整数的卷积",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0002 · Recover the convolution at a fixed integer from its reflected increments"
+      },
+      "brief": {
+        "zh": "令 M=2^K>N。顶层上两个非零权的整数和必须等于 N，底层为总质量的平方除以 M。N 本身是二次幂时取严格更大的 M。",
+        "en": "Take M=2^K>N. Two surviving weights on the top level have integer sum N. The bottom level is the mass squared divided by M. The modulus is strictly larger even when N is a power of two."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/dyadic-reflection/README.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-dyadic-carry-increment"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicCarryTelescope.lean",
+      "module": "Conjectures.Goldbach.DyadicCarryTelescope",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-character-primitive-kernel",
+      "statement": "∀ (k : ℕ) (χ : DirichletCharacter ℂ (2^(k+1))), 1 ≤ k →\n  (χ.IsPrimitive ↔ χ ((1 + 2^k : ℕ) : ZMod (2^(k+1))) = -1)",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0003 · 用约化核筛出二幂模数的全部本原特征",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0003 · Select all primitive characters at a power of two using the reduction kernel"
+      },
+      "brief": {
+        "zh": "模 2^(k+1) 约化到模 2^k 的单位核恰为 1 与 1+2^k。本原条件等价于后一个元素取值 −1。最低的比较是模 4 与模 2。",
+        "en": "The kernel of unit reduction from 2^(k+1) to 2^k consists of 1 and 1+2^k. Primitivity means the latter evaluates to −1. The first comparison is modulus 4 with modulus 2."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicCharacterPrimitiveKernel.lean",
+      "module": "Conjectures.Goldbach.DyadicCharacterPrimitiveKernel",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-coarse-reflection-budget",
+      "statement": "∀ (N K : ℕ) (Q C : ℝ), 4 ≤ N → Even N → N < 2^K → 0 ≤ Q → 2*Q ≤ N → 0 ≤ C →\n  (∀ k : ℕ, 1 ≤ k → k < K → (2^k : ℝ) ≤ Q →\n    ∀ χ : DirichletCharacter ℂ (2^(k+1)), χ.IsPrimitive →\n      ‖∑ n ∈ (Finset.range (N+1)).filter Nat.Prime,\n        (Real.log (n : ℝ) : ℂ) * star (χ (n : ZMod (2^(k+1))))‖ ≤\n          C * Real.sqrt (N : ℝ) * (Real.log (2*N : ℝ))^2) →\n  let w := fun n : ℕ => if n.Prime then Real.log (n : ℝ) else 0\n  let A := fun (d r : ℕ) => ∑ n ∈ (Finset.range (N+1)).filter (fun n => n%d=r), w n\n  let S := (Finset.range K).filter (fun k => 1 ≤ k ∧ (2^k : ℝ) ≤ Q)\n  (∑ k ∈ S,\n    let q : ℕ := 2^k\n    let D := fun r : ℕ => A (2*q) r - A (2*q) (r+q)\n    |(q : ℝ) / ((2^K : ℕ) : ℝ) * ∑ r ∈ Finset.range q,\n      (if (N+2*q-r)%(2*q) < q then (1 : ℝ) else -1) * D r * D ((N+q-r)%q)|) ≤\n    4 * C^2 * Q * (Real.log (2*N : ℝ))^4 + (Real.log 2)^2",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0017 · 用真素数扭曲和控制二进粗层的逐点总误差",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0017 · Use the twisted prime sum to control the coarse layers at each target"
+      },
+      "brief": {
+        "zh": "逐层用本原 Parseval，再按 q 的几何和求总误差。冻结前提仅需所用模数 m=2q 的扭曲界和 2Q≤N，符合 #2829 所用的模数上限。",
+        "en": "Use primitive Parseval on each layer and sum the geometric weights q. The declared premise uses only the twisted bounds at m=2q and 2Q≤N, which meets the modulus limit of PR #2829."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/cfde193e18afc4e0ffac53868d514142e908cd36/research/goldbach-skirts/LowSkirtGRHSingle.lean#L8704",
+      "program": "correlation",
+      "role": "conditional",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-dyadic-primitive-energy",
+        "L-goldbach-dyadic-reflected-prime-two",
+        "L-goldbach-dyadic-carry-increment"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicCoarseReflectionBudget.lean",
+      "module": "Conjectures.Goldbach.DyadicCoarseReflectionBudget",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-power-target-diagonal",
+      "statement": "∀ (N k : ℕ), Even N → 1 ≤ k →\n  let m : ℕ := 2^(k+1)\n  m ∣ 2*N →\n    ∀ (χ ψ : DirichletCharacter ℂ m), ψ.IsPrimitive →\n      (∑ x : (ZMod m)ˣ, star (χ (x : ZMod m)) * ψ ((N : ZMod m) - (x : ZMod m))) /\n        (m.totient : ℂ) =\n      if χ=ψ then if m ∣ N then ψ (-1) else -ψ (-1) else 0",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0014 · 在模数整除两倍目标时计算本原特征的对角符号",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0014 · Compute the primitive diagonal signs when the modulus divides twice the even target"
+      },
+      "brief": {
+        "zh": "在奇单位上把反射写成乘 N−1。若模数整除 N，符号为 χ(−1)。否则要额外乘 −1。此项刻画二次幂目标的最顶层及其以下各层。",
+        "en": "On odd units, reflection is multiplication by N−1. The sign is χ(−1) when the modulus divides N and gains a factor −1 otherwise. This gives the top and lower layers at a power-of-two target."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-dyadic-character-primitive-kernel",
+        "L-goldbach-reflection-stabilizer-conductor"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicPowerTargetDiagonal.lean",
+      "module": "Conjectures.Goldbach.DyadicPowerTargetDiagonal",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-primitive-energy",
+      "statement": "∀ (k : ℕ), 1 ≤ k →\n  let q : ℕ := 2^k\n  let m : ℕ := 2^(k+1)\n  ∀ f : ZMod m → ℝ,\n    (∑ r ∈ (Finset.range q).filter (fun r => Odd r), (f (r : ZMod m) - f ((r+q : ℕ) : ZMod m))^2) =\n      2 / (m.totient : ℝ) * ∑ χ ∈ (Finset.univ : Finset (DirichletCharacter ℂ m)).filter (fun χ => χ.conductor = m),\n        ‖∑ x : (ZMod m)ˣ, (f (x : ZMod m) : ℂ) * star (χ (x : ZMod m))‖^2",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0004 · 把两子类之差的平方和转换为本原特征能量",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0004 · Convert the squared differences of the two child classes to primitive character energy"
+      },
+      "brief": {
+        "zh": "将任意实的模 2q 权 f 投影为 (f(x)−f(x+q))/2。每对奇代表只计一次，故能量系数为 2/φ(2q)。用于 DR-0012 和 DR-0017。",
+        "en": "Project the real weight f at modulus 2q to (f(x)−f(x+q))/2. Count each odd pair once to obtain the factor 2/φ(2q). DR-0012 and DR-0017 use this normalization."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-dyadic-character-primitive-kernel",
+        "L-goldbach-characters-odd-parseval"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicPrimitiveEnergy.lean",
+      "module": "Conjectures.Goldbach.DyadicPrimitiveEnergy",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-primitive-reflected-form",
+      "statement": "∀ (N k : ℕ), Even N → 1 ≤ k →\n  let q : ℕ := 2^k\n  let m : ℕ := 2^(k+1)\n  ∀ f : ZMod m → ℝ,\n    let D := fun r : ℕ => f (r : ZMod m) - f ((r+q : ℕ) : ZMod m)\n    let s := (Finset.univ : Finset (DirichletCharacter ℂ m)).filter (fun χ => χ.conductor = m)\n    let v := fun χ : DirichletCharacter ℂ m =>\n      (∑ x : (ZMod m)ˣ, (f (x : ZMod m) : ℂ) * star (χ (x : ZMod m))) /\n        (Real.sqrt (m.totient : ℝ) : ℂ)\n    let H := fun χ ψ : DirichletCharacter ℂ m =>\n      (∑ x : (ZMod m)ˣ, star (χ (x : ZMod m)) * ψ ((N : ZMod m) - (x : ZMod m))) / (m.totient : ℂ)\n    (∑ r ∈ (Finset.range q).filter (fun r => Odd r),\n      (if (N+2*q-r)%(2*q) < q then (1 : ℝ) else -1) * D r * D ((N+q-r)%q)) =\n      2 * (∑ χ ∈ s, ∑ ψ ∈ s, star (v χ) * H χ ψ * v ψ).re",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0012 · 用本原特征二次型精确计算奇余类的反射增量",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0012 · Compute the odd-residue increment exactly by a primitive-character quadratic form"
+      },
+      "brief": {
+        "zh": "用 f 的半差作本原投影。写成单位群正交归一基中的二次型后，两子类各贡献一次，粗类带符号的和等于二次型实部的两倍。",
+        "en": "Project f by taking its half-difference across the two children. In the orthonormal unit basis, the two children give the same contribution. The signed coarse sum equals twice the real part of the form."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/dyadic-reflection/README.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-dyadic-carry-increment",
+        "L-goldbach-dyadic-primitive-energy",
+        "L-goldbach-reflection-conductor-blocks"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicPrimitiveReflectedForm.lean",
+      "module": "Conjectures.Goldbach.DyadicPrimitiveReflectedForm",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-reflected-prime-two",
+      "statement": "∀ (N k : ℕ), 4 ≤ N → Even N → 1 ≤ k →\n  let q : ℕ := 2^k\n  let A := fun r : ℕ => ∑ n ∈ (Finset.range (N+1)).filter (fun n => n%(2*q)=r ∧ n.Prime), Real.log (n : ℝ)\n  let D := fun r : ℕ => A r - A (r+q)\n  (∑ r ∈ (Finset.range q).filter (fun r => Even r),\n    (if (N+2*q-r)%(2*q) < q then (1 : ℝ) else -1) * D r * D ((N+q-r)%q)) =\n    (if N%(2*q)=4%(2*q) then (1 : ℝ) else if N%(2*q)=(4+q)%(2*q) then -1 else 0) * (Real.log 2)^2",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0013 · 精确分出素数 2 在偶余类上的带符号贡献",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0013 · Compute the signed contribution of the prime 2 in the even residues"
+      },
+      "brief": {
+        "zh": "在 q≥2 的二幂层按 N=4 或 4+q 模 2q 取正负号，其余目标给零。结果可跨层给出小于 (log 2)^2 的绝对预算。",
+        "en": "On each power-of-two layer q≥2, the sign is positive at N≡4 and negative at N≡4+q modulo 2q. The other targets give zero. Summing the absolute costs gives a budget below (log 2)^2."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/dyadic-reflection/README.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-dyadic-carry-increment"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicReflectedPrimeTwo.lean",
+      "module": "Conjectures.Goldbach.DyadicReflectedPrimeTwo",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-truncation-amplitude-budget",
+      "statement": "∀ (N m : ℕ) [NeZero m] (C B : ℝ), 2 ≤ N → 2 ≤ m → m ≤ 2*N → 0 ≤ C → 0 ≤ B →\n  let u : ℝ := (N : ℝ) + 1/2\n  let zeros := fun (χ : DirichletCharacter ℂ m) (T : ℝ) =>\n    {ρ : ℂ | 0 < ρ.re ∧ ρ.re < 1 ∧ |ρ.im| < T ∧ DirichletCharacter.LFunction χ ρ = 0}\n  let ord := fun (χ : DirichletCharacter ℂ m) (ρ : ℂ) => analyticOrderNatAt (DirichletCharacter.LFunction χ) ρ\n  let low := fun χ : DirichletCharacter ℂ m => ∑ᶠ ρ ∈ zeros χ 1, (ord χ ρ : ℝ) / ‖ρ‖\n  let V := fun χ : DirichletCharacter ℂ m =>\n    ∑ n ∈ Finset.range (N+1), (ArithmeticFunction.vonMangoldt n : ℂ) * χ⁻¹ (n : ZMod m)\n  let Z := fun χ : DirichletCharacter ℂ m =>\n    -(∑ᶠ ρ ∈ zeros χ⁻¹ N, (ord χ⁻¹ ρ : ℂ) * ((u : ℂ)^ρ / ρ))\n  let s := (Finset.univ : Finset (DirichletCharacter ℂ m)).filter (fun χ => χ.conductor = m)\n  (∀ χ ∈ s, (zeros χ⁻¹ N).Finite ∧\n    ‖V χ-Z χ‖ ≤ C * (u * (Real.log ((m : ℝ)*u*N))^2 / N + Real.log ((m : ℝ)*u) + low χ⁻¹)) →\n  (∀ χ ∈ s, low χ⁻¹ ≤ B * Real.log (2*m : ℝ)) →\n    (∑ χ ∈ s, ‖(V χ-Z χ) / (Real.sqrt (m.totient : ℝ) : ℂ)‖^2) ≤\n      (16*C*(1+B)*(Real.log (2*N : ℝ))^2)^2",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0019 · 将半整数截断显式公式的余项转为本原振幅误差",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0019 · Convert the half-integer explicit-formula remainders into a primitive amplitude error"
+      },
+      "brief": {
+        "zh": "按重数保留严格高度窗，取 u=N+1/2 和 T=N。冻结前提分别给出每个特征的 Perron 余项及低零点和。把两项统一为欧氏误差供 DR-0018 使用，允许模数超过 N。",
+        "en": "Keep multiplicities and the strict height cutoff at u=N+1/2 and T=N. The premises record the Perron remainder and the low-zero sum for each character. Convert them to one Euclidean error for DR-0018, including moduli above N."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean#L607",
+      "program": "correlation",
+      "role": "conditional",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicTruncationAmplitudeBudget.lean",
+      "module": "Conjectures.Goldbach.DyadicTruncationAmplitudeBudget",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-dyadic-truncation-form-budget",
+      "statement": "∀ (N K : ℕ) (S : Finset ℕ) (w : ℕ → ℝ)\n    (z : (k : ℕ) → DirichletCharacter ℂ (2^(k+1)) → ℂ) (E : ℝ),\n  N < 2^K → 0 ≤ E → (∀ k ∈ S, 1 ≤ k ∧ k < K) →\n  let s := fun k : ℕ => (Finset.univ : Finset (DirichletCharacter ℂ (2^(k+1)))).filter (fun χ => χ.conductor = 2^(k+1))\n  let v := fun (k : ℕ) (χ : DirichletCharacter ℂ (2^(k+1))) =>\n    (∑ n ∈ Finset.range (N+1), (w n : ℂ) * star (χ (n : ZMod (2^(k+1))))) /\n      (Real.sqrt (((2^(k+1) : ℕ).totient) : ℝ) : ℂ)\n  let R := fun (k : ℕ) (a : DirichletCharacter ℂ (2^(k+1)) → ℂ) =>\n    (∑ χ ∈ s k, ∑ ψ ∈ s k, star (a χ) *\n      ((∑ x : (ZMod (2^(k+1)))ˣ, star (χ (x : ZMod (2^(k+1)))) * ψ ((N : ZMod (2^(k+1))) - (x : ZMod (2^(k+1))))) /\n        (((2^(k+1) : ℕ).totient) : ℂ)) * a ψ).re\n  (∀ k ∈ S, (∑ χ ∈ s k, ‖v k χ-z k χ‖^2) ≤ E^2) →\n    |∑ k ∈ S, ((2^(k+1) : ℕ) : ℝ) / ((2^K : ℕ) : ℝ) * (R k (v k) - R k (z k))| ≤\n      10 * E * Real.sqrt (∑ n ∈ Finset.range (N+1), (w n)^2) + 2*E^2",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0018 · 控制二幂层上归一化二次型的总替换误差",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0018 · Control the total replacement error of normalized forms on dyadic layers"
+      },
+      "brief": {
+        "zh": "给统一坐标向量误差 E，在任意选定的层上保留原权 m/M。两项几何和分别控制混合项和误差的平方，可接真实零点向量。",
+        "en": "Given one vector error E, retain m/M on any selected layers. Two geometric sums control the mixed term and the squared error. The formula can use the actual zero vector."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/dyadic-reflection/README.md",
+      "program": "correlation",
+      "role": "conditional",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-reflection-character-contraction",
+        "L-goldbach-character-window-fiber-energy"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/DyadicTruncationFormBudget.lean",
+      "module": "Conjectures.Goldbach.DyadicTruncationFormBudget",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-reflection-character-contraction",
+      "statement": "∀ (m : ℕ) [NeZero m] (N : ZMod m),\n  let H : Matrix (DirichletCharacter ℂ m) (DirichletCharacter ℂ m) ℂ := fun χ ψ =>\n    (∑ x : (ZMod m)ˣ, star (χ (x : ZMod m)) * ψ (N - (x : ZMod m))) / (m.totient : ℂ)\n  H.IsHermitian ∧ ∀ (s : Finset (DirichletCharacter ℂ m)) (v : DirichletCharacter ℂ m → ℂ),\n    (∑ χ ∈ s, ‖∑ ψ ∈ s, H χ ψ * v ψ‖^2) ≤ ∑ χ ∈ s, ‖v χ‖^2",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0006 · 在任意特征子集上核对反射矩阵的自伴和范数",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0006 · Verify the character reflection matrix is Hermitian and contractive on any character subset"
+      },
+      "brief": {
+        "zh": "在单位余类上使用 φ(m) 的平方根归一化。先将特征向量零延拓，再用反射的部分置换和有限 Parseval。该范数界控制 DR-0016、DR-0018 的两种替换。",
+        "en": "Normalize characters by the square root of φ(m). Extend the coefficient vector by zero and use the partial permutation and finite Parseval. DR-0016 and DR-0018 use this bound for their replacements."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-reflection-partial-involution"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/ReflectionCharacterContraction.lean",
+      "module": "Conjectures.Goldbach.ReflectionCharacterContraction",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-reflection-character-crt",
+      "statement": "let H := fun (m : ℕ) [NeZero m] (N : ℕ) (χ ψ : DirichletCharacter ℂ m) =>\n  (∑ x : (ZMod m)ˣ, star (χ (x : ZMod m)) * ψ ((N : ZMod m) - (x : ZMod m))) / (m.totient : ℂ)\n∀ (m d : ℕ) [NeZero m] [NeZero d] (N : ℕ), m.Coprime d →\n  ∀ (χ ψ : DirichletCharacter ℂ m) (ξ η : DirichletCharacter ℂ d),\n    H (m*d) N\n      (χ.changeLevel (Nat.dvd_mul_right m d) * ξ.changeLevel (Nat.dvd_mul_left d m))\n      (ψ.changeLevel (Nat.dvd_mul_right m d) * η.changeLevel (Nat.dvd_mul_left d m)) =\n      H m N χ ψ * H d N ξ η",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0010 · 分解互素模数上的反射特征交叉项",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0010 · Factor reflection cross terms across coprime moduli"
+      },
+      "brief": {
+        "zh": "通过模环约化组合两侧特征。CRT 将单位与反射同时分解，欧拉函数相乘，故归一化系数也是两系数的乘积。",
+        "en": "Pull back the two characters by reduction. CRT splits both the units and the reflection and the totients multiply. The normalized entry is the product of the two entries."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L148",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-coset-unit-crt"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/ReflectionCharacterCrt.lean",
+      "module": "Conjectures.Goldbach.ReflectionCharacterCrt",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-reflection-conductor-average",
+      "statement": "∀ (p j k : ℕ) [Fact p.Prime], 1 ≤ j → j ≤ k →\n  ∀ (h : p^j ∣ p^k) (N : ZMod (p^k)) (f : ZMod (p^k) → ℂ),\n    let π := ZMod.castHom h (ZMod (p^j))\n    let P := fun (g : ZMod (p^k) → ℂ) (x : ZMod (p^k)) =>\n      (∑ y ∈ (Finset.univ : Finset (ZMod (p^k))).filter (fun y => IsUnit y ∧ π y = π x), g y) /\n        ((p : ℂ)^(k-j))\n    let K := fun (g : ZMod (p^k) → ℂ) (x : ZMod (p^k)) =>\n      if IsUnit x ∧ IsUnit (N-x) then g (N-x) else 0\n    P (K f) = K (P f)",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0007 · 证明素幂纤维平均与单位反射交换",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0007 · Commute averaging over prime-power fibers with unit reflection"
+      },
+      "brief": {
+        "zh": "固定 1≤j≤k。模 p^j 的约化保留单位条件，并把反射后的纤维送到反射类，纤维大小是 p^(k−j)。最低模 p 留在分解内。",
+        "en": "Fix 1≤j≤k. Reduction to p^j preserves the unit mask and reflection sends each fiber to the reflected class. The fiber size is p^(k−j). Keep the level modulo p as the bottom block."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/dyadic-reflection/README.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-coset-primepower-lift"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/ReflectionConductorAverage.lean",
+      "module": "Conjectures.Goldbach.ReflectionConductorAverage",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-reflection-conductor-blocks",
+      "statement": "∀ (p k : ℕ) [Fact p.Prime], 1 ≤ k →\n  ∀ (N : ZMod (p^k)) (χ ψ : DirichletCharacter ℂ (p^k)),\n    max p χ.conductor ≠ max p ψ.conductor →\n      (∑ x : (ZMod (p^k))ˣ, star (χ (x : ZMod (p^k))) * ψ (N - (x : ZMod (p^k)))) = 0",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0008 · 排除不同活跃导子层之间的反射项",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0008 · Eliminate reflection entries between distinct active conductor layers"
+      },
+      "brief": {
+        "zh": "用模 p^j 的平均作正交投影，选择一个只使两特征之一通过的 j。导子 1 和 p 放在同一最低块，因此冻结结论只区分 max(p,导子)。",
+        "en": "Use the average modulo p^j as an orthogonal projector and choose j so exactly one character passes. Conductors 1 and p share the bottom block, so the statement distinguishes max(p,conductor)."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-reflection-conductor-average",
+        "L-goldbach-reflection-character-contraction"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/ReflectionConductorBlocks.lean",
+      "module": "Conjectures.Goldbach.ReflectionConductorBlocks",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-reflection-jacobi-phase",
+      "statement": "∀ (p : ℕ) [Fact p.Prime] (t : ZMod p) (χ ψ : DirichletCharacter ℂ p),\n  (∑ x : (ZMod p)ˣ, star (χ (x : ZMod p)) * ψ (t - (x : ZMod p))) =\n    if t = 0 then (if χ = ψ then (p.totient : ℂ) * ψ (-1) else 0)\n    else star (χ t) * ψ t * jacobiSum χ⁻¹ ψ",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0011 · 核对素模反射的 Jacobi 相位及零目标的对角项",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0011 · Compute the Jacobi phase at a prime modulus and the diagonal at target zero"
+      },
+      "brief": {
+        "zh": "非零 t 时换元 x=t·y，并保留两特征各自的相位。t=0 时用单位群正交性，实二次特征已有结论可用作检验。",
+        "en": "For t≠0 use x=t·y and keep the separate phases of both characters. For t=0 use orthogonality on the unit group. The existing real quadratic result supplies a check."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-exceptional-prime-jacobi",
+        "L-goldbach-exceptional-character-reflection"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/ReflectionJacobiPhase.lean",
+      "module": "Conjectures.Goldbach.ReflectionJacobiPhase",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-reflection-partial-involution",
+      "statement": "∀ (m : ℕ) [NeZero m] (N : ZMod m),\n  let A := (Finset.univ : Finset (ZMod m)).filter (fun x => IsUnit x ∧ IsUnit (N-x))\n  let F := A.filter (fun x => N-x=x)\n  let K : Matrix (ZMod m) (ZMod m) ℂ := fun x y => if x ∈ A ∧ y=N-x then 1 else 0\n  (K*K = Matrix.diagonal (fun x => if x ∈ A then (1 : ℂ) else 0)) ∧\n    2 * Module.finrank ℂ (Module.End.eigenspace K.mulVecLin 1) = A.card+F.card ∧\n    2 * Module.finrank ℂ (Module.End.eigenspace K.mulVecLin (-1)) = A.card-F.card",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0005 · 计算单位反射矩阵的平方及其正负空间维数",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0005 · Compute the square and the two signed dimensions of the unit reflection matrix"
+      },
+      "brief": {
+        "zh": "在完整剩余系上以零填充，仅保留 x 与 N−x 都为单位的坐标。每个二循环贡献一个正方向和一个负方向，每个不动点贡献一个正方向。",
+        "en": "Use the whole residue ring with zeros outside the retained coordinates where both x and N−x are units. Each transposition contributes one direction of each sign and each fixed point contributes one positive direction."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/dyadic-reflection/README.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/ReflectionPartialInvolution.lean",
+      "module": "Conjectures.Goldbach.ReflectionPartialInvolution",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-reflection-prime-power-model-error",
+      "statement": "∀ (m : ℕ) [NeZero m] (N : ℕ) (s : Finset (DirichletCharacter ℂ m)), 2 ≤ N →\n  let w := fun n : ℕ => if n.Prime then Real.log (n : ℝ) else 0\n  let v := fun (a : ℕ → ℝ) (χ : DirichletCharacter ℂ m) =>\n    (∑ n ∈ Finset.range (N+1), (a n : ℂ) * star (χ (n : ZMod m))) / (Real.sqrt (m.totient : ℝ) : ℂ)\n  let H := fun χ ψ : DirichletCharacter ℂ m =>\n    (∑ x : (ZMod m)ˣ, star (χ (x : ZMod m)) * ψ ((N : ZMod m) - (x : ZMod m))) / (m.totient : ℂ)\n  let R := fun z : DirichletCharacter ℂ m → ℂ => (∑ χ ∈ s, ∑ ψ ∈ s, star (z χ) * H χ ψ * z ψ).re\n  |R (v ArithmeticFunction.vonMangoldt) - R (v w)| ≤\n    2 * (1 + (N/m : ℕ) : ℝ) * Real.sqrt (((N+1) * (Nat.sqrt N+1) * (Nat.log 2 N+1) : ℕ) : ℝ) *\n      (Real.log (N : ℝ))^2",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0016 · 估计反射二次型内替换真素数权的素数幂误差",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0016 · Bound prime-power replacement inside the reflected quadratic form"
+      },
+      "brief": {
+        "zh": "将差写成两个混合项。用窗口纤维界、反射压缩界和已收录的真幂计数给出可跨二幂层相加的显式误差。",
+        "en": "Write the difference as two mixed terms. Use the window fiber bound, the contraction and the recorded proper-power count to obtain an explicit cost that can be summed over dyadic layers."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/dyadic-reflection/README.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-reflection-character-contraction",
+        "L-goldbach-character-window-fiber-energy",
+        "L-goldbach-power-index-count",
+        "L-goldbach-mangoldt-power-support"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/ReflectionPrimePowerModelError.lean",
+      "module": "Conjectures.Goldbach.ReflectionPrimePowerModelError",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
+      "id": "L-goldbach-reflection-stabilizer-conductor",
+      "statement": "∀ (m : ℕ) [NeZero m] (N : ℕ) (χ : DirichletCharacter ℂ m),\n  let d := m / Nat.gcd m N\n  let R := fun ψ : DirichletCharacter ℂ m =>\n    ∑ x : (ZMod m)ˣ, star (χ (x : ZMod m)) * ψ ((N : ZMod m) - (x : ZMod m))\n  (∀ ψ, R ψ ≠ 0 → (χ⁻¹ * ψ).conductor ∣ d) ∧\n    ((Finset.univ : Finset (DirichletCharacter ℂ m)).filter (fun ψ => R ψ ≠ 0)).card ≤ d.totient",
+      "plain_statement": {
+        "zh": "新路线 · 二进反射与 Levent GRH · DR-0009 · 限制非零反射系数的导子并界定每行支撑",
+        "en": "New route · Dyadic reflection and Levent GRH · DR-0009 · Restrict the conductor of nonzero reflection entries and bound the row support"
+      },
+      "brief": {
+        "zh": "对稳定元 b 满足 (b−1)N=0 的单位作换元。它们构成约化到 m/gcd(m,N) 的核。用诱导特征的唯一性数每行，包含商模 1。",
+        "en": "Change variables by units b with (b−1)N=0. These are the kernel of reduction to m/gcd(m,N). Count induced characters by uniqueness, including quotient modulus 1."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/ReflectionStabilizerConductor.lean",
+      "module": "Conjectures.Goldbach.ReflectionStabilizerConductor",
+      "track": "dyadic-reflection",
+      "route_source": "dyadic-reflection"
+    },
+    {
       "id": "L-goldbach-finite-phase-abel-two-ranges",
       "file": "lean/PEqualNP/Outside/L_goldbach_finite_phase_abel_two_ranges.lean",
       "module": "PEqualNP.Outside.L_goldbach_finite_phase_abel_two_ranges",
@@ -13897,6 +14356,392 @@
       "role": "lemma",
       "depends_on": [],
       "route_source": "explicit-skirt-inputs"
+    },
+    {
+      "id": "L-goldbach-farey-coprime-progression-count",
+      "statement": "∀ n d b l h : ℕ, 0 < n → 0 < d → d.Coprime n → b < d → l ≤ h → |((((Finset.Icc l h).filter (fun u => u%d = b ∧ u.Coprime n)).card : ℝ) - ((h-l+1 : ℕ) : ℝ)*(n.totient:ℝ)/((d:ℝ)*n))| ≤ (n.divisors.card:ℝ)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8003 · 给单个筛根计算带互素掩码的完整区间误差",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8003 · Count a single sieve root with the coprimality mask in an arbitrary interval"
+      },
+      "brief": {
+        "zh": "用 Möbius 反演展开 u 与 n 互素。对每个 c∣n，用 CRT 把 c∣u 与 u≡b (mod d) 合成一条模 cd 的进程。每个正约数只引入至多 1 的端点误差。",
+        "en": "Expand the coprimality mask by Möbius inversion. For each c dividing n, use CRT to combine the two residue conditions into one progression of modulus cd. Each positive divisor costs at most one endpoint error."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareyCoprimeProgressionCount.lean",
+      "module": "Conjectures.Goldbach.FareyCoprimeProgressionCount",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-first-hit-late",
+      "statement": "let I := fun n : ℕ => Finset.Icc ((n+2)/3) ((2*n)/3); let P := fun z : ℕ => (Finset.Icc 2 z).filter Nat.Prime; let V := fun n z : ℕ => ((I n).card:ℝ)*(n.totient:ℝ)/n * ∏ p ∈ (P z).filter (fun p => ¬ p ∣ n), (1-2/(p:ℝ)); let Z₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let Z₂ := Nat.sqrt; ∃ N₀ : ℕ, 64 ≤ N₀ ∧ ∀ n : ℕ, N₀ ≤ n → Even n → let L := ((I n).filter (fun u => u.Coprime n ∧ Z₁ n < (u*(n-u)).minFac ∧ (u*(n-u)).minFac ≤ Z₂ n)).card; (L:ℝ) ≤ V n (Z₁ n) - V n (Z₂ n) + V n (Z₂ n)/2",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8015 · 挑战 · 末段首次命中的二分之一终筛预算",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8015 · Challenge · Cap late first hits with one half of the terminal main term"
+      },
+      "brief": {
+        "zh": "按半素数换元处理平方项与不同因子项。保留另一分母在最小因子 p 之前的粗糙条件。差值右端附加固定的 V_n(√n)/2 预算，与中段和初筛同时使用。",
+        "en": "Use the semiprime reindexing for squares and distinct factors. Keep the roughness condition on the other denominator before the first prime p. The fixed allowance V_n(√n)/2 is used together with the middle and initial sieve budgets."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "correlation",
+      "role": "target",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-farey-late-first-hit-factor-switch",
+        "L-goldbach-farey-late-prime-square-loss"
+      ],
+      "imports": [],
+      "challenge_only": true,
+      "file": "lean/Conjectures/Goldbach/FareyFirstHitLate.lean",
+      "module": "Conjectures.Goldbach.FareyFirstHitLate",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-first-hit-middle",
+      "statement": "let I := fun n : ℕ => Finset.Icc ((n+2)/3) ((2*n)/3); let P := fun z : ℕ => (Finset.Icc 2 z).filter Nat.Prime; let V := fun n z : ℕ => ((I n).card:ℝ)*(n.totient:ℝ)/n * ∏ p ∈ (P z).filter (fun p => ¬ p ∣ n), (1-2/(p:ℝ)); let Z₀ := fun n U : ℕ => ⌊(n:ℝ)^((1:ℝ)/(U:ℝ))⌋₊; let Z₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let Z₂ := Nat.sqrt; ∃ U₁ : ℕ, 8 ≤ U₁ ∧ ∀ U : ℕ, U₁ ≤ U → ∃ N₀ : ℕ, 64 ≤ N₀ ∧ ∀ n : ℕ, N₀ ≤ n → Even n → let L := ((I n).filter (fun u => u.Coprime n ∧ Z₀ n U < (u*(n-u)).minFac ∧ (u*(n-u)).minFac ≤ Z₁ n)).card; (L:ℝ) ≤ V n (Z₀ n U) - V n (Z₁ n) + V n (Z₂ n)/4",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8012 · 挑战 · 中段首次命中的四分之一终筛预算",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8012 · Challenge · Cap middle first hits with one quarter of the terminal main term"
+      },
+      "brief": {
+        "zh": "在同一中心全窗保留两分母的全部更小素因子限制。按最小因子和命中一侧重排。需要处理超过可用小除数水平的真实带权和。先取充分大的固定 U，再取该 U 的 n 阈值。",
+        "en": "Retain the least-factor restriction on both denominators in the same full window. Reindex by the first prime and the side it hits. The weighted sum beyond the small-divisor level requires a further estimate. Choose a fixed sufficiently large U before the threshold in n."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "correlation",
+      "role": "target",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "challenge_only": true,
+      "file": "lean/Conjectures/Goldbach/FareyFirstHitMiddle.lean",
+      "module": "Conjectures.Goldbach.FareyFirstHitMiddle",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-full-sieve-remainder",
+      "statement": "∀ n d l h : ℕ, 1 < n → 0 < d → Squarefree d → d.Coprime n → l ≤ h → h < n → let r : ℝ := (2 : ℝ)^d.primeFactors.card; let A := ((Finset.Icc l h).filter (fun u => u.Coprime n ∧ d ∣ u*(n-u))).card; |(A:ℝ) - ((h-l+1 : ℕ):ℝ)*(n.totient:ℝ)*r/((d:ℝ)*n)| ≤ r*(n.divisors.card:ℝ)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8004 · 在全分子窗给出二元筛的统一 CRT 余项",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8004 · Bound the two-residue sieve remainder with all numerator labels included"
+      },
+      "brief": {
+        "zh": "先数允许根，再逐根应用带互素掩码的进程界。令 d 平方自由且与 n 互素。TH-0030、TH-0031 给出每个素因子的 0 与 n 两个根，两个根用同一实例的区间。",
+        "en": "Count the roots, then apply the masked progression estimate to each root. For squarefree d coprime to n, TH-0030 and TH-0031 identify the two roots 0 and n at each prime factor."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-farey-coprime-progression-count",
+        "L-goldbach-sieve-residue-dimension",
+        "L-goldbach-sieve-residue-crt"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareyFullSieveRemainder.lean",
+      "module": "Conjectures.Goldbach.FareyFullSieveRemainder",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-hyperbola-rectangles",
+      "statement": "∀ ε : ℝ, 0 < ε → ∃ C : ℝ, 0 < C ∧ ∀ n : ℕ, 1 < n → ∀ c l h a b : ℕ, c.Coprime n → h < n → b < n → let I := Finset.Icc l h; let J := Finset.Icc a b; |((((I.product J).filter (fun (x : ℕ × ℕ) => (x.1*x.2)%n = c%n)).card : ℝ) - (I.card:ℝ)*(J.card:ℝ)*(n.totient:ℝ)/(n:ℝ)^2)| ≤ C*(n:ℝ)^((1/2:ℝ)+ε)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8006 · 形式化互素常数项的模双曲线矩形计数界",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8006 · Formalize the modular hyperbola rectangle bound for a unit right-hand side"
+      },
+      "brief": {
+        "zh": "Shparlinski 综述定理 13 及式 (10) 给出文献入口。保持合数模 n、统一的矩形端点与可逆常数项。证明需要合数模 Kloosterman 和界，单点或空区间可直接计数。",
+        "en": "Use Theorem 13 and equation (10) of Shparlinski’s survey. Keep composite moduli, uniform rectangle endpoints and a unit right-hand side. The proof uses a composite-modulus Kloosterman bound. Count singleton and empty intervals directly."
+      },
+      "source": "https://arxiv.org/abs/1103.2879",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "challenge_only": true,
+      "file": "lean/Conjectures/Goldbach/FareyHyperbolaRectangles.lean",
+      "module": "Conjectures.Goldbach.FareyHyperbolaRectangles",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-hyperbola-shift",
+      "statement": "∀ (n d b l h s c : ℕ) (J : Finset ℕ), 1 < n → 0 < d → b < d → b ≤ h → l ≤ h → h < n → s < n → (d*s)%n = b%n → (d*c)%n = 1 → let lo := (l+d-1-b)/d; let hi := (h-b)/d; let I := Finset.Icc (lo+s) (hi+s); let count := fun (I : Finset ℕ) (k : ℕ) => ((I.product J).filter (fun (x : ℕ × ℕ) => (x.1*x.2)%n = k%n)).card; hi+s < n ∧ count ((Finset.Icc l h).filter (fun u => u%d = b)) 1 = count I c ∧ |(I.card:ℝ) - ((h-l+1 : ℕ):ℝ)/d| ≤ 1",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8005 · 把一条筛根进程平移到单个模双曲线矩形",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8005 · Shift a sieve root progression into one modular hyperbola rectangle"
+      },
+      "brief": {
+        "zh": "写 u=b+dt，将 t 平移 s，令 ds≡b，dc≡1 (mod n)。由标准代表 0≤b≤h<n、s<n 得 ds=b+kn 且 k<d。于是 d(t+s)=u+kn<dn，真实区间无需回绕。核对精确计数和长度的端点误差。",
+        "en": "Write u=b+dt and translate t by s, where ds is congruent to b and dc is congruent to 1 modulo n. For canonical representatives, write ds=b+kn with k<d. Then d(t+s)=u+kn<dn, so the translated interval stays within one period. Check the exact count and the length error."
+      },
+      "source": "https://arxiv.org/abs/1103.2879",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareyHyperbolaShift.lean",
+      "module": "Conjectures.Goldbach.FareyHyperbolaShift",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-hyperbola-sieve-transfer",
+      "statement": "∀ (n d l h a b : ℕ) (E : ℝ), 1 < n → 0 < d → d.Coprime n → Squarefree d → l ≤ h → h < n → b < n → 0 ≤ E → ( ∀ c l h a b : ℕ, c.Coprime n → h < n → b < n → let I := Finset.Icc l h; let J := Finset.Icc a b; |((((I.product J).filter (fun (x : ℕ × ℕ) => (x.1*x.2)%n = c%n)).card : ℝ) - (I.card:ℝ)*(J.card:ℝ)*(n.totient:ℝ)/(n:ℝ)^2)| ≤ E) → let I := (Finset.Icc l h).filter (fun u => d ∣ u*(n-u)); let J := Finset.Icc a b; let R : ℝ := (2 : ℝ)^d.primeFactors.card; |((((I.product J).filter (fun (x : ℕ × ℕ) => (x.1*x.2)%n = 1)).card : ℝ) - ((h-l+1 : ℕ):ℝ)*(J.card:ℝ)*(n.totient:ℝ)*R/((d:ℝ)*(n:ℝ)^2))| ≤ R*(E+1)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8007 · 把矩形误差传到带逆元标记的平方自由筛余项",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8007 · Transfer rectangle discrepancy to the inverse-labelled squarefree sieve"
+      },
+      "brief": {
+        "zh": "逐根应用平移。即使某根超过区间上端，也只损失一个单位计数误差。每根的矩形误差至多 E，加一个长度误差后乘根数。",
+        "en": "Apply the shift to each root. A root above the upper endpoint costs at most one unit of discrepancy. Add the rectangle error and the length error for each root, then sum."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "correlation",
+      "role": "conditional",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-farey-hyperbola-shift",
+        "L-goldbach-sieve-residue-dimension",
+        "L-goldbach-sieve-residue-crt"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareyHyperbolaSieveTransfer.lean",
+      "module": "Conjectures.Goldbach.FareyHyperbolaSieveTransfer",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-initial-sieve-lower",
+      "statement": "let I := fun n : ℕ => Finset.Icc ((n+2)/3) ((2*n)/3); let P := fun z : ℕ => (Finset.Icc 2 z).filter Nat.Prime; let V := fun n z : ℕ => ((I n).card:ℝ)*(n.totient:ℝ)/n * ∏ p ∈ (P z).filter (fun p => ¬ p ∣ n), (1-2/(p:ℝ)); let S := fun n z : ℕ => ((I n).filter (fun u => u.Coprime n ∧ z < (u*(n-u)).minFac)).card; let Z₀ := fun n U : ℕ => ⌊(n:ℝ)^((1:ℝ)/(U:ℝ))⌋₊; let Z₂ := Nat.sqrt; ∃ U₀ : ℕ, 8 ≤ U₀ ∧ ∀ U : ℕ, U₀ ≤ U → ∃ N₀ : ℕ, 64 ≤ N₀ ∧ ∀ n : ℕ, N₀ ≤ n → Even n → V n (Z₀ n U) - V n (Z₂ n)/8 ≤ (S n (Z₀ n U):ℝ)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8011 · 把初筛下界误差吸收到终筛主项的八分之一",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8011 · Bound the lower-sieve loss by one eighth of the terminal main term"
+      },
+      "brief": {
+        "zh": "在全分子窗应用二维筛基本引理。取水平 n^(1/4)，初筛 n^(1/U)，证明筛基本引理的相对误差乘两筛点比后仍不超过 1/8。量词选定任意充分大的固定 U，再选 n 的阈值。",
+        "en": "Apply the dimension-two fundamental lemma in the full window. Use level n^(1/4) and initial cutoff n^(1/U). Bound the fundamental-lemma error times the main-term ratio by 1/8. Choose a threshold in n for each sufficiently large fixed U."
+      },
+      "source": "https://doi.org/10.1090/coll/057",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-farey-full-sieve-remainder",
+        "L-goldbach-farey-sieve-root-total",
+        "L-goldbach-farey-sieve-terminal-floor",
+        "L-goldbach-farey-sieve-cutoff-ratio"
+      ],
+      "imports": [],
+      "challenge_only": true,
+      "file": "lean/Conjectures/Goldbach/FareyInitialSieveLower.lean",
+      "module": "Conjectures.Goldbach.FareyInitialSieveLower",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-insertion-inverse",
+      "statement": "∀ n u : ℕ, 1 < n → 0 < u → u < n → u.Coprime n → ∃! a : ℕ, 0 < a ∧ a < n ∧ (a*u)%n = 1 ∧ ∃ b c : ℕ, b < u ∧ c ≤ n-u ∧ a*u = b*n+1 ∧ c*n = a*(n-u)+1 ∧ c*u = b*(n-u)+1",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8001 · 给每个有序互素分母对唯一的插入分子",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8001 · Find the unique insertion numerator for each ordered coprime denominator pair"
+      },
+      "brief": {
+        "zh": "给定左分母 u 和右分母 n−u，取 a 为 u 在模 n 的标准逆元。显式恢复左、右分子 b、c，验证两个行列式均为 1；分母和 n 保证旧 Farey 层 n−1 无内点。",
+        "en": "Take the least positive inverse a of the left denominator u modulo n. Recover the two numerators b and c and check the determinant identities. The sum of the denominators is n, which excludes an intermediate fraction at order n−1."
+      },
+      "source": "https://arxiv.org/abs/1206.6597",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareyInsertionInverse.lean",
+      "module": "Conjectures.Goldbach.FareyInsertionInverse",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-inverse-full-weight",
+      "statement": "∀ (n : ℕ) (w : ℕ → ℝ), 1 < n → (∑ a ∈ Finset.Ico 1 n, ∑ u ∈ (Finset.Ico 1 n).filter (fun u => (a*u)%n = 1), w u) = (∑ u ∈ (Finset.Ico 1 n).filter (fun u => u.Coprime n), w u)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8002 · 合并全部逆元窗的任意分母权",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8002 · Recover the unrestricted coprime weight by summing all inverse labels"
+      },
+      "brief": {
+        "zh": "交换分母与分子的求和顺序。对每个 u，逆元纤维恰有一项当且仅当 u 与 n 互素。代入真素数对数权，再用 TH-0012 添回对角项。",
+        "en": "Swap the numerator and denominator sums. Exactly one inverse label contributes when u is a unit. Substitute prime log weights and apply TH-0012 to restore the diagonal term."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-farey-insertion-inverse"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareyInverseFullWeight.lean",
+      "module": "Conjectures.Goldbach.FareyInverseFullWeight",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-late-first-hit-factor-switch",
+      "statement": "∀ (n : ℕ) (J : Finset ℕ), 64 ≤ n → let I := Finset.Icc ((n+2)/3) ((2*n)/3); let mark := fun (u b : ℕ) => (J.filter (fun a => (a*u)%n = b)).Nonempty; let Hit := I.filter (fun u => u.Coprime n ∧ mark u 1 ∧ n < ((u*(n-u)).minFac)^3 ∧ ((u*(n-u)).minFac)^2 ≤ n); let P := (Finset.range (n+1)).filter (fun p => p.Prime ∧ n < p^3 ∧ p^2 ≤ n); let Q := fun (p b : ℕ) => (Finset.Icc p n).filter (fun q => q.Prime ∧ p*q ∈ I ∧ (p*q).Coprime n ∧ p ≤ (n-p*q).minFac ∧ mark (p*q) b); Hit.card = ∑ p ∈ P, ((Q p 1).card+(Q p (n-1)).card)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8013 · 在带逆元标记的末段按命中侧换元成半素数",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8013 · Reindex inverse-labelled late first hits by the side with a semiprime"
+      },
+      "brief": {
+        "zh": "最小因子 p 大于立方根且至多平方根。一侧的分母是 p*q，p≤q 且 q 为素数。始终保留另一侧的最小因子限制。左侧要求 a*p*q≡1，右侧要求 a*p*q≡−1，p=q 也计入。",
+        "en": "The least factor p is above the cube root and at most the square root. The hit side is p*q with p≤q and q prime. Keep the least-factor condition on the other side. Use residues +1 and −1 for the two sides, and include p=q."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-farey-insertion-inverse",
+        "L-goldbach-finite-rough-factor-power"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareyLateFirstHitFactorSwitch.lean",
+      "module": "Conjectures.Goldbach.FareyLateFirstHitFactorSwitch",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-late-prime-square-loss",
+      "statement": "∀ (n : ℕ) (J : Finset ℕ), 64 ≤ n → let I := Finset.Icc ((n+2)/3) ((2*n)/3); let Hit := I.filter (fun u => u.Coprime n ∧ (J.filter (fun a => (a*u)%n = 1)).Nonempty ∧ (∃ p : ℕ, p ≤ Nat.sqrt n ∧ p.Prime ∧ n < p^3 ∧ p ≤ (u*(n-u)).minFac ∧ (u=p^2 ∨ n-u=p^2))); Hit.card ≤ 2*Nat.sqrt n",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8014 · 给带逆元标记的末段素数平方一个统一计数上界",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8014 · Bound the inverse-labelled prime-square loss in the late band"
+      },
+      "brief": {
+        "zh": "在末段换元后单独计 q=p。每个 p≤⌊√n⌋对每个方向至多贡献一次，无需估计筛后的另一分母。这个预算可用于全窗和任意固定逆元窗。",
+        "en": "Count q=p after the late-band reindexing. Each possible p contributes at most once per orientation. The estimate applies to both the full window and any fixed inverse-labelled window."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-farey-late-first-hit-factor-switch"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareyLatePrimeSquareLoss.lean",
+      "module": "Conjectures.Goldbach.FareyLatePrimeSquareLoss",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-sieve-cutoff-ratio",
+      "statement": "let I := fun n : ℕ => Finset.Icc ((n+2)/3) ((2*n)/3); let P := fun z : ℕ => (Finset.Icc 2 z).filter Nat.Prime; let M := fun z : ℕ => ∏ p ∈ P z, (1-(p:ℝ)⁻¹); let V := fun n z : ℕ => ((I n).card:ℝ)*(n.totient:ℝ)/n * ∏ p ∈ (P z).filter (fun p => ¬ p ∣ n), (1-2/(p:ℝ)); ∀ n z y : ℕ, 12 ≤ n → Even n → 2 ≤ z → z ≤ y → V n z ≤ 2*(M z/M y)^2 * V n y",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8010 · 控制两个筛点的局部主项比",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8010 · Compare the local main terms at two sieve cutoffs"
+      },
+      "brief": {
+        "zh": "消去窗口和 totient 共有因子。只控制两个筛点之间的有限乘积，被 n 整除的素数可在下界中补回。代入 Mertens 估计可得初筛与终筛主项的 O(U²) 比。",
+        "en": "Cancel the shared interval and totient factors. Compare the product over the intervening primes with the square of the product of 1−1/p. A Mertens estimate then bounds the ratio of the initial and terminal main terms by O(U²)."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-euler-subproduct"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareySieveCutoffRatio.lean",
+      "module": "Conjectures.Goldbach.FareySieveCutoffRatio",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-sieve-root-total",
+      "statement": "∀ D : ℕ, 1 ≤ D → (∑ d ∈ Finset.Icc 1 D, (2:ℝ)^d.primeFactors.card) ≤ (D:ℝ)*(1+Real.log D)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8008 · 给整个筛水平的平方自由根数权一个显式总预算",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8008 · Bound the total root weight up to the sieve level"
+      },
+      "brief": {
+        "zh": "用 2^ω(d)≤τ(d) 将根权总和限制到除数和，再交换正约数与倍数。用调和和上界 1+log D，供全窗与逆元窗的绝对余项求和。",
+        "en": "Use 2^ω(d)≤τ(d), then exchange the divisor and multiple sums. The harmonic sum bound 1+log D controls accumulated errors in both the full and inverse-labelled windows."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareySieveRootTotal.lean",
+      "module": "Conjectures.Goldbach.FareySieveRootTotal",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-sieve-terminal-floor",
+      "statement": "let I := fun n : ℕ => Finset.Icc ((n+2)/3) ((2*n)/3); let P := fun z : ℕ => (Finset.Icc 2 z).filter Nat.Prime; let M := fun z : ℕ => ∏ p ∈ P z, (1-(p:ℝ)⁻¹); let V := fun n z : ℕ => ((I n).card:ℝ)*(n.totient:ℝ)/n * ∏ p ∈ (P z).filter (fun p => ¬ p ∣ n), (1-2/(p:ℝ)); ∀ n : ℕ, 12 ≤ n → Even n → (2/3:ℝ)*((I n).card:ℝ)*(M (Nat.sqrt n))^2 ≤ V n (Nat.sqrt n)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8009 · 控制终筛主项中的大坏素数尾",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8009 · Bound the large bad-prime factors in the terminal sieve main term"
+      },
+      "brief": {
+        "zh": "在平方根以上至多一个 n 的素因子，末尾乘积至少 2/3。将其余坏素数与局部 Euler 因子配对，单列 p=2，再用 TH-0072 或整数有限乘积下界。",
+        "en": "There is at most one prime divisor of n above its square root, so the tail product is at least 2/3. Pair the other bad-prime factors with their local factors, compute the factor at 2 and use TH-0072 or the finite product lower bound."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-coset-normalized-euler",
+        "L-goldbach-coset-euler-lower"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareySieveTerminalFloor.lean",
+      "module": "Conjectures.Goldbach.FareySieveTerminalFloor",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-terminal-survivors",
+      "statement": "∀ (n : ℕ) (J : Finset ℕ), 64 ≤ n → let I := (Finset.Icc ((n+2)/3) ((2*n)/3)).filter (fun u => u.Coprime n ∧ (J.filter (fun a => (a*u)%n = 1)).Nonempty); I.filter (fun u => Nat.sqrt n < (u*(n-u)).minFac) = I.filter (fun u => u.Prime ∧ (n-u).Prime)",
+      "plain_statement": {
+        "zh": "新路线 · Farey 分母对与逆元筛 · HD-8016 · 在任意逆元窗从终筛幸存者提取有序素数对",
+        "en": "New route · Farey denominator pairs and inverse sieve · HD-8016 · Identify terminal sieve survivors with ordered prime pairs in any inverse window"
+      },
+      "brief": {
+        "zh": "中心窗的两侧都大于 √n。若其中一侧为合数，其最小素因子的平方不超过该侧大小，于是该点已被筛去。逆元条件在两个集合中保持一致。",
+        "en": "Both denominator sides exceed the square root of n. A composite side has a prime factor at most its square root, so the terminal sieve removes that point. Keep the same inverse constraint on both sets."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/farey-inverse-sieve/README.md",
+      "program": "foundation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-farey-insertion-inverse"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FareyTerminalSurvivors.lean",
+      "module": "Conjectures.Goldbach.FareyTerminalSurvivors",
+      "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
     },
     {
       "id": "L-goldbach-finite-chen-distinct-factor-band-cap",
@@ -14087,6 +14932,561 @@
       "role": "lemma",
       "depends_on": [],
       "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "L-goldbach-finite-chen-distinct-factor-cube-split",
+      "statement": "∀ n : ℕ, let R := (Finset.Icc 2 n).filter Nat.Prime; let D := (Finset.range (n+1)).filter (fun p => p.Prime ∧ (R.filter (fun r => ((Finset.Ioc r (n/r)).filter (fun v => v.Prime ∧ p+r*v=n)).Nonempty)).Nonempty); let B := D.filter (fun p => (R.filter (fun r => r ∣ n ∧ ((Finset.Ioc r (n/r)).filter (fun v => v.Prime ∧ p+r*v=n)).Nonempty)).Nonempty); let L := R.filter (fun r => ¬ r∣n ∧ r^3≤n); let H := R.filter (fun r => ¬ r∣n ∧ n<r^3); let F := fun r : ℕ => ((Finset.Ioc r (n/r)).filter (fun v => v.Prime ∧ (n-r*v).Prime)).card; D.card = B.card + (∑ r ∈ L, F r) + (∑ r ∈ H, F r) ∧ B.card≤n.primeFactors.card",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9020 · 按较小因子的立方切分陈氏不同因子余项并界定坏模数",
+        "en": "New route · Finite-range coverage III · FR-9020 · Split distinct-factor Chen remainders at the cube-root threshold and bound the bad moduli"
+      },
+      "brief": {
+        "zh": "不同素因子按 r<v 唯一排序。r∣n 时 p 必须等于 r，所以坏模数合计至多为 n 的不同素因子个数。两个好模数和都保留 n−rv 的素性。",
+        "en": "Order the distinct primes uniquely by r<v. If r divides n, primality forces p=r, so the total bad contribution is at most the number of distinct prime factors of n. Both good-modulus sums retain primality of n−rv."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#weighted-sieve-and-chen-counts",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-factor-window-switch",
+        "L-goldbach-finite-chen-distinct-factor-band-cap"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteChenDistinctFactorCubeSplit.lean",
+      "module": "Conjectures.Goldbach.FiniteChenDistinctFactorCubeSplit",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-chen-distinct-factor-local-density",
+      "statement": "∀ (ℓ r n : ℕ), ℓ.Prime → let B := (Finset.range ℓ).filter (fun v => v=0 ∨ (r*v)%ℓ = n%ℓ); B.card = (if ℓ∣r then (if ℓ∣n then ℓ else 1) else (if ℓ∣n then 1 else 2))",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9021 · 计算交换变量后 v(n−rv) 在素模中的局部根数",
+        "en": "New route · Finite-range coverage III · FR-9021 · Count the local roots of v(n−rv) after the semiprime switch"
+      },
+      "brief": {
+        "zh": "分别处理 ℓ 整除 r、ℓ 整除 n 及两个根重合的情形。用模逆元给出 r 可逆时的根。对真实素数和需另保留 v=ℓ 或 n−rv=ℓ 的例外。",
+        "en": "Distinguish the cases where ℓ divides r, where ℓ divides n and where the roots coincide. Use the inverse of r when it is a unit. A sieve for the actual prime sum must retain the cases v=ℓ and n−rv=ℓ."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#weighted-sieve-and-chen-counts",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteChenDistinctFactorLocalDensity.lean",
+      "module": "Conjectures.Goldbach.FiniteChenDistinctFactorLocalDensity",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-chen-unweighted-count-partition",
+      "statement": "∀ n : ℕ, let P := (Finset.range (n+1)).filter Nat.Prime; let C := P.filter (fun p => 0<n-p ∧ (n-p).primeFactorsList.length≤2); let G := P.filter (fun p => (n-p).Prime); let S := P.filter (fun p => (Nat.sqrt (n-p)).Prime ∧ (Nat.sqrt (n-p))^2=n-p); let D := P.filter (fun p => ((Finset.Icc 2 n).filter (fun r => r.Prime ∧ ((Finset.Ioc r n).filter (fun v => v.Prime ∧ p+r*v=n)).Nonempty)).Nonempty); C.card = G.card + S.card + D.card + (if (n-1).Prime then 1 else 0)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9019 · 精确分割 BJS 的无权陈氏计数",
+        "en": "New route · Finite-range coverage III · FR-9019 · Partition the unweighted Chen count used by BJS"
+      },
+      "brief": {
+        "zh": "按余项 1、素数、素数平方和不同素因子的乘积分割。把定理 3 的无权总计数与 FR-8006、FR-8007 的平方损失接在同一归一化上。",
+        "en": "Partition the remainders into one, a prime, a prime square and a product of distinct primes. This connects the unweighted count in Theorem 3 to the square loss in FR-8006 and FR-8007."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#weighted-sieve-and-chen-counts",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-chen-square-reindex"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteChenUnweightedCountPartition.lean",
+      "module": "Conjectures.Goldbach.FiniteChenUnweightedCountPartition",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-major-bmor-conditional-energy",
+      "statement": "(∀ (q a m : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 8000000000 ≤ m → |(∑ k ∈ (Finset.range (m+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (m:ℝ)/Nat.totient q| ≤ (m:ℝ)/(840*Real.log (m:ℝ))) → let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let _J := fun (h : ℝ) (f : ℝ → ℂ) => intervalIntegral f (-h) h MeasureTheory.volume; let Jr := fun (h : ℝ) (f : ℝ → ℝ) => intervalIntegral f (-h) h MeasureTheory.volume; let V := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.Icc 1 n, E ((k:ℝ)*β); let S := fun (n : ℕ) (α : ℝ) => ∑ k ∈ Finset.Icc 1 n, (ArithmeticFunction.vonMangoldt k:ℂ)*E ((k:ℝ)*α); let M := fun (n q : ℕ) (β : ℝ) => ((ArithmeticFunction.moebius q:ℤ):ℂ)/(Nat.totient q:ℂ)*V n β; let H := fun (n q : ℕ) => (105:ℝ)/((q:ℝ)*(n:ℝ)); let Q := Finset.Icc (1:ℕ) 105; let A := fun (q : ℕ) => (Finset.range q).filter (fun a => Nat.Coprime a q); let U := fun (n : ℕ) => ∑ q ∈ Q, ∑ a ∈ A q, Jr (H n q) (fun β => ‖S n ((a:ℝ)/q+β)-M n q β‖^2); let c := fun (q : ℕ) => if q≤2 then (2:ℝ) else 1; let a := fun (q : ℕ) => c q/(840*42) + 1/(10^8:ℝ); let d := fun (q : ℕ) => c q*105*22/(7*840*34*(q:ℝ)); ∀ n : ℕ, 4000000000000000000≤n → (n:ℝ)<Real.exp (Real.exp (19/5)) → U n ≤ (n:ℝ) * ∑ q ∈ Q, 210*(Nat.totient q:ℝ) * ((a q)^2+a q*d q+(d q)^2/3) ∧ (∑ q ∈ Q, 210*(Nat.totient q:ℝ) * ((a q)^2+a q*d q+(d q)^2/3)) < (3/40:ℝ)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9013 · 在 BMOR 前提下给出固定主弧累计能量小于 3n/40 的逐模预算",
+        "en": "New route · Finite-range coverage III · FR-9013 · Bound the fixed-arc energy by 3n/40 under the BMOR premise"
+      },
+      "brief": {
+        "zh": "用 FR-9011 的仿射误差和 FR-9012 的平方和上界。用模 4 的两支处理 q=1,2，单列非单位 Mangoldt 质量。按缩放偏移积分，再核验脚本的有理数总和。",
+        "en": "Apply the affine error bound in FR-9011 and the squared-sum bound in FR-9012. Use the two unit classes modulo 4 for q=1 and q=2. Include the nonunit Mangoldt mass. Integrate in the scaled offset and verify the rational sum in the replay."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "conditional",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-major-phase-bmor-three-ranges",
+        "L-goldbach-finite-major-phase-reduced-parseval",
+        "L-goldbach-finite-fixed-nonunit-mangoldt",
+        "L-goldbach-finite-fixed-chi-constant-mode"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteMajorBmorConditionalEnergy.lean",
+      "module": "Conjectures.Goldbach.FiniteMajorBmorConditionalEnergy",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-major-fixed-model-bounds",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let _J := fun (h : ℝ) (f : ℝ → ℂ) => intervalIntegral f (-h) h MeasureTheory.volume; let Jr := fun (h : ℝ) (f : ℝ → ℝ) => intervalIntegral f (-h) h MeasureTheory.volume; let V := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.Icc 1 n, E ((k:ℝ)*β); let M := fun (n q : ℕ) (β : ℝ) => ((ArithmeticFunction.moebius q:ℤ):ℂ)/(Nat.totient q:ℂ)*V n β; let H := fun (n q : ℕ) => (105:ℝ)/((q:ℝ)*(n:ℝ)); let Q := Finset.Icc (1:ℕ) 105; let A := fun (q : ℕ) => (Finset.range q).filter (fun a => Nat.Coprime a q); let B := fun (n : ℕ) => ∑ q ∈ Q, ((A q).card:ℝ) * Jr (H n q) (fun β => ‖M n q β‖^2); let C := fun (n : ℕ) => ∑ q ∈ Q, ∑ a ∈ A q, (_J (H n q) (fun β => (M n q β)^2*E (-(n:ℝ)*((a:ℝ)/q+β)))).re; ∀ n : ℕ, 4000000000000000000≤n → 30 ∣ n → (7/2:ℝ)*(n:ℝ) < C n ∧ B n < 6*(n:ℝ)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9010 · 在 105 分母的同一组主弧上给出模型下界和能量上界",
+        "en": "New route · Finite-range coverage III · FR-9010 · Bound the model below and its energy above on the same denominator-105 arcs"
+      },
+      "brief": {
+        "zh": "先对既约分子求和。模型的相位平方用 FR-9009 的带符号表，能量用正的 φ(q) 倒数和。两者由 FR-9007、9008 控制截断和离散误差。",
+        "en": "Sum over reduced numerators first. Use FR-9009 for the signed square and the positive reciprocal-totient sum for the energy. FR-9007 and FR-9008 control discretization and truncation."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-major-rescaled-interval-kernel",
+        "L-goldbach-finite-major-sinc-mass",
+        "L-goldbach-finite-major-signed-kernel-table",
+        "L-goldbach-finite-fixed-chi-constant-mode"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteMajorFixedModelBounds.lean",
+      "module": "Conjectures.Goldbach.FiniteMajorFixedModelBounds",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-major-forward-margin",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let _J := fun (h : ℝ) (f : ℝ → ℂ) => intervalIntegral f (-h) h MeasureTheory.volume; let Jr := fun (h : ℝ) (f : ℝ → ℝ) => intervalIntegral f (-h) h MeasureTheory.volume; let V := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.Icc 1 n, E ((k:ℝ)*β); let S := fun (n : ℕ) (α : ℝ) => ∑ k ∈ Finset.Icc 1 n, (ArithmeticFunction.vonMangoldt k:ℂ)*E ((k:ℝ)*α); let M := fun (n q : ℕ) (β : ℝ) => ((ArithmeticFunction.moebius q:ℤ):ℂ)/(Nat.totient q:ℂ)*V n β; let H := fun (n q : ℕ) => (105:ℝ)/((q:ℝ)*(n:ℝ)); let Q := Finset.Icc (1:ℕ) 105; let A := fun (q : ℕ) => (Finset.range q).filter (fun a => Nat.Coprime a q); let B := fun (n : ℕ) => ∑ q ∈ Q, ((A q).card:ℝ) * Jr (H n q) (fun β => ‖M n q β‖^2); let C := fun (n : ℕ) => ∑ q ∈ Q, ∑ a ∈ A q, (_J (H n q) (fun β => (M n q β)^2*E (-(n:ℝ)*((a:ℝ)/q+β)))).re; let U := fun (n : ℕ) => ∑ q ∈ Q, ∑ a ∈ A q, Jr (H n q) (fun β => ‖S n ((a:ℝ)/q+β)-M n q β‖^2); ∀ n : ℕ, 0<n → (7/2:ℝ)*(n:ℝ)<C n → B n<6*(n:ℝ) → U n≤(n:ℝ)/10 → let actual := ∑ q ∈ Q, ∑ a ∈ A q, (_J (H n q) (fun β => (S n ((a:ℝ)/q+β))^2*E (-(n:ℝ)*((a:ℝ)/q+β)))).re; C n-2*Real.sqrt (U n*B n)-U n≤actual ∧ (37/20:ℝ)*(n:ℝ)<actual",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9014 · 将模型与积分平方误差合成实际主弧的显式正余量",
+        "en": "New route · Finite-range coverage III · FR-9014 · Transfer the model and integrated squared error to an explicit major-arc margin"
+      },
+      "brief": {
+        "zh": "展开 S²−M²，对混合项在全部已标记弧上用一次 Cauchy–Schwarz。输入 U≤n/10 可由 FR-9013 的较强估计给出。",
+        "en": "Expand S²−M² and apply Cauchy–Schwarz to the mixed term across the indexed arcs. The stronger estimate in FR-9013 implies the input U≤n/10."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "conditional",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-major-fixed-model-bounds",
+        "L-goldbach-finite-major-bmor-conditional-energy"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteMajorForwardMargin.lean",
+      "module": "Conjectures.Goldbach.FiniteMajorForwardMargin",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-major-phase-bmor-three-ranges",
+      "statement": "(∀ (q a m : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 8000000000 ≤ m → |(∑ k ∈ (Finset.range (m+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (m:ℝ)/Nat.totient q| ≤ (m:ℝ)/(840*Real.log (m:ℝ))) → let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (q a n : ℕ) (β : ℝ), 3≤q → q≤105 → a<q → Nat.Coprime a q → 4000000000000000000≤n → |β|≤105/(n:ℝ) → ‖∑ k ∈ Finset.Icc 1 n, (((if k%q=a then ArithmeticFunction.vonMangoldt k else 0) - 1/(Nat.totient q:ℝ):ℝ):ℂ)*E ((k:ℝ)*β)‖ ≤ (n:ℝ)*(1/(10^9:ℝ)+1/(840*42)) + Real.pi * |β| * (n:ℝ)^2/(840*34)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9011 · 用三段 Abel 估计保留主弧相位误差对 β 的依赖",
+        "en": "New route · Finite-range coverage III · FR-9011 · Keep the phase dependence in the major-arc error using three Abel ranges"
+      },
+      "brief": {
+        "zh": "显式传入 BMOR。将前缀在 8×10^9、6×10^14 切开，末段用 log m>34，端点用 log n>42。整个范围允许 |β|≤105/n，以便用模 4 的两条单位类处理 q=1,2。",
+        "en": "Take the BMOR bound as a premise. Split the prefixes at 8×10^9 and 6×10^14. Use log m>34 in the last range and log n>42 for the endpoint. The range |β|≤105/n lets the two unit classes modulo 4 handle q=1 and q=2."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "conditional",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-phase-abel-two-ranges",
+        "L-goldbach-finite-phase-early-prefix-cost"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteMajorPhaseBmorThreeRanges.lean",
+      "module": "Conjectures.Goldbach.FiniteMajorPhaseBmorThreeRanges",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-major-phase-reduced-parseval",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (q : ℕ) (f : ℕ → ℂ), 0<q → (∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), ‖∑ r ∈ (Finset.range q).filter (fun r => Nat.Coprime r q), f r*E ((a:ℝ)*(r:ℝ)/q)‖^2) ≤ (q:ℝ)*(∑ r ∈ (Finset.range q).filter (fun r => Nat.Coprime r q), ‖f r‖^2)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9012 · 用加法 Parseval 控制既约分子上的误差平方和",
+        "en": "New route · Finite-range coverage III · FR-9012 · Bound phase errors over reduced numerators by additive Parseval"
+      },
+      "brief": {
+        "zh": "把单位类上的误差零延拓，再把输出频率扩大到全部剩余类。Parseval 给出 q 因子。这个因子与实际弧宽的 1/q 抵消。",
+        "en": "Extend the errors by zero on nonunits and sum over all output residues. Parseval supplies the factor q, which cancels the 1/q in the arc width."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-discrete-parseval"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteMajorPhaseReducedParseval.lean",
+      "module": "Conjectures.Goldbach.FiniteMajorPhaseReducedParseval",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-major-rescaled-interval-kernel",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let _J := fun (h : ℝ) (f : ℝ → ℂ) => intervalIntegral f (-h) h MeasureTheory.volume; let Jr := fun (h : ℝ) (f : ℝ → ℝ) => intervalIntegral f (-h) h MeasureTheory.volume; let V := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.Icc 1 n, E ((k:ℝ)*β); ∀ (n : ℕ) (h : ℝ), 0<n → 0≤h → (let f := fun t : ℝ => V n (t/n)/(n:ℂ); (∀ t : ℝ, ‖f t - E (t/2)*(Real.sinc (Real.pi*t):ℂ)‖ ≤ 2*Real.pi*|t|/(n:ℝ)) ∧ |((_J (h/n) (fun β => (V n β)^2*E (-(n:ℝ)*β))).re/(n:ℝ)) - Jr h (fun t => Real.sinc (Real.pi*t)^2)| ≤ 4*Real.pi*h^2/(n:ℝ) ∧ |Jr (h/n) (fun β => ‖V n β‖^2)/(n:ℝ) - Jr h (fun t => Real.sinc (Real.pi*t)^2)| ≤ 4*Real.pi*h^2/(n:ℝ))",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9007 · 同时控制归一化主弧平方与平方模的 sinc 逼近",
+        "en": "New route · Finite-range coverage III · FR-9007 · Bound the rescaled sinc approximation for both the square and the squared norm"
+      },
+      "brief": {
+        "zh": "将 [0,1] 分成 n 个子区间，逐段用相位弦长控制右端点 Riemann 和。用同一误差处理乘 e(−nβ) 的平方以及模型能量。",
+        "en": "Split [0,1] into n cells and bound the error of each right-endpoint term by the phase chord length. Apply the same estimate to the square with e(−nβ) and to the model energy."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-phase-unit"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteMajorRescaledIntervalKernel.lean",
+      "module": "Conjectures.Goldbach.FiniteMajorRescaledIntervalKernel",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-major-signed-error-divisor-fold",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (q n : ℕ) (F : ℕ → ℂ), 0<q → let U := (Finset.range q).filter (fun r => Nat.Coprime r q); let G := fun (d y : ℕ) => ∑ r ∈ U.filter (fun r => r%d=y), F r; (∑ a ∈ U, E (-(n:ℝ)*(a:ℝ)/q) * (∑ r ∈ U, F r*E ((a:ℝ)*(r:ℝ)/q))^2) = ∑ d ∈ q.divisors, (d:ℂ)*((ArithmeticFunction.moebius (q/d):ℤ):ℂ) * (∑ y ∈ Finset.range d, G d y * G d ((n+d-y)%d))",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9022 · 将带符号的真实主弧误差平方折叠到除数纤维",
+        "en": "New route · Finite-range coverage III · FR-9022 · Fold the signed major-arc error square into divisor fibers"
+      },
+      "brief": {
+        "zh": "展开复平方后，按 Ramanujan 的除数公式分组，并保留每个纤维的反射相位。取 F 为带相位的单位余类误差时，可匹配第三章的反射矩阵。模 1 为常数项，非单位项由 FR-7023 处理。",
+        "en": "Expand the complex square and group terms using the Ramanujan divisor formula. Preserve the reflected fibers. Taking F to be the phased unit-class error connects this identity to the reflection matrix. Modulus one gives the constant term. FR-7023 handles nonunits."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-ram-prime-power",
+        "L-goldbach-ram-crt"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteMajorSignedErrorDivisorFold.lean",
+      "module": "Conjectures.Goldbach.FiniteMajorSignedErrorDivisorFold",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-major-signed-kernel-table",
+      "statement": "let R := fun (q n : ℕ) => ∑ d ∈ q.divisors.filter (fun d => d ∣ n), (d:ℝ)*(ArithmeticFunction.moebius (q/d):ℝ); ∀ (n : ℕ) (K : ℕ → ℝ), 30 ∣ n → (∀ q ∈ Finset.Icc (1:ℕ) 105, 0≤K q ∧ K q≤1) → (∀ q ∈ Finset.Icc (1:ℕ) 105, q ∣ 30 → 1-2*(q:ℝ)/(9*105)≤K q) → (351/100:ℝ) < ∑ q ∈ Finset.Icc (1:ℕ) 105, (ArithmeticFunction.moebius q:ℝ)^2/(Nat.totient q:ℝ)^2*R q n*K q",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9009 · 给 30 的倍数计算带符号主弧模型的有限下界表",
+        "en": "New route · Finite-range coverage III · FR-9009 · Bound the signed major-arc model table on multiples of 30"
+      },
+      "brief": {
+        "zh": "q∣30 的贡献至少 26/7。其余负项由 q 的一个不整除 n 的素因子控制，各项上界的有理数和小于 201/1000。复用 Ramanujan 和的 CRT 分解。",
+        "en": "Denominators dividing 30 contribute at least 26/7. Bound each possible negative term with a prime factor of q that does not divide n. The rational sum of these bounds is below 201/1000. Use the CRT factorization of Ramanujan sums."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-ram-prime",
+        "L-goldbach-ram-crt"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteMajorSignedKernelTable.lean",
+      "module": "Conjectures.Goldbach.FiniteMajorSignedKernelTable",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-major-sinc-mass",
+      "statement": "∀ h : ℝ, 0<h → let k := intervalIntegral (fun t : ℝ => Real.sinc (Real.pi*t)^2) (-h) h MeasureTheory.volume; 0≤k ∧ k≤1 ∧ 1-2/(9*h)≤k",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9008 · 给归一化 sinc 核一个显式截断尾界",
+        "en": "New route · Finite-range coverage III · FR-9008 · Bound the truncated mass of the normalized sinc kernel"
+      },
+      "brief": {
+        "zh": "从单位区间指示函数的 Plancherel 得全质量 1。用 |sin|≤1 和 π>3 控制两侧积分尾。对每个 h>0 同时适用。",
+        "en": "Use Plancherel on the indicator of the unit interval to obtain total mass one. Bound both tails with |sin|≤1 and π>3. The estimate is uniform for every h>0."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteMajorSincMass.lean",
+      "module": "Conjectures.Goldbach.FiniteMajorSincMass",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-minor-fixed-105-dstar",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (α : ℝ) => ∑ k ∈ Finset.Icc 1 n, (ArithmeticFunction.vonMangoldt k:ℂ)*E ((k:ℝ)*α); let arcs := fun (n : ℕ) => {t : ℝ | ∃ (q a : ℕ) (z : ℤ), 1≤q ∧ q≤105 ∧ a<q ∧ Nat.Coprime a q ∧ |t-((a:ℝ)/q+(z:ℝ))|≤105/((q:ℝ)*(n:ℝ))}; ∀ n : ℕ, 4000000000000000000<n → 30 ∣ n → (n:ℝ)<Real.exp (Real.exp (19/5)) → -(9/5:ℝ)*(n:ℝ) ≤ (MeasureTheory.integral (MeasureTheory.volume.restrict (Set.Icc (0:ℝ) 1 \\ arcs n)) (fun t => (S n t)^2*E (-(n:ℝ)*t))).re",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9015 · 在 D* 上控制固定 105 分母弧的实际补集",
+        "en": "New route · Finite-range coverage III · FR-9015 · Bound the actual complement of the fixed denominator-105 arcs on D*"
+      },
+      "brief": {
+        "zh": "补集按圆周定义，包含 q=1 在 0、1 处的两半弧。若该单侧界通过，FR-9014 的 37/20 主弧下界与 FR-7019 的素数幂预算给同一子域的余量。",
+        "en": "Define the complement on the circle, with the two halves of the q=1 arc at 0 and 1. If this signed bound holds, the 37/20 major-arc margin in FR-9014 and the prime-power budget in FR-7019 give a positive margin on the same subdomain."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#fixed-major-arcs",
+      "program": "correlation",
+      "role": "target",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "challenge_only": true,
+      "file": "lean/Conjectures/Goldbach/FiniteMinorFixed105Dstar.lean",
+      "module": "Conjectures.Goldbach.FiniteMinorFixed105Dstar",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-post-boundary-through-32768",
+      "statement": "∀ j : ℕ, 65 ≤ j → j ≤ 16384 → let n : ℕ := 4000000000000000000 + 2*j; ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9002 · 核验从已发表端点加 130 到加 32768 的素数对",
+        "en": "New route · Finite-range coverage III · FR-9002 · Verify prime pairs from 130 to 32768 above the published cutoff"
+      },
+      "brief": {
+        "zh": "回放脚本生成共享 Lucas 节点和全部 16320 行的两个见证。可按相邻锚点把偶数转为小偏移，再按表核验。FR-8001 覆盖 j=1 至 64，本题从 j=65 开始。",
+        "en": "The replay script produces shared Lucas nodes and witnesses for all 16,320 rows. Convert each even target to an offset from its nearest earlier anchor and verify it against the table. FR-8001 covers j=1 through 64. This block starts at j=65."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#prime-pair-certificates",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-shared-lucas-certificates",
+        "L-goldbach-finite-witness-translate-bitset"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FinitePostBoundaryThrough32768.lean",
+      "module": "Conjectures.Goldbach.FinitePostBoundaryThrough32768",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-rough-seventynine-constants",
+      "statement": "Real.exp (19/5) < 11*Real.log 79 ∧ Real.exp 5 < 34*Real.log 79 ∧ (19495926505 : ℕ) < 11^11",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9005 · 核验 79 粗余项的对数边界与小数段交接",
+        "en": "New route · Finite-range coverage III · FR-9005 · Certify the logarithmic bounds and small-range handoff for the 79-rough remainder"
+      },
+      "brief": {
+        "zh": "回放给出实指数的有理 Taylor 上界。低于轮筛起点时由模 210 的候选和 11^11 交接。",
+        "en": "The replay gives rational Taylor bounds for the exponentials. The bound by 11^11 lets the modulo-210 construction reach the start of the lifted wheel."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#rough-remainder-wheel",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteRoughSeventynineConstants.lean",
+      "module": "Conjectures.Goldbach.FiniteRoughSeventynineConstants",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-rough-ten-thirtythree",
+      "statement": "∀ n : ℕ, 4≤n → Even n → (n:ℝ)<Real.exp (Real.exp 5) → ∃ p : ℕ, Nat.Prime p ∧ 2≤n-p ∧ (n-p).primeFactorsList.length≤33 ∧ ((n:ℝ)<Real.exp (Real.exp (19/5)) → (n-p).primeFactorsList.length≤10)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9006 · 把两个原型的素因子数界分别降至 10 和 33",
+        "en": "New route · Finite-range coverage III · FR-9006 · Reduce the two prototype factor bounds to ten and thirty-three"
+      },
+      "brief": {
+        "zh": "在轮筛起点以上用 FR-9003、9004 得 79 粗余项，再用 FR-7005 按重数计数。较小偶数用 FR-7006 和九个素数对。用同一个候选同时满足两条因子数界。",
+        "en": "Apply FR-9003 and FR-9004 above the wheel threshold and then FR-7005 to count factors with multiplicity. Use FR-7006 and nine prime pairs for smaller even inputs. The same prime must satisfy both factor bounds."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#rough-remainder-wheel",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-wheel-sixteen-prime-lifts",
+        "L-goldbach-finite-wheel-injective-projection-lift",
+        "L-goldbach-finite-rough-seventynine-constants",
+        "L-goldbach-finite-rough-factor-power",
+        "L-goldbach-finite-rough-candidate-lift"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteRoughTenThirtythree.lean",
+      "module": "Conjectures.Goldbach.FiniteRoughTenThirtythree",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-shared-lucas-certificates",
+      "statement": "let checked := fun (nodes : List (ℕ × ℕ × List ℕ)) => ∀ entry ∈ nodes, let p := entry.1; let a := entry.2.1; let fs := entry.2.2; 2 < p ∧ fs.prod = p-1 ∧ Nat.powMod a (p-1) p = 1 % p ∧ (∀ r ∈ fs, 2 ≤ r ∧ r < p ∧ (r = 2 ∨ ∃ item ∈ nodes, item.1 = r) ∧ Nat.powMod a ((p-1)/r) p ≠ 1 % p); ∀ nodes : List (ℕ × ℕ × List ℕ), checked nodes → ∀ entry ∈ nodes, Nat.Prime entry.1",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9001 · 核验共享因子节点的 Lucas 素性证书",
+        "en": "New route · Finite-range coverage III · FR-9001 · Verify Lucas certificates with shared factor nodes"
+      },
+      "brief": {
+        "zh": "按节点数值强归纳。每个 p−1 的因子只需在同一表中出现一次，2 作为基例。用 Nat.powMod 与 ZMod 幂的对应调用 Mathlib 的 lucas_primality。用于 FR-9002 的锚点表。",
+        "en": "Induct on the value of a node. Each factor of p−1 only needs one entry in the table. Use 2 as the base and the conversion from Nat.powMod to powers in ZMod to apply Mathlib's lucas_primality. FR-9002 uses the result for its anchor table."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#prime-pair-certificates",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteSharedLucasCertificates.lean",
+      "module": "Conjectures.Goldbach.FiniteSharedLucasCertificates",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-weighted-sieve-factor-cap",
+      "statement": "let W := fun (z y s : ℕ) => let P := (Finset.Ico z y).filter Nat.Prime; (2:ℤ)-((P.filter (fun p => p∣s)).card:ℤ)-((P.filter (fun p => p^2∣s)).card:ℤ); ∀ (n z y s r : ℕ), 2 ≤ z → z < y → 2 ≤ s → s < n → (∀ p : ℕ, p.Prime → (p ∣ s) → z ≤ p) → n ≤ y^(r+1) → n ≤ z*y^r → 0 < W z y s → s.primeFactorsList.length ≤ r",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9017 · 将 1+4 的正权因子数判据推广到一般因子数预算",
+        "en": "New route · Finite-range coverage III · FR-9017 · Extend the one-plus-four positive-weight support test to a general factor cap"
+      },
+      "brief": {
+        "zh": "按重数分解 s。正权最多允许一个位于 [z,y) 的素因子且只出现一次，其余因子均不小于 y。r=2 和 r=3 给下侧加权筛的具体参数条件。",
+        "en": "Factor s with multiplicity. Positive weight permits at most one prime factor in [z,y), with exponent one. All other factors are at least y. The cases r=2 and r=3 give concrete parameter constraints for the lower-range sieve."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#weighted-sieve-and-chen-counts",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteWeightedSieveFactorCap.lean",
+      "module": "Conjectures.Goldbach.FiniteWeightedSieveFactorCap",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-weighted-sieve-remove-unit",
+      "statement": "let W := fun (z y s : ℕ) => let P := (Finset.Ico z y).filter Nat.Prime; (2:ℤ)-((P.filter (fun p => p∣s)).card:ℤ)-((P.filter (fun p => p^2∣s)).card:ℤ); let A := fun (n z : ℕ) => (Finset.range (n+1)).filter (fun p => p.Prime ∧ ¬ (p ∣ n) ∧ ((Finset.Ico 2 z).filter (fun q => Nat.Prime q ∧ q ∣ (n-p))) = ∅); ∀ (n z y : ℕ), 4≤n → (∑ p ∈ A n z, W z y (n-p)) = (∑ p ∈ Finset.filter (fun p => 2≤n-p) (A n z), W z y (n-p)) + (if (n-1).Prime then (2:ℤ) else 0)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9016 · 从 1+4 筛和中精确扣除余项 1",
+        "en": "New route · Finite-range coverage III · FR-9016 · Remove the remainder one exactly from the one-plus-four sieve sum"
+      },
+      "brief": {
+        "zh": "本题用原权的两倍作整数权。由 p 不整除 n 排除余项 0。余项 1 当且仅当 n−1 为素数时出现，对和贡献 2。",
+        "en": "Use twice the original weight to work with integers. The condition p∤n excludes remainder zero. Remainder one contributes two precisely when n−1 is prime."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#weighted-sieve-and-chen-counts",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteWeightedSieveRemoveUnit.lean",
+      "module": "Conjectures.Goldbach.FiniteWeightedSieveRemoveUnit",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-weighted-sieve-supported-region",
+      "statement": "let W := fun (z y s : ℕ) => let P := (Finset.Ico z y).filter Nat.Prime; (2:ℤ)-((P.filter (fun p => p∣s)).card:ℤ)-((P.filter (fun p => p^2∣s)).card:ℤ); let A := fun (n z : ℕ) => (Finset.range (n+1)).filter (fun p => p.Prime ∧ ¬ (p ∣ n) ∧ ((Finset.Ico 2 z).filter (fun q => Nat.Prime q ∧ q ∣ (n-p))) = ∅); ∀ (n z y : ℕ), 4≤n → 2<z → z<y → let A0 := Finset.filter (fun p => 2≤n-p) (A n z); let P := (Finset.Ico z y).filter Nat.Prime; (∑ p ∈ A0, W z y (n-p)) = (2:ℤ)*(A0.card:ℤ) - (∑ q ∈ P, ((Finset.filter (fun p => q ∣ n-p) A0).card:ℤ)) - (∑ q ∈ P, ((Finset.filter (fun p => q^2 ∣ n-p) A0).card:ℤ)) ∧ (∀ q ∈ P, q ∣ n → (Finset.filter (fun p => q ∣ n-p) A0) = ∅)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9023 · 把去掉 1 的筛和化成同一底集上的一次与平方整除计数",
+        "en": "New route · Finite-range coverage III · FR-9023 · Express the sieve sum without remainder one using first and square divisibility counts"
+      },
+      "brief": {
+        "zh": "交换两次有限求和。q 整除 n 时，若也整除 n−p，素性迫使 p=q，与 p 不整除 n 矛盾。由此统一 F17–F18 的主项和误差对象。",
+        "en": "Exchange the two finite sums. If q divides both n and n−p, primality gives p=q, contradicting p∤n. This gives the common counting objects for F17 and F18."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#weighted-sieve-and-chen-counts",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-weighted-sieve-remove-unit"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteWeightedSieveSupportedRegion.lean",
+      "module": "Conjectures.Goldbach.FiniteWeightedSieveSupportedRegion",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-weighted-sieve-two-factor-dstar",
+      "statement": "let W := fun (z y s : ℕ) => let P := (Finset.Ico z y).filter Nat.Prime; (2:ℤ)-((P.filter (fun p => p∣s)).card:ℤ)-((P.filter (fun p => p^2∣s)).card:ℤ); let A := fun (n z : ℕ) => (Finset.range (n+1)).filter (fun p => p.Prime ∧ ¬ (p ∣ n) ∧ ((Finset.Ico 2 z).filter (fun q => Nat.Prime q ∧ q ∣ (n-p))) = ∅); ∀ n : ℕ, 4000000000000000000<n → 30 ∣ n → (n:ℝ)<Real.exp (Real.exp (19/5)) → ∃ z y : ℕ, 2<z ∧ z<y ∧ n≤y^3 ∧ n≤z*y^2 ∧ 0<(∑ p ∈ Finset.filter (fun p => 2≤n-p) (A n z), W z y (n-p))",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9018 · 在 D* 上用原加权筛寻求最多两个因子的正余量",
+        "en": "New route · Finite-range coverage III · FR-9018 · Seek a positive two-factor margin from the original weighted sieve on D*"
+      },
+      "brief": {
+        "zh": "参数可以随 n 变化。验收为同一筛和扣除余项 1 与重复因子后仍为正。FR-9017 将它转成 D* 中每个偶数的 G₂。",
+        "en": "The parameters may vary with n. Show a positive sum after excluding remainder one and debiting repeated factors with the original weight. FR-9017 then gives G₂ for every even input in D*."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#weighted-sieve-and-chen-counts",
+      "program": "correlation",
+      "role": "target",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-weighted-sieve-remove-unit",
+        "L-goldbach-finite-weighted-sieve-factor-cap"
+      ],
+      "imports": [],
+      "challenge_only": true,
+      "file": "lean/Conjectures/Goldbach/FiniteWeightedSieveTwoFactorDstar.lean",
+      "module": "Conjectures.Goldbach.FiniteWeightedSieveTwoFactorDstar",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-wheel-injective-projection-lift",
+      "statement": "∀ (P S : Finset ℕ) (b W B n : ℕ), b<W → B+2≤n → Nat.Coprime ((n+W-b)%W) W → P.card<S.card → (∀ p ∈ S, Nat.Prime p ∧ p≤B ∧ p%W=b) → (∀ r ∈ P, Nat.Prime r ∧ Set.InjOn (fun p : ℕ => p%r) (S : Set ℕ)) → ∃ p ∈ S, p≤B ∧ 2≤n-p ∧ Nat.Coprime (n-p) (W*(∏ r ∈ P, r))",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9004 · 从单射投影推出一般轮筛的存活候选",
+        "en": "New route · Finite-range coverage III · FR-9004 · Produce a surviving wheel candidate from injective projections"
+      },
+      "brief": {
+        "zh": "对每个新增素数，坏候选是与 n 同余的一条纤维，至多含一个元素。并集最多删去 P.card 个素数。非空剩余集给出保留 p≤B 的实际候选。",
+        "en": "Each additional prime removes the candidates in one residue class, which has at most one element. The union removes at most P.card primes. A remaining prime gives a witness with p≤B."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#rough-remainder-wheel",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteWheelInjectiveProjectionLift.lean",
+      "module": "Conjectures.Goldbach.FiniteWheelInjectiveProjectionLift",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-finite-wheel-sixteen-prime-lifts",
+      "statement": "let P : Finset ℕ := {17,19,23,29,31,37,41,43,47,53,59,61,67,71,73}; ∀ b ∈ ({17,19,23,181,29,37,41,43,31,47,53,67} : Finset ℕ), ∃ S : Finset ℕ, S.card=16 ∧ (∀ p ∈ S, Nat.Prime p ∧ p≤19495926503 ∧ p%30030=b) ∧ (∀ r ∈ P, Set.InjOn (fun p : ℕ => p%r) (S : Set ℕ))",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖第三批 · FR-9003 · 核验十二组各十六个素数的轮筛证书",
+        "en": "New route · Finite-range coverage III · FR-9003 · Verify the sixteen-prime wheel certificate for each of twelve residues"
+      },
+      "brief": {
+        "zh": "逐行复核 wheel.csv 的素性、模 30030 的基类和十五个单射投影。整表为一项证书，最大素数为 19495926503。",
+        "en": "Check primality, the residue modulo 30030 and injectivity modulo each of the fifteen additional primes in wheel.csv. Verify the whole table as one certificate. Its largest prime is 19495926503."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/README.md#rough-remainder-wheel",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-wheel-unit-base"
+      ],
+      "imports": [],
+      "file": "lean/Conjectures/Goldbach/FiniteWheelSixteenPrimeLifts.lean",
+      "module": "Conjectures.Goldbach.FiniteWheelSixteenPrimeLifts",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
     },
     {
       "id": "L-goldbach-divisor-indicator-covariance",
@@ -14315,6 +15715,57 @@
       "route_source": "signed-factor-windows"
     },
     {
+      "id": "L-goldbach-factor-box-bezout-weight",
+      "statement": "∀ (a b n l r u v : ℤ) (w : ℤ → ℤ → ℝ), 0 < a → 0 < b →\nlet g : ℤ := Int.gcd a b\nlet h := b / g\nlet k := a / g\nlet x := (n / g) * Int.gcdA a b\nlet y := (n / g) * Int.gcdB a b\nlet lo := max (-((x-l) / h)) (-((v-y) / k))\nlet hi := min ((r-x) / h) ((y-u) / k)\nlet box := ((Finset.Icc l r).product (Finset.Icc u v)).filter (fun z => a*z.1 + b*z.2 = n)\n(∑ z ∈ box, w z.1 z.2) = if g ∣ n then ∑ i ∈ Finset.Icc lo hi, w (x+h*i) (y-k*i) else 0",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-9001 · 把截断因子线的实际权送到精确的整数区间",
+        "en": "New route · Signed factors and shift windows · FW-9001 · Transport a weighted factor box to its exact Bézout interval"
+      },
+      "brief": {
+        "zh": "对 gcd 整除的纤维用 Bézout 解定位原点，把两个闭区间分别取整并求交。权可取截断 Möbius 除数和与两份 Mangoldt 权的乘积，取常数 1 得到实际纤维数。FW-9002 使用同一组端点。",
+        "en": "Use a Bézout solution on each compatible fiber. Intersect both integer ranges using floor division. Weight one gives the actual multiplicity. The same interval transports truncated Möbius and Mangoldt weights into FW-9002."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/signed-factor-windows/split-3.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-factor-line-fiber-param"
+      ],
+      "file": "lean/Conjectures/Goldbach/FactorBoxBezoutWeight.lean",
+      "module": "Conjectures.Goldbach.FactorBoxBezoutWeight",
+      "track": "signed-factor-windows",
+      "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-factor-box-determinant-energy",
+      "statement": "∀ (n U A B H : ℕ), 0 < n → 0 < A → A ≤ B →\nlet F := fun (a b : ℕ) => ((Finset.Icc (U+1) (n/a)).product (Finset.Icc (U+1) (n/b))).filter (fun z => a*z.1 + b*z.2 = n)\nlet c := fun a : ℕ => ∑ d ∈ (Nat.divisors a).filter (fun d => U < d), ((ArithmeticFunction.moebius d : ℤ) : ℝ)\nlet w := fun (a b : ℕ) (z : ℕ × ℕ) => c a * ArithmeticFunction.vonMangoldt z.1 * (c b * ArithmeticFunction.vonMangoldt z.2)\nlet det := fun (x y : ℕ × ℕ) => ((x.1 : ℤ) * y.2 - (y.1 : ℤ) * x.2).natAbs\n|∑ a ∈ Finset.Icc A B, ∑ b ∈ Finset.Icc A B, ∑ x ∈ F a b, ∑ y ∈ (F a b).filter (fun y => x ≠ y ∧ det x y ≤ H), w a b x * w a b y| ≤\n∑ a ∈ Finset.Icc A B, ∑ b ∈ Finset.Icc A B, 2 * ((H * Nat.gcd a b / n : ℕ) : ℝ) * (∑ x ∈ F a b, (w a b x)^2)",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-9002 · 按真实行列式截断估计第三带的近对角能量",
+        "en": "New route · Signed factors and shift windows · FW-9002 · Bound near-diagonal band-three energy at an actual determinant cutoff"
+      },
+      "brief": {
+        "zh": "给每个非空纤维应用行列式步长 n/g，固定一个点至多有 2⌊Hg/n⌋ 个邻点。用 2|uv|≤u²+v² 及邻接对称性保留真实平方权。取 A=⌊n^(1/3)⌋+1、B=⌊n^(2/3)⌋ 得父题的因子带。远壳和宽弧扣除另需估计。",
+        "en": "The determinant step on a nonempty fiber is n/g. Each point has at most 2⌊Hg/n⌋ neighbors. Apply 2|uv|≤u²+v² in both orders to retain the actual squared weights. Set A=⌊n^(1/3)⌋+1 and B=⌊n^(2/3)⌋ for band three. Far shells and wide arcs need separate estimates."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/signed-factor-windows/split-3.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-factor-box-bezout-weight",
+        "L-goldbach-factor-line-fiber-determinant",
+        "L-goldbach-factor-line-near-diagonal-budget",
+        "L-goldbach-type2-center-wide-subtraction"
+      ],
+      "file": "lean/Conjectures/Goldbach/FactorBoxDeterminantEnergy.lean",
+      "module": "Conjectures.Goldbach.FactorBoxDeterminantEnergy",
+      "track": "signed-factor-windows",
+      "route_source": "signed-factor-windows"
+    },
+    {
       "id": "L-goldbach-factor-line-fiber-determinant",
       "file": "lean/PEqualNP/Outside/L_goldbach_factor_line_fiber_determinant.lean",
       "module": "PEqualNP.Outside.L_goldbach_factor_line_fiber_determinant",
@@ -14405,6 +15856,32 @@
       "route_source": "signed-factor-windows"
     },
     {
+      "id": "L-goldbach-shift-fixed-row-grid-model",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; let model := fun n m : ℕ =>\n  let K : ℕ := (n+1)^6\n  let t := fun j : ℕ => ((j:ℝ) + 1/2) / K\n  ((∑ j ∈ Finset.range K, ((wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) (t j))).re) / K\n∀ ε η : ℝ, 0 < ε → 0 < η → η < 1/3 → ∃ n₀ : ℕ, ∀ n : ℕ, n₀ ≤ n → Even n →\nlet W := (Finset.Icc n (2*n)).filter Even\nlet ω := fun m : ℕ => if m ∈ W then 1 / (W.card : ℝ) else 0\n(∑ m ∈ W, ω m) = 1 ∧\n(∑ m ∈ W, (ω m)^2) * (n:ℝ)^(8/3+η) ≤ ((ε/2)*(n:ℝ))^2 ∧\n(∑ m ∈ W, ((deepCoeff n m).re - model n m)^2) ≤ 1/(n:ℝ)^2",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-9004 · 用同一中点网格在平方和范数中逼近深弧的整行偶系数",
+        "en": "New route · Signed factors and shift windows · FW-9004 · Approximate a fixed row of deep-arc coefficients on one midpoint grid"
+      },
+      "brief": {
+        "zh": "在不跨界的格上用频率至多 4n 的指数和导数界 O(n³log²(2n))；跨界格用 O(n²log²(2n)) 的振幅界。每个系数同用 (n+1)^6 个格，平方后再对 W 求和。均匀权有 |W|≥n/2。尚须比较有限模型的窗口均值与其在 n 处的值。",
+        "en": "On smooth cells use the derivative bound O(n³ log²(2n)) for frequencies up to 4n. On crossing cells use the amplitude bound O(n² log²(2n)). Use the same (n+1)^6 cells for every even shift before summing squares. The uniform window has at least n/2 points. Comparing the model mean with its value at n remains open."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/signed-factor-windows/split-3.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-shift-grid-mask-crossings",
+        "L-goldbach-shift-frozen-even-average",
+        "L-goldbach-shift-normalized-support"
+      ],
+      "file": "lean/Conjectures/Goldbach/ShiftFixedRowGridModel.lean",
+      "module": "Conjectures.Goldbach.ShiftFixedRowGridModel",
+      "track": "signed-factor-windows",
+      "route_source": "signed-factor-windows"
+    },
+    {
       "id": "L-goldbach-shift-frozen-even-average",
       "file": "lean/PEqualNP/Outside/L_goldbach_shift_frozen_even_average.lean",
       "module": "PEqualNP.Outside.L_goldbach_shift_frozen_even_average",
@@ -14426,6 +15903,28 @@
       "depends_on": [
         "L-goldbach-even-shift-phase-filter"
       ],
+      "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-shift-grid-mask-crossings",
+      "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; ∀ n K : ℕ, 0 < n → 0 < K →\nlet cell := fun j : ℕ => Set.Icc ((j : ℝ) / K) (((j : ℝ)+1) / K)\nlet cross := @Finset.filter ℕ (fun j => ((cell j) ∩ (wideArcs n)).Nonempty ∧ ((cell j) ∩ (wideArcs n)ᶜ).Nonempty) (fun _ => Classical.propDecidable _) (Finset.range K)\ncross.card ≤ 4 * (∑ q ∈ Finset.Icc 1 (Q₁ n), (q+1))",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-9003 · 界定均匀网格中能跨越冻结宽弧边界的格数",
+        "en": "New route · Signed factors and shift windows · FW-9003 · Count uniform grid cells that cross the frozen wide-arc mask"
+      },
+      "brief": {
+        "zh": "每个跨界格含一个有理中心闭弧的端点。一个端点至多属于两个相邻的闭格。包括碰到 0、1 的格与重叠弧。此数控制 FW-9004 的不连续误差。",
+        "en": "Each crossing cell contains an endpoint of a rational arc. Each endpoint belongs to at most two closed cells. Include boundary cells and overlapping arcs. This count controls the discontinuities in FW-9004."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/signed-factor-windows/split-3.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "file": "lean/Conjectures/Goldbach/ShiftGridMaskCrossings.lean",
+      "module": "Conjectures.Goldbach.ShiftGridMaskCrossings",
+      "track": "signed-factor-windows",
       "route_source": "signed-factor-windows"
     },
     {
@@ -14902,6 +16401,22 @@
       "route_source": "deep-moment-refutation"
     },
     {
+      "id": "dyadic-reflection",
+      "title": {
+        "zh": "二进反射与 Levent GRH 零点公式",
+        "en": "Dyadic reflection and the Levent GRH explicit formula"
+      },
+      "description": {
+        "zh": "固定一个偶数，按二进余类拆出反射相关，再用本原特征和与带重数的零点和替换细层。粗层预算、零点替换误差与真实零点相位是三项独立工作。",
+        "en": "Fix the even target. Expand its reflected correlation by dyadic residue classes and use primitive character sums and zeros with multiplicity on fine layers. The coarse budget, the replacement error and the actual zero phases require separate estimates."
+      },
+      "feeds": [
+        "odd-character-interference",
+        "representations"
+      ],
+      "route_source": "dyadic-reflection"
+    },
+    {
       "id": "explicit-skirt-inputs",
       "title": {
         "zh": "裙边与显式算术输入",
@@ -14919,6 +16434,21 @@
       "route_source": "explicit-skirt-inputs"
     },
     {
+      "id": "farey-inverse-sieve",
+      "title": {
+        "zh": "新路线 · Farey 分母对与逆元筛",
+        "en": "New route · Farey denominator pairs and the inverse sieve"
+      },
+      "description": {
+        "zh": "在同一个偶数的 Farey 插入层上给中心窗分母加上逆元标记。比较全窗 CRT 和分窗模双曲线计数，再按最小素因子计算筛损失。",
+        "en": "Label the central denominator pairs on a single Farey insertion layer by their inverses. Compare full-window CRT counts with modular hyperbola counts in subwindows, then group sieve losses by the least prime factor."
+      },
+      "feeds": [
+        "representations"
+      ],
+      "route_source": "farey-inverse-sieve"
+    },
+    {
       "id": "finite-rfc-second",
       "title": {
         "zh": "小偶数覆盖续批",
@@ -14932,6 +16462,21 @@
         "representations"
       ],
       "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "finite-rfc-third",
+      "title": {
+        "zh": "小偶数覆盖第三批",
+        "en": "Finite-range coverage III"
+      },
+      "description": {
+        "zh": "核验已发表端点以后的素数对，推进固定主弧的误差和余量，并改进有限范围的素因子数与陈氏计数界。",
+        "en": "Verify further prime pairs above the published cutoff, bound errors on fixed major arcs and improve the finite-range factor and Chen count estimates."
+      },
+      "feeds": [
+        "representations"
+      ],
+      "route_source": "finite-rfc-third"
     },
     {
       "id": "liouville-dilation",
