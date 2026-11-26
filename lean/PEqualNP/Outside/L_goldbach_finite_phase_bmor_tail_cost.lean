@@ -3,7 +3,7 @@ import Mathlib
 open scoped BigOperators
 
 theorem PEqualNP.Outside.L_goldbach_finite_phase_bmor_tail_cost :
-    (∀ (q a n : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 8000000000 ≤ n → |(∑ k ∈ (Finset.range (n+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/Nat.totient q| ≤ (n:ℝ)/(840 * Real.log (n:ℝ))) → let D := fun (q a n : ℕ) => (∑ k ∈ (Finset.range (n+1)).filter (fun k => k%q=a%q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/(Nat.totient q:ℝ); let J := fun (q a l u : ℕ) (β : ℝ) => 2 * Real.pi * |β| * (∑ m ∈ Finset.Ico l u, |D q a m|); let T : ℕ := 8000000000; ∀ (q a n : ℕ) (β : ℝ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 4000000000000000000 ≤ n → |β| ≤ 105/((q:ℝ)*n) → |D q a n| + J q a T n β ≤ (n:ℝ)/(840*Real.log n) + 105*Real.pi*n/(840*(q:ℝ)*Real.log T) := by
+    (∀ (q a n : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 8000000000 ≤ n → |(∑ k ∈ (Finset.range (n+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/Nat.totient q| ≤ (n:ℝ)/(840 * Real.log (n:ℝ))) → let D := fun (q a n : ℕ) => (∑ k ∈ (Finset.range (n+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/(Nat.totient q:ℝ); let J := fun (q a l u : ℕ) (β : ℝ) => 2 * Real.pi * |β| * (∑ m ∈ Finset.Ico l u, |D q a m|); let T : ℕ := 8000000000; ∀ (q a n : ℕ) (β : ℝ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 4000000000000000000 ≤ n → |β| ≤ 105/((q:ℝ)*n) → |D q a n| + J q a T n β ≤ (n:ℝ)/(840*Real.log n) + 105*Real.pi*n/(840*(q:ℝ)*Real.log T) := by
   intro hBMOR D J T q a n β hq hq' ha hcop hn hβ
   have hT : 1 < (T : ℝ) := by norm_num [T]
   have hlog : 0 < Real.log (T : ℝ) := Real.log_pos hT
