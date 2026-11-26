@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-skirt-paired-annulus-kernel",
+  "file": "lean/PEqualNP/Outside/L_goldbach_skirt_paired_annulus_kernel.lean",
+  "module": "PEqualNP.Outside.L_goldbach_skirt_paired_annulus_kernel",
+  "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (q : ℕ) (j : ℤ) (h H : ℝ), 0 < q → 0 ≤ h → h ≤ H → let A := (Finset.range q).filter (fun a => Nat.Coprime a q); let T := fun (a : ℕ) (r : ℝ) => intervalIntegral (fun u => E ((j:ℝ)*((a:ℝ)/q+u))) (-r) r MeasureTheory.volume; (∑ a ∈ A, (T a H - T a h)) = (∑ a ∈ A, E ((j:ℝ)*a/q)) * ((if j=0 then 2*(H-h) else (Real.sin (2*Real.pi*j*H)-Real.sin (2*Real.pi*j*h))/(Real.pi*j) : ℝ):ℂ)",
+  "plain_statement": {
+    "zh": "新路线 · 裙边与显式算术输入 · SI-8003 · 计算一圈既约中心上成对裙边的 Ramanujan–sinc 核",
+    "en": "New route · Skirts and explicit arithmetic inputs · SI-8003 · Compute the Ramanujan–sinc kernel across paired annuli"
+  },
+  "brief": {
+    "zh": "固定偏移 j，分别积分 ±β，再求既约分子和。q=1 用中心 0 两侧的周期延拓；在全弧集合应用时须验证分离。供低模裙边和中模剩余裙边共用。",
+    "en": "Integrate the symmetric offsets at fixed j before summing reduced numerators. Use the periodic wrap at center zero for q=1. Check separation when summing actual arc sets. Both skirts use this kernel."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "explicit-skirt-inputs",
+  "role": "lemma",
+  "depends_on": []
+}

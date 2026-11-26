@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-finite-phase-bmor-tail-cost",
+  "file": "lean/PEqualNP/Outside/L_goldbach_finite_phase_bmor_tail_cost.lean",
+  "module": "PEqualNP.Outside.L_goldbach_finite_phase_bmor_tail_cost",
+  "statement": "(∀ (q a n : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 8000000000 ≤ n → |(∑ k ∈ (Finset.range (n+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/Nat.totient q| ≤ (n:ℝ)/(840 * Real.log (n:ℝ))) → let D := fun (q a n : ℕ) => (∑ k ∈ (Finset.range (n+1)).filter (fun k => k%q=a%q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/(Nat.totient q:ℝ); let J := fun (q a l u : ℕ) (β : ℝ) => 2 * Real.pi * |β| * (∑ m ∈ Finset.Ico l u, |D q a m|); let T : ℕ := 8000000000; ∀ (q a n : ℕ) (β : ℝ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 4000000000000000000 ≤ n → |β| ≤ 105/((q:ℝ)*n) → |D q a n| + J q a T n β ≤ (n:ℝ)/(840*Real.log n) + 105*Real.pi*n/(840*(q:ℝ)*Real.log T)",
+  "plain_statement": {
+    "zh": "新路线 · 裙边与显式算术输入 · SI-8005 · 把 BMOR 的逐前缀估计积成主弧后段误差",
+    "en": "New route · Skirts and explicit arithmetic inputs · SI-8005 · Sum the BMOR prefix estimates over the late part of the arc budget"
+  },
+  "brief": {
+    "zh": "前提逐字取自 PR #2484 的小模数 ψ 声明。对 T≤m<n 用 log m≥log T 并计算等差和；单列终点 n，保留 q 和两处分母的对数。",
+    "en": "Use the exact small-modulus ψ statement from PR #2484 as a hypothesis. For T≤m<n use log m≥log T and sum the arithmetic progression. Keep n as a separate endpoint with its own logarithm."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2484",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "explicit-skirt-inputs",
+  "role": "conditional",
+  "depends_on": []
+}

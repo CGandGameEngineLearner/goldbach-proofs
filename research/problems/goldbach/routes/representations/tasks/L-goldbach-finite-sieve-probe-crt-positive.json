@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-finite-sieve-probe-crt-positive",
+  "statement": "∀ n d e : ℕ, 0 < d → 0 < e → ((∃ p : ℕ, p % d = n % d ∧ p % e = 1 % e) ↔ n % (Nat.gcd d e) = 1 % (Nat.gcd d e))",
+  "plain_statement": {
+    "zh": "新路线 · 小偶数覆盖 · FR-7012 · p−1 辅助权的广义 CRT",
+    "en": "New route · Finite-range coverage · FR-7012 · Generalized CRT for the p−1 probe"
+  },
+  "brief": {
+    "zh": "先仅处理相容性，不把两个模数当成独立；之后按 lcm 进入分布估计。",
+    "en": "Establish compatibility before applying progression estimates modulo the lcm."
+  },
+  "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+  "program": "correlation",
+  "parallel": true,
+  "depends_on": [],
+  "file": "lean/PEqualNP/Outside/L_goldbach_finite_sieve_probe_crt_positive.lean",
+  "module": "PEqualNP.Outside.L_goldbach_finite_sieve_probe_crt_positive",
+  "imports": [],
+  "track": "representations",
+  "role": "lemma"
+}

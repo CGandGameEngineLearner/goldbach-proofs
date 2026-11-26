@@ -34,6 +34,89 @@ RELEASE_REASONS = {
 }
 
 
+HARNESS_NAMES = (
+    'codex',
+    'claude-code',
+    'cursor',
+    'gemini-cli',
+    'opencode',
+    'kimi-code',
+    'qwen-code',
+    'qoder',
+    'qoder-cn',
+    'lingma',
+    'trae',
+    'codebuddy',
+    'comate',
+    'codegeex',
+    'iflycode',
+    'github-copilot',
+    'github-copilot-cli',
+    'windsurf',
+    'cline',
+    'roo-code',
+    'kilo-code',
+    'continue',
+    'aider',
+    'goose',
+    'openhands',
+    'kiro',
+    'amazon-q',
+    'augment-code',
+    'auggie',
+    'devin',
+    'devin-desktop',
+    'jetbrains-ai',
+    'jetbrains-air',
+    'junie',
+    'zed',
+    'warp',
+    'tabnine',
+    'replit-agent',
+    'factory-droid',
+    'mistral-vibe',
+    'pi',
+    'antigravity',
+    'hermes-agent',
+    'swe-agent',
+    'mini-swe-agent',
+    'open-interpreter',
+    'other',
+    'unknown',
+)
+AGENT_LABEL = re.compile(r"[a-zA-Z0-9][a-zA-Z0-9 ._:/+\-]{0,95}", re.ASCII)
+# Only recognize this explicit family of aliases. Do not strip arbitrary model suffixes:
+# dates, preview names, fine-tunes and other providers may encode distinct models there.
+GPT_VARIANT = re.compile(
+    r"(?:openai[/:])?(?:gpt[ _-]?)?(\d+(?:\.\d+)+)[ _-]+"
+    r"(astra|sol|terra|luna)(?:[ _-]*(?:none|minimal|low|medium|high|xhigh|max|ultra))?"
+)
+
+
+def model_ranking_name(value):
+    """Group known spelling/effort aliases without changing submitted provenance."""
+    label = " ".join(value.lower().split())
+    match = GPT_VARIANT.fullmatch(label)
+    return f"gpt-{match[1]}-{match[2]}" if match else label
+
+
+def agent_metadata(value):
+    """Normalize self-reported identifiers; missing data stays explicitly unknown."""
+    if not isinstance(value, dict) or not {"model", "harness"} <= value.keys():
+        raise ValueError("agent_model_and_harness_required")
+    if set(value) - {"model", "harness", "harness_version"}:
+        raise ValueError("invalid_agent_metadata")
+    result = {}
+    for key in ("model", "harness", "harness_version"):
+        label = value.get(key, "unknown")
+        if not isinstance(label, str) or not AGENT_LABEL.fullmatch(label):
+            raise ValueError("invalid_agent_metadata")
+        result[key] = " ".join(label.lower().split())
+    if result["harness"] not in HARNESS_NAMES:
+        raise ValueError("invalid_agent_metadata")
+    return result
+
+
 def canonical_handle(value):
     if isinstance(value, str) and value.isascii() and len(value) <= 39 and HANDLE.fullmatch(value.lower()):
         return value.lower()
@@ -93,6 +176,12 @@ class Desk:
             columns = {row[1] for row in conn.execute("PRAGMA table_info(goldbach_leases)")}
             if "last_polled_at" not in columns:
                 conn.execute("ALTER TABLE goldbach_leases ADD COLUMN last_polled_at INTEGER")
+            # Additive migration keeps existing leases/verdicts and old clients usable.
+            for column in ("model", "harness", "harness_version"):
+                if column not in columns:
+                    conn.execute(f"ALTER TABLE goldbach_leases ADD COLUMN {column} TEXT NOT NULL DEFAULT 'unknown'")
+            if "agent_reported" not in columns:
+                conn.execute("ALTER TABLE goldbach_leases ADD COLUMN agent_reported INTEGER NOT NULL DEFAULT 0")
 
     @contextmanager
     def transaction(self, write=False):
@@ -138,6 +227,10 @@ class Desk:
             return error(400, "invalid_claim")
         if requested_gap is not None and requested_gap not in self.gaps:
             return error(404, "unknown_gap")
+        if requested_gap and self.gaps[requested_gap].get("refutation"):
+            return error(409, "refutation_" + self.gaps[requested_gap]["refutation"]["status"])
+        if requested_gap and self.gaps[requested_gap].get("claims_closed"):
+            return error(409, "claims_closed")
         if fleet is not None:
             match = re.fullmatch(r"v1\.([0-9]{1,12})\.[a-f0-9]{64}", fleet)
             if (not match or int(match[1]) <= now
@@ -166,7 +259,8 @@ class Desk:
 
             load = Counter(lease["gap"] for lease in active)
             proved = self.proved_gaps(conn)
-            candidates = self.gaps if requested_gap is None else (requested_gap,)
+            candidates = ((key for key, gap in self.gaps.items() if not gap.get("challenge_only") and not gap.get("claims_closed") and not gap.get("refutation"))
+                          if requested_gap is None else (requested_gap,))
             if fleet is None and owned:
                 candidates = (gap for gap in candidates if gap != owned[0]["gap"])
             program_load = Counter(self.gaps[row["gap"]].get("program", "foundation")
@@ -230,17 +324,28 @@ class Desk:
             pr, head = body.get("pr"), body.get("head")
             if not positive_id(pr, 9_999_999) or not isinstance(head, str) or not HEAD.fullmatch(head):
                 return error(400, "invalid_pull_request")
+            same_submission = lease["pr"] == pr and lease["head"] == head
+            if same_submission and "agent" not in body:
+                return 200, {"submitted": True, **self.lease_times(lease)}
+            try:
+                agent = agent_metadata(body.get("agent"))
+            except ValueError as exc:
+                return error(400, str(exc))
             if lease["pr"] is not None:
-                if lease["pr"] == pr and lease["head"] == head:
+                if same_submission:
+                    if any(agent[key] != lease[key] for key in agent):
+                        return error(409, "submission_metadata_frozen")
                     return 200, {"submitted": True, **self.lease_times(lease)}
                 return error(409, "lease_already_submitted")
 
             # A submitted proof waits for a hosted runner independently of its authoring lease.
             expires = now + SUBMISSION_SECONDS
             conn.execute("""
-                UPDATE goldbach_leases SET pr = ?, head = ?, submitted_at = ?, expires_at = ?
+                UPDATE goldbach_leases SET pr = ?, head = ?, submitted_at = ?, expires_at = ?,
+                    model = ?, harness = ?, harness_version = ?, agent_reported = ?
                 WHERE token_hash = ?
-            """, (pr, head, now, expires, digest))
+            """, (pr, head, now, expires, agent["model"], agent["harness"], agent["harness_version"],
+                  1, digest))
             return 200, {"submitted": True, "expires_at": expires,
                          "absolute_expires_at": lease["absolute_expires_at"]}
 
@@ -344,15 +449,51 @@ class Desk:
             WHERE expires_at > ? AND released_at IS NULL AND finished_at IS NULL GROUP BY gap
         """, (now,)))
 
-    def progress(self):
+    def progress_snapshot(self):
         with self.transaction() as conn:
             proved = self.proved_gaps(conn) & self.gaps.keys()
             assigned = self.active_assignments(conn, int(time.time()))
         available = sum(
-            gap_id not in proved and (gap_id not in assigned or gap.get("parallel") is True)
+            not gap.get("claims_closed") and not gap.get("refutation") and gap_id not in proved and (gap_id not in assigned or gap.get("parallel") is True)
             for gap_id, gap in self.gaps.items()
         )
-        return len(proved), len(self.gaps), available
+        return len(proved), len(self.gaps), available, assigned.keys() - proved
+
+    def progress(self):
+        return self.progress_snapshot()[:3]
+
+    @staticmethod
+    def annotate_verdicts(records, conn):
+        """Attach attribution via the authorized run, without changing signed verdict bytes."""
+        for record in records:
+            row = conn.execute("""
+                SELECT model, harness, harness_version, agent_reported FROM goldbach_leases
+                WHERE run_id = ? AND gap = ? AND pr IS NOT NULL AND head IS NOT NULL
+            """, (record["run_id"], record["lemma_id"])).fetchone()
+            record["agent"] = dict(zip(("model", "harness", "harness_version"), row[:3])) if row else dict.fromkeys(("model", "harness", "harness_version"), "unknown")
+            record["agent"]["source"] = "self_reported" if row and row[3] else "unrecorded"
+
+    @staticmethod
+    def agent_rankings(conn, now):
+        # Same first-acceptance rule as the contributor leaderboard, one attribution per lemma.
+        winners = conn.execute("""
+            WITH accepted AS (
+                SELECT model, harness, finished_at,
+                       ROW_NUMBER() OVER (PARTITION BY gap ORDER BY finished_at, run_id) AS position
+                FROM goldbach_leases
+                WHERE verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
+            )
+            SELECT model, harness FROM accepted WHERE position = 1
+                AND (model != 'unknown' OR harness != 'unknown')
+        """, (now,)).fetchall()
+        def ranking(column):
+            counts = Counter(
+                model_ranking_name(row[column]) if column == 0 else row[column]
+                for row in winners if row[column] != "unknown"
+            )
+            return [{"name": name, "accepted": count} for name, count in
+                    sorted(counts.items(), key=lambda pair: (-pair[1], pair[0]))]
+        return {"models": ranking(0), "harnesses": ranking(1), "proofs": len(winners)}
 
     def public_status(self):
         now = int(time.time())
@@ -413,6 +554,7 @@ class Desk:
                     ORDER BY accepted DESC, latest_accepted_at DESC, handle
                 """, (now, now - 3600, now - 3600))
             ]
+            agent_rankings = self.agent_rankings(conn, now)
         all_time = [
             {key: row[key] for key in ("handle", "accepted", "latest_accepted_at")}
             for row in first_acceptances
@@ -426,7 +568,7 @@ class Desk:
         )
         return {
             "active": active, "sessions": sessions, "assignments": assignments,
-            "activities": activities, "leaderboard": leaderboard,
+            "activities": activities, "leaderboard": leaderboard, "agent_rankings": agent_rankings,
             "rankings": {
                 "all_time": all_time,
                 "hour": hour,

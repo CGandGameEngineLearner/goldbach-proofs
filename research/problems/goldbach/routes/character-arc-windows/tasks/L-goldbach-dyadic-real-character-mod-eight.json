@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-dyadic-real-character-mod-eight",
+  "file": "lean/PEqualNP/Outside/L_goldbach_dyadic_real_character_mod_eight.lean",
+  "module": "PEqualNP.Outside.L_goldbach_dyadic_real_character_mod_eight",
+  "statement": "∀ (k : ℕ), 3 ≤ k → ∀ χ : DirichletCharacter ℂ (2^k), χ^2 = 1 → ∃ χ₈ : DirichletCharacter ℂ 8, ∀ a : ℕ, χ (a : ZMod (2^k)) = χ₈ (a : ZMod 8)",
+  "plain_statement": {
+    "zh": "新路线 · 特征与分母扩窗 · CW-8003 · 将二幂塔上的实特征降到模八",
+    "en": "New route · Characters and extended arcs · CW-8003 · Descend real characters on the dyadic tower to modulus eight"
+  },
+  "brief": {
+    "zh": "证明 1 模 8 的单位在模 2^k 都是平方，再沿商群下降。这样可隔离实特征；非实特征和中心素数对相关仍待估计。",
+    "en": "Prove that every unit congruent to one modulo eight is a square modulo 2^k, then descend through the quotient. The complex characters and central prime correlation remain."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/DirichletLZerosEqPrimitiveCharacterZeros.lean",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "character-arc-windows",
+  "role": "lemma",
+  "depends_on": []
+}

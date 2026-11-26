@@ -1,0 +1,17 @@
+{
+  "id": "L-no-three-in-line-repeated-residue-direction-positive",
+  "file": "lean/PEqualNP/Outside/L_no_three_in_line_repeated_residue_direction_positive.lean",
+  "module": "PEqualNP.Outside.L_no_three_in_line_repeated_residue_direction_positive",
+  "statement": "∀ (p x y u v s t : ℤ), 0 < p → (((x+p*u)-x)*(t-y) = ((y+p*v)-y)*(s-x) ↔ u*(t-y) = v*(s-x))",
+  "plain_statement": {
+    "zh": "两个提升点相差 p(u,v) 时，第三点与它们共线当且仅当 u(t−y)=v(s−x)。",
+    "en": "For a pair separated by p(u,v), a third point (s,t) lies on its line exactly when u(t−y)=v(s−x)."
+  },
+  "brief": {
+    "zh": "在两周期窗口中，互异同余点的方向只有水平、垂直、斜率 ±1 四类。对选取掩码逐类核查整条直线上的点数。",
+    "en": "Cancel p. Distinct representatives of one residue in a two-period square yield only horizontal, vertical and the two diagonal directions. Check entire lines against the selection rule."
+  },
+  "program": "correlation",
+  "imports": [],
+  "parallel": true
+}

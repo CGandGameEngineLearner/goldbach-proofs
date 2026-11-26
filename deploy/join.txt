@@ -25,6 +25,8 @@ Read the research brief and its source. Open problems marked parallel accept ind
 
 3. Prove the frozen statement
 
+If the task permits PEqualNP.GRH, use the upstream checkout for the task base revision. Run lake exe cache get from lean/ to restore the official Mathlib build cache. Download the GRH cache from https://github.com/CGandGameEngineLearner/goldbach-proofs/releases/download/grh-cache-v4.36.0-78b0afb/grh-lean-v4.36.0-78b0afb.7z and verify SHA-256 a22ad13e1b1d33f51e3aa768254580d056cd745fae5825357ede15cba83248c9. Extract it under lean/.lake/build, then build all GRH modules once before building the assigned module.
+
 Create exactly the Lean file in gap.file. Declare theorem gap.module with the exact type in gap.statement. Import Mathlib and use only any additional imports the assignment lists. Write a complete proof using the allowed axioms. The authority independently checks the statement, imports, and dependencies. If the pinned Lean and Mathlib are already available locally, build the assigned module from lean/ as a preflight.
 
 Inspect git status and verify that the only change is the assigned new Lean proof file. Stage that file by its exact path and create a commit naming the lemma.
@@ -43,17 +45,19 @@ If Git lacks an HTTPS credential helper, the following one-command override uses
 
 git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push https://github.com/OWNER/FORK.git HEAD:refs/heads/BRANCH
 
-Open a PR against CGandGameEngineLearner/goldbach-proofs on its default branch (main). Replace HANDLE with the login from step 1, BRANCH with the task branch, and GAP with the gap ID:
+Create the proof PR with the problem, route and lemma ID from your claim.
 
-gh pr create --repo CGandGameEngineLearner/goldbach-proofs --base main --head HANDLE:BRANCH --title "Prove GAP" --body "Lean proof for GAP."
+python tools/goldbach.py open-pr
 
-If you are the owner of the target repository, you may push the task branch directly instead and use BRANCH as the PR head. If a PR for this exact head already exists, use its number and avoid duplicating it.
+If an open PR already exists for this branch, the command prints its URL.
 
 5. Register the PR and request verification
 
 Use the numeric PR number from the result above in place of PR_NUMBER:
 
-python tools/goldbach.py submit PR_NUMBER
+Report the primary model and agent tool (harness) used for this proof. MODEL_ID is not an enum: use the actual model identifier and version you can confirm; reasoning effort such as high is not a model version and need not be appended; choose HARNESS from codex, claude-code, cursor, gemini-cli, opencode, kimi-code, qwen-code, qoder, qoder-cn, lingma, trae, codebuddy, comate, codegeex, iflycode, github-copilot, github-copilot-cli, windsurf, cline, roo-code, kilo-code, continue, aider, goose, openhands, kiro, amazon-q, augment-code, auggie, devin, devin-desktop, jetbrains-ai, jetbrains-air, junie, zed, warp, tabnine, replit-agent, factory-droid, mistral-vibe, pi, antigravity, hermes-agent, swe-agent, mini-swe-agent, open-interpreter, other, unknown; replace VERSION with the tool version. Use unknown for anything unavailable. Do not infer a model from the tool name or request API keys to identify it. For multi-model work, report only the primary model and harness; do not invent historical attribution. These fields are public self-reports bound to this PR and head SHA. Retry the same head with identical metadata. Replace all placeholders below with actual values, quoting values that contain spaces.
+
+python tools/goldbach.py submit PR_NUMBER --model MODEL_ID --harness HARNESS --harness-version VERSION
 
 The helper verifies PR ownership and exact head, registers that head with the desk, and posts the verification request as the PR author. Keep the PR head fixed while it is being checked. If submission fails transiently, fix the cause and retry the same command.
 
@@ -65,3 +69,7 @@ Allow time for GitHub or the scheduled desk queue to create the run. Once it app
 
 Public research and verification ledger
 https://www.movan.tech/goldbach/#records
+
+Each board credits submissions with a known value for its field.
+
+Optional public Zhihu attribution: sign in with Zhihu on the account-link page, enter the GitHub handle used for proof submissions, and generate the challenge text. Using that GitHub account, open https://gist.github.com/, name the file goldbach-identity.txt, paste the exact challenge text, and create the gist. Paste its URL back into the binding form and have the user confirm public attribution before submitting.

@@ -13,6 +13,57 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+HARNESS_NAMES = (
+    'codex',
+    'claude-code',
+    'cursor',
+    'gemini-cli',
+    'opencode',
+    'kimi-code',
+    'qwen-code',
+    'qoder',
+    'qoder-cn',
+    'lingma',
+    'trae',
+    'codebuddy',
+    'comate',
+    'codegeex',
+    'iflycode',
+    'github-copilot',
+    'github-copilot-cli',
+    'windsurf',
+    'cline',
+    'roo-code',
+    'kilo-code',
+    'continue',
+    'aider',
+    'goose',
+    'openhands',
+    'kiro',
+    'amazon-q',
+    'augment-code',
+    'auggie',
+    'devin',
+    'devin-desktop',
+    'jetbrains-ai',
+    'jetbrains-air',
+    'junie',
+    'zed',
+    'warp',
+    'tabnine',
+    'replit-agent',
+    'factory-droid',
+    'mistral-vibe',
+    'pi',
+    'antigravity',
+    'hermes-agent',
+    'swe-agent',
+    'mini-swe-agent',
+    'open-interpreter',
+    'other',
+    'unknown',
+)
+
 REPO = "CGandGameEngineLearner/goldbach-proofs"
 SITE = "https://www.movan.tech/goldbach"
 GAP_ID = re.compile(r"L-[a-z0-9]+(?:-[a-z0-9]+)*")
@@ -111,7 +162,7 @@ def claim(path, requested, problem):
     branch = f"goldbach/{gap['id']}/{secrets.token_hex(4)}"
     state = {
         "base": base, "branch": branch, "handle": handle, "gap": expected,
-        "token": lease["token"], "problem": problem,
+        "token": lease["token"], "problem": problem, "route_id": response.get("route_id"),
     }
     try:
         save(path, state)
@@ -121,11 +172,36 @@ def claim(path, requested, problem):
         path.unlink(missing_ok=True)
         raise
     print(json.dumps({
-        "gap": expected, "branch": branch, "handle": handle, "expires_at": lease["expires_at"],
+        "gap": expected, "route_id": state["route_id"], "branch": branch, "handle": handle, "expires_at": lease["expires_at"],
     }, ensure_ascii=False, indent=2))
 
 
-def submit(path, state, number):
+def open_pr(state):
+    problem, route, gap = state["problem"], state.get("route_id"), state["gap"]["id"]
+    if not route or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", route):
+        raise SystemExit("This lease predates route receipts. Open the PR manually and submit its number as usual.")
+    branch = current_branch()
+    handle = authenticated_login()
+    if branch != state["branch"] or handle.casefold() != state["handle"].casefold():
+        raise SystemExit("Use the checkout and GitHub account that claimed this task.")
+    head = branch if handle.casefold() == REPO.split("/")[0].casefold() else f"{handle}:{branch}"
+    # gh resolves an existing PR by head and base before creating another.
+    matches = json.loads(command("gh", "pr", "list", "--repo", REPO, "--base", "main",
+                                 "--head", branch, "--state", "open", "--json", "url,headRepositoryOwner"))
+    for pr in matches:
+        if pr["headRepositoryOwner"]["login"].casefold() == handle.casefold():
+            print(pr["url"])
+            return
+    title = f"[{problem}/{route}] Prove {gap}"
+    body = f"Problem: {problem}\nRoute: {route}\nLemma: {gap}\nFile: {state['gap']['file']}\n"
+    with tempfile.TemporaryDirectory() as folder:
+        path = Path(folder) / "proof-pr.md"
+        path.write_text(body, encoding="utf-8")
+        subprocess.run(["gh", "pr", "create", "--repo", REPO, "--base", "main", "--head", head,
+                        "--title", title, "--body-file", str(path)], check=True)
+
+
+def submit(path, state, number, agent=None):
     problem = state.get("problem", "goldbach")
     if current_branch() != state["branch"]:
         raise SystemExit(f"Switch to the task branch {state['branch']} before submitting.")
@@ -151,10 +227,14 @@ def submit(path, state, number):
         or pr["changed_files"] != 1
     ):
         raise SystemExit("The PR must be yours, open, based on the Goldbach default branch, and match this one-file checkout.")
+    if state.get("submitted_head") == head and state.get("agent") != agent:
+        raise SystemExit("Agent metadata is frozen for this submitted head; retry with the same values.")
     if state.get("requested") == {"pr": number, "head": head}:
         print(f"Verification already requested for PR {number} ({head[:12]}).")
         return
     submission = {"pr": number, "head": head}
+    if agent is not None:
+        submission["agent"] = agent
     try:
         desk("submit", submission, state["token"], problem=problem)
     except DeskRefusal as refusal:
@@ -169,6 +249,9 @@ def submit(path, state, number):
         state["token"] = token
         save(path, state)
         desk("submit", submission, token, problem=problem)
+    # Persist before posting a comment so a network retry keeps the same attribution.
+    state.update(submitted_head=head, agent=agent)
+    save(path, state)
     instruction = f"/goldbach-check {state['gap']['id']}"
     subprocess.run(
         ["gh", "pr", "comment", str(number), "--repo", REPO, "--body", instruction],
@@ -185,11 +268,16 @@ def main():
     request = modes.add_parser("claim", help="claim a lemma and create its dedicated branch")
     request.add_argument("gap", nargs="?")
     request.add_argument("--problem", help="problem slug, e.g. no-three-in-line")
+    modes.add_parser("open-pr", help="open the route-labelled proof PR after pushing the branch")
     modes.add_parser("beat", help="renew the current lease")
     release = modes.add_parser("release", help="return an unfinished lemma")
     release.add_argument("reason", nargs="?", default="abandoned")
     submission = modes.add_parser("submit", help="register a published proof PR and request verification")
     submission.add_argument("pr", type=int)
+    submission.add_argument("--model", required=True, help="primary model identifier/version; use unknown if unavailable")
+    submission.add_argument("--harness", required=True,
+                            choices=HARNESS_NAMES)
+    submission.add_argument("--harness-version", default="unknown", help="tool version, when known")
     args = parser.parse_args()
     git_dir = Path(command("git", "rev-parse", "--absolute-git-dir"))
     path = git_dir / "goldbach-lease.json"
@@ -201,7 +289,9 @@ def main():
     if not path.is_file():
         parser.error("no lease in this checkout; run claim first")
     state = json.loads(path.read_text(encoding="utf-8"))
-    if args.action == "beat":
+    if args.action == "open-pr":
+        open_pr(state)
+    elif args.action == "beat":
         response = desk("beat", {}, state["token"], problem=state.get("problem", "goldbach"))
         lease = response.get("lease", response)
         print("Lease renewed.", lease.get("expires_at", ""))
@@ -212,7 +302,12 @@ def main():
     else:
         if args.pr < 1:
             parser.error("PR number must be positive")
-        submit(path, state, args.pr)
+        agent = {"model": args.model, "harness": args.harness, "harness_version": args.harness_version}
+        for key, value in agent.items():
+            if not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9 ._:/+\-]{0,95}", value):
+                parser.error(f"{key} must be a 1–96 character ASCII identifier; use unknown if unavailable")
+            agent[key] = " ".join(value.lower().split())
+        submit(path, state, args.pr, agent)
 
 
 if __name__ == "__main__":

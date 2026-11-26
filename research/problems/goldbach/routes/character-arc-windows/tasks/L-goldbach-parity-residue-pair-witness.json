@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-parity-residue-pair-witness",
+  "file": "lean/PEqualNP/Outside/L_goldbach_parity_residue_pair_witness.lean",
+  "module": "PEqualNP.Outside.L_goldbach_parity_residue_pair_witness",
+  "statement": "let liouville := fun n : ℕ => (-1:ℤ)^n.primeFactorsList.length; Nat.Prime 97 ∧ Nat.Prime 103 ∧ Nat.Prime 67 ∧ Nat.Prime 7 ∧ Nat.Prime 19 ∧ 133 = 7*19 ∧ 97+103=200 ∧ 67+133=200 ∧ (∀ x ∈ ({97,103,67,133} : Finset ℕ), 200 ≤ 3*x ∧ 3*x ≤ 400) ∧ (∀ m : ℕ, m ∣ 30 → ∀ F : ℕ → ℕ → ℝ, F (97%m) (103%m)=F (67%m) (133%m)) ∧ liouville 97 * liouville 103 = 1 ∧ liouville 67 * liouville 133 = -1",
+  "plain_statement": {
+    "zh": "新路线 · 特征与分母扩窗 · CW-8009 · 核验中央窗内余类相同而素因子奇偶不同的两组分解",
+    "en": "New route · Characters and extended arcs · CW-8009 · Check two central pairs with identical residue data and different factor parity"
+  },
+  "brief": {
+    "zh": "检验 200 的两组分解并把模 30 的同余降到每个因子模数。可作为有限余类测试的反例。进一步的 Theta 测试须提供额外的双变量输入。",
+    "en": "Check both pairs and reduce the congruences modulo 30 to each divisor of 30. This is a finite test for residue-based models. A theta model needs extra two-variable data."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2495",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "character-arc-windows",
+  "role": "lemma",
+  "depends_on": []
+}

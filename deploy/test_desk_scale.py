@@ -1,5 +1,6 @@
 """Run with python -m unittest deploy.test_desk_scale -v (Python 3.11+ and OpenSSL)."""
 
+import gzip
 import hashlib
 import hmac
 import json
@@ -33,7 +34,7 @@ class DeskScaleTest(unittest.TestCase):
         self.secret = secrets.token_hex(32).encode()
         (folder / "webhook").write_bytes(self.secret)
         (folder / "china-apnic.txt").write_bytes(b"")
-        for source in ("deploy/server.py", "deploy/desk.py", "deploy/landau.py", "deploy/presence.py", "deploy/join.txt", "deploy/join-zh.txt",
+        for source in ("deploy/server.py", "deploy/site.js", "deploy/site.css", "deploy/desk.py", "deploy/landau.py", "deploy/presence.py", "deploy/join.txt", "deploy/join-zh.txt",
                        "deploy/zhihu_oauth.py", "deploy/sponsors.py", "deploy/github_identity.py", "deploy/zh.html", "deploy/en.html",
                        "research/gaps.json", "research/problems.json"):
             shutil.copy(ROOT / source, folder)
@@ -71,6 +72,65 @@ class DeskScaleTest(unittest.TestCase):
         self.server.terminate()
         self.server.wait(timeout=10)
         self.server.stdout.close()
+
+    def test_agent_attribution_across_problem_desks(self):
+        for index, path in enumerate(("", "/problems/log-rank")):
+            claim = self.request(path + "/api/desk/claim", {"handle": "alice"}, expected=201)
+            gap, token = claim["gap"], claim["lease"]["token"]
+            agent = {"model": "model-test-v1", "harness": "codex", "harness_version": "1.2.3"}
+            submission = {"pr": 40 + index, "head": "a" * 40, "agent": agent}
+            self.request(path + "/api/desk/submit", submission, token=token)
+            self.request(path + "/api/desk/submit", submission, token=token)
+            self.request(path + "/api/desk/submit", {**submission, "agent": {**agent, "model": "other"}}, token=token, expected=409)
+            run_id = 500 + index
+            self.request("/api/desk/authorize", {"gap": gap["id"], "pr": 40 + index, "head": "a" * 40,
+                         "handle": "alice", "run_id": run_id,
+                         "statement_sha256": hashlib.sha256(gap["statement"].encode()).hexdigest()}, signed=True)
+            record = {"lemma_id": gap["id"], "run_id": run_id, "run_attempt": 1, "verdict": "ACCEPTED",
+                      "manifest": {"rests_on": [{"module": gap["module"], "sha256": "a" * 64}], "defs": []}}
+            self.request("/api/verdict", record, signed=True)
+            self.request("/api/verdict", record, signed=True)
+            status = self.request(path + "/api/status")
+            with closing(HTTPSConnection("127.0.0.1", self.port, context=self.context)) as conn:
+                conn.request("GET", path + "/api/status?view=web-gzip")
+                response = conn.getresponse()
+                self.assertEqual(response.status, 200)
+                self.assertEqual(response.getheader("Content-Encoding"), "gzip")
+                compact = json.loads(gzip.decompress(response.read()))
+            self.assertEqual(compact["results"], status["results"])
+            self.assertEqual(compact["counts"], status["counts"])
+            latest = next(g["latest"] for g in compact["gaps"] if g["id"] == gap["id"])
+            self.assertNotIn("manifest", latest)
+            self.assertEqual(latest["lemma_id"], gap["id"])
+            self.assertEqual(status["results"][0]["agent"], {**agent, "source": "self_reported"})
+            self.assertEqual(status["desk"]["agent_rankings"], {
+                "models": [{"name": "model-test-v1", "accepted": 1}],
+                "harnesses": [{"name": "codex", "accepted": 1}], "proofs": 1})
+            self.assertEqual(status["desk"]["rankings"]["proofs"], 1)
+            for lang in ("zh", "en"):
+                page = self.request(path + "/?lang=" + lang, text=True)
+                self.assertIn('data-ranking-mode="agents"', page)
+                guide = self.request(path + "/join" + ("-zh" if lang == "zh" else "") + ".txt", text=True)
+                self.assertIn('--model MODEL_ID --harness HARNESS', guide)
+
+    def test_verification_history_pagination(self):
+        api = "/api/"
+        def publish(run, attempt):
+            self.request("/api/verdict", {"lemma_id": "L-goldbach-history", "run_id": run,
+                         "run_attempt": attempt, "verdict": "REJECTED", "manifest": None}, signed=True)
+
+        for run in range(100, 113):
+            publish(run, 1)
+        publish(101, 2)
+        first = self.request(api + "records")
+        self.assertEqual(len(first["results"]), 12)
+        self.assertEqual(first["next"], "101-2")
+        publish(113, 1)
+        last = self.request(api + "records?before=" + first["next"])
+        self.assertEqual([r["run_id"] for r in last["results"]], [101, 100])
+        self.assertIsNone(last["next"])
+        self.assertEqual(self.request("/problems/log-rank/api/records")["results"], [])
+        self.request(api + "records?before=invalid", expected=400)
 
     def test_page_views_count_only_successful_page_gets(self):
         def total():
@@ -150,12 +210,12 @@ class DeskScaleTest(unittest.TestCase):
                     tokens = [item["lease"]["token"] for item in claims]
                     gaps = {item["gap"]["id"] for item in claims}
                     catalogue = json.loads((ROOT / "research/gaps.json").read_text(encoding="utf-8"))["gaps"]
-                    self.assertEqual(gaps, {entry["id"] for entry in catalogue})
+                    self.assertTrue(gaps <= {entry["id"] for entry in catalogue})
+                    self.assertEqual(len(gaps), min(SESSIONS, len(catalogue)))
                     for entry in catalogue:
                         count = sum(item["gap"]["id"] == entry["id"] for item in claims)
                         if not entry.get("parallel"):
-                            self.assertEqual(count, 1)
-                    self.assertGreater(SESSIONS, len(gaps))
+                            self.assertLessEqual(count, 1)
                     self.assertEqual(len(set(tokens)), SESSIONS)
                     status = self.request("/api/status")["desk"]
                     self.assertEqual(set(status["assignments"]), gaps)
@@ -165,7 +225,7 @@ class DeskScaleTest(unittest.TestCase):
                         self.request(api + "claim", {"handle": "outsider"}, ticket=ticket, expected=401)
                     self.wave(pool, mode, "renewals", lambda i: self.request(api + "beat", {}, token=tokens[i]))
                     self.wave(pool, mode, "submissions", lambda i: self.request(
-                        api + "submit", {"pr": i + 1, "head": f"{i + 1:040x}"}, token=tokens[i],
+                        api + "submit", {"pr": i + 1, "head": f"{i + 1:040x}", "agent": {"model": "test-model", "harness": "codex"}}, token=tokens[i],
                     ))
                     pending = []
                     for _ in range(0, SESSIONS, QUEUE_BATCH):
@@ -199,7 +259,7 @@ class DeskScaleTest(unittest.TestCase):
             token = claim["lease"]["token"]
             next_path = paths[(i + 1) % len(paths)]
             self.request(next_path + "/api/desk/beat", {}, token=token, expected=401)
-            self.request(path + "/api/desk/submit", {"pr": i + 1, "head": f"{i + 1:040x}"}, token=token)
+            self.request(path + "/api/desk/submit", {"pr": i + 1, "head": f"{i + 1:040x}", "agent": {"model": "test-model", "harness": "codex"}}, token=token)
         pending = self.request("/api/desk/pending", {}, signed=True)["pending"]
         self.assertEqual({row["gap"] for row in pending}, {claim["gap"]["id"] for claim in claims})
 
@@ -255,7 +315,7 @@ class DeskScaleTest(unittest.TestCase):
                 self.assertTrue(set(expected) <= catalogue)
                 self.assertEqual(len(set(expected)), min(len(expected), len(catalogue)))
             self.wave(pool, f"{len(paths)} problems", "submissions", lambda i: self.request(
-                claims[i][0] + "/api/desk/submit", {"pr": i + 1, "head": f"{i + 1:040x}"}, token=claims[i][1]
+                claims[i][0] + "/api/desk/submit", {"pr": i + 1, "head": f"{i + 1:040x}", "agent": {"model": "test-model", "harness": "codex"}}, token=claims[i][1]
             ))
             queued = []
             remaining = expected_claims.copy()
@@ -283,6 +343,10 @@ class DeskScaleTest(unittest.TestCase):
         for lang, suffix in (("en", ""), ("zh", "-zh")):
             self.assertIn(f'log-rank/?lang={lang}', self.request(f"/problems/?lang={lang}", text=True))
             page = self.request(f"{path}/?lang={lang}", text=True)
+            for stage in problem["roadmap"]:
+                key = stage.get("route_id") or stage["route_source"]
+                self.assertIn(f'data-program="{key}"', page)
+                self.assertIn(f'id="track-{key}"', page)
             guide = self.request(f"{path}/join{suffix}.txt", text=True)
             for material in problem["materials"]:
                 self.assertIn(material["url"], page)
@@ -297,13 +361,24 @@ class DeskScaleTest(unittest.TestCase):
         total = len(problem["gaps"])
         directory = self.request("/problems/?lang=en", text=True)
         self.assertIn(f"Lean verified 0/{total} · {total} available", directory)
-        self.request(path + "/api/desk/claim", {"handle": "reader", "gap": problem["gaps"][0]["id"]},
-                     ip="192.0.2.11", expected=201)
+        claim = self.request(path + "/api/desk/claim", {"handle": "reader", "gap": problem["gaps"][0]["id"]},
+                             ip="192.0.2.11", expected=201)
+        gap = next(g for g in self.request(path + "/api/status")["gaps"] if g["id"] == claim["gap"]["id"])
+        self.assertEqual(claim["route_id"], gap["route_id"])
         self.assertIn(f"Lean verified 0/{total} · {total - 1} available",
                       self.request("/problems/?lang=en", text=True))
         self.assertIn(f"Lean 已核验 0/{total} · {total - 1} 条可领取",
                       self.request("/problems/?lang=zh", text=True))
         for lang, suffix in (("en", ""), ("zh", "-zh")):
+            gap = problem["gaps"][0]["id"]
+            title = next((stage[lang][0] for stage in problem["roadmap"]
+                          if any(task["id"] == gap for task in stage["tasks"])),
+                         "未分路线的命题" if lang == "zh" else "Unassigned tasks")
+            directory = self.request(f"/problems/?lang={lang}", text=True)
+            self.assertIn(("进行中 · " if lang == "zh" else "In progress · ") + title, directory)
+            page = self.request(f"{path}/?lang={lang}", text=True)
+            for task in problem["gaps"]:
+                self.assertIn(f'data-roadmap-task="{task["id"]}"', page)
             guide = self.request(f"{path}/join{suffix}.txt", text=True)
             self.assertIn(f"python tools/goldbach.py claim --problem {slug}\n", guide)
             self.assertNotIn("python tools/goldbach.py claim\n", guide)

@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-primitive-zero-window-increment",
+  "file": "lean/PEqualNP/Outside/L_goldbach_primitive_zero_window_increment.lean",
+  "module": "PEqualNP.Outside.L_goldbach_primitive_zero_window_increment",
+  "statement": "∀ (u v : ℝ) (ρ : ℂ), 1 ≤ u → u ≤ v → 0 ≤ ρ.re → ρ ≠ 0 → ‖((v:ℂ)^ρ-(u:ℂ)^ρ)/ρ‖ ≤ (v:ℝ)^ρ.re * min (Real.log (v/u)) (2/‖ρ‖)",
+  "plain_statement": {
+    "zh": "新路线 · 特征与分母扩窗 · CW-8005 · 为截断显式公式的单个零点给出双端点增量界",
+    "en": "New route · Characters and extended arcs · CW-8005 · Bound one zero contribution across two explicit-formula endpoints"
+  },
+  "brief": {
+    "zh": "沿正实轴积分 x^(ρ−1) 得对数窗界，再用两个端点得 2/|ρ| 界。可按重数求和；该估计允许实零点靠近 1。",
+    "en": "Integrate x^(ρ−1) on the positive ray for the logarithmic width. Bound the endpoints for 2/|ρ|. Multiplicities survive summation and real zeros near one remain possible."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean#L607",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "character-arc-windows",
+  "role": "lemma",
+  "depends_on": []
+}

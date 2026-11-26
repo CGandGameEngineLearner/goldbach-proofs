@@ -1,5 +1,7 @@
+import re
 """Check the public research queue and the scope of its analytic targets."""
 
+import hashlib
 import json
 import unittest
 from pathlib import Path
@@ -33,6 +35,13 @@ class CatalogueTests(unittest.TestCase):
     def test_roadmap_links_resolve_within_their_own_problem(self):
         for slug, problem in PROBLEMS.items():
             ids = {gap["id"] for gap in problem["gaps"]}
+            routes = [s.get("route_id") or s["route_source"] for s in problem["roadmap"]]
+            self.assertEqual(len(routes), len(set(routes)))
+            members = [t["id"] for s in problem["roadmap"] for t in s["tasks"]]
+            self.assertEqual(len(members), len(set(members)))
+            for route in routes:
+                self.assertRegex(route, r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+                self.assertNotEqual(route, "unclassified")
             for stage in problem["roadmap"]:
                 with self.subTest(problem=slug, stage=stage["en"][0]):
                     self.assertTrue(stage["tasks"])
@@ -67,6 +76,65 @@ class CatalogueTests(unittest.TestCase):
         self.assertTrue(all(g["role"] in {"lemma", "conditional", "target"} for g in tasks))
         self.assertEqual([g["id"] for g in GAPS if g.get("role") == "endpoint"],
                          ["L-goldbach-binary-pointwise-positivity"])
+
+    def test_audited_claim_policy_and_fourth_moment_refutation(self):
+        gaps = {g["id"].removeprefix("L-goldbach-"): g for g in GAPS}
+        closed = ("binary-pointwise-positivity", "dyadic-correlation-floor", "arc-minor-saving",
+                  "bulk-signed-floor", "frontier-spatial-diag-series-margin")
+        explicit = (
+            "frontier-antispike-shift-transfer", "frontier-no-siegel-zero", "frontier-bv-three-fifths-level",
+            "dyadic-central-prime-mass", "frontier-deep-three-quarters-saving", "frontier-skirt-medium-moduli",
+            "frontier-sqrt-modulus-arc-band", "finite-fixed-progression-unit-error",
+            "frontier-grh-medium-zones", "frontier-skirt-polylog-moduli", "deep-fourth-moment-refutation",
+            *("frontier-type2-" + cell for cell in
+              ("b1-b1", "b1-b2", "b1-b3", "b2-b2", "b2-b3", "b3-b3-parity", "b1-b4", "b2-b4", "b3-b4")),
+        )
+        for key in (*closed, *explicit):
+            with self.subTest(gap=key):
+                self.assertIs(gaps[key].get("challenge_only"), True)
+                self.assertEqual(gaps[key].get("claims_closed", False), key in closed)
+        retired = gaps["frontier-deep-fourth-moment-conjecture"]
+        self.assertIs(retired.get("challenge_only"), True)
+        self.assertIs(retired.get("claims_closed"), True)
+        self.assertEqual(retired["refutation"]["pr"], 2508)
+        negation = gaps["deep-fourth-moment-refutation"]["statement"]
+        self.assertTrue(negation.startswith("¬ (") and negation.endswith(")"))
+        self.assertEqual(negation[3:-1], retired["statement"])
+        frozen = hashlib.sha256(retired["statement"].encode("utf-8")).hexdigest()
+        self.assertEqual(frozen, "41dcb3eeed67239ec1493cf89db1dffea1df1fc0bd2453ca4bb75a641add1476")
+
+    def test_new_route_labels_and_dependencies(self):
+        from graphlib import TopologicalSorter
+
+        by_id = {g["id"]: g for g in GAPS}
+        graph = TopologicalSorter()
+        seen = set()
+        for track, prefix in (("theta-reflection", "TH"), ("odd-character-interference", "OC")):
+            cohort = [g for g in GAPS if g.get("track") == track]
+            self.assertTrue(cohort)
+            for g in cohort:
+                title = g["plain_statement"]
+                match = re.search(rf" · ({prefix}-[0-9]{{4}}) · ", title["zh"])
+                self.assertTrue(match, g["id"])
+                serial = match.group(1)
+                self.assertNotIn(serial, seen)
+                seen.add(serial)
+                self.assertTrue(title["zh"].startswith("新路线 · "))
+                self.assertIn(serial, title["en"])
+                for dep in g["depends_on"]:
+                    self.assertIn(dep, by_id)
+                graph.add(g["id"], *g["depends_on"])
+        list(graph.static_order())
+
+    def test_mellin_windows_allow_nonzero_compactly_supported_functions(self):
+        # At the pinned Mathlib revision the top ContDiff order denotes analyticity.
+        mellin = {g["id"]: g["statement"] for g in GAPS
+                  if g["id"].startswith("L-goldbach-mellin-")}
+        witness = mellin["L-goldbach-mellin-admissible-witness"]
+        self.assertIn("∃ φ : ℝ → ℝ, Adm φ", witness)
+        self.assertIn("φ u=1", witness)
+        for statement in mellin.values():
+            self.assertNotRegex(statement, r"ContDiff\s+ℝ\s+⊤")
 
     def test_analytic_programs_and_context(self):
         self.assertEqual({g["program"] for g in GAPS},

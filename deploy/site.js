@@ -125,11 +125,11 @@ const rankingsAnnouncement = document.getElementById('rankings-announcement');
 let rankingsData = null;
 let rankingsSnapshot = null;
 let rankingMode = null;
+let agentRankingsData = null;
 const locale = document.documentElement.lang;
 const eventTime = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' });
 const relativeTime = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
 
-const mapNodes = document.getElementById('map-nodes');
 const mapContext = document.getElementById('map-context');
 const mapReset = document.getElementById('map-reset');
 const programButtons = Array.from(document.querySelectorAll('[data-program]'));
@@ -143,6 +143,7 @@ const pageSelect = document.getElementById('lemma-page');
 const pageSize = 24;
 
 let publishedGaps = [];
+let gapRoutes = new Map();
 let assignments = {};
 let selectedProgram = '';
 let selectedGap = null;
@@ -162,7 +163,10 @@ function messageRow(label, link) {
 }
 
 function programOf(gap) {
-  return gap.program || 'foundation';
+  if (programs.has(gap.route_id)) return gap.route_id;
+  if (programs.has(gap.track)) return gap.track;
+  if (programs.has(gap.program)) return gap.program;
+  return gap.route_id || gap.track || 'unclassified';
 }
 
 function programName(key) {
@@ -173,28 +177,42 @@ function assigned(gap) {
   return !gap.proved && Object.hasOwn(strings.assignments, assignments[gap.id]);
 }
 
+function closedClaimLabel() {
+  return lang === 'zh' ? '已停止新领取' : 'Closed to new claims';
+}
+
 function gapStatus(gap) {
+  if (gap.refutation) {
+    const verified = gap.refutation.status === 'verified';
+    const label = lang === 'zh' ? (verified ? '已证伪' : '反证待核验') : (verified ? 'Refuted' : 'Refutation under review');
+    return { label, kind: 'occupied', style: 'in-progress' };
+  }
   if (gap.proved) return { label: strings.proved, kind: 'verified', style: 'accepted' };
   if (assigned(gap)) {
     return { label: strings.assignments[assignments[gap.id]], kind: 'occupied', style: 'in-progress' };
   }
+  if (gap.claims_closed) return { label: closedClaimLabel(), kind: 'closed', style: '' };
   return { label: strings.open, kind: 'available', style: '' };
 }
 
 function canClaim(gap) {
-  return !gap.proved && (!assigned(gap) || gap.parallel === true);
+  return !gap.claims_closed && !gap.refutation && !gap.proved && (!assigned(gap) || gap.parallel === true);
 }
 
 function renderProgramCounts() {
-  const counts = new Map(Array.from(programs.keys(), key => [key, { published: 0, verified: 0 }]));
+  const counts = new Map(Array.from(programs.keys(), key => [key, { published: 0, verified: 0, active: 0 }]));
   for (const gap of publishedGaps) {
     const count = counts.get(programOf(gap));
     if (!count) continue;
     count.published += 1;
     if (gap.proved) count.verified += 1;
+    if (assigned(gap)) count.active++;
   }
   for (const [key, count] of counts) {
-    programs.get(key).querySelector('.program-count').textContent = strings.programCount(count.verified, count.published);
+    const button = programs.get(key);
+    button.classList.toggle('route-active', count.active > 0);
+    button.querySelector('.program-count').textContent = strings.programCount(count.verified, count.published)
+      + ' · ' + count.active + (lang === 'zh' ? ' 进行中' : ' in progress');
   }
 }
 
@@ -207,6 +225,7 @@ function chooseProgram(program) {
   mapReset.hidden = !program;
   lemmaPage = 1;
   if (lastGaps !== null) renderLemmas();
+  researchMap.setProgram(program);
 }
 
 for (const [key, button] of programs) {
@@ -216,6 +235,32 @@ mapReset.addEventListener('click', () => {
   programs.get(selectedProgram)?.focus();
   chooseProgram('');
 });
+
+function updateRouteActivity(gaps) {
+  const byId = new Map(gaps.map(gap => [gap.id, gap]));
+  for (const panel of document.querySelectorAll('.route-panel')) {
+    const counts = { working: 0, submitted: 0, checking: 0, proved: 0 };
+    for (const link of panel.querySelectorAll('[data-roadmap-task]')) {
+      const gap = byId.get(link.dataset.roadmapTask);
+      if (!gap) continue;
+      const state = gap.proved ? 'proved' : assignments[gap.id];
+      if (Object.hasOwn(counts, state)) counts[state]++;
+      const badge = link.querySelector('.task-activity');
+      if (Object.hasOwn(strings.assignments, state)) {
+        const current = badge || element('small', '', 'task-activity');
+        current.textContent = strings.assignments[state];
+        if (!badge) link.append(current);
+      } else if (badge) badge.remove();
+    }
+    const active = counts.working + counts.submitted + counts.checking;
+    panel.classList.toggle('route-active', active > 0);
+    const parts = ['working', 'submitted', 'checking']
+      .filter(key => counts[key]).map(key => counts[key] + ' ' + strings.assignments[key]);
+    if (!active) parts.push(lang === 'zh' ? '暂无进行中任务' : 'No active tasks');
+    parts.push(counts.proved + (lang === 'zh' ? ' 已核验' : ' verified'));
+    panel.querySelector('[data-route-status]').textContent = ' · ' + parts.join(' · ');
+  }
+}
 
 function openGap(id) {
   selectedGap = id;
@@ -244,7 +289,8 @@ function renderGapDetail() {
     target: lang === 'zh' ? '待突破的解析估计' : 'Open analytic target',
     conditional: lang === 'zh' ? '需使用命题中所列假设' : 'Conditional on the stated hypotheses'
   }[gap.role];
-  const context = [programName(programOf(gap)), role].filter(Boolean).join(' · ');
+  const challenge = gap.challenge_only && !gap.claims_closed && (lang === 'zh' ? '核心开放难题 · 仅按 ID 主动挑战' : 'Open research challenge · claim explicitly by ID');
+  const context = [programName(programOf(gap)), role, challenge].filter(Boolean).join(' · ');
   detailContent.replaceChildren(
     identity,
     element('h3', gap.plain_statement[lang]),
@@ -254,7 +300,7 @@ function renderGapDetail() {
 
   if (gap.brief?.[lang]) detailContent.append(element('p', gap.brief[lang], 'detail-context'));
   if (gap.source) detailContent.append(anchor(lang === 'zh' ? '阅读来源 ↗' : 'Read the source ↗', gap.source, 'evidence-link'));
-  if (!gap.proved && gap.parallel) detailContent.append(element('p',
+  if (canClaim(gap) && gap.parallel) detailContent.append(element('p',
     lang === 'zh' ? '此问题开放给多个参与者独立试证。' : 'This problem accepts independent proof attempts in parallel.', 'detail-context'));
   if (gap.file) {
     const file = element('p', undefined, 'detail-file');
@@ -264,8 +310,13 @@ function renderGapDetail() {
   if (gap.latest) {
     detailContent.append(runLink(gap.latest, strings.latestRun));
   }
+  if (gap.refutation) {
+    detailContent.append(anchor(status.label + ' · PR #' + gap.refutation.pr, repository + '/pull/' + gap.refutation.pr, 'evidence-link'));
+    return;
+  }
   if (!canClaim(gap)) {
-    detailContent.append(element('p', gap.proved ? strings.alreadyVerified : strings.occupied, 'detail-context'));
+    const reason = gap.proved ? strings.alreadyVerified : gap.claims_closed ? closedClaimLabel() : strings.occupied;
+    detailContent.append(element('p', reason, 'detail-context'));
     return;
   }
   const join = element('div', undefined, 'detail-join');
@@ -304,108 +355,6 @@ function lemmaRow(gap) {
   return row;
 }
 
-function mapNode(gap) {
-  const status = gapStatus(gap);
-  const button = element('button', undefined, 'map-node');
-  const dot = element('span', undefined, 'map-dot ' + status.kind);
-  dot.setAttribute('aria-hidden', 'true');
-  button.type = 'button';
-  button.setAttribute('aria-label', gap.id + ' · ' + status.label);
-  button.title = gap.plain_statement[lang];
-  button.append(dot, element('code', gap.id.replace('L-' + (topic || 'goldbach') + '-', '')));
-  button.addEventListener('click', () => openGap(gap.id));
-  return button;
-}
-
-const graph = document.getElementById('network-map');
-const palette = { available: '#aebcaf', occupied: '#f2be63', verified: '#9cdaa2' };
-const programPalette = { foundation: '#a0c6a1', grh: '#ebc883', correlation: '#9ab9d7', exceptions: '#c4acd7' };
-let graphGaps = [];
-let graphTargets = [];
-function drawNetwork() {
-  const w = graph.clientWidth;
-  const h = graph.clientHeight;
-  const ctx = graph.getContext('2d');
-  if (!ctx || !w || !h) return;
-  const scale = Math.min(window.devicePixelRatio || 1, 2);
-  graph.width = Math.round(w * scale);
-  graph.height = Math.round(h * scale);
-  ctx.scale(scale, scale);
-  graphTargets = [];
-  const center = { x: w / 2, y: h / 2 };
-  function edge(a, b, color) {
-    ctx.strokeStyle = color;
-    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-  }
-  function dot(p, radius, color) {
-    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(p.x, p.y, radius, 0, 2 * Math.PI); ctx.fill();
-  }
-  function caption(p, text, color) {
-    ctx.font = w < 460 ? '550 11px system-ui, sans-serif' : '550 13px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    const width = ctx.measureText(text).width;
-    ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(p.x - width / 2 - 8, p.y - 12, width + 16, 24, 4);
-    else ctx.rect(p.x - width / 2 - 8, p.y - 12, width + 16, 24);
-    ctx.fillStyle = '#192b23';
-    ctx.fill();
-    ctx.strokeStyle = color + '90';
-    ctx.stroke();
-    ctx.fillStyle = color;
-    ctx.fillText(text, p.x, p.y + 4);
-  }
-  const keys = selectedProgram ? [selectedProgram] : [...programs.keys()];
-  keys.forEach((key, index) => {
-    const gaps = graphGaps.filter(gap => programOf(gap) === key);
-    if (!gaps.length) return;
-    const hub = selectedProgram ? center : {
-      x: w * (index % 2 ? 0.75 : 0.25), y: h * (keys.length <= 2 ? 0.5 : index < 2 ? 0.25 : 0.75)
-    };
-    const tint = programPalette[key];
-    if (!selectedProgram) edge(center, hub, tint + '66');
-    const radiusX = w * (selectedProgram ? .44 : .19);
-    const radiusY = h * (selectedProgram ? .43 : .20);
-    gaps.forEach((gap, i) => {
-      const angle = i * Math.PI * (3 - Math.sqrt(5));
-      const radius = Math.sqrt((i + 1) / gaps.length);
-      const p = { x: hub.x + radius * radiusX * Math.cos(angle),
-        y: hub.y + radius * radiusY * Math.sin(angle) };
-      edge(hub, p, tint + '70');
-      const { kind } = gapStatus(gap);
-      dot(p, selectedProgram ? 7 : 6, palette[kind] + '26');
-      dot(p, selectedProgram ? 4.25 : 3.5, palette[kind]);
-      graphTargets.push({ ...p, gap, radius: 10 });
-    });
-    caption(hub, programName(key), tint);
-    graphTargets.push({ ...hub, program: key, radius: 15 });
-  });
-  if (!selectedProgram || !graphGaps.length) {
-    caption(center, graphGaps.length ? (topic ? (lang === 'zh' ? '研究路线' : 'Research') : lang === 'zh' ? '强哥德巴赫' : 'Binary Goldbach') : strings.empty, '#f1ddb1');
-  }
-}
-function graphTarget(event) {
-  const bounds = graph.getBoundingClientRect();
-  const x = event.clientX - bounds.left;
-  const y = event.clientY - bounds.top;
-  let nearest, distance = Infinity;
-  for (const target of graphTargets) {
-    const d = Math.hypot(x - target.x, y - target.y);
-    if (d <= target.radius && d < distance) { nearest = target; distance = d; }
-  }
-  return nearest;
-}
-graph.addEventListener('pointermove', event => {
-  const target = graphTarget(event);
-  graph.style.cursor = target ? 'pointer' : 'default';
-  graph.title = target?.gap?.plain_statement[lang] || (target ? programName(target.program) : '');
-});
-graph.addEventListener('click', event => {
-  const target = graphTarget(event);
-  if (target?.gap) openGap(target.gap.id);
-  else if (target) chooseProgram(selectedProgram ? '' : target.program);
-});
-new ResizeObserver(drawNetwork).observe(graph);
-
 function renderLemmas() {
   const query = lemmaSearch.value.trim().toLocaleLowerCase();
   const selection = lemmaState.value;
@@ -423,13 +372,10 @@ function renderLemmas() {
     ];
     return content.some(text => text.toLocaleLowerCase().includes(query));
   });
-  graphGaps = visibleGaps;
-  drawNetwork();
   const maxPage = Math.max(1, Math.ceil(visibleGaps.length / pageSize));
   lemmaPage = Math.min(lemmaPage, maxPage);
   const offset = (lemmaPage - 1) * pageSize;
   const current = visibleGaps.slice(offset, offset + pageSize);
-  mapNodes.replaceChildren(...current.map(mapNode));
   lemmaRows.replaceChildren(...(current.length ? current.map(lemmaRow) : [messageRow(strings.empty)]));
   pageRange.textContent = current.length ? strings.pageRange(offset + 1, offset + current.length, visibleGaps.length) : strings.empty;
   previousPage.disabled = lemmaPage === 1;
@@ -450,6 +396,11 @@ previousPage.addEventListener('click', () => setPage(lemmaPage - 1));
 nextPage.addEventListener('click', () => setPage(lemmaPage + 1));
 pageSelect.addEventListener('change', () => setPage(Number(pageSelect.value)));
 
+function appendRouteLink(parent, id) {
+  const route = gapRoutes.get(id);
+  if (route && programs.has(route)) parent.append(anchor(programName(route), '#track-' + route, 'log-note'));
+}
+
 function renderLogEntry(run) {
   const article = element('article');
   article.dataset.run = run.run_id + '/' + run.run_attempt;
@@ -460,8 +411,18 @@ function renderLogEntry(run) {
     element('code', run.lemma_id, 'log-id'),
     element('span', strings.attempt + ' ' + run.run_attempt + ' · #' + run.run_id, 'log-note')
   );
+  appendRouteLink(label, run.lemma_id);
   row.append(label, verdictTag(strings[judgement], judgement), runLink(run, strings.run));
   article.append(row);
+  if (run.agent) {
+    const a = run.agent;
+    const model = agentName(a.model), harness = agentName(a.harness);
+    const version = a.harness_version && a.harness_version !== 'unknown' ? ' ' + a.harness_version : '';
+    article.append(element('p', (lang === 'zh' ? '模型：' : 'Model: ') + model +
+      ' · Harness: ' + harness + version + ' · ' +
+      (a.source === 'self_reported' ? (lang === 'zh' ? '提交者自报' : 'Self-reported') :
+        (lang === 'zh' ? '未记录' : 'Unrecorded')), 'log-note agent-attribution'));
+  }
   if (run.manifest) {
     const details = element('details', undefined, 'manifest');
     details.append(
@@ -479,6 +440,7 @@ function renderActivity(event) {
   const label = Object.hasOwn(strings.activities, event.kind) ? strings.activities[event.kind] : strings.event;
   const byline = element('div', undefined, 'activity-byline');
   byline.append(element('span', event.handle || strings.participant), element('code', event.lemma_id));
+  appendRouteLink(byline, event.lemma_id);
   details.append(element('strong', label), byline);
 
   const links = element('div', undefined, 'activity-links');
@@ -577,19 +539,173 @@ function updateRankingTimes() {
   }
 }
 
+const harnessLabels = {
+  "codex": "Codex",
+  "claude-code": "Claude Code",
+  "cursor": "Cursor",
+  "gemini-cli": "Gemini CLI",
+  "opencode": "OpenCode",
+  "kimi-code": "Kimi Code",
+  "qwen-code": "Qwen Code",
+  "qoder": "Qoder",
+  "qoder-cn": "Qoder CN",
+  "lingma": "通义灵码 / Lingma",
+  "trae": "TRAE",
+  "codebuddy": "CodeBuddy",
+  "comate": "Baidu Comate",
+  "codegeex": "CodeGeeX",
+  "iflycode": "iFlyCode",
+  "github-copilot": "GitHub Copilot",
+  "github-copilot-cli": "GitHub Copilot CLI",
+  "windsurf": "Windsurf",
+  "cline": "Cline",
+  "roo-code": "Roo Code",
+  "kilo-code": "Kilo Code",
+  "continue": "Continue",
+  "aider": "Aider",
+  "goose": "Goose",
+  "openhands": "OpenHands",
+  "kiro": "Kiro",
+  "amazon-q": "Amazon Q Developer",
+  "augment-code": "Augment Code",
+  "auggie": "Auggie",
+  "devin": "Devin",
+  "devin-desktop": "Devin Desktop",
+  "jetbrains-ai": "JetBrains AI Assistant",
+  "jetbrains-air": "JetBrains Air",
+  "junie": "Junie",
+  "zed": "Zed",
+  "warp": "Warp",
+  "tabnine": "Tabnine",
+  "replit-agent": "Replit Agent",
+  "factory-droid": "Factory Droid",
+  "mistral-vibe": "Mistral Vibe",
+  "pi": "Pi",
+  "antigravity": "Google Antigravity",
+  "hermes-agent": "Hermes Agent",
+  "swe-agent": "SWE-agent",
+  "mini-swe-agent": "mini-SWE-agent",
+  "open-interpreter": "Open Interpreter"
+};
+
+function agentName(name) {
+  if (!name || name === 'unknown') return lang === 'zh' ? '未记录／未知' : 'Unknown / unrecorded';
+  if (name === 'other') return lang === 'zh' ? '其他工具' : 'Other tools';
+  return Object.hasOwn(harnessLabels, name) ? harnessLabels[name] : name;
+}
+
+const agentBrandRules = [
+  [/(?:^|[ /:_-])(?:codex)(?=$|[ /:_.0-9-])/, 22],
+  [/(?:^|[ /:_-])(?:claude-code)(?=$|[ /:_.0-9-])/, 23],
+  [/(?:^|[ /:_-])(?:gemini-cli)(?=$|[ /:_.0-9-])/, 25],
+  [/(?:^|[ /:_-])(?:cursor)(?=$|[ /:_.0-9-])/, 24],
+  [/(?:^|[ /:_-])(?:opencode)(?=$|[ /:_.0-9-])/, 26],
+  [/(?:^|[ /:_-])(?:openai|gpt|chatgpt|o[134](?:-|$))(?=$|[ /:_.0-9-])/, 0],
+  [/(?:^|[ /:_-])(?:anthropic|claude)(?=$|[ /:_.0-9-])/, 1],
+  [/(?:^|[ /:_-])(?:gemini)(?=$|[ /:_.0-9-])/, 2],
+  [/(?:^|[ /:_-])(?:deepseek)(?=$|[ /:_.0-9-])/, 3],
+  [/(?:^|[ /:_-])(?:qwen|qwq|qvq|tongyi)(?=$|[ /:_.0-9-])/, 4],
+  [/(?:^|[ /:_-])(?:xai|x-ai|grok)(?=$|[ /:_.0-9-])/, 5],
+  [/(?:^|[ /:_-])(?:meta|llama)(?=$|[ /:_.0-9-])/, 6],
+  [/(?:^|[ /:_-])(?:mistral|mixtral|codestral|devstral|magistral)(?=$|[ /:_.0-9-])/, 7],
+  [/(?:^|[ /:_-])(?:kimi)(?=$|[ /:_.0-9-])/, 8],
+  [/(?:^|[ /:_-])(?:moonshot)(?=$|[ /:_.0-9-])/, 33],
+  [/(?:^|[ /:_-])(?:zhipu|zai|z-ai|glm|chatglm)(?=$|[ /:_.0-9-])/, 9],
+  [/(?:^|[ /:_-])(?:doubao|seed|bytedance)(?=$|[ /:_.0-9-])/, 10],
+  [/(?:^|[ /:_-])(?:baidu|ernie)(?=$|[ /:_.0-9-])/, 11],
+  [/(?:^|[ /:_-])(?:minimax)(?=$|[ /:_.0-9-])/, 12],
+  [/(?:^|[ /:_-])(?:yi(?:-|$)|01-ai)(?=$|[ /:_.0-9-])/, 13],
+  [/(?:^|[ /:_-])(?:cohere|command)(?=$|[ /:_.0-9-])/, 14],
+  [/(?:^|[ /:_-])(?:ai21|jamba)(?=$|[ /:_.0-9-])/, 15],
+  [/(?:^|[ /:_-])(?:nvidia|nemotron)(?=$|[ /:_.0-9-])/, 16],
+  [/(?:^|[ /:_-])(?:microsoft|phi)(?=$|[ /:_.0-9-])/, 17],
+  [/(?:^|[ /:_-])(?:hunyuan)(?=$|[ /:_.0-9-])/, 18],
+  [/(?:^|[ /:_-])(?:stepfun|step(?:-|$))(?=$|[ /:_.0-9-])/, 19],
+  [/(?:^|[ /:_-])(?:gemma)(?=$|[ /:_.0-9-])/, 20],
+  [/(?:^|[ /:_-])(?:google|palm)(?=$|[ /:_.0-9-])/, 21],
+  [/(?:^|[ /:_-])(?:perplexity|sonar)(?=$|[ /:_.0-9-])/, 27],
+  [/(?:^|[ /:_-])(?:alibaba)(?=$|[ /:_.0-9-])/, 28],
+  [/(?:^|[ /:_-])(?:tencent)(?=$|[ /:_.0-9-])/, 29],
+  [/(?:^|[ /:_-])(?:ibm|granite)(?=$|[ /:_.0-9-])/, 30],
+  [/(?:^|[ /:_-])(?:huggingface|smollm)(?=$|[ /:_.0-9-])/, 31],
+];
+
+function agentBrandIcon(name) {
+  const match = agentBrandRules.find(([pattern]) => pattern.test(name.toLowerCase()));
+  const icon = element('span', match ? '' : name.slice(0, 1).toUpperCase(), 'agent-brand-icon');
+  icon.setAttribute('aria-hidden', 'true');
+  if (match) {
+    icon.classList.add('has-brand');
+    icon.style.backgroundPosition = '-' + (match[1] * 32) + 'px 0';
+  }
+  return icon;
+}
+
+function renderAgentRankingRow(entry, index) {
+  const item = element('li', undefined, 'ranking-row agent-ranking-row');
+  const name = element('strong', undefined, 'ranking-name agent-brand-name');
+  name.append(agentBrandIcon(entry.name), element('span', agentName(entry.name)));
+  item.append(element('span', index + 1, 'ranking-position'), name);
+  const result = element('div', undefined, 'ranking-result');
+  result.append(element('span', '+' + entry.accepted.toLocaleString(locale), 'ranking-score'),
+    element('span', strings.rankingPeriods.all_time, 'ranking-period'));
+  item.append(result);
+  return item;
+}
+
+function renderAgentColumns(container, limit = Infinity) {
+  container.replaceChildren(...['models', 'harnesses'].map(dimension => {
+    const column = element('section', undefined, 'agent-ranking-column');
+    const title = dimension === 'models' ? (lang === 'zh' ? '模型' : 'Models') : (lang === 'zh' ? 'Harness 工具' : 'Harness tools');
+    const list = element('ol', undefined, 'ranking-list');
+    list.setAttribute('aria-label', title);
+    fillRankings(list, (agentRankingsData?.[dimension] || []).slice(0, limit), 'agents');
+    column.append(element('h3', title), list);
+    return column;
+  }));
+}
+
+function renderFullRankings() {
+  const agents = rankingMode === 'agents';
+  const columns = document.getElementById('agent-rankings-full');
+  columns.hidden = !agents;
+  rankingsFullList.hidden = agents;
+  if (agents) renderAgentColumns(columns);
+  else fillRankings(rankingsFullList, rankingsData.all_time, 'all_time');
+}
+
 function fillRankings(list, data, mode) {
-  const empty = mode === 'hour' ? strings.noHourContributors : strings.noContributors;
+  const empty = mode === 'agents'
+    ? (agentRankingsData ? (lang === 'zh' ? '暂无通过验证的记录。' : 'No verified contributions yet.') : strings.rankingsUnavailable)
+    : mode === 'hour' ? strings.noHourContributors : strings.noContributors;
   list.replaceChildren(...(data.length
-    ? data.map((entry, index) => renderRankingRow(entry, index, mode))
+    ? data.map((entry, index) => mode === 'agents' ? renderAgentRankingRow(entry, index) : renderRankingRow(entry, index, mode))
     : [element('li', empty, 'ranking-empty')]));
 }
 
 function renderRankingMode() {
   if (!rankingsData) return;
-  const rows = rankingsData[rankingMode];
+  const agents = rankingMode === 'agents';
+  const rows = agents ? (agentRankingsData?.models || []) : rankingsData[rankingMode];
+  const columns = document.getElementById('agent-ranking-columns');
+  columns.hidden = !agents;
+  rankingsList.hidden = agents;
+  if (agents) renderAgentColumns(columns, 6);
+  document.getElementById('agent-ranking-controls').hidden = !agents;
+  document.querySelector('.ranking-candidate').hidden = agents;
+  rankingsAll.disabled = agents && !agentRankingsData;
+  rankingsAll.textContent = agents ? (lang === 'zh' ? '查看完整榜单 ↗' : 'See full leaderboard ↗') :
+    (lang === 'zh' ? '查看全部贡献者 ↗' : 'See all contributors ↗');
+  document.getElementById('rankings-dialog-title').textContent = agents
+    ? (lang === 'zh' ? '模型与 Harness 贡献榜' : 'Model and harness contributions')
+    : (lang === 'zh' ? '全部已核验贡献者' : 'All verified contributors');
+  document.getElementById('rankings-summary').textContent = agents
+    ? (lang === 'zh' ? '按本研究台累计首次通过的引理数排列。' : 'Ranked by all-time first accepted lemmas on this research desk.')
+    : strings.rankingsSummary(rankingsData.contributors.toLocaleString(locale), rankingsData.proofs.toLocaleString(locale));
   fillRankings(rankingsList, rows.slice(0, 6), rankingMode);
   document.getElementById('ranking-next-place').textContent = String(rows.length + 1);
-  rankingsAnnouncement.textContent = strings.rankingsCount(rows.length);
+  rankingsAnnouncement.textContent = agents ? (lang === 'zh' ? '共 ' + rows.length + ' 项。' : rows.length + ' entries.') : strings.rankingsCount(rows.length);
+  if (rankingsDialog.open) renderFullRankings();
 }
 
 function selectRankingMode(mode) {
@@ -598,31 +714,32 @@ function selectRankingMode(mode) {
   renderRankingMode();
 }
 
-function renderRankings(rankings) {
+function renderRankings(rankings, agentRankings) {
   if (!rankings) {
     if (!rankingsData) rankingsList.replaceChildren(element('li', strings.rankingsUnavailable, 'ranking-empty'));
     return;
   }
-  const snapshot = JSON.stringify(rankings);
+  const snapshot = JSON.stringify({rankings, agentRankings});
   if (rankingsSnapshot === snapshot) {
     updateRankingTimes();
     return;
   }
   rankingsData = rankings;
+  agentRankingsData = agentRankings || null;
   rankingsSnapshot = snapshot;
   rankingsAll.disabled = false;
   document.getElementById('rankings-summary').textContent = strings.rankingsSummary(
     rankings.contributors.toLocaleString(locale), rankings.proofs.toLocaleString(locale)
   );
   selectRankingMode(rankingMode ?? (rankings.hour.length ? 'hour' : 'all_time'));
-  if (rankingsDialog.open) fillRankings(rankingsFullList, rankings.all_time, 'all_time');
+
 }
 
 for (const button of rankingsModes) {
   button.addEventListener('click', () => selectRankingMode(button.dataset.rankingMode));
 }
 rankingsAll.addEventListener('click', () => {
-  fillRankings(rankingsFullList, rankingsData.all_time, 'all_time');
+  renderFullRankings();
   rankingsDialog.showModal();
 });
 
@@ -632,7 +749,7 @@ function showDeskNotice(message) {
 }
 
 function renderDesk(desk) {
-  renderRankings(desk?.rankings);
+  renderRankings(desk?.rankings, desk?.agent_rankings);
   if (!desk) {
     showDeskNotice(lastDesk === null ? strings.deskUnavailable : strings.stale);
     if (lastDesk === null) {
@@ -678,6 +795,60 @@ function renderResults(results) {
   });
   verificationLog.replaceChildren(...(entries.length ? entries : [element('p', strings.noRecords, 'empty-state')]));
 }
+
+// Each cursor identifies a boundary in this desk's immutable (run, attempt) order.
+const recordStarts = [''];
+const recordPrev = document.getElementById('record-prev');
+const recordNext = document.getElementById('record-next');
+const recordRetry = document.getElementById('record-retry');
+const recordPage = document.getElementById('record-page');
+let currentRecordPage = 0;
+let nextRecordCursor = null;
+let recordPending = false;
+let recordVisible = false;
+let retryPage = 0;
+let latestRecordKey = '';
+let displayedHead = null;
+
+async function loadRecordPage(index) {
+  if (recordPending) return;
+  const cursor = recordStarts[index];
+  const requestedHead = latestRecordKey;
+  recordPending = true;
+  recordPrev.disabled = recordNext.disabled = true;
+  recordRetry.hidden = true;
+  try {
+    const response = await fetch('api/records' + (cursor ? '?before=' + encodeURIComponent(cursor) : ''),
+      {signal: AbortSignal.timeout(15000)});
+    if (!response.ok) throw new Error('Records unavailable');
+    const page = await response.json();
+    renderResults(page.results);
+    currentRecordPage = index;
+    recordStarts.length = index + 1;
+    nextRecordCursor = page.next;
+    if (!index) displayedHead = requestedHead;
+    recordPage.textContent = lang === 'zh' ? '第 ' + (index + 1) + ' 页' : 'Page ' + (index + 1);
+  } catch {
+    retryPage = index;
+    recordRetry.hidden = false;
+    recordPage.textContent = strings.failure;
+  } finally {
+    recordPending = false;
+    recordPrev.disabled = currentRecordPage === 0;
+    recordNext.disabled = !nextRecordCursor;
+  }
+}
+
+recordPrev.addEventListener('click', () => loadRecordPage(currentRecordPage - 1));
+recordNext.addEventListener('click', () => {
+  recordStarts[currentRecordPage + 1] = nextRecordCursor;
+  loadRecordPage(currentRecordPage + 1);
+});
+recordRetry.addEventListener('click', () => loadRecordPage(retryPage));
+new IntersectionObserver(([entry]) => {
+  recordVisible = entry.isIntersecting;
+  if (recordVisible && !currentRecordPage && displayedHead !== latestRecordKey) loadRecordPage(0);
+}, {rootMargin: '200px'}).observe(verificationLog);
 
 lemmaSearch.addEventListener('input', () => setPage(1));
 lemmaState.addEventListener('change', () => setPage(1));
@@ -731,18 +902,101 @@ function renderExponent(record) {
   notice.textContent = '';
 }
 
+const researchMap = (() => {
+const root=document.getElementById('research-map-v4');
+let tracks=[],gaps=[],T=new Map(),G=new Map(),groups=new Map(),upstream=new Map(),initialized=false;
+const endpointId='L-goldbach-binary-pointwise-positivity';
+const tr=(zh,en)=>lang==='zh'?zh:en;
+const groupOf=g=>topic?('program-'+programOf(g)):(g.track||(g.id===endpointId?'__goal':'__core'));
+const goalTitle=()=>topic?document.getElementById('page-title').textContent.trim():tr('强哥德巴赫猜想','Strong Goldbach conjecture');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const palette={foundation:'#a0c6a1',grh:'#9ab9d7',correlation:'#ebc883',exceptions:'#c4acd7'},roleName=lang==='zh'?{target:'待突破',conditional:'条件归约',lemma:'支撑引理',endpoint:'终点'}:{target:'Open target',conditional:'Conditional',lemma:'Supporting lemma',endpoint:'Target'},distance=new Map();
+function dist(id,seen=new Set()){if(distance.has(id))return distance.get(id);if(seen.has(id))throw Error('路线存在循环依赖');let next=new Set(seen);next.add(id);let out=T.get(id).feeds||[],d=out.length?1+Math.max(...out.map(x=>dist(x,next))):0;distance.set(id,d);return d}
+function closure(id,next){let set=new Set(),stack=[id];while(stack.length){let x=stack.pop();if(set.has(x))continue;set.add(x);for(const v of next(x))stack.push(v)}return set}
+let focus=null,hover=null,onlyChain=false,compact=true,horizontal=false,field=null,globalFilter='all',savedScrollY=0,currentTrack=null,observer=null,pendingGap=null,expanded=null,localFilter='all',localSearch='',indexMode=false;
+function status(g){if(g.refutation)return 'progress';if(g.proved)return 'verified';if(assigned(g))return 'progress';if(g.claims_closed)return 'closed';return g.role==='target'?'target':'available'}
+function statusText(g){if(status(g)==='closed')return closedClaimLabel();if(g.refutation){const v=g.refutation.status==='verified';return lang==='zh'?(v?'已证伪':'反证待核验'):(v?'Refuted':'Refutation under review')}return ({verified:lang==='zh'?'已核查':'Verified',progress:lang==='zh'?'处理中':'In progress',target:lang==='zh'?'待突破':'Open target',available:lang==='zh'?'可领取':'Available'})[status(g)]}
+function stateOK(g,v){return v==='all'||(v==='open'&&status(g)!=='verified')||(v==='target'&&g.role==='target'&&status(g)!=='verified')}
+function counts(gs){let verified=gs.filter(g=>status(g)==='verified').length;return {verified,progress:gs.filter(g=>status(g)==='progress').length,available:gs.filter(g=>status(g)==='available').length,target:gs.filter(g=>status(g)==='target').length,pct:gs.length?100*verified/gs.length:0}}
+function program(t){let c={};for(const g of groups.get(t.id))c[g.program]=(c[g.program]||0)+1;return Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||'foundation'}
+function trackSets(id){return {up:closure(id,x=>upstream.get(x)||[]),down:closure(id,x=>T.get(x)?.feeds||[])}}
+function scrollRestore(){requestAnimationFrame(()=>{window.scrollTo({top:savedScrollY,behavior:'instant'});requestAnimationFrame(drawBoard)})}
+function enterTrack(id,gap){if(!groups.has(id))return;if(!currentTrack)savedScrollY=window.scrollY;pendingGap=gap||null;if(location.hash===`#route=${encodeURIComponent(id)}`){renderRoute();return}location.hash=`route=${encodeURIComponent(id)}`}
+function goOverview(){if(currentTrack)location.hash='';else renderRoute()}
+function renderRoute(){let wasTrack=currentTrack;let m=location.hash.match(/^#route=(.+)$/),id=m?decodeURIComponent(m[1]):null;if(id&&!groups.has(id))id=null;currentTrack=id;observer?.disconnect();if(id){localFilter='all';localSearch='';indexMode=false;expanded=pendingGap;pendingGap=null;root.querySelector('#map-overview').hidden=true;root.querySelector('#map-route-view').hidden=false;root.querySelector('#map-focusbar').hidden=true;renderTrack();root.scrollIntoView({block:'start',behavior:'instant'});if(expanded)requestAnimationFrame(()=>root.querySelector(`[data-item="${CSS.escape(expanded)}"]`)?.scrollIntoView({block:'center'}));}else{root.querySelector('#map-overview').hidden=false;root.querySelector('#map-route-view').hidden=true;root.querySelector('#map-route-view').innerHTML='';renderBoard();renderFocus();if(wasTrack)scrollRestore()}}
+function renderBoard(){let html='';let active=focus||hover,sets=active?trackSets(active):null,board=root.querySelector('#rm-board');board.classList.toggle('horizontal',horizontal);board.classList.toggle('chain-horizontal',horizontal&&onlyChain&&!!focus);for(let d=0;d<=Math.max(...distance.values());d++){let list=tracks.filter(t=>dist(t.id)===d).filter(t=>!onlyChain||!focus||sets.up.has(t.id)||sets.down.has(t.id)).filter(t=>groups.get(t.id).some(g=>(!field||(topic?programOf(g)===field:g.program===field))&&stateOK(g,globalFilter))).sort((a,b)=>Number(b.id.startsWith('frontier-'))-Number(a.id.startsWith('frontier-'))||a.title[lang].localeCompare(b.title[lang],locale));if(!list.length)continue;html+=`<section class="level" data-depth="${d}"><h3>${lang==='zh'?'第 '+(d+1)+' 层':'Layer '+(d+1)} · ${d===0?tr('直接汇合','Direct convergence'):`${tr('依赖深度','Dependency depth')} ${d}`}</h3><div class="grid count-${Math.min(list.length,3)}">`;for(const t of list){let gs=groups.get(t.id),c=counts(gs),n=gs.filter(g=>g.role==='target'&&status(g)!=='verified').length,muted=active&&!sets.up.has(t.id)&&!sets.down.has(t.id);html+=`<div class="track ${compact?'compact':'full'} ${focus===t.id?'selected':''} ${muted?'dim':''}" data-track="${esc(t.id)}" style="--c:${palette[program(t)]}" tabindex="0" role="button" aria-label="${tr('聚焦','Focus')} ${esc(t.title[lang])}" title="${esc(t.description[lang])}"><div class="track-title"><strong>${esc(t.title[lang])}</strong>${n?`<span class="target-badge">${lang==='zh'?`${n} 待突破`:`${n} open target${n===1?'':'s'}`}</span>`:''}</div>${compact?'':`<span class="description">${esc(t.description[lang])}</span>`}<span class="stats">${tr('已核查 / 全部','Verified / Total')}：${c.verified} / ${gs.length}</span><span class="bar"><i style="width:${c.pct}%"></i></span><button class="enter-small" data-enter="${esc(t.id)}">${tr('查看','View')} ${gs.length} ${tr('条引理','lemmas')} →</button></div>`}html+='</div></section>'}root.querySelector('#rm-levels').innerHTML=html;requestAnimationFrame(drawBoard)}
+function drawBoard(){if(currentTrack)return;let board=root.querySelector('#rm-board'),svg=root.querySelector('#rm-board-svg');if(!board||!svg)return;let rect=board.getBoundingClientRect();svg.setAttribute('viewBox',`0 0 ${rect.width} ${rect.height}`);let active=focus||hover,sets=active?trackSets(active):null,center=el=>{let r=el.getBoundingClientRect();return{x:r.left-rect.left+r.width/2,y:r.top-rect.top+r.height/2,left:r.left-rect.left,right:r.right-rect.left,top:r.top-rect.top,bottom:r.bottom-rect.top}},nodes=new Map([...board.querySelectorAll('[data-track]')].map(x=>[x.dataset.track,center(x)])),goal=center(root.querySelector('#rm-goal')),paths='';function edge(a,b,gold,op,from,to){let d;if(horizontal){let dx=Math.max(20,(b.left-a.right)*.5);d=`M ${a.right} ${a.y} C ${a.right+dx} ${a.y}, ${b.left-dx} ${b.y}, ${b.left} ${b.y}`}else{let dy=Math.max(25,(a.top-b.bottom)*.5);d=`M ${a.x} ${a.top} C ${a.x} ${a.top-dy}, ${b.x} ${b.bottom+dy}, ${b.x} ${b.bottom}`}paths+=`<path data-from="${esc(from)}" data-to="${esc(to)}" d="${d}" stroke="${gold?'#e3c580':'#a0c6a1'}" stroke-width="${active?2:0.85}" stroke-opacity="${op}" fill="none" marker-end="url(#arr-${gold?'gold':'mint'})"/>`}
+for(const t of tracks){if(!nodes.has(t.id))continue;for(const f of t.feeds||[]){if(!nodes.has(f))continue;let down=active&&sets.down.has(t.id)&&sets.down.has(f),up=active&&sets.up.has(t.id)&&sets.up.has(f);if(!active||down||up)edge(nodes.get(t.id),nodes.get(f),!!down,active?.95:.2,t.id,f)}if(!(t.feeds||[]).length&&(!active||sets.down.has(t.id)))edge(nodes.get(t.id),goal,!!active,active?.95:.2,t.id,'goal')}
+for(const el of board.querySelectorAll('[data-track]')){el.classList.toggle('selected',focus===el.dataset.track);el.classList.toggle('dim',!!active&&!sets.up.has(el.dataset.track)&&!sets.down.has(el.dataset.track))}svg.innerHTML=`<defs><marker id="arr-gold" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#e3c580"/></marker><marker id="arr-mint" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#a0c6a1"/></marker></defs>${paths}`}
+function setFocus(id){let rebuild=onlyChain;focus=id;hover=null;if(!id)onlyChain=false;if(rebuild)renderBoard();else drawBoard();renderFocus()}
+function renderFocus(){let bar=root.querySelector('#map-focusbar');bar.hidden=!focus||!!currentTrack;if(bar.hidden)return;let t=T.get(focus),up=upstream.get(focus)||[],down=t.feeds||[],buttons=a=>a.map(x=>`<button class="flow-focus" data-focus="${esc(x)}">${esc(T.get(x).title[lang])}</button>`).join('、'),summarize=a=>a.length>3?`${buttons(a.slice(0,3))} ${lang==='zh'?'等 '+a.length+' 条':'and '+a.length+' total'}`:buttons(a);bar.innerHTML=`<div class="focus-inner"><div class="focus-copy"><div class="flowline">${up.length?`${summarize(up)} → `:''}<b>${lang==='zh'?`【当前：${esc(t.title[lang])}】`:`Current: ${esc(t.title[lang])}`}</b>${down.length?` → ${summarize(down)}`:''} → ${esc(goalTitle())}</div></div><div class="focus-actions"><button id="chain-toggle" aria-pressed="${onlyChain}">${onlyChain?tr('显示全部路线','Show all routes'):tr('仅看相关链路','Related routes only')}</button><button data-enter="${esc(focus)}" class="primary">${tr('查看','View')} ${groups.get(focus).length} ${tr('条引理','lemmas')} →</button><button id="clear-focus">${tr('取消聚焦','Clear focus')}</button></div></div>`}
+function gapGraph(id){let all=groups.get(id),set=new Set(all.map(g=>g.id)),parents=new Map(all.map(g=>[g.id,[]])),depths=new Map();for(const g of all)for(const d of g.depends_on||[])if(set.has(d))parents.get(d).push(g.id);function depth(g,seen=new Set()){if(depths.has(g.id))return depths.get(g.id);if(seen.has(g.id))return 0;let ns=new Set(seen);ns.add(g.id);let ds=(g.depends_on||[]).filter(x=>set.has(x)).map(x=>depth(G.get(x),ns));let n=ds.length?1+Math.max(...ds):0;depths.set(g.id,n);return n}all.forEach(g=>depth(g));return {set,parents,depths,hasEdges:all.some(g=>(g.depends_on||[]).some(x=>set.has(x)))}}
+function gapRelated(id,graph){if(!id)return new Set();let a=closure(id,x=>(G.get(x)?.depends_on||[]).filter(d=>graph.set.has(d))),b=closure(id,x=>graph.parents.get(x)||[]);return new Set([...a,...b])}
+function ordered(id,graph){let rank=g=>g.role==='target'?2:g.role==='conditional'?1:0;return [...groups.get(id)].sort((a,b)=>rank(b)-rank(a)||graph.depths.get(b.id)-graph.depths.get(a.id)||a.id.localeCompare(b.id,undefined,{numeric:true}))}
+function details(g){let parents=gaps.filter(x=>(x.depends_on||[]).includes(g.id)),links=ids=>ids.length?ids.map(id=>`<button data-gap-jump="${esc(id)}">${esc(id)}</button>`).join(' · '):tr('无','None');return `<div class="detail-inline"><div class="detail-title"><b>${esc(g.id)}</b><span class="state ${status(g)}">● ${statusText(g)}</span><span class="role">${esc(roleName[g.role]||tr('命题','Statement'))}</span></div><p>${esc(g.plain_statement?.[lang]||tr('无中文说明','No statement available'))}</p>${g.brief?.[lang]?`<p class="muted">${esc(g.brief[lang])}</p>`:''}<div class="related"><b>${tr('上游依赖：','Prerequisites: ')}</b>${links(g.depends_on||[])}<br><b>${tr('下游影响：','Supports: ')}</b>${links(parents.map(x=>x.id))}</div><p class="muted">${tr('文件路径：','File: ')}${esc(g.file||tr('未指定','Not specified'))}</p><b>${tr('Lean 表述','Lean statement')}</b>${g.latest?runLink(g.latest,strings.latestRun).outerHTML:''}${g.refutation?` <a href="${repository}/pull/${Number(g.refutation.pr)}">${statusText(g)} · PR #${Number(g.refutation.pr)}</a>`:''}${g.source && /^https?:\/\//i.test(g.source)?` <a href="${esc(g.source)}" rel="noopener noreferrer">${tr('阅读来源 ↗','Read source ↗')}</a>`:''}<pre>${esc(g.statement||tr('未提供','Not provided'))}</pre></div>`}
+function renderTrack(){if(!currentTrack)return;observer?.disconnect();let id=currentTrack,t=T.get(id),all=groups.get(id),graph=gapGraph(id),ct=counts(all),q=localSearch.trim().toLowerCase(),related=gapRelated(expanded,graph),shown=ordered(id,graph).filter(g=>stateOK(g,localFilter==='chain'?'all':localFilter)&&(!q||`${g.id} ${g.plain_statement?.[lang]||''} ${g.brief?.[lang]||''}`.toLowerCase().includes(q))&&(localFilter!=='chain'||related.has(g.id))),toButton=(x)=>`<button data-nav="${esc(x)}">${esc(T.get(x).title[lang])}</button>`,feed=t?.feeds||[],ups=upstream.get(id)||[];
+let toolbar=[['all',`${tr('全部','All')} ${all.length}`],['open',tr('仅未通过','Not verified')],['target',tr('仅待突破','Open targets')],...(graph.hasEdges?[['chain',tr('仅依赖链','Dependency chain')]]:[])].map(([k,v])=>`<button data-filter="${k}" class="${localFilter===k?'active':''}">${v}</button>`).join('');
+let rows=shown.map(g=>`<div class="item" data-item="${esc(g.id)}"><div class="row ${expanded===g.id?'active':''}" data-row="${esc(g.id)}" role="button" tabindex="0" aria-expanded="${expanded===g.id}"><span class="lemma-id" title="${esc(g.id)}">${esc(g.id.replace(/^L-goldbach-/,''))}</span><span class="state ${status(g)}">● ${statusText(g)}</span><span class="role">${esc(roleName[g.role]||tr('命题','Statement'))}</span><span class="statement">${esc(g.plain_statement?.[lang]||g.brief?.[lang]||tr('无中文说明','No statement available'))}</span><span class="expand">${expanded===g.id?tr('收起 ▴','Collapse ▴'):tr('展开 ▾','Expand ▾')}</span></div>${expanded===g.id?details(g):''}</div>`).join('');
+let chips=shown.map(g=>`<button data-index="${esc(g.id)}" class="index-chip ${status(g)} ${expanded===g.id?'selected':''}" title="${esc(g.id)}"><span>●</span> ${esc(g.id.replace(/^L-goldbach-/,''))}</button>`).join('');
+root.querySelector('#map-route-view').innerHTML=`<div class="backbar"><button id="back-overview">← ${tr('返回研究地图','Back to research map')}</button><span class="breadcrumb">${esc(goalTitle())} / ${t?`${lang==='zh'?'第 '+(dist(id)+1)+' 层':'Layer '+(dist(id)+1)} / ${esc(t.title[lang])}`:(id==='__goal'?tr('主命题','Main statement'):tr('核心主干引理','Core lemmas'))}</span></div><div class="track-header"><div class="header-info"><h1>${esc(t?.title[lang]||(id==='__goal'?tr('强哥德巴赫猜想','Strong Goldbach conjecture'):tr('核心主干引理','Core lemmas')))} <small>（${all.length} ${tr('条','lemmas')}）</small></h1><p>${esc(t?.description[lang]||(id==='__goal'?tr('查看主命题的正式表述。','Read the formal statement.'):tr('支撑研究地图的早期核心命题。','Early statements supporting the research map.')))}</p><div class="track-flows">${ups.length?`<span>${tr('上游路线：','Upstream: ')}</span>${ups.map(toButton).join(' ')}`:''}${feed.length?`<span>${tr('流向：','Feeds into: ')}</span>${feed.map(toButton).join(' ')}`:(t?`<span>${tr('流向：','Feeds into: ')}${esc(goalTitle())} →</span>`:'')}</div></div><div class="header-progress"><span>${tr('已核查 / 全部','Verified / Total')}</span><b>${ct.verified} / ${all.length}</b><div class="bar"><i style="width:${ct.pct}%"></i></div><div class="legend"><span class="verified">● ${tr('已核查','Verified')} ${ct.verified}</span><span class="target">● ${tr('待突破','Open targets')} ${ct.target}</span><span class="available">● ${tr('未通过','Not verified')} ${ct.progress+ct.available}</span></div></div></div><section class="track-content"><div class="toolbar">${toolbar}<input id="track-search" type="search" placeholder="${tr('路线内搜索编号或中文命题','Search ID or statement')}" value="${esc(localSearch)}"><div class="segments"><button data-view="list" class="${!indexMode?'active':''}">${tr('列表','List')}</button><button data-view="index" ${graph.hasEdges?`disabled title="${tr('该路线包含依赖关系','This route has dependencies')}"`:''} class="${indexMode?'active':''}">${tr('紧凑索引','Compact index')}</button></div></div><div class="countline">${tr('共','Total')} ${all.length} · ${tr('当前显示','shown')} ${shown.length}</div>${shown.length?(indexMode&&!graph.hasEdges?`<div class="index-area">${expanded&&shown.some(g=>g.id===expanded)?`<div class="index-detail" data-item="${esc(expanded)}">${details(G.get(expanded))}</div>`:''}<div class="index-grid">${chips}</div></div>`:`<div class="proof ${graph.hasEdges?'has-rail':''}">${graph.hasEdges?`<div class="rail"><svg aria-label="${tr('路线内真实依赖关系','Dependencies within this route')}"></svg></div>`:''}<div class="listing"><div class="table-head"><span>${tr('引理编号','Lemma ID')}</span><span>${tr('状态','Status')}</span><span>${tr('角色','Role')}</span><span>${tr('引理陈述','Statement')}</span><span>${tr('操作','Action')}</span></div><div class="items">${rows}</div></div></div>`):`<p class="empty">${tr('没有匹配的命题；请选择全部或清除搜索。','No matches; clear the search or filters.')}</p>`}</section>`;
+if(graph.hasEdges&&shown.length&&!indexMode){let container=root.querySelector('.items');observer=new ResizeObserver(()=>drawRail(id));observer.observe(container);for(const item of container.children)observer.observe(item);requestAnimationFrame(()=>drawRail(id))}}
+function drawRail(id){if(id!==currentTrack)return;let rail=root.querySelector('.rail'),svg=rail?.querySelector('svg'),container=root.querySelector('.items');if(!svg||!container)return;let graph=gapGraph(id),items=[...container.querySelectorAll('.item')],map=new Map(items.map((it,i)=>{let row=it.querySelector('.row').getBoundingClientRect(),base=rail.getBoundingClientRect();return [it.dataset.item,{y:row.top+row.height/2-base.top,index:i}]})),w=rail.clientWidth,h=container.offsetHeight+(container.getBoundingClientRect().top-rail.getBoundingClientRect().top),orderedAll=ordered(id,graph),assigned=new Map(),xFor=i=>12+(w-28)*i/4;for(const [i,g] of orderedAll.entries()){let ps=graph.parents.get(g.id)||[],parent=ps.find(x=>assigned.has(x)),siblings=parent?(G.get(parent).depends_on||[]).filter(x=>graph.set.has(x)):[],j=siblings.indexOf(g.id);assigned.set(g.id,g.role==='target'||g.role==='endpoint'?4:parent&&j===0?assigned.get(parent):(graph.depths.get(g.id)+Math.max(0,j)+i)%4)}for(const [id,n] of map)n.x=xFor(assigned.get(id));let rel=gapRelated(expanded,graph),paths='';for(const [key,n] of map)for(const dep of G.get(key).depends_on||[])if(map.has(dep)){let a=map.get(dep),b=n,mid=(a.y+b.y)/2,on=rel.has(key)&&rel.has(dep);paths+=`<path data-from="${esc(dep)}" data-to="${esc(key)}" d="M${a.x} ${a.y} L${a.x} ${mid} C${a.x} ${mid-10},${b.x} ${mid+10},${b.x} ${mid} L${b.x} ${b.y}" stroke="${on?'#e3c580':'#a4b9a5'}" stroke-opacity="${expanded&&!on?.2:.75}" stroke-width="${on?2:1}" fill="none"/>`}
+for(const [key,n] of map){let target=G.get(key).role==='target';if(key===expanded)paths+=`<path d="M${n.x} ${n.y}H${w}" stroke="#e3c580" stroke-width="1.5"/>`;if(target)paths+=`<circle cx="${n.x}" cy="${n.y}" r="8" fill="#183126" stroke="#e3c580"/><path d="M${n.x} ${n.y-9}v-8 m-3 3 3-3 3 3" fill="none" stroke="#e3c580"/>`;paths+=`<circle data-node="${esc(key)}" cx="${n.x}" cy="${n.y}" r="${target?5:3.5}" fill="${rel.has(key)||target?'#e3c580':'#d8e5d8'}"/>`}rail.style.height=h+'px';svg.style.height=h+'px';svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.innerHTML=paths}
+function expandGap(id){expanded=expanded===id?null:id;let old=window.scrollY;renderTrack();window.scrollTo({top:old,behavior:'instant'})}
+function jumpGap(id){let g=G.get(id);if(!g)return;let tid=groupOf(g);if(currentTrack!==tid){enterTrack(tid,id);return}localFilter='all';localSearch='';expanded=id;renderTrack();requestAnimationFrame(()=>root.querySelector(`[data-item="${CSS.escape(id)}"]`)?.scrollIntoView({block:'center',behavior:'smooth'}))}
+root.addEventListener('click',e=>{let el=e.target.closest('button,[data-track],[data-row],[data-goal]');if(!el){if(e.target.closest('#rm-board')&&focus)setFocus(null);return}if(el.dataset.goal&&!topic){enterTrack('__goal',endpointId);return}if(el.dataset.direction){horizontal=el.dataset.direction==='horizontal';root.querySelectorAll('[data-direction]').forEach(x=>x.classList.toggle('active',x===el));renderBoard();return}if(el.dataset.cards){compact=el.dataset.cards==='compact';root.querySelectorAll('[data-cards]').forEach(x=>x.classList.toggle('active',x===el));renderBoard();return}if(el.dataset.focus){setFocus(el.dataset.focus);return}if(el.id==='clear-focus'){setFocus(null);return}if(el.id==='chain-toggle'){onlyChain=!onlyChain;renderBoard();renderFocus();return}if(el.id==='back-overview'){goOverview();return}if(el.dataset.enter){enterTrack(el.dataset.enter);return}if(el.dataset.nav){enterTrack(el.dataset.nav);return}if(el.dataset.gapJump){jumpGap(el.dataset.gapJump);return}if(el.dataset.resultGap){enterTrack(groupOf(G.get(el.dataset.resultGap)),el.dataset.resultGap);return}if(el.dataset.resultTrack){enterTrack(el.dataset.resultTrack);return}if(el.dataset.program)return;if(el.dataset.filter){localFilter=el.dataset.filter;if(localFilter==='chain'&&!expanded){let g=ordered(currentTrack,gapGraph(currentTrack)).find(g=>g.role==='target')||groups.get(currentTrack)[0];expanded=g.id}renderTrack();return}if(el.dataset.view){indexMode=el.dataset.view==='index';renderTrack();return}if(el.dataset.index){expandGap(el.dataset.index);return}if(el.dataset.row){expandGap(el.dataset.row);return}if(el.dataset.track){setFocus(el.dataset.track);return}});
+root.addEventListener('dblclick',e=>{let el=e.target.closest('[data-track]');if(el&&!e.target.closest('button'))enterTrack(el.dataset.track)});root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-track],[data-row],[data-goal]')){e.preventDefault();e.target.click()}});
+root.addEventListener('pointerover',e=>{let card=e.target.closest('[data-track]');if(card&&!focus&&hover!==card.dataset.track){hover=card.dataset.track;drawBoard()}});root.addEventListener('pointerout',e=>{let card=e.target.closest('[data-track]');if(card&&!focus&&!card.contains(e.relatedTarget)){hover=null;drawBoard()}});
+root.querySelector('#rm-state').addEventListener('change',e=>{globalFilter=e.target.value;renderBoard()});root.addEventListener('input',e=>{if(e.target.id==='track-search'){let val=e.target.value,pos=e.target.selectionStart;localSearch=val;renderTrack();let input=root.querySelector('#track-search');input.focus();input.setSelectionRange(pos,pos)}if(e.target.id==='rm-search'){let q=e.target.value.trim().toLowerCase(),box=root.querySelector('#rm-search-results');if(!q){box.innerHTML='';return}let ts=tracks.filter(t=>`${t.id} ${t.title[lang]}`.toLowerCase().includes(q)),gs=gaps.filter(g=>`${g.id} ${g.plain_statement?.[lang]||''}`.toLowerCase().includes(q));box.innerHTML=`<span>${ts.length} ${tr('条路线','routes')} · ${gs.length} ${tr('条命题匹配','matching lemmas')}:</span>`+ts.map(t=>`<button data-result-track="${esc(t.id)}">${esc(t.title[lang])}</button>`).join(' ')+gs.map(g=>`<button data-result-gap="${esc(g.id)}">${esc(g.id)}</button>`).join(' ')}});
+window.addEventListener('hashchange',()=>{if(initialized)renderRoute()});window.addEventListener('resize',()=>{if(currentTrack)drawRail(currentTrack);else drawBoard()});
+
+
+function update(data, incoming){
+ const prevTrack=currentTrack,active=document.activeElement,activeId=active?.id,activeRow=active?.dataset?.row,activeIndex=active?.dataset?.index,activeFilter=active?.dataset?.filter,caret=active?.selectionStart,scrollY=window.scrollY;
+ gaps=data;tracks=incoming.length?incoming:[...programs.keys()].map(key=>({id:'program-'+key,title:{zh:programName(key),en:programName(key)},description:{zh:'查看该研究方向的命题。',en:'Explore statements in this research area.'},feeds:[]}));
+ T=new Map(tracks.map(t=>[t.id,t]));G=new Map(gaps.map(g=>[g.id,g]));groups=new Map(tracks.map(t=>[t.id,[]]));groups.set('__core',[]);groups.set('__goal',[]);
+ for(const g of gaps){let key=groupOf(g);if(!groups.has(key))key='__core';groups.get(key).push(g)}
+ upstream=new Map(tracks.map(t=>[t.id,[]]));for(const t of tracks)for(const f of t.feeds||[])upstream.get(f)?.push(t.id);distance.clear();tracks.forEach(t=>dist(t.id));
+ const goal=root.querySelector('#rm-goal');goal.innerHTML=topic?`<strong>${esc(goalTitle())}</strong>`:`<strong>${esc(tr('强哥德巴赫猜想 · 每个偶数 n ≥ 4 可表为 p + q','Strong Goldbach conjecture · every even n ≥ 4 is p + q'))}</strong><small>${tracks.length} ${tr('条研究路线','research routes')} · ${gaps.length} ${tr('条命题','statements')}</small><button class="goal-core" data-enter="__core">${tr('核心主干引理','Core lemmas')} (${groups.get('__core').length}) ↗</button>`;
+ if(!topic){goal.dataset.goal='1';goal.tabIndex=0}else{delete goal.dataset.goal;goal.removeAttribute('tabindex')}
+ if(!initialized){initialized=true;renderRoute();return}
+ if(prevTrack&&groups.has(prevTrack)){currentTrack=prevTrack;renderTrack();{const selector=activeId?'#'+CSS.escape(activeId):activeRow?`[data-row="${CSS.escape(activeRow)}"]`:activeIndex?`[data-index="${CSS.escape(activeIndex)}"]`:activeFilter?`[data-filter="${CSS.escape(activeFilter)}"]`:null;const e=selector&&root.querySelector(selector);if(e){e.focus({preventScroll:true});if(typeof caret==='number'&&e.setSelectionRange)e.setSelectionRange(caret,caret)}}}else{renderBoard();renderFocus()}
+ window.scrollTo({top:scrollY,behavior:'instant'});
+}
+return {update,setProgram(value){field=value;if(initialized&&!currentTrack)renderBoard()}};
+})();
+
+let cachedTracks = [];
+let cachedRevision;
+
 async function loadStatus() {
   if (loading || document.hidden) return;
   loading = true;
   const request = new AbortController();
   const timeout = window.setTimeout(() => request.abort(), 30000);
   try {
-    const response = await fetch('api/status?view=web-gzip', {
+    const incremental = lastGaps !== null && Boolean(cachedRevision);
+    const response = await fetch(incremental ? 'api/status?view=board-delta-gzip' : 'api/status?view=board-gzip', {
       headers: { Accept: 'application/json' },
       signal: request.signal,
     });
     if (!response.ok) throw new Error('Status request failed');
-    const { gaps, counts, results, desk, lpf_record } = await response.json();
+    const data = await response.json();
+    const { counts, results, desk, lpf_record, catalogue_revision } = data;
+    if (incremental && cachedRevision !== catalogue_revision) {
+      window.location.reload();
+      return;
+    }
+    const delta = incremental ? new Map(data.gaps.map(gap => [gap.id, gap])) : null;
+    const gaps = delta ? publishedGaps.map(gap => ({ ...gap, ...delta.get(gap.id) })) : data.gaps;
+    const tracks = incremental ? cachedTracks : (data.tracks || []);
+    cachedTracks = tracks;
+    cachedRevision = catalogue_revision;
+    const pageRevision = document.querySelector('meta[name="catalogue-revision"]')?.content;
+    if (pageRevision && catalogue_revision && pageRevision !== catalogue_revision) {
+      window.location.reload();
+      return;
+    }
     renderExponent(lpf_record);
     assignments = desk?.assignments ?? assignments;
     document.getElementById('hero-available').textContent = gaps.filter(canClaim).length;
@@ -750,9 +1004,12 @@ async function loadStatus() {
     document.getElementById('news-verdict').textContent = latest
       ? latest.lemma_id + ' · ' + (latest.verdict === 'ACCEPTED' ? strings.accepted : strings.rejected)
       : strings.noRecords;
-    const gapsSnapshot = JSON.stringify([gaps, assignments]);
+    const gapsSnapshot = JSON.stringify([gaps, tracks, assignments]);
     if (lastGaps !== gapsSnapshot) {
       publishedGaps = gaps;
+      gapRoutes = new Map(gaps.map(gap => [gap.id, programOf(gap)]));
+      updateRouteActivity(gaps);
+      researchMap.update(gaps, tracks);
       renderProgramCounts();
       renderLemmas();
       if (lemmaDialog.open) renderGapDetail();
@@ -774,7 +1031,8 @@ async function loadStatus() {
       document.getElementById('proof-progress-caption').textContent =
         counts.accepted.toLocaleString(locale) + ' / ' + counts.published.toLocaleString(locale);
     }
-    renderResults(results);
+    latestRecordKey = latest ? latest.run_id + '/' + latest.run_attempt : '';
+    if (recordVisible && !currentRecordPage && displayedHead !== latestRecordKey) loadRecordPage(0);
     renderDesk(desk);
   } catch {
     renderExponent(null);
@@ -782,11 +1040,6 @@ async function loadStatus() {
       lemmaRows.replaceChildren(messageRow(strings.failure, anchor(strings.published, repository + '/blob/main/research/' + (topic ? 'problems.json' : 'gaps.json'))));
       lemmaSearch.disabled = true;
       lemmaState.disabled = true;
-    }
-    if (lastResults === null) {
-      const error = element('p', strings.failure, 'empty-state');
-      error.append(anchor(strings.actions, repository + '/actions'));
-      verificationLog.replaceChildren(error);
     }
     renderDesk(null);
   } finally {
@@ -867,5 +1120,5 @@ if (participation) {
 }
 
 loadStatus();
-window.setInterval(loadStatus, exponentPanel ? 15000 : 45000);
+window.setInterval(loadStatus, 120000);
 document.addEventListener('visibilitychange', loadStatus);

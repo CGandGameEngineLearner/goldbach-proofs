@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-finite-phase-abel-two-ranges",
+  "file": "lean/PEqualNP/Outside/L_goldbach_finite_phase_abel_two_ranges.lean",
+  "module": "PEqualNP.Outside.L_goldbach_finite_phase_abel_two_ranges",
+  "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let D := fun (q a n : ℕ) => (∑ k ∈ (Finset.range (n+1)).filter (fun k => k%q=a%q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/(Nat.totient q:ℝ); let F := fun (q a n : ℕ) (β : ℝ) => ∑ k ∈ Finset.Icc 1 n, (((if k%q=a%q then ArithmeticFunction.vonMangoldt k else 0) - 1/(Nat.totient q:ℝ):ℝ):ℂ)*E ((k:ℝ)*β); let J := fun (q a l u : ℕ) (β : ℝ) => 2 * Real.pi * |β| * (∑ m ∈ Finset.Ico l u, |D q a m|); ∀ (q a n t : ℕ) (β : ℝ), 0 < q → t ≤ n → ‖F q a n β‖ ≤ |D q a n| + J q a 0 t β + J q a t n β",
+  "plain_statement": {
+    "zh": "新路线 · 裙边与显式算术输入 · SI-8006 · 把相位误差分配给两个不相交的前缀区间",
+    "en": "New route · Skirts and explicit arithmetic inputs · SI-8006 · Split a phased progression error between two disjoint prefix ranges"
+  },
+  "brief": {
+    "zh": "在闭右端点的 Ψ 上做离散分部求和。相邻相位的弦长至多 2π|β|，D(0)=0。将 0≤m<t 和 t≤m<n 分别交给 SI-8004、SI-8005。",
+    "en": "Sum by parts with Ψ inclusive on the right. Adjacent phases differ by at most 2π|β| and D(0)=0. Send 0≤m<t and t≤m<n to SI-8004 and SI-8005 respectively."
+  },
+  "source": "https://www.goldbach.tech/?lemma=L-goldbach-finite-fixed-progression-unit-error",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "explicit-skirt-inputs",
+  "role": "lemma",
+  "depends_on": [
+    "L-goldbach-abel-total-variation"
+  ]
+}

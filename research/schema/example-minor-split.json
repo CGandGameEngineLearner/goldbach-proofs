@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "problem": "goldbach",
+  "base_revision": "f62d5df8b7f211e4c7ad3fa8d1f00c49e59f437c",
+  "request_id": "example-minor-split-01",
+  "parent": {
+    "id": "L-goldbach-minor-bilinear-split",
+    "statement_sha256": "b5a59d6c7d2803c5fadad6a3a2e70ec5f00246cc3e046e1ccaf3091856c7c98f"
+  },
+  "motivation": {
+    "zh": "单独核验积分之前的点态展开。",
+    "en": "Check the pointwise expansion before integration."
+  },
+  "tasks": [
+    {
+      "id": "L-goldbach-example-square-expansion",
+      "statement": "∀ a b : ℂ, (a+b)^2=a^2+2*a*b+b^2",
+      "plain_statement": {
+        "zh": "两个复数之和的平方展开。",
+        "en": "Expand the square of a sum of complex numbers."
+      },
+      "brief": {
+        "zh": "用环恒等式验证，再代入高低频谱。",
+        "en": "Use a ring identity before substituting the two spectra."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/ROADMAP.md",
+      "program": "correlation",
+      "parallel": true,
+      "assumptions": [],
+      "depends_on": [],
+      "route": "minor-truncation"
+    }
+  ],
+  "links": [
+    {
+      "kind": "input",
+      "inputs": [
+        "L-goldbach-example-square-expansion"
+      ],
+      "output": "L-goldbach-minor-bilinear-split",
+      "explanation": {
+        "zh": "给出被积函数的代数部分；仍需证明可积性和积分线性。",
+        "en": "Provides the algebraic step; integrability and linearity remain."
+      }
+    }
+  ],
+  "route_note": {
+    "zh": "先证明点态恒等式，再处理积分。",
+    "en": "Establish the pointwise identity before integration."
+  }
+}

@@ -1,0 +1,20 @@
+version: 2.1
+
+jobs:
+  lean-catalogue:
+    docker:
+      - image: cimg/base:2025.11
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: Check the catalogue and elaborate all statements
+          command: bash .circleci/check-catalogue.sh
+
+workflows:
+  catalogue-pilot:
+    jobs:
+      - lean-catalogue:
+          filters:
+            branches:
+              only: main

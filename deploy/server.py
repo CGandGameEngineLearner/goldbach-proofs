@@ -8,12 +8,14 @@ import re
 import sqlite3
 import ssl
 import time
+from collections import OrderedDict
 from contextlib import closing
 from datetime import datetime
+from functools import lru_cache
 from html import escape
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from threading import BoundedSemaphore
+from threading import BoundedSemaphore, Lock
 from urllib.parse import parse_qs, urlsplit
 
 from desk import Desk, QUEUE_BATCH
@@ -25,16 +27,21 @@ import sponsors
 SPONSOR_UPLOAD_SLOT = BoundedSemaphore(1)
 
 ROOT = Path(__file__).resolve().parent
+SITE_REVISION_FILE = ROOT / ".site-revision"
+SITE_REVISION = SITE_REVISION_FILE.read_text(encoding="ascii").strip() if SITE_REVISION_FILE.is_file() else None
 CREDS = Path(os.environ["CREDENTIALS_DIRECTORY"])
 SECRET = (CREDS / "webhook").read_bytes().strip()
 DB = Path(os.environ["STATE_DIRECTORY"]) / "verdicts.sqlite3"
 oauth_credential = CREDS / "zhihu-oauth"
 ZHIHU = ZhihuOAuth(DB.with_name("contributor-links.sqlite3"), json.loads(oauth_credential.read_bytes())
                    if oauth_credential.is_file() else None)
-GOLDBACH_CATALOGUE = json.loads((ROOT / "gaps.json").read_text(encoding="utf-8"))
+LIVE_RELEASE = Path("/opt/goldbach-catalogues/current")
+CATALOGUE_ROOT = LIVE_RELEASE.resolve(strict=True) if LIVE_RELEASE.is_symlink() else ROOT
+RELEASE_SHA = (CATALOGUE_ROOT / "revision").read_text() if CATALOGUE_ROOT != ROOT else None
+GOLDBACH_CATALOGUE = json.loads((CATALOGUE_ROOT / "gaps.json").read_text(encoding="utf-8"))
 GAPS = GOLDBACH_CATALOGUE["gaps"]
 DESK = Desk(DB, GAPS, SECRET)
-PROBLEM_FILE = ROOT / "problems.json"
+PROBLEM_FILE = CATALOGUE_ROOT / "problems.json"
 PROBLEMS = json.loads(PROBLEM_FILE.read_text(encoding="utf-8")) if PROBLEM_FILE.exists() else {}
 PUBLIC_SITE = "https://www.movan.tech/goldbach/"
 problem_ids = set(gap["id"] for gap in GAPS)
@@ -67,6 +74,7 @@ with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn, conn:
     conn.execute("INSERT OR IGNORE INTO page_views VALUES ('live', 0)")
 
 ASSETS = {
+    "/agent-icons.png": "image/png",
     "/core-team-signup.png": "image/png",
     sponsors.STYLE: "text/css",
     sponsors.SCRIPT: "text/javascript",
@@ -81,6 +89,11 @@ ASSETS = {
     "/join-zh.txt": "text/plain",
 }
 
+@lru_cache(maxsize=16)
+def compressed_asset(content):
+    return gzip.compress(content, compresslevel=6, mtime=0)
+
+
 DISCUSSION_EXPIRES = datetime.fromisoformat("2026-12-02T00:00:00+08:00")
 
 
@@ -89,14 +102,14 @@ def discussion_widget(lang, prefix):
         return ""
     zh = lang == "zh"
     label = "扫码进群 讨论进度" if zh else "Join WeChat group"
-    name = "知乎 AI4S 讨论组（哥猜）" if zh else "Zhihu AI4S Goldbach discussion group"
+    name = "知乎 AI4S 讨论组（哥猜 3 群）" if zh else "Zhihu AI4S Goldbach discussion group 3"
     instructions = "微信扫码，讨论研究进度" if zh else "Scan in WeChat to discuss research progress"
     cutoff = DISCUSSION_EXPIRES.date()
     validity = f"{cutoff.month} 月 {cutoff.day} 日前有效" if zh else f"Valid before {cutoff:%Y-%m-%d} (UTC+8)"
-    alt = "知乎 AI4S 讨论组（哥猜）微信群二维码" if zh else "WeChat QR code for the Zhihu AI4S Goldbach discussion group"
+    alt = "知乎 AI4S 讨论组（哥猜 3 群）微信群二维码" if zh else "WeChat QR code for the Zhihu AI4S Goldbach discussion group 3"
     return f"""<details class="discussion-widget" id="wechat-discussion" name="research-qr" aria-label="{name}"><summary><img class="wechat-mark" src="{prefix}wechat.svg" width="34" height="34" alt="">{label}<span aria-hidden="true"></span></summary>
 <div class="discussion-body"><strong>{name}</strong><p>{instructions}</p>
-<div class="discussion-code"><img src="{prefix}discussion-qr.png" alt="{alt}" width="360" height="544"></div>
+<div class="discussion-code"><img loading="lazy" src="{prefix}discussion-qr.png" alt="{alt}" width="800" height="1198"></div>
 <small>{validity}</small></div></details>"""
 
 
@@ -117,7 +130,7 @@ def core_team_signup(lang, prefix):
 <summary>{title}<span aria-hidden="true"></span></summary>
 <div class="core-team-signup"><p>{intro}</p>
 <p><strong>{research}</strong> {development}</p>
-<figure><img src="{prefix}core-team-signup.png" width="176" height="176" alt="{caption}">
+<figure><img loading="lazy" src="{prefix}core-team-signup.png" width="176" height="176" alt="{caption}">
 <figcaption>{caption}</figcaption></figure></div></details>"""
 
 
@@ -145,7 +158,7 @@ def site_dock(lang, prefix):
 <script src="{prefix}discussion.js" defer></script><script src="{prefix}presence.js" defer></script>"""
 
 
-def research_status(desk=DESK):
+def research_status(desk=DESK, *, compact=False, board=False):
     db = desk.db_path
     results = []
     latest = {}
@@ -157,17 +170,19 @@ def research_status(desk=DESK):
             if desk is DESKS.get("quadratic-primes"):
                 extra["lpf_record"] = exponent_record(desk, conn)
             if conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='verdicts'").fetchone():
+                projection = "json_object('lemma_id', json_extract(CAST(body AS TEXT), '$.lemma_id'), 'verdict', json_extract(CAST(body AS TEXT), '$.verdict'), 'run_id', run_id, 'run_attempt', attempt)" if board else "body"
                 results = [json.loads(body) for (body,) in conn.execute(
-                    "SELECT body FROM verdicts ORDER BY run_id DESC, attempt DESC LIMIT 12"
+                    f"SELECT {projection} FROM verdicts ORDER BY run_id DESC, attempt DESC LIMIT ?", (1 if board else 12,)
                 )]
-                rows = conn.execute("""
+                payload = "json_remove(CAST(v.body AS TEXT), '$.manifest')" if compact else "v.body"
+                rows = conn.execute(f"""
                     WITH runs AS (
-                        SELECT body, run_id, attempt,
+                        SELECT run_id, attempt,
                                json_extract(CAST(body AS TEXT), '$.lemma_id') AS lemma,
                                json_extract(CAST(body AS TEXT), '$.verdict') AS verdict
                         FROM verdicts
                     ), ranked AS (
-                        SELECT body, lemma,
+                        SELECT run_id, attempt, lemma,
                                ROW_NUMBER() OVER (
                                    PARTITION BY lemma ORDER BY run_id DESC, attempt DESC
                                ) AS position,
@@ -175,16 +190,20 @@ def research_status(desk=DESK):
                                COUNT(*) OVER (PARTITION BY lemma) AS attempts
                         FROM runs
                     )
-                    SELECT lemma, body, proved, attempts FROM ranked WHERE position = 1
+                    SELECT lemma, {payload}, proved, attempts FROM ranked
+                    JOIN verdicts AS v USING (run_id, attempt) WHERE position = 1
                 """)
                 for lemma, body, proved, count in rows:
                     latest[lemma] = (json.loads(body), bool(proved))
                     attempts += count
+                if not board:
+                    desk.annotate_verdicts(results, conn)
+                desk.annotate_verdicts([result for result, _ in latest.values()], conn)
 
     gaps = []
     for gap in desk.gaps.values():
         result, proved = latest.get(gap["id"], (None, False))
-        gaps.append({**gap, "latest": result, "proved": proved})
+        gaps.append({**gap, "latest": result, "proved": proved, "route_id": TASK_ROUTE[gap["id"]]})
     accepted = sum(gap["proved"] for gap in gaps)
     desk_status = desk.public_status()
     rankings = desk_status["rankings"]
@@ -196,7 +215,9 @@ def research_status(desk=DESK):
             row["zhihu"] = profile
     return {
         **extra,
+        "catalogue_revision": RELEASE_SHA,
         "gaps": gaps,
+        **({"tracks": GOLDBACH_CATALOGUE.get("tracks", [])} if desk is DESK else {}),
         "results": results,
         "desk": desk_status,
         "counts": {
@@ -207,33 +228,152 @@ def research_status(desk=DESK):
         },
     }
 
-def goldbach_task_routes(lang):
-    zh = lang == "zh"
-    heading = "按子命题领取" if zh else "Choose a proof task"
-    note = ("对每个偶数证明素数卷积为正，就是最终猜想。下列工作线可分别领取。"
-            "主弧下界与次弧逐点抵消仍待证明；即使两者成立，阈值以下也要单独覆盖。" if zh else
-            "Prime convolution positivity at every even target is the final conjecture. "
-            "The major-arc floor and pointwise minor-arc cancellation are research targets. "
-            "Even with both, values below the resulting threshold need separate coverage.")
-    tracks = GOLDBACH_CATALOGUE.get("tracks", [])
-    names = {track["id"]: track["title"][lang] for track in tracks}
-    sections = []
-    for track in tracks:
-        links = []
+# Bound the memory used by concurrent full-history renders across all problem desks.
+STATUS_BUILD = BoundedSemaphore(1)
+WEB_SNAPSHOTS = {}
+
+
+RAW_STATUS_CLIENTS = OrderedDict()
+RAW_STATUS_LOCK = Lock()
+
+
+def raw_status_allowed(ip):
+    now = time.monotonic()
+    with RAW_STATUS_LOCK:
+        credit, last = RAW_STATUS_CLIENTS.pop(ip, (4, now))
+        credit = min(4, credit + (now - last) / 30)
+        allowed = credit >= 1
+        RAW_STATUS_CLIENTS[ip] = (credit - int(allowed), now)
+        if len(RAW_STATUS_CLIENTS) > 4096:
+            RAW_STATUS_CLIENTS.popitem(last=False)
+        return allowed
+
+
+def accepts_gzip(value):
+    for item in value.split(","):
+        coding, _, params = item.strip().lower().partition(";")
+        if coding.strip() == "gzip":
+            return not params or bool(re.fullmatch(r"\s*q\s*=\s*(?:1(?:\.0{0,3})?|0\.\d{0,2}[1-9]\d{0,2})\s*", params))
+    return False
+
+
+def status_body(desk, web_view, board=False, compress=False, delta=False):
+    key = (desk, web_view, board, delta)
+    cached = WEB_SNAPSHOTS.get(key) if compress else None
+    if cached and cached[0] > time.monotonic():
+        return cached[1]
+    with STATUS_BUILD:
+        if compress:
+            cached = WEB_SNAPSHOTS.get(key)
+            if cached and cached[0] > time.monotonic():
+                return cached[1]
+        status = research_status(desk, compact=web_view, board=board)
+        if delta:
+            status["gaps"] = [{k: gap[k] for k in ("id", "latest", "proved")} for gap in status["gaps"]]
+            status.pop("tracks", None)
+        body = json.dumps(status, ensure_ascii=False, separators=(",", ":")).encode()
+        if compress:
+            body = gzip.compress(body, compresslevel=5, mtime=0)
+            WEB_SNAPSHOTS[key] = (time.monotonic() + 10, body)
+        return body
+
+
+def desk_routes(slug, lang):
+    """Read route membership from the catalogue used by the claim service."""
+    if slug != "goldbach":
+        routes = [(stage.get("route_id") or stage.get("route_source") or f"stage-{i+1}", *stage[lang],
+                   {task["id"]: task[lang] for task in stage["tasks"]}, [])
+                  for i, stage in enumerate(PROBLEMS[slug]["roadmap"])]
+    else:
+        groups = {}
         for gap in GAPS:
-            if gap.get("track") != track["id"]:
-                continue
-            key = escape(gap["id"])
+            groups.setdefault(gap.get("track"), {})[gap["id"]] = gap["plain_statement"][lang]
+        tracks = GOLDBACH_CATALOGUE.get("tracks", [])
+        titles = {t["id"]: t["title"][lang] for t in tracks}
+        routes = [(t["id"], titles[t["id"]], t["description"][lang], groups.get(t["id"], {}),
+                   [(key, titles[key]) for key in t["feeds"]]) for t in tracks]
+    listed = {task for _, _, _, tasks, _ in routes for task in tasks}
+    remaining = {key: gap["plain_statement"][lang] for key, gap in DESKS[slug].gaps.items() if key not in listed}
+    if remaining:
+        routes.append(("unclassified", "未分路线的命题" if lang == "zh" else "Unassigned tasks",
+                       "", remaining, []))
+    return routes
+
+
+# Shared by the map, claim receipt and public verification records.
+TASK_ROUTE = {task: key for slug in DESKS for key, _, _, tasks, _ in desk_routes(slug, "en") for task in tasks}
+
+def route_refutations(slug, tasks, lang):
+    labels = {"pending": ("反证待核验", "Refutation under review"), "verified": ("已证伪", "Refuted")}
+    notes = []
+    for task in tasks:
+        ref = DESKS[slug].gaps[task].get("refutation")
+        if ref:
+            notes.append(f'{labels[ref["status"]][lang != "zh"]} · #{int(ref["pr"])}')
+    return f'<small class="route-meta">{escape(" · ".join(notes))}</small>' if notes else ""
+
+
+def route_filters(slug, lang):
+    return "".join(
+        f'<button type="button" class="map-program-button" data-program="{escape(key)}" aria-pressed="false">'
+        f'<strong class="program-name">{escape(title)}</strong>{route_refutations(slug, tasks, lang)}<span class="program-count">{len(tasks)} '
+        f'{"题" if lang == "zh" else "tasks"}</span></button>'
+        for key, title, _, tasks, _ in desk_routes(slug, lang)
+    )
+
+
+def goldbach_program_filters(lang):
+    zh = lang == "zh"
+    programs = (
+        ("foundation", "素数权重" if zh else "Prime weights"),
+        ("grh", "黎曼猜想与素数分布" if zh else "GRH & prime distribution"),
+        ("correlation", "二元加法相关" if zh else "Binary correlations"),
+        ("exceptions", "例外集合" if zh else "Exceptional sets"),
+    )
+    return "".join(
+        f'<button type="button" class="map-program-button" data-program="{key}" aria-pressed="false">'
+        f'<strong class="program-name">{title}</strong><span class="program-count">—</span></button>'
+        for key, title in programs
+    )
+
+
+def route_panels(slug, lang):
+    zh = lang == "zh"
+    sections = []
+    for key, title, description, tasks, feeds in desk_routes(slug, lang):
+        links = []
+        for task, label in tasks.items():
+            role = DESKS[slug].gaps[task].get("role")
             prefix = {"target": "待突破 · " if zh else "Research target · ",
-                      "conditional": "条件归约 · " if zh else "Conditional · "}.get(gap.get("role"), "")
-            links.append(f'<a href="?lang={lang}&amp;lemma={key}#roadmap" data-roadmap-task="{key}">'
-                         f'{prefix}{escape(gap["plain_statement"][lang])}</a>')
-        uses = " · ".join(f'<a href="#track-{key}">{escape(names[key])}</a>' for key in track["feeds"])
-        next_steps = f'<p>{"用于" if zh else "Feeds into"}　{uses}</p>' if uses else ""
-        sections.append(f'<details id="track-{track["id"]}"><summary>{escape(names[track["id"]])} ({len(links)})</summary>'
-                        f'<p>{escape(track["description"][lang])}</p>{next_steps}<div class="roadmap-tasks">'
-                        f'{"".join(links)}</div></details>')
-    return f'<div class="goldbach-tracks"><h3>{heading}</h3><p>{note}</p>{"".join(sections)}</div>'
+                      "conditional": "条件归约 · " if zh else "Conditional · "}.get(role, "")
+            ident = escape(task)
+            links.append(f'<a href="?lang={lang}&amp;lemma={ident}#roadmap" data-roadmap-task="{ident}">'
+                         f'{prefix}{escape(label)}</a>')
+        targets = " · ".join(f'<a href="#track-{escape(k)}">{escape(v)}</a>' for k, v in feeds)
+        following = f'<p>{"用于" if zh else "Feeds into"}　{targets}</p>' if targets else ""
+        sections.append(f'<details class="route-panel" id="track-{escape(key)}"><summary>'
+                        f'<strong>{escape(title)}</strong>{route_refutations(slug, tasks, lang)}<span class="route-meta">{len(tasks)} '
+                        f'{"题" if zh else "tasks"}<span data-route-status></span></span></summary>'
+                        f'<p>{escape(description)}</p>{following}<div class="roadmap-tasks">{"".join(links)}</div></details>')
+    return '<div class="goldbach-tracks"><h3>' + ("按子命题领取" if zh else "Choose a proof task") + '</h3>' + "".join(sections) + '</div>'
+
+
+def goldbach_roadmap_page(page, lang):
+    # Catalogue order sets the two featured routes; the map contains the full catalogue.
+    if RELEASE_SHA:
+        page = page.replace("</head>", f'<meta name="catalogue-revision" content="{escape(RELEASE_SHA)}"></head>', 1)
+    featured = GOLDBACH_CATALOGUE.get("tracks", [])[:2]
+    stages = []
+    for track in featured:
+        key = escape(track["id"])
+        title = escape(track["title"][lang])
+        summary = escape(track["description"][lang])
+        count = sum(g.get("track") == track["id"] for g in GAPS)
+        tasks = f"{count} 个子命题" if lang == "zh" else f"{count} proof tasks"
+        stages.append(f'<li><h3>{title}</h3><p>{summary}</p><a href="#route={key}">{tasks}</a></li>')
+    overview = '<ul class="roadmap topic-roadmap">' + "".join(stages) + '</ul>'
+    return page.replace("<!-- catalogue filters -->", goldbach_program_filters(lang)).replace(
+        "<!-- catalogue roadmap -->", overview)
 
 
 def problem_page(page, slug, lang):
@@ -310,29 +450,11 @@ def problem_page(page, slug, lang):
     page = re.sub(r'<aside class="method-note">.*?</aside>',
                   lambda _: f'<aside class="method-note"><h2>{note_title}</h2><p>{note_body}</p>{references}</aside>',
                   page, count=1, flags=re.S)
-    def program_card(match):
-        key = match[2]
-        if key not in translations:
-            return ""
-        text = re.sub(r'(<strong class="program-name">).*?(</strong>)',
-                      lambda m: m[1] + translations[key] + m[2], match[0])
-        return re.sub(r'<span class="program-description">.*?</span>', '', text)
-    page = re.sub(r'<button type="button" class="map-program-button" (data-program="([^"]+)").*?</button>',
-                  program_card, page, flags=re.S)
-    def roadmap_stage(step):
-        heading, body = step[lang]
-        links = "".join(
-            f'<a href="?lang={lang}&amp;lemma={escape(task["id"])}#roadmap" '
-            f'data-roadmap-task="{escape(task["id"])}">{escape(task[lang])}</a>'
-            for task in step.get("tasks", [])
-        )
-        return (f'<li><h3>{escape(heading)}</h3><p>{escape(body)}</p>'
-                f'<div class="roadmap-tasks">{links}</div></li>')
-
-    stages = "".join(roadmap_stage(step) for step in data.get("roadmap", []))
+    page = page.replace("<!-- catalogue filters -->", route_filters(slug, lang))
+    stages = route_panels(slug, lang)
     page = re.sub(r'<section class="section road-section" id="roadmap".*?</section>',
                   lambda _: f'<section class="section road-section" id="roadmap"><div class="section-heading"><div>'
-                  f'<h2>{translations["road"]}</h2></div></div><ol class="roadmap topic-roadmap">{stages}</ol></section>',
+                  f'<h2>{translations["road"]}</h2></div></div>{stages}</section>',
                   page, count=1, flags=re.S)
     url = PUBLIC_SITE + "problems/" + slug + "/join" + ("-zh" if zh else "") + ".txt"
     prompt = (f"阅读 {url}，按说明领取一条任务，提交 Lean 证明并跟踪核验。" if zh else
@@ -344,15 +466,72 @@ def problem_page(page, slug, lang):
 def problem_card(slug, data, lang):
     zh = lang == "zh"
     try:
-        verified, published, available = DESKS[slug].progress()
+        verified, published, available, active = DESKS[slug].progress_snapshot()
     except sqlite3.Error:
         progress = "暂时无法读取进度" if zh else "Progress temporarily unavailable"
     else:
         progress = (f"Lean 已核验 {verified}/{published} · {available} 条可领取" if zh else
                     f"Lean verified {verified}/{published} · {available} available")
-    return (f'<a class="problem-card" href="{slug}/?lang={lang}"><span class="problem-formula">{escape(data["formula"])}</span>'
+        running = [title for _, title, _, tasks, _ in desk_routes(slug, lang) if active.intersection(tasks)]
+        activity = ("进行中 · " if zh else "In progress · ") + ("、" if zh else ", ").join(running) if running else (
+            "当前无活跃路线" if zh else "No active routes")
+        progress += f'<span class="desk-running">{escape(activity)}</span>'
+    url = "../" if slug == "goldbach" else slug + "/"
+    return (f'<a class="problem-card" href="{url}?lang={lang}#roadmap"><span class="problem-formula">{escape(data["formula"])}</span>'
             f'<h2>{escape(data["title"][lang])}</h2><p>{escape(data["question"][lang])}</p>'
             f'<p class="problem-progress">{progress}</p></a>')
+
+
+TWIN_PRIMES_SLUG = "twin-primes"
+TWIN_PRIMES_FORMULA = "p, p + 2"
+TWIN_PRIMES_COPY = {
+    "zh": (
+        "孪生素数猜想",
+        "是否有无穷多对相差 2 的素数？",
+        "任务筹备中",
+        "返回猜想目录",
+        "历史进展",
+        "例如 (3, 5)、(11, 13) 和 (17, 19) 都是孪生素数。",
+        "陈景润证明，有无穷多个素数 p，使 p + 2 是至多两个素数的乘积（按重数计）。猜想要求其中无穷多个 p + 2 本身是素数。",
+        "张益唐于 2013 年证明，有无穷多对相邻素数的间隔小于 7000 万。孪生素数猜想要求间隔恰好为 2 的情形出现无穷多次。",
+        "拟议路线将研究 Levent 的 GRH 证明中使用的方法组合及其自然推广能否处理固定移位 2 的素数对。",
+        "查看研究任务拆分提案",
+    ),
+    "en": (
+        "Twin prime conjecture",
+        "Are there infinitely many pairs of primes that differ by 2?",
+        "Tasks in preparation",
+        "Back to research problems",
+        "Historical results",
+        "Examples include (3, 5), (11, 13), and (17, 19).",
+        "Chen Jingrun proved that infinitely many primes p have p + 2 equal to a product of at most two primes, counted with multiplicity. The conjecture asks whether p + 2 itself is prime for infinitely many such p.",
+        "In 2013, Yitang Zhang proved that infinitely many consecutive prime pairs have a gap below 70 million. The twin prime conjecture asks whether the gap is exactly 2 infinitely often.",
+        "The proposed research will examine whether the methods used in Levent’s GRH proof and their natural extensions can handle prime pairs at the fixed shift 2.",
+        "View the proposed research tasks",
+    ),
+}
+
+
+def twin_primes_page(lang):
+    title, question, status, back, history, examples, chen, zhang, route, proposal = TWIN_PRIMES_COPY[lang]
+    other_lang, other_label = ("en", "English") if lang == "zh" else ("zh", "简体中文")
+    chen_label = "陈景润原论文" if lang == "zh" else "Chen’s paper"
+    zhang_label = "张益唐原论文" if lang == "zh" else "Zhang’s paper"
+    return f"""<!doctype html>
+<html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title><link rel="icon" type="image/svg+xml" sizes="any" href="../../goldbach-icon.svg">
+<link rel="stylesheet" href="../../site.css"></head>
+<body><header class="masthead"><div class="shell masthead-inner"><a class="brand" href="../?lang={lang}">{back}</a>
+<a class="locale" href="?lang={other_lang}">{other_label}</a></div></header>
+<main class="shell problem-directory">
+<span class="problem-formula">{TWIN_PRIMES_FORMULA}</span><h1>{title}</h1>
+<p>{question} {examples}</p>
+<section><h2>{history}</h2>
+<p>{chen} <a href="https://doi.org/10.1142/9789812776600_0021">{chen_label}</a></p>
+<p>{zhang} <a href="https://doi.org/10.4007/annals.2014.179.3.7">{zhang_label}</a></p></section>
+<section><h2>{status}</h2><p>{route}</p>
+<p><a href="https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2388">{proposal}</a></p></section>
+</main>{site_dock(lang, "../../")}</body></html>"""
 
 
 def directory_page(lang):
@@ -362,7 +541,15 @@ def directory_page(lang):
     platform = "数学猜想协作平台" if zh else "Open Conjecture Platform"
     intro = ("数学家可以担任研究管理员，制定路线、拆分引理和审阅命题。选一道感兴趣的猜想，把参与提示词交给自己的 Agent，就可以从一条引理开始。" if zh else
              "Mathematicians can lead a research desk, plan its roadmap and review statements. Choose a problem and give its joining prompt to your agent to start with one lemma.")
-    cards = "\n".join(problem_card(slug, data, lang) for slug, data in PROBLEMS.items())
+    main = {"title": {"zh": "强哥德巴赫猜想", "en": "Strong Goldbach conjecture"},
+            "question": {"zh": "每个大于 2 的偶数都是两个素数之和吗？", "en": "Is every even integer above two a sum of two primes?"},
+            "formula": "2n = p + q"}
+    cards = "\n".join(problem_card(slug, data, lang) for slug, data in {"goldbach": main, **PROBLEMS}.items())
+    if TWIN_PRIMES_SLUG not in PROBLEMS:
+        title, question, status, *_ = TWIN_PRIMES_COPY[lang]
+        cards += (f'<a class="problem-card" href="{TWIN_PRIMES_SLUG}/?lang={lang}">'
+                  f'<span class="problem-formula">{TWIN_PRIMES_FORMULA}</span>'
+                  f'<h2>{title}</h2><p>{question}</p><p class="problem-progress">{status}</p></a>')
     return f"""<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{heading} · {platform}</title><link rel="icon" type="image/svg+xml" sizes="any" href="../goldbach-icon.svg"><link rel="stylesheet" href="../site.css"></head>
@@ -496,7 +683,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def reply(self, status, body, content_type="application/json", language=None, encoding=None):
+    def reply(self, status, body, content_type="application/json", language=None, encoding=None, static=False, cache=None, etag=None, vary=False, retry_after=None):
         if status == 200 and self.command == "GET" and content_type == "text/html":
             try:
                 with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn, conn:
@@ -512,16 +699,30 @@ class Handler(BaseHTTPRequestHandler):
         if content_type == "application/json" or content_type.startswith("text/"):
             content_type += "; charset=utf-8"
         self.send_header("Content-Type", content_type)
+        if static or vary:
+            self.send_header("Vary", "Accept-Encoding")
+        if etag:
+            self.send_header("ETag", etag)
+        if retry_after:
+            self.send_header("Retry-After", str(retry_after))
         if encoding:
             self.send_header("Content-Encoding", encoding)
-        self.send_header("Cache-Control", "no-store")
+        self.send_header("Cache-Control", cache or ("public, max-age=300" if static else "no-store"))
         self.send_header("X-Content-Type-Options", "nosniff")
-        self.send_header("Content-Length", str(len(body)))
+        if status != 304:
+            self.send_header("Content-Length", str(len(body)))
         if language:
             self.send_header("Content-Language", language)
         self.end_headers()
         if self.command != "HEAD":
             self.wfile.write(body)
+
+    def public_conditional(self, body, content_type="application/json", encoding=None, cache="public, max-age=10", vary=False):
+        etag = '"' + hashlib.sha256(body).hexdigest() + '"'
+        validators = {item.strip().removeprefix("W/") for item in self.headers.get("If-None-Match", "").split(",")}
+        if etag in validators or "*" in validators:
+            return self.reply(304, b"", content_type, cache=cache, etag=etag, vary=vary)
+        return self.reply(200, body, content_type, encoding=encoding, cache=cache, etag=etag, vary=vary)
 
     def client_ip(self):
         peer = ipaddress.ip_address(self.client_address[0])
@@ -565,10 +766,12 @@ class Handler(BaseHTTPRequestHandler):
         logo = re.fullmatch(r"/sponsors/logo/([1-9][0-9]{0,15})\.png", url.path)
         if logo:
             image = sponsors.public_logo(ZHIHU.db, logo[1])
-            return self.reply(200, image, "image/png") if image else self.reply(404, b'{}')
+            return self.public_conditional(image, "image/png", cache="public, max-age=3600") if image else self.reply(404, b'{}')
         if url.path == ZHIHU_PATH or url.path.startswith(ZHIHU_PATH + "/"):
             return self.zhihu_request(url.path, url.query)
-        if url.path == "/problems" or url.path.removeprefix("/problems/") in PROBLEMS:
+        twin_primes_path = f"/problems/{TWIN_PRIMES_SLUG}"
+        if (url.path in {"/problems", twin_primes_path}
+                or url.path.removeprefix("/problems/") in PROBLEMS):
             self.send_response(308)
             suffix = "?" + url.query if url.query else ""
             self.send_header("Location", url.path.rsplit("/", 1)[-1] + "/" + suffix)
@@ -580,26 +783,90 @@ class Handler(BaseHTTPRequestHandler):
             directory = directory_page(lang).replace("</main>", "</main>" + sponsors.wall(ZHIHU.db,lang,"../"), 1)
             directory = directory.replace('</a></div></header>', '</a>'+ZHIHU.account_link(self.headers,lang)+'</div></header>',1)
             return self.reply(200, directory.encode(), "text/html", lang)
+        if url.path == twin_primes_path + "/" and TWIN_PRIMES_SLUG not in PROBLEMS:
+            lang = self.language(url)
+            return self.reply(200, twin_primes_page(lang).encode(), "text/html", lang)
         desk, path, slug = self.scope(url.path)
         if desk is None:
             return self.reply(404, b'{}')
         if path == "/health":
-            return self.reply(200, b'{"status":"ok"}')
+            return self.reply(200, json.dumps({
+                "status": "ok", "catalogue_revision": RELEASE_SHA,
+                "site_revision": SITE_REVISION,
+            }).encode())
+        if path == "/research-changes":
+            zh = self.language(url) == "zh"
+            title = "研究路线变更记录" if zh else "Research change history"
+            entries = json.loads((CATALOGUE_ROOT / "history.json").read_bytes()) if RELEASE_SHA else []
+            repo = "https://github.com/CGandGameEngineLearner/goldbach-proofs"
+            params = parse_qs(url.query)
+            raw_end = params.get("end", [str(len(entries))])[0]
+            if not re.fullmatch(r"[0-9]{1,10}", raw_end):
+                return self.reply(400, b'{"error":"invalid page"}')
+            end = min(int(raw_end), len(entries))
+            start = max(0, end - 20)
+            nav = []
+            lang = "zh" if zh else "en"
+            if end < len(entries):
+                nav.append(f'<a href="?lang={lang}&amp;end={min(end+20,len(entries))}">{"上一页" if zh else "Previous"}</a>')
+            if start:
+                nav.append(f'<a href="?lang={lang}&amp;end={start}">{"下一页" if zh else "Next"}</a>')
+            def run_url(row):
+                run = int(row["run"])
+                if row.get("provider") == "circleci":
+                    return f"https://app.circleci.com/pipelines/github/CGandGameEngineLearner/goldbach-proofs/{run}"
+                return f"{repo}/actions/runs/{run}"
+
+            rows = "".join(
+                f'<li><time>{escape(row["at"])}</time> · <a href="{repo}/pull/{int(row["pr"])}">'
+                f'{escape(row["title"])}</a> · {escape(row["actor"])} · '
+                f'<a href="{run_url(row)}">CI</a></li>'
+                for row in reversed(entries[start:end]))
+            empty = "尚无自动发布记录。" if zh else "No automated releases yet."
+            page = (f'<!doctype html><html lang="{"zh" if zh else "en"}"><meta charset="utf-8">'
+                    f'<meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title>'
+                    f'<link rel="stylesheet" href="site.css"><main class="shell"><h1>{title}</h1>'
+                    f'{("<ol>"+rows+"</ol>") if rows else empty}<nav>{" · ".join(nav)}</nav></main></html>')
+            return self.reply(200, page.encode(), "text/html")
+        if path == "/api/records":
+            query = parse_qs(url.query, keep_blank_values=True)
+            before = query.get("before", [])
+            if query and (set(query) != {"before"} or len(before) != 1 or
+                          not re.fullmatch(r"[0-9]{1,18}-[0-9]{1,18}", before[0])):
+                return self.reply(400, b'{"error":"invalid cursor"}')
+            cursor = tuple(map(int, before[0].split("-"))) if before else ()
+            where = "WHERE (run_id, attempt) < (?, ?)" if cursor else ""
+            try:
+                with desk.transaction() as conn:
+                    rows = []
+                    if conn.execute("SELECT 1 FROM sqlite_master WHERE name='verdicts'").fetchone():
+                        rows = conn.execute(f"SELECT run_id, attempt, body FROM verdicts {where} "
+                                            "ORDER BY run_id DESC, attempt DESC LIMIT 13", cursor).fetchall()
+                    results = [json.loads(row[2]) for row in rows[:12]]
+                    desk.annotate_verdicts(results, conn)
+                following = f"{rows[11][0]}-{rows[11][1]}" if len(rows) == 13 else None
+                body = json.dumps({"results": results, "next": following}, ensure_ascii=False).encode()
+                if "gzip" in (t.strip() for t in self.headers.get("Accept-Encoding", "").lower().split(",")):
+                    return self.reply(200, gzip.compress(body, compresslevel=3), encoding="gzip")
+                return self.reply(200, body)
+            except sqlite3.Error:
+                return self.reply(503, b'{"error":"records unavailable"}')
         if path == "/api/status":
             try:
-                status = research_status(desk)
-                web_view = parse_qs(url.query).get("view") == ["web-gzip"]
-                if web_view:
-                    for gap in status["gaps"]:
-                        if gap["latest"]:
-                            gap["latest"] = {k: v for k, v in gap["latest"].items() if k != "manifest"}
-                body = json.dumps(status, ensure_ascii=False, separators=(",", ":")).encode()
+                view = parse_qs(url.query).get("view")
+                delta = view == ["board-delta-gzip"]
+                board = delta or view == ["board-gzip"]
+                web_view = board or view == ["web-gzip"]
+                compress = web_view or accepts_gzip(self.headers.get("Accept-Encoding", ""))
+                if (not compress and self.command == "GET" and not self.client_ip().is_loopback
+                        and not raw_status_allowed(self.client_ip())):
+                    return self.reply(429, b'{"error":"Use Accept-Encoding: gzip for frequent status requests"}',
+                                      vary=True, retry_after=30)
+                body = status_body(desk, web_view, board, compress=compress, delta=delta)
             except sqlite3.Error as error:
                 self.log_error("Unable to read verdicts: %s", error)
                 return self.reply(503, b'{"error":"verdicts unavailable"}')
-            if web_view:
-                return self.reply(200, gzip.compress(body, compresslevel=3), encoding="gzip")
-            return self.reply(200, body)
+            return self.public_conditional(body, encoding="gzip" if compress else None, vary=True)
         if path == "/platform-logo.svg":
             path = "/goldbach-icon.svg"
         if path in ASSETS:
@@ -640,7 +907,14 @@ class Handler(BaseHTTPRequestHandler):
                     PUBLIC_SITE + "#records", f"{PUBLIC_SITE}problems/{slug}/?lang={lang}#records"
                 )
                 content = f"{title}\n\n{introduction}\n\n{instructions}".encode()
-            return self.reply(200, content, ASSETS[path])
+            mime = ASSETS[path]
+            static = mime != "text/plain"
+            encoding = None
+            if static and mime in {"text/css", "text/javascript", "image/svg+xml"}:
+                encodings = self.headers.get("Accept-Encoding", "").lower().split(",")
+                if "gzip" in (token.strip() for token in encodings):
+                    content, encoding = compressed_asset(content), "gzip"
+            return self.reply(200, content, mime, encoding=encoding, static=static)
         if path != "/":
             return self.reply(404, b'{}')
         lang = self.language(url)
@@ -648,8 +922,7 @@ class Handler(BaseHTTPRequestHandler):
         if slug != "goldbach":
             page = problem_page(page, slug, lang)
         else:
-            page = re.sub(r'(<ol class="roadmap">.*?</ol>)',
-                          lambda match: match[0] + goldbach_task_routes(lang), page, count=1, flags=re.S)
+            page = goldbach_roadmap_page(page, lang)
         prefix = "" if slug == "goldbach" else "../../"
         page = page.replace("<!-- account -->", ZHIHU.account_link(self.headers, lang), 1)
         hero = '<section class="hero" aria-labelledby="page-title">'
@@ -677,6 +950,8 @@ class Handler(BaseHTTPRequestHandler):
                     if isinstance(gap, str):
                         desk = DESKS[GAP_DESKS.get(gap, "goldbach")]
                 status, result = desk.dispatch(path, body, self.headers, str(self.client_ip()), raw)
+                if path == "/api/desk/claim" and status == 201:
+                    result["route_id"] = TASK_ROUTE[result["gap"]["id"]]
         except (ValueError, OSError):
             return self.reply(400, b'{"error":"invalid request body"}')
         except sqlite3.Error as error:

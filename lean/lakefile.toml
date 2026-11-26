@@ -20,3 +20,16 @@ name = "CheckerSuite"
 name = "checklemma"
 root = "CheckLemma"
 supportInterpreter = true
+
+# GRH source uses the elaboration options of the upstream proof.
+[[lean_lib]]
+name = "GRHCompact"
+roots = ["PEqualNP.GRHSource"]
+moreLeanArgs = ["--tstack=400000"]
+
+[lean_lib.leanOptions]
+autoImplicit = false
+relaxedAutoImplicit = false
+maxSynthPendingDepth = 3
+pp.unicode.fun = true
+maxHeartbeats = 4000000
