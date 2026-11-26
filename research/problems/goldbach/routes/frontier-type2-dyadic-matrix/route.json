@@ -1,0 +1,15 @@
+{
+  "id": "frontier-type2-dyadic-matrix",
+  "title": {
+    "zh": "前沿二：深次弧 Vaughan 双线性 Type-II 十格点猜想矩阵",
+    "en": "Frontier 2: Ten-cell dyadic Type-II × Type-II bilinear conjecture matrix"
+  },
+  "description": {
+    "zh": "在深次弧上先无条件完成 L² Parseval 换权并消去所有初段与 Type-I 交叉项，将未知核心压缩为四段 Type-II 二分带交织出的十个双线性元胞，精准分离可攻克角格点与真正的奇偶性核心 (n^(1/3), n^(2/3)]。",
+    "en": "Unconditionally swap to Λ and eliminate all Type-I terms on deep minor arcs, compressing the open core to 10 dyadic Type-II × Type-II cells that isolate the parity core (n^(1/3), n^(2/3)]."
+  },
+  "feeds": [
+    "frontier-medium-arc-scales",
+    "arc-budget"
+  ]
+}
