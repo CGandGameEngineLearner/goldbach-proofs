@@ -11022,7 +11022,8 @@
         "source": "https://github.com/CGandGameEngineLearner/landau-fourth-problem-1.323/blob/42cd8945093d9c82379dc9193b2e5fb6c8758c78/notes/HARMAN_RECURSIVE_1_323_ANALYTIC_TRANSFER_AUDIT_2026-08-25.md",
         "program": "correlation",
         "imports": [],
-        "parallel": true
+        "parallel": true,
+        "challenge_only": true
       },
       {
         "id": "L-quadratic-primes-prime-endpoint-equivalence",
@@ -11059,7 +11060,8 @@
         "program": "correlation",
         "imports": [],
         "parallel": true,
-        "lpf_exponent": "1.323"
+        "lpf_exponent": "1.323",
+        "challenge_only": true
       },
       {
         "id": "L-quadratic-primes-lpf-first-increment",
@@ -11077,7 +11079,8 @@
         },
         "program": "correlation",
         "parallel": true,
-        "imports": []
+        "imports": [],
+        "challenge_only": true
       },
       {
         "id": "L-quadratic-primes-lpf-next",
@@ -11096,7 +11099,8 @@
         "program": "correlation",
         "imports": [],
         "parallel": true,
-        "lpf_exponent": "1.324"
+        "lpf_exponent": "1.324",
+        "challenge_only": true
       },
       {
         "id": "L-quadratic-primes-lpf-endpoint",
@@ -11115,7 +11119,8 @@
         "program": "correlation",
         "imports": [],
         "parallel": true,
-        "lpf_exponent": "2"
+        "lpf_exponent": "2",
+        "challenge_only": true
       },
       {
         "id": "L-quadratic-primes-prime-power-roots",
@@ -11219,7 +11224,8 @@
         "program": "correlation",
         "imports": [],
         "parallel": true,
-        "source": "https://arxiv.org/abs/1908.08816"
+        "source": "https://arxiv.org/abs/1908.08816",
+        "challenge_only": true
       },
       {
         "id": "L-quadratic-primes-mass-to-increment",
@@ -14459,7 +14465,8 @@
         "source": "https://www.goldbach.tech/problems/quadratic-primes/?lemma=L-quadratic-primes-middle-prime-saving#roadmap",
         "program": "correlation",
         "parallel": true,
-        "imports": []
+        "imports": [],
+        "challenge_only": true
       },
       {
         "id": "L-quadratic-primes-mid-high-recurrent",
@@ -14477,7 +14484,8 @@
         "source": "https://www.goldbach.tech/problems/quadratic-primes/?lemma=L-quadratic-primes-middle-prime-saving#roadmap",
         "program": "correlation",
         "parallel": true,
-        "imports": []
+        "imports": [],
+        "challenge_only": true
       },
       {
         "id": "L-quadratic-primes-mid-compatible",
@@ -14749,8 +14757,8 @@
         "imports": [
           "PEqualNP.Outside.L_quadratic_primes_residue_invariance"
         ],
-        "module": "Conjectures.QuadraticPrimes.ShiftedResidueInvariance",
         "file": "lean/Conjectures/QuadraticPrimes/ShiftedResidueInvariance.lean",
+        "module": "Conjectures.QuadraticPrimes.ShiftedResidueInvariance",
         "track": "high-mode-extension",
         "route_source": "high-mode-extension"
       },
@@ -15294,6 +15302,179 @@
         "route_source": "levent-factor-mass-and-sieve"
       },
       {
+        "id": "L-quadratic-primes-gauss-band-error",
+        "statement": "let block := fun x : ℕ => Finset.Ioc x (2*x); let window := fun x p : ℕ => (block x).filter (fun n => p^100000≤n^132301); let phase := fun p k (t : ℕ) => 2*Real.pi*(k : ℝ)*(t : ℝ)/(p : ℝ); let rootWave := fun q k t : ℕ => 2*Real.cos (phase q k t); let good := fun p a b r v : ℕ => p.Prime ∧ 2<p ∧ 0<a ∧ a≤b ∧ p=a^2+b^2 ∧ r<p ∧ v<b ∧ (b*r)%p=a%p ∧ (a*v)%b=1%b; let low := fun p : ℕ => (Finset.Ico 1 p).filter (fun k => min k (p-k)≤Nat.sqrt p); let amp := fun x p q t : ℕ => (∑ k ∈ low p, rootWave q (min k (p-k)) t * (∑ n ∈ window x p, Real.cos (phase p (min k (p-k)) n)) / (p : ℝ)) * Real.log p; let split := fun x : ℕ => (Finset.Ioc x ((2*x)^2+1)).filter (fun p => p.Prime ∧ p%4=1 ∧ p^100000≤(2*x)^132301); ∃ C : ℝ, 0<C ∧ ∀ x : ℕ, 4≤x → ∀ S : Finset ℕ, S⊆split x →\n  ∀ a b r v : ℕ → ℕ, (∀ p ∈ S, good p (a p) (b p) (r p) (v p)) →\n  |∑ p ∈ S, (amp x p p (r p) - amp x p (b p) (v p))| ≤\n    C * (x : ℝ)^(132301/200000 : ℝ) * (Real.log (2*(x : ℝ)))^2",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0091 · 给两个原中段素数带统一的次线性替换预算",
+          "en": "New route · Levent GRH and natural extensions · QP-0091 · Give a uniform sublinear replacement budget for either original middle prime band"
+        },
+        "brief": {
+          "zh": "每个 p 将 k 和 p−k 配对，至多 2⌊√p⌋ 项。把 4π/√p·log p 累加至 (2x)^(132301/100000)。模型对 p−k 仍用模 p 配对后的 k；冻结式的 amp 以 min(k,p−k) 统一选择该代表。",
+          "en": "Pair k with p−k for each p, with at most 2⌊√p⌋ terms. Sum 4π log p/√p up to (2x)^(132301/100000). Both amplitudes use the paired representative min(k,p−k), including in the smaller modulus."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2487",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-gauss-mode-error",
+          "L-quadratic-primes-gauss-split-representation",
+          "L-quadratic-primes-levent-conjugate-frequency"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.GaussBandError",
+        "file": "lean/Conjectures/QuadraticPrimes/GaussBandError.lean",
+        "track": "levent-gaussian-root-phases",
+        "route_source": "levent-gaussian-root-phases"
+      },
+      {
+        "id": "L-quadratic-primes-gauss-inverse-completion",
+        "statement": "∀ (b : ℕ) [NeZero b] (k : ZMod b) (w : ZMod b → ℂ),\n  let S := fun j : ZMod b =>\n    ∑ a : (ZMod b)ˣ, ZMod.stdAddChar (j*(a : ZMod b)+k*(↑(a⁻¹) : ZMod b));\n  (∑ a : (ZMod b)ˣ, w (a : ZMod b) * ZMod.stdAddChar (k*(↑(a⁻¹) : ZMod b))) =\n    (∑ j : ZMod b, ZMod.dft w j * S j)/(b : ℂ) ∧\n  (∑ j : ZMod b, ‖S j‖^2) = (b : ℝ)*(Nat.totient b : ℝ)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0093 · 完全化任意实际权的逆元和并确定完整二阶矩",
+          "en": "New route · Levent GRH and natural extensions · QP-0093 · Complete the inverse sum for an arbitrary actual weight and compute the full second moment"
+        },
+        "brief": {
+          "zh": "用负号约定的 DFT 逆变换得到正 j 相位，再按单位的标准代表做完全正交。w 可同时携带 p=a²+b² 的素性、动态窗和对数权。",
+          "en": "Use the inverse transform for the negative-sign DFT to obtain the positive j phase. Apply complete orthogonality to the unit representatives. The weight w can carry primality of p=a²+b², the moving window, and the log weight together."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-gauss-inverse-zero-mode",
+          "L-quadratic-primes-levent-finite-dft-parseval"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.GaussInverseCompletion",
+        "file": "lean/Conjectures/QuadraticPrimes/GaussInverseCompletion.lean",
+        "track": "levent-gaussian-root-phases",
+        "route_source": "levent-gaussian-root-phases"
+      },
+      {
+        "id": "L-quadratic-primes-gauss-inverse-reciprocity",
+        "statement": "∀ a b p r v : ℕ, 0<a → a≤b → p.Prime → p=a^2+b^2 →\n  r<p → v<b → (b*r)%p=a%p → (a*v)%b=1%b →\n  ∃ j : ℤ, (r : ℝ)/p + (v : ℝ)/b = (j : ℝ) + (a : ℝ)/((b : ℝ)*p)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0089 · 把模 p 的根比变换成较小模 b 的逆元相位",
+          "en": "New route · Levent GRH and natural extensions · QP-0089 · Transport the root ratio modulo p to the inverse phase modulo the smaller b"
+        },
+        "brief": {
+          "zh": "将恒等式乘以 bp。由 br≡a mod p 和 p≡a² mod b 得 br+pv−a 同时被 b,p 整除，再用互素。b=1 时 v=0。",
+          "en": "Multiply by bp. The congruence br≡a mod p and p≡a² mod b imply that br+pv−a is divisible by both b and p. Use coprimality and include v=0 when b=1."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-gauss-two-root-phase"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.GaussInverseReciprocity",
+        "file": "lean/Conjectures/QuadraticPrimes/GaussInverseReciprocity.lean",
+        "track": "levent-gaussian-root-phases",
+        "route_source": "levent-gaussian-root-phases"
+      },
+      {
+        "id": "L-quadratic-primes-gauss-inverse-zero-mode",
+        "statement": "∀ (b : ℕ) [NeZero b] (k : ℤ),\n  (∑ u : (ZMod b)ˣ, ZMod.stdAddChar ((k : ZMod b) * (↑(u⁻¹) : ZMod b))) =\n    ∑ d ∈ (Nat.gcd b k.natAbs).divisors, (d : ℂ) * (ArithmeticFunction.moebius (b/d) : ℂ)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0092 · 计算较小模数完全化的零频 Ramanujan 和",
+          "en": "New route · Levent GRH and natural extensions · QP-0092 · Compute the zero frequency of the completed inverse sum as a Ramanujan sum"
+        },
+        "brief": {
+          "zh": "单位求逆给置换，故零频可由互素条件的 Möbius 反演计算。保留 k=0 和合数 b。该式为按 a 重排后的零频提供精确基准。",
+          "en": "Inversion permutes the units, so expand the coprimality condition by Möbius inversion. Include k=0 and composite b. This gives the exact zero frequency after reindexing by a."
+        },
+        "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/ArithmeticFunction/Moebius.lean",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-gauss-inverse-reciprocity"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.GaussInverseZeroMode",
+        "file": "lean/Conjectures/QuadraticPrimes/GaussInverseZeroMode.lean",
+        "track": "levent-gaussian-root-phases",
+        "route_source": "levent-gaussian-root-phases"
+      },
+      {
+        "id": "L-quadratic-primes-gauss-mode-error",
+        "statement": "let block := fun x : ℕ => Finset.Ioc x (2*x); let window := fun x p : ℕ => (block x).filter (fun n => p^100000≤n^132301); let phase := fun p k (t : ℕ) => 2*Real.pi*(k : ℝ)*(t : ℝ)/(p : ℝ); let rootWave := fun q k t : ℕ => 2*Real.cos (phase q k t); let good := fun p a b r v : ℕ => p.Prime ∧ 2<p ∧ 0<a ∧ a≤b ∧ p=a^2+b^2 ∧ r<p ∧ v<b ∧ (b*r)%p=a%p ∧ (a*v)%b=1%b; ∀ x p a b r v k : ℕ, good p a b r v → 0<k → k≤Nat.sqrt p →\n  |(rootWave p k r - rootWave b k v) * (∑ n ∈ window x p, Real.cos (phase p k n)) / (p : ℝ)| ≤\n  2*Real.pi/p",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0090 · 逐频控制真实移动窗上替换根相位的误差",
+          "en": "New route · Levent GRH and natural extensions · QP-0090 · Bound the root-phase replacement error on the actual moving window at one frequency"
+        },
+        "brief": {
+          "zh": "逆元互反把根对的误差压到 4πk/p。QP-0037 的几何和与 k≤√p≤p/2 给窗口和 ≤p/(2k)，所以每频归一化损失 ≤2π/p。",
+          "en": "Reciprocity bounds the paired-root error by 4πk/p. QP-0037 and k≤√p≤p/2 give a window sum at most p/(2k). The normalized loss per frequency is at most 2π/p."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-gauss-inverse-reciprocity",
+          "L-quadratic-primes-levent-incomplete-phase-bound",
+          "L-quadratic-primes-levent-window-factorization"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.GaussModeError",
+        "file": "lean/Conjectures/QuadraticPrimes/GaussModeError.lean",
+        "track": "levent-gaussian-root-phases",
+        "route_source": "levent-gaussian-root-phases"
+      },
+      {
+        "id": "L-quadratic-primes-gauss-split-representation",
+        "statement": "∀ p : ℕ, p.Prime → p%4=1 →\n  ∃ a b : ℕ, (0<a ∧ a≤b ∧ a^2+b^2=p) ∧\n    ∀ a' b' : ℕ, 0<a' → a'≤b' → a'^2+b'^2=p → a'=a ∧ b'=b",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0087 · 唯一选取分裂素数的两个正有序平方分量",
+          "en": "New route · Levent GRH and natural extensions · QP-0087 · Choose the unique ordered positive square coordinates of each split prime"
+        },
+        "brief": {
+          "zh": "由 Mathlib 的平方和定理得存在性。把两对坐标的比视作模 p 中 −1 的两个根。比较 ab′−a′b 与 ab′+a′b 的整除和大小，核对有序代表的唯一性。",
+          "en": "Use Mathlib’s sum-of-two-squares theorem for existence. View the two coordinate ratios as roots of −1 modulo p. Divisibility and size of ab′−a′b or ab′+a′b give uniqueness for the ordered representatives."
+        },
+        "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/SumTwoSquares.lean",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-quadratic-primes-levent-root-card-splitting"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.GaussSplitRepresentation",
+        "file": "lean/Conjectures/QuadraticPrimes/GaussSplitRepresentation.lean",
+        "track": "levent-gaussian-root-phases",
+        "route_source": "levent-gaussian-root-phases"
+      },
+      {
+        "id": "L-quadratic-primes-gauss-two-root-phase",
+        "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (a b : ℕ), 2<p → 0<a → a≤b → p=a^2+b^2 →\n  let r : ZMod p := (a : ZMod p)/(b : ZMod p);\n  ∀ k : ZMod p, (∑ v : ZMod p, if v^2+1=0 then ZMod.stdAddChar (k*v) else 0) =\n    ZMod.stdAddChar (k*r) + ZMod.stdAddChar (-k*r)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0088 · 把二次根的 Fourier 和写成两个高斯分量比相位",
+          "en": "New route · Levent GRH and natural extensions · QP-0088 · Write the quadratic-root Fourier sum as two Gaussian-ratio phases"
+        },
+        "brief": {
+          "zh": "b 在模 p 可逆，a/b 与 −a/b 是不同的两个根。用分解 (v−r)(v+r) 排除多余根，保留两条相位的符号。",
+          "en": "The denominator b is a unit modulo p, and a/b and −a/b are distinct roots. Factor (v−r)(v+r) to exclude further roots and keep both phase signs."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-quadratic-primes-levent-root-card-splitting"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.GaussTwoRootPhase",
+        "file": "lean/Conjectures/QuadraticPrimes/GaussTwoRootPhase.lean",
+        "track": "levent-gaussian-root-phases",
+        "route_source": "levent-gaussian-root-phases"
+      },
+      {
         "id": "L-quadratic-primes-levent-abel-reciprocal",
         "file": "lean/PEqualNP/Outside/L_quadratic_primes_levent_abel_reciprocal.lean",
         "module": "PEqualNP.Outside.L_quadratic_primes_levent_abel_reciprocal",
@@ -15758,6 +15939,368 @@
         ],
         "track": "levent-natural-quadratic-extensions",
         "route_source": "levent-natural-quadratic-extensions"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-divisor-remainders",
+        "statement": "let f := fun k : ℕ => 4*k^2+1; let roots := fun (q : ℕ) => (Finset.range q).filter (fun r => q ∣ f r); let rho := fun q : ℕ => ((roots q).card : ℝ); let count := fun A B d : ℕ => ((Finset.Ioc A B).filter (fun k => d ∣ f k)).card;\n∀ A B D : ℕ, A≤B → 1≤D →\n  (∑ d ∈ (Finset.Icc 1 D).filter (fun d => Odd d ∧ Squarefree d),\n    |(count A B d : ℝ) - ((B-A : ℕ) : ℝ) * rho d / d|) ≤\n    (D : ℝ) * (1 + Real.log D)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0074 · 把奇平方自由除数的窗口余项累加到任意筛层 D",
+          "en": "New route · Levent GRH and natural extensions · QP-0074 · Sum window remainders for odd squarefree moduli up to any level D"
+        },
+        "brief": {
+          "zh": "在模奇数 d 下用 r↦2r 搬运 QP-0014 的根数。每根的区间取整误差至多一。以 ρ(d)≤τ(d) 加总，再用成对约数的调和和。",
+          "en": "Transport the QP-0014 root count by r↦2r modulo odd d. The rounding error per root is at most one. Sum ρ(d)≤τ(d) by pairing divisors and using the harmonic sum."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2487",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-quadratic-primes-levent-root-count-multiplicative",
+          "L-quadratic-primes-interval-residue-count"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveDivisorRemainders",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveDivisorRemainders.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-euler-correction",
+        "statement": "let split := fun z : ℕ => (Finset.Icc 5 z).filter (fun p => Nat.Prime p ∧ p%4=1); let correction := fun z : ℕ => ∏ p ∈ split z, (1 - 2/(p : ℝ)) / (1 - 1/(p : ℝ))^2;\n∃ c : ℝ, 0<c ∧ Filter.Tendsto correction Filter.atTop (nhds c)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0075 · 证明模四分裂素数的局部因子修正积收敛为正数",
+          "en": "New route · Levent GRH and natural extensions · QP-0075 · Prove that the local correction product over split primes has a positive limit"
+        },
+        "brief": {
+          "zh": "每项等于 1−1/(p−1)²。把对数尾界到收敛的整数平方倒数和；从 p=5 开始保证真因子都严格为正。",
+          "en": "Each factor equals 1−1/(p−1)². Bound the log tail by a convergent sum over reciprocal integer squares. Starting at p=5 keeps each factor positive."
+        },
+        "source": "https://doi.org/10.1090/coll/057",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveEulerCorrection",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveEulerCorrection.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-even-parameter",
+        "statement": "let f := fun k : ℕ => 4*k^2+1; let block := fun x : ℕ => Finset.Ioc (x/2) x; ∀ x : ℕ, 2≤x →\n  ((Finset.Ioc x (2*x)).filter (fun n => (n^2+1).Prime)) =\n    ((block x).filter (fun k => (f k).Prime)).image (fun k => 2*k)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0072 · 用偶参数精确描述原倍增窗中的全部素数值",
+          "en": "New route · Levent GRH and natural extensions · QP-0072 · Index every prime value in the original window by an even parameter"
+        },
+        "brief": {
+          "zh": "原窗内 n≥3，奇 n 使 n²+1 有因子 2。对 n=2k 逐端点核对 k∈(⌊x/2⌋,x]。该字典供终筛回到冻结的 n 窗。",
+          "en": "In the original window n≥3, an odd n gives the factor 2. Check both endpoints for n=2k and k∈(⌊x/2⌋,x]. Use this dictionary to pass from the final sieve to the frozen window in n."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2487",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveEvenParameter",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveEvenParameter.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-final-sign",
+        "statement": "let f := fun k : ℕ => 4*k^2+1; let block := fun x : ℕ => Finset.Ioc (x/2) x; let primes := fun z : ℕ => (Finset.Icc 3 z).filter (fun p => Nat.Prime p); let wheel := fun z : ℕ => ∏ p ∈ primes z, p; let rough := fun x z : ℕ => (block x).filter (fun k => Nat.Coprime (f k) (wheel z)); ∀ x z : ℕ, 2≤x → z≤2*x → (2*x)^2+1≤z^3 →\n  (∑ k ∈ (block x).filter (fun k => (f k).Prime), Real.log (f k : ℝ)) =\n    ∑ k ∈ rough x z, (1 - (ArithmeticFunction.moebius (f k) : ℝ))/2 * Real.log (f k : ℝ)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0084 · 在终带用 Möbius 的符号精确计入真素数值",
+          "en": "New route · Levent GRH and natural extensions · QP-0084 · Use the Möbius sign to count the actual prime values in the terminal range"
+        },
+        "brief": {
+          "zh": "终带存活值至多两个素因子，平方情形由 QP-0064 排除。素数值在此窗均大于 2x。半素数的 μ 为 +1，素数的 μ 为 −1。",
+          "en": "A terminal survivor has at most two prime factors. QP-0064 excludes the square, and every prime value in this window exceeds 2x. A semiprime contributes μ=+1 and a prime μ=−1."
+        },
+        "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/ArithmeticFunction/Moebius.lean",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-sieve-even-parameter",
+          "L-quadratic-primes-levent-prime-values-no-square",
+          "L-quadratic-primes-sieve-first-hit"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveFinalSign",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveFinalSign.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-first-hit",
+        "statement": "let f := fun k : ℕ => 4*k^2+1; let block := fun x : ℕ => Finset.Ioc (x/2) x; let primes := fun z : ℕ => (Finset.Icc 3 z).filter (fun p => Nat.Prime p); let wheel := fun z : ℕ => ∏ p ∈ primes z, p; let rough := fun x z : ℕ => (block x).filter (fun k => Nat.Coprime (f k) (wheel z)); ∀ x lo hi : ℕ, 0<x → lo≤hi →\n  (rough x lo).card =\n    (rough x hi).card + ((block x).filter (fun k => lo < (f k).minFac ∧ (f k).minFac ≤ hi)).card",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0079 · 按真实最小素因子记账两个筛口之间的流失",
+          "en": "New route · Levent GRH and natural extensions · QP-0079 · Account for the losses between two cutoffs using the actual least prime factor"
+        },
+        "brief": {
+          "zh": "对 k>0，4k²+1 是大于一的奇数。逐点使用最小素因子所在的唯一带，包含右边界。此分割可在同一 x 上迭代。",
+          "en": "For k>0 the value 4k²+1 is odd and greater than one. Assign each point to the unique band of its least factor and include the right endpoint. Iterate the partition at the same x."
+        },
+        "source": "https://doi.org/10.1090/coll/057",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-sieve-mobius-count"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveFirstHit",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveFirstHit.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-gaussian-fiber",
+        "statement": "∀ a b c₀ d₀ c d : ℤ, a*d₀+b*c₀=1 →\n  (a*d+b*c=1 ↔ ∃ t : ℤ, c=c₀+a*t ∧ d=d₀-b*t) ∧\n  (∀ t : ℤ, a*(c₀+a*t)-b*(d₀-b*t) = (a*c₀-b*d₀)+(a^2+b^2)*t) ∧\n  (2*(a*c₀-b*d₀))^2 - 4*(a^2+b^2)*(c₀^2+d₀^2) = -4",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0086 · 为高斯余因子给出整数纤维与固定判别式",
+          "en": "New route · Levent GRH and natural extensions · QP-0086 · Parametrize the Gaussian cofactor fibre and retain its fixed discriminant"
+        },
+        "brief": {
+          "zh": "初始解 a d₀+b c₀=1 给出互素性。核对整数解的实际步长 p=a²+b² 和二次余因子的判别式 −4。",
+          "en": "The initial solution a d₀+b c₀=1 gives coprimality. Check that the integer parameter advances n by p=a²+b² and that the quadratic cofactor has discriminant −4."
+        },
+        "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/Zsqrtd/GaussianInt.lean",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-sieve-terminal-gaussian"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveGaussianFiber",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveGaussianFiber.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-initial-lower-bound",
+        "statement": "let f := fun k : ℕ => 4*k^2+1; let block := fun x : ℕ => Finset.Ioc (x/2) x; let primes := fun z : ℕ => (Finset.Icc 3 z).filter (fun p => Nat.Prime p); let split := fun z : ℕ => (Finset.Icc 5 z).filter (fun p => Nat.Prime p ∧ p%4=1); let wheel := fun z : ℕ => ∏ p ∈ primes z, p; let rough := fun x z : ℕ => (block x).filter (fun k => Nat.Coprime (f k) (wheel z)); let localProd := fun z : ℕ => ∏ p ∈ split z, (1 - 2/(p : ℝ)); (∃ c : ℝ, 0<c ∧ Filter.Tendsto (fun z : ℕ => Real.log (z : ℝ) * localProd z) Filter.atTop (nhds c)) →\n∃ U : ℕ, 4≤U ∧ ∃ c : ℝ, 0<c ∧ ∃ X : ℕ, 2≤X ∧ ∀ x : ℕ, X≤x →\n  let z := (Finset.range (x+1)).sup (fun t => if t^U≤x then t else 0);\n  c*(x : ℝ)/Real.log x ≤ ((rough x z).card : ℝ)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0078 · 把一维下界筛应用到 4k²+1 的初始筛口",
+          "en": "New route · Levent GRH and natural extensions · QP-0078 · Apply the dimension-one lower-bound sieve to the initial cutoff for 4k²+1"
+        },
+        "brief": {
+          "zh": "取除数层 x^(3/4)，再取固定 U 使 s=3U/4 大于线性筛下界的临界值。核对初筛只到 ⌊x^(1/U)⌋，并把 QP-0074 的总误差吸收到下界中。",
+          "en": "Take divisor level x^(3/4) and choose a fixed U so that s=3U/4 exceeds the lower linear sieve cutoff. Check the floor ⌊x^(1/U)⌋ and absorb the total error from QP-0074."
+        },
+        "source": "https://doi.org/10.1090/coll/057",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-sieve-divisor-remainders",
+          "L-quadratic-primes-sieve-mertens-density",
+          "L-quadratic-primes-sieve-mobius-count"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveInitialLowerBound",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveInitialLowerBound.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-mertens-density",
+        "statement": "let split := fun z : ℕ => (Finset.Icc 5 z).filter (fun p => Nat.Prime p ∧ p%4=1); let localProd := fun z : ℕ => ∏ p ∈ split z, (1 - 2/(p : ℝ)); (∀ (Q : ℕ) [NeZero Q] (χ : DirichletCharacter ℂ Q) (s : ℂ), 0<s.re → s.re<1 → DirichletCharacter.LFunction χ s=0 → s.re=1/2)→\n∃ c : ℝ, 0<c ∧ Filter.Tendsto (fun z : ℕ => Real.log (z : ℝ) * localProd z) Filter.atTop (nhds c)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0077 · 从分裂素数倒数和得到一维筛密度的正极限",
+          "en": "New route · Levent GRH and natural extensions · QP-0077 · Derive a positive dimension-one sieve density limit from the split-prime harmonic sum"
+        },
+        "brief": {
+          "zh": "用 log(1−2/p)+2/p 的绝对可和性。修正积可复用 QP-0075。奇数 p≡3 mod 4 的局部因子等于一，4k²+1 在 2 处无根。",
+          "en": "Use the absolute summability of log(1−2/p)+2/p. QP-0075 gives the correction product. The inert primes have factor one, and 4k²+1 has no root at 2."
+        },
+        "source": "https://doi.org/10.1090/coll/057",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-sieve-euler-correction",
+          "L-quadratic-primes-sieve-split-harmonic",
+          "L-quadratic-primes-levent-root-card-splitting"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveMertensDensity",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveMertensDensity.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-mobius-count",
+        "statement": "let f := fun k : ℕ => 4*k^2+1; let block := fun x : ℕ => Finset.Ioc (x/2) x; let primes := fun z : ℕ => (Finset.Icc 3 z).filter (fun p => Nat.Prime p); let wheel := fun z : ℕ => ∏ p ∈ primes z, p; let rough := fun x z : ℕ => (block x).filter (fun k => Nat.Coprime (f k) (wheel z)); let hitCount := fun x d : ℕ => ((block x).filter (fun k => d ∣ f k)).card;\n∀ x z : ℕ, ((rough x z).card : ℤ) = ∑ d ∈ (wheel z).divisors, ArithmeticFunction.moebius d * (hitCount x d : ℤ)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0073 · 用真正的二次值写出筛存活点的 Möbius 公式",
+          "en": "New route · Levent GRH and natural extensions · QP-0073 · Expand the actual quadratic survivors by Möbius inversion"
+        },
+        "brief": {
+          "zh": "逐点先把除数限制到 gcd(4k²+1, W(z))，再交换除数与窗口求和。公式亦适用于空轮与空余类。",
+          "en": "First restrict the divisors at each point to gcd(4k²+1, W(z)). Then exchange the divisor and window sums. Include the empty wheel and empty residue classes."
+        },
+        "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/ArithmeticFunction/Moebius.lean",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveMobiusCount",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveMobiusCount.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-pell-spacing",
+        "statement": "∀ (m a b u v : ℕ), (0 < m) → (0 < a) → (a < b) → (a^2 + 1 = m*u^2) → (b^2 + 1 = m*v^2) → 2*a < b",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0082 · 为任意余因子的负 Pell 分支给出倍增间距",
+          "en": "New route · Levent GRH and natural extensions · QP-0082 · Prove dyadic spacing for the negative Pell equation with an arbitrary cofactor"
+        },
+        "brief": {
+          "zh": "写正解的商为 A+B√m，其中 A=muv−ab，B=bu−av。由范数一和商大于一得 A≥2、B≥1，再取有理坐标。旧题只处理 m=2。",
+          "en": "Write the quotient of the positive solutions as A+B√m with A=muv−ab and B=bu−av. Norm one and quotient greater than one give A≥2 and B≥1. Extract the rational coordinate. The earlier task covers m=2."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/lean/PEqualNP/Outside/L_quadratic_primes_mid_pell_spacing.lean",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SievePellSpacing",
+        "file": "lean/Conjectures/QuadraticPrimes/SievePellSpacing.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-split-harmonic",
+        "statement": "let split := fun z : ℕ => (Finset.Icc 5 z).filter (fun p => Nat.Prime p ∧ p%4=1); (∀ (Q : ℕ) [NeZero Q] (χ : DirichletCharacter ℂ Q) (s : ℂ), 0<s.re → s.re<1 → DirichletCharacter.LFunction χ s=0 → s.re=1/2)→\n∃ b C : ℝ, 0<C ∧ ∀ z : ℕ, 5≤z →\n  |(∑ p ∈ split z, (1 : ℝ)/(p : ℝ)) - Real.log (Real.log z)/2 - b| ≤\n    C * (Real.log (2*(z : ℝ)))^2 / Real.sqrt z",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0076 · 在 Dirichlet GRH 前提下给分裂素数倒数和的尾部定量",
+          "en": "New route · Levent GRH and natural extensions · QP-0076 · Quantify the tail of the split-prime harmonic sum under Dirichlet GRH"
+        },
+        "brief": {
+          "zh": "通过 QP-0005 和 QP-0006 把 ψ 换成真素数 θ，再以 1/(t log t) 分部求和。截断公式的零线假设保留在冻结类型中。",
+          "en": "Use QP-0005 and QP-0006 to pass from ψ to the true prime sum θ. Sum by parts with 1/(t log t). The frozen type retains the zero-line assumption used for the explicit formula."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean#L607",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": true,
+        "depends_on": [
+          "L-quadratic-primes-levent-mod-four-psi",
+          "L-quadratic-primes-levent-mod-four-powers",
+          "L-quadratic-primes-levent-abel-reciprocal"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveSplitHarmonic",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveSplitHarmonic.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-square-tail",
+        "statement": "let f := fun k : ℕ => 4*k^2+1; let block := fun x : ℕ => Finset.Ioc (x/2) x; let flagged := fun x y : ℕ => (block x).filter (fun k =>\n  ((Finset.Ioc y (2*x)).filter (fun p => Nat.Prime p ∧ p^2 ∣ f k)).Nonempty);\n∃ C : ℝ, 0<C ∧ ∀ x y : ℕ, 2≤x → 2≤y →\n  ((flagged x y).card : ℝ) ≤ C*((x : ℝ)/y + (x : ℝ)^(2/3 : ℝ))",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0083 · 在初筛深度之后定量扣除重复素因子",
+          "en": "New route · Levent GRH and natural extensions · QP-0083 · Bound the repeated-prime loss beyond the initial sieve cutoff"
+        },
+        "brief": {
+          "zh": "在 p≤x^(2/3) 用素数平方根数与区间误差。其上按 m=(n²+1)/p² 切换，只有 O(x^(2/3)) 个余因子，每个由 QP-0082 至多命中一次。",
+          "en": "For p≤x^(2/3), count roots modulo p² and keep the interval error. Above that cutoff switch to m=(n²+1)/p². There are O(x^(2/3)) cofactors and QP-0082 allows at most one hit per cofactor."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2487",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-sieve-pell-spacing",
+          "L-quadratic-primes-prime-power-roots"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveSquareTail",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveSquareTail.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-switched-cofactor",
+        "statement": "let f := fun k : ℕ => 4*k^2+1; ∀ p r t : ℕ, 2<p → p.Prime → r<p → p ∣ f r →\n  let cofactor := 4*p*t^2+8*r*t+(f r)/p;\n  f (p*t+r) = p*cofactor ∧\n    (8*(r : ℤ))^2 - 4*(4*(p : ℤ))*((f r / p : ℕ) : ℤ) = -16 ∧\n    (∀ d : ℕ, Nat.Coprime d p → (d ∣ cofactor ↔ d ∣ f (p*t+r)))",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0080 · 切换首次因子后保留二次余因子的判别式与筛条件",
+          "en": "New route · Levent GRH and natural extensions · QP-0080 · Preserve the discriminant and sieve conditions after switching out a first factor"
+        },
+        "brief": {
+          "zh": "在实际根 r 上写 k=pt+r。除掉 p 后判别式恒为 −16；与 p 互素的旧筛条件保持等价。此式用在最小因子 p 的内层和。",
+          "en": "Write k=pt+r at an actual root r. Removing p leaves discriminant −16 and preserves sieve conditions coprime to p. This supplies the inner sum with least factor p."
+        },
+        "source": "https://doi.org/10.1090/coll/057",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveSwitchedCofactor",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveSwitchedCofactor.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-switched-fourier",
+        "statement": "let f := fun k : ℕ => 4*k^2+1; ∀ (d : ℕ) [NeZero d] (p r : ℕ) (u k : ZMod d), Nat.Coprime d p → (p : ZMod d)*u=1 → p ∣ f r →\n  let coeff := fun t : ZMod d => 4*(p : ZMod d)*t^2 + 8*(r : ZMod d)*t + (f r / p : ℕ);\n  (∑ t : ZMod d, if coeff t = 0 then ZMod.stdAddChar (k*t) else 0) =\n    ZMod.stdAddChar (-k*u*(r : ZMod d)) *\n       (∑ v : ZMod d, if 4*v^2+1 = 0 then ZMod.stdAddChar (k*u*v) else 0)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0081 · 传输切换余因子筛的完整 Fourier 系数",
+          "en": "New route · Levent GRH and natural extensions · QP-0081 · Transport the complete Fourier coefficients for the switched cofactor sieve"
+        },
+        "brief": {
+          "zh": "令 v=pt+r，在原模 d 上保留逆元 u 与平移相位。先以可逆的 p 将余因子零条件化回 4v²+1=0。该公式只处理完整根掩码，窗口余项继续使用 QP-0074。",
+          "en": "Set v=pt+r and retain the inverse u and the translation phase modulo d. First use the unit p to recover 4v²+1=0 from the cofactor zero. QP-0074 supplies the separate interval errors."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": false,
+        "depends_on": [
+          "L-quadratic-primes-sieve-switched-cofactor",
+          "L-quadratic-primes-levent-crt-root-bijection"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveSwitchedFourier",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveSwitchedFourier.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
+      },
+      {
+        "id": "L-quadratic-primes-sieve-terminal-gaussian",
+        "statement": "∀ n p : ℕ, 0<n → p.Prime → 2<p → p ∣ n^2+1 →\n  ∃ a b c d : ℤ, a^2+b^2=(p : ℤ) ∧ 0<a ∧ b≠0 ∧\n    (n : ℤ)=a*c-b*d ∧ 1=a*d+b*c ∧ c^2+d^2=((n^2+1)/p : ℕ)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然扩张 · QP-0085 · 把末段大素因子切换为高斯整数的一次方程",
+          "en": "New route · Levent GRH and natural extensions · QP-0085 · Switch a terminal prime factor to a linear equation over the Gaussian integers"
+        },
+        "brief": {
+          "zh": "用 p=a²+b² 的两种方向选出整除 n+i 的一个因子。将 (n+i)(a−bi)/p 展开，并通过范数乘法保留余因子。",
+          "en": "Use the two orientations of p=a²+b² to choose a factor of n+i. Expand (n+i)(a−bi)/p and keep the cofactor via the multiplicative norm."
+        },
+        "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/SumTwoSquares.lean",
+        "program": "foundation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-quadratic-primes-gauss-split-representation",
+          "L-quadratic-primes-gauss-two-root-phase"
+        ],
+        "imports": [],
+        "module": "Conjectures.QuadraticPrimes.SieveTerminalGaussian",
+        "file": "lean/Conjectures/QuadraticPrimes/SieveTerminalGaussian.lean",
+        "track": "levent-prime-value-sieve",
+        "route_source": "levent-prime-value-sieve"
       },
       {
         "id": "L-quadratic-primes-levent-prime-values-cofactor-mass",
@@ -17755,6 +18298,61 @@
       },
       {
         "en": [
+          "A natural extension of Levent’s GRH methods for Gaussian splitting and inverse phases",
+          "Replace the quadratic root in the frozen middle-band low modes by an inverse phase from p=a²+b², with a uniform replacement error on both prime bands. Finite Fourier completion retains the prime condition and the moving endpoint. QP-0038 through QP-0040 remain the signed cancellation challenges."
+        ],
+        "zh": [
+          "Levent GRH 的自然推广：移动窗上的高斯分裂与逆元相位",
+          "将冻结中段低频中的二次根换作 p=a²+b² 的逆元相位，统一控制两个真实素数段的替换误差。有限 Fourier 完全化保留素数条件与移动端点；开放的带符号抵消沿用 QP-0038 至 QP-0040。"
+        ],
+        "tasks": [
+          {
+            "id": "L-quadratic-primes-gauss-band-error",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0091 · 给两个原中段素数带统一的次线性替换预算",
+            "en": "New route · Levent GRH and natural extensions · QP-0091 · Give a uniform sublinear replacement budget for either original middle prime band",
+            "route_source": "levent-gaussian-root-phases"
+          },
+          {
+            "id": "L-quadratic-primes-gauss-inverse-completion",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0093 · 完全化任意实际权的逆元和并确定完整二阶矩",
+            "en": "New route · Levent GRH and natural extensions · QP-0093 · Complete the inverse sum for an arbitrary actual weight and compute the full second moment",
+            "route_source": "levent-gaussian-root-phases"
+          },
+          {
+            "id": "L-quadratic-primes-gauss-inverse-reciprocity",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0089 · 把模 p 的根比变换成较小模 b 的逆元相位",
+            "en": "New route · Levent GRH and natural extensions · QP-0089 · Transport the root ratio modulo p to the inverse phase modulo the smaller b",
+            "route_source": "levent-gaussian-root-phases"
+          },
+          {
+            "id": "L-quadratic-primes-gauss-inverse-zero-mode",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0092 · 计算较小模数完全化的零频 Ramanujan 和",
+            "en": "New route · Levent GRH and natural extensions · QP-0092 · Compute the zero frequency of the completed inverse sum as a Ramanujan sum",
+            "route_source": "levent-gaussian-root-phases"
+          },
+          {
+            "id": "L-quadratic-primes-gauss-mode-error",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0090 · 逐频控制真实移动窗上替换根相位的误差",
+            "en": "New route · Levent GRH and natural extensions · QP-0090 · Bound the root-phase replacement error on the actual moving window at one frequency",
+            "route_source": "levent-gaussian-root-phases"
+          },
+          {
+            "id": "L-quadratic-primes-gauss-split-representation",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0087 · 唯一选取分裂素数的两个正有序平方分量",
+            "en": "New route · Levent GRH and natural extensions · QP-0087 · Choose the unique ordered positive square coordinates of each split prime",
+            "route_source": "levent-gaussian-root-phases"
+          },
+          {
+            "id": "L-quadratic-primes-gauss-two-root-phase",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0088 · 把二次根的 Fourier 和写成两个高斯分量比相位",
+            "en": "New route · Levent GRH and natural extensions · QP-0088 · Write the quadratic-root Fourier sum as two Gaussian-ratio phases",
+            "route_source": "levent-gaussian-root-phases"
+          }
+        ],
+        "route_source": "levent-gaussian-root-phases"
+      },
+      {
+        "en": [
           "From zeros to the zero mode",
           "Use partial summation over primes modulo four to budget 2/5 for the moving window’s zero mode."
         ],
@@ -17892,6 +18490,109 @@
           }
         ],
         "route_source": "levent-natural-quadratic-extensions"
+      },
+      {
+        "en": [
+          "A natural extension of Levent’s GRH methods for sieving quadratic prime values",
+          "Sieve 4k²+1 on the even-parameter part of the sequence. Summed small-divisor errors and the local factors from the mod-four prime sums supply the initial sieve. The final range uses the actual least prime factor, the primality of the cofactor and the Möbius sign. Bounding the losses to first hits remains necessary before claiming prime values."
+        ],
+        "zh": [
+          "Levent GRH 的自然推广：近平方素数值的筛法",
+          "对偶参数 n=2k 筛 4k²+1。累计小除数误差和模四局部因子支撑初筛。末段由真实最小素因子、余因子素性和 Möbius 符号共同决定。下界初筛与到达全素数终点之间仍缺首次命中损失的估计。"
+        ],
+        "tasks": [
+          {
+            "id": "L-quadratic-primes-sieve-divisor-remainders",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0074 · 把奇平方自由除数的窗口余项累加到任意筛层 D",
+            "en": "New route · Levent GRH and natural extensions · QP-0074 · Sum window remainders for odd squarefree moduli up to any level D",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-euler-correction",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0075 · 证明模四分裂素数的局部因子修正积收敛为正数",
+            "en": "New route · Levent GRH and natural extensions · QP-0075 · Prove that the local correction product over split primes has a positive limit",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-even-parameter",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0072 · 用偶参数精确描述原倍增窗中的全部素数值",
+            "en": "New route · Levent GRH and natural extensions · QP-0072 · Index every prime value in the original window by an even parameter",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-final-sign",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0084 · 在终带用 Möbius 的符号精确计入真素数值",
+            "en": "New route · Levent GRH and natural extensions · QP-0084 · Use the Möbius sign to count the actual prime values in the terminal range",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-first-hit",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0079 · 按真实最小素因子记账两个筛口之间的流失",
+            "en": "New route · Levent GRH and natural extensions · QP-0079 · Account for the losses between two cutoffs using the actual least prime factor",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-gaussian-fiber",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0086 · 为高斯余因子给出整数纤维与固定判别式",
+            "en": "New route · Levent GRH and natural extensions · QP-0086 · Parametrize the Gaussian cofactor fibre and retain its fixed discriminant",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-initial-lower-bound",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0078 · 把一维下界筛应用到 4k²+1 的初始筛口",
+            "en": "New route · Levent GRH and natural extensions · QP-0078 · Apply the dimension-one lower-bound sieve to the initial cutoff for 4k²+1",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-mertens-density",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0077 · 从分裂素数倒数和得到一维筛密度的正极限",
+            "en": "New route · Levent GRH and natural extensions · QP-0077 · Derive a positive dimension-one sieve density limit from the split-prime harmonic sum",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-mobius-count",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0073 · 用真正的二次值写出筛存活点的 Möbius 公式",
+            "en": "New route · Levent GRH and natural extensions · QP-0073 · Expand the actual quadratic survivors by Möbius inversion",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-pell-spacing",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0082 · 为任意余因子的负 Pell 分支给出倍增间距",
+            "en": "New route · Levent GRH and natural extensions · QP-0082 · Prove dyadic spacing for the negative Pell equation with an arbitrary cofactor",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-split-harmonic",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0076 · 在 Dirichlet GRH 前提下给分裂素数倒数和的尾部定量",
+            "en": "New route · Levent GRH and natural extensions · QP-0076 · Quantify the tail of the split-prime harmonic sum under Dirichlet GRH",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-square-tail",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0083 · 在初筛深度之后定量扣除重复素因子",
+            "en": "New route · Levent GRH and natural extensions · QP-0083 · Bound the repeated-prime loss beyond the initial sieve cutoff",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-switched-cofactor",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0080 · 切换首次因子后保留二次余因子的判别式与筛条件",
+            "en": "New route · Levent GRH and natural extensions · QP-0080 · Preserve the discriminant and sieve conditions after switching out a first factor",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-switched-fourier",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0081 · 传输切换余因子筛的完整 Fourier 系数",
+            "en": "New route · Levent GRH and natural extensions · QP-0081 · Transport the complete Fourier coefficients for the switched cofactor sieve",
+            "route_source": "levent-prime-value-sieve"
+          },
+          {
+            "id": "L-quadratic-primes-sieve-terminal-gaussian",
+            "zh": "新路线 · Levent GRH 与自然扩张 · QP-0085 · 把末段大素因子切换为高斯整数的一次方程",
+            "en": "New route · Levent GRH and natural extensions · QP-0085 · Switch a terminal prime factor to a linear equation over the Gaussian integers",
+            "route_source": "levent-prime-value-sieve"
+          }
+        ],
+        "route_source": "levent-prime-value-sieve"
       },
       {
         "en": [
