@@ -1,0 +1,14 @@
+{
+  "id": "deep-moment-refutation",
+  "title": {
+    "zh": "深次弧四次矩反驳",
+    "en": "Deep fourth-moment refutation"
+  },
+  "description": {
+    "zh": "用独立 ID 提交旧上界的严格否定。",
+    "en": "Submit a proof of the exact negation of the retired upper bound under a distinct ID."
+  },
+  "feeds": [
+    "frontier-moment-antispike"
+  ]
+}

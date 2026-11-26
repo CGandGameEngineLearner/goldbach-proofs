@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-exceptional-prime-jacobi",
+  "file": "lean/PEqualNP/Outside/L_goldbach_exceptional_prime_jacobi.lean",
+  "module": "PEqualNP.Outside.L_goldbach_exceptional_prime_jacobi",
+  "statement": "∀ (p : ℕ) [Fact p.Prime] (χ : DirichletCharacter ℂ p), χ ≠ 1 → χ^2 = 1 → ∀ t : ZMod p, t ≠ 0 → (∑ a : ZMod p, χ a * χ (t-a)) = -χ (-1)",
+  "plain_statement": {
+    "zh": "新路线 · 特征与分母扩窗 · CW-8002 · 计算素导子与目标互素时的 Jacobi 项",
+    "en": "New route · Characters and extended arcs · CW-8002 · Evaluate the Jacobi term when the prime conductor misses the target"
+  },
+  "brief": {
+    "zh": "换元 a=t u，利用 χ(t)²=1。再用 u/(1−u) 将去掉 u=1 的和化为非平凡特征和。两种符号均保留。",
+    "en": "Scale by t using χ(t)²=1. On u≠1 use u/(1−u) and the complete nontrivial character sum. Retain the parity sign."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "character-arc-windows",
+  "role": "lemma",
+  "depends_on": []
+}

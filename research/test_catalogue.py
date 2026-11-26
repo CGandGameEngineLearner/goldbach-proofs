@@ -1,6 +1,7 @@
 import re
 """Check the public research queue and the scope of its analytic targets."""
 
+import hashlib
 import json
 import unittest
 from pathlib import Path
@@ -75,6 +76,32 @@ class CatalogueTests(unittest.TestCase):
         self.assertTrue(all(g["role"] in {"lemma", "conditional", "target"} for g in tasks))
         self.assertEqual([g["id"] for g in GAPS if g.get("role") == "endpoint"],
                          ["L-goldbach-binary-pointwise-positivity"])
+
+    def test_audited_claim_policy_and_fourth_moment_refutation(self):
+        gaps = {g["id"].removeprefix("L-goldbach-"): g for g in GAPS}
+        closed = ("binary-pointwise-positivity", "dyadic-correlation-floor", "arc-minor-saving",
+                  "bulk-signed-floor", "frontier-spatial-diag-series-margin")
+        explicit = (
+            "frontier-antispike-shift-transfer", "frontier-no-siegel-zero", "frontier-bv-three-fifths-level",
+            "dyadic-central-prime-mass", "frontier-deep-three-quarters-saving", "frontier-skirt-medium-moduli",
+            "frontier-sqrt-modulus-arc-band", "finite-fixed-progression-unit-error",
+            "frontier-grh-medium-zones", "frontier-skirt-polylog-moduli", "deep-fourth-moment-refutation",
+            *("frontier-type2-" + cell for cell in
+              ("b1-b1", "b1-b2", "b1-b3", "b2-b2", "b2-b3", "b3-b3-parity", "b1-b4", "b2-b4", "b3-b4")),
+        )
+        for key in (*closed, *explicit):
+            with self.subTest(gap=key):
+                self.assertIs(gaps[key].get("challenge_only"), True)
+                self.assertEqual(gaps[key].get("claims_closed", False), key in closed)
+        retired = gaps["frontier-deep-fourth-moment-conjecture"]
+        self.assertIs(retired.get("challenge_only"), True)
+        self.assertIs(retired.get("claims_closed"), True)
+        self.assertEqual(retired["refutation"]["pr"], 2508)
+        negation = gaps["deep-fourth-moment-refutation"]["statement"]
+        self.assertTrue(negation.startswith("¬ (") and negation.endswith(")"))
+        self.assertEqual(negation[3:-1], retired["statement"])
+        frozen = hashlib.sha256(retired["statement"].encode("utf-8")).hexdigest()
+        self.assertEqual(frozen, "41dcb3eeed67239ec1493cf89db1dffea1df1fc0bd2453ca4bb75a641add1476")
 
     def test_new_route_labels_and_dependencies(self):
         from graphlib import TopologicalSorter

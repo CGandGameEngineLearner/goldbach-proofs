@@ -1,0 +1,24 @@
+{
+  "id": "L-goldbach-liouville-dilation-bessel",
+  "file": "lean/PEqualNP/Outside/L_goldbach_liouville_dilation_bessel.lean",
+  "module": "PEqualNP.Outside.L_goldbach_liouville_dilation_bessel",
+  "statement": "let L := fun n : ℕ => if n=0 then (0:ℝ) else (-1:ℝ)^n.primeFactorsList.length; let C := fun n : ℕ => (∑ t ∈ Finset.range n, L t * L (n-t))/(n:ℝ); ∀ N : ℕ, 0 < N → (∑ p ∈ N.divisors.filter Nat.Prime, (C (N/p)-C N)^2/((p:ℝ)-1)) ≤ ((N-1:ℕ):ℝ)/(N:ℝ)-(C N)^2",
+  "plain_statement": {
+    "zh": "新路线 · Liouville 相关的整除膨胀 · LD-8003 · 给素因子整除膨胀的同时偏差一个方差预算",
+    "en": "New route · Dilation of Liouville correlations · LD-8003 · Bound simultaneous prime-dilation deviations by the variance"
+  },
+  "brief": {
+    "zh": "对 p·1_{p∣t}−1 使用 LD-8001 和 LD-8002。将平方范数展开，有限样本中 t=0 的贡献为零，其余为 1。",
+    "en": "Use LD-8001 and LD-8002 for the centered indicators. Expand the squared norm. The squared endpoint term is zero and every other squared term is one."
+  },
+  "source": "https://arxiv.org/abs/1509.05422",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "liouville-dilation",
+  "role": "lemma",
+  "depends_on": [
+    "L-goldbach-divisor-indicator-covariance",
+    "L-goldbach-liouville-multiple-average"
+  ]
+}

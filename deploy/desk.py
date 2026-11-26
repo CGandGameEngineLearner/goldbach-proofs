@@ -229,6 +229,8 @@ class Desk:
             return error(404, "unknown_gap")
         if requested_gap and self.gaps[requested_gap].get("refutation"):
             return error(409, "refutation_" + self.gaps[requested_gap]["refutation"]["status"])
+        if requested_gap and self.gaps[requested_gap].get("claims_closed"):
+            return error(409, "claims_closed")
         if fleet is not None:
             match = re.fullmatch(r"v1\.([0-9]{1,12})\.[a-f0-9]{64}", fleet)
             if (not match or int(match[1]) <= now
@@ -257,7 +259,7 @@ class Desk:
 
             load = Counter(lease["gap"] for lease in active)
             proved = self.proved_gaps(conn)
-            candidates = ((key for key, gap in self.gaps.items() if not gap.get("challenge_only") and not gap.get("refutation"))
+            candidates = ((key for key, gap in self.gaps.items() if not gap.get("challenge_only") and not gap.get("claims_closed") and not gap.get("refutation"))
                           if requested_gap is None else (requested_gap,))
             if fleet is None and owned:
                 candidates = (gap for gap in candidates if gap != owned[0]["gap"])
@@ -452,7 +454,7 @@ class Desk:
             proved = self.proved_gaps(conn) & self.gaps.keys()
             assigned = self.active_assignments(conn, int(time.time()))
         available = sum(
-            not gap.get("refutation") and gap_id not in proved and (gap_id not in assigned or gap.get("parallel") is True)
+            not gap.get("claims_closed") and not gap.get("refutation") and gap_id not in proved and (gap_id not in assigned or gap.get("parallel") is True)
             for gap_id, gap in self.gaps.items()
         )
         return len(proved), len(self.gaps), available, assigned.keys() - proved

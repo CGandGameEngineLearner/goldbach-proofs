@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-sqrt-arc-separation-scale",
+  "file": "lean/PEqualNP/Outside/L_goldbach_sqrt_arc_separation_scale.lean",
+  "module": "PEqualNP.Outside.L_goldbach_sqrt_arc_separation_scale",
+  "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let Q₂ := fun n : ℕ => ⌊Real.sqrt (n:ℝ)/((Nat.log 2 (n+2):ℝ)^4)⌋₊; ∃ N : ℕ, ∀ n ≥ N, Q₁ n < Q₂ n ∧ 2*(256*Q₂ n*Q n)*Q₂ n < n",
+  "plain_statement": {
+    "zh": "新路线 · 特征与分母扩窗 · CW-8007 · 核验扩带后的分母增长和 Farey 分离尺度",
+    "en": "New route · Characters and extended arcs · CW-8007 · Verify growth and Farey separation at the extended cutoff"
+  },
+  "brief": {
+    "zh": "两端取整后比较 n^(1/6) 与对数四次幂。分离式的比值至多 512/log₂(n+2)^6，可用分数间距逐弧积分。",
+    "en": "After flooring compare n^(1/6) to the fourth power of the logarithm. The separation ratio is at most 512/log₂(n+2)^6, which permits termwise arc integration."
+  },
+  "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-sqrt-modulus-arc-band",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "character-arc-windows",
+  "role": "lemma",
+  "depends_on": []
+}

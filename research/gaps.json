@@ -157,7 +157,8 @@
       "source": "https://arxiv.org/abs/2607.27282v2",
       "parallel": true,
       "role": "endpoint",
-      "challenge_only": true
+      "challenge_only": true,
+      "claims_closed": true
     },
     {
       "id": "L-goldbach-dyadic-correlation-floor",
@@ -175,7 +176,9 @@
         "en": "Open quantitative strengthening of eventual positivity. Uniform control of the negative minor-arc contribution and effective thresholds would be needed to connect this approach to the endpoint."
       },
       "source": "https://arxiv.org/abs/2607.27282v2",
-      "parallel": true
+      "parallel": true,
+      "challenge_only": true,
+      "claims_closed": true
     },
     {
       "id": "L-goldbach-grh-goldbach-exception-density",
@@ -2003,7 +2006,8 @@
       "source": "https://arxiv.org/abs/2607.27282",
       "track": "arc-budget",
       "role": "target",
-      "challenge_only": true
+      "challenge_only": true,
+      "claims_closed": true
     },
     {
       "id": "L-goldbach-arc-budget-transfer",
@@ -7467,7 +7471,8 @@
       "challenge_only": true,
       "depends_on": [
         "L-goldbach-minor-shift-window-budget"
-      ]
+      ],
+      "claims_closed": true
     },
     {
       "id": "L-goldbach-reflection-energy",
@@ -11721,7 +11726,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-medium-arc-scales",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-skirt-medium-moduli",
@@ -11741,7 +11747,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-medium-arc-scales",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-medium-assembly-bridge",
@@ -11821,7 +11828,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-type2-b1-b2",
@@ -11841,7 +11849,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-type2-b1-b4",
@@ -11861,7 +11870,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-type2-b4-b4",
@@ -11901,7 +11911,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-type2-b2-b4",
@@ -11921,7 +11932,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-type2-b1-b3",
@@ -11941,7 +11953,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-type2-b2-b3",
@@ -11961,7 +11974,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-type2-b3-b4",
@@ -11981,7 +11995,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-type2-b3-b3-parity",
@@ -12001,7 +12016,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-type2-matrix-bridge",
@@ -12065,7 +12081,9 @@
       "refutation": {
         "status": "pending",
         "pr": 2508
-      }
+      },
+      "challenge_only": true,
+      "claims_closed": true
     },
     {
       "id": "L-goldbach-frontier-deep-three-quarters-saving",
@@ -12085,7 +12103,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-moment-antispike",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-antispike-shift-transfer",
@@ -12105,7 +12124,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-moment-antispike",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-moment-antispike-bridge",
@@ -12145,7 +12165,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-grh-and-zero-chains",
-      "role": "conditional"
+      "role": "conditional",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-grh-deep-equivalence",
@@ -12205,7 +12226,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-grh-and-zero-chains",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-bv-three-fifths-level",
@@ -12225,7 +12247,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-grh-and-zero-chains",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-sqrt-modulus-arc-band",
@@ -12245,7 +12268,8 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-grh-and-zero-chains",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-frontier-spatial-exact-split",
@@ -12325,7 +12349,9 @@
       "parallel": true,
       "imports": [],
       "track": "frontier-spatial-sinc-conjectures",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true,
+      "claims_closed": true
     },
     {
       "id": "L-goldbach-frontier-spatial-assembly-bridge",
@@ -13314,7 +13340,8 @@
       "module": "PEqualNP.Outside.L_goldbach_finite_fixed_progression_unit_error",
       "imports": [],
       "track": "representations",
-      "role": "target"
+      "role": "target",
+      "challenge_only": true
     },
     {
       "id": "L-goldbach-finite-fixed-nonunit-mangoldt",
@@ -13517,6 +13544,551 @@
       "role": "lemma"
     },
     {
+      "id": "L-goldbach-deep-even-fejer-local-energy",
+      "file": "lean/PEqualNP/Outside/L_goldbach_deep_even_fejer_local_energy.lean",
+      "module": "PEqualNP.Outside.L_goldbach_deep_even_fejer_local_energy",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; let F := fun (n : ℕ) => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2); ∀ (n m H : ℕ), 0 < H → Even m → n ≤ m → m+4*(H-1) ≤ 2*n → ((∑ i ∈ Finset.range H, ∑ j ∈ Finset.range H, ‖deepCoeff n (m+2*(i+(H-1)-j))‖^2 : ℝ):ℂ) = intervalIntegral (fun u => intervalIntegral (fun v => F n u * (starRingEnd ℂ) (F n v) * E (-((m+2*(H-1):ℕ):ℝ)*(u-v)) * ((‖∑ j ∈ Finset.range H, E (2*(j:ℝ)*(u-v))‖^2:ℝ):ℂ)) (0:ℝ) 1 MeasureTheory.volume) (0:ℝ) 1 MeasureTheory.volume",
+      "plain_statement": {
+        "zh": "新路线 · 特征与分母扩窗 · CW-8006 · 把短偶移窗内的系数能量写成 Fejér 核双积分",
+        "en": "New route · Characters and extended arcs · CW-8006 · Express the local even-shift coefficient energy by a Fejér double integral"
+      },
+      "brief": {
+        "zh": "把每个系数模方展开为双积分，先合并 i−j，再求几何和。除以 H 得三角形窗。与全区间 Bessel 预算相比，本题保留窗口中心和半整数共振。",
+        "en": "Expand each squared coefficient as a double integral, group i−j and evaluate the geometric sum. Division by H gives the triangular window. It retains the window center and half-integer resonances."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "exceptions",
+      "parallel": true,
+      "imports": [],
+      "track": "character-arc-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "L-goldbach-dyadic-real-character-mod-eight",
+      "file": "lean/PEqualNP/Outside/L_goldbach_dyadic_real_character_mod_eight.lean",
+      "module": "PEqualNP.Outside.L_goldbach_dyadic_real_character_mod_eight",
+      "statement": "∀ (k : ℕ), 3 ≤ k → ∀ χ : DirichletCharacter ℂ (2^k), χ^2 = 1 → ∃ χ₈ : DirichletCharacter ℂ 8, ∀ a : ℕ, χ (a : ZMod (2^k)) = χ₈ (a : ZMod 8)",
+      "plain_statement": {
+        "zh": "新路线 · 特征与分母扩窗 · CW-8003 · 将二幂塔上的实特征降到模八",
+        "en": "New route · Characters and extended arcs · CW-8003 · Descend real characters on the dyadic tower to modulus eight"
+      },
+      "brief": {
+        "zh": "证明 1 模 8 的单位在模 2^k 都是平方，再沿商群下降。这样可隔离实特征；非实特征和中心素数对相关仍待估计。",
+        "en": "Prove that every unit congruent to one modulo eight is a square modulo 2^k, then descend through the quotient. The complex characters and central prime correlation remain."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/DirichletLZerosEqPrimitiveCharacterZeros.lean",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "character-arc-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "L-goldbach-exceptional-character-reflection",
+      "file": "lean/PEqualNP/Outside/L_goldbach_exceptional_character_reflection.lean",
+      "module": "PEqualNP.Outside.L_goldbach_exceptional_character_reflection",
+      "statement": "∀ (d n : ℕ) [NeZero d] (χ : DirichletCharacter ℂ d), d ∣ n → χ^2 = 1 → (∑ a : (ZMod d)ˣ, χ (a : ZMod d) * χ ((n : ZMod d) - (a : ZMod d))) = (Nat.totient d : ℂ) * χ (-1)",
+      "plain_statement": {
+        "zh": "新路线 · 特征与分母扩窗 · CW-8001 · 计算导子整除目标时实特征对的反射项",
+        "en": "New route · Characters and extended arcs · CW-8001 · Evaluate the reflected quadratic-character pair at multiples of the conductor"
+      },
+      "brief": {
+        "zh": "在单位群上把 n−a 换成 −a，再用 χ²=1。奇特征给 −φ(d)，偶特征给正号。剩余零点和交叉项仍须估计。",
+        "en": "On the units n−a equals −a. Apply χ²=1 there. Odd parity gives −φ(d), even parity gives the positive sign. Other zeros and cross terms still need estimates."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "character-arc-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "L-goldbach-exceptional-prime-jacobi",
+      "file": "lean/PEqualNP/Outside/L_goldbach_exceptional_prime_jacobi.lean",
+      "module": "PEqualNP.Outside.L_goldbach_exceptional_prime_jacobi",
+      "statement": "∀ (p : ℕ) [Fact p.Prime] (χ : DirichletCharacter ℂ p), χ ≠ 1 → χ^2 = 1 → ∀ t : ZMod p, t ≠ 0 → (∑ a : ZMod p, χ a * χ (t-a)) = -χ (-1)",
+      "plain_statement": {
+        "zh": "新路线 · 特征与分母扩窗 · CW-8002 · 计算素导子与目标互素时的 Jacobi 项",
+        "en": "New route · Characters and extended arcs · CW-8002 · Evaluate the Jacobi term when the prime conductor misses the target"
+      },
+      "brief": {
+        "zh": "换元 a=t u，利用 χ(t)²=1。再用 u/(1−u) 将去掉 u=1 的和化为非平凡特征和。两种符号均保留。",
+        "en": "Scale by t using χ(t)²=1. On u≠1 use u/(1−u) and the complete nontrivial character sum. Retain the parity sign."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "character-arc-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "L-goldbach-parity-residue-pair-witness",
+      "file": "lean/PEqualNP/Outside/L_goldbach_parity_residue_pair_witness.lean",
+      "module": "PEqualNP.Outside.L_goldbach_parity_residue_pair_witness",
+      "statement": "let liouville := fun n : ℕ => (-1:ℤ)^n.primeFactorsList.length; Nat.Prime 97 ∧ Nat.Prime 103 ∧ Nat.Prime 67 ∧ Nat.Prime 7 ∧ Nat.Prime 19 ∧ 133 = 7*19 ∧ 97+103=200 ∧ 67+133=200 ∧ (∀ x ∈ ({97,103,67,133} : Finset ℕ), 200 ≤ 3*x ∧ 3*x ≤ 400) ∧ (∀ m : ℕ, m ∣ 30 → ∀ F : ℕ → ℕ → ℝ, F (97%m) (103%m)=F (67%m) (133%m)) ∧ liouville 97 * liouville 103 = 1 ∧ liouville 67 * liouville 133 = -1",
+      "plain_statement": {
+        "zh": "新路线 · 特征与分母扩窗 · CW-8009 · 核验中央窗内余类相同而素因子奇偶不同的两组分解",
+        "en": "New route · Characters and extended arcs · CW-8009 · Check two central pairs with identical residue data and different factor parity"
+      },
+      "brief": {
+        "zh": "检验 200 的两组分解并把模 30 的同余降到每个因子模数。可作为有限余类测试的反例。进一步的 Theta 测试须提供额外的双变量输入。",
+        "en": "Check both pairs and reduce the congruences modulo 30 to each divisor of 30. This is a finite test for residue-based models. A theta model needs extra two-variable data."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2495",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "character-arc-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "L-goldbach-primitive-zero-window-increment",
+      "file": "lean/PEqualNP/Outside/L_goldbach_primitive_zero_window_increment.lean",
+      "module": "PEqualNP.Outside.L_goldbach_primitive_zero_window_increment",
+      "statement": "∀ (u v : ℝ) (ρ : ℂ), 1 ≤ u → u ≤ v → 0 ≤ ρ.re → ρ ≠ 0 → ‖((v:ℂ)^ρ-(u:ℂ)^ρ)/ρ‖ ≤ (v:ℝ)^ρ.re * min (Real.log (v/u)) (2/‖ρ‖)",
+      "plain_statement": {
+        "zh": "新路线 · 特征与分母扩窗 · CW-8005 · 为截断显式公式的单个零点给出双端点增量界",
+        "en": "New route · Characters and extended arcs · CW-8005 · Bound one zero contribution across two explicit-formula endpoints"
+      },
+      "brief": {
+        "zh": "沿正实轴积分 x^(ρ−1) 得对数窗界，再用两个端点得 2/|ρ| 界。可按重数求和；该估计允许实零点靠近 1。",
+        "en": "Integrate x^(ρ−1) on the positive ray for the logarithmic width. Bound the endpoints for 2/|ρ|. Multiplicities survive summation and real zeros near one remain possible."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean#L607",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "character-arc-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "L-goldbach-progression-unit-fourier-variance",
+      "file": "lean/PEqualNP/Outside/L_goldbach_progression_unit_fourier_variance.lean",
+      "module": "PEqualNP.Outside.L_goldbach_progression_unit_fourier_variance",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let Λ := ArithmeticFunction.vonMangoldt; ∀ (q n : ℕ), 0 < q → let D := fun r : ℕ => if Nat.Coprime r q then (∑ k ∈ (Finset.range (n+1)).filter (fun k => k%q=r), Λ k) - (n:ℝ)/Nat.totient q else 0; (∑ a ∈ Finset.range q, ‖∑ r ∈ Finset.range q, (D r:ℂ)*E ((a:ℝ)*r/q)‖^2) = (q:ℝ)*(∑ r ∈ Finset.range q, (D r)^2)",
+      "plain_statement": {
+        "zh": "新路线 · 特征与分母扩窗 · CW-8004 · 把有理频率总能量精确还原为单位余类方差",
+        "en": "New route · Characters and extended arcs · CW-8004 · Recover the unit-class variance from the rational-frequency energy"
+      },
+      "brief": {
+        "zh": "对所有分子取平方均值并用加法正交。非单位类按零延拓。用于检验频率预算，3/5 水平的逐类最大误差及模数和另需输入。",
+        "en": "Sum over every numerator and apply additive orthogonality with zero extension on nonunits. The maximum class error and the sum over moduli at level 3/5 need additional bounds."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "character-arc-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "L-goldbach-sqrt-arc-separation-scale",
+      "file": "lean/PEqualNP/Outside/L_goldbach_sqrt_arc_separation_scale.lean",
+      "module": "PEqualNP.Outside.L_goldbach_sqrt_arc_separation_scale",
+      "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let Q₂ := fun n : ℕ => ⌊Real.sqrt (n:ℝ)/((Nat.log 2 (n+2):ℝ)^4)⌋₊; ∃ N : ℕ, ∀ n ≥ N, Q₁ n < Q₂ n ∧ 2*(256*Q₂ n*Q n)*Q₂ n < n",
+      "plain_statement": {
+        "zh": "新路线 · 特征与分母扩窗 · CW-8007 · 核验扩带后的分母增长和 Farey 分离尺度",
+        "en": "New route · Characters and extended arcs · CW-8007 · Verify growth and Farey separation at the extended cutoff"
+      },
+      "brief": {
+        "zh": "两端取整后比较 n^(1/6) 与对数四次幂。分离式的比值至多 512/log₂(n+2)^6，可用分数间距逐弧积分。",
+        "en": "After flooring compare n^(1/6) to the fourth power of the logarithm. The separation ratio is at most 512/log₂(n+2)^6, which permits termwise arc integration."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-sqrt-modulus-arc-band",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "character-arc-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "L-goldbach-sqrt-band-old-new-shells",
+      "file": "lean/PEqualNP/Outside/L_goldbach_sqrt_band_old_new_shells.lean",
+      "module": "PEqualNP.Outside.L_goldbach_sqrt_band_old_new_shells",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Q₂ := fun n : ℕ => ⌊Real.sqrt (n : ℝ) / ((Nat.log 2 (n + 2) : ℝ) ^ 4)⌋₊; let sqrtArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q₂ n ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t - (a : ℝ) / (q : ℝ)| ≤ ((256 * Q₂ n * Q n : ℕ) : ℝ) / ((q : ℝ) * (n : ℝ))}; ∀ n : ℕ, 0 < n → Q₁ n ≤ Q₂ n → let old := {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q₁ n ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/q| ≤ ((256*Q₂ n*Q n:ℕ):ℝ)/((q:ℝ)*n)}; let J := fun A : Set ℝ => intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; J ((wideArcs n)ᶜ) = J (old \\ wideArcs n) + J (sqrtArcs n \\ old) + J ((sqrtArcs n)ᶜ)",
+      "plain_statement": {
+        "zh": "新路线 · 特征与分母扩窗 · CW-8008 · 把原深弧系数分成旧分母外环、新增区域和外侧余项",
+        "en": "New route · Characters and extended arcs · CW-8008 · Split the old deep coefficient into old annuli, new area and the exterior"
+      },
+      "brief": {
+        "zh": "使用 W⊆old⊆U 的可测嵌套和相同 f。新分母只计 old 外的区域。父题只含前两项，第三项仍进入原深弧。",
+        "en": "Use the nested measurable masks W⊆old⊆U with the same f. Count new centers only outside old. The parent controls the first two terms. The exterior remains in the original deep coefficient."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-sqrt-modulus-arc-band",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "character-arc-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "L-goldbach-deep-fourth-moment-refutation",
+      "file": "lean/PEqualNP/Outside/L_goldbach_deep_fourth_moment_refutation.lean",
+      "module": "PEqualNP.Outside.L_goldbach_deep_fourth_moment_refutation",
+      "statement": "¬ (let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; ∀ η : ℝ, 0 < η → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => ‖S n w u‖ ^ 4) t) (0 : ℝ) 1 MeasureTheory.volume ≤ (n : ℝ) ^ (2 + η))",
+      "plain_statement": {
+        "zh": "新路线 · 深次弧四次矩反驳 · MR-8001 · 反驳已撤下的深次弧四次矩上界",
+        "en": "New route · Deep fourth-moment refutation · MR-8001 · Refute the retired deep-arc fourth-moment bound"
+      },
+      "brief": {
+        "zh": "取 η=1/6，在立方根截断刚外侧选择平方自由分母。对全部既约分子求和，用 Ramanujan 和、Farey 分离及 Hölder 给出任意大尺度的反例。提交整个冻结声明的否定。",
+        "en": "Take η=1/6 and squarefree denominators just beyond the cube-root cutoff. Sum over reduced numerators, use Ramanujan sums, Farey separation and Hölder, and obtain counterexamples at arbitrarily large cutoffs."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/ROADMAP.md",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "deep-moment-refutation",
+      "role": "target",
+      "depends_on": [],
+      "challenge_only": true,
+      "route_source": "deep-moment-refutation"
+    },
+    {
+      "id": "L-goldbach-finite-phase-abel-two-ranges",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_phase_abel_two_ranges.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_phase_abel_two_ranges",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let D := fun (q a n : ℕ) => (∑ k ∈ (Finset.range (n+1)).filter (fun k => k%q=a%q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/(Nat.totient q:ℝ); let F := fun (q a n : ℕ) (β : ℝ) => ∑ k ∈ Finset.Icc 1 n, (((if k%q=a%q then ArithmeticFunction.vonMangoldt k else 0) - 1/(Nat.totient q:ℝ):ℝ):ℂ)*E ((k:ℝ)*β); let J := fun (q a l u : ℕ) (β : ℝ) => 2 * Real.pi * |β| * (∑ m ∈ Finset.Ico l u, |D q a m|); ∀ (q a n t : ℕ) (β : ℝ), 0 < q → t ≤ n → ‖F q a n β‖ ≤ |D q a n| + J q a 0 t β + J q a t n β",
+      "plain_statement": {
+        "zh": "新路线 · 裙边与显式算术输入 · SI-8006 · 把相位误差分配给两个不相交的前缀区间",
+        "en": "New route · Skirts and explicit arithmetic inputs · SI-8006 · Split a phased progression error between two disjoint prefix ranges"
+      },
+      "brief": {
+        "zh": "在闭右端点的 Ψ 上做离散分部求和。相邻相位的弦长至多 2π|β|，D(0)=0。将 0≤m<t 和 t≤m<n 分别交给 SI-8004、SI-8005。",
+        "en": "Sum by parts with Ψ inclusive on the right. Adjacent phases differ by at most 2π|β| and D(0)=0. Send 0≤m<t and t≤m<n to SI-8004 and SI-8005 respectively."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-finite-fixed-progression-unit-error",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "explicit-skirt-inputs",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-abel-total-variation"
+      ],
+      "route_source": "explicit-skirt-inputs"
+    },
+    {
+      "id": "L-goldbach-finite-phase-bmor-tail-cost",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_phase_bmor_tail_cost.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_phase_bmor_tail_cost",
+      "statement": "(∀ (q a n : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 8000000000 ≤ n → |(∑ k ∈ (Finset.range (n+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/Nat.totient q| ≤ (n:ℝ)/(840 * Real.log (n:ℝ))) → let D := fun (q a n : ℕ) => (∑ k ∈ (Finset.range (n+1)).filter (fun k => k%q=a%q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/(Nat.totient q:ℝ); let J := fun (q a l u : ℕ) (β : ℝ) => 2 * Real.pi * |β| * (∑ m ∈ Finset.Ico l u, |D q a m|); let T : ℕ := 8000000000; ∀ (q a n : ℕ) (β : ℝ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 4000000000000000000 ≤ n → |β| ≤ 105/((q:ℝ)*n) → |D q a n| + J q a T n β ≤ (n:ℝ)/(840*Real.log n) + 105*Real.pi*n/(840*(q:ℝ)*Real.log T)",
+      "plain_statement": {
+        "zh": "新路线 · 裙边与显式算术输入 · SI-8005 · 把 BMOR 的逐前缀估计积成主弧后段误差",
+        "en": "New route · Skirts and explicit arithmetic inputs · SI-8005 · Sum the BMOR prefix estimates over the late part of the arc budget"
+      },
+      "brief": {
+        "zh": "前提逐字取自 PR #2484 的小模数 ψ 声明。对 T≤m<n 用 log m≥log T 并计算等差和；单列终点 n，保留 q 和两处分母的对数。",
+        "en": "Use the exact small-modulus ψ statement from PR #2484 as a hypothesis. For T≤m<n use log m≥log T and sum the arithmetic progression. Keep n as a separate endpoint with its own logarithm."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2484",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "explicit-skirt-inputs",
+      "role": "conditional",
+      "depends_on": [],
+      "route_source": "explicit-skirt-inputs"
+    },
+    {
+      "id": "L-goldbach-finite-phase-early-prefix-cost",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_phase_early_prefix_cost.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_phase_early_prefix_cost",
+      "statement": "let D := fun (q a n : ℕ) => (∑ k ∈ (Finset.range (n+1)).filter (fun k => k%q=a%q), ArithmeticFunction.vonMangoldt k) - (n:ℝ)/(Nat.totient q:ℝ); let J := fun (q a l u : ℕ) (β : ℝ) => 2 * Real.pi * |β| * (∑ m ∈ Finset.Ico l u, |D q a m|); let T : ℕ := 8000000000; ∀ (q a n : ℕ) (β : ℝ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 4000000000000000000 ≤ n → |β| ≤ 105/((q:ℝ)*n) → J q a 0 T β ≤ (n:ℝ)/10^12",
+      "plain_statement": {
+        "zh": "新路线 · 裙边与显式算术输入 · SI-8004 · 把显式等差数列定理起点以下的相位损失压至 n/10¹²",
+        "en": "New route · Skirts and explicit arithmetic inputs · SI-8004 · Bound the pre-threshold phase loss by n/10¹²"
+      },
+      "brief": {
+        "zh": "对 m<T=8·10⁹ 用 Λ(k)≤log T，故 |D(m)|≤m(log T+1)。代入 C、半宽 105/(qn) 和整数端点，保留绝对常数。",
+        "en": "Below T=8·10⁹ use Λ(k)≤log T and |D(m)|≤m(log T+1). Insert the cutoff C and width 105/(qn), keeping the endpoints and constants."
+      },
+      "source": "https://arxiv.org/abs/1802.00085",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "explicit-skirt-inputs",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "explicit-skirt-inputs"
+    },
+    {
+      "id": "L-goldbach-fourth-band-free-factor",
+      "file": "lean/PEqualNP/Outside/L_goldbach_fourth_band_free_factor.lean",
+      "module": "PEqualNP.Outside.L_goldbach_fourth_band_free_factor",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let Λ := ArithmeticFunction.vonMangoldt; ∀ (n U B : ℕ) (t : ℝ), 1 ≤ B → let T := fun m : ℕ => ∑ a ∈ (Nat.divisors m).filter (fun a => B < a ∧ U < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U < d), μ d) * Λ (m/a); (∑ m ∈ Finset.range (n+1), (T m:ℂ)*E ((m:ℝ)*t)) = -(∑ b ∈ Finset.Ioc U (n/(B+1)), ∑ d ∈ Finset.Icc 1 U, ((Λ b * μ d:ℝ):ℂ) * ∑ l ∈ Finset.Ioc (B/d) ((n/b)/d), E ((b*d*l:ℕ)*t))",
+      "plain_statement": {
+        "zh": "新路线 · 裙边与显式算术输入 · SI-8001 · 从第四带的短除数补和中露出无权长变量",
+        "en": "New route · Skirts and explicit arithmetic inputs · SI-8001 · Expose the unweighted variable in the fourth band"
+      },
+      "brief": {
+        "zh": "a>B≥1 时全 Möbius 除数和为零。把补和取负，写 a=dℓ，保留 b≤n/(B+1) 和 ℓ 的两个取整端点。取 B=⌊n^(2/3)⌋。",
+        "en": "For a>B≥1 the full Möbius divisor sum vanishes. Negate the short complement, set a=dℓ and keep both floors and b≤n/(B+1). Use B=⌊n^(2/3)⌋."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-type2-b3-b4",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "explicit-skirt-inputs",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "explicit-skirt-inputs"
+    },
+    {
+      "id": "L-goldbach-fourth-band-rational-resonance",
+      "file": "lean/PEqualNP/Outside/L_goldbach_fourth_band_rational_resonance.lean",
+      "module": "PEqualNP.Outside.L_goldbach_fourth_band_rational_resonance",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (A B h q a : ℕ), 0 < q → Nat.Coprime a q → let z := E ((a:ℝ)*h/q); ‖∑ l ∈ Finset.Ioc A B, E ((a:ℝ)*h*l/q)‖ ≤ if q ∣ h then ((B-A:ℕ):ℝ) else min ((B-A:ℕ):ℝ) (2/‖1-z‖)",
+      "plain_statement": {
+        "zh": "新路线 · 裙边与显式算术输入 · SI-8002 · 在有理中心显式分出自由因子的共振类",
+        "en": "New route · Skirts and explicit arithmetic inputs · SI-8002 · Separate the resonant free factors at a rational center"
+      },
+      "brief": {
+        "zh": "取 h=bd。既约性使共振条件等于 q∣bd；对其余项求几何级数。偏离中心的相位和与第三带的交项仍待估计。",
+        "en": "Take h=bd. Coprimality makes q∣bd the exact resonance condition. Sum the geometric series off resonance. Nearby phases and the cross term with band three still need estimates."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "explicit-skirt-inputs",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "explicit-skirt-inputs"
+    },
+    {
+      "id": "L-goldbach-skirt-paired-annulus-kernel",
+      "file": "lean/PEqualNP/Outside/L_goldbach_skirt_paired_annulus_kernel.lean",
+      "module": "PEqualNP.Outside.L_goldbach_skirt_paired_annulus_kernel",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (q : ℕ) (j : ℤ) (h H : ℝ), 0 < q → 0 ≤ h → h ≤ H → let A := (Finset.range q).filter (fun a => Nat.Coprime a q); let T := fun (a : ℕ) (r : ℝ) => intervalIntegral (fun u => E ((j:ℝ)*((a:ℝ)/q+u))) (-r) r MeasureTheory.volume; (∑ a ∈ A, (T a H - T a h)) = (∑ a ∈ A, E ((j:ℝ)*a/q)) * ((if j=0 then 2*(H-h) else (Real.sin (2*Real.pi*j*H)-Real.sin (2*Real.pi*j*h))/(Real.pi*j) : ℝ):ℂ)",
+      "plain_statement": {
+        "zh": "新路线 · 裙边与显式算术输入 · SI-8003 · 计算一圈既约中心上成对裙边的 Ramanujan–sinc 核",
+        "en": "New route · Skirts and explicit arithmetic inputs · SI-8003 · Compute the Ramanujan–sinc kernel across paired annuli"
+      },
+      "brief": {
+        "zh": "固定偏移 j，分别积分 ±β，再求既约分子和。q=1 用中心 0 两侧的周期延拓；在全弧集合应用时须验证分离。供低模裙边和中模剩余裙边共用。",
+        "en": "Integrate the symmetric offsets at fixed j before summing reduced numerators. Use the periodic wrap at center zero for q=1. Check separation when summing actual arc sets. Both skirts use this kernel."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "explicit-skirt-inputs",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "explicit-skirt-inputs"
+    },
+    {
+      "id": "L-goldbach-finite-chen-distinct-factor-band-cap",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_chen_distinct_factor_band_cap.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_chen_distinct_factor_band_cap",
+      "statement": "∀ (n D E Q : ℕ) (w : ℕ → ℝ) (B : ℝ), 0 ≤ B → (∀ p ≤ n, w p ≤ B) → let P := (Finset.range (n+1)).filter (fun p => Nat.Prime p ∧ ((Finset.Ioc D E).filter (fun r => Nat.Prime r ∧ ((Finset.Ioc r Q).filter (fun q => Nat.Prime q ∧ p+r*q=n)).Nonempty)).Nonempty); (∑ p ∈ P, w p) ≤ B * (∑ r ∈ (Finset.Ioc D E).filter Nat.Prime, ((min Q (n/r)-r:ℕ):ℝ))",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖续批 · FR-8008 · 为明确较小因子带内的平方自由半素数贡献给出上界",
+        "en": "New route · Finite-range coverage II · FR-8008 · Bound the distinct-factor semiprime mass in a specified smaller-factor band"
+      },
+      "brief": {
+        "zh": "用唯一较小素因子分拆候选。固定 r，把候选注入 r<q≤min(Q,n/r) 的区间。计算所得上界可与同权的陈氏下界比较，完整因子区间仍需逐 n 的更精细估计。",
+        "en": "Partition by the unique smaller prime factor. For each r, inject into the interval r<q≤min(Q,n/r). A same-weight Chen lower bound can be compared with this budget. The full factor range still needs sharper bounds for each n."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "finite-rfc-second",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-finite-chen-square-reindex"
+      ],
+      "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "L-goldbach-finite-chen-square-numeric-loss",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_chen_square_numeric_loss.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_chen_square_numeric_loss",
+      "statement": "let P := fun n : ℕ => (Finset.range (n+1)).filter (fun p => Nat.Prime p ∧ Nat.Prime (Nat.sqrt (n-p)) ∧ (Nat.sqrt (n-p))^2=n-p); ∀ n : ℕ, 4000000000000000000 ≤ n → ((P n).card:ℝ) ≤ (n:ℝ)/(10^6*(Real.log n)^2)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖续批 · FR-8007 · 给无权陈氏计数中的平方损失一个百万分之一预算",
+        "en": "New route · Finite-range coverage II · FR-8007 · Give the unweighted Chen count an explicit prime-square loss"
+      },
+      "brief": {
+        "zh": "先用平方根个数界。log²(x)/√x 在 x≥C 单调下降，在 C 处小于 10⁻⁶。可与同一 n 的无权陈氏下界比较。",
+        "en": "Bound the count by √n. The ratio log²(x)/√x decreases for x≥C and is below 10⁻⁶ at C. Compare with the unweighted Chen lower bound at the same n."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "finite-rfc-second",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-finite-chen-square-reindex"
+      ],
+      "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "L-goldbach-finite-chen-square-reindex",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_chen_square_reindex.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_chen_square_reindex",
+      "statement": "let P := fun n : ℕ => (Finset.range (n+1)).filter (fun p => Nat.Prime p ∧ Nat.Prime (Nat.sqrt (n-p)) ∧ (Nat.sqrt (n-p))^2=n-p); ∀ (n : ℕ) (v : ℕ → ℝ), (∑ p ∈ P n, v p) = ∑ a ∈ (Finset.Icc 2 (Nat.sqrt n)).filter (fun a => Nat.Prime a ∧ Nat.Prime (n-a^2)), v (n-a^2)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖续批 · FR-8006 · 在同一权下精确移除陈氏候选中的素数平方余项",
+        "en": "New route · Finite-range coverage II · FR-8006 · Remove prime-square remainders with the same Chen weight"
+      },
+      "brief": {
+        "zh": "以 p↔a、p+a²=n 建立双射。右边撤去 p 后仍保留 v(n−a²)。平方自由半素数须另外去除。",
+        "en": "Use p+a²=n for the bijection and keep v(n−a²) on the right. Distinct-factor semiprimes require a further estimate."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "finite-rfc-second",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-finite-factor-window-switch"
+      ],
+      "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "L-goldbach-finite-post-boundary-prime-block",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_post_boundary_prime_block.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_post_boundary_prime_block",
+      "statement": "∀ j : ℕ, 1 ≤ j → j ≤ 64 → let n : ℕ := 4000000000000000000 + 2*j; ∃ p ∈ ({3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,67,71,127,131,137,139,149,151,163,181,211,227,239,251,313,317,337,367,379,509,769,1213} : Finset ℕ), Nat.Prime p ∧ p < n ∧ Nat.Prime (n-p)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖续批 · FR-8001 · 核验已发表端点之后连续 64 个偶数的素数见证",
+        "en": "New route · Finite-range coverage II · FR-8001 · Verify prime witnesses for the next 64 even numbers beyond the published cutoff"
+      },
+      "brief": {
+        "zh": "RFC 列出按 j 排序的候选。逐行核验两侧素性，可用 n−p−1 的因子证书。覆盖 C+2 至 C+128 的所有偶数。",
+        "en": "The RFC lists candidates by j. Verify both primes in each row, for example with certificates factoring n−p−1. The block covers every even integer from C+2 to C+128."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "finite-rfc-second",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-finite-witness-translate-bitset"
+      ],
+      "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "L-goldbach-finite-rough-fourteen-fortyseven",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_fourteen_fortyseven.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_fourteen_fortyseven",
+      "statement": "∀ n : ℕ, 4 ≤ n → Even n → (n:ℝ) < Real.exp (Real.exp 5) → ∃ p : ℕ, Nat.Prime p ∧ 2 ≤ n-p ∧ (n-p).primeFactorsList.length ≤ 47 ∧ ((n:ℝ) < Real.exp (Real.exp (19/5)) → (n-p).primeFactorsList.length ≤ 14)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖续批 · FR-8005 · 把两个原型区间的因子数上界降到 14 和 47",
+        "en": "New route · Finite-range coverage II · FR-8005 · Improve the two prototype factor bounds to 14 and 47"
+      },
+      "brief": {
+        "zh": "用 23^Ω≤n−p 并验证 exp(3.8)<15 log 23、exp(5)<48 log 23。小于 210235 时 n=4 单列，其余偶数取 p=3 后用奇因子 ≥3。",
+        "en": "Use 23^Ω≤n−p and verify exp(3.8)<15 log 23 and exp(5)<48 log 23. Below 210235 handle 4 separately and take p=3 for the other evens, whose remainder has only odd factors."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "finite-rfc-second",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-finite-wheel-rough-twentythree",
+        "L-goldbach-finite-rough-factor-power"
+      ],
+      "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "L-goldbach-finite-wheel-rough-twentythree",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_wheel_rough_twentythree.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_wheel_rough_twentythree",
+      "statement": "∀ n : ℕ, 210235 ≤ n → Even n → ∃ p : ℕ, Nat.Prime p ∧ p ≤ 210233 ∧ 2 ≤ n-p ∧ Nat.Coprime (n-p) 9699690",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖续批 · FR-8004 · 在完整模 9699690 的轮筛上构造 23 粗余项",
+        "en": "New route · Finite-range coverage II · FR-8004 · Construct a 23-rough remainder on the full 9699690 wheel"
+      },
+      "brief": {
+        "zh": "先用 n%30030 选基类，再从三候选删去模 17 或 19 命中的至多两项。整数门槛保证差至少为二。",
+        "en": "Use n%30030 for the base class. Among its three candidates remove at most two forbidden by 17 and 19. The integer cutoff leaves a difference of at least two."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "finite-rfc-second",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-finite-wheel-unit-base",
+        "L-goldbach-finite-wheel-three-prime-lifts"
+      ],
+      "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "L-goldbach-finite-wheel-three-prime-lifts",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_wheel_three_prime_lifts.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_wheel_three_prime_lifts",
+      "statement": "∀ r ∈ ({17,19,23,181,29,37,41,43,31,47,53,67} : Finset ℕ), ∃ S : Finset ℕ, S.card=3 ∧ (∀ p ∈ S, Nat.Prime p ∧ p ≤ 210233 ∧ p%30030=r) ∧ (∀ p ∈ S, ∀ q ∈ S, p ≠ q → p%17 ≠ q%17 ∧ p%19 ≠ q%19)",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖续批 · FR-8003 · 为十二个基类各核验三个互补的素数提升",
+        "en": "New route · Finite-range coverage II · FR-8003 · Certify three complementary prime lifts for each of twelve classes"
+      },
+      "brief": {
+        "zh": "逐行使用 RFC 的三素数证书，检查两个模数各自的互异性。17 与 19 各至多排除一个候选。",
+        "en": "Use each RFC triple to verify primality and distinct residues separately modulo 17 and 19. Each new modulus excludes at most one candidate."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "finite-rfc-second",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "L-goldbach-finite-wheel-unit-base",
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_wheel_unit_base.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_wheel_unit_base",
+      "statement": "∀ a : ℕ, a < 30030 → Even a → ∃ r ∈ ({17,19,23,181,29,37,41,43,31,47,53,67} : Finset ℕ), Nat.Coprime r 30030 ∧ Nat.Coprime ((a+30030-r)%30030) 30030",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖续批 · FR-8002 · 找到本身也为单位的模 30030 覆盖表",
+        "en": "New route · Finite-range coverage II · FR-8002 · Cover modulus 30030 with base candidates that are units"
+      },
+      "brief": {
+        "zh": "逐项删除已覆盖的偶类。旧表含 3、5、7、11，这些素数的本类无法容纳三个素数提升。本表各基类均可继续提升。",
+        "en": "Remove the covered even classes in order. The previous table included 3,5,7,11, whose classes cannot contain three prime lifts. Each new base class can be lifted."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "finite-rfc-second",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "finite-rfc-second"
+    },
+    {
       "id": "L-goldbach-antispike-shared-coefficient-error",
       "statement": "∀ (n : ℕ) (a w : ℕ → ℝ) (δ T : ℝ), 0 ≤ δ → let s := Finset.Icc n (2 * n); ((∀ c : ℕ → ℝ, (∑ m ∈ s, (c m - a m) ^ 2) ≤ δ ^ 2 → (∑ m ∈ s, w m * c m) - c n ≤ T) ↔ (∑ m ∈ s, w m * a m) - a n + δ * Real.sqrt (1 - 2 * w n + ∑ m ∈ s, (w m) ^ 2) ≤ T)",
       "plain_statement": {
@@ -13539,6 +14111,75 @@
       "route_source": "frontier-moment-antispike"
     },
     {
+      "id": "L-goldbach-divisor-indicator-covariance",
+      "file": "lean/PEqualNP/Outside/L_goldbach_divisor_indicator_covariance.lean",
+      "module": "PEqualNP.Outside.L_goldbach_divisor_indicator_covariance",
+      "statement": "let X := fun (p t : ℕ) => (p:ℝ)*(if p ∣ t then 1 else 0)-1; ∀ (N p q : ℕ), 0 < N → Nat.Prime p → Nat.Prime q → p ∣ N → q ∣ N → ((∑ t ∈ Finset.range N, X p t * X q t)/(N:ℝ)) = if p=q then (p:ℝ)-1 else 0",
+      "plain_statement": {
+        "zh": "新路线 · Liouville 相关的整除膨胀 · LD-8001 · 计算模 N 均匀测度下素因子整除指示的协方差",
+        "en": "New route · Dilation of Liouville correlations · LD-8001 · Compute covariance of prime divisibility indicators modulo N"
+      },
+      "brief": {
+        "zh": "统计 [0,N) 内的 p 倍数。异素数时，交集为 pq 的倍数，且 pq 整除 N。",
+        "en": "Count multiples of p in [0,N). For distinct primes the intersection consists of multiples of pq, which divides N."
+      },
+      "source": "https://arxiv.org/abs/1509.05422",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "liouville-dilation",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "liouville-dilation"
+    },
+    {
+      "id": "L-goldbach-liouville-dilation-bessel",
+      "file": "lean/PEqualNP/Outside/L_goldbach_liouville_dilation_bessel.lean",
+      "module": "PEqualNP.Outside.L_goldbach_liouville_dilation_bessel",
+      "statement": "let L := fun n : ℕ => if n=0 then (0:ℝ) else (-1:ℝ)^n.primeFactorsList.length; let C := fun n : ℕ => (∑ t ∈ Finset.range n, L t * L (n-t))/(n:ℝ); ∀ N : ℕ, 0 < N → (∑ p ∈ N.divisors.filter Nat.Prime, (C (N/p)-C N)^2/((p:ℝ)-1)) ≤ ((N-1:ℕ):ℝ)/(N:ℝ)-(C N)^2",
+      "plain_statement": {
+        "zh": "新路线 · Liouville 相关的整除膨胀 · LD-8003 · 给素因子整除膨胀的同时偏差一个方差预算",
+        "en": "New route · Dilation of Liouville correlations · LD-8003 · Bound simultaneous prime-dilation deviations by the variance"
+      },
+      "brief": {
+        "zh": "对 p·1_{p∣t}−1 使用 LD-8001 和 LD-8002。将平方范数展开，有限样本中 t=0 的贡献为零，其余为 1。",
+        "en": "Use LD-8001 and LD-8002 for the centered indicators. Expand the squared norm. The squared endpoint term is zero and every other squared term is one."
+      },
+      "source": "https://arxiv.org/abs/1509.05422",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "liouville-dilation",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-divisor-indicator-covariance",
+        "L-goldbach-liouville-multiple-average"
+      ],
+      "route_source": "liouville-dilation"
+    },
+    {
+      "id": "L-goldbach-liouville-multiple-average",
+      "file": "lean/PEqualNP/Outside/L_goldbach_liouville_multiple_average.lean",
+      "module": "PEqualNP.Outside.L_goldbach_liouville_multiple_average",
+      "statement": "let L := fun n : ℕ => if n=0 then (0:ℝ) else (-1:ℝ)^n.primeFactorsList.length; let C := fun n : ℕ => (∑ t ∈ Finset.range n, L t * L (n-t))/(n:ℝ); ∀ (N p : ℕ), 0 < N → Nat.Prime p → p ∣ N → (∑ t ∈ (Finset.range N).filter (fun t => p ∣ t), L t * L (N-t))/((N/p:ℕ):ℝ)=C (N/p)",
+      "plain_statement": {
+        "zh": "新路线 · Liouville 相关的整除膨胀 · LD-8002 · 计算整除纤维上 Liouville 二元相关的平均",
+        "en": "New route · Dilation of Liouville correlations · LD-8002 · Compute the mean Liouville pair correlation on a divisibility fiber"
+      },
+      "brief": {
+        "zh": "以 t=pu 换元。两个 Liouville 因子各乘 −1，端点按 L(0)=0 处理。",
+        "en": "Reindex t=pu. Each Liouville factor gains a minus sign. Handle the endpoint with L(0)=0."
+      },
+      "source": "https://arxiv.org/abs/1509.05422",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "liouville-dilation",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "liouville-dilation"
+    },
+    {
       "id": "L-goldbach-finite-sieve-probe-crt-positive",
       "statement": "∀ n d e : ℕ, 0 < d → 0 < e → ((∃ p : ℕ, p % d = n % d ∧ p % e = 1 % e) ↔ n % (Nat.gcd d e) = 1 % (Nat.gcd d e))",
       "plain_statement": {
@@ -13559,6 +14200,186 @@
       "track": "representations",
       "role": "lemma",
       "route_source": "representations"
+    },
+    {
+      "id": "L-goldbach-factor-band-unfold",
+      "file": "lean/PEqualNP/Outside/L_goldbach_factor_band_unfold.lean",
+      "module": "PEqualNP.Outside.L_goldbach_factor_band_unfold",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let Λ := ArithmeticFunction.vonMangoldt; ∀ (n U L R : ℕ) (t : ℝ), let M := fun a : ℕ => ∑ d ∈ (Nat.divisors a).filter (fun d => U < d), μ d; let T := fun m : ℕ => ∑ a ∈ (Nat.divisors m).filter (fun a => L < a ∧ a ≤ R ∧ U < m/a), M a * Λ (m/a); (∑ m ∈ Finset.range (n+1), (T m : ℂ) * E ((m:ℝ)*t)) = ∑ a ∈ Finset.Ioc L (min R n), ∑ b ∈ Finset.Ioc U (n/a), ((M a * Λ b : ℝ):ℂ) * E ((a*b:ℕ)*t)",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-8001 · 把 Vaughan 带谱展开为带乘积截断的双和",
+        "en": "New route · Signed factors and shift windows · FW-8001 · Unfold a Vaughan band into a product-truncated double sum"
+      },
+      "brief": {
+        "zh": "用 m=ab 双射，分别处理 m=0 和下降的区间。L、R 可取前三带的真实整数端点。供六个双线性格共用。",
+        "en": "Use m=ab and the exact floors, including m=0 and empty intervals. Substituting the first three bands serves all six core cells."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "signed-factor-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-factor-line-fiber-determinant",
+      "file": "lean/PEqualNP/Outside/L_goldbach_factor_line_fiber_determinant.lean",
+      "module": "PEqualNP.Outside.L_goldbach_factor_line_fiber_determinant",
+      "statement": "∀ (a b N r₀ s₀ g i j : ℤ), 0 < g → g ∣ a → g ∣ b → a*r₀+b*s₀=N → (r₀+(b/g)*i)*(s₀-(a/g)*j)-(r₀+(b/g)*j)*(s₀-(a/g)*i)=-(N/g)*(j-i)",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-8007 · 计算反射纤维的两点行列式",
+        "en": "New route · Signed factors and shift windows · FW-8007 · Compute the determinant of two points on a reflected fiber"
+      },
+      "brief": {
+        "zh": "先还原整除下的约化步长，再展开。远非对角项的行列式随目标增长。",
+        "en": "Use exact division of the steps and expand. The determinant off the diagonal grows with the target."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2495",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "signed-factor-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-factor-line-fiber-param",
+      "file": "lean/PEqualNP/Outside/L_goldbach_factor_line_fiber_param.lean",
+      "module": "PEqualNP.Outside.L_goldbach_factor_line_fiber_param",
+      "statement": "∀ (a b N r₀ s₀ : ℤ), 0 < a → 0 < b → a*r₀+b*s₀=N → let g := (Int.gcd a b : ℤ); ∀ r s : ℤ, a*r+b*s=N ↔ ∃ j : ℤ, r=r₀+(b/g)*j ∧ s=s₀-(a/g)*j",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-8006 · 参数化固定因子线上的整数解",
+        "en": "New route · Signed factors and shift windows · FW-8006 · Parametrize the integer solutions on a factor line"
+      },
+      "brief": {
+        "zh": "除以公因子后使用约化步长互素。证明所有整点恰落在这个参数族内，再将带限交给参数区间。",
+        "en": "Divide by the gcd and use coprimality of the reduced steps. Prove both directions for all integers before imposing band limits."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2495",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "signed-factor-windows",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-factor-line-reduced-progression"
+      ],
+      "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-factor-line-near-diagonal-budget",
+      "file": "lean/PEqualNP/Outside/L_goldbach_factor_line_near_diagonal_budget.lean",
+      "module": "PEqualNP.Outside.L_goldbach_factor_line_near_diagonal_budget",
+      "statement": "∀ (J : Finset ℤ) (D : ℕ) (u v : ℤ → ℝ) (B : ℝ), 0 ≤ B → (∀ i ∈ J, |u i * v i| ≤ B) → |∑ i ∈ J, ∑ j ∈ J.filter (fun j => j ≠ i ∧ (j-i).natAbs ≤ D), u i * v i * (u j * v j)| ≤ (J.card:ℝ) * (2*(D:ℝ)) * B^2",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-8008 · 给有限纤维上近对角能量单列上界",
+        "en": "New route · Signed factors and shift windows · FW-8008 · Bound the near-diagonal energy of a finite fiber"
+      },
+      "brief": {
+        "zh": "固定 i 后注入长度 2D 的双侧非零移位集，再用绝对值和与权上界。全局预算还须乘上每类纤维的实际数量。",
+        "en": "For each i, inject the adjacent indices into the 2D nonzero offsets. Apply the absolute weight bound. The global budget also needs the number of fibers in each range."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2495",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "signed-factor-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-factor-line-reduced-progression",
+      "file": "lean/PEqualNP/Outside/L_goldbach_factor_line_reduced_progression.lean",
+      "module": "PEqualNP.Outside.L_goldbach_factor_line_reduced_progression",
+      "statement": "let Λ := ArithmeticFunction.vonMangoldt; ∀ (n a b U : ℕ), 0 < a → 0 < b → let g := Nat.gcd a b; (∑ r ∈ Finset.Ioc U (n/a), ∑ s ∈ (Finset.Ioc U (n/b)).filter (fun s => a*r+b*s=n), Λ r * Λ s) = if g ∣ n then ∑ r ∈ (Finset.Ioc U (n/a)).filter (fun r => (a/g)*r % (b/g) = (n/g) % (b/g) ∧ U < (n-a*r)/b), Λ r * Λ ((n-a*r)/b) else 0",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-8002 · 把固定因子线的 Mangoldt 对限制到约化同余类",
+        "en": "New route · Signed factors and shift windows · FW-8002 · Restrict the Mangoldt pair on each factor line to a reduced congruence"
+      },
+      "brief": {
+        "zh": "固定 a,b；g 不整除目标时直线为空。否则先除 g 再取余，整除和 a r≤n 同时保证第二余因子的取值与端点。对应全圆对角；深弧还须扣宽弧。",
+        "en": "Fix a,b. Divide by the gcd before taking the congruence. Divisibility and ar≤n determine the other cofactor and its endpoints. This treats the full-circle diagonal. The wide-arc subtraction remains."
+      },
+      "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "signed-factor-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-shift-frozen-even-average",
+      "file": "lean/PEqualNP/Outside/L_goldbach_shift_frozen_even_average.lean",
+      "module": "PEqualNP.Outside.L_goldbach_shift_frozen_even_average",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ n H : ℕ, Even n → 0 < H → 2*(H-1) ≤ n → (∑ j ∈ Finset.range H, deepCoeff n (n+2*j))/(H:ℂ) = intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => f n u * ((∑ j ∈ Finset.range H, E (-2*(j:ℝ)*u))/(H:ℂ))) t) (0:ℝ) 1 MeasureTheory.volume",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-8004 · 求冻结深弧上归一化偶移平均的频率响应",
+        "en": "New route · Signed factors and shift windows · FW-8004 · Identify the frequency response of the frozen even-shift average"
+      },
+      "brief": {
+        "zh": "先固定 n 的权和遮罩，再交换有限和与积分。使用既有几何核界控制远离半整数的部分；距离指定点的单侧损失另计。",
+        "en": "Keep the weights and mask at n before interchanging the sum and integral. The existing kernel bounds frequencies away from half-integers. A separate one-sided loss remains at n."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-antispike-shift-transfer",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "signed-factor-windows",
+      "role": "lemma",
+      "depends_on": [
+        "L-goldbach-even-shift-phase-filter"
+      ],
+      "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-shift-normalized-support",
+      "file": "lean/PEqualNP/Outside/L_goldbach_shift_normalized_support.lean",
+      "module": "PEqualNP.Outside.L_goldbach_shift_normalized_support",
+      "statement": "∀ (n : ℕ) (e η : ℝ) (ω : ℕ → ℝ), 0 < n → 0 < e → 0 < η → let W := (Finset.Icc n (2*n)).filter (fun m => Even m ∧ ω m ≠ 0); (∑ m ∈ W, ω m) = 1 → (∑ m ∈ W, (ω m)^2) * (n:ℝ)^(8/3+η) ≤ ((e/2)*(n:ℝ))^2 → 4*(n:ℝ)^(2/3+η) ≤ e^2*(W.card:ℝ)",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-8003 · 算出归一化偶移核的最短有效支撑",
+        "en": "New route · Signed factors and shift windows · FW-8003 · Lower-bound the support of a normalized even-shift kernel"
+      },
+      "brief": {
+        "zh": "对和为一的窗用 Cauchy–Schwarz，插入原预算。该长度排除了极短平滑窗；仍需推回指定 n。",
+        "en": "Apply Cauchy–Schwarz to the unit mass and insert the frozen energy budget. This excludes short windows. Transfer to n is a separate estimate."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-antispike-shift-transfer",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "signed-factor-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "signed-factor-windows"
+    },
+    {
+      "id": "L-goldbach-type2-center-wide-subtraction",
+      "file": "lean/PEqualNP/Outside/L_goldbach_type2_center_wide_subtraction.lean",
+      "module": "PEqualNP.Outside.L_goldbach_type2_center_wide_subtraction",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let Λ := ArithmeticFunction.vonMangoldt; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₂ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let B₃ := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)⌋₊; let τ₃ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => B₂ n < a ∧ a ≤ B₃ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * Λ (m / a); let Jdeep := fun (n : ℕ) (u v : ℕ → ℝ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun x => S n u x * S n v x * E (-(n:ℝ)*x)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ n : ℕ, let f := fun t : ℝ => (S n (τ₃ n) t)^2 * E (-(n:ℝ)*t); Jdeep n (τ₃ n) (τ₃ n) = ((∑ k ∈ Finset.range (n+1), τ₃ n k * τ₃ n (n-k)):ℝ) - intervalIntegral ((wideArcs n).indicator f) (0:ℝ) 1 MeasureTheory.volume",
+      "plain_statement": {
+        "zh": "新路线 · 有符号因子与移位窗 · FW-8005 · 用真实第三带权把深弧系数写成全圆系数减宽弧系数",
+        "en": "New route · Signed factors and shift windows · FW-8005 · Subtract the wide arcs from the full-circle coefficient for band three"
+      },
+      "brief": {
+        "zh": "先用整数频率正交求全圆系数。用有限个可测有理弧分去宽弧。保留冻结声明的截断和复数值，供比较 GSP 的中央窗和乘积截断。",
+        "en": "Use orthogonality of integer frequencies on the full interval. Subtract the finite union of measurable wide arcs. Keep the frozen cutoffs and complex value when comparing with GSP."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2495",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "signed-factor-windows",
+      "role": "lemma",
+      "depends_on": [],
+      "route_source": "signed-factor-windows"
     }
   ],
   "tracks": [
@@ -13956,6 +14777,99 @@
       "feeds": [
         "arc-budget"
       ]
+    },
+    {
+      "id": "character-arc-windows",
+      "title": {
+        "zh": "特征与分母扩窗",
+        "en": "Characters and extended arcs"
+      },
+      "description": {
+        "zh": "在有限特征和与实际弧带上核验例外项、模数扩窗和均方预算。",
+        "en": "Compute exceptional character terms, arc extensions and mean-square budgets with the actual denominators and masks."
+      },
+      "feeds": [
+        "frontier-grh-and-zero-chains",
+        "frontier-medium-arc-scales",
+        "odd-character-interference"
+      ],
+      "route_source": "character-arc-windows"
+    },
+    {
+      "id": "deep-moment-refutation",
+      "title": {
+        "zh": "深次弧四次矩反驳",
+        "en": "Deep fourth-moment refutation"
+      },
+      "description": {
+        "zh": "用独立 ID 提交旧上界的严格否定。",
+        "en": "Submit a proof of the exact negation of the retired upper bound under a distinct ID."
+      },
+      "feeds": [
+        "frontier-moment-antispike"
+      ],
+      "route_source": "deep-moment-refutation"
+    },
+    {
+      "id": "explicit-skirt-inputs",
+      "title": {
+        "zh": "裙边与显式算术输入",
+        "en": "Skirts and explicit arithmetic inputs"
+      },
+      "description": {
+        "zh": "隔离第四带自由变量、小分母裙边核及显式等差数列常数。",
+        "en": "Isolate the free variable in band four, the small-modulus skirt kernel and explicit progression constants."
+      },
+      "feeds": [
+        "frontier-type2-dyadic-matrix",
+        "frontier-medium-arc-scales",
+        "representations"
+      ],
+      "route_source": "explicit-skirt-inputs"
+    },
+    {
+      "id": "finite-rfc-second",
+      "title": {
+        "zh": "小偶数覆盖续批",
+        "en": "Finite-range coverage II"
+      },
+      "description": {
+        "zh": "在计算边界外核验真素数对，提升粗数轮模，并精确计数陈氏候选中的平方余项。",
+        "en": "Verify prime pairs above the computation boundary, lift the rough-number wheel and count square remainders among Chen candidates."
+      },
+      "feeds": [
+        "representations"
+      ],
+      "route_source": "finite-rfc-second"
+    },
+    {
+      "id": "liouville-dilation",
+      "title": {
+        "zh": "Liouville 相关的整除膨胀",
+        "en": "Dilation of Liouville correlations"
+      },
+      "description": {
+        "zh": "对固定目标量化素因子整除条件下的二元 Liouville 相关。一般偶数的符号和与真素数对的联系仍开放。",
+        "en": "Quantify two-point Liouville correlation under prime divisibility at a fixed target. Its sign for general even targets and its relation to prime pairs remain open."
+      },
+      "feeds": [],
+      "route_source": "liouville-dilation"
+    },
+    {
+      "id": "signed-factor-windows",
+      "title": {
+        "zh": "有符号因子与移位窗",
+        "en": "Signed factors and shift windows"
+      },
+      "description": {
+        "zh": "展开真实双线性权，比较冻结深弧遮罩上的偶移平均与指定系数。",
+        "en": "Unfold the arithmetic bilinear weights and compare even-shift averages with the prescribed coefficient under a fixed deep-arc mask."
+      },
+      "feeds": [
+        "frontier-type2-dyadic-matrix",
+        "frontier-moment-antispike"
+      ],
+      "route_source": "signed-factor-windows"
     }
   ]
 }

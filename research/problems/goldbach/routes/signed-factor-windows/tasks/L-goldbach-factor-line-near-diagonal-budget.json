@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-factor-line-near-diagonal-budget",
+  "file": "lean/PEqualNP/Outside/L_goldbach_factor_line_near_diagonal_budget.lean",
+  "module": "PEqualNP.Outside.L_goldbach_factor_line_near_diagonal_budget",
+  "statement": "∀ (J : Finset ℤ) (D : ℕ) (u v : ℤ → ℝ) (B : ℝ), 0 ≤ B → (∀ i ∈ J, |u i * v i| ≤ B) → |∑ i ∈ J, ∑ j ∈ J.filter (fun j => j ≠ i ∧ (j-i).natAbs ≤ D), u i * v i * (u j * v j)| ≤ (J.card:ℝ) * (2*(D:ℝ)) * B^2",
+  "plain_statement": {
+    "zh": "新路线 · 有符号因子与移位窗 · FW-8008 · 给有限纤维上近对角能量单列上界",
+    "en": "New route · Signed factors and shift windows · FW-8008 · Bound the near-diagonal energy of a finite fiber"
+  },
+  "brief": {
+    "zh": "固定 i 后注入长度 2D 的双侧非零移位集，再用绝对值和与权上界。全局预算还须乘上每类纤维的实际数量。",
+    "en": "For each i, inject the adjacent indices into the 2D nonzero offsets. Apply the absolute weight bound. The global budget also needs the number of fibers in each range."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2495",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "signed-factor-windows",
+  "role": "lemma",
+  "depends_on": []
+}

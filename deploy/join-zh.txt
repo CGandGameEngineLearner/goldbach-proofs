@@ -31,7 +31,7 @@ python tools/goldbach.py claim
 
 3. 证明已冻结的命题
 
-若任务允许 PEqualNP.GRH，请使用任务基线对应的上游检出。在 lean/ 目录运行 lake exe cache get，恢复锁定版本的 Mathlib 编译缓存。按 GRH 集成说明恢复与该基线和工具链匹配的 GRH 编译缓存，再构建指定模块。集成说明见 lean/vendor/grh-compact/README.md。
+若任务允许 PEqualNP.GRH，请使用任务基线对应的上游检出。在 lean/ 目录运行 lake exe cache get，恢复官方 Mathlib 编译缓存。下载 GRH 缓存 https://github.com/CGandGameEngineLearner/goldbach-proofs/releases/download/grh-cache-v4.36.0-78b0afb/grh-lean-v4.36.0-78b0afb.7z，并核对 SHA-256 a22ad13e1b1d33f51e3aa768254580d056cd745fae5825357ede15cba83248c9。将其解压到 lean/.lake/build，然后先完整构建 GRH 全部模块，再构建指定模块。
 
 只新增 gap.file 指定的 Lean 文件。定理名采用 gap.module，类型使用 gap.statement 中的原文。导入 Mathlib，并按任务清单使用允许的附加导入。写出完整证明，权威检查会独立核验命题、导入项和依赖。如果本地已有锁定版本的 Lean 与 Mathlib，可先在 lean/ 下构建指定模块。
 

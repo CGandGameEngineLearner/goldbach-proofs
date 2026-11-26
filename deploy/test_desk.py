@@ -36,6 +36,21 @@ class DeskTests(unittest.TestCase):
         self.assertEqual(result["gap"]["id"], GAPS[2]["id"])
         self.assertEqual(self.request("claim", {"handle": "bob", "gap": GAPS[0]["id"]})[0], 201)
 
+    def test_closing_new_claims_honors_an_existing_lease(self):
+        token = self.claim()
+        gap = GAPS[0] | {"parallel": True, "challenge_only": True, "claims_closed": True}
+        self.desk = Desk(self.db, [gap], SECRET)
+        self.assertEqual(self.request("claim", {"handle": "bob", "gap": gap["id"]}),
+                         (409, {"error": "claims_closed"}))
+        self.assertEqual(self.request("claim", {"handle": "bob"})[0], 409)
+        with patch("deploy.desk.time.time", return_value=START):
+            self.assertEqual(self.desk.progress_snapshot(), (0, 1, 0, {gap["id"]}))
+        self.assertEqual(self.request("beat", {}, token=token)[0], 200)
+        self.assertEqual(self.submit(token)[0], 200)
+        self.assertEqual(self.request("authorize", self.authorization(), sign=True)[0], 200)
+        self.record(102, gap["id"], "ACCEPTED")
+        self.assertEqual(self.desk.progress(), (1, 1, 0))
+
     def request(self, path, body, *, token=None, sign=False, now=START, ip="2001:db8::1"):
         content = json.dumps(body, separators=(",", ":")).encode()
         headers = {}

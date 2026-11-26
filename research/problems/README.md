@@ -24,6 +24,8 @@ goldbach/routes/signed-window/
 
 沿用主站已有路线时，只需在 route.json 写入对应的 id。分站新路线使用双语 title、description；接入既有分站路线时以其固定 route_id 作为目录名和 id，填写 existing_stage_en（原阶段完整英文标题）。任务文件沿用同研究台的完整目录记录，包括 id、file、module、statement、双语 plain_statement 和 brief、program、imports、source 等字段。任务的 track 从目录名生成。复用同一研究台的引理时在 depends_on 中引用其 ID。Lean 文件和模块沿用原签名约定。
 
+设置 `challenge_only: true` 后，开放题只接受按 ID 的新领取。需要连按 ID 的新领取也停止时，同时设置 `claims_closed: true`。这两个目录字段不参与声明哈希，已有租约可按原流程续租、提交和验证。
+
 ## 提交和核验
 
 1. 添加源文件后运行 `python research/build_catalogue.py --write`。一并提交源文件与更新的兼容清单。网站、领取工具及权威检查器继续读取现有清单。

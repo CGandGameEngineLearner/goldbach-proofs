@@ -66,6 +66,31 @@ def reload_revision(sha):
     raise RuntimeError("Production health did not confirm revision " + sha)
 
 
+def circleci_api(path):
+    request = Request("https://circleci.com/api/v2/" + path, headers={"Accept": "application/json"})
+    with urlopen(request, timeout=15) as response:
+        return json.load(response)
+
+
+def circleci_release(sha):
+    # A success on a contributor branch or a different revision cannot authorize publication.
+    project = "gh/" + REPO
+    source = "https://github.com/" + REPO
+    pipelines = circleci_api(f"project/{project}/pipeline?branch=main")["items"]
+    for pipeline in pipelines:
+        vcs = pipeline.get("vcs", {})
+        if (pipeline.get("project_slug") != project or vcs.get("branch") != "main"
+                or vcs.get("revision") != sha or vcs.get("target_repository_url") != source):
+            continue
+        for workflow in circleci_api(f"pipeline/{pipeline['id']}/workflow")["items"]:
+            if workflow["name"] != "catalogue-pilot" or workflow["status"] != "success":
+                continue
+            jobs = circleci_api(f"workflow/{workflow['id']}/job")["items"]
+            if any(job["name"] == "lean-catalogue" and job["status"] == "success" for job in jobs):
+                return {"id": int(pipeline["number"]), "provider": "circleci"}
+    return None
+
+
 def approved(sha):
     prs = api("/commits/" + sha + "/pulls")
     pr = next((p for p in prs if p["merge_commit_sha"] == sha and p["base"]["ref"] == "main"
@@ -76,6 +101,9 @@ def approved(sha):
     allowed = {OWNER_ID, *(int(uid) for uid in os.environ.get("GOLDBACH_CATALOGUE_MERGER_IDS", "").split())}
     if (detail.get("merged_by") or {}).get("id") not in allowed:
         raise RuntimeError("Catalogue PR requires an authorized research task publisher")
+    if os.environ.get("GOLDBACH_CATALOGUE_CI") == "circleci":
+        run = circleci_release(sha)
+        return (detail, run) if run else None
     runs = api("/actions/workflows/catalogue.yml/runs?event=push&branch=main&head_sha=" + sha)["workflow_runs"]
     return next(((detail, r) for r in runs if r["head_sha"] == sha and r["conclusion"] == "success"), None)
 
@@ -102,7 +130,7 @@ def activate(sha, parent, pr, run):
             (stage / name).write_bytes(result)
         history = json.loads((old / "history.json").read_bytes())
         history.append(dict(sha=sha, pr=pr["number"], title=pr["title"], actor=pr["merged_by"]["login"],
-                            run=run["id"], at=datetime.now(timezone.utc).isoformat(timespec="seconds")))
+                            run=run["id"], provider=run.get("provider", "github"), at=datetime.now(timezone.utc).isoformat(timespec="seconds")))
         (stage / "history.json").write_text(json.dumps(history, ensure_ascii=False), encoding="utf-8")
         prepared = finish(stage, sha)
         (STORE / "pending").write_text(sha)

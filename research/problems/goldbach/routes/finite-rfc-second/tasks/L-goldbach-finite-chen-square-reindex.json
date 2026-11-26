@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-finite-chen-square-reindex",
+  "file": "lean/PEqualNP/Outside/L_goldbach_finite_chen_square_reindex.lean",
+  "module": "PEqualNP.Outside.L_goldbach_finite_chen_square_reindex",
+  "statement": "let P := fun n : ℕ => (Finset.range (n+1)).filter (fun p => Nat.Prime p ∧ Nat.Prime (Nat.sqrt (n-p)) ∧ (Nat.sqrt (n-p))^2=n-p); ∀ (n : ℕ) (v : ℕ → ℝ), (∑ p ∈ P n, v p) = ∑ a ∈ (Finset.Icc 2 (Nat.sqrt n)).filter (fun a => Nat.Prime a ∧ Nat.Prime (n-a^2)), v (n-a^2)",
+  "plain_statement": {
+    "zh": "新路线 · 小偶数覆盖续批 · FR-8006 · 在同一权下精确移除陈氏候选中的素数平方余项",
+    "en": "New route · Finite-range coverage II · FR-8006 · Remove prime-square remainders with the same Chen weight"
+  },
+  "brief": {
+    "zh": "以 p↔a、p+a²=n 建立双射。右边撤去 p 后仍保留 v(n−a²)。平方自由半素数须另外去除。",
+    "en": "Use p+a²=n for the bijection and keep v(n−a²) on the right. Distinct-factor semiprimes require a further estimate."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "finite-rfc-second",
+  "role": "lemma",
+  "depends_on": [
+    "L-goldbach-finite-factor-window-switch"
+  ]
+}

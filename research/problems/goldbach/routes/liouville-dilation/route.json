@@ -1,0 +1,12 @@
+{
+  "id": "liouville-dilation",
+  "title": {
+    "zh": "Liouville 相关的整除膨胀",
+    "en": "Dilation of Liouville correlations"
+  },
+  "description": {
+    "zh": "对固定目标量化素因子整除条件下的二元 Liouville 相关。一般偶数的符号和与真素数对的联系仍开放。",
+    "en": "Quantify two-point Liouville correlation under prime divisibility at a fixed target. Its sign for general even targets and its relation to prime pairs remain open."
+  },
+  "feeds": []
+}

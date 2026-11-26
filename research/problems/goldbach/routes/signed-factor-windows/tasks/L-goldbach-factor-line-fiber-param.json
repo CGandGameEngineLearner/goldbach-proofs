@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-factor-line-fiber-param",
+  "file": "lean/PEqualNP/Outside/L_goldbach_factor_line_fiber_param.lean",
+  "module": "PEqualNP.Outside.L_goldbach_factor_line_fiber_param",
+  "statement": "∀ (a b N r₀ s₀ : ℤ), 0 < a → 0 < b → a*r₀+b*s₀=N → let g := (Int.gcd a b : ℤ); ∀ r s : ℤ, a*r+b*s=N ↔ ∃ j : ℤ, r=r₀+(b/g)*j ∧ s=s₀-(a/g)*j",
+  "plain_statement": {
+    "zh": "新路线 · 有符号因子与移位窗 · FW-8006 · 参数化固定因子线上的整数解",
+    "en": "New route · Signed factors and shift windows · FW-8006 · Parametrize the integer solutions on a factor line"
+  },
+  "brief": {
+    "zh": "除以公因子后使用约化步长互素。证明所有整点恰落在这个参数族内，再将带限交给参数区间。",
+    "en": "Divide by the gcd and use coprimality of the reduced steps. Prove both directions for all integers before imposing band limits."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2495",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "signed-factor-windows",
+  "role": "lemma",
+  "depends_on": [
+    "L-goldbach-factor-line-reduced-progression"
+  ]
+}
