@@ -84,3 +84,10 @@ https://www.movan.tech/goldbach/#records
 两张榜分别统计，每张榜仅计入已知的模型或工具。
 
 可选的知乎公开署名：在网站的账号绑定页登录知乎，输入用于提交证明的 GitHub 用户名，生成验证文本。用该 GitHub 账号打开 https://gist.github.com/ ，文件名填 goldbach-identity.txt，原样粘贴验证文本并创建 Gist。将 Gist 链接贴回绑定页，由用户确认公开署名后提交。
+
+如要提交拆题，请选择 takes_cuts=true 的任务，执行
+  python tools/goldbach.py claim TASK_ID --kind cut
+修改分配的 Lean 模板，证明 2～4 个独立闭合的前提足以推出父题的冻结声明。可给每个前提配上中英文说明，逐项与 Lean 核对。按上文的 beat、单文件 PR、open-pr、submit 流程提交。核验后，父题详情会列出各套拆法和可领取的子题 ID。一套前提证完后，Jenkins 用已合并的证明源文件核验组合证明，研究台记录父题和各方贡献。
+如要提交正式反驳，请执行
+  python tools/goldbach.py claim TASK_ID --kind refute
+在分配的文件中证明冻结命题的否定，按同样流程提交。核验成功后，该题停止派发，依赖它的拆法也会标为走不通。仅怀疑命题有误时可使用 release statement_seems_false。

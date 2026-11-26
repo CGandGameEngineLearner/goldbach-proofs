@@ -28,16 +28,20 @@ SESSIONS = 128
 PROBLEMS = json.loads((ROOT / "research/problems.json").read_text(encoding="utf-8"))
 
 
-class DeskScaleTest(unittest.TestCase):
+class DeskServerTestCase(unittest.TestCase):
+    def configure_catalogue(self, folder):
+        pass
+
     def setUp(self):
         folder = Path(self.enterContext(tempfile.TemporaryDirectory()))
         self.secret = secrets.token_hex(32).encode()
         (folder / "webhook").write_bytes(self.secret)
         (folder / "china-apnic.txt").write_bytes(b"")
-        for source in ("deploy/server.py", "deploy/site.js", "deploy/site.css", "deploy/desk.py", "deploy/landau.py", "deploy/presence.py", "deploy/join.txt", "deploy/join-zh.txt",
+        for source in ("deploy/server.py", "deploy/site.js", "deploy/site.css", "deploy/desk.py", "deploy/reductions.py", "deploy/landau.py", "deploy/presence.py", "deploy/join.txt", "deploy/join-zh.txt",
                        "deploy/zhihu_oauth.py", "deploy/sponsors.py", "deploy/github_identity.py", "deploy/zh.html", "deploy/en.html",
                        "research/gaps.json", "research/problems.json"):
             shutil.copy(ROOT / source, folder)
+        self.configure_catalogue(folder)
         openssl = os.environ.get("OPENSSL") or shutil.which("openssl")
         if not openssl and shutil.which("git"):
             git_openssl = Path(shutil.which("git")).parents[1] / "usr/bin/openssl.exe"
@@ -73,6 +77,31 @@ class DeskScaleTest(unittest.TestCase):
         self.server.wait(timeout=10)
         self.server.stdout.close()
 
+    def request(self, path, body=None, *, token=None, signed=False, ip=None, ticket=None, expected=200, text=False):
+        raw = json.dumps(body).encode() if body is not None else None
+        headers = {"Content-Type": "application/json"}
+        if token:
+            headers["Authorization"] = "Bearer " + token
+        if signed:
+            headers["X-Goldbach-Signature"] = "sha256=" + hmac.new(self.secret, raw, hashlib.sha256).hexdigest()
+        if ip:
+            # The production proxy supplies this header to the loopback upstream.
+            headers["X-Goldbach-Client-IP"] = ip
+        if ticket:
+            headers["X-Goldbach-Fleet"] = ticket
+        with closing(HTTPSConnection("127.0.0.1", self.port, timeout=45, context=self.context)) as conn:
+            conn.request("POST" if raw is not None else "GET", path, body=raw, headers=headers)
+            response = conn.getresponse()
+            if text:
+                self.assertEqual(response.status, expected, path)
+                return response.read().decode("utf-8")
+            result = (json.loads(gzip.decompress(response.read())) if response.getheader("Content-Encoding") == "gzip"
+                      else json.load(response))
+            self.assertEqual(response.status, expected, (path, result.get("error")))
+            return result
+
+
+class DeskScaleTest(DeskServerTestCase):
     def test_agent_attribution_across_problem_desks(self):
         for index, path in enumerate(("", "/problems/log-rank")):
             claim = self.request(path + "/api/desk/claim", {"handle": "alice"}, expected=201)
@@ -157,28 +186,6 @@ class DeskScaleTest(unittest.TestCase):
         self.assertEqual(get_total(), 1)
         self.request("/problems/", ip="2001:db8::1", text=True)
         self.assertEqual(get_total(), 2)
-
-    def request(self, path, body=None, *, token=None, signed=False, ip=None, ticket=None, expected=200, text=False):
-        raw = json.dumps(body).encode() if body is not None else None
-        headers = {"Content-Type": "application/json"}
-        if token:
-            headers["Authorization"] = "Bearer " + token
-        if signed:
-            headers["X-Goldbach-Signature"] = "sha256=" + hmac.new(self.secret, raw, hashlib.sha256).hexdigest()
-        if ip:
-            # The production proxy supplies this header to the loopback upstream.
-            headers["X-Goldbach-Client-IP"] = ip
-        if ticket:
-            headers["X-Goldbach-Fleet"] = ticket
-        with closing(HTTPSConnection("127.0.0.1", self.port, timeout=45, context=self.context)) as conn:
-            conn.request("POST" if raw is not None else "GET", path, body=raw, headers=headers)
-            response = conn.getresponse()
-            if text:
-                self.assertEqual(response.status, expected, path)
-                return response.read().decode("utf-8")
-            result = json.load(response)
-            self.assertEqual(response.status, expected, (path, result.get("error")))
-            return result
 
     def wave(self, pool, mode, label, action, size=SESSIONS):
         ready = threading.Barrier(size, timeout=30)
