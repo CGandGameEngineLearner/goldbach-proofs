@@ -72,8 +72,68 @@ jobs:
                    Path("../research/check-statement-scope.lean").read_text(),
                    f"example : StrongGoldbach ↔ ({endpoint}) := strongGoldbach_iff_primeMass",
                    "set_option autoImplicit false"]
+          reductions = {
+              "L-goldbach-packet-short-period-large-prime-weight": "GoldbachPacket.shortPeriodLargePrimeWeight",
+              "L-goldbach-packet-model-from-center-counts": "(fun a b => GoldbachPacket.modelFromCenters (GoldbachPacket.combineCenterCounts a b))",
+              "L-goldbach-packet-short-order-peak-overlap-from-full": "GoldbachPacket.modelRegionFromFull true",
+              "L-goldbach-packet-remaining-peak-overlap-from-full": "GoldbachPacket.modelRegionFromFull false",
+              "L-goldbach-packet-short-centers-from-moduli": "GoldbachPacket.shortCentersFromModuli",
+              "L-goldbach-packet-rational-center-stability": "GoldbachPacket.rationalCenterStability",
+              "L-goldbach-packet-rational-peak-far-tails": "GoldbachPacket.farTails",
+              "L-goldbach-packet-mangoldt-uniform-spectral-error": "GoldbachPacket.mangoldtSpectralError",
+              "L-goldbach-packet-mangoldt-masked-error": "GoldbachPacket.mangoldtMaskedError",
+              "L-goldbach-packet-energy-from-mangoldt": "GoldbachPacket.resonantFromMangoldt",
+              "L-goldbach-packet-resonant-low-peaks": "GoldbachPacket.lowPeaksSublinear",
+              "L-goldbach-packet-spikes-from-late-levels": "GoldbachPacket.spikesFromLateLevels",
+              "L-goldbach-packet-progression-leakage": "GoldbachPacket.progressionLeakage",
+              "L-goldbach-packet-divisor-mixture-leakage": "GoldbachPacket.divisorMixtureLeakage",
+              "L-goldbach-packet-deep-moderate-values": "GoldbachPacket.deepFloorBudget",
+              "L-goldbach-packet-energy-from-rational-regions": "GoldbachPacket.energyFromRegions",
+              "L-goldbach-packet-short-order-shell-from-model": "GoldbachPacket.shellFromModel true",
+              "L-goldbach-packet-remaining-rational-shell-from-model": "GoldbachPacket.shellFromModel false",
+              "L-goldbach-packet-wheel-masked-budget": "GoldbachPacket.wheelMaskedBudget",
+              "L-goldbach-packet-wheel-grid-tail": "GoldbachPacket.gridTail",
+              "L-goldbach-packet-wheel-minor-leakage": "GoldbachPacket.wheelMinorLeakage",
+              "L-goldbach-packet-wheel-smooth-envelope": "GoldbachPacket.wheelEnvelope",
+              "L-goldbach-packet-wheel-envelope-transfer": "GoldbachPacket.wheelLeakageTransfer",
+              "L-goldbach-packet-wheel-geometric": "GoldbachPacket.wheelGeometric",
+              "L-goldbach-packet-lag-energy-identity": "GoldbachPacket.lagEnergyIdentity",
+              "L-goldbach-packet-sparse-lag-budget": "GoldbachPacket.sparseLagBudget",
+              "L-goldbach-packet-even-lag-support": "GoldbachPacket.evenLagSupport",
+              "L-goldbach-packet-short-lag-envelope": "GoldbachPacket.shortEnvelope",
+              "L-goldbach-packet-short-wheel-error": "GoldbachPacket.shortWheelBudget",
+              "L-goldbach-packet-mask-log-decay": "GoldbachPacket.maskLogDecay",
+              "L-goldbach-packet-doubling-tilt": "GoldbachPacket.doublingTilt",
+              "L-goldbach-packet-exponential-moment": "GoldbachPacket.exponentialMoment",
+              "L-goldbach-packet-upper-tail-half": "GoldbachPacket.upperTail",
+              "L-goldbach-packet-cap-comparison": "GoldbachBudget.capComparison",
+              "L-goldbach-packet-energy-from-lags": "GoldbachBudget.energyFromLags",
+              "L-goldbach-packet-from-capped-energy": "GoldbachBudget.packetFromCapped",
+              "L-goldbach-bulk-energy-to-clipped": "GoldbachBudget.clippedBound",
+              "L-goldbach-bulk-off-coherence-transfer": "GoldbachBudget.restToDefect",
+              "L-goldbach-bulk-binary-partition": "GoldbachBudget.packetPartition",
+              "L-goldbach-bulk-binary-recombine": "GoldbachBudget.packetToBulk",
+              "L-goldbach-fixed-budget-to-dyadic": "GoldbachBudget.fixedToDyadic",
+          }
           for gap in gaps:
               lines.extend(("", "-- " + gap["id"], "#check_statement_scope (" + gap["statement"] + ")", "example : Prop := (" + gap["statement"] + ")"))
+              if gap["id"] in reductions:
+                  lines.append(f"example : ({gap['statement']}) := {reductions.pop(gap['id'])}")
+          assert not reductions, f"Missing catalogue reductions: {reductions}"
+          # All other inputs of the lag-to-energy reduction now have proofs in the reference file.
+          frozen = {gap["id"]: gap["statement"] for gap in gaps}
+          far = frozen["L-goldbach-packet-long-wheel-excess"]
+          energy = frozen["L-goldbach-packet-resonant-prime-energy"]
+          lines.append(f"example : ({far}) → ({energy}) := GoldbachPacket.maskedEnergyFromLong")
+          levels = frozen["L-goldbach-packet-deep-weak-levels"]
+          spike = frozen["L-goldbach-packet-deep-spike-energy"]
+          lines.append(f"example : ({levels}) → ({spike}) := by "
+                       "rintro ⟨N, h⟩; apply GoldbachPacket.spikesFromLateLevels; "
+                       "exact ⟨N, fun n hn he j _ _ => h n hn he j⟩")
+          smooth = frozen["L-goldbach-packet-smooth-moduli-weight"]
+          short = frozen["L-goldbach-packet-short-order-center-count"]
+          lines.append(f"example : ({smooth}) → ({short}) := fun h => "
+                       "GoldbachPacket.shortCentersFromModuli h GoldbachPacket.shortPeriodLargePrimeWeight")
           (Path(os.environ["RUNNER_TEMP"]) / "Catalogue.lean").write_text("\n".join(lines) + "\n")
           print(f"Type-checking {len(gaps)} propositions")
           PY
