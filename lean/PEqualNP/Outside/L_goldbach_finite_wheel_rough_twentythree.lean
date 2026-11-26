@@ -15,7 +15,7 @@ theorem PEqualNP.Outside.L_goldbach_finite_wheel_rough_twentythree :
   have hdistinct : ∀ g j i k, row g i % modulus j = row g k % modulus j → i = k := by
     decide
   intro n hn he
-  obtain ⟨g, hg⟩ := hrow ⟨n%3, Nat.mod_lt _ (by decide)⟩ ⟨n%5, Nat.mod_lt _ (by decide)⟩
+  obtain ⟨g, hg⟩ := hrow ⟨n % 3, Nat.mod_lt _ (by decide)⟩ ⟨n % 5, Nat.mod_lt _ (by decide)⟩
   -- Each remaining wheel prime rules out at most one of the six entries.
   have hgood : ∃ i, ∀ j, n % modulus j ≠ row g i % modulus j := by
     by_contra! h
