@@ -10829,8 +10829,6 @@ theorem PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli : let w := fun
   intro n hn hEven
   have hnN : N ≤ n := le_trans (Nat.le_max_left N K) hn
   have hnK : K ≤ n := le_trans (Nat.le_max_right N K) hn
-  obtain ⟨hfloorF, hcellerr⟩ := hN n hnN
-  have hfloor := hfloorF hEven
   obtain ⟨hnpos, hQ, hQU, hUn, hHn, hbudget⟩ := hK n hnK
   have hQH : GoldbachGRHBudget.narrow n ≤ GoldbachGRHBudget.width n :=
     hQU.trans (GoldbachGRHBudget.width_ge_cutoff n hQ)
@@ -10842,8 +10840,10 @@ theorem PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli : let w := fun
     unfold GoldbachFourthMoment.phase; fun_prop
   have hF : Continuous (fun t : ℝ => GoldbachFourthMoment.primeSum n t ^ 2 *
       GoldbachFourthMoment.phase (-(n:ℝ)*t)) := (hS.pow 2).mul hOsc
-  have hres := PorterTop1Final.skirt_from_floor_and_cell_error e he 0
-    (fun m hm hmE => hfloor) (fun m hm hmE => hcellerr) n (Nat.zero_le n) hEven
+  have hres := PorterTop1Final.skirt_from_floor_and_cell_error e he N
+    (fun m hm hmE => (hN m hm).1 hmE)
+    (fun m hm hmE => (hN m hm).2)
+    n hnN hEven
   have hbridge := GoldbachGRHArcs.integrate_difference_eq_sum (n:=n)
     (Q:=GoldbachGRHBudget.narrow n) (U:=GoldbachGRHBudget.narrow n)
     (H:=GoldbachGRHBudget.width n) le_rfl hQH hbudgetQ
