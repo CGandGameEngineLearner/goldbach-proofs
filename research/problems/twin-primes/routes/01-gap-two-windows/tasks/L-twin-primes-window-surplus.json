@@ -15,7 +15,9 @@
   "program": "foundation",
   "role": "target",
   "parallel": true,
-  "depends_on": [],
+  "depends_on": [
+    "L-twin-primes-sharp-window-contamination"
+  ],
   "imports": [],
   "challenge_only": true
 }

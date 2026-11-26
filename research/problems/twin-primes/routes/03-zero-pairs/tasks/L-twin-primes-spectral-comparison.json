@@ -20,7 +20,8 @@
     "L-twin-primes-ordered-indices",
     "L-twin-primes-hermitian-pairs",
     "L-twin-primes-mellin-tail",
-    "L-twin-primes-rh-contour"
+    "L-twin-primes-rh-contour",
+    "L-twin-primes-moving-height-mellin-tail"
   ],
   "imports": [],
   "challenge_only": true

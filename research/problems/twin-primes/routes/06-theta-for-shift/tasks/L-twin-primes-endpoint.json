@@ -18,7 +18,7 @@
   "depends_on": [
     "L-twin-primes-window-bridge",
     "L-twin-primes-divisor-bridge",
-    "L-twin-primes-energy-bridge"
+    "L-twin-primes-energy-bridge-v2"
   ],
   "imports": [],
   "challenge_only": true

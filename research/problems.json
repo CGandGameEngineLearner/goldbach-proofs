@@ -4841,7 +4841,9 @@
         "program": "foundation",
         "role": "target",
         "parallel": true,
-        "depends_on": [],
+        "depends_on": [
+          "L-twin-primes-sharp-window-contamination"
+        ],
         "imports": [],
         "challenge_only": true,
         "track": "01-gap-two-windows",
@@ -5281,7 +5283,8 @@
           "L-twin-primes-ordered-indices",
           "L-twin-primes-hermitian-pairs",
           "L-twin-primes-mellin-tail",
-          "L-twin-primes-rh-contour"
+          "L-twin-primes-rh-contour",
+          "L-twin-primes-moving-height-mellin-tail"
         ],
         "imports": [],
         "challenge_only": true,
@@ -5477,7 +5480,8 @@
         "parallel": true,
         "depends_on": [
           "L-twin-primes-cofactor-switch",
-          "L-twin-primes-semiprime-cancellation"
+          "L-twin-primes-semiprime-cancellation",
+          "L-twin-primes-divisor-near-square-root-strip"
         ],
         "imports": [],
         "challenge_only": true,
@@ -5789,10 +5793,35 @@
         "depends_on": [
           "L-twin-primes-window-bridge",
           "L-twin-primes-divisor-bridge",
-          "L-twin-primes-energy-bridge"
+          "L-twin-primes-energy-bridge-v2"
         ],
         "imports": [],
         "challenge_only": true,
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-energy-bridge-v2",
+        "statement": "(let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let N := fun (X : ℕ) => 2*X+5; let f := fun (X n : ℕ) => if n ∈ w X ∧ n.Prime then Real.log n else 0; let energy := fun (X : ℕ) => letI : NeZero (N X) := ⟨Nat.succ_ne_zero _⟩; ∑ k : ZMod (N X), (ZMod.stdAddChar (N:=N X) (2*k)).re * ‖ZMod.dft (fun j : ZMod (N X) => ((f X j.val:ℝ):ℂ)) k‖^2; ∀ B : ℕ, ∃ X : ℕ, B<X ∧ 0<energy X) → (∀ B : ℕ, ∃ p : ℕ, B < p ∧ p.Prime ∧ (p+2).Prime)",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0053R · 由指定 Θ 算术测试的正能量抽取孪生素数",
+          "en": "New route · Theta lift for a prescribed shift · TP-0053R · Extract twin primes from positive energy in the prescribed arithmetic test"
+        },
+        "brief": {
+          "zh": "TP-0053 的修正版。dreyeki 在 #2833 报告了声明预检缺陷，并给出了对修正声明的证明。用补零与带符号 Parseval 提取同窗素数对。",
+          "en": "This replaces TP-0053. In #2833 dreyeki diagnosed the statement check and supplied a proof for the corrected type. Use zero padding and signed Parseval to extract a prime pair in the window."
+        },
+        "source": "https://github.com/dreyeki/gold/blob/9ab930d41fb966d670fbc91ba0bae59fe8ee248e/submissions/L_twin_primes_energy_bridge_fixed_statement.lean",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-prescribed-energy-v2"
+        ],
+        "imports": [],
+        "challenge_only": true,
+        "module": "Conjectures.TwinPrimes.EnergyBridgeV2",
+        "file": "lean/Conjectures/TwinPrimes/EnergyBridgeV2.lean",
         "track": "06-theta-for-shift",
         "route_source": "06-theta-for-shift"
       },
@@ -5806,8 +5835,8 @@
           "en": "New route · Theta lift for a prescribed shift · TP-0053 · Extract twin primes from positive energy in the prescribed arithmetic test"
         },
         "brief": {
-          "zh": "对同一补零序列应用带符号 Parseval；能量严格正给出两端同窗的素数。",
-          "en": "Apply signed Parseval to the same padded sequence. Positive energy yields two primes in the same window."
+          "zh": "旧声明在检查证明前触发 #2833 报告的辅助声明错误。新任务 L-twin-primes-energy-bridge-v2 接续，历史记录和原租约仍认此编号。",
+          "en": "The original type triggers the auxiliary declaration error reported in #2833. Use L-twin-primes-energy-bridge-v2 for new work. The original ID identifies its history and any prior lease."
         },
         "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
         "program": "correlation",
@@ -5817,6 +5846,8 @@
           "L-twin-primes-prescribed-energy"
         ],
         "imports": [],
+        "claims_closed": true,
+        "challenge_only": true,
         "track": "06-theta-for-shift",
         "route_source": "06-theta-for-shift"
       },
@@ -5867,6 +5898,38 @@
         "route_source": "06-theta-for-shift"
       },
       {
+        "id": "L-twin-primes-prescribed-energy-v2",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let N := fun (X : ℕ) => 2*X+5; let f := fun (X n : ℕ) => if n ∈ w X ∧ n.Prime then Real.log n else 0; let energy := fun (X : ℕ) => letI : NeZero (N X) := ⟨Nat.succ_ne_zero _⟩; ∑ k : ZMod (N X), (ZMod.stdAddChar (N:=N X) (2*k)).re * ‖ZMod.dft (fun j : ZMod (N X) => ((f X j.val:ℝ):ℂ)) k‖^2; ∀ B : ℕ, ∃ X : ℕ, B<X ∧ 0<energy X",
+        "plain_statement": {
+          "zh": "新路线 · 指定平移的 Θ 提升 · TP-0052R · 在无界尺度估计指定差二测试的谱能量",
+          "en": "New route · Theta lift for a prescribed shift · TP-0052R · Bound the signed energy of the prescribed gap-two test on unbounded scales"
+        },
+        "brief": {
+          "zh": "TP-0052 的修正版，与 TP-0054 等价。挑战要求对实际素数权证明无界尺度上的正性。任意固定尺度的有限检验仅校验归一化。",
+          "en": "This replaces TP-0052 and is equivalent to TP-0054. The challenge asks for positive energy of the actual prime weights at unbounded scales. A finite check at a fixed scale only tests the normalization."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2833",
+        "program": "correlation",
+        "role": "target",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-sifted-correlation",
+          "L-twin-primes-cosine-plancherel",
+          "L-twin-primes-theta-error-budget",
+          "L-twin-primes-window-endpoint-overhang",
+          "L-twin-primes-rough-window-prime-extraction",
+          "L-twin-primes-shifted-character-jacobi",
+          "L-twin-primes-prime-wheel-progression-budget",
+          "L-twin-primes-wheel-marginal-counterexample"
+        ],
+        "imports": [],
+        "challenge_only": true,
+        "module": "Conjectures.TwinPrimes.PrescribedEnergyV2",
+        "file": "lean/Conjectures/TwinPrimes/PrescribedEnergyV2.lean",
+        "track": "06-theta-for-shift",
+        "route_source": "06-theta-for-shift"
+      },
+      {
         "id": "L-twin-primes-prescribed-energy",
         "file": "lean/PEqualNP/Outside/L_twin_primes_prescribed_energy.lean",
         "module": "PEqualNP.Outside.L_twin_primes_prescribed_energy",
@@ -5876,8 +5939,8 @@
           "en": "New route · Theta lift for a prescribed shift · TP-0052 · Bound the signed energy of the prescribed gap-two test on unbounded scales"
         },
         "brief": {
-          "zh": "与 TP-0054 等价。由 TP-0050、TP-0051 将正能量化为同窗孪生对；反向取足够大的孪生对 p,p+2，并令 X=p−1。",
-          "en": "This is equivalent to TP-0054. TP-0050 and TP-0051 convert positive energy into a twin pair in the window. For the converse, choose a sufficiently large twin pair p,p+2 and set X=p−1."
+          "zh": "旧声明在检查证明前触发 #2833 报告的辅助声明错误。新任务 L-twin-primes-prescribed-energy-v2 接续，历史记录和原租约仍认此编号。",
+          "en": "The original type triggers the auxiliary declaration error reported in #2833. Use L-twin-primes-prescribed-energy-v2 for new work. The original ID identifies its history and any prior lease."
         },
         "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
         "program": "correlation",
@@ -5890,6 +5953,7 @@
         ],
         "imports": [],
         "challenge_only": true,
+        "claims_closed": true,
         "track": "06-theta-for-shift",
         "route_source": "06-theta-for-shift"
       },
@@ -5984,6 +6048,418 @@
         "imports": [],
         "track": "06-theta-for-shift",
         "route_source": "06-theta-for-shift"
+      },
+      {
+        "id": "L-twin-primes-balanced-semiprime-window-loss",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let S := fun (X : ℕ) => @Finset.filter ℕ (fun p => p.Prime ∧ ∃ r s : ℕ, r.Prime ∧ s.Prime ∧ r < s ∧ Nat.sqrt X/2 ≤ r ∧ r ≤ Nat.sqrt (2*X+2) ∧ p+2=r*s) (fun _ => Classical.propDecidable _) (w X); (∃ C : ℝ, 0 < C ∧ ∀ (Y r : ℕ), 3 ≤ Y → r.Prime → 2 < r → ((((Finset.Ioc Y (2*Y)).filter (fun s => s.Prime ∧ (r*s-2).Prime)).card:ℕ):ℝ) ≤ C*(Y:ℝ)/(Real.log Y)^2) → (∃ K : ℝ, 0 < K ∧ ∀ X : ℕ, 100 ≤ X → (S X).sum (fun p => Real.log p * Real.log (p+2)) ≤ K*(X:ℝ)/Real.log X)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0063 · 控制短窗中两个近平衡素因子造成的加权污染",
+          "en": "New route · Levent GRH methods and extensions · TP-0063 · Bound the weighted contribution of semiprimes with balanced factors in the window"
+        },
+        "brief": {
+          "zh": "按较小因子 r 分组。由实际窗与 r 的范围把 s 放入常数个二进窗。TP-0062 给每个 r 的上界，再用 Chebyshev 的素数计数界求和。此项仅兑现差二粗筛中近平衡的不同素数乘积预算。",
+          "en": "Group by the smaller factor r. The window and the bounds on r put s in a bounded number of dyadic intervals. Apply TP-0062 and then the Chebyshev bound for the number of prime r. This controls the part of the rough gap-two sieve with two balanced distinct factors."
+        },
+        "source": "https://doi.org/10.1090/coll/057",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-cofactor-two-linear-sieve",
+          "L-twin-primes-sifted-correlation"
+        ],
+        "imports": [],
+        "module": "Conjectures.TwinPrimes.BalancedSemiprimeWindowLoss",
+        "file": "lean/Conjectures/TwinPrimes/BalancedSemiprimeWindowLoss.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-cofactor-sieve-root-count",
+        "statement": "∀ (r ℓ : ℕ), r.Prime → 2 < r → ℓ.Prime → ((Finset.range ℓ).filter (fun a => a % ℓ = 0 ∨ (r*a) % ℓ = 2 % ℓ)).card = if ℓ = 2 ∨ ℓ = r then 1 else 2",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0061 · 计算余因子素数 r 下两条线性式的局部坏类",
+          "en": "New route · Levent GRH methods and extensions · TP-0061 · Count the forbidden classes for the two linear forms with prime cofactor r"
+        },
+        "brief": {
+          "zh": "两条线性式为 s 和 rs−2。模 2 时两根合并，模 r 时第二式为非零常数，其余素数各去两个不同类。使用同余式避免在 s=0 时发生 Nat 截断。",
+          "en": "The forms are s and rs−2. Their roots coincide modulo 2. Modulo r the second form is a nonzero constant. Every other prime removes two distinct classes. Use modular equality to handle s=0 without truncated subtraction."
+        },
+        "source": "https://doi.org/10.1090/coll/057",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "module": "Conjectures.TwinPrimes.CofactorSieveRootCount",
+        "file": "lean/Conjectures/TwinPrimes/CofactorSieveRootCount.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-cofactor-two-linear-sieve",
+        "statement": "∃ C : ℝ, 0 < C ∧ ∀ (Y r : ℕ), 3 ≤ Y → r.Prime → 2 < r → ((((Finset.Ioc Y (2*Y)).filter (fun s => s.Prime ∧ (r*s-2).Prime)).card:ℕ):ℝ) ≤ C*(Y:ℝ)/(Real.log Y)^2",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0062 · 给固定素数余因子的双线性式筛出统一上界",
+          "en": "New route · Levent GRH methods and extensions · TP-0062 · Give a uniform upper sieve bound for the two forms with a fixed prime cofactor"
+        },
+        "brief": {
+          "zh": "已知的二维 Selberg 上界筛移植。对每个固定 r 在长度 Y 的窗使用 TP-0061，异常 Euler 因子的相对放大至多 2。CRT 余项逐坏类最多一项，常数须对奇素数 r 一致。选低次幂筛界后两个实际素数值皆大于筛界。",
+          "en": "Formalize a two-dimensional Selberg upper sieve in an interval of length Y. TP-0061 shows that the exceptional Euler factor changes the constant by at most 2. Count each CRT class with error at most one. The constant is uniform in the odd prime r, and both prime values exceed a small power of Y."
+        },
+        "source": "https://doi.org/10.1090/coll/057",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-cofactor-sieve-root-count"
+        ],
+        "imports": [],
+        "challenge_only": true,
+        "module": "Conjectures.TwinPrimes.CofactorTwoLinearSieve",
+        "file": "lean/Conjectures/TwinPrimes/CofactorTwoLinearSieve.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-divisor-ap-error-to-square-root",
+        "statement": "(∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q) (s : ℂ), 0 < s.re → s.re < 1 → DirichletCharacter.LFunction χ s = 0 → s.re = 1/2) → (let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let A := fun (X d : ℕ) => ((w X).filter (fun p => p.Prime ∧ d ∣ p+2)).sum (fun p => Real.log p); let D := fun (X : ℕ) => Nat.floor (Real.sqrt X/(Real.log (2+(X:ℝ)))^5); ∃ C : ℝ, 0 < C ∧ ∀ X : ℕ, 3 ≤ X → (((Finset.Icc 1 (D X)).filter Odd).sum (fun d => Real.log d * |A X d-(X:ℝ)/(50*Nat.totient d)|))/(X:ℝ) ≤ C/(Real.log (2+(X:ℝ)))^2)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0059 · 将 GRH 进程误差绝对求和到近平方根截点",
+          "en": "New route · Levent GRH methods and extensions · TP-0059 · Sum the absolute GRH progression errors to a cutoff below the square root"
+        },
+        "brief": {
+          "zh": "逐模使用 TP-0030。d≤D≤X 时有 log d·log²(2dX)≪log³(2+X)，乘上 D/√X 后得到逆平方对数预算。",
+          "en": "Apply TP-0030 separately to each modulus. For d≤D≤X, the three log factors cost O(log³(2+X)). Multiplying by D/√X gives an inverse-square-log error."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean#L607",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-ap-short-error"
+        ],
+        "imports": [
+          "PEqualNP.Outside.L_twin_primes_ap_short_error"
+        ],
+        "module": "Conjectures.TwinPrimes.DivisorApErrorToSquareRoot",
+        "file": "lean/Conjectures/TwinPrimes/DivisorApErrorToSquareRoot.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-divisor-near-square-root-strip",
+        "statement": "RiemannHypothesis → (∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q) (s : ℂ), 0 < s.re → s.re < 1 → DirichletCharacter.LFunction χ s = 0 → s.re = 1/2) → (let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let D := fun (X : ℕ) => Nat.floor (Real.sqrt X/(Real.log (2+(X:ℝ)))^5); let A := fun (X : ℕ) => Nat.floor ((X:ℝ)^(1/3:ℝ)); let c := fun (d : ℕ) => -(ArithmeticFunction.moebius d : ℝ)*Real.log d; let strip := fun (X : ℕ) => (((w X).filter Nat.Prime).sum (fun p => Real.log p * (((p+2).divisors.filter (fun d => A X < d ∧ d ≤ D X)).sum c)))/(X:ℝ); Filter.Tendsto strip Filter.atTop (nhds 0))",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0060 · 在同一窄窗把立方根到近平方根的带符号除数和压到零",
+          "en": "New route · Levent GRH methods and extensions · TP-0060 · Show that the signed divisor strip from the cube root to the new cutoff tends to zero"
+        },
+        "brief": {
+          "zh": "两个截点都趋于无穷，最终 D≥A。TP-0034 的两个截断主项同收敛到 2C₂/50，TP-0059 控制实际进程误差。由此把 TP-0038 的剩余分析移到 d>D，保留其原尺度和余量。",
+          "en": "Both cutoffs tend to infinity and D≥A eventually. TP-0034 gives the same 2C₂/50 limit at each cutoff. TP-0059 controls the actual progression errors. This moves the analysis in TP-0038 to d>D at the original scale and margin."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean#L607",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-divisor-split",
+          "L-twin-primes-hard-cutoff",
+          "L-twin-primes-divisor-ap-error-to-square-root"
+        ],
+        "imports": [
+          "PEqualNP.Outside.L_twin_primes_ap_short_error",
+          "PEqualNP.Outside.L_twin_primes_hard_cutoff",
+          "PEqualNP.Outside.L_twin_primes_divisor_split"
+        ],
+        "module": "Conjectures.TwinPrimes.DivisorNearSquareRootStrip",
+        "file": "lean/Conjectures/TwinPrimes/DivisorNearSquareRootStrip.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-higher-power-log-mass",
+        "statement": "let Λ := ArithmeticFunction.vonMangoldt; ∃ C : ℝ, 0 < C ∧ ∀ Y : ℕ, 2 ≤ Y → (@Finset.filter ℕ (fun n => ∃ p k : ℕ, p.Prime ∧ 3 ≤ k ∧ n = p^k) (fun _ => Classical.propDecidable _) (Finset.range (Y+1))).sum (fun n => Λ n) ≤ C*(Y:ℝ)^(1/3:ℝ)*Real.log (2+(Y:ℝ))",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0056 · 给三次及以上真素数幂分配三次根预算",
+          "en": "New route · Levent GRH methods and extensions · TP-0056 · Bound the log mass of prime powers of exponent at least three"
+        },
+        "brief": {
+          "zh": "按指数层求和，底数均不超过 Y^(1/3)，指数层数至多 log Y/log 2。跨指数重复出现时保留上界方向。",
+          "en": "Sum over the exponents. The bases are at most Y^(1/3) and there are at most log Y/log 2 exponent levels. Repeated images only increase the upper bound."
+        },
+        "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/Chebyshev.lean#L655",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-power-count"
+        ],
+        "imports": [
+          "PEqualNP.Outside.L_twin_primes_window_contamination"
+        ],
+        "module": "Conjectures.TwinPrimes.HigherPowerLogMass",
+        "file": "lean/Conjectures/TwinPrimes/HigherPowerLogMass.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-moving-height-mellin-tail",
+        "statement": "∀ C : ℝ, 0 ≤ C → ∃ K : ℝ, 0 ≤ K ∧ ∀ (t : ℝ) (L : ℕ) (m : ℤ → ℝ), (∀ j : ℤ, 0 ≤ m j ∧ m j ≤ C*Real.log (2+|(Int.floor t : ℝ)+(j:ℝ)|)) → (∑' j : ℤ, if L ≤ j.natAbs then m j/(1+(j.natAbs:ℝ))^6 else 0) ≤ K*Real.log (2+|t|+(L:ℝ))/(1+(L:ℝ))^5",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0070 · 按重数控制以任意 t 为中心的截断零点尾",
+          "en": "New route · Levent GRH methods and extensions · TP-0070 · Bound the zero tail with multiplicity uniformly about a moving height"
+        },
+        "brief": {
+          "zh": "给以 floor t 为原点、有正负向的单位窗分配重数。用 log(2+|t|+L+k)≤log(2+|t|+L)+log(1+k/(1+L))，或分二进壳求和。TP-0022 给单侧模型。新界保留 t 及 L 的依赖，供 TP-0026 的移动截尾。",
+          "en": "Use unit windows in both directions about floor t. Separate the log at scale 1+L, or sum over dyadic shells. TP-0022 gives the one-sided model. Keep the dependence on t and L to bound the moving truncation in TP-0026."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean#L607",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-mellin-tail",
+          "L-twin-primes-ordered-indices"
+        ],
+        "imports": [
+          "PEqualNP.Outside.L_twin_primes_mellin_tail"
+        ],
+        "module": "Conjectures.TwinPrimes.MovingHeightMellinTail",
+        "file": "lean/Conjectures/TwinPrimes/MovingHeightMellinTail.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-prime-wheel-progression-budget",
+        "statement": "(∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q) (s : ℂ), 0 < s.re → s.re < 1 → DirichletCharacter.LFunction χ s = 0 → s.re = 1/2) → (let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let S := fun (X q : ℕ) => ((w X).filter (fun p => p.Prime ∧ Nat.Coprime (p+2) q)).sum (fun p => Real.log p); let V := fun (q : ℕ) => q.primeFactors.prod (fun r => 1-1/((r:ℝ)-1)); ∃ C : ℝ, 0 < C ∧ ∀ (X q : ℕ), 2 ≤ X → q ≤ X → Odd q → Squarefree q → |S X q-(X:ℝ)/50*V q| ≤ C*(q.divisors.card:ℝ)*Real.sqrt X*(Real.log (2*(q:ℝ)*X))^2)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0065 · 计算同窗真素数乘差二轮筛的主项与误差",
+          "en": "New route · Levent GRH methods and extensions · TP-0065 · Compute the main term and error for a gap-two wheel on actual primes in the window"
+        },
+        "brief": {
+          "zh": "只在第二端施加 q 的互素遮罩。用 Möbius 容斥，TP-0030 给每个 d∣q 的实际 −2 类进程误差。有限乘积的局部因子是 1−1/(r−1)，保留 q=1 和绝对误差。可给 Θ 测试的真素数端一阶归一化。",
+          "en": "Apply the coprimality mask only to the translated endpoint. Use Möbius inclusion and exclusion with the actual −2 progression bound TP-0030 for each d∣q. The finite product has factors 1−1/(r−1), including the empty product at q=1. This gives a first-moment normalization on the prime side of the theta test."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/GlobalInterpolation/TruncatedExplicitFormula.lean#L607",
+        "program": "correlation",
+        "role": "conditional",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-ap-short-error",
+          "L-twin-primes-crt-mask",
+          "L-twin-primes-unit-class"
+        ],
+        "imports": [
+          "PEqualNP.Outside.L_twin_primes_ap_short_error",
+          "PEqualNP.Outside.L_twin_primes_unit_class"
+        ],
+        "module": "Conjectures.TwinPrimes.PrimeWheelProgressionBudget",
+        "file": "lean/Conjectures/TwinPrimes/PrimeWheelProgressionBudget.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-rough-window-factor-shapes",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let z := fun (X : ℕ) => Nat.sqrt X / 2; ∀ (X p : ℕ), 4096 ≤ X → p ∈ w X → z X ≤ (p+2).minFac → (p+2).Prime ∨ (∃ r s : ℕ, r.Prime ∧ s.Prime ∧ z X ≤ r ∧ r ≤ s ∧ r ≤ Nat.sqrt (2*X+2) ∧ p+2=r*s)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0067 · 给近平方根筛余值确定精确的素因子形状",
+          "en": "New route · Levent GRH methods and extensions · TP-0067 · Classify the factors of survivors near the square-root cutoff"
+        },
+        "brief": {
+          "zh": "先证 z≥32 且 z³>2X+2。若 p+2 含三个带重数的素因子，其乘积至少 z³。按最小素因子写剩下两因子的情形，保留平方分支。",
+          "en": "First prove z≥32 and z³>2X+2. Three prime factors counted with multiplicity would force a product of at least z³. The conclusion keeps the prime-square branch, then separates distinct two-prime products."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-sifted-correlation"
+        ],
+        "imports": [],
+        "module": "Conjectures.TwinPrimes.RoughWindowFactorShapes",
+        "file": "lean/Conjectures/TwinPrimes/RoughWindowFactorShapes.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-rough-window-prime-extraction",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let z := fun (X : ℕ) => Nat.sqrt X / 2; let R := fun (X : ℕ) => ((w X).filter (fun p => p.Prime ∧ z X ≤ (p+2).minFac)); let T := fun (X : ℕ) => ((w X).filter (fun p => p.Prime ∧ (p+2).Prime)); let Q := fun (X : ℕ) => ((w X).filter (fun p => p.Prime ∧ (Nat.sqrt (p+2)).Prime ∧ p+2=(Nat.sqrt (p+2))^2)); let S := fun (X : ℕ) => @Finset.filter ℕ (fun p => p.Prime ∧ ∃ r s : ℕ, r.Prime ∧ s.Prime ∧ r < s ∧ Nat.sqrt X/2 ≤ r ∧ r ≤ Nat.sqrt (2*X+2) ∧ p+2=r*s) (fun _ => Classical.propDecidable _) (w X); let L := fun (p : ℕ) => Real.log p * Real.log (p+2); ∀ (X : ℕ) (M E F : ℝ), 4096 ≤ X → M ≤ (R X).sum L → (Q X).sum L ≤ E → (S X).sum L ≤ F → M-E-F ≤ (T X).sum L",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0069 · 由同一短窗的粗筛下界与两项污染预算提取真素数质量",
+          "en": "New route · Levent GRH methods and extensions · TP-0069 · Extract prime-pair mass from the rough count and both loss bounds in the same window"
+        },
+        "brief": {
+          "zh": "用 TP-0067 把粗筛和逐项覆盖到真素数、平方和两个不同素数。用 TP-0063、0068 的量纲同为对数权乘积。若 M−E−F>0，同一 X 有一对。用于 TP-0052R，仍需实际粗筛下界。",
+          "en": "Use TP-0067 to cover each rough survivor by a prime, a square or two distinct primes. TP-0063 and TP-0068 give bounds with the same log-product weights. A positive remainder supplies a pair at that X. TP-0052R still needs a lower bound on the actual rough count."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-rough-window-factor-shapes",
+          "L-twin-primes-shifted-square-window-loss",
+          "L-twin-primes-balanced-semiprime-window-loss"
+        ],
+        "imports": [],
+        "module": "Conjectures.TwinPrimes.RoughWindowPrimeExtraction",
+        "file": "lean/Conjectures/TwinPrimes/RoughWindowPrimeExtraction.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-sharp-window-contamination",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let Λ := ArithmeticFunction.vonMangoldt; let E := fun (X : ℕ) => ((w X).filter (fun n => ¬ (n.Prime ∧ (n+2).Prime))).sum (fun n => Λ n * Λ (n+2)) / (X:ℝ); ∃ C : ℝ, 0 < C ∧ ∀ X : ℕ, 2 ≤ X → E X ≤ C*Real.log (2+(X:ℝ))^3/Real.sqrt X",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0057 · 在旧窄窗将高次幂污染压到 log X/√X",
+          "en": "New route · Levent GRH methods and extensions · TP-0057 · Reduce proper-power contamination in the original window to log X/√X"
+        },
+        "brief": {
+          "zh": "将每一端的坏项由单端 Λ 质量控制，另一端至多贡献一个对数因子。平方根计数和三重对数预算合成 log³ X/√X。用于 TP-0003 的提取及 TP-0015 的双矩转移。",
+          "en": "Bound bad terms using the Λ mass at either endpoint and at most one logarithmic factor at the other endpoint. Combine the square-root count with a log-cubed budget. This supports the extraction and moment transfer in TP-0003 and TP-0015."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-square-log-mass",
+          "L-twin-primes-higher-power-log-mass",
+          "L-twin-primes-window-contamination"
+        ],
+        "imports": [
+          "PEqualNP.Outside.L_twin_primes_window_extraction"
+        ],
+        "module": "Conjectures.TwinPrimes.SharpWindowContamination",
+        "file": "lean/Conjectures/TwinPrimes/SharpWindowContamination.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-shifted-character-jacobi",
+        "statement": "∀ (p : ℕ) [Fact p.Prime], 2 < p → ∀ (χ ψ : DirichletCharacter ℂ p), (∑ x : ZMod p, χ x * ψ (x+2)) = χ (-2) * ψ 2 * (∑ y : ZMod p, χ y * ψ (1-y)) ∧ (χ ≠ 1 → (∑ x : ZMod p, χ x * (1 : DirichletCharacter ℂ p) (x+2)) = -χ (-2))",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0064 · 计算奇素模下差二混合特征的 Jacobi 相位和主特征列",
+          "en": "New route · Levent GRH methods and extensions · TP-0064 · Compute the Jacobi phase and the principal column for gap-two mixed characters"
+        },
+        "brief": {
+          "zh": "用单位换元 x=−2y 保留 χ(−2)ψ(2)。第二式拿掉 x=−2 的一项并用非主特征和为零。给指定平移局部试验核对实际混合系数。",
+          "en": "Change variables by the unit x=−2y, keeping χ(−2)ψ(2). For the second identity, delete x=−2 and use the vanishing sum of a nonprincipal character. This gives mixed coefficients for the local test at the prescribed shift."
+        },
+        "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-local-residues",
+          "L-twin-primes-shift-fourier-phase"
+        ],
+        "imports": [
+          "PEqualNP.Outside.L_twin_primes_shift_fourier_phase"
+        ],
+        "module": "Conjectures.TwinPrimes.ShiftedCharacterJacobi",
+        "file": "lean/Conjectures/TwinPrimes/ShiftedCharacterJacobi.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-shifted-square-window-loss",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let Q := fun (X : ℕ) => ((w X).filter (fun p => p.Prime ∧ (Nat.sqrt (p+2)).Prime ∧ p+2=(Nat.sqrt (p+2))^2)); let L := fun (p : ℕ) => Real.log p * Real.log (p+2); ∃ C : ℝ, 0 < C ∧ ∀ X : ℕ, 2 ≤ X → (Q X).sum L ≤ C*Real.sqrt X*Real.log (2+(X:ℝ))",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0068 · 消去短窗中 p+2 为素数平方的加权贡献",
+          "en": "New route · Levent GRH methods and extensions · TP-0068 · Bound the weighted contribution when p+2 is a prime square in the window"
+        },
+        "brief": {
+          "zh": "将 p+2=r² 的权写为 2·log p·log r。p↦p+2 无重数，套 TP-0055 给所有平方底数的对数权总量。",
+          "en": "Write the weight for p+2=r² as 2·log p·log r. The map p↦p+2 is injective. Use TP-0055 for the total log weight of prime bases."
+        },
+        "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/Chebyshev.lean#L655",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-square-log-mass"
+        ],
+        "imports": [],
+        "module": "Conjectures.TwinPrimes.ShiftedSquareWindowLoss",
+        "file": "lean/Conjectures/TwinPrimes/ShiftedSquareWindowLoss.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-square-log-mass",
+        "statement": "let Λ := ArithmeticFunction.vonMangoldt; ∀ Y : ℕ, ((Finset.range (Y+1)).filter (fun n => (Nat.sqrt n).Prime ∧ n = (Nat.sqrt n)^2)).sum (fun n => Λ n) ≤ Real.log 4 * Real.sqrt Y",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0055 · 给真素数平方的对数权分配平方根预算",
+          "en": "New route · Levent GRH methods and extensions · TP-0055 · Bound the log mass of prime squares by a square-root budget"
+        },
+        "brief": {
+          "zh": "平方位置按底素数唯一重排。Λ(p²)=log p，再用 Chebyshev.theta 的上界。该预算保留了一重对数权，供差二短窗的污染估计。",
+          "en": "Index the squares by their unique prime bases. Use Λ(p²)=log p and the upper bound for Chebyshev.theta. Keep the single log weight for the gap-two error."
+        },
+        "source": "https://github.com/leanprover-community/mathlib4/blob/fc4f59e577feb1a4956671bc04ac18aaaf8cd842/Mathlib/NumberTheory/Chebyshev.lean#L655",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "module": "Conjectures.TwinPrimes.SquareLogMass",
+        "file": "lean/Conjectures/TwinPrimes/SquareLogMass.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-wheel-marginal-counterexample",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); ∀ (q X : ℕ), 0 < q → 200*(q+1) ≤ X → (∃ a : ℕ, a < q ∧ Nat.Coprime a q ∧ Nat.Coprime (a+2) q) → (∃ f g : ℕ → ℝ, (∀ n, (f n=0 ∨ f n=1) ∧ (g n=0 ∨ g n=1) ∧ (¬ (n ∈ w X ∧ Nat.Coprime n q) → f n=0 ∧ g n=0)) ∧ (∀ a : ℕ, a < q → ((w X).filter (fun n => n%q=a)).sum f = ((w X).filter (fun n => n%q=a)).sum g) ∧ (w X).sum (fun n => f n * f (n+2))=1 ∧ (w X).sum (fun n => g n * g (n+2))=0)",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0066 · 构造轮筛各余类质量一致但差二相关不同的同窗权重",
+          "en": "New route · Levent GRH methods and extensions · TP-0066 · Construct two weights with the same wheel marginals and different gap-two correlations"
+        },
+        "brief": {
+          "zh": "选同一个 w 中的 k≡a (mod q)，令两份权支撑在 {k,k+2} 与 {k,k+2+2q}。两份权均在单位余类内。该反例检验只使用轮筛各余类质量的推导，给 TP-0052R 的局部到整体比较划出限制。",
+          "en": "Choose k≡a (mod q) in w. Use supports {k,k+2} and {k,k+2+2q}. Both weights are supported on unit classes. This counterexample tests deductions that use only the wheel marginals and gives a limit for the local-to-global comparison in TP-0052R."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-crt-mask",
+          "L-twin-primes-local-residues",
+          "L-twin-primes-window-endpoint-overhang"
+        ],
+        "imports": [],
+        "module": "Conjectures.TwinPrimes.WheelMarginalCounterexample",
+        "file": "lean/Conjectures/TwinPrimes/WheelMarginalCounterexample.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
+      },
+      {
+        "id": "L-twin-primes-window-endpoint-overhang",
+        "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); ∀ (X : ℕ) (f : ℕ → ℝ) (A : ℝ), 2 ≤ X → 0 ≤ A → (∀ n : ℕ, n ≤ 2*X+2 → 0 ≤ f n ∧ f n ≤ A) → 0 ≤ (w X).sum (fun n => f n * f (n+2)) - ((w X).filter (fun n => n+2 ∈ w X)).sum (fun n => f n * f (n+2)) ∧ (w X).sum (fun n => f n * f (n+2)) - ((w X).filter (fun n => n+2 ∈ w X)).sum (fun n => f n * f (n+2)) ≤ 2*A^2",
+        "plain_statement": {
+          "zh": "新路线 · Levent GRH 与自然推广 · TP-0058 · 量化单端短窗与双端短窗的差二边界误差",
+          "en": "New route · Levent GRH methods and extensions · TP-0058 · Bound the gap-two loss at the right edge of the window"
+        },
+        "brief": {
+          "zh": "严格上界给出的最大整数是 (51X−1)/50。删掉 n+2 超窗的点最多两个。对 Λ 和真素数的对数权都能使用，供 TP-0013 与修正后的 TP-0053R 对照。",
+          "en": "The largest permitted integer is floor((51X−1)/50). At most two starting points lose their translated endpoint. The same estimate applies to Λ and prime log weights when comparing TP-0013 and TP-0053R."
+        },
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/twin-primes.md",
+        "program": "correlation",
+        "role": "lemma",
+        "parallel": true,
+        "depends_on": [
+          "L-twin-primes-two-moment-identity",
+          "L-twin-primes-no-wrap"
+        ],
+        "imports": [],
+        "module": "Conjectures.TwinPrimes.WindowEndpointOverhang",
+        "file": "lean/Conjectures/TwinPrimes/WindowEndpointOverhang.lean",
+        "track": "07-levent-gap-two",
+        "route_source": "07-levent-gap-two"
       }
     ],
     "roadmap": [
@@ -6339,6 +6815,12 @@
             "route_source": "06-theta-for-shift"
           },
           {
+            "id": "L-twin-primes-energy-bridge-v2",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0053R · 由指定 Θ 算术测试的正能量抽取孪生素数",
+            "en": "New route · Theta lift for a prescribed shift · TP-0053R · Extract twin primes from positive energy in the prescribed arithmetic test",
+            "route_source": "06-theta-for-shift"
+          },
+          {
             "id": "L-twin-primes-energy-bridge",
             "zh": "新路线 · 指定平移的 Θ 提升 · TP-0053 · 由指定 Θ 算术测试的正能量抽取孪生素数",
             "en": "New route · Theta lift for a prescribed shift · TP-0053 · Extract twin primes from positive energy in the prescribed arithmetic test",
@@ -6354,6 +6836,12 @@
             "id": "L-twin-primes-no-wrap",
             "zh": "新路线 · 指定平移的 Θ 提升 · TP-0050 · 用补零将整数平移配对嵌入有限循环模型",
             "en": "New route · Theta lift for a prescribed shift · TP-0050 · Embed the integer shift pairing into a padded cyclic model",
+            "route_source": "06-theta-for-shift"
+          },
+          {
+            "id": "L-twin-primes-prescribed-energy-v2",
+            "zh": "新路线 · 指定平移的 Θ 提升 · TP-0052R · 在无界尺度估计指定差二测试的谱能量",
+            "en": "New route · Theta lift for a prescribed shift · TP-0052R · Bound the signed energy of the prescribed gap-two test on unbounded scales",
             "route_source": "06-theta-for-shift"
           },
           {
@@ -6388,6 +6876,115 @@
           }
         ],
         "route_source": "06-theta-for-shift"
+      },
+      {
+        "en": [
+          "New route · Methods from the Levent GRH project and their extensions at gap two",
+          "Use the same gap-two window to bound proper powers and endpoint losses. Test the near-square-root divisor cutoff, semiprime bounds and local Fourier inputs with the actual prime weights."
+        ],
+        "zh": [
+          "新路线 · Levent GRH 方法与自然推广：差二短窗",
+          "在同一差二短窗减去高次素数幂与端点误差，用真实素数权验证近平方根的短除数和、半素数预算与局部 Fourier 输入。"
+        ],
+        "tasks": [
+          {
+            "id": "L-twin-primes-balanced-semiprime-window-loss",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0063 · 控制短窗中两个近平衡素因子造成的加权污染",
+            "en": "New route · Levent GRH methods and extensions · TP-0063 · Bound the weighted contribution of semiprimes with balanced factors in the window",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-cofactor-sieve-root-count",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0061 · 计算余因子素数 r 下两条线性式的局部坏类",
+            "en": "New route · Levent GRH methods and extensions · TP-0061 · Count the forbidden classes for the two linear forms with prime cofactor r",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-cofactor-two-linear-sieve",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0062 · 给固定素数余因子的双线性式筛出统一上界",
+            "en": "New route · Levent GRH methods and extensions · TP-0062 · Give a uniform upper sieve bound for the two forms with a fixed prime cofactor",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-divisor-ap-error-to-square-root",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0059 · 将 GRH 进程误差绝对求和到近平方根截点",
+            "en": "New route · Levent GRH methods and extensions · TP-0059 · Sum the absolute GRH progression errors to a cutoff below the square root",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-divisor-near-square-root-strip",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0060 · 在同一窄窗把立方根到近平方根的带符号除数和压到零",
+            "en": "New route · Levent GRH methods and extensions · TP-0060 · Show that the signed divisor strip from the cube root to the new cutoff tends to zero",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-higher-power-log-mass",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0056 · 给三次及以上真素数幂分配三次根预算",
+            "en": "New route · Levent GRH methods and extensions · TP-0056 · Bound the log mass of prime powers of exponent at least three",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-moving-height-mellin-tail",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0070 · 按重数控制以任意 t 为中心的截断零点尾",
+            "en": "New route · Levent GRH methods and extensions · TP-0070 · Bound the zero tail with multiplicity uniformly about a moving height",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-prime-wheel-progression-budget",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0065 · 计算同窗真素数乘差二轮筛的主项与误差",
+            "en": "New route · Levent GRH methods and extensions · TP-0065 · Compute the main term and error for a gap-two wheel on actual primes in the window",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-rough-window-factor-shapes",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0067 · 给近平方根筛余值确定精确的素因子形状",
+            "en": "New route · Levent GRH methods and extensions · TP-0067 · Classify the factors of survivors near the square-root cutoff",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-rough-window-prime-extraction",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0069 · 由同一短窗的粗筛下界与两项污染预算提取真素数质量",
+            "en": "New route · Levent GRH methods and extensions · TP-0069 · Extract prime-pair mass from the rough count and both loss bounds in the same window",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-sharp-window-contamination",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0057 · 在旧窄窗将高次幂污染压到 log X/√X",
+            "en": "New route · Levent GRH methods and extensions · TP-0057 · Reduce proper-power contamination in the original window to log X/√X",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-shifted-character-jacobi",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0064 · 计算奇素模下差二混合特征的 Jacobi 相位和主特征列",
+            "en": "New route · Levent GRH methods and extensions · TP-0064 · Compute the Jacobi phase and the principal column for gap-two mixed characters",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-shifted-square-window-loss",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0068 · 消去短窗中 p+2 为素数平方的加权贡献",
+            "en": "New route · Levent GRH methods and extensions · TP-0068 · Bound the weighted contribution when p+2 is a prime square in the window",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-square-log-mass",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0055 · 给真素数平方的对数权分配平方根预算",
+            "en": "New route · Levent GRH methods and extensions · TP-0055 · Bound the log mass of prime squares by a square-root budget",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-wheel-marginal-counterexample",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0066 · 构造轮筛各余类质量一致但差二相关不同的同窗权重",
+            "en": "New route · Levent GRH methods and extensions · TP-0066 · Construct two weights with the same wheel marginals and different gap-two correlations",
+            "route_source": "07-levent-gap-two"
+          },
+          {
+            "id": "L-twin-primes-window-endpoint-overhang",
+            "zh": "新路线 · Levent GRH 与自然推广 · TP-0058 · 量化单端短窗与双端短窗的差二边界误差",
+            "en": "New route · Levent GRH methods and extensions · TP-0058 · Bound the gap-two loss at the right edge of the window",
+            "route_source": "07-levent-gap-two"
+          }
+        ],
+        "route_source": "07-levent-gap-two"
       }
     ]
   },

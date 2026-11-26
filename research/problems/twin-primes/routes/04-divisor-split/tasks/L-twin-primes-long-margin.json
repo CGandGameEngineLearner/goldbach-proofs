@@ -17,7 +17,8 @@
   "parallel": true,
   "depends_on": [
     "L-twin-primes-cofactor-switch",
-    "L-twin-primes-semiprime-cancellation"
+    "L-twin-primes-semiprime-cancellation",
+    "L-twin-primes-divisor-near-square-root-strip"
   ],
   "imports": [],
   "challenge_only": true
