@@ -1,4 +1,3 @@
-/- Adapted with attribution from the public proof draft in PR #2645 by @CATLILIZHOU; see the PR for provenance. -/
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.BigOperators.Group.Finset.Sigma
