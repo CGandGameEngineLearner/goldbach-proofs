@@ -13513,6 +13513,76 @@
       "role": "lemma"
     },
     {
+      "id": "L-goldbach-finite-residue-rough-510510",
+      "statement": "∀ a : ℕ, a < 510510 → Even a → ∃ p ∈ ({3,5,7,11,41,61,79,149,167,769,1747,2297,2311} : Finset ℕ), Nat.Coprime ((a+510510-p)%510510) 510510",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖 · FR-7032 · 十三个候选覆盖模 510510 的偶数类",
+        "en": "New route · Finite-range coverage · FR-7032 · Thirteen candidates cover even residues modulo 510510"
+      },
+      "brief": {
+        "zh": "逐类复核 255255 个偶类，可按 1001 个一块分 255 块由内核求值。再避开 17 后得到 19 粗的候选。",
+        "en": "Verify all 255255 even residues, e.g. by kernel evaluation in 255 blocks of 1001. Excluding 17 as well gives a 19-rough candidate."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_residue_rough_510510.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_residue_rough_510510",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma",
+      "route_source": "representations"
+    },
+    {
+      "id": "L-goldbach-finite-rough-prototype-50",
+      "statement": "∀ n : ℕ, 4 ≤ n → Even n → (n:ℝ) < Real.exp (Real.exp 5) → ∃ p : ℕ, Nat.Prime p ∧ 2 ≤ n-p ∧ (n-p).primeFactorsList.length ≤ 50",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖 · FR-7034 · 将原型全域因子上界降至五十",
+        "en": "New route · Finite-range coverage · FR-7034 · Reduce the full prototype factor bound to fifty"
+      },
+      "brief": {
+        "zh": "对 n≥2313 用模 510510 的 19 粗候选与 exp 5<51 log 19；更小的偶数取 p=2，因 n−2<2^51。",
+        "en": "For n≥2313 use the 19-rough candidate modulo 510510 and exp 5<51 log 19. For smaller even n take p=2, since n−2<2^51."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-residue-rough-510510",
+        "L-goldbach-finite-rough-prototype-constants-19",
+        "L-goldbach-finite-rough-factor-power"
+      ],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_prototype_50.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_prototype_50",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma",
+      "route_source": "representations"
+    },
+    {
+      "id": "L-goldbach-finite-rough-prototype-constants-19",
+      "statement": "Real.exp 5 < 51 * Real.log 19",
+      "plain_statement": {
+        "zh": "新路线 · 小偶数覆盖 · FR-7033 · 19 粗候选在原型全域所需的指数比较",
+        "en": "New route · Finite-range coverage · FR-7033 · Exponential comparison for 19-rough candidates on the full prototype"
+      },
+      "brief": {
+        "zh": "用 e<2.7182818286 估计 exp 5<148.42，再由 log 19=4 log 2+log(19/16) 与 log x≥1−1/x 从下界定。",
+        "en": "Bound exp 5<148.42 from e<2.7182818286, and bound log 19=4 log 2+log(19/16) from below with log x≥1−1/x."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-binary-pointwise-positivity",
+      "program": "foundation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_prototype_constants_19.lean",
+      "module": "PEqualNP.Outside.L_goldbach_finite_rough_prototype_constants_19",
+      "imports": [],
+      "track": "representations",
+      "role": "lemma",
+      "route_source": "representations"
+    },
+    {
       "id": "L-goldbach-finite-sieve-probe-crt-positive",
       "statement": "∀ n d e : ℕ, 0 < d → 0 < e → ((∃ p : ℕ, p % d = n % d ∧ p % e = 1 % e) ↔ n % (Nat.gcd d e) = 1 % (Nat.gcd d e))",
       "plain_statement": {
