@@ -14089,6 +14089,94 @@
       "route_source": "finite-rfc-second"
     },
     {
+      "id": "L-goldbach-frontier-type2-b1-b1-bilinear-expansion",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let τ₁ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * ArithmeticFunction.vonMangoldt (m / a); ∀ (n : ℕ) (t : ℝ), S n (τ₁ n) t = ∑ a ∈ Finset.Icc (U n + 1) (B₁ n), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * ∑ r ∈ Finset.Icc (U n + 1) (n / a), ArithmeticFunction.vonMangoldt r * E (((a*r:ℕ):ℝ)*t)",
+      "plain_statement": {
+        "zh": "τ₁ 的指数和展开为按除数 a 与商 r 的双线性形式。",
+        "en": "Expand the exponential sum of τ₁ into its bilinear divisor-and-quotient form."
+      },
+      "brief": {
+        "zh": "先按 a|m 交换两个有限和，再把 m=a·r 重指标化；这是应用 Type-II 双线性估计前的结构恒等式。",
+        "en": "Swap the finite sums over a|m, then reindex m=a·r; this is the structural identity before applying Type-II bilinear estimates."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-type2-b1-b1#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b1_b1_bilinear_expansion.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b1_b1_bilinear_expansion",
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "lemma",
+      "route_source": "frontier-type2-dyadic-matrix"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b1-b1-phase-quadruple-expansion",
+      "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let c := fun (n a : ℕ) => ∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d; let τ₁ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a), c n a * ArithmeticFunction.vonMangoldt (m / a); ∀ (n : ℕ) (t : ℝ), S n (τ₁ n) t * S n (τ₁ n) t * E (-(n:ℝ)*t) = ∑ a ∈ Finset.Icc (U n + 1) (B₁ n), ∑ b ∈ Finset.Icc (U n + 1) (B₁ n), c n a * c n b * ∑ r ∈ Finset.Icc (U n + 1) (n / a), ∑ s ∈ Finset.Icc (U n + 1) (n / b), ArithmeticFunction.vonMangoldt r * ArithmeticFunction.vonMangoldt s * E ((((a*r:ℕ):ℝ)+((b*s:ℕ):ℝ)-(n:ℝ))*t)",
+      "plain_statement": {
+        "zh": "τ₁ 的平方相位展开为四重 Type-II 指数和。",
+        "en": "Expand the squared phase of τ₁ into a quadruple Type-II exponential sum."
+      },
+      "brief": {
+        "zh": "把两个双线性展开相乘，合并指数相位；积分前先把父题写成对频率 ar+bs−n 的显式和。",
+        "en": "Multiply the two bilinear expansions and combine the exponential phases; this writes the parent integrand as an explicit sum over frequencies ar+bs−n before integration."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-type2-b1-b1#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b1_b1_phase_quadruple_expansion.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b1_b1_phase_quadruple_expansion",
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "lemma",
+      "route_source": "frontier-type2-dyadic-matrix"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b1-b1-tau-support",
+      "statement": "let U := fun n : ℕ => ⌊(n:ℝ)^(1/16:ℝ)⌋₊; let B₁ := fun n : ℕ => ⌊(n:ℝ)^(1/4:ℝ)⌋₊; let τ₁ := fun (n m : ℕ) => ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), ((ArithmeticFunction.moebius d : ℤ) : ℝ)) * ArithmeticFunction.vonMangoldt (m / a); ∀ n m : ℕ, m ≤ (U n)^2 → τ₁ n m = 0",
+      "plain_statement": {
+        "zh": "Type-II 支撑下界：m ≤ U(n)² 时 τ₁(n,m)=0。",
+        "en": "Type-II support bound: τ₁(n,m)=0 whenever m ≤ U(n)²."
+      },
+      "brief": {
+        "zh": "若 a 和 m/a 都大于 U，则 m=a·(m/a)>U²；因此小区间上的项全部消失。",
+        "en": "If a and m/a are both greater than U, then m=a·(m/a)>U²; every term below that range vanishes."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-type2-b1-b1#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b1_b1_tau_support.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b1_b1_tau_support",
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "lemma",
+      "route_source": "frontier-type2-dyadic-matrix"
+    },
+    {
+      "id": "L-goldbach-frontier-type2-b1-b1-widearcs-measurable",
+      "statement": "let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; ∀ n, MeasurableSet (wideArcs n)",
+      "plain_statement": {
+        "zh": "wideArcs(n) 是 Borel 可测集。",
+        "en": "wideArcs(n) is Borel measurable."
+      },
+      "brief": {
+        "zh": "把存在量词展开为可数个有理邻域的并；每个邻域是闭区间。",
+        "en": "Expand the existential as a countable union of rational neighborhoods; each is a closed interval."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-type2-b1-b1#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "file": "lean/PEqualNP/Outside/L_goldbach_frontier_type2_b1_b1_widearcs_measurable.lean",
+      "module": "PEqualNP.Outside.L_goldbach_frontier_type2_b1_b1_widearcs_measurable",
+      "imports": [],
+      "track": "frontier-type2-dyadic-matrix",
+      "role": "lemma",
+      "route_source": "frontier-type2-dyadic-matrix"
+    },
+    {
       "id": "L-goldbach-divisor-indicator-covariance",
       "file": "lean/PEqualNP/Outside/L_goldbach_divisor_indicator_covariance.lean",
       "module": "PEqualNP.Outside.L_goldbach_divisor_indicator_covariance",
