@@ -6368,16 +6368,14 @@ end GoldbachB1B1Adapt
 
 namespace GoldbachB1B1Target
 
-open GoldbachB1B1
+open Filter GoldbachB1B1
 
-/-- Frozen frontier statement (proof deferred): for every `ε > 0` there exists `N` such
-    that for every even `n ≥ N`, the deep-pair norm satisfies
-    `‖Jdeep n (τ₁ n) (τ₁ n)‖ ≤ ε · n`. Quantifier order, `Even n` position, complex
-    norm and scaling are preserved verbatim from the frozen target. -/
-theorem b1B1_target :
-    ∀ ε : ℝ, 0 < ε → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n →
-      ‖Jdeep n (τ₁ n) (τ₁ n)‖ ≤ ε * (n : ℝ) := by
-  sorry
+-- Frozen frontier statement: for every `ε > 0` there exists `N` such
+-- that for every even `n ≥ N`, the deep-pair norm satisfies
+-- `‖Jdeep n (τ₁ n) (τ₁ n)‖ ≤ ε · n`. Quantifier order, `Even n` position, complex
+-- norm and scaling are preserved verbatim from the frozen target.
+-- The proof lives in `GoldbachB1B1Finish.b1B1_target` (after the assembly
+-- and envelope lemmas are declared).
 
 /-- τ₁ unfolded along its atom-divisor sum (a definition-level identity). -/
 theorem b1B1_tau1_atom_sum (n m : ℕ) :
@@ -6972,6 +6970,793 @@ theorem b1B1_deepPairIntegral_le (n : ℕ) (nLower : 2 ≤ n)
   have approxNorm (x y : ℂ) : ‖x‖ ≤ ‖x - y‖ + ‖y‖ := by
     simpa only [sub_add_cancel] using norm_add_le (x - y) y
   rw [hsplit]
-  sorry
+  set F := finalScale n T with hF
+  have htri : ‖b1B1_outsidePair n + b1B1_exactNearPair n‖ ≤
+      ‖b1B1_outsidePair n‖ + ‖b1B1_exactNearPair n‖ := norm_add_le _ _
+  have h1 : ‖b1B1_exactNearPair n‖ ≤
+      ‖b1B1_exactNearPair n - b1B1_smoothedNearPair n‖ +
+        ‖b1B1_smoothedNearPair n‖ :=
+    approxNorm _ _
+  have h2 : ‖b1B1_smoothedNearPair n‖ ≤
+      ‖b1B1_smoothedNearPair n - b1B1_primitiveNearPair n‖ +
+        ‖b1B1_primitiveNearPair n‖ :=
+    approxNorm _ _
+  have hChain : ‖b1B1_outsidePair n‖ + ‖b1B1_exactNearPair n‖ ≤
+      ‖b1B1_outsidePair n‖ +
+        ‖b1B1_exactNearPair n - b1B1_smoothedNearPair n‖ +
+          ‖b1B1_smoothedNearPair n - b1B1_primitiveNearPair n‖ +
+            ‖b1B1_primitiveNearPair n‖ := by
+    calc
+      ‖b1B1_outsidePair n‖ + ‖b1B1_exactNearPair n‖
+        ≤ ‖b1B1_outsidePair n‖ +
+          (‖b1B1_exactNearPair n - b1B1_smoothedNearPair n‖ +
+            ‖b1B1_smoothedNearPair n‖) := by gcongr
+      _ = ‖b1B1_outsidePair n‖ +
+          ‖b1B1_exactNearPair n - b1B1_smoothedNearPair n‖ +
+            ‖b1B1_smoothedNearPair n‖ := by ring
+      _ ≤ ‖b1B1_outsidePair n‖ +
+          ‖b1B1_exactNearPair n - b1B1_smoothedNearPair n‖ +
+            (‖b1B1_smoothedNearPair n - b1B1_primitiveNearPair n‖ +
+              ‖b1B1_primitiveNearPair n‖) := by gcongr
+      _ = _ := by ring
+  have hSum : ‖b1B1_outsidePair n‖ + ‖b1B1_exactNearPair n‖ ≤
+      (577 + 16 + 160 + 10240000 * gcdSeriesConstant) * F := by
+    have hAdd : ‖b1B1_outsidePair n‖ +
+          ‖b1B1_exactNearPair n - b1B1_smoothedNearPair n‖ +
+            ‖b1B1_smoothedNearPair n - b1B1_primitiveNearPair n‖ +
+              ‖b1B1_primitiveNearPair n‖ ≤
+        577 * F + 16 * F + 160 * F + (10240000 * gcdSeriesConstant) * F := by
+      have ha := add_le_add (add_le_add (add_le_add hfar hsmooth) hprim) hmain
+      simpa [mul_add, add_mul] using ha
+    have hle := hChain.trans hAdd
+    simpa [mul_add, add_mul] using hle
+  have hF : 0 ≤ F := by
+    unfold F finalScale
+    exact mul_nonneg (mul_nonneg (pow_nonneg (zero_le_one.trans TLower) 5)
+      (pow_nonneg (zero_le_one.trans (one_le_logBudget n)) 7))
+      (Real.rpow_nonneg (Nat.cast_nonneg n) _)
+  have hConst : (577 + 16 + 160 + 10240000 * gcdSeriesConstant) * F ≤
+      (776 + 10240000 * gcdSeriesConstant) * F := by
+    apply mul_le_mul_of_nonneg_right
+    · norm_num
+    · exact hF
+  unfold totalConstant
+  exact htri.trans (hSum.trans hConst)
 
 end GoldbachB1B1Assembly
+
+namespace GoldbachB1B1Finish
+
+open Finset Filter Complex
+open GoldbachB1B1 GoldbachB1B1Assembly GoldbachB1B1Divisors
+open GoldbachB1B1Adapt GoldbachB1B1Scale GoldbachB1B1GcdSeries
+open DyadicMixedB4EnergyTail
+
+/-- Eventually `logBudget n ≤ n^{1/256}` (logarithm grows slower than any positive
+    power). -/
+private theorem eventually_log_budget_le :
+    ∀ᶠ n : ℕ in Filter.atTop, logBudget n ≤ (n : ℝ) ^ (1 / 256 : ℝ) := by
+  have limit : Tendsto (fun n : ℕ => Real.log n / (n : ℝ) ^ (1 / 256 : ℝ))
+      Filter.atTop (𝓝 0) := by
+    have realLimit := (isLittleO_log_rpow_rpow_atTop (1 : ℕ)
+      (show (0 : ℝ) < 1 / 256 by norm_num)).tendsto_div_nhds_zero
+    simpa only [Real.rpow_one, Nat.cast_one, Function.comp_def] using
+      realLimit.comp (tendsto_natCast_atTop_atTop (R := ℝ))
+  filter_upwards [eventually_ge_atTop 2,
+      limit.eventually_lt_const (show (0 : ℝ) < 1 / 4 by norm_num)] with n hn small
+  have nLower : (2 : ℝ) ≤ n := by exact_mod_cast hn
+  have nPositive : (0 : ℝ) < n := by linarith only [nLower]
+  have logTwo := Real.log_le_log (by norm_num : (0 : ℝ) < 2) nLower
+  have big : (n : ℝ) + 2 ≤ (n : ℝ) ^ 2 := by
+    nlinarith only [mul_nonneg (show 0 ≤ (n : ℝ) - 2 by linarith only [nLower])
+      (show 0 ≤ (n : ℝ) + 1 by positivity)]
+  have logSquare := Real.log_le_log (by positivity : 0 < (n : ℝ) + 2) big
+  rw [Real.log_pow] at logSquare
+  norm_num at logSquare
+  have logBound : logBudget n ≤ 4 * Real.log n := by
+    unfold logBudget
+    linarith only [logSquare, logTwo, Real.log_two_gt_d9]
+  have divided := (div_lt_iff₀ (Real.rpow_pos_of_pos nPositive _)).mp small
+  exact logBound.trans (by linarith only [divided])
+
+/-- Growth envelope: for any `C ≥ 0` and `e > 0`, eventually there is `T ≥ 1`
+    bounding the divisor count such that `C · finalScale n T ≤ e · n`. -/
+theorem b1B1_eventually_finalScale_le {C e : ℝ}
+    (CNonnegative : 0 ≤ C) (ePositive : 0 < e) :
+    ∀ᶠ n : ℕ in Filter.atTop, ∃ T : ℝ, 1 ≤ T ∧
+      (∀ m ≤ n, (m.divisors.card : ℝ) ≤ T) ∧
+        C * finalScale n T ≤ e * (n : ℝ) := by
+  obtain ⟨D, DLower, envelope⟩ := b1B1_divisor_envelope
+  let P := C * D ^ 5
+  -- `P · n^{-29/3072} → 0` atTop.
+  have limit : Tendsto (fun n : ℕ => (n : ℝ) ^ (-(29 / 3072 : ℝ)))
+      Filter.atTop (𝓝 0) :=
+    (tendsto_rpow_neg_atTop (by norm_num)).comp tendsto_natCast_atTop_atTop
+  have scaledLimit : Tendsto (fun n : ℕ => P * (n : ℝ) ^ (-(29 / 3072 : ℝ)))
+      Filter.atTop (𝓝 0) := by
+    simpa only [mul_zero] using tendsto_const_nhds.mul limit
+  filter_upwards [eventually_ge_atTop 1, eventually_log_budget_le,
+      scaledLimit.eventually_lt_const ePositive] with n nLower logBound small
+  let X := (n : ℝ) ^ (1 / 1024 : ℝ)
+  let T := D * X
+  have nOne : 1 ≤ (n : ℝ) := by exact_mod_cast nLower
+  have nPositive : (0 : ℝ) < n := zero_lt_one.trans_le nOne
+  have XLower : 1 ≤ X := Real.one_le_rpow nOne (by norm_num)
+  have TLower : 1 ≤ T := one_le_mul_of_one_le_of_one_le DLower XLower
+  refine ⟨T, TLower, fun m upper => envelope n m upper, ?_⟩
+  have hNonneg : 0 ≤ (n : ℝ) := by linarith
+  have hmulLog : ((n : ℝ) ^ (1 / 256 : ℝ)) ^ 7 = (n : ℝ) ^ (7 / 256 : ℝ) := by
+    rw [← Real.rpow_natCast, ← Real.rpow_mul hNonneg]
+    norm_num
+  have hLog7 : logBudget n ^ 7 ≤ (n : ℝ) ^ (7 / 256 : ℝ) := by
+    have h1 : 1 ≤ logBudget n := one_le_logBudget n
+    have h := pow_le_pow_left₀ (zero_le_one.trans h1) logBound 7
+    rw [hmulLog] at h
+    exact h
+  have hX5 : X ^ 5 = (n : ℝ) ^ (5 / 1024 : ℝ) := by
+    unfold X
+    rw [← Real.rpow_natCast, ← Real.rpow_mul hNonneg]
+    norm_num
+  have hExp : (n : ℝ) ^ (5 / 1024 : ℝ) * (n : ℝ) ^ (7 / 256 : ℝ) *
+      (n : ℝ) ^ (23 / 24 : ℝ) = (n : ℝ) ^ (3043 / 3072 : ℝ) := by
+    rw [← Real.rpow_add nPositive, ← Real.rpow_add nPositive]
+    norm_num
+  have hExp2 : (n : ℝ) ^ (3043 / 3072 : ℝ) =
+      (n : ℝ) ^ (-(29 / 3072 : ℝ)) * (n : ℝ) := by
+    have key := Real.rpow_add nPositive (-(29 / 3072 : ℝ)) (1 : ℝ)
+    norm_num at key ⊢
+    exact key
+  calc
+    C * finalScale n T
+      ≤ C * (T ^ 5 * (n : ℝ) ^ (7 / 256 : ℝ) * (n : ℝ) ^ (23 / 24 : ℝ)) := by
+        unfold finalScale
+        exact mul_le_mul_of_nonneg_left
+          (mul_le_mul_of_nonneg_right
+            (mul_le_mul_of_nonneg_left hLog7 (by positivity)) (by positivity))
+          CNonnegative
+    _ = C * D ^ 5 * ((n : ℝ) ^ (5 / 1024 : ℝ) * (n : ℝ) ^ (7 / 256 : ℝ) *
+          (n : ℝ) ^ (23 / 24 : ℝ)) := by
+        have hT5 : T ^ 5 = D ^ 5 * X ^ 5 := by ring
+        rw [hT5, hX5]
+        ring
+    _ = P * (n : ℝ) ^ (3043 / 3072 : ℝ) := by
+        have hP : P = C * D ^ 5 := rfl
+        rw [hP, hExp]
+    _ = P * (n : ℝ) ^ (-(29 / 3072 : ℝ)) * (n : ℝ) := by rw [hExp2]; ring
+    _ ≤ e * (n : ℝ) := mul_le_mul_of_nonneg_right small.le hNonneg
+
+/-- Frozen frontier theorem: pure quantifier assembly over the segment bounds and
+    the growth envelope. -/
+theorem b1B1_target :
+    ∀ ε : ℝ, 0 < ε → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n →
+      ‖Jdeep n (τ₁ n) (τ₁ n)‖ ≤ ε * (n : ℝ) := by
+  intro ε hε
+  have CNonneg : 0 ≤ totalConstant := totalConstant_nonnegative
+  have envelope := b1B1_eventually_finalScale_le CNonneg hε
+  obtain ⟨Nwidth, hwidth⟩ := b1B1_small_width_thresholded
+  obtain ⟨Nenv, hNenv⟩ := Filter.eventually_atTop.mp envelope
+  let N := max 2 (max Nwidth Nenv)
+  refine ⟨N, fun n hn _hEven => ?_⟩
+  have hGeWidth : Nwidth ≤ n := by
+    exact le_trans (le_max_left Nwidth Nenv)
+      (le_trans (le_max_right 2 (max Nwidth Nenv)) hn)
+  have hGeEnv : Nenv ≤ n := by
+    exact le_trans (le_max_right Nwidth Nenv)
+      (le_trans (le_max_right 2 (max Nwidth Nenv)) hn)
+  have hwidth' : 4 * BH n * BM n ≤ n := by
+    have hReal : ((4 * BH n * BM n : ℕ) : ℝ) ≤ n := by
+      simpa using hwidth n hGeWidth
+    exact Nat.cast_le.mp hReal
+  have hNenv' := hNenv n hGeEnv
+  obtain ⟨T, TLower, divisorBound, bound⟩ := hNenv'
+  have nLower : 2 ≤ n := by
+    have : 2 ≤ N := le_max_left _ _
+    omega
+  have main := b1B1_deepPairIntegral_le n nLower hwidth' TLower divisorBound
+  exact main.trans bound
+
+end GoldbachB1B1Finish
+
+namespace GoldbachB1B1LowCoeff
+
+open Finset Filter ArithmeticFunction
+open GoldbachB1B1 GoldbachB1B1Target
+
+/-- Inner Möbius weight `Σ_{d|a, U n<d} μ d` bounded by the divisor card of `a`. -/
+private theorem b1B1_inner_moebius_le (n a : ℕ) :
+    |(∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d : ℝ)| ≤
+      (a.divisors.card : ℝ) := by
+  set s := (Nat.divisors a).filter (fun d => U n < d)
+  have h : ‖(∑ d ∈ s, μ d : ℝ)‖ ≤ ∑ d ∈ s, ‖(μ d : ℝ)‖ := norm_sum_le s (fun d => μ d)
+  rw [Real.norm_eq_abs] at h
+  calc
+    _ ≤ ∑ d ∈ s, |μ d| := h
+    _ ≤ ∑ d ∈ s, (1 : ℝ) := by
+      refine sum_le_sum fun d _ => ?_
+      have key : |(ArithmeticFunction.moebius d : ℝ)| ≤ 1 := by
+        exact_mod_cast abs_moebius_le_one (n := d)
+      simpa [μ] using key
+    _ ≤ ∑ d ∈ Nat.divisors a, (1 : ℝ) :=
+      sum_le_sum_of_subset_of_nonneg (filter_subset _ _) (fun _ _ _ => zero_le_one)
+    _ = (a.divisors.card : ℝ) := by rw [sum_const, nsmul_eq_mul, mul_one]
+
+/-- Low-band coefficient L∞ bound: `|τ₁ n m| ≤ d(m)^2 · log n`.
+    Isomorphic to reference `abs_lowBandCoefficient_le` (L6818), with
+    `U ↦ U n`, `B ↦ B₁ n`; the inner μ-sum is the reference `lowMoebiusWeight`. -/
+theorem b1B1_tau1_coeff_le (n m : ℕ) (mBound : m ≤ n) (nPositive : 0 < n) :
+    |τ₁ n m| ≤ (m.divisors.card : ℝ) ^ 2 * Real.log n := by
+  have logNonnegative : 0 ≤ Real.log n := Real.log_nonneg (by exact_mod_cast nPositive)
+  have logLambda (a : ℕ) (member : a ∈ m.divisors) :
+      ArithmeticFunction.vonMangoldt (m / a) ≤ Real.log n := by
+    have aDivides := Nat.dvd_of_mem_divisors member
+    have mPositive : 0 < m := Nat.pos_of_ne_zero (Nat.ne_zero_of_mem_divisors member)
+    have aPositive := Nat.pos_of_mem_divisors member
+    have quotientPositive := Nat.div_pos (Nat.le_of_dvd mPositive aDivides) aPositive
+    refine vonMangoldt_le_log.trans (Real.log_le_log (by exact_mod_cast quotientPositive) ?_)
+    exact_mod_cast (Nat.div_le_self m a).trans mBound
+  have tau (a : ℕ) (member : a ∈ m.divisors) :
+      (a.divisors.card : ℝ) ≤ (m.divisors.card : ℝ) := by
+    apply Nat.cast_le.mpr
+    apply card_le_card
+    intro d dMember
+    exact Nat.mem_divisors.mpr ⟨(Nat.dvd_of_mem_divisors dMember).trans (Nat.dvd_of_mem_divisors member),
+      Nat.ne_zero_of_mem_divisors member⟩
+  rw [← Real.norm_eq_abs, b1B1_tau1_atom_sum]
+  refine (norm_sum_le (E := ℝ) _ _).trans ?_
+  calc
+    _ ≤ ∑ a ∈ (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a),
+        (m.divisors.card : ℝ) * Real.log n := by
+      refine sum_le_sum fun a membership => ?_
+      have divisor := (mem_filter.mp membership).1
+      rw [norm_mul, Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg vonMangoldt_nonneg]
+      exact mul_le_mul ((b1B1_inner_moebius_le n a).trans (tau a divisor)) (logLambda a divisor)
+        vonMangoldt_nonneg (Nat.cast_nonneg _)
+    _ ≤ ∑ _ ∈ Nat.divisors m, (m.divisors.card : ℝ) * Real.log n :=
+      sum_le_sum_of_subset_of_nonneg (filter_subset _ _) (fun _ _ _ =>
+        mul_nonneg (Nat.cast_nonneg _) logNonnegative)
+    _ = _ := by rw [sum_const, nsmul_eq_mul]; ring
+
+end GoldbachB1B1LowCoeff
+
+namespace GoldbachB1B1Budget
+
+open Finset Filter Real
+open GoldbachB1B1 GoldbachB1B1Scale GoldbachB1B1Adapt
+open DyadicMixedB4ArcGeometry DyadicMixedB4EnergyTail
+open GoldbachB1B1Assembly
+
+/-- Outside budget scale: `S = M_low / √n`. -/
+def b1B1_outsideScale (n : ℕ) : ℝ := (BM n : ℝ) / Real.sqrt n
+
+/-- `M_low ≥ 1`, for `n ≥ 1`. -/
+private theorem b1B1_stepLow_one_le {n : ℕ} (hn : 1 ≤ n) : 1 ≤ BM n :=
+  Nat.le_floor (Real.one_le_rpow (by exact_mod_cast hn) (by norm_num))
+
+/-- `M_low > 0` (real cast), for `n ≥ 1`. -/
+private theorem b1B1_stepLow_real_pos {n : ℕ} (hn : 1 ≤ n) : 0 < (BM n : ℝ) := by
+  have h : 1 ≤ BM n := b1B1_stepLow_one_le hn
+  exact_mod_cast h
+
+/-- `S > 0`. -/
+theorem b1B1_outsideScale_pos {n : ℕ} (hn : 1 ≤ n) : 0 < b1B1_outsideScale n :=
+  div_pos (b1B1_stepLow_real_pos hn) (Real.sqrt_pos_of_pos (by exact_mod_cast hn))
+
+/-- `1 + log M_low ≤ logBudget n`. -/
+theorem b1B1_one_add_log_step_le {n : ℕ} (hn : 1 ≤ n) :
+    1 + Real.log (BM n : ℝ) ≤ logBudget n := by
+  have mPos : 0 < (BM n : ℝ) := b1B1_stepLow_real_pos hn
+  have mLeN : (BM n : ℝ) ≤ n := by exact_mod_cast b1B1_stepLow_le_n hn
+  exact add_le_add_right (Real.log_le_log mPos (by linarith)) 1
+
+/-- `√n · M_low ≤ n^(9/10)` (1/2 + 2/5 = 9/10). -/
+theorem b1B1_sqrt_mul_stepLow_le {n : ℕ} (hn : 1 ≤ n) :
+    Real.sqrt n * (BM n : ℝ) ≤ (n : ℝ) ^ (9 / 10 : ℝ) := by
+  have nReal : (0 : ℝ) < n := by exact_mod_cast hn
+  calc
+    _ ≤ Real.sqrt n * (n : ℝ) ^ (2 / 5 : ℝ) :=
+      mul_le_mul_of_nonneg_left (b1B1_stepLow_le_power n) (Real.sqrt_nonneg _)
+    _ = (n : ℝ) ^ (9 / 10 : ℝ) := by
+      rw [Real.sqrt_eq_rpow, ← Real.rpow_add nReal]; ring
+
+/-- Far/outside budget: pure exponent arithmetic. Mirrors reference `outside_budget_le`,
+    adapted to the low×low step `M = BM n` and the `n^(23/24)` final scale
+    (9/10 ≤ 23/24, so the `√n · M` envelope is absorbed by `finalScale`). -/
+theorem b1B1_outside_budget_le {n : ℕ} (hn : 1 ≤ n) {T : ℝ} (TLower : 1 ≤ T) :
+    let A := T ^ 2 * logBudget n
+    let W := T * logBudget n
+    (1 / 2 : ℝ) * (b1B1_outsideScale n * (((n : ℝ) + 1) * A ^ 2) +
+      (b1B1_outsideScale n)⁻¹ * (128 * W ^ 2 * ((BM n : ℝ) ^ 2 * logBudget n ^ 2 +
+        (radius (BM n))⁻¹ * (1 + Real.log (BM n : ℝ)) ^ 3))) ≤
+      577 * finalScale n T := by
+  dsimp only
+  let A := T ^ 2 * logBudget n
+  let W := T * logBudget n
+  let B := logBudget n
+  let M := (BM n : ℝ)
+  let S := b1B1_outsideScale n
+  have mPos : 0 < M := b1B1_stepLow_real_pos hn
+  have nLower : (1 : ℝ) ≤ n := by exact_mod_cast hn
+  have nReal : (0 : ℝ) < n := by exact_mod_cast hn
+  have root : 0 < Real.sqrt n := Real.sqrt_pos_of_pos nReal
+  have SPos : 0 < S := b1B1_outsideScale_pos hn
+  have BLower : 1 ≤ B := one_le_logBudget n
+  have BNonneg : 0 ≤ B := zero_le_one.trans BLower
+  have TNonneg : 0 ≤ T := zero_le_one.trans TLower
+  have mOne : (1 : ℝ) ≤ (BM n : ℝ) := by
+    exact_mod_cast b1B1_stepLow_one_le hn
+  have HNonneg : 0 ≤ 1 + Real.log M :=
+    add_nonneg zero_le_one (Real.log_nonneg mOne)
+  have radiusInv : (radius (BM n))⁻¹ = 8 * M ^ 2 := by
+    unfold radius; rw [one_div, inv_inv]
+  have nDivSqrt : (n : ℝ) / Real.sqrt n = Real.sqrt n := by
+    apply (div_eq_iff root.ne').mpr
+    rw [← pow_two, Real.sq_sqrt nReal.le]
+  have first : S * (((n : ℝ) + 1) * A ^ 2) ≤ 2 * Real.sqrt n * M * A ^ 2 := by
+    calc
+      _ ≤ S * ((2 * (n : ℝ)) * A ^ 2) :=
+        mul_le_mul_of_nonneg_left
+          (mul_le_mul_of_nonneg_right (by linarith only [nLower]) (sq_nonneg _)) SPos.le
+      _ = _ := by
+        change (M / Real.sqrt n) * ((2 * (n : ℝ)) * A ^ 2) = _
+        calc
+          _ = 2 * ((n : ℝ) / Real.sqrt n) * M * A ^ 2 := by ring
+          _ = _ := by rw [nDivSqrt]
+  have inner : M ^ 2 * B ^ 2 + (radius (BM n))⁻¹ * (1 + Real.log M) ^ 3 ≤
+      9 * M ^ 2 * B ^ 3 := by
+    rw [radiusInv]
+    calc
+      _ ≤ M ^ 2 * B ^ 3 + (8 * M ^ 2) * B ^ 3 :=
+        add_le_add
+          (mul_le_mul_of_nonneg_left
+            (pow_le_pow_right₀ BLower (by decide : 2 ≤ 3)) (sq_nonneg _))
+          (mul_le_mul_of_nonneg_left
+            (pow_le_pow_left₀ HNonneg (b1B1_one_add_log_step_le hn) 3) (by positivity))
+      _ = _ := by ring
+  have second : S⁻¹ * (128 * W ^ 2 * (M ^ 2 * B ^ 2 + (radius (BM n))⁻¹ * (1 + Real.log M) ^ 3)) ≤
+      1152 * Real.sqrt n * M * (W ^ 2 * B ^ 3) := by
+    calc
+      _ ≤ S⁻¹ * (128 * W ^ 2 * (9 * M ^ 2 * B ^ 3)) :=
+        mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left inner (by positivity)) (by positivity)
+      _ = _ := by
+        change (M / Real.sqrt n)⁻¹ * _ = _
+        rw [inv_div]; field_simp; ring
+  have aBound : A ^ 2 ≤ T ^ 5 * B ^ 7 := by
+    unfold A
+    rw [mul_pow, ← pow_mul]
+    exact mul_le_mul (pow_le_pow_right₀ TLower (by decide : 2 * 2 ≤ 5))
+      (pow_le_pow_right₀ BLower (by decide : 2 ≤ 7)) (sq_nonneg _) (by positivity)
+  have wBound : W ^ 2 * B ^ 3 ≤ T ^ 5 * B ^ 7 := by
+    unfold W
+    rw [mul_pow, mul_assoc, ← pow_add]
+    exact mul_le_mul (pow_le_pow_right₀ TLower (by decide : 2 ≤ 5))
+      (pow_le_pow_right₀ BLower (by decide : 2 + 3 ≤ 7)) (by positivity) (by positivity)
+  have exponentLe : (n : ℝ) ^ (9 / 10 : ℝ) ≤ (n : ℝ) ^ (23 / 24 : ℝ) :=
+    Real.rpow_le_rpow_of_exponent_le nLower (by norm_num)
+  have sqrtBound : Real.sqrt n * M ≤ (n : ℝ) ^ (23 / 24 : ℝ) :=
+    (b1B1_sqrt_mul_stepLow_le hn).trans exponentLe
+  calc
+    _ ≤ (1 / 2 : ℝ) * (2 * Real.sqrt n * M * A ^ 2 +
+          1152 * Real.sqrt n * M * (W ^ 2 * B ^ 3)) :=
+      mul_le_mul_of_nonneg_left (add_le_add first second) (by norm_num)
+    _ = Real.sqrt n * M * (A ^ 2 + 576 * (W ^ 2 * B ^ 3)) := by ring
+    _ ≤ (n : ℝ) ^ (23 / 24 : ℝ) * (T ^ 5 * B ^ 7 + 576 * (T ^ 5 * B ^ 7)) :=
+      mul_le_mul sqrtBound
+        (add_le_add aBound (mul_le_mul_of_nonneg_left wBound (by norm_num)))
+        (by positivity) (by positivity)
+    _ = 577 * finalScale n T := by unfold finalScale; ring
+
+end GoldbachB1B1Budget
+
+namespace GoldbachB1B1Polynomial
+
+open Finset Filter
+open DyadicMixedB4Fourier DyadicMixedB4Geometric DyadicMixedB4ArcCenters
+
+/-- Plain trigonometric polynomial `Σ_{m≤n} a_m · phase(m t)`. -/
+def plainPolynomial (n : ℕ) (a : ℕ → ℂ) (t : ℝ) : ℂ :=
+  ∑ m ∈ range (n + 1), a m * phase ((m : ℝ) * t)
+
+/-- Shifted polynomial `Σ_{m≤n} a_m · phase((m-n) t)`. -/
+def shiftedPolynomial (n : ℕ) (a : ℕ → ℂ) (t : ℝ) : ℂ :=
+  ∑ m ∈ range (n + 1), a m * phase ((((m : ℤ) - (n : ℤ) : ℤ) : ℝ) * t)
+
+theorem shiftedPolynomial_eq (n : ℕ) (a : ℕ → ℂ) (t : ℝ) :
+    shiftedPolynomial n a t = plainPolynomial n a t * phase (-(n : ℝ) * t) := by
+  rw [shiftedPolynomial, plainPolynomial, sum_mul]
+  refine sum_congr rfl fun m _ => ?_
+  have h : (((m : ℤ) - (n : ℤ) : ℤ) : ℝ) * t = (m : ℝ) * t + (-(n : ℝ) * t) := by
+    push_cast; ring
+  have key : phase ((((m : ℤ) - (n : ℤ) : ℤ) : ℝ) * t) =
+      phase ((m : ℝ) * t) * phase (-(n : ℝ) * t) := by
+    rw [h]
+    exact phase_add ((m : ℝ) * t) (-(n : ℝ) * t)
+  rw [key]
+  ring
+
+theorem shiftedPolynomial_continuous (n : ℕ) (a : ℕ → ℂ) :
+    Continuous (shiftedPolynomial n a) := by
+  unfold shiftedPolynomial phase
+  fun_prop
+
+theorem norm_shiftedPolynomial_eq (n : ℕ) (a : ℕ → ℂ) (t : ℝ) :
+    ‖shiftedPolynomial n a t‖ = ‖plainPolynomial n a t‖ := by
+  rw [shiftedPolynomial_eq, norm_mul, norm_phase', mul_one]
+
+theorem shiftedPolynomial_parseval (n : ℕ) (a : ℕ → ℂ) :
+    (∫ t in (0 : ℝ)..1, ‖shiftedPolynomial n a t‖ ^ 2) =
+      ∑ m ∈ range (n + 1), ‖a m‖ ^ 2 := by
+  have exactMode (m : ℕ) (t : ℝ) : phase ((m : ℝ) * t) = mode (m : ℤ) t := by
+    rw [BombieriVinogradov.LargeSieve.mode_nat_additivePhase]
+    simp only [phase, BombieriVinogradov.LargeSieve.additivePhase, circleMap_zero,
+      Complex.ofReal_one, one_mul]
+  simp only [norm_shiftedPolynomial_eq, plainPolynomial, exactMode]
+  exact parseval_real (n + 1) a
+
+end GoldbachB1B1Polynomial
+
+namespace GoldbachB1B1LowAtoms
+
+open Finset Filter ArithmeticFunction
+open GoldbachB1B1 GoldbachB1B1Target GoldbachB1B1Adapt GoldbachB1B1Scale
+open DyadicMixedB4Geometric DyadicMixedB4ArcGeometry DyadicMixedB4EnergyTail
+
+/-- Low×low atom set: `p=(a,b)` with `a ∈ (U n, B₁ n]`, `b ∈ (U n, n/a]`. -/
+def lowAtomSet (n : ℕ) : Finset (ℕ × ℕ) :=
+  ((Ioc (U n) (B₁ n)).product (range (n + 1))).filter
+    (fun p => U n < p.2 ∧ p.1 * p.2 ≤ n)
+
+/-- Atom step: the small divisor `a` (the product `a·b` stays in the mode layer). -/
+def lowAtomStep (_n : ℕ) (p : ℕ × ℕ) : ℕ := p.1
+
+/-- Atom window indices: single cell `Ioc (b-1, b) = {b}`. -/
+def lowAtomLower (p : ℕ × ℕ) : ℕ := p.2 - 1
+def lowAtomUpper (p : ℕ × ℕ) : ℕ := p.2
+
+/-- Atom weight, termwise identical to the `τ₁ n m` summand for `m = a·b`. -/
+def lowAtomWeight (n : ℕ) (p : ℕ × ℕ) : ℂ :=
+  (∑ d ∈ (Nat.divisors p.1).filter (fun d => U n < d), μ d : ℂ) *
+    (vonMangoldt p.2 : ℂ)
+
+/-- G: offWave expansion of the same low band over the atom set. -/
+def lowOutsidePolynomial (n : ℕ) (t : ℝ) : ℂ :=
+  ∑ p ∈ lowAtomSet n, lowAtomWeight n p *
+    offWave (radius (BM n)) p.1 (p.2 - 1) p.2 t
+
+theorem mem_lowAtomSet {n : ℕ} {p : ℕ × ℕ} :
+    p ∈ lowAtomSet n ↔
+      U n < p.1 ∧ p.1 ≤ B₁ n ∧ U n < p.2 ∧ p.1 * p.2 ≤ n := by
+  constructor
+  · intro h
+    have hmem := mem_product.mp (mem_filter.mp h).1
+    have hcond := (mem_filter.mp h).2
+    obtain ⟨h1, h2⟩ := mem_Ioc.mp hmem.1
+    exact ⟨h1, h2, hcond.1, hcond.2⟩
+  · rintro ⟨h1, h2, h3, h4⟩
+    have h1pos : 1 ≤ p.1 := by omega
+    have h5 : p.2 ≤ n := (Nat.le_mul_of_pos_left p.2 h1pos).trans h4
+    refine mem_filter.mpr ⟨mem_product.mpr ⟨mem_Ioc.mpr ⟨h1, h2⟩, mem_range.mpr (by omega)⟩,
+      ⟨h3, h4⟩⟩
+
+/-- Fibre of atoms with `a·b = m`. -/
+def tau1AtomFibre (n m : ℕ) : Finset (ℕ × ℕ) :=
+  (lowAtomSet n).filter (fun p => p.1 * p.2 = m)
+
+/-- Interface alignment: `τ₁ n m` equals the atom-weight sum over the fibre `a·b = m`. -/
+theorem tau1_atom_sum (n m : ℕ) (hm : m ≤ n) :
+    (τ₁ n m : ℂ) =
+      ∑ p ∈ lowAtomSet n, if p.1 * p.2 = m then lowAtomWeight n p else 0 := by
+  by_cases hM : m = 0
+  · subst hM
+    have hR : (∑ p ∈ lowAtomSet n, if p.1 * p.2 = 0 then lowAtomWeight n p else (0 : ℂ)) = 0 := by
+      rw [← sum_filter]
+      apply sum_eq_zero
+      intro p hp
+      have hmem := mem_lowAtomSet.mp (mem_filter.mp hp).1
+      have h1pos : 0 < p.1 := by omega
+      have h2pos : 0 < p.2 := by omega
+      have hnz : p.1 * p.2 ≠ 0 := mul_ne_zero h1pos.ne' h2pos.ne'
+      exact False.elim (hnz (mem_filter.mp hp).2)
+    have hL : (τ₁ n 0 : ℂ) = 0 := by
+      rw [b1B1_tau1_atom_sum]
+      simp
+    rw [hL, hR]
+  · have mPos : 0 < m := Nat.pos_of_ne_zero hM
+    let S := (Nat.divisors m).filter (fun a => U n < a ∧ a ≤ B₁ n ∧ U n < m / a)
+    let T := tau1AtomFibre n m
+    have hbij : ∑ a ∈ S, ((∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d : ℂ) *
+        (vonMangoldt (m / a) : ℂ)) = ∑ p ∈ T, lowAtomWeight n p := by
+      apply Finset.sum_bij (s := S) (t := T) (fun a _ => (a, m / a))
+      · intro a ha
+        have hmem := mem_filter.mp ha
+        have hdiv := hmem.1
+        have hcond := hmem.2
+        have hU := hcond.1
+        have hB := hcond.2.1
+        have hC := hcond.2.2
+        have hmul : a * (m / a) = m := Nat.mul_div_cancel' (Nat.dvd_of_mem_divisors hdiv)
+        have hAtom : (a, m / a) ∈ lowAtomSet n := by
+          rw [mem_lowAtomSet]
+          exact ⟨hU, hB, hC, by rw [hmul]; exact hm⟩
+        exact mem_filter.mpr ⟨hAtom, hmul⟩
+      · intro a _ a' _ h
+        simp only [Prod.ext_iff] at h
+        exact h.1
+      · intro p hp
+        have hpatom := (mem_filter.mp hp).1
+        have heq : p.1 * p.2 = m := (mem_filter.mp hp).2
+        obtain ⟨hU, hB, hC, _⟩ := mem_lowAtomSet.mp hpatom
+        set a := p.1
+        set b := p.2
+        have haDiv : a ∣ m := ⟨b, heq.symm⟩
+        have haPos : 0 < a := by omega
+        have haMemDiv : a ∈ Nat.divisors m := Nat.mem_divisors.mpr ⟨haDiv, hM⟩
+        have hb : m / a = b := Nat.div_eq_of_eq_mul_right haPos heq.symm
+        have haInS : a ∈ S :=
+          mem_filter.mpr ⟨haMemDiv, hU, hB, by rw [hb]; exact hC⟩
+        have hfa : (a, m / a) = p := by
+          apply Prod.ext
+          · rfl
+          · exact hb
+        exact ⟨a, haInS, hfa⟩
+      · intro a _
+        rfl
+    have htau : (τ₁ n m : ℂ) = ∑ a ∈ S, ((∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d : ℂ) *
+        (vonMangoldt (m / a) : ℂ)) := by
+      have h : τ₁ n m = ∑ a ∈ S,
+          (∑ d ∈ (Nat.divisors a).filter (fun d => U n < d), μ d) * vonMangoldt (m / a) :=
+        b1B1_tau1_atom_sum n m
+      exact_mod_cast h
+    calc
+      (τ₁ n m : ℂ) = ∑ a ∈ S, _ := htau
+      _ = ∑ p ∈ T, lowAtomWeight n p := hbij
+      _ = ∑ p ∈ lowAtomSet n, if p.1 * p.2 = m then lowAtomWeight n p else 0 :=
+        sum_filter (s := lowAtomSet n) (p := fun p => p.1 * p.2 = m) (f := lowAtomWeight n)
+
+end GoldbachB1B1LowAtoms
+
+namespace GoldbachB1B1Split
+
+open Finset Complex MeasureTheory
+open scoped BigOperators
+open DyadicMixedB4Geometric DyadicMixedB4ArcGeometry DyadicMixedB4ArcCenters
+open GoldbachB1B1Polynomial GoldbachB1B1Adapt GoldbachB1B1Scale
+
+noncomputable section
+
+-- ===========================================================================
+-- Measurability / integrability helpers (ref L6559, L6581)
+-- ===========================================================================
+
+-- SOURCE: ref L6559 `wide_measurable`
+-- DIFF: renamed `b1B1_wide_measurable`; body unchanged.
+theorem b1B1_wide_measurable (n B H : ℕ) : MeasurableSet (wide n B H) := by
+  unfold wide
+  simp only [Set.ofPred_exists]
+  refine MeasurableSet.iUnion fun q => MeasurableSet.iUnion fun a => ?_
+  by_cases condition : 1 ≤ q ∧ q ≤ B ∧ a ≤ q ∧ a.Coprime q
+  · obtain ⟨qPositive, qBound, aBound, coprime⟩ := condition
+    simp only [qPositive, qBound, aBound, true_and]
+    have equality : {x : ℝ | a.Coprime q ∧ |x - (a : ℝ) / q| ≤ (H : ℝ) / ((q : ℝ) * n)} =
+        {x : ℝ | |x - (a : ℝ) / q| ≤ (H : ℝ) / ((q : ℝ) * n)} := by
+      ext x
+      exact ⟨And.right, And.intro coprime⟩
+    rw [equality]
+    exact measurableSet_le (f := fun t : ℝ => |t - (a : ℝ) / q|)
+      (g := fun _ : ℝ => (H : ℝ) / ((q : ℝ) * n)) (by fun_prop) measurable_const
+  · have empty : {t : ℝ | 1 ≤ q ∧ q ≤ B ∧ a ≤ q ∧ a.Coprime q ∧
+        |t - (a : ℝ) / q| ≤ (H : ℝ) / ((q : ℝ) * n)} = ∅ := by
+      ext t
+      simp
+      tauto
+    rw [empty]
+    exact MeasurableSet.empty
+
+-- SOURCE: ref L6581 `indicator_intervalIntegrable`
+-- DIFF: renamed `b1B1_indicator_intervalIntegrable`; body unchanged.
+theorem b1B1_indicator_intervalIntegrable {f : ℝ → ℂ} {s : Set ℝ}
+    (continuous : Continuous f) (measurable : MeasurableSet s) :
+    IntervalIntegrable (s.indicator f) volume 0 1 := by
+  rw [intervalIntegrable_iff_integrableOn_Ioc_of_le zero_le_one]
+  have h : IntegrableOn f (Set.Ioc 0 1) volume :=
+    continuous.continuousOn.integrableOn_Icc.mono_set Set.Ioc_subset_Icc_self
+  exact h.indicator measurable
+
+-- ===========================================================================
+-- Disjoint partition: `outside = (outside ∩ nearᶜ) ∪ (outside ∩ near)`
+-- ===========================================================================
+
+-- SOURCE: ref L6635/L6645 pointwise split; extracted as a standalone set lemma.
+-- DIFF: no reference counterpart as a separate theorem; this is the required
+--       "outside splits into off-near and near-cell" identity, proved first so
+--       the per-wave integral split can reuse it.
+theorem b1B1_outside_near_partition (outside near : Set ℝ) :
+    outside = (outside ∩ nearᶜ) ∪ (outside ∩ near) ∧
+      Disjoint (outside ∩ nearᶜ) (outside ∩ near) := by
+  refine ⟨?_, ?_⟩
+  · ext t
+    by_cases hnear : t ∈ near <;> simp [hnear, and_or_left, or_and_right] <;> tauto
+  · rw [Set.disjoint_left]
+    intro x hx1 hx2
+    exact hx1.2 hx2.2
+
+-- SOURCE: ref L6635 `offEqual`
+-- DIFF: renamed `b1B1_off_indicator_eq`; `off = nearᶜ.indicator f` supplied
+--       explicitly as `hoff`.
+theorem b1B1_off_indicator_eq (outside near : Set ℝ) (f off : ℝ → ℂ)
+    (hoff : off = nearᶜ.indicator f) :
+    outside.indicator off = (outside ∩ nearᶜ).indicator f := by
+  funext t
+  by_cases nearMem : t ∈ near <;> by_cases outsideMem : t ∈ outside <;>
+    simp [hoff, nearMem, outsideMem, Set.indicator_of_mem, Set.indicator_of_notMem]
+
+-- ===========================================================================
+-- Per-wave shifted-polynomial split (ref L6616 `split_shifted_wave`)
+-- ===========================================================================
+
+/-!
+Conclusion (low×low constants):
+
+```
+∫ t in (0:ℝ)..1, (wide n (BB n) (BH n))ᶜ.indicator
+    (shiftedPolynomial n a * wave g l r)
+=
+∫ t in (0:ℝ)..1, (wide n (BB n) (BH n))ᶜ.indicator
+    (shiftedPolynomial n a * offWave (radius (BM n)) g l r)
++
+Σ q ∈ g.divisors.filter (BR n < q), Σ m ∈ range (n+1),
+    a m * ramanujan q ((m:ℤ)-n) *
+      ∫ t in window n (BM n) (BB n) (BH n) q,
+        phase (((m:ℤ)-(n:ℤ):ℤ):ℝ * t) * wave g l r t
+```
+-/
+
+-- SOURCE: ref L6616 `split_shifted_wave`
+-- DIFF: constants `maximumStep→BM n`, `cutoffB→BB n`, `cutoffH→BH n`,
+--       `cutoffR→BR n`; the near-cell Ramanujan/q expansion is delegated to
+--       Port `centered_deep_wave_integral` (Stack L877), which internally
+--       closes via `deep_cell_indicator` (Stack L694).
+theorem b1B1_split_shifted_wave (n M B H R g l r : ℕ) (a : ℕ → ℂ)
+    (nPositive : 0 < n) (gPositive : 0 < g) (gBound : g ≤ M) (Bbound : B ≤ M)
+    (width : 4 * H * M ≤ n) (Rpositive : 1 ≤ R) (Rbound : R ≤ B)
+    (cover : (R : ℝ) * (n : ℝ) * radius M ≤ (H : ℝ)) :
+    (∫ t in (0 : ℝ)..1, (wide n B H)ᶜ.indicator
+        (fun x => shiftedPolynomial n a x * wave g l r x) t) =
+      (∫ t in (0 : ℝ)..1, (wide n B H)ᶜ.indicator
+          (fun x => shiftedPolynomial n a x * offWave (radius M) g l r x) t) +
+        ∑ q ∈ g.divisors.filter (fun q => R < q), ∑ m ∈ range (n + 1),
+          a m * ramanujan q ((m : ℤ) - n) *
+            ∫ t in window n M B H q,
+              phase ((((m : ℤ) - (n : ℤ) : ℤ) : ℝ) * t) * wave g l r t := by
+  classical
+  let near := gridNear (radius M) g
+  let outside := (wide n B H)ᶜ
+  let f (t : ℝ) := shiftedPolynomial n a t * wave g l r t
+  let off (t : ℝ) := shiftedPolynomial n a t * offWave (radius M) g l r t
+  let v (m : ℕ) (t : ℝ) :=
+    phase ((((m : ℤ) - (n : ℤ) : ℤ) : ℝ) * t) * wave g l r t
+  have waveContinuous : Continuous (wave g l r) := by
+    unfold wave phase
+    fun_prop
+  have fContinuous : Continuous f :=
+    (shiftedPolynomial_continuous n a).mul waveContinuous
+  have nearMeasurable : MeasurableSet near := gridNear_measurable (radius M) g
+  have outsideMeasurable : MeasurableSet outside := (b1B1_wide_measurable n B H).compl
+  have offEqual : outside.indicator off = (outside ∩ nearᶜ).indicator f := by
+    funext t
+    by_cases hout : t ∈ outside
+    · by_cases hnear : t ∈ near
+      · have hnc : t ∉ nearᶜ := by simpa [Set.mem_compl] using hnear
+        have hWave0 : offWave (radius M) g l r t = 0 :=
+          Set.indicator_of_notMem hnc (f := wave g l r)
+        have hoff : off t = 0 := by simp only [off, hWave0, mul_zero]
+        have z : outside.indicator off t = 0 := by
+          simp only [Set.indicator, hoff, if_pos hout, mul_zero]
+        have hni : t ∉ outside ∩ nearᶜ := fun h => hnc h.2
+        have z' : (outside ∩ nearᶜ).indicator f t = 0 :=
+          Set.indicator_of_notMem hni (f := f)
+        rw [z, z']
+      · have hnc : t ∈ nearᶜ := by simpa [Set.mem_compl] using hnear
+        have hWave : offWave (radius M) g l r t = wave g l r t :=
+          Set.indicator_of_mem hnc (f := wave g l r)
+        have hoff : off t = f t := by simp only [off, f, hWave]
+        have a : outside.indicator off t = f t := by
+          rw [Set.indicator_of_mem hout (f := off), hoff]
+        have hmem : t ∈ outside ∩ nearᶜ := ⟨hout, hnc⟩
+        have b : (outside ∩ nearᶜ).indicator f t = f t :=
+          Set.indicator_of_mem hmem (f := f)
+        rw [a, b]
+    · have hni : t ∉ outside ∩ nearᶜ := fun h => hout h.1
+      have z : outside.indicator off t = 0 := Set.indicator_of_notMem hout (f := off)
+      have z' : (outside ∩ nearᶜ).indicator f t = 0 :=
+        Set.indicator_of_notMem hni (f := f)
+      rw [z, z']
+  have offInt : IntervalIntegrable (outside.indicator off) volume 0 1 := by
+    rw [offEqual]
+    exact b1B1_indicator_intervalIntegrable fContinuous
+      (outsideMeasurable.inter nearMeasurable.compl)
+  have nearInt : IntervalIntegrable ((near ∩ outside).indicator f) volume 0 1 :=
+    b1B1_indicator_intervalIntegrable fContinuous (nearMeasurable.inter outsideMeasurable)
+  have split (t : ℝ) : outside.indicator f t =
+      outside.indicator off t + (near ∩ outside).indicator f t := by
+    rw [offEqual]
+    by_cases nearMem : t ∈ near <;> by_cases outsideMem : t ∈ outside <;>
+      simp [nearMem, outsideMem]
+  have expandNear (t : ℝ) : (near ∩ outside).indicator f t =
+      ∑ m ∈ range (n + 1), a m * (near ∩ outside).indicator (v m) t := by
+    by_cases membership : t ∈ near ∩ outside
+    · simp only [Set.indicator_of_mem membership, f, shiftedPolynomial, sum_mul, v,
+        mul_assoc]
+    · simp [membership]
+  have termInt (m : ℕ) :
+      IntervalIntegrable (fun t => a m * (near ∩ outside).indicator (v m) t) volume 0 1 := by
+    have continuousMode : Continuous (fun t : ℝ =>
+      phase ((((m : ℤ) - (n : ℤ) : ℤ) : ℝ) * t)) := by
+      unfold phase
+      fun_prop
+    exact (b1B1_indicator_intervalIntegrable (continuousMode.mul waveContinuous)
+      (nearMeasurable.inter outsideMeasurable)).const_mul (a m)
+  change (∫ t in (0 : ℝ)..1, outside.indicator f t) =
+      (∫ t in (0 : ℝ)..1, outside.indicator off t) + _
+  calc
+    _ = ∫ t in (0 : ℝ)..1, outside.indicator off t + (near ∩ outside).indicator f t :=
+      intervalIntegral.integral_congr fun t _ => split t
+    _ = (∫ t in (0 : ℝ)..1, outside.indicator off t) +
+        ∫ t in (0 : ℝ)..1, (near ∩ outside).indicator f t :=
+      intervalIntegral.integral_add offInt nearInt
+    _ = _ := by
+      congr 1
+      simp_rw [expandNear]
+      rw [intervalIntegral.integral_finsetSum (fun m _ => termInt m)]
+      simp_rw [intervalIntegral.integral_const_mul]
+      have identify (m : ℕ) : (∫ t in (0 : ℝ)..1, (near ∩ outside).indicator (v m) t) =
+          ∑ q ∈ g.divisors.filter (fun q => R < q), ramanujan q ((m : ℤ) - n) *
+            ∫ t in window n M B H q, v m t :=
+        centered_deep_wave_integral n M B H R g l r ((m : ℤ) - n)
+          nPositive gPositive gBound Bbound width Rpositive Rbound cover
+      simp_rw [identify, mul_sum]
+      rw [sum_comm]
+      simp only [v, mul_assoc]
+
+-- ===========================================================================
+-- Top-level atom-list split (abstract; ref L7143 `deepPairIntegral_split`)
+-- ===========================================================================
+
+/-!
+The reference sums the per-wave split over `highAtoms n`, carrying
+`atomWeight i` through both the off integral and the near atom sum. In the
+low×low Stack the atom list is not wired yet (placeholder L6913); this lemma
+is therefore parameterized over an item type `ι` with step/interval accessors
+and weights. Concretely:
+- `items`  : wave atoms (per alternative (C), divisor-side `a`; see MainBlock Q3);
+- `step i`/`lo i`/`hi i`: wave step and window indices;
+- `weight i`: outer atom weight.
+
+NEEDS: object wiring — replace the abstract `items`/accessors with the real
+low×low atom expansion once it lands in Stack.
+-/
+
+-- SOURCE: ref L7143 `deepPairIntegral_split`
+-- DIFF: abstracted over `ι`/`step`/`lo`/`hi`/`weight`; no reference to the
+--       unwired `deepPairIntegral`/`outsidePairIntegral`/`exactNearPair`
+--       placeholders. The per-wave identity is `b1B1_split_shifted_wave` above.
+theorem b1B1_deepPair_split_aux {ι : Type*} (n M B H R : ℕ)
+    (items : Finset ι) (step lo hi : ι → ℕ) (weight : ι → ℝ)
+    (a : ℕ → ℂ) (nPositive : 0 < n)
+    (gBound : ∀ i ∈ items, step i ≤ M) (Bbound : B ≤ M)
+    (width : 4 * H * M ≤ n) (Rpositive : 1 ≤ R) (Rbound : R ≤ B)
+    (cover : (R : ℝ) * (n : ℝ) * radius M ≤ (H : ℝ)) :
+    True := by
+  -- TODO: wire the atom-list integral split.
+  -- 1. For each `i ∈ items`, apply `b1B1_split_shifted_wave` with
+  --    `g := step i`, `l := lo i`, `r := hi i`.
+  -- 2. Sum the per-item off integrals into the outside-pair integral; sum the
+  --    per-item near atom sums (`Σ q, Σ m, a m · ramanujan q · window integral`)
+  --    into the near-pair sum, mirroring ref L7195–7199
+  --    (`integral_finsetSum` over `items`, `integral_const_mul` for weights).
+  -- 3. State the equality against the real low×low outside/near pair objects
+  --    once those replace the Stack L6910–6913 zero placeholders.
+  trivial
+
+end
+
+end GoldbachB1B1Split
