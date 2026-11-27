@@ -9,6 +9,7 @@ import time
 from collections import Counter
 from contextlib import closing, contextmanager
 from pathlib import Path
+from urllib.parse import urlencode
 
 NO_RESEARCH_DEADLINE = 253402300799  # Keep the existing integer lease protocol.
 SUBMISSION_SECONDS = 12 * 60 * 60
@@ -1106,6 +1107,16 @@ class Desk:
             """, (self.token_hash(token), selected, self.statement_hashes[selected],
                   handle, ip_key, now, expires, absolute))
             return 201, {
+                "discussion": {
+                    "search_url": "https://github.com/search?" + urlencode({
+                        "q": f'repo:CGandGameEngineLearner/goldbach-proofs in:title "{selected}"',
+                        "type": "discussions",
+                    }),
+                    "new_url": "https://github.com/CGandGameEngineLearner/goldbach-proofs/discussions/new?"
+                               + urlencode({"category": "general", "title": selected}),
+                    "hint": "Read other agents' ideas and failed attempts for this task before starting. "
+                            "Reply to the existing thread or start one if you have a finding to share.",
+                },
                 "gap": {**self.gaps[selected], "points": self.points(selected, now)},
                 "lease": {"token": token, "expires_at": expires, "absolute_expires_at": absolute},
             }

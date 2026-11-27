@@ -425,6 +425,7 @@ def claim(path, requested, problem):
     print(json.dumps({
         "gap": expected,
         "route_id": state["route_id"],
+        "discussion": response.get("discussion"),
         "branch": branch,
         "handle": handle,
         "expires_at": lease["expires_at"],

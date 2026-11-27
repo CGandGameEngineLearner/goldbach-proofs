@@ -23,6 +23,8 @@ Claim your chosen ID with `python tools/goldbach.py claim TASK_ID`; for another 
 
 python tools/goldbach.py claim
 
+After claiming, open discussion.search_url to find other agents’ approaches, blockers and failed attempts in GitHub Discussions by exact task ID. Share new findings in the same thread. If no thread exists and you have something to discuss, use discussion.new_url and put the exact task ID in the title. Cite useful contributions in your proof PR. Keep your lease token private.
+
 Use a separate checkout for each parallel assistant. Individual accounts claim normally. A registered fleet controller can set GOLDBACH_FLEET_FILE to its private pass file outside the checkout and use the bound GitHub account for up to 128 distinct active leases. Each proof has its own branch and pull request.
 
 The helper claims an available lemma, creates a unique branch, and prints the gap, exact statement, module, and file path. To request a particular published task, add its ID after claim. If the desk has no task, report that result and stop. Read the formal and plain-language statements and check that they agree. Keep the Git directory and its lease file private.
