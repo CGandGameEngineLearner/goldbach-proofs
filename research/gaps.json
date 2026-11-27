@@ -14249,8 +14249,8 @@
       "imports": [
         "PEqualNP.Outside.L_goldbach_arc_major_floor"
       ],
-      "module": "Conjectures.Goldbach.ExceptionFourSeventhsCountingBridge",
       "file": "lean/Conjectures/Goldbach/ExceptionFourSeventhsCountingBridge.lean",
+      "module": "Conjectures.Goldbach.ExceptionFourSeventhsCountingBridge",
       "route_source": "exceptional-set-four-sevenths"
     },
     {
@@ -14277,8 +14277,8 @@
       "imports": [
         "PEqualNP.Outside.L_goldbach_frontier_uncond_deep_second_moment"
       ],
-      "module": "Conjectures.Goldbach.ExceptionFourSeventhsNegativeEnergy",
       "file": "lean/Conjectures/Goldbach/ExceptionFourSeventhsNegativeEnergy.lean",
+      "module": "Conjectures.Goldbach.ExceptionFourSeventhsNegativeEnergy",
       "route_source": "exceptional-set-four-sevenths"
     },
     {
@@ -14302,8 +14302,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.ExceptionFourSeventhsUnconditional",
       "file": "lean/Conjectures/Goldbach/ExceptionFourSeventhsUnconditional.lean",
+      "module": "Conjectures.Goldbach.ExceptionFourSeventhsUnconditional",
       "route_source": "exceptional-set-four-sevenths",
       "imports": []
     },
@@ -15949,7 +15949,8 @@
       "module": "Conjectures.Goldbach.DynPathSecondMoment",
       "file": "lean/Conjectures/Goldbach/DynPathSecondMoment.lean",
       "imports": [
-        "Conjectures.Goldbach.DynFactorialCollisions"
+        "Conjectures.Goldbach.DynFactorialCollisions",
+        "Conjectures.Goldbach.DynShiftSieve"
       ],
       "track": "representations",
       "role": "lemma",
