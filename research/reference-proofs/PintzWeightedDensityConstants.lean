@@ -1,3 +1,5 @@
+import Mathlib.Analysis.Convex.Deriv
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
 import Mathlib.Analysis.Convex.SpecificFunctions.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
@@ -55,6 +57,57 @@ theorem B_antitone {w x y : ℝ} (hw : 0 ≤ w) (hx : 0 < x) (hxy : x ≤ y) :
   have hy := hx.trans_le hxy
   exact add_le_add (by gcongr; exact kernel_antitone hx hxy)
     (pow_le_pow_left₀ (kernel_nonneg hw hy) (kernel_antitone hx hxy) _)
+
+private theorem sinh_ratio_mono {w x y : ℝ} (hw : 0 ≤ w) (hx : 0 < x) (hxy : x ≤ y) :
+    Real.sinh (w*x) / x ≤ Real.sinh (w*y) / y := by
+  have hy := hx.trans_le hxy
+  have hc : ConvexOn ℝ (Set.Ici 0) Real.sinh := by
+    apply convexOn_of_deriv2_nonneg' (convex_Ici _) Real.differentiable_sinh.differentiableOn
+    · rw [Real.deriv_sinh]
+      exact Real.differentiable_cosh.differentiableOn
+    · intro t ht
+      simpa [Function.iterate_succ_apply', Real.deriv_sinh, Real.deriv_cosh] using
+        (Real.sinh_nonneg_iff.mpr ht)
+  have h := hc.2 (show w*y ∈ Set.Ici 0 from mul_nonneg hw hy.le)
+    (show (0:ℝ) ∈ Set.Ici 0 from Set.self_mem_Ici) (div_nonneg hx.le hy.le)
+    (sub_nonneg.mpr ((div_le_one hy).2 hxy)) (show x/y+(1-x/y)=1 by ring)
+  simp only [smul_eq_mul, mul_zero, add_zero, Real.sinh_zero] at h
+  rw [show x/y*(w*y) = w*x by field_simp] at h
+  apply (div_le_div_iff₀ hx hy).2
+  field_simp [hy.ne'] at h
+  linarith
+
+private theorem tilted_B (w x : ℝ) (hx : 0 < x) :
+    Real.exp (w*x) * B w x =
+      (2 * (Real.sinh (w*x) / x)) / 6 + (2 * (Real.sinh ((w/2)*x) / x))^2 := by
+  have h1 : Real.exp (w*x) = Real.exp ((w/2)*x)^2 := by
+    rw [sq, ← Real.exp_add]
+    congr 1
+    ring
+  have h2 : Real.exp ((2*w)*x) = Real.exp (w*x)^2 := by
+    rw [sq, ← Real.exp_add]
+    congr 1
+    ring
+  simp only [B, kernel, neg_mul, Real.exp_neg, Real.sinh_eq, h2, h1]
+  field_simp [hx.ne', Real.exp_ne_zero]
+
+/-- Damping the row estimate at a zero below the cutoff moves the bound
+to the common cutoff. This also covers zeros above it, as in (5.32)–(5.34). -/
+theorem damped_B_le_at_cutoff {w x y : ℝ} (hw : 0 ≤ w) (hx : 0 < x) (hy : 0 < y) :
+    Real.exp (-w * max 0 (y-x)) * B w x ≤ B w y := by
+  by_cases hxy : x ≤ y
+  · have hm : Real.exp (w*x) * B w x ≤ Real.exp (w*y) * B w y := by
+      rw [tilted_B w x hx, tilted_B w y hy]
+      have h₁ := sinh_ratio_mono hw hx hxy
+      have h₂ := sinh_ratio_mono (show 0 ≤ w/2 by positivity) hx hxy
+      have hs : 0 ≤ Real.sinh (w/2*x) := Real.sinh_nonneg_iff.mpr (by positivity)
+      gcongr
+    apply (mul_le_mul_iff_right₀ (Real.exp_pos (w*y))).mp
+    rw [max_eq_right (sub_nonneg.mpr hxy), ← mul_assoc, ← Real.exp_add,
+      show w*y + -w*(y-x) = w*x by ring]
+    exact hm
+  · simpa only [max_eq_left (sub_nonpos.mpr (le_of_not_ge hxy)), mul_zero, Real.exp_zero,
+      one_mul] using (show B w x ≤ B w y from B_antitone hw hy (le_of_not_ge hxy))
 
 theorem factor_antitone {x y : ℝ} (hx : 0 < x) (hxy : x ≤ y) : factor y ≤ factor x := by
   unfold factor
