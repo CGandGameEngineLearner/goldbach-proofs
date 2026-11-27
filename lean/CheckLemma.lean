@@ -319,25 +319,36 @@ unsafe def reduceShape (stmtEnv full : Environment) (libEnv : Kernel.Environment
   for i in [0:k] do
     let t := kids[i]!
     let which := s!"child {i + 1} of {mod}"
-    let printed ← (runMetaIn stmtEnv do
-        let f ← Meta.ppExpr (canonBinders t)
-        return (f.pretty 1000000).replace "\n" " ").toBaseIO
-    let text ← match printed with
-      | .ok s => pure s
-      | .error e => return ← fail "reduce-child" s!"{which} could not be printed: {e}"
-    if text.length > maxChildChars then
-      return ← fail "reduce-child" s!"{which} prints as {text.length} characters; a child prints in at most {maxChildChars}"
-    match Parser.runParserCategory stmtEnv `term text "<child>" with
-    | .error e => return ← fail "reduce-child" s!"{which} prints as `{text}`, which is not one Lean term: {e}"
-    | .ok _ => pure ()
-    let src := "set_option autoImplicit false\ntheorem PEqualNPChecker.child :\n(\n" ++ text ++ "\n) := sorry\n"
-    let (env', msgs) ← Elab.process src stmtEnv {} (fileName := "<child>")
-    if msgs.hasErrors then
-      return ← fail "reduce-child" s!"{which} prints as `{text}`, which does not elaborate again in the statement environment"
-    let some back := env'.find? `PEqualNPChecker.child
-      | return ← fail "reduce-child" s!"{which} prints as `{text}`, which did not elaborate to a declaration"
-    unless back.levelParams.isEmpty && back.type == t do
-      return ← fail "reduce-child" s!"{which} prints as `{text}`, which elaborates again to a different term; the printed text would not mean the child"
+    let roundTrip (typedCoercions : Bool) : IO (Except String String) := do
+      let printed ← (runMetaIn stmtEnv do
+          let f ← withOptions (fun opts => opts.setBool `pp.coercions.types typedCoercions) <|
+            Meta.ppExpr (canonBinders t)
+          return (f.pretty 1000000).replace "\n" " ").toBaseIO
+      let text ← match printed with
+        | .ok s => pure s
+        | .error e => return .error s!"could not be printed: {e}"
+      if text.length > maxChildChars then
+        return .error s!"prints as {text.length} characters; a child prints in at most {maxChildChars}"
+      match Parser.runParserCategory stmtEnv `term text "<child>" with
+      | .error e => return .error s!"prints as `{text}`, which is not one Lean term: {e}"
+      | .ok _ => pure ()
+      let src := "set_option autoImplicit false\ntheorem PEqualNPChecker.child :\n(\n" ++ text ++ "\n) := sorry\n"
+      let (env', msgs) ← Elab.process src stmtEnv {} (fileName := "<child>")
+      if msgs.hasErrors then
+        return .error s!"prints as `{text}`, which does not elaborate again in the statement environment"
+      let some back := env'.find? `PEqualNPChecker.child
+        | return .error s!"prints as `{text}`, which did not elaborate to a declaration"
+      unless back.levelParams.isEmpty && back.type == t do
+        return .error s!"prints as `{text}`, which elaborates again to a different term"
+      return .ok text
+    -- Keep the original text when it round-trips. A coercion before an overloaded
+    -- operation can require the target type to reconstruct the expression.
+    let text ← match ← roundTrip false with
+      | .ok text => pure text
+      | .error _ =>
+        match ← roundTrip true with
+        | .ok text => pure text
+        | .error message => return ← fail "reduce-child" s!"{which} {message}"
     out := out.push (t, text)
   return .ok out
 
