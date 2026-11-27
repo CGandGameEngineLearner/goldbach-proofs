@@ -17,7 +17,9 @@
     "L-joshi-abc-theta-minimum",
     "L-joshi-abc-root-unit"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.ThetaMinimum"
+  ],
   "track": "02-scaled-log-and-theta",
   "module": "Conjectures.JoshiAbc.ThetaRatioNorm",
   "file": "lean/Conjectures/JoshiAbc/ThetaRatioNorm.lean"
