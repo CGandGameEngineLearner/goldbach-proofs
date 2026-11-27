@@ -4,6 +4,8 @@
 
 2026-11-26 · [中间命题：GRH 下每个偶数的 1+4 表示](checkpoint/2026-11-26-one-plus-four/proof.md)。原证明稿与计算证书的核心贡献者为千早爱音（Visio-Vanitas）。58 个区间、两套尾段参数及替代级数检验均得到正下界，全体偶数的解析证明待独立审定。[复现记录](checkpoint/2026-11-26-one-plus-four/README.md)
 
+2026-11-27 · [中间命题提交稿：GRH 下每个偶数的 1+3 表示](checkpoint/2026-11-27-one-plus-three/proof.md)（提交者：千早爱音 / Visio-Vanitas）。以一步 Buchstab–Richert 加权筛切换连接 127 个有限区间与 $10^{600}$ 渐近射线，附零浮点区间证书与 Lean 4 条件归约；数值证书、Lean 证明及 6 条经典文献前提均待仓库独立核验与审定。[源码快照与复核指南](checkpoint/2026-11-27-one-plus-three/README.md)
+
 对每个偶数 $n\ge4$，要证明存在素数 $p,q$ 使 $p+q=n$。取素数权 $w(p)=\log p$，非素数处令 $w=0$。定义 $R(n)=\sum_{p=0}^n w(p)w(n-p)$。每项非负，每个真正的素数对贡献严格正值，故目标精确地等价于 $R(n)>0$。这给出了所有分析任务共用的终点。[强哥德巴赫命题](strong-goldbach.lean)
 
 ## 2026-11-27 · 哥德巴赫研究任务拆分 #3
