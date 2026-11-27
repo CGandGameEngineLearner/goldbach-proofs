@@ -16,5 +16,7 @@
   "depends_on": [
     "L-quadratic-primes-gaussian-conjugate-coprime-even"
   ],
-  "imports": []
+  "imports": [
+    "Conjectures.QuadraticPrimes.GaussianConjugateCoprimeEven"
+  ]
 }
