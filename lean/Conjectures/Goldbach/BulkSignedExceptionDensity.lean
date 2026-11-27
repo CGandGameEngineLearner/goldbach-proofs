@@ -10137,8 +10137,8 @@ theorem weighted_tail_bound {R Q D M n : ℕ} (hRQ : R ≤ Q) (hQD : Q ≤ D) (h
   rw [← hunion, sum_union hdis]
   calc
     _ ≤ (∑ q ∈ Icc 1 R, ((M:ℝ)/2) * ((R:ℝ)/Q) * ‖coefficient q n‖) +
-        ∑ q ∈ Ioc R Q, ((M:ℝ)/2) * ‖coefficient q n‖ :=
-      add_le_add (sum_le_sum hs) (sum_le_sum ht)
+        ∑ q ∈ Ioc R Q, ((M:ℝ)/2) * ‖coefficient q n‖ := by
+      exact add_le_add (sum_le_sum hs) (sum_le_sum ht)
     _ = ((M:ℝ)/2) * (((R:ℝ)/Q) * (∑ q ∈ Icc 1 R, ‖coefficient q n‖) +
           ∑ q ∈ Ioc R Q, ‖coefficient q n‖) := by
       rw [← mul_sum, ← mul_sum, mul_add, mul_assoc]
@@ -10216,8 +10216,8 @@ theorem compare_major {R Q D n M : ℕ} (hRQ : R ≤ Q) (hQD : Q ≤ D) (hQ : 0 
   calc
     _ ≤ (GoldbachMajorArc.Polylog.totalArcError Q n (n:ℝ) + ((M:ℝ)/2) * (ξ Q + τ)) +
         ((n:ℝ)+1) * τ +
-        (GoldbachMajorArc.Polylog.totalArcError D M (n:ℝ) + ((M:ℝ)/2) * (ξ Q + τ)) :=
-      add_le_add (add_le_add hA hG) hB
+        (GoldbachMajorArc.Polylog.totalArcError D M (n:ℝ) + ((M:ℝ)/2) * (ξ Q + τ)) := by
+      exact add_le_add (add_le_add hA hG) hB
     _ = _ := by
       change _ = GoldbachMajorArc.Polylog.totalArcError Q n (n:ℝ) +
         GoldbachMajorArc.Polylog.totalArcError D M (n:ℝ) + (M:ℝ) * ξ Q +
@@ -10767,7 +10767,7 @@ end BulkSignedExceptionDensityProof
 namespace Conjectures.Goldbach.BulkSignedExceptionDensity_aux.BulkProof
 
 open Finset Filter MeasureTheory
-open _root_.BulkSignedExceptionDensityProof
+open BulkSignedExceptionDensityProof
 open GoldbachMajorArc (coefficient)
 open scoped Topology
 
