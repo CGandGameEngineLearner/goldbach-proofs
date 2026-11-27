@@ -5267,8 +5267,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.IntegerScaleOrdinatePairKernel",
         "file": "lean/Conjectures/TwinPrimes/IntegerScaleOrdinatePairKernel.lean",
+        "module": "Conjectures.TwinPrimes.IntegerScaleOrdinatePairKernel",
         "track": "03-zero-pairs",
         "route_source": "03-zero-pairs"
       },
@@ -5423,8 +5423,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.AdmissibleLongPrimePowerConvolution",
         "file": "lean/Conjectures/TwinPrimes/AdmissibleLongPrimePowerConvolution.lean",
+        "module": "Conjectures.TwinPrimes.AdmissibleLongPrimePowerConvolution",
         "track": "04-divisor-split",
         "route_source": "04-divisor-split"
       },
@@ -5588,8 +5588,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.HarmonicKernelCofactorError",
         "file": "lean/Conjectures/TwinPrimes/HarmonicKernelCofactorError.lean",
+        "module": "Conjectures.TwinPrimes.HarmonicKernelCofactorError",
         "track": "04-divisor-split",
         "route_source": "04-divisor-split"
       },
@@ -5610,8 +5610,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.IntegerScaleDivisorKernel",
         "file": "lean/Conjectures/TwinPrimes/IntegerScaleDivisorKernel.lean",
+        "module": "Conjectures.TwinPrimes.IntegerScaleDivisorKernel",
         "track": "04-divisor-split",
         "route_source": "04-divisor-split"
       },
@@ -5632,8 +5632,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.LongDivisorLargeBasePowerTail",
         "file": "lean/Conjectures/TwinPrimes/LongDivisorLargeBasePowerTail.lean",
+        "module": "Conjectures.TwinPrimes.LongDivisorLargeBasePowerTail",
         "track": "04-divisor-split",
         "route_source": "04-divisor-split"
       },
@@ -5828,8 +5828,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.HarmonicProperPowerTail",
         "file": "lean/Conjectures/TwinPrimes/HarmonicProperPowerTail.lean",
+        "module": "Conjectures.TwinPrimes.HarmonicProperPowerTail",
         "track": "05-finite-increments",
         "route_source": "05-finite-increments"
       },
@@ -5879,8 +5879,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.JumpAbelEndpointIdentity",
         "file": "lean/Conjectures/TwinPrimes/JumpAbelEndpointIdentity.lean",
+        "module": "Conjectures.TwinPrimes.JumpAbelEndpointIdentity",
         "track": "05-finite-increments",
         "route_source": "05-finite-increments"
       },
@@ -6442,8 +6442,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.FifthRootRoughPrimeMass",
         "file": "lean/Conjectures/TwinPrimes/FifthRootRoughPrimeMass.lean",
+        "module": "Conjectures.TwinPrimes.FifthRootRoughPrimeMass",
         "track": "07-levent-gap-two",
         "route_source": "07-levent-gap-two"
       },
@@ -6464,8 +6464,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.FirstFactorDoubledFifthBand",
         "file": "lean/Conjectures/TwinPrimes/FirstFactorDoubledFifthBand.lean",
+        "module": "Conjectures.TwinPrimes.FirstFactorDoubledFifthBand",
         "track": "07-levent-gap-two",
         "route_source": "07-levent-gap-two"
       },
@@ -6512,8 +6512,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.MiddleNextFactorBuchstabDomain",
         "file": "lean/Conjectures/TwinPrimes/MiddleNextFactorBuchstabDomain.lean",
+        "module": "Conjectures.TwinPrimes.MiddleNextFactorBuchstabDomain",
         "track": "07-levent-gap-two",
         "route_source": "07-levent-gap-two"
       },
@@ -6534,8 +6534,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.MiddleRepeatedFirstFactorLoss",
         "file": "lean/Conjectures/TwinPrimes/MiddleRepeatedFirstFactorLoss.lean",
+        "module": "Conjectures.TwinPrimes.MiddleRepeatedFirstFactorLoss",
         "track": "07-levent-gap-two",
         "route_source": "07-levent-gap-two"
       },
@@ -6585,8 +6585,8 @@
           "L-twin-primes-quadratic-square-sieve-residues"
         ],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.PrimeSquareMinusTwoUpperSieve",
         "file": "lean/Conjectures/TwinPrimes/PrimeSquareMinusTwoUpperSieve.lean",
+        "module": "Conjectures.TwinPrimes.PrimeSquareMinusTwoUpperSieve",
         "track": "07-levent-gap-two",
         "route_source": "07-levent-gap-two"
       },
@@ -6636,8 +6636,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.QuadraticSquareSieveResidues",
         "file": "lean/Conjectures/TwinPrimes/QuadraticSquareSieveResidues.lean",
+        "module": "Conjectures.TwinPrimes.QuadraticSquareSieveResidues",
         "track": "07-levent-gap-two",
         "route_source": "07-levent-gap-two"
       },
@@ -6809,8 +6809,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.TwinPrimes.SquareNeighbourModThree",
         "file": "lean/Conjectures/TwinPrimes/SquareNeighbourModThree.lean",
+        "module": "Conjectures.TwinPrimes.SquareNeighbourModThree",
         "track": "07-levent-gap-two",
         "route_source": "07-levent-gap-two"
       },
@@ -6859,9 +6859,11 @@
           "L-twin-primes-square-neighbour-mod-three",
           "L-twin-primes-prime-square-minus-two-upper-sieve"
         ],
-        "imports": [],
-        "module": "Conjectures.TwinPrimes.WindowContaminationSquareRoot",
+        "imports": [
+          "Conjectures.TwinPrimes.SquareNeighbourModThree"
+        ],
         "file": "lean/Conjectures/TwinPrimes/WindowContaminationSquareRoot.lean",
+        "module": "Conjectures.TwinPrimes.WindowContaminationSquareRoot",
         "track": "07-levent-gap-two",
         "route_source": "07-levent-gap-two"
       },
@@ -16862,8 +16864,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.DyadicLargeRootHatWeight",
         "file": "lean/Conjectures/QuadraticPrimes/DyadicLargeRootHatWeight.lean",
+        "module": "Conjectures.QuadraticPrimes.DyadicLargeRootHatWeight",
         "track": "levent-gaussian-root-phases",
         "route_source": "levent-gaussian-root-phases"
       },
@@ -17274,8 +17276,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.AngularHeckeFejerDeterminantKernel",
         "file": "lean/Conjectures/QuadraticPrimes/AngularHeckeFejerDeterminantKernel.lean",
+        "module": "Conjectures.QuadraticPrimes.AngularHeckeFejerDeterminantKernel",
         "track": "levent-natural-quadratic-extensions",
         "route_source": "levent-natural-quadratic-extensions"
       },
@@ -17296,8 +17298,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.GaussianAnnulusDeterminantFibers",
         "file": "lean/Conjectures/QuadraticPrimes/GaussianAnnulusDeterminantFibers.lean",
+        "module": "Conjectures.QuadraticPrimes.GaussianAnnulusDeterminantFibers",
         "track": "levent-natural-quadratic-extensions",
         "route_source": "levent-natural-quadratic-extensions"
       },
@@ -17567,8 +17569,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.BinomialImaginaryTwoAdicGap",
         "file": "lean/Conjectures/QuadraticPrimes/BinomialImaginaryTwoAdicGap.lean",
+        "module": "Conjectures.QuadraticPrimes.BinomialImaginaryTwoAdicGap",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17592,8 +17594,8 @@
           "L-quadratic-primes-near-equal-semiprime-count"
         ],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.DisjointFirstHitPrimeExtraction",
         "file": "lean/Conjectures/QuadraticPrimes/DisjointFirstHitPrimeExtraction.lean",
+        "module": "Conjectures.QuadraticPrimes.DisjointFirstHitPrimeExtraction",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17616,8 +17618,8 @@
           "L-quadratic-primes-switched-cofactor-small-sieve"
         ],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.FirstFactorEdgeBands",
         "file": "lean/Conjectures/QuadraticPrimes/FirstFactorEdgeBands.lean",
+        "module": "Conjectures.QuadraticPrimes.FirstFactorEdgeBands",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17638,8 +17640,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.GaussianConjugateCoprimeEven",
         "file": "lean/Conjectures/QuadraticPrimes/GaussianConjugateCoprimeEven.lean",
+        "module": "Conjectures.QuadraticPrimes.GaussianConjugateCoprimeEven",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17663,8 +17665,8 @@
           "L-quadratic-primes-switched-cofactor-small-sieve"
         ],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.MiddleFirstFactorSwitchedBudget",
         "file": "lean/Conjectures/QuadraticPrimes/MiddleFirstFactorSwitchedBudget.lean",
+        "module": "Conjectures.QuadraticPrimes.MiddleFirstFactorSwitchedBudget",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17688,8 +17690,8 @@
           "L-quadratic-primes-odd-quadratic-root-average"
         ],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.NearEqualSemiprimeCount",
         "file": "lean/Conjectures/QuadraticPrimes/NearEqualSemiprimeCount.lean",
+        "module": "Conjectures.QuadraticPrimes.NearEqualSemiprimeCount",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17712,8 +17714,8 @@
           "L-quadratic-primes-gaussian-conjugate-coprime-even"
         ],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.OddPowerImaginaryUnit",
         "file": "lean/Conjectures/QuadraticPrimes/OddPowerImaginaryUnit.lean",
+        "module": "Conjectures.QuadraticPrimes.OddPowerImaginaryUnit",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17734,8 +17736,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.OddQuadraticRootAverage",
         "file": "lean/Conjectures/QuadraticPrimes/OddQuadraticRootAverage.lean",
+        "module": "Conjectures.QuadraticPrimes.OddQuadraticRootAverage",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17760,10 +17762,12 @@
           "L-quadratic-primes-levent-prime-values-no-square"
         ],
         "imports": [
-          "PEqualNP.Outside.L_quadratic_primes_levent_prime_values_no_square"
+          "PEqualNP.Outside.L_quadratic_primes_levent_prime_values_no_square",
+          "Conjectures.QuadraticPrimes.OddPowerImaginaryUnit",
+          "Conjectures.QuadraticPrimes.BinomialImaginaryTwoAdicGap"
         ],
-        "module": "Conjectures.QuadraticPrimes.QuadraticMangoldtExactSupport",
         "file": "lean/Conjectures/QuadraticPrimes/QuadraticMangoldtExactSupport.lean",
+        "module": "Conjectures.QuadraticPrimes.QuadraticMangoldtExactSupport",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17784,8 +17788,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.SemiprimeGapConicBijection",
         "file": "lean/Conjectures/QuadraticPrimes/SemiprimeGapConicBijection.lean",
+        "module": "Conjectures.QuadraticPrimes.SemiprimeGapConicBijection",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -17808,9 +17812,11 @@
         "depends_on": [
           "L-quadratic-primes-semiprime-gap-conic-bijection"
         ],
-        "imports": [],
-        "module": "Conjectures.QuadraticPrimes.SeparatedSemiprimeConicBudget",
+        "imports": [
+          "Conjectures.QuadraticPrimes.SemiprimeGapConicBijection"
+        ],
         "file": "lean/Conjectures/QuadraticPrimes/SeparatedSemiprimeConicBudget.lean",
+        "module": "Conjectures.QuadraticPrimes.SeparatedSemiprimeConicBudget",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -18204,8 +18210,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.SwitchedCofactorSmallSieve",
         "file": "lean/Conjectures/QuadraticPrimes/SwitchedCofactorSmallSieve.lean",
+        "module": "Conjectures.QuadraticPrimes.SwitchedCofactorSmallSieve",
         "track": "levent-prime-value-sieve",
         "route_source": "levent-prime-value-sieve"
       },
@@ -18923,8 +18929,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.QuadraticPrimes.BlockExponentFirstIncrementTransfer",
         "file": "lean/Conjectures/QuadraticPrimes/BlockExponentFirstIncrementTransfer.lean",
+        "module": "Conjectures.QuadraticPrimes.BlockExponentFirstIncrementTransfer",
         "track": "submit-an-unconditional-exponent",
         "route_source": "submit-an-unconditional-exponent"
       },
