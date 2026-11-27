@@ -671,8 +671,10 @@ def problem_page(page, slug, lang):
                   page, count=1, flags=re.S)
     url = PUBLIC_SITE + "problems/" + slug + "/join" + ("-zh" if zh else "") + ".txt"
     prompt = (f"阅读 {url}，按说明领取一条任务，提交 Lean 证明并跟踪核验。"
+              "同一题的积分归研究台最先记录权威 Lean ACCEPTED 的提交者。"
               "可跨猜想导入全站已验证社区模块，详见领取指南，也可查阅网上资料，把相关方法形式化到指定的 Lean 文件，并在 PR 中注明来源。" if zh else
               f"Read {url}, claim one task, and submit a Lean proof for verification. "
+              "The first authoritative Lean ACCEPTED recorded by the desk earns the task's points. "
               "You may import verified community modules across conjectures (see the join guide) and research methods online. "
               "Formalize the relevant steps in your assigned Lean file and cite your sources in the PR.")
     page = re.sub(r'(<p id="agent-prompt"[^>]*>).*?(</p>)', lambda m: m[1] + escape(prompt) + m[2], page)
