@@ -711,6 +711,18 @@ def goldbach_roadmap_page(page, lang):
     return page.replace("<!-- catalogue filters -->", goldbach_program_filters(lang))
 
 
+def problem_formula(data):
+    formula = data["formula"]
+    if formula == "c < K_ε rad(abc)^(1+ε)":
+        return (
+            '<math><mi>c</mi><mo>&lt;</mo><msub><mi>K</mi><mi>ε</mi></msub>'
+            '<mspace width="0.1667em"/><msup><mrow><mi>rad</mi><mo>(</mo>'
+            '<mi>a</mi><mi>b</mi><mi>c</mi><mo>)</mo></mrow>'
+            '<mrow><mn>1</mn><mo>+</mo><mi>ε</mi></mrow></msup></math>'
+        )
+    return escape(formula)
+
+
 def problem_page(page, slug, lang):
     data = PROBLEMS[slug]
     title, question, description = (escape(data[key][lang]) for key in ("title", "question", "summary"))
@@ -728,7 +740,8 @@ def problem_page(page, slug, lang):
     page = re.sub(r'<title>[^<]*</title>', f'<title>{title}</title>', page, count=1)
     page = re.sub(r'<meta (?:name|property)="(?:description|og:[^"]+|twitter:[^"]+)"[^>]*>\n?', '', page)
     page = re.sub(r'(<a href="#top" class="brand">.*?</span>)[^<]+', lambda m: m[1] + title, page, count=1)
-    page = page.replace('aria-hidden="true">p + q ?</span>', f'aria-hidden="true">{escape(data["formula"])}</span>', 1)
+    formula = problem_formula(data)
+    page = page.replace('aria-hidden="true">p + q ?</span>', f'aria-hidden="true">{formula}</span>', 1)
     page = page.replace('href="problems/?', 'href="../?').replace('href="site.css"', 'href="../../site.css"').replace(
         'src="site.js"', 'src="../../site.js"')
     page = page.replace('href="goldbach-icon.svg"', 'href="../../goldbach-icon.svg"')
@@ -741,7 +754,6 @@ def problem_page(page, slug, lang):
     page = page.replace("强猜想 · 尚未解决", "开放研究问题").replace("Strong conjecture · Open", "Open research problem")
     page = re.sub(r'(<h2 id="target-title">).*?(</h2>)',
                   lambda m: m[1] + translations["target"] + m[2], page)
-    formula = escape(data["formula"])
     figure = f'<div class="target-figure topic-formula">{formula}</div>'
     if slug == "quadratic-primes":
         current = "当前研究指数" if zh else "Current research exponent"
@@ -823,7 +835,7 @@ def problem_card(slug, data, lang):
         progress += f'<span class="desk-running">{escape(activity)}</span>'
     url = "../" if slug == "goldbach" else slug + "/"
     anchor = "#lemmas" if slug == "goldbach" else "#roadmap"
-    return (f'<a class="problem-card" href="{url}?lang={lang}{anchor}"><span class="problem-formula">{escape(data["formula"])}</span>'
+    return (f'<a class="problem-card" href="{url}?lang={lang}{anchor}"><span class="problem-formula">{problem_formula(data)}</span>'
             f'<h2>{escape(data["title"][lang])}</h2><p>{escape(data["question"][lang])}</p>'
             f'<p class="problem-progress">{progress}</p></a>')
 
