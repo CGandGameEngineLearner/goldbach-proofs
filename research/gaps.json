@@ -14866,6 +14866,34 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-exceptional-zero-progressions",
+      "statement": "by\n  classical\n  let hit := fun {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) (s b : ℝ) =>\n    s<b ∧ b<1 ∧ (χ ≠ 1 ∨ (b:ℂ) ≠ 1) ∧ DirichletCharacter.LFunction χ (b:ℂ)=0\n  exact ∃ k C : ℝ, 0<k ∧ 0<C ∧ ∀ x : ℝ, Real.exp 64≤x →\n    let u := Real.sqrt (Real.log x)\n    let s := 1-k/u\n    ∀ (Q : ℕ) [NeZero Q], (Q:ℝ)≤Real.exp u → ∃ (b : ℝ) (d : ℕ), d≤Q ∧\n    ∀ (q : ℕ) [NeZero q], q≤Q →\n      let S := @Finset.filter (DirichletCharacter ℂ q) (fun χ => hit χ s b)\n        (fun _ => Classical.propDecidable _) Finset.univ\n      S.card=(if d∣q then 1 else 0) ∧\n      (∀ χ ∈ S, χ.IsQuadratic ∧ χ ≠ 1 ∧ χ.conductor=d ∧\n        analyticOrderNatAt (DirichletCharacter.LFunction χ) (b:ℂ)=1) ∧\n      ∀ a : ℕ, a<q → a.Coprime q →\n        let ε := (∑ χ ∈ S, χ (a:ZMod q)⁻¹).re\n        let ψ := ∑ n ∈ (Finset.Ioc 0 ⌊x⌋₊).filter (fun n => n%q=a), ArithmeticFunction.vonMangoldt n\n        let R := |ψ-(x-ε*(x^b/b))/q.totient|\n        (if d∣q then ε=1 ∨ ε= -1 else ε=0) ∧ R≤C*x*Real.exp (-(k*u)) ∧\n        ((q:ℝ)≤Real.exp (k*u/2) → R≤C*(x/q.totient)*Real.exp (-(k*u/2)))",
+      "plain_statement": {
+        "zh": "带同一例外导子的等差数列素数定理与次指数模数上的统一误差",
+        "en": "A uniform prime number theorem in progressions with a common exceptional conductor"
+      },
+      "brief": {
+        "zh": "设 u=√log x。对 x≥exp(64)、Q≤exp(u)，存在同一实数 β 和整数 d≤Q。对每个正模数 q≤Q，Re s>1−k/u 处被选中的 β 恰在 d 整除 q 时由一个非主二次特征承载，且为单零点。对既约剩余类 a，ψ(x;q,a) 的主项为 (x−ε x^β/β)/φ(q)。ε 在承载层为该特征在 a 逆元的取值 ±1，在其他层为零。绝对误差至多 Cx exp(−ku)，当 q≤exp(ku/2) 时至多 C(x/φ(q))exp(−ku/2)。d=0 表示没有承载层。",
+        "en": "Put u=sqrt(log x). For x≥exp(64) and Q≤exp(u), choose one real beta and one conductor d≤Q. At each positive level q≤Q the selected zero above 1−k/u has one nonprincipal quadratic carrier precisely when d divides q, and has analytic order one. On every reduced residue class the main term of psi(x;q,a) is (x−epsilon x^beta/beta)/phi(q). The sign is the carrier evaluated at the inverse of a, and is zero on other levels. The error is at most Cx exp(−ku), improving to C(x/phi(q))exp(−ku/2) for q≤exp(ku/2). Set d=0 when no level carries the correction."
+      },
+      "source": "https://doi.org/10.1017/CBO9780511984030.011",
+      "program": "exceptions",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-deep-three-quarters-exceptional-zero-criterion",
+        "L-goldbach-estermann-almost-all-polylog"
+      ],
+      "imports": [
+        "Conjectures.Goldbach.DeepThreeQuartersExceptionalZeroCriterion",
+        "Conjectures.Goldbach.EstermannAlmostAllPolylog"
+      ],
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.ExceptionalZeroProgressions",
+      "file": "lean/Conjectures/Goldbach/ExceptionalZeroProgressions.lean",
+      "track": "exceptions",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-short-square-window-collision",
       "statement": "∀ (P H a b c d : ℤ), 0 ≤ P → 0 ≤ H → H ^ 2 ≤ 8 * P + 4 * H + 4 → P ≤ a → a ≤ b → b ≤ P + H → P ≤ c → c ≤ d → d ≤ P + H → a ^ 2 + b ^ 2 = c ^ 2 + d ^ 2 → a + b ≤ c + d → (a = c ∧ b = d) ∨ (H ^ 2 = 8 * P + 4 * H + 4 ∧ a = P ∧ b = P + H ∧ c = d ∧ 2 * c = 2 * P + H + 2)",
       "plain_statement": {
@@ -16632,8 +16660,8 @@
       "imports": [
         "Conjectures.Goldbach.SqrtArcSecondMomentFloor"
       ],
-      "module": "Conjectures.Goldbach.DenominatorCutoffFourthMomentFloor",
       "file": "lean/Conjectures/Goldbach/DenominatorCutoffFourthMomentFloor.lean",
+      "module": "Conjectures.Goldbach.DenominatorCutoffFourthMomentFloor",
       "track": "frontier-moment-antispike",
       "route_source": "frontier-moment-antispike"
     },
@@ -16701,8 +16729,8 @@
       "imports": [
         "Conjectures.Goldbach.SqrtArcSecondMomentFloor"
       ],
-      "module": "Conjectures.Goldbach.SqrtShellSecondMomentFloor",
       "file": "lean/Conjectures/Goldbach/SqrtShellSecondMomentFloor.lean",
+      "module": "Conjectures.Goldbach.SqrtShellSecondMomentFloor",
       "track": "frontier-moment-antispike",
       "route_source": "frontier-moment-antispike"
     },
@@ -17206,8 +17234,8 @@
       "imports": [
         "Conjectures.Goldbach.MajorNumeratorDilation"
       ],
-      "module": "Conjectures.Goldbach.AdaptiveMinorNegativeTail",
       "file": "lean/Conjectures/Goldbach/AdaptiveMinorNegativeTail.lean",
+      "module": "Conjectures.Goldbach.AdaptiveMinorNegativeTail",
       "track": "minor-truncation",
       "route_source": "minor-truncation"
     },
@@ -20629,8 +20657,8 @@
       "parallel": true,
       "depends_on": [],
       "role": "lemma",
-      "module": "Conjectures.Goldbach.ShortWindowPowerExceptions",
       "file": "lean/Conjectures/Goldbach/ShortWindowPowerExceptions.lean",
+      "module": "Conjectures.Goldbach.ShortWindowPowerExceptions",
       "track": "representations",
       "route_source": "representations",
       "imports": []
