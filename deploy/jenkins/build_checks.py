@@ -43,6 +43,18 @@ def enqueue_formal_checks(jobs, outbox, *, first_job_id=1):
         enqueue(outbox, "authoritative-pr", sha, conclusion,
                 f"Lean verdict for {gap}: {verdict}. Task desk run {run_id}.", pr=pr, run_id=run_id)
 
+    if jobs.execute("SELECT 1 FROM sqlite_master WHERE name='proof_refusals' AND type='table'").fetchone():
+        refusals = jobs.execute("""SELECT j.sha, j.pr, r.run_id, f.reason
+            FROM proof_refusals f JOIN ci_jobs j ON j.id=f.job_id
+            JOIN desk_runs r ON r.job_id=j.id
+            WHERE j.id>=? AND j.kind='authoritative' AND j.pr>0
+              AND NOT EXISTS (SELECT 1 FROM desk_outbox o WHERE o.run=r.run_id AND o.attempt=1)
+        """, (first_job_id,))
+        for sha, pr, run_id, reason in refusals:
+            summary = ("REFUSED: The file guard stopped this submission before Lean ran. "
+                       f"No Lean verdict or points were issued.\n\n    {reason}")
+            enqueue(outbox, "proof-refused-pr", sha, "failure", summary, pr=pr, run_id=run_id)
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)

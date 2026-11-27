@@ -12,6 +12,10 @@ from proof_blob import proof_blob
 from verdict_manifest import PROOF_MODULE, module_path
 
 
+class ProofRefused(ValueError):
+    """The proof guard rejected the input before Lean ran."""
+
+
 def grh_enabled():
     return os.environ.get("GOLDBACH_GRH_ENABLED") == "1"
 
@@ -71,7 +75,7 @@ def prepare(app, number, expected_head, base, work):
         (work / f"{name}.json").write_text(json.dumps(data), encoding="utf-8")
 
     def guard(*args):
-        subprocess.run([
+        result = subprocess.run([
             "docker", "run", "--rm", "--pull", "never", "--runtime", "runsc",
             "--network", "none", "--read-only", "--cap-drop", "ALL",
             "--security-opt", "no-new-privileges", "--memory", "512m",
@@ -79,7 +83,8 @@ def prepare(app, number, expected_head, base, work):
             "--mount", f"type=bind,source={work},target=/input",
             "--entrypoint", "node", "goldbach-site-agent:site-check",
             "/base/.github/scripts/outside-guard.mjs", *args,
-        ], check=True, timeout=30)
+        ], stdout=subprocess.PIPE, text=True, encoding="utf-8", errors="replace", timeout=30)
+        report_guard_result(result)
 
     os.chown(work, 1000, 1000)
     guard("pr", "/input/pr.json", "/input/files.json", "/input/tree.json",
@@ -95,3 +100,14 @@ def prepare(app, number, expected_head, base, work):
     guard("closure", "/base", "/input/build-imports.json", file, "/input")
     check_grh_imports((work / "base-imports.txt").read_text(encoding="utf-8").splitlines())
     return file
+
+
+def report_guard_result(result):
+    if result.returncode == 1:
+        refusal = next((line for line in result.stdout.splitlines() if line.startswith("REFUSED: ")), "")
+        if refusal:
+            # Keep the proof guard's diagnostic out of subprocess tracebacks and Markdown.
+            raise ProofRefused("".join(c if c.isprintable() else " " for c in refusal[9:])[:1000])
+    if result.stdout:
+        print(result.stdout, end="", flush=True)
+    result.check_returncode()

@@ -14,7 +14,7 @@ from threading import BoundedSemaphore
 
 from formal_proof import judge
 from github_app import GitHubApp
-from prepare_proof import grh_enabled, prepare
+from prepare_proof import ProofRefused, grh_enabled, prepare
 from verify_proof import verify
 
 ROOT = Path("/opt/goldbach-ci")
@@ -129,6 +129,9 @@ def check_formal(job_id):
             )
             row = db.execute("SELECT payload FROM desk_outbox WHERE run=? AND attempt=1", (run,)).fetchone()
             return {"ACCEPTED": 0, "REJECTED": 1}[json.loads(row[0])["verdict"]]
+    except ProofRefused as error:
+        logging.warning("Formal submission refused for job %s: %s", job_id, error)
+        return 1
     except (ValueError, OSError, sqlite3.Error, subprocess.SubprocessError):
         logging.exception("Formal proof infrastructure error for job %s", job_id)
         return 3

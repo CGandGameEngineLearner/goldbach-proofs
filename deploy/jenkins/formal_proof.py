@@ -6,7 +6,7 @@ from desk_outbox import enqueue, initialize
 from desk_verdict import authorize
 from event_jobs import desk_run_id
 from github_revision import REPO, StaleDelivery, pull_request
-from prepare_proof import prepare
+from prepare_proof import ProofRefused, prepare
 from verify_proof import ProofRejected, verify
 
 
@@ -28,7 +28,15 @@ def judge(db, app, job_id, work, base, toolchain, ownership_check, *, desk_url, 
     if previous is not None:
         return run_id
 
-    file = prepare(app, pr, head, base, work)
+    try:
+        file = prepare(app, pr, head, base, work)
+    except ProofRefused as error:
+        with db:
+            db.execute("""CREATE TABLE IF NOT EXISTS proof_refusals (
+                job_id INTEGER PRIMARY KEY, reason TEXT NOT NULL
+            )""")
+            db.execute("INSERT OR IGNORE INTO proof_refusals VALUES (?, ?)", (job_id, str(error)))
+        raise
     gap = (work / "gap.id").read_text().strip()
     statement = (work / "statement.txt").read_bytes()
     prepared_base = json.loads((work / "pr.json").read_text(encoding="utf-8"))["base"]
