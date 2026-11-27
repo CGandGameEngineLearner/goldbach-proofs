@@ -50,3 +50,9 @@ Localize square-root prime steps to every block of length about X^(3/4). Togethe
 - `L-goldbach-dyn-ultrashort-restricted-hit` — 同一 26/1075 窗长下，要求至少一个由平方根带素数参与的表示。取 X=y 并放开加数即推出 Li 定理 7 的存在结论。它排除同尺度全漏，且铺窗可得到 Ω(X^(1−26/1075)) 个不同命中。要得到父题的密度结论，还需控制剩余漏点。切入口是对带短窗权的素数二元卷积直接建立正下界。
 
 Both targets are open and retain the square-root constraint. With X=y and that constraint dropped, their conclusions recover Li's Theorems 6 and 7 respectively. The first controls every comparable window at exponent 13/225 and gives a power saving in the exception count. The second rules out wholly missed windows at the shorter exponent 26/1075. The literature comparison establishes the stated improvements over these baselines; priority for the exact restricted statements remains subject to further literature review.
+
+### 平方数之间的素数 / Primes between consecutive squares
+
+上述两个受限短窗目标中的任意一个都蕴含充分大指标的 Oppermann 猜想。具体地说，对每个充分大的整数 $m$，区间 $(m^2,m(m+1))$ 与 $(m(m+1),(m+1)^2)$ 各含一个素数。这为试图逐窗证明目标的论证提供了一个可检验的必要条件。[Lean 证明](../../../../reference-proofs/RestrictedWindowPrimeGaps.lean)
+
+The underlying observation applies to any window exponent $\alpha\leq 1/3$. Fix $m^2\leq a\leq(m+1)^2$, put $k=\lfloor m/4\rfloor$, $X=(3k)^2$, and take the first even $y>a+6k$. For large $m$, the window starting at $y$ lies in $[X,2X]$ and has width at most $k/2$. A hit $n=p+q$ has $3k\leq p\leq6k$, forcing $a<q<a+m$. Set $a=m^2$ and then $a=m(m+1)$ to get the two primes. The power-saving target supplies a hit because an even-start window has at least half its integers even, while its permitted miss fraction eventually falls below one half. The Lean statement takes each target as a hypothesis.
