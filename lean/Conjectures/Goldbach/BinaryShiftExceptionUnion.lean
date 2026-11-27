@@ -1,3 +1,5 @@
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Tactic.Positivity
 import Mathlib.Data.Nat.Log
 import Mathlib.Data.Finset.Prod
 import Mathlib.Data.Nat.Prime.Basic
@@ -23,11 +25,10 @@ def badShift (X : ℕ) : Finset ℕ :=
   (Ico X (2*X)).filter (fun n => Even n ∧ 0 <
     ((Icc 1 (Nat.log 2 X / 2)).filter (fun e => reps (n-2^e) = 0)).card)
 
-/-- Each flagged target is in the image of a pair (exception, shift index). -/
-theorem count_le {X : ℕ} (hx : 8 ≤ X) :
-    (badShift X).card ≤ (exceptions (2*X)).card * (Nat.log 2 X / 2) := by
+private theorem count_with_cover {X : ℕ} (hx : 8 ≤ X) (D : Finset ℕ)
+    (cover : ∀ m ∈ exceptions (2*X), X/2 ≤ m → m ∈ D) :
+    (badShift X).card ≤ D.card * (Nat.log 2 X / 2) := by
   let H := Icc 1 (Nat.log 2 X / 2)
-  let D := exceptions (2*X)
   let addShift := fun u : ℕ × ℕ => u.1 + 2^u.2
   have sub : badShift X ⊆ (D ×ˢ H).image addShift := by
     intro n hn
@@ -48,13 +49,18 @@ theorem count_le {X : ℕ} (hx : 8 ≤ X) :
     have hpow : Even ((2:ℕ)^e) := even_two.pow_of_ne_zero (by omega)
     have hdiff : Even (n-2^e) := (Nat.even_sub hle).mpr ⟨fun _ => hpow, fun _ => hEven⟩
     have hm : n-2^e ∈ D := by
+      apply cover _ _ (by omega)
       apply mem_filter.mpr
       exact ⟨mem_Icc.mpr ⟨by omega, by omega⟩, hdiff, hrep⟩
     exact mem_image.mpr ⟨(n-2^e,e), mem_product.mpr ⟨hm,heH⟩, Nat.sub_add_cancel hle⟩
   calc
     _ ≤ ((D ×ˢ H).image addShift).card := card_le_card sub
     _ ≤ (D ×ˢ H).card := card_image_le
-    _ = _ := by simp [D,H, Nat.card_Icc]
+    _ = _ := by simp [H, Nat.card_Icc]
+
+theorem count_le {X : ℕ} (hx : 8 ≤ X) :
+    (badShift X).card ≤ (exceptions (2*X)).card * (Nat.log 2 X / 2) :=
+  count_with_cover hx _ (fun _ hm _ => hm)
 
 private theorem absorb (k : ℕ) (hk : 256 ≤ k) : k^20 * 2^15 ≤ 2^k := by
   induction k, hk using Nat.le_induction with
@@ -75,6 +81,27 @@ private theorem absorb (k : ℕ) (hk : 256 ≤ k) : k^20 * 2^15 ≤ 2^k := by
       _ ≤ 2*(2^k) := Nat.mul_le_mul_left _ ih
       _ = 2^(k+1) := by rw [pow_succ, Nat.mul_comm]
 
+private theorem finish_count {X B : ℕ} (hx : 2^256 ≤ X)
+    (hB : B^4 ≤ (2*X)^3) (hcnt : (badShift X).card ≤ B*(Nat.log 2 X/2)) :
+    (badShift X).card^5 ≤ X^4 := by
+  have h8 : 8 ≤ X := le_trans (by decide : 8 ≤ (2:ℕ)^256) hx
+  let L := Nat.log 2 X / 2
+  have hk : 256 ≤ Nat.log 2 X := (Nat.le_log_iff_pow_le (by decide) (by omega)).mpr hx
+  have hL : L^20 * 2^15 ≤ X := calc
+    _ ≤ (Nat.log 2 X)^20 * 2^15 := Nat.mul_le_mul_right _ (Nat.pow_le_pow_left (Nat.div_le_self _ _) _)
+    _ ≤ 2^(Nat.log 2 X) := absorb _ hk
+    _ ≤ X := Nat.pow_log_le_self 2 (by omega)
+  have h := Nat.pow_le_pow_left hcnt 20
+  apply (Nat.pow_le_pow_iff_left (n:=4) (by decide)).mp
+  calc
+    ((badShift X).card^5)^4 = (badShift X).card^20 := by ring
+    _ ≤ (B*L)^20 := h
+    _ = (B^4)^5 * L^20 := by ring
+    _ ≤ ((2*X)^3)^5 * L^20 := Nat.mul_le_mul_right _ (Nat.pow_le_pow_left hB 5)
+    _ = (L^20*2^15)*X^15 := by ring
+    _ ≤ X*X^15 := Nat.mul_le_mul_right _ hL
+    _ = (X^4)^4 := by ring
+
 /-- The quantified conclusion is the desk's frozen target, conditional only on
 an ordinary, unshifted exceptional-set estimate (in integer arithmetic). -/
 theorem of_exception_bound
@@ -86,24 +113,7 @@ theorem of_exception_bound
   have ht := (le_max_left T (2^256)).trans hX
   have hx := (le_max_right T (2^256)).trans hX
   have h8 : 8 ≤ X := le_trans (by decide : 8 ≤ (2:ℕ)^256) hx
-  let L := Nat.log 2 X / 2
-  let B := (exceptions (2*X)).card
-  have hk : 256 ≤ Nat.log 2 X := (Nat.le_log_iff_pow_le (by decide) (by omega)).mpr hx
-  have hL : L^20 * 2^15 ≤ X := calc
-    _ ≤ (Nat.log 2 X)^20 * 2^15 := Nat.mul_le_mul_right _ (Nat.pow_le_pow_left (Nat.div_le_self _ _) _)
-    _ ≤ 2^(Nat.log 2 X) := absorb _ hk
-    _ ≤ X := Nat.pow_log_le_self 2 (by omega)
-  have hB : B^4 ≤ (2*X)^3 := hT _ (by omega)
-  have h := Nat.pow_le_pow_left (count_le h8) 20
-  apply (Nat.pow_le_pow_iff_left (n:=4) (by decide)).mp
-  calc
-    ((badShift X).card^5)^4 = (badShift X).card^20 := by ring
-    _ ≤ (B*L)^20 := h
-    _ = (B^4)^5 * L^20 := by ring
-    _ ≤ ((2*X)^3)^5 * L^20 := Nat.mul_le_mul_right _ (Nat.pow_le_pow_left hB 5)
-    _ = (L^20*2^15)*X^15 := by ring
-    _ ≤ X*X^15 := Nat.mul_le_mul_right _ hL
-    _ = (X^4)^4 := by ring
+  exact finish_count hx (hT _ (by omega)) (count_le h8)
 
 /-- Adapter for an integer version of the published 18/25 estimate.
 No analytic exception theorem is postulated or proved by this adapter. -/
@@ -123,5 +133,87 @@ theorem frozen_of_pintz
     _ = Y^72 := by ring
     _ ≤ Y^75 := Nat.pow_le_pow_right (by omega) (by decide)
     _ = (Y^3)^25 := by ring
+
+private def bad (m : ℕ) : Prop :=
+  4 ≤ m ∧ Even m ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=m
+
+private noncomputable def exc (I : Finset ℕ) : Finset ℕ :=
+  @Finset.filter ℕ bad (Classical.decPred bad) I
+
+private theorem bad_of_mem {m Y : ℕ} (hm : m ∈ exceptions Y) : bad m := by
+  obtain ⟨hI,hev,hzero⟩ := mem_filter.mp hm
+  refine ⟨(mem_Icc.mp hI).1, hev, ?_⟩
+  rintro ⟨p,q,hp,hq,hpq⟩
+  have hpos : 0 < reps m := card_pos.mpr ⟨p, mem_filter.mpr
+    ⟨mem_range.mpr (by omega), hp, by simpa only [show m-p = q by omega]⟩⟩
+  omega
+
+private theorem absorb_real {C : ℝ} {Y B : ℕ} (hY : C^12 ≤ (Y:ℝ))
+    (hb : (B:ℝ) ≤ C*(Y:ℝ)^((2:ℝ)/3)) : B^4 ≤ Y^3 := by
+  have h := pow_le_pow_left₀ (Nat.cast_nonneg B : (0:ℝ) ≤ B) hb 12
+  rw [mul_pow, ← Real.rpow_mul_natCast (Nat.cast_nonneg Y) _ 12,
+      show (2:ℝ)/3 * (12:ℕ) = (8:ℕ) by norm_num, Real.rpow_natCast] at h
+  have h12 : (B:ℝ)^12 ≤ (Y:ℝ)^9 := calc
+    _ ≤ _ := h
+    _ ≤ (Y:ℝ)*(Y:ℝ)^8 := mul_le_mul_of_nonneg_right hY (by positivity)
+    _ = _ := by ring
+  apply (Nat.pow_le_pow_iff_left (n:=3) (by decide)).mp
+  rw [← pow_mul, ← pow_mul]
+  exact_mod_cast h12
+
+/-- Takes exactly the cumulative 4/7 + ε target as an assumption. -/
+theorem frozen_of_four_sevenths (hg : let bad := fun n : ℕ => 4 ≤ n ∧ Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n; ∀ e : ℝ, 0 < e → ∃ (C : ℝ) (N : ℕ), 0 < C ∧ ∀ X : ℕ, N ≤ X → ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Icc 4 X)).card : ℝ) ≤ C * (X:ℝ) ^ (4/7 + e)) : let G := fun m : ℕ => ((Finset.range (m+1)).filter (fun p => Nat.Prime p ∧ Nat.Prime (m-p))).card; ∃ X₀ : ℕ, ∀ X ≥ X₀, let L := Nat.log 2 X / 2; let E := (Finset.Ico X (2*X)).filter (fun n => Even n ∧ 0 < ((Finset.Icc 1 L).filter (fun e => G (n-2^e)=0)).card); E.card^5 ≤ X^4 := by
+  classical
+  obtain ⟨C,N,hC,H⟩ := hg (2/21) (by norm_num)
+  obtain ⟨K,hK⟩ := exists_nat_ge (C^12)
+  apply of_exception_bound
+  refine ⟨max N K, ?_⟩
+  intro Y hY
+  have hN := (le_max_left N K).trans hY
+  have hK' := (le_max_right N K).trans hY
+  have hi : exceptions Y ⊆ exc (Icc 4 Y) := fun m hm =>
+    mem_filter.mpr ⟨(mem_filter.mp hm).1,bad_of_mem hm⟩
+  apply absorb_real (hK.trans (Nat.cast_le.mpr hK'))
+  have h := H Y hN
+  norm_num only [show (4:ℝ)/7 + 2/21 = 2/3 by norm_num] at h
+  exact (Nat.cast_le.mpr (card_le_card hi)).trans h
+
+/-- Takes exactly CountingBridge's dyadic output. A shift of n∈[X,2X)
+lies in one of two adjacent blocks, including when X is odd. -/
+theorem frozen_of_dyadic_four_sevenths (hd : let bad := fun n : ℕ => 4 ≤ n ∧ Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n; ∀ e : ℝ, 0 < e → ∃ (C : ℝ) (N : ℕ), 0 < C ∧ ∀ X : ℕ, N ≤ X → ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Icc X (2*X))).card : ℝ) ≤ C * (X:ℝ) ^ (4/7 + e)) : let G := fun m : ℕ => ((Finset.range (m+1)).filter (fun p => Nat.Prime p ∧ Nat.Prime (m-p))).card; ∃ X₀ : ℕ, ∀ X ≥ X₀, let L := Nat.log 2 X / 2; let E := (Finset.Ico X (2*X)).filter (fun n => Even n ∧ 0 < ((Finset.Icc 1 L).filter (fun e => G (n-2^e)=0)).card); E.card^5 ≤ X^4 := by
+  classical
+  obtain ⟨C,N,hC,H⟩ := hd (2/21) (by norm_num)
+  obtain ⟨K,hK⟩ := exists_nat_ge ((C+C)^12)
+  refine ⟨max (2^256) (max (2*N) K), ?_⟩
+  intro X hX
+  have hx := (le_max_left _ _).trans hX
+  have hm := (le_max_right _ _).trans hX
+  have hN := (le_max_left _ _).trans hm
+  have hK' := (le_max_right _ _).trans hm
+  have h8 : 8 ≤ X := le_trans (by decide : 8 ≤ (2:ℕ)^256) hx
+  let F := fun t : ℕ => exc (Icc t (2*t))
+  let D := F (X/2) ∪ F X
+  have hc : (badShift X).card ≤ D.card*(Nat.log 2 X/2) := by
+    apply count_with_cover h8 D
+    intro m hmem hlo
+    have hb := bad_of_mem hmem
+    have hmhi := (mem_Icc.mp (mem_filter.mp hmem).1).2
+    by_cases hh : m < X
+    · exact mem_union_left _ (mem_filter.mpr ⟨mem_Icc.mpr ⟨hlo,by omega⟩,hb⟩)
+    · exact mem_union_right _ (mem_filter.mpr ⟨mem_Icc.mpr ⟨by omega,hmhi⟩,hb⟩)
+  have heach (t : ℕ) (ht : N ≤ t) (htX : t ≤ X) :
+      ((F t).card:ℝ) ≤ C*(X:ℝ)^((2:ℝ)/3) := by
+    have h := H t ht
+    rw [show (4:ℝ)/7 + 2/21 = 2/3 by norm_num] at h
+    exact h.trans (mul_le_mul_of_nonneg_left
+      (Real.rpow_le_rpow (Nat.cast_nonneg t) (Nat.cast_le.mpr htX) (by norm_num)) hC.le)
+  have hcard : (D.card:ℝ) ≤ (C+C)*(X:ℝ)^((2:ℝ)/3) := calc
+    _ ≤ (((F (X/2)).card:ℝ) + ((F X).card:ℝ)) := by
+      exact_mod_cast card_union_le (F (X/2)) (F X)
+    _ ≤ _ := by
+      rw [add_mul]
+      exact add_le_add (heach _ (by omega) (by omega)) (heach _ (by omega) le_rfl)
+  have hB := absorb_real (hK.trans (Nat.cast_le.mpr hK')) hcard
+  exact finish_count hx (hB.trans (Nat.pow_le_pow_left (by omega) 3)) hc
 
 end GoldbachBinaryShiftReduction
