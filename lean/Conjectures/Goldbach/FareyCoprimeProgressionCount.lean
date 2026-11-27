@@ -52,8 +52,7 @@ private theorem residueError (q a l h : ℕ) (hq : 0 < q) (ha : a < q) (hl : l �
         rwa [Nat.mod_eq_of_lt hu] at he
       · rintro rfl
         exact ⟨ha, Nat.mod_eq_of_lt ha⟩
-    rw [hs]
-    simp
+    simp [hs]
   have hfull : Nat.count P q = 1 := by
     change Nat.count (fun k => (k + l) % q = a) q = 1
     rw [← shiftCard (fun u => u % q = a) l q,
@@ -169,8 +168,8 @@ theorem Conjectures.Goldbach.FareyCoprimeProgressionCount :
     have hdc := hdn.coprime_dvd_right (Nat.dvd_of_mem_divisors hc)
     let r := Nat.chineseRemainder hdc b 0
     have hr : r.val < d * c := Nat.chineseRemainder_lt_mul hdc b 0 hd.ne' hcpos.ne'
-    have hrd : r.val % d = b := r.property.1.trans (Nat.mod_eq_of_lt hb)
-    have hrc : r.val % c = 0 := r.property.2.trans (Nat.zero_mod c)
+    have hrd : r.val % d = b := Eq.trans r.property.1 (Nat.mod_eq_of_lt hb)
+    have hrc : r.val % c = 0 := Eq.trans r.property.2 (Nat.zero_mod c)
     have he : S.filter (fun u => c ∣ u) =
         (Finset.Icc l h).filter (fun u => u % (d * c) = r.val) := by
       ext u
@@ -181,11 +180,11 @@ theorem Conjectures.Goldbach.FareyCoprimeProgressionCount :
         have h2 : Nat.ModEq c u r.val := (Nat.modEq_zero_iff_dvd.mpr hcu).trans
           (Nat.modEq_zero_iff_dvd.mpr (Nat.dvd_iff_mod_eq_zero.mpr hrc)).symm
         have hh := (Nat.modEq_and_modEq_iff_modEq_mul hdc).mp ⟨h1, h2⟩
-        exact ⟨hu, hh.trans (Nat.mod_eq_of_lt hr)⟩
+        exact ⟨hu, Eq.trans hh (Nat.mod_eq_of_lt hr)⟩
       · rintro ⟨hu, hub⟩
         have hh : Nat.ModEq (d * c) u r.val := hub.trans (Nat.mod_eq_of_lt hr).symm
         obtain ⟨h1, h2⟩ := (Nat.modEq_and_modEq_iff_modEq_mul hdc).mpr hh
-        exact ⟨⟨hu, h1.trans hrd⟩, Nat.dvd_iff_mod_eq_zero.mpr (h2.trans hrc)⟩
+        exact ⟨⟨hu, Eq.trans h1 hrd⟩, Nat.dvd_iff_mod_eq_zero.mpr (Eq.trans h2 hrc)⟩
     dsimp only [C, L]
     rw [he]
     simpa only [Nat.cast_mul] using residueError (d * c) r.val l h (Nat.mul_pos hd hcpos) hr hl
