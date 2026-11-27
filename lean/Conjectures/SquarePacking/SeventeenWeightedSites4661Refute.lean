@@ -1,8 +1,16 @@
-import Mathlib
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Tactic.FinCases
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Algebra.Order.BigOperators.Group.List
+import Mathlib.Data.Rat.BigOperators
+import Mathlib.Basic.Real.Basic
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
 
 namespace OrbitWitness4661
 
-/-- 与原冻结命题一致的开单位正方形内部谓词 -/
 def inside (x y a b X Y : ℝ) : Prop :=
   |a * (X - x) + b * (Y - y)| < 1 / 2 ∧ |(-b) * (X - x) + a * (Y - y)| < 1 / 2
 
@@ -24,7 +32,6 @@ structure ExactSq where
   w  : ℕ
 deriving Repr, DecidableEq
 
-/-- 70 行精确有理轨道代表（与已复算的原始 CSV 逐行一致） -/
 def orbits70 : List Orbit := [
   ⟨500,500,1,0,1,4000000⟩, ⟨1500,500,1,0,1,5082998⟩, ⟨1500,1500,1,0,1,866484⟩,
   ⟨2150,2150,1,0,1,236301⟩, ⟨2150,500,1,0,1,1406728⟩, ⟨2330,1400,4,3,5,707697⟩,
@@ -52,7 +59,6 @@ def orbits70 : List Orbit := [
   ⟨1375,1350,21,20,29,18479⟩
 ]
 
-/-- 每条轨道保留全部 8 条 D4 像（带重数） -/
 def expandOrbit (o : Orbit) : List ExactSq :=
   [ ⟨o.cx,        o.cy,         o.p,  o.q, o.r, o.w⟩
   , ⟨o.cx,        4661 - o.cy,  o.p, -o.q, o.r, o.w⟩
@@ -67,8 +73,6 @@ def squares560 : List ExactSq := orbits70.flatMap expandOrbit
 
 def CAP : ℕ := 8015919
 
-/-! ### 一、基础整数校验（全部由 kernel `decide` 闭合） -/
-
 set_option maxRecDepth 12000 in
 theorem squares560_length : squares560.length = 560 := by decide
 
@@ -80,8 +84,6 @@ theorem strict_over_17_witness : 17 * 8014706 < (squares560.map (·.w)).sum := b
 
 set_option maxRecDepth 12000 in
 theorem strict_over_17_cap : 17 * CAP < (squares560.map (·.w)).sum := by decide
-
-/-! ### 二、560 条样本几何合法性证明 -/
 
 def sqValidReal (s : ExactSq) : Prop :=
   let x : ℝ := (s.cx : ℝ) / 1000
@@ -140,8 +142,6 @@ theorem squares560_valid : ∀ s ∈ squares560, sqValidReal s := by
   intro s hs
   exact sqValidInt_sound s (List.all_eq_true.mp all_squares560_validInt s hs)
 
-/-! ### 三、实数荷载定义与严格开半平面等价刻画 -/
-
 def sqInside (s : ExactSq) (X Y : ℝ) : Prop :=
   inside ((s.cx : ℝ) / 1000) ((s.cy : ℝ) / 1000) ((s.p : ℝ) / s.r) ((s.q : ℝ) / s.r) X Y
 
@@ -149,7 +149,6 @@ noncomputable def loadList (L : List ExactSq) (X Y : ℝ) : ℕ := by
   classical
   exact (L.map fun s => if sqInside s X Y then s.w else 0).sum
 
-/-- 严格开半平面 A*X + B*Y < C -/
 structure HP where
   A : ℤ
   B : ℤ
@@ -182,8 +181,6 @@ lemma sqInside_iff_hps (s : ExactSq) (hr : 0 < s.r) (X Y : ℝ) :
     · refine (mul_lt_mul_iff_of_pos_right hpos).mp ?_; field_simp [hrR.ne']; linarith
     · refine (mul_lt_mul_iff_of_pos_right hpos).mp ?_; field_simp [hrR.ne']; linarith
     · refine (mul_lt_mul_iff_of_pos_right hpos).mp ?_; field_simp [hrR.ne']; linarith
-
-/-! ### 四、精确见证点 (3716655/1887000, 161574474/81141000) 荷载恰为 8014706 -/
 
 def sqInsideAtRat (s : ExactSq) (Xn Yn D : ℤ) : Bool :=
   decide ((getHPs s 0).A * Xn + (getHPs s 0).B * Yn < (getHPs s 0).C * D) &&
@@ -239,7 +236,7 @@ lemma loadList_atRat_eq (L : List ExactSq) (hr : ∀ s ∈ L, 0 < s.r) (Xn Yn D 
       simp [hbf, hnb, ih']
 
 set_option maxRecDepth 12000 in
-/-- 81141 = 43 * 1887，故 (3716655/1887000, 161574474/81141000) = (159816165/81141000, 161574474/81141000) -/
+
 theorem witnessPoint_load_int :
     loadListAtRat squares560 159816165 161574474 81141000 = 8014706 := by decide
 
@@ -249,7 +246,6 @@ theorem witnessPoint_load_eq :
   have hy : ((161574474 : ℝ) / 81141000) = ((161574474 : ℤ) : ℝ) / (81141000 : ℤ) := by norm_num
   rw [hx, hy, loadList_atRat_eq squares560 (fun s hs => (squares560_valid s hs).1) _ _ _ (by norm_num)]
   exact witnessPoint_load_int
-
 
 end OrbitWitness4661
 
@@ -410,7 +406,6 @@ lemma localFarkasDisjoint_sound (s1 s2 : ExactSq) (hr1 : 0 < s1.r) (hr2 : 0 < s2
   · split_ifs at hB
     exact hcomb _ _ hB
 
-/-- 未击中权重和 gapList：对 List.Sublist 单调 -/
 noncomputable def gapList (L : List ExactSq) (X Y : ℝ) : ℕ := by
   classical
   exact (L.map fun s => if sqInside s X Y then 0 else s.w).sum
@@ -592,7 +587,6 @@ lemma verifyBox_sound : ∀ (fuel : ℕ) (x0 x1 y0 y1 D : ℤ) (cand : List Exac
           · exact ih _ _ _ _ _ active hact_r hD2 hv01 hYX hx0' hXl hYr hy1'
           · exact ih _ _ _ _ _ active hact_r hD2 hv10 hYX hXr hx1' hy0' hYl
           · exact ih _ _ _ _ _ active hact_r hD2 hv11 hYX hXr hx1' hYr hy1'
-
 
 end OrbitWitness4661
 
@@ -797,7 +791,6 @@ lemma gridPairs_cover {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t ≤ (4661 : ℝ) / 2000
   · exact ⟨(4022, 4072), by simp, h5, h6⟩
   exact ⟨(4072, 4661), by simp, h6, ht1⟩
 
-/-- 全域荷载上界健全性定理：给定单盒健全性 `hbox` 与有限布尔检验 `hcert`，全平面所有实点荷载均 ≤ `CAP`。 -/
 theorem verifyFundamental_sound_of_box_sound
     (hbox :
       ∀ (fuel : ℕ) (x0 x1 y0 y1 D : ℤ) (cand : List ExactSq),
@@ -819,14 +812,14 @@ theorem verifyFundamental_sound_of_box_sound
   intro X Y
   by_cases hin : 0 ≤ X ∧ X ≤ 4661 / 1000 ∧ 0 ≤ Y ∧ Y ≤ 4661 / 1000
   · rcases hin with ⟨hX0, hX1, hY0, hY1⟩
-    -- 第 1 步：X 折叠到 [0, 4661/2000]
+
     obtain ⟨X', hX'0, hX'1, hEq1⟩ :
         ∃ X' : ℝ, 0 ≤ X' ∧ X' ≤ 4661 / 2000 ∧ loadList squares560 X Y = loadList squares560 X' Y := by
       rcases le_total X (4661 / 2000) with h | h
       · exact ⟨X, hX0, h, rfl⟩
       · refine ⟨4661 / 1000 - X, by linarith, by linarith, ?_⟩
         exact (load_flatMap_inv orbits70 (fun a b => (4661 / 1000 - a, b)) load_expandOrbit_reflectX X Y).symm
-    -- 第 2 步：Y 折叠到 [0, 4661/2000]
+
     obtain ⟨Y', hY'0, hY'1, hEq2⟩ :
         ∃ Y' : ℝ, 0 ≤ Y' ∧ Y' ≤ 4661 / 2000 ∧ loadList squares560 X' Y = loadList squares560 X' Y' := by
       rcases le_total Y (4661 / 2000) with h | h
@@ -834,7 +827,7 @@ theorem verifyFundamental_sound_of_box_sound
       · refine ⟨4661 / 1000 - Y, by linarith, by linarith, ?_⟩
         exact (load_flatMap_inv orbits70 (fun a b => (a, 4661 / 1000 - b)) load_expandOrbit_reflectY X' Y).symm
     rw [hEq1, hEq2]
-    -- 第 3 步：若 Y' > X'，交换 (X', Y')
+
     rcases le_total Y' X' with hYX | hXY
     · exact hfund X' Y' hY'0 hYX hX'1
     · have hEq3 : loadList squares560 X' Y' = loadList squares560 Y' X' :=
@@ -1190,5 +1183,3 @@ theorem Conjectures.SquarePacking.SeventeenWeightedSites4661Refute :
   OrbitWitness4661.refute_weighted_sites_of_depth
     (OrbitWitness4661.verifyFundamental_sound_of_box_sound
       OrbitWitness4661.verifyBox_sound OrbitWitness4661.checkFundamentalByGrid)
-
-
