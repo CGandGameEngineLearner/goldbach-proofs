@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-codifferent-rounding"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.CodifferentRounding"
+  ],
   "track": "06-common-hull-and-szpiro",
   "module": "Conjectures.JoshiAbc.RoundingRadical",
   "file": "lean/Conjectures/JoshiAbc/RoundingRadical.lean"

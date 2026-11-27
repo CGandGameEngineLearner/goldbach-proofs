@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-mean-square"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.MeanSquare"
+  ],
   "track": "06-common-hull-and-szpiro",
   "module": "Conjectures.JoshiAbc.ConstantHull",
   "file": "lean/Conjectures/JoshiAbc/ConstantHull.lean"
