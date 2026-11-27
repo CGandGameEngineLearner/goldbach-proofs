@@ -9,6 +9,7 @@ from lean_dep_cache import compile_cached, context as cache_context, key as cach
 from verdict_manifest import MODULE, PROOF_MODULE, build_manifest, module_path
 
 PROOF_CPUS = 4
+DEPENDENCY_COMPILE_SECONDS = 15 * 60
 IMAGE = "docker.m.daocloud.io/jenkins/jenkins@sha256:4d85f6cf5a8939647921564952d12a5a761f32a3bc520c2f4e5c3cafa7ea660f"
 
 
@@ -109,12 +110,13 @@ def verify(file, work, project, toolchain, ownership_check):
         (proof / source).parent.mkdir(parents=True, exist_ok=True)
         (proof / source).write_bytes(content)
         if cache is None:
-            compile_module(source, 240)
+            compile_module(source, DEPENDENCY_COMPILE_SECONDS)
             continue
         keys[name] = cache_key(context, name, content, keys)
         artifact = compiled / Path(source).with_suffix(".olean")
         artifact.parent.mkdir(parents=True, exist_ok=True)
-        compile_cached(cache, name, keys[name], artifact, lambda: compile_module(source, 240))
+        compile_cached(cache, name, keys[name], artifact,
+                       lambda: compile_module(source, DEPENDENCY_COMPILE_SECONDS))
     compile_module(leaf, 1200, submission=True)
     verification = subprocess.run(flags + [
         "--entrypoint", "/usr/bin/timeout", IMAGE, "--kill-after=10", "1200",
