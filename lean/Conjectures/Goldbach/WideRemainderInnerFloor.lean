@@ -275,5 +275,117 @@ lemma re_total_integral_eq_R (n : ℕ) :
   simp
 
 
+/-! ### The master reduction: J additivity and the route partition -/
+
+/-- The Goldbach integrand of the frozen statement, built from `GW`/`GE`. -/
+noncomputable def fG (n : ℕ) (t : ℝ) : ℂ :=
+  (Finset.sum (Finset.range (n+1)) (fun k => (GW k : ℂ) * GE ((k:ℝ)*t)))^2
+    * GE (-(n:ℝ)*t)
+
+/-- The frozen `J` functional: real part of the interval integral of the
+set-indicator of `A` against the Goldbach integrand. -/
+noncomputable def JG (n : ℕ) (A : Set ℝ) : ℝ :=
+  (intervalIntegral (fun t => A.indicator (fG n) t) (0:ℝ) 1 MeasureTheory.volume).re
+
+lemma continuous_summand_GE (n : ℕ) (k : ℕ) :
+    Continuous (fun t : ℝ => (GW k : ℂ) * GE ((k:ℝ)*t)) :=
+  continuous_const_mul_GE _ _
+
+lemma continuous_fG (n : ℕ) : Continuous (fG n) := by
+  have hS : Continuous (fun t : ℝ => Finset.sum (Finset.range (n+1))
+      (fun k => (GW k : ℂ) * GE ((k:ℝ)*t))) :=
+    continuous_finsetSum (Finset.range (n+1)) (fun k _ => continuous_summand_GE n k)
+  have h1 : Continuous (fun t : ℝ => (Finset.sum (Finset.range (n+1))
+      (fun k => (GW k : ℂ) * GE ((k:ℝ)*t)))^2) := hS.pow 2
+  have h2 : Continuous (fun t : ℝ => GE (-(n:ℝ)*t)) :=
+    continuous_GE.comp (continuous_const.mul continuous_id)
+  exact h1.mul h2
+
+lemma intervalIntegrable_fG (n : ℕ) :
+    IntervalIntegrable (fG n) MeasureTheory.volume 0 1 :=
+  Continuous.intervalIntegrable (continuous_fG n) 0 1
+
+lemma intervalIntegrable_indicator_fG (n : ℕ) {A : Set ℝ} (hA : MeasurableSet A) :
+    IntervalIntegrable (fun t => A.indicator (fG n) t) MeasureTheory.volume 0 1 := by
+  have hb : (0:ℝ) ≤ 1 := by norm_num
+  have hIntOn : MeasureTheory.IntegrableOn (fG n) (Set.Icc (0:ℝ) 1) MeasureTheory.volume :=
+    (continuous_fG n).continuousOn.integrableOn_Icc
+  have h' : MeasureTheory.IntegrableOn (A.indicator (fG n)) (Set.Icc (0:ℝ) 1)
+      MeasureTheory.volume :=
+    (show MeasureTheory.Integrable (fG n)
+        (MeasureTheory.volume.restrict (Set.Icc (0:ℝ) 1)) from hIntOn).indicator hA
+  have h : MeasureTheory.IntegrableOn (A.indicator (fG n)) (Set.uIcc (0:ℝ) 1)
+      MeasureTheory.volume := by
+    rwa [← Set.uIcc_of_le hb] at h'
+  exact h.intervalIntegrable
+
+/-- `JG` is finitely additive over disjoint measurable sets. -/
+lemma JG_add (n : ℕ) {A B : Set ℝ} (hA : MeasurableSet A) (hB : MeasurableSet B)
+    (hd : Disjoint A B) : JG n (A ∪ B) = JG n A + JG n B := by
+  have hIA := intervalIntegrable_indicator_fG n hA
+  have hIB := intervalIntegrable_indicator_fG n hB
+  unfold JG
+  have hstep : (∫ t in (0:ℝ)..1, (A ∪ B).indicator (fG n) t)
+      = (∫ t in (0:ℝ)..1, A.indicator (fG n) t + B.indicator (fG n) t) := by
+    apply intervalIntegral.integral_congr
+    intro t _
+    exact congrFun (Set.indicator_union_of_disjoint hd (fG n)) t
+  rw [hstep, intervalIntegral.integral_add hIA hIB, Complex.add_re]
+
+/-! ### Measurability of the arc sets -/
+
+/-- Any "arc family" set — a finite union over coprime `a/q` with `q ≤ Q` of intervals
+of a prescribed radius `B q` — is measurable. This covers `arcs`, `wideArcs`,
+`lowWideArcs` and `inner` of the frozen statement. -/
+lemma measurableSet_arc_family (Q : ℕ) (B : ℕ → ℝ) :
+    MeasurableSet {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q ∧ a ≤ q ∧ Nat.Coprime a q
+      ∧ |t - (a:ℝ)/(q:ℝ)| ≤ B q} := by
+  have hsets : {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q ∧ a ≤ q ∧ Nat.Coprime a q
+      ∧ |t - (a:ℝ)/(q:ℝ)| ≤ B q}
+      = ⋃ q ∈ Finset.range (Q+1), ⋃ a ∈ Finset.range (Q+1),
+        {t : ℝ | 1 ≤ q ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t - (a:ℝ)/(q:ℝ)| ≤ B q} := by
+    ext t
+    simp only [Set.mem_setOf_eq, Set.mem_iUnion, exists_prop]
+    constructor
+    · rintro ⟨q, a, h1, h2, h3, h4, h5⟩
+      exact ⟨q, Finset.mem_range.mpr (Nat.lt_succ_of_le h2), a,
+        Finset.mem_range.mpr (Nat.lt_succ_of_le (Nat.le_trans h3 h2)),
+        h1, h3, h4, h5⟩
+    · rintro ⟨q, hq, a, ha, h1, h3, h4, h5⟩
+      exact ⟨q, a, h1, Nat.le_of_lt_succ (Finset.mem_range.mp hq), h3, h4, h5⟩
+  rw [hsets]
+  refine Finset.measurableSet_biUnion (Finset.range (Q+1)) (fun q _ =>
+    Finset.measurableSet_biUnion (Finset.range (Q+1)) (fun a _ => ?_))
+  by_cases h : a ≤ q ∧ Nat.Coprime a q
+  · have hq1 : 1 ≤ q := by
+      rcases Nat.eq_zero_or_pos q with hq0 | hq0
+      · subst hq0
+        have ha0 : a = 0 := Nat.le_zero.mp h.1
+        subst ha0
+        exact absurd h.2 (by simp)
+      · exact hq0
+    have heq : {t : ℝ | 1 ≤ q ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t - (a:ℝ)/(q:ℝ)| ≤ B q}
+        = Set.Icc ((a:ℝ)/(q:ℝ) - B q) ((a:ℝ)/(q:ℝ) + B q) := by
+      ext t
+      simp only [Set.mem_setOf_eq, Set.mem_Icc, abs_le]
+      constructor
+      · intro hh
+        rcases hh with ⟨h1, h2, h3, h4, h5⟩
+        constructor <;> linarith
+      · intro hh
+        rcases hh with ⟨h1, h2⟩
+        exact ⟨hq1, h.1, h.2, by linarith, by linarith⟩
+    rw [heq]
+    exact isClosed_Icc.measurableSet
+  · have heq : {t : ℝ | 1 ≤ q ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t - (a:ℝ)/(q:ℝ)| ≤ B q} = ∅ := by
+      ext t
+      constructor
+      · intro hmem
+        exact h ⟨hmem.2.1, hmem.2.2.1⟩
+      · intro hfalse
+        exact False.elim hfalse
+    rw [heq]
+    exact MeasurableSet.empty
+
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
   sorry
