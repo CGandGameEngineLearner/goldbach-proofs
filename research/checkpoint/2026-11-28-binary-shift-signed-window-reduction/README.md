@@ -14,7 +14,7 @@ Fix real $\alpha<4/5$ and $C>0$. Suppose that for every sufficiently large integ
 
 1. $m$ is even and $\lfloor X/2\rfloor\le m\le 2X$.
 2. $\lceil 2m/3\rceil\le Y\le\lfloor 3m/4\rfloor$.
-3. $\operatorname{Re}\widehat R_Y(m)<-Y/256$.
+3. The real part of $\widehat{R}_Y(m)$ is less than $-Y/256$.
 
 Then $|E(X)|^5\le X^4$ for every sufficiently large $X$. The hypothesis counts pairs, so a frequency that fails at several interior scales contributes once per failing scale.
 
@@ -26,7 +26,7 @@ Then $|E(X)|^5\le X^4$ for every sufficiently large $X$. The hypothesis counts p
 | Model comparison | Replacing the true middle-window coefficient by the zero-corrected one costs at most $108\cdot128^2X^{5/3}$ additional failing pairs when the threshold changes from $-Y/64$ to $-Y/128$. Both coefficients may be centered at the same complex value. | [Dyadic pair count](CanonicalDyadicPairs.lean) |
 | Constant mode | The geometric kernel starts at index zero. Removing all resulting offsets changes each Fourier coefficient by at most $Y^{2/3}$ for all sufficiently large $Y$, uniformly in $m$. This leaves $Z^2-2cK_YZ$ and allows the threshold $-Y/256$. | [Offset estimate](SignedRowOffsetRemoval.lean) · [Threshold transfer](CorrectionTransfer.lean) |
 | Character sums | On summing over the reduced numerators, a linear Gauss factor vanishes unless the conductor of $\chi$ divides $q/\gcd(q,m)$. The quadratic factor obeys the same test for $\chi\psi$. For $m>0$ the remaining factors have explicit conductor and divisor-sum bounds. | [Contraction](CanonicalCharacterContraction.lean) · [Amplitude bounds](B13SignedAmplitudes.lean) |
-| Low zeros and resonances | For fixed $K>0$ there is a $\delta>0$ for which near-one zeros of nonprincipal characters with conductor and height at most $X^\delta$ contribute zero in the strip $\operatorname{Re}z\ge1-K/\log X$. The principal character retains its zeta term. A separate count bounds individual resonances $r\mid hm$ for $r\ge X^\theta$ by $X^{1-\theta+\varepsilon}$ for fixed $h>0$ in the stated polynomial ranges. | [Zero removal](CanonicalLowConductorZerosActual.lean) · [Conductor incidences](ConductorIncidenceTerminal.lean) |
+| Low zeros and resonances | For fixed $K>0$ there is a $\delta>0$ for which near-one zeros of nonprincipal characters with conductor and height at most $X^\delta$ contribute zero when the real part of $z$ is at least $1-K/\log X$. The principal character retains its zeta term. A separate count bounds individual resonances $r\mid hm$ for $r\ge X^\theta$ by $X^{1-\theta+\varepsilon}$ for fixed $h>0$ in the stated polynomial ranges. | [Zero removal](CanonicalLowConductorZerosActual.lean) · [Conductor incidences](ConductorIncidenceTerminal.lean) |
 
 The outstanding step is to bound the negative real part after summing and integrating the surviving linear and quadratic terms. The conductor restriction holds term by term. Obtaining the pair count above requires additional control on their combined contribution.
 
