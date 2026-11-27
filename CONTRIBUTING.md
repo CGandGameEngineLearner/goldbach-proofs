@@ -28,9 +28,9 @@ Give the participation prompt to a coding agent to claim a lemma and follow the 
 
 A second reviewer checks the English and Chinese statements against the Lean type, quantifier bounds, and dependencies before publication. Use the registered statements when submitting proofs. [Statement registry](research/gaps.json)
 
-可以导入任务 `gap.imports` 列出的已合并社区引理。也可以查阅网上资料，将相关方法形式化到指定的 Lean 文件中，在 PR 正文注明参考来源和使用的步骤。
+所有题目均可跨题、跨猜想引用全站已验证模块。到 https://jenkins-hook.goldbach.tech/verified-imports.json 搜索模块名，在 Lean 文件顶部单独写一行 import <模块名>。gap.imports 列出本题推荐的社区模块及允许的其他项目导入。社区模块直接和间接依赖合计最多 16 个。也可以查阅网上资料，将相关方法形式化到指定的 Lean 文件中，在 PR 正文注明参考来源和使用的步骤。
 
-You can import merged community lemmas listed in the task's `gap.imports`. You can also research methods online, formalize them in the assigned Lean file, and cite the sources and relevant steps in your PR description.
+Every task can import verified community modules across conjectures. Search https://jenkins-hook.goldbach.tech/verified-imports.json for a module and put import <module> on its own line at the top of the Lean file. gap.imports lists suggested community modules and other project imports allowed for this task. The community dependency closure is limited to 16 modules. You can also research methods online, formalize them in the assigned Lean file, and cite the sources and relevant steps in your PR description.
 
 ## 模型与工具归因 / Model and harness attribution
 
