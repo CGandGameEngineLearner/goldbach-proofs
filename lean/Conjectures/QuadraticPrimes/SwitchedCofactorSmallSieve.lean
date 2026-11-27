@@ -1,8 +1,8 @@
 import Mathlib
 import Conjectures.TwinPrimes.CofactorTwoLinearSieve
 
-/-! The finite Selberg inequality, the periodic counting estimate and the notation
-for its weights come from `Conjectures.TwinPrimes.CofactorTwoLinearSieve`.
+/-! The finite Selberg inequality, the periodic counting estimate and the definitions
+of its weights come from `Conjectures.TwinPrimes.CofactorTwoLinearSieve`.
 The affine change of variable below applies that sieve to the switched progression. -/
 
 namespace Conjectures.QuadraticPrimes.SwitchedCofactorSmallSieveAux
@@ -209,7 +209,7 @@ theorem split_retained (n y : ℕ) (hn : 2∣n) (hy : 2≤y) :
 
 /-! The convolution of the mod-four character with the constant-one arithmetic
 function has nonnegative coefficients. Its harmonic sum is large because each
-nonempty partial sum of the alternating odd reciprocals is at least 2/3. -/
+nonempty initial sum of the alternating odd reciprocals is at least 2/3. -/
 open ArithmeticFunction
 
 def character : ArithmeticFunction ℝ where
@@ -258,14 +258,14 @@ theorem alternating_geom (j : ℕ) :
     · simp [(Nat.not_even_iff_odd.mpr hj), hj.neg_one_pow, Nat.even_add_one, hj]
 
 theorem prime_coeff_values (p j : ℕ) (hp : p.Prime) : coeff (p^j) =
-    if p=2 then 1 else if p%4=1 then ((j+1:ℕ):ℝ) else if Even j then 1 else 0 := by
+    if p=2 then 1 else if p % 4=1 then ((j+1:ℕ):ℝ) else if Even j then 1 else 0 := by
   rw [coeff_prime_power p j hp, character_formula]
   by_cases h : p=2
   · subst p
     simp [Finset.sum_range_succ']
   · have ho := hp.eq_two_or_odd.resolve_left h
     simp only [h, ho, one_ne_zero, ite_false]
-    by_cases h4 : p%4=1
+    by_cases h4 : p % 4=1
     · simp [h4]
     · simp only [h4, ite_false, alternating_geom]
 
@@ -280,7 +280,7 @@ def charTerm (n : ℕ) := character n / n
 theorem char_block (m : ℕ) :
     (0:ℝ) ≤ charTerm (4*m) + charTerm (4*m+1) + charTerm (4*m+2) + charTerm (4*m+3) := by
   simp only [charTerm,character_formula]
-  have h0 : 4*m%2=0 := by omega
+  have h0 : 4*m % 2=0 := by omega
   have h1 : (4*m+1)%2=1 := by omega
   have h2 : (4*m+2)%2=0 := by omega
   have h3 : (4*m+3)%2=1 := by omega
@@ -314,7 +314,7 @@ theorem char_lower (N : ℕ) (hN : 1 ≤ N) :
   have H := char_four_blocks (j-1)
   rw [show 4*(j-1)+4=4*j by omega] at H
   have H' := char_four_blocks j
-  have hc : ∀ n : ℕ, n%2=0 → charTerm n = 0 := by
+  have hc : ∀ n : ℕ, n % 2=0 → charTerm n = 0 := by
     intro n hn; simp [charTerm,character_formula,hn]
   have h1 : 0 ≤ charTerm (4*j+1) := by
     simp [charTerm,character_formula,show (4*j+1)%2=1 by omega,show (4*j+1)%4=1 by omega]
@@ -428,7 +428,7 @@ theorem local_two : (∑' j : ℕ, densityWeight (2^j)) = 2 := by
           rw [weight_power, prime_coeff_values 2 j Nat.prime_two]; norm_num)
        _ = 2 := tsum_geometric_inv_two
 
-theorem local_split {p : ℕ} (hp : p.Prime) (h4 : p%4=1) :
+theorem local_split {p : ℕ} (hp : p.Prime) (h4 : p % 4=1) :
     (∑' j : ℕ, densityWeight (p^j)) ≤ 1+CentralSelberg.wgt 2 p := by
   have h2 : p≠2 := by omega
   have hp2 : 2<p := by have := hp.two_le; omega
@@ -446,7 +446,7 @@ theorem local_split {p : ℕ} (hp : p.Prime) (h4 : p%4=1) :
   field_simp [show 1-2*(p:ℝ)⁻¹≠0 by linarith]
   <;> ring
 
-theorem local_inert {p : ℕ} (hp : p.Prime) (h2 : p≠2) (h4 : p%4≠1) :
+theorem local_inert {p : ℕ} (hp : p.Prime) (h2 : p≠2) (h4 : p % 4≠1) :
     (∑' j : ℕ, densityWeight (p^j)) ≤ 1 + 2/(p:ℝ)^2 := by
   let t : ℝ := (p:ℝ)⁻¹
   have ht : 0 ≤ t := by dsimp [t]; positivity
@@ -482,13 +482,13 @@ theorem eulerConstant_pos : 0 < eulerConstant := by unfold eulerConstant; positi
 
 theorem euler_lower (y : ℕ) :
     (2/3:ℝ)*Real.log ((y:ℝ)+1) ≤ eulerConstant *
-      ∏ p ∈ y.primesLE.filter (fun p => p%4=1), (1+CentralSelberg.wgt 2 p) := by
+      ∏ p ∈ y.primesLE.filter (fun p => p % 4=1), (1+CentralSelberg.wgt 2 p) := by
   have hE := smooth_sum_le_euler_product densityWeight weight_nonneg
     (by simp [densityWeight, coeff_mult.map_one])
     (fun hc => by simp only [densityWeight, coeff_mult.2 hc,Nat.cast_mul,mul_div_mul_comm])
     (fun hp => by simpa only [Real.norm_eq_abs,abs_of_nonneg (weight_nonneg _)] using weight_summable hp)
     (y+1) (Icc 1 y) (fun n hn => Nat.mem_smoothNumbers_of_lt (mem_Icc.mp hn).1 (by have := (mem_Icc.mp hn).2; omega))
-  let g := fun p : ℕ => if p%4=1 then 1+CentralSelberg.wgt 2 p else (1:ℝ)
+  let g := fun p : ℕ => if p % 4=1 then 1+CentralSelberg.wgt 2 p else (1:ℝ)
   let h := fun p : ℕ => if p=2 then (2:ℝ) else 1
   let b := fun p : ℕ => 2/(p:ℝ)^2
   have hg (p : ℕ) (hp : p.Prime) : 1 ≤ g p := by
@@ -500,7 +500,7 @@ theorem euler_lower (y : ℕ) :
     have h1 : 1 ≤ Real.exp (b p) := (Real.one_le_exp_iff.mpr (hb0 p))
     by_cases h2 : p=2
     · subst p; rw [local_two]; simp only [h,ite_true]; nlinarith [hg 2 Nat.prime_two, mul_le_mul_of_nonneg_left (hg 2 Nat.prime_two) (Real.exp_pos (b 2)).le]
-    · by_cases h4 : p%4=1
+    · by_cases h4 : p % 4=1
       · apply (local_split hp h4).trans
         simp only [h,h2,ite_false,one_mul,g,h4,ite_true]
         exact le_mul_of_one_le_left (by linarith [CentralSelberg.wgt_pos 2 (dvd_refl _) p hp]) h1
