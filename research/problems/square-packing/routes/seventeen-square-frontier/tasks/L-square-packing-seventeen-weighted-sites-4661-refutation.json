@@ -1,0 +1,22 @@
+{
+  "id": "L-square-packing-seventeen-weighted-sites-4661-refutation",
+  "statement": "¬ (let inside := fun (x y a b X Y : ℝ) => |a*(X-x)+b*(Y-y)| < 1/2 ∧ |(-b)*(X-x)+a*(Y-y)| < 1/2; ∃ (k : ℕ) (X Y : Fin k → ℚ) (w : Fin k → ℕ) (q : ℕ), 0 < q ∧ (∑ j, w j) < 17*q ∧ ∀ x y a b : ℝ, (a ^ 2 + b ^ 2 = 1 ∧ |a| + |b| ≤ 2*x ∧ |a| + |b| ≤ 2*((4661/1000:ℝ)-x) ∧ |a| + |b| ≤ 2*y ∧ |a| + |b| ≤ 2*((4661/1000:ℝ)-y)) → q ≤ (∑ j : Fin k, (if inside x y a b (X j) (Y j) then w j else 0)))",
+  "plain_statement": {
+    "zh": "证明边长 4.661 时不存在总权重小于 17q、且在每个可行开单位正方形中权重至少为 q 的有理点集（q 为正整数）。",
+    "en": "At side 4.661, rule out weighted rational sites of total weight below 17q that hit every admissible open unit square to weight at least q, for positive integer q."
+  },
+  "brief": {
+    "zh": "证书给出 758 个对称轨道，方块总重 W=1361594240。用整数区间算术证明每个点上的覆盖权重至多 C=80071857，核对严格内部与容器边界。对方块和见证点双计数得 qW ≤ C∑w，而 W−17C=372671。将证书数据、全域容量证明与冻结命题接入 Lean。",
+    "en": "Expand the 758 symmetry orbits to weighted squares of total mass W=1361594240. Certify their pointwise depth bound C=80071857 on the whole container by integer interval arithmetic, respecting open interiors. Double counting gives qW ≤ C∑w, while W−17C=372671. Formalize the data, geometric coverage, and contradiction in Lean."
+  },
+  "source": "https://github.com/Yilin-Cheng23/goldbach-proofs/tree/4caa64e70f6de904bf3c8453a6beb533b2b6f1b8/evidence/weighted-sites-4661",
+  "program": "correlation",
+  "role": "target",
+  "depends_on": [],
+  "parallel": true,
+  "challenge_only": true,
+  "imports": [],
+  "track": "seventeen-square-frontier",
+  "module": "Conjectures.SquarePacking.SeventeenWeightedSites4661Refutation",
+  "file": "lean/Conjectures/SquarePacking/SeventeenWeightedSites4661Refutation.lean"
+}
