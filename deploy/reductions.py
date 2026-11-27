@@ -2,6 +2,7 @@
 import hashlib
 import json
 import re
+import time
 
 MAX_DEPTH = 2
 MAX_LIVE = 3
@@ -46,7 +47,7 @@ def cut_reason(gap, live):
 
 
 def catalogue(conn, static):
-    return {**static, **{key: json.loads(data) for key, data in conn.execute(
+    return {**static, **{key: {**json.loads(data), "parallel": True} for key, data in conn.execute(
         "SELECT id,descriptor FROM cut_tasks")}}
 
 
@@ -112,6 +113,7 @@ def register(conn, parent, lease, children, gaps, slug, refuted, proved, descrip
         return
     for pos, task in enumerate(tasks):
         if task["id"] not in gaps:
+            conn.execute("INSERT INTO goldbach_task_openings VALUES (?,?)", (task["id"], lease["finished_at"]))
             conn.execute("INSERT INTO cut_tasks VALUES (?,?)",
                          (task["id"], json.dumps(task, ensure_ascii=False)))
         conn.execute("INSERT INTO cut_premises VALUES (?,?,?)", (run, pos, task["id"]))
@@ -193,7 +195,7 @@ def plan_hash(plan):
     return digest(json.dumps(plan, sort_keys=True, separators=(",", ":")))
 
 
-def complete(conn, gaps, result):
+def complete(conn, desk, result):
     """Compare the worker's pinned plan again inside the transaction recording completion."""
     run, parent = result["run"], result["parent"]
     if type(run) is not int or run <= 0 or not isinstance(result["plan_hash"], str):
@@ -201,7 +203,7 @@ def complete(conn, gaps, result):
     existing = conn.execute("SELECT certificate FROM assembled_proofs WHERE gap=?", (parent,)).fetchone()
     if existing:
         return json.loads(existing[0])["plan_hash"] == result["plan_hash"]
-    plan = next((p for p in assembly_plans(conn, gaps, run - 1) if p["run"] == run), None)
+    plan = next((p for p in assembly_plans(conn, desk.gaps, run - 1) if p["run"] == run), None)
     if not plan or plan_hash(plan) != result["plan_hash"]:
         return False
     module = "Conjectures.Cuts.Assembly" + result["plan_hash"][:24]
@@ -212,8 +214,6 @@ def complete(conn, gaps, result):
         raise ValueError("Missing checked assembly source")
     cert = {**result, "proof": plan["proof"], "module": module, "statement_sha256": digest(plan["statement"])}
     conn.execute("INSERT INTO assembled_proofs VALUES (?,?,?)", (parent, run, json.dumps(cert)))
-    conn.execute("UPDATE reductions SET state=CASE WHEN run=? THEN 'completed' ELSE 'superseded' END "
-                 "WHERE parent=? AND state='live'", (run, parent))
-    conn.execute("""UPDATE goldbach_leases SET released_at=unixepoch(),release_reason='superseded'
-                    WHERE gap=? AND released_at IS NULL AND finished_at IS NULL AND run_id IS NULL""", (parent,))
+    conn.execute("UPDATE reductions SET state='completed' WHERE run=?", (run,))
+    desk.settle(conn, parent, "prove", int(time.time()))
     return True

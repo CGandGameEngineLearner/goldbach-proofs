@@ -42,7 +42,7 @@ description: 为哥德巴赫研究台及分站自动盘点剩余困难命题，�
 
 1. **读取**：从研究台快照取得父题 ID、冻结声明和基线 Git SHA。对原声明 UTF-8 字节计算 SHA-256。读取父题、已完成输入和在途任务，先查重。
 2. **拆解**：将数学家的意图写入 `motivation`。每条子题给出独立 Lean 声明、显式前提、中英文解释、证明提示、所属路线、来源和依赖 ID。用 `links` 指向下游：`input` 提供必要步骤或可复用输入，`exploration` 是探索，`sufficient_reduction` 要列全输入并提供组合引理 `bridge`。检查组合引理的类型确实把这些输入推到父题。证明状态始终读取权威流水线裁决。
-3. **校验**：先用 Draft 2020-12 验证 JSON 结构，再验证父题哈希、ID 唯一性、引用在本台存在、路线存在、依赖无环和双语语义。服务端从 ID 派生固定文件名与模块名；v1 新题使用 Mathlib 并遵循该台的 program/role 规则。新路线或新增允许导入项需要扩展协议；v1 的 `route_note` 更新父题对应路线的双语说明。仅调整说明时允许空任务列表。最后运行仓库目录测试和固定版本 Lean。
+3. **校验**：先用 Draft 2020-12 验证 JSON 结构，再验证父题哈希、ID 唯一性、引用在本台存在、路线存在、依赖无环和双语语义。服务端从 ID 派生固定文件名与模块名；v1 新题使用 Mathlib 并遵循该台的 program/role 规则。对已合入的依赖按下文登记可导入引理；新路线需要扩展协议；v1 的 `route_note` 更新父题对应路线的双语说明。仅调整说明时允许空任务列表。最后运行仓库目录测试和固定版本 Lean。
 4. **交付变更 PR**：将变更集落实到对应目录，在功能分支提交并推送。用 PR 正文记录父题、数学动机、新增命题、依赖关系、声明变化和待解决输入。把 PR 链接交给 lifesize 审核；不代替管理员合并。研究目录发布器核对合并身份和 main 上确切 SHA 的 `Goldbach CI / catalogue release` Check。变更集是 skill 的逐题交换格式；发布入口是 GitHub PR。
 
 ## 定位缺口
@@ -59,14 +59,26 @@ description: 为哥德巴赫研究台及分站自动盘点剩余困难命题，�
 
 - 哥德巴赫主站使用 [gaps.json](../../../research/gaps.json) 中的 `gaps`、`tracks` 和 `feeds`。每道新题关联有效的 `track`、`program` 和适当的 `role`。主线数学方向改变时更新 [ROADMAP.md](../../../research/ROADMAP.md)，并核对中英文首页的路线摘要。
 - 分站使用 [problems.json](../../../research/problems.json) 对应 slug 下的 `gaps` 与 `roadmap`。在阶段的 `tasks` 中引用同一分站的题目 ID，并为阶段和任务填写中英文文本。只改阶段顺序、说明或引用时，可保留原有题目。
-- 遵循同分支相邻记录的字段和 [目录测试](../../../research/test_catalogue.py)。新任务 `L-goldbach-example` 对应模块 `Conjectures.Goldbach.Example`、文件 `lean/Conjectures/Goldbach/Example.lean`。任务生成器派生新任务的 `module` 和 `file`。全站 ID、模块名和文件路径须唯一。填写完整 `statement`、两种语言的 `plain_statement` 与 `brief`、可核对的 `source`，按实际情况设置 `parallel`。使用项目允许的导入。
+- 遵循同分支相邻记录的字段和 [目录测试](../../../research/test_catalogue.py)。新任务 `L-goldbach-example` 对应模块 `Conjectures.Goldbach.Example`、文件 `lean/Conjectures/Goldbach/Example.lean`。任务生成器派生新任务的 `module` 和 `file`。全站 ID、模块名和文件路径须唯一。填写完整 `statement`、两种语言的 `plain_statement` 与 `brief`、可核对的 `source`，所有新任务填写 `"parallel": true`。使用项目允许的导入。
 - 既有领取记录绑定声明字节的 SHA-256。扩充目录时对比基线，核对旧题 ID 和声明。修正改变数学含义的已发布命题时使用新 ID，在路线中解释替代关系并处理旧任务的在途领取和历史记录。仅重写路线说明不需要换 ID。
+
+## 并行领取与积分
+
+所有开放命题都允许不同参与者同时领取并独立提交。有在途尝试时仍可领取。发布前核对新任务源包含 `"parallel": true`，发布后核对状态接口的 `gaps[].parallel`。
+
+积分以服务器登记提交时的分值为准，归首个通过权威 Lean 核验的解决结果。已登记的证伪和原题证明共享一次奖励。题单和 PR 说明应指引参与者优先解决高分题。
 
 ## 新版路线图的挂载与验收
 
 新增任务或改路线时，按[新版路线图指南](references/roadmap-display.md)核对主站地图与分站路线面板各自的数据字段和直达链接。PR 写明研究台、路线 ID、影响的任务和中英文预览入口。发布后核对实际页面、任务详情和状态接口中的路线归属。目录测试和 CI 通过后，仍需完成这一步。
 
 单条证明 PR 只提交指定的 Lean 文件。通过权威核验后，页面从任务台状态刷新进度。证明改变研究方向时，由维护者另开路线 PR。
+
+## 默认登记可导入引理
+
+新增任务时填写 `depends_on`，列出真实数学依赖的任务 ID。准备目录 PR 时运行 `python research/build_catalogue.py --write`。该命令给尚无证明文件的任务登记 `imports`，把已在可信基线合入的直接依赖转换为 Lean 模块名，并保留已有显式条目。还没有对应证明的依赖继续留在 `depends_on`。有新依赖合入后，在下一次目录更新时重跑此命令。
+
+评审时核对每个新增导入确实来自已正式核验并合入的社区证明。其他确实需要的已核验引理可以显式填入任务源的 `imports`。参与者领取任务后按 `gap.imports` 写 `import`，该列表为空时可以使用 Mathlib。登记导入不修改冻结声明。
 
 ## 验证、发布与回读
 

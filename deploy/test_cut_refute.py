@@ -25,6 +25,8 @@ from verify_proof import ProofRejected, mode_for, verifier_manifest
 
 DESK = "/api/desk/"
 PARENT = "L-goldbach-cut-integration"
+NEGATIVE = PARENT + "-negative"
+OTHER = PARENT + "-other"
 P = "∀ k : ℕ, 0 + k = k"
 A = "∀ n : ℕ, n = 0"
 B = "∀ n : ℕ, n + 0 = n"
@@ -39,6 +41,10 @@ class CutFlow(DeskServerTestCase):
                 "reductions": True}
         self.disabled = data["gaps"][0]["id"]
         data["gaps"].append(root)
+        for key, statement, name in ((NEGATIVE, f"¬ ({P})", "Negative"), (OTHER, "True", "Other")):
+            data["gaps"].append({**root, "id": key, "statement": statement,
+                                 "module": "Conjectures.Fixtures." + name,
+                                 "file": f"lean/Conjectures/Fixtures/{name}.lean"})
         (folder / "gaps.json").write_text(json.dumps(data))
         self.published = folder
         self.i = 0
@@ -50,7 +56,13 @@ class CutFlow(DeskServerTestCase):
         receipt = self.request(DESK + "claim", {"gap": ident, "kind": kind, "handle": handle}, ip=ip, expected=201)
         gap, token = receipt["gap"], receipt["lease"]["token"]
         self.assertEqual(receipt["kind"], kind)
-        self.assertEqual(self.request(DESK + "task?module=" + gap["module"])["gap"], gap)
+        if gap["module"].startswith("Conjectures.Cuts."):
+            frozen = self.request(DESK + "task?module=" + gap["module"])["gap"]
+            self.assertEqual(frozen, {key: value for key, value in gap.items() if key != "points"})
+        if kind == "cut":
+            self.assertIsNone(gap["points"])
+        else:
+            self.assertGreaterEqual(gap["points"], 1)
         self.request(DESK + "beat", {}, token=token)
         head = f"{i:040x}"
         submission = {"pr": i, "head": head, "agent": {"model": "test", "harness": "codex"}}
@@ -166,6 +178,11 @@ class CutFlow(DeskServerTestCase):
                          f": ¬ ({board[a]['statement']}) := by\n  intro h\n  have bad := h 1\n  omega")
         board = gaps()
         self.assertEqual(board[a]["refutation"]["handle"], "counterexample")
+        self.assertTrue(board[a]["resolved"])
+        self.assertIsNone(board[a]["points"])
+        rankings = self.request("/api/status")["desk"]["rankings"]["all_time"]
+        self.assertEqual([r["handle"] for r in rankings], ["counterexample"])
+        self.assertGreaterEqual(rankings[0]["points"], 1)
         self.request(DESK + "claim", {"gap": a, "kind": "prove", "handle": "late"}, expected=409)
         self.assertEqual([x["status"] for x in board[PARENT]["cuts"]], ["refuted", "live"])
         self.assertFalse(board[PARENT]["proved"])
@@ -180,6 +197,24 @@ class CutFlow(DeskServerTestCase):
 
     def test_desk_flow(self):
         self.exercise(False)
+
+    def test_catalogued_negative_proof_settles_original_and_blocks_dependent_cuts(self):
+        self.native = False
+        self.submit_task(PARENT, "cut", "split-original", [A, B])
+        self.submit_task(OTHER, "cut", "split-other", [P, B])
+        late = self.submit_task(OTHER, "cut", "late-cut", [P, C], defer=True)
+        self.submit_task(NEGATIVE, "prove", "legacy-refuter", "")
+        late()
+        status = self.request("/api/status")
+        gaps = {g["id"]: g for g in status["gaps"]}
+        self.assertTrue(gaps[NEGATIVE]["proved"])
+        self.assertTrue(gaps[PARENT]["resolved"])
+        self.assertFalse(gaps[PARENT]["proved"] or gaps[PARENT]["takes_cuts"])
+        self.assertIsNone(gaps[PARENT]["points"])
+        self.assertEqual([r["status"] for r in gaps[PARENT]["cuts"]], ["superseded"])
+        self.assertEqual([r["status"] for r in gaps[OTHER]["cuts"]], ["refuted", "refuted"])
+        self.assertEqual([r["handle"] for r in status["desk"]["rankings"]["all_time"]], ["legacy-refuter"])
+        self.request(DESK + "claim", {"gap": PARENT, "handle": "late"}, expected=409)
 
     def test_limits_inheritance_and_reuse(self):
         self.native = False

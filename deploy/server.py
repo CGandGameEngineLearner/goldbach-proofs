@@ -39,9 +39,37 @@ ZHIHU = ZhihuOAuth(DB.with_name("contributor-links.sqlite3"), json.loads(oauth_c
 LIVE_RELEASE = Path("/opt/goldbach-catalogues/current")
 CATALOGUE_ROOT = LIVE_RELEASE.resolve(strict=True) if LIVE_RELEASE.is_symlink() else ROOT
 RELEASE_SHA = (CATALOGUE_ROOT / "revision").read_text() if CATALOGUE_ROOT != ROOT else None
+def catalogue_openings():
+    """Recover first public appearance from activated catalogue snapshots."""
+    if not RELEASE_SHA:
+        return {}
+    history_file = CATALOGUE_ROOT / "history.json"
+    history = json.loads(history_file.read_bytes())
+    snapshots = [(entry["sha"], int(datetime.fromisoformat(entry["at"]).timestamp()))
+                 for entry in history]
+    # The initial snapshot predates the history log. Its history file was written at bootstrap.
+    for snapshot in CATALOGUE_ROOT.parent.iterdir():
+        log = snapshot / "history.json"
+        if re.fullmatch(r"[a-f0-9]{40}", snapshot.name) and log.is_file() and json.loads(log.read_bytes()) == []:
+            snapshots.append((snapshot.name, int(log.stat().st_mtime)))
+    openings = {}
+    for sha, opened_at in sorted(snapshots, key=lambda snapshot: snapshot[1]):
+        snapshot = CATALOGUE_ROOT.parent / sha
+        if not snapshot.is_dir():
+            continue
+        goldbach = json.loads((snapshot / "gaps.json").read_bytes())
+        problem_file = snapshot / "problems.json"
+        problems = json.loads(problem_file.read_bytes()) if problem_file.is_file() else {}
+        for problem in (goldbach, *problems.values()):
+            for gap in problem["gaps"]:
+                openings.setdefault(gap["id"], opened_at)
+    return openings
+
+
+OPENINGS = catalogue_openings()
 GOLDBACH_CATALOGUE = json.loads((CATALOGUE_ROOT / "gaps.json").read_text(encoding="utf-8"))
 GAPS = GOLDBACH_CATALOGUE["gaps"]
-DESK = Desk(DB, GAPS, SECRET)
+DESK = Desk(DB, GAPS, SECRET, OPENINGS)
 PROBLEM_FILE = CATALOGUE_ROOT / "problems.json"
 PROBLEMS = json.loads(PROBLEM_FILE.read_text(encoding="utf-8")) if PROBLEM_FILE.exists() else {}
 PUBLIC_SITE = "https://www.movan.tech/goldbach/"
@@ -54,7 +82,7 @@ for slug, problem in PROBLEMS.items():
             raise ValueError(f"Invalid or duplicate task: {gap['id']}")
         problem_ids.add(gap["id"])
 DESKS = {"goldbach": DESK, **{
-    slug: Desk(DB.with_name(slug + ".sqlite3"), problem["gaps"], SECRET, slug=slug)
+    slug: Desk(DB.with_name(slug + ".sqlite3"), problem["gaps"], SECRET, OPENINGS, slug=slug)
     for slug, problem in PROBLEMS.items()
 }}
 GAP_DESKS = {
@@ -276,13 +304,22 @@ def research_status(desk=DESK, *, compact=False, board=False):
                     desk.annotate_verdicts(results, conn)
                 desk.annotate_verdicts([result for result, _ in latest.values()], conn)
 
-            for gap in desk.research_gaps(conn):
-                result, proved = latest.get(gap["id"], (None, False))
+            descriptors = list(desk.research_gaps(conn))
+            settled = {key for key, (_, proved) in latest.items() if proved}
+            settled.update(g["id"] for g in descriptors
+                           if g.get("assembly") or g.get("refutation", {}).get("status") == "verified")
+            resolved = desk.resolution_group(settled)
+            now = int(time.time())
+            for gap in descriptors:
+                key = gap["id"]
+                result, proved = latest.get(key, (None, False))
                 proved = proved or bool(gap.get("assembly"))
-                if proved:
+                if key in resolved:
                     gap.update(takes_cuts=False, cut_reason="settled")
-                gaps.append({**gap, "latest": result, "proved": proved,
-                             "route_id": TASK_ROUTE.get(gap.get("route_parent", gap["id"]), "unclassified")})
+                points = None if key in resolved or gap.get("refutation") else desk.points(key, now, conn)
+                gaps.append({**gap, "latest": result, "proved": proved, "points": points,
+                             "resolved": key in resolved,
+                             "route_id": TASK_ROUTE.get(gap.get("route_parent", key), "unclassified")})
     accepted = sum(gap["proved"] for gap in gaps)
     desk_status = desk.public_status()
     rankings = desk_status["rankings"]
@@ -302,7 +339,7 @@ def research_status(desk=DESK, *, compact=False, board=False):
         "counts": {
             "published": len(gaps),
             "accepted": accepted,
-            "open": sum(not g["proved"] and g.get("refutation", {}).get("status") != "verified" for g in gaps),
+            "open": sum(not g["resolved"] and g.get("refutation", {}).get("status") != "verified" for g in gaps),
             "attempts": attempts,
         },
     }
@@ -348,7 +385,7 @@ def status_body(desk, web_view, board=False, compress=False, delta=False):
                 return cached[1]
         status = research_status(desk, compact=web_view, board=board)
         if delta:
-            fields = ("id", "latest", "proved", "takes_cuts", "cut_reason", "reductions_live", "cuts", "refutation", "assembly")
+            fields = ("id", "latest", "proved", "resolved", "points", "takes_cuts", "cut_reason", "reductions_live", "cuts", "refutation", "assembly")
             status["gaps"] = [gap if gap.get("route_parent") else {k: gap[k] for k in fields if k in gap}
                               for gap in status["gaps"]]
             status.pop("tracks", None)
@@ -928,21 +965,55 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/records":
             query = parse_qs(url.query, keep_blank_values=True)
             before = query.get("before", [])
-            if query and (set(query) != {"before"} or len(before) != 1 or
-                          not re.fullmatch(r"[0-9]{1,18}-[0-9]{1,18}", before[0])):
-                return self.reply(400, b'{"error":"invalid cursor"}')
+            page_param = query.get("page", [])
+            limit_param = query.get("limit", [])
+            if query:
+                keys = set(query)
+                if keys == {"before"}:
+                    if len(before) != 1 or not re.fullmatch(r"[0-9]{1,18}-[0-9]{1,18}", before[0]):
+                        return self.reply(400, b'{"error":"invalid cursor"}')
+                elif keys <= {"page", "limit"}:
+                    if ((page_param and (len(page_param) != 1 or not re.fullmatch(r"[1-9][0-9]{0,5}", page_param[0])))
+                            or (limit_param and (len(limit_param) != 1 or not re.fullmatch(r"[1-9][0-9]{0,2}", limit_param[0])))):
+                        return self.reply(400, b'{"error":"invalid page"}')
+                else:
+                    return self.reply(400, b'{"error":"invalid cursor"}')
+            use_page = bool(page_param or limit_param)
+            limit = int(limit_param[0]) if limit_param else 12
+            if use_page and not 1 <= limit <= 24:
+                return self.reply(400, b'{"error":"invalid page"}')
+            page_num = int(page_param[0]) if page_param else 1
             cursor = tuple(map(int, before[0].split("-"))) if before else ()
-            where = "WHERE (run_id, attempt) < (?, ?)" if cursor else ""
             try:
                 with desk.transaction() as conn:
                     rows = []
+                    total = 0
                     if conn.execute("SELECT 1 FROM sqlite_master WHERE name='verdicts'").fetchone():
-                        rows = conn.execute(f"SELECT run_id, attempt, body FROM verdicts {where} "
-                                            "ORDER BY run_id DESC, attempt DESC LIMIT 13", cursor).fetchall()
-                    results = [json.loads(row[2]) for row in rows[:12]]
+                        total = conn.execute("SELECT COUNT(*) FROM verdicts").fetchone()[0]
+                        if use_page:
+                            total_pages = max(1, (total + limit - 1) // limit)
+                            page_num = min(page_num, total_pages)
+                            offset = (page_num - 1) * limit
+                            rows = conn.execute(
+                                "SELECT run_id, attempt, body FROM verdicts "
+                                "ORDER BY run_id DESC, attempt DESC LIMIT ? OFFSET ?",
+                                (limit + 1, offset),
+                            ).fetchall()
+                        else:
+                            where = "WHERE (run_id, attempt) < (?, ?)" if cursor else ""
+                            rows = conn.execute(
+                                f"SELECT run_id, attempt, body FROM verdicts {where} "
+                                "ORDER BY run_id DESC, attempt DESC LIMIT 13",
+                                cursor,
+                            ).fetchall()
+                    results = [json.loads(row[2]) for row in rows[:limit]]
                     desk.annotate_verdicts(results, conn)
-                following = f"{rows[11][0]}-{rows[11][1]}" if len(rows) == 13 else None
-                body = json.dumps({"results": results, "next": following}, ensure_ascii=False).encode()
+                following = f"{rows[limit - 1][0]}-{rows[limit - 1][1]}" if len(rows) > limit else None
+                payload = {"results": results, "next": following, "total": total}
+                if use_page:
+                    total_pages = max(1, (total + limit - 1) // limit)
+                    payload.update({"page": min(page_num, total_pages), "limit": limit, "pages": total_pages})
+                body = json.dumps(payload, ensure_ascii=False).encode()
                 if "gzip" in (t.strip() for t in self.headers.get("Accept-Encoding", "").lower().split(",")):
                     return self.reply(200, gzip.compress(body, compresslevel=3), encoding="gzip")
                 return self.reply(200, body)
@@ -1068,7 +1139,7 @@ class Handler(BaseHTTPRequestHandler):
                 if not scope:
                     raise ValueError()
                 with scope.transaction(write=True) as conn:
-                    stored = reductions.complete(conn, scope.gaps, body)
+                    stored = reductions.complete(conn, scope, body)
                 status, result = (200, {"status": "stored"}) if stored else (409, {"error": "stale_plan"})
             elif path == "/api/desk/pending" and slug == "goldbach":
                 status, result = queue_pending(raw, self.headers)

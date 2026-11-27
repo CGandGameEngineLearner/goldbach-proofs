@@ -7,7 +7,7 @@ import secrets
 import sqlite3
 import time
 from collections import Counter
-from contextlib import closing, contextmanager
+from contextlib import closing, contextmanager, nullcontext
 
 if __package__:
     from . import reductions
@@ -144,14 +144,24 @@ def error(status, code):
 
 
 class Desk:
-    def __init__(self, db_path, gaps, secret, *, slug="goldbach"):
+    def __init__(self, db_path, gaps, secret, openings=None, *, slug="goldbach"):
         self.slug = slug
         self.db_path = db_path
-        self.gaps = {gap["id"]: gap for gap in gaps}
+        self.gaps = {gap["id"]: {**gap, "parallel": True} for gap in gaps}
         self.statement_hashes = {
             gap_id: hashlib.sha256(gap["statement"].encode("utf-8")).hexdigest()
             for gap_id, gap in self.gaps.items()
         }
+        statements = {}
+        for gap_id, gap in self.gaps.items():
+            statements.setdefault(gap["statement"], []).append(gap_id)
+        self.refutation_targets = {}
+        for gap_id, gap in self.gaps.items():
+            statement = gap["statement"]
+            if statement.startswith("¬ (") and statement.endswith(")"):
+                targets = statements.get(statement[3:-1], [])
+                if len(targets) == 1:
+                    self.refutation_targets[gap_id] = targets[0]
         self.secret = secret
         with closing(sqlite3.connect(db_path)) as conn:
             conn.execute("PRAGMA journal_mode=WAL")
@@ -196,6 +206,33 @@ class Desk:
                 conn.execute("ALTER TABLE goldbach_leases ADD COLUMN agent_reported INTEGER NOT NULL DEFAULT 0")
 
             conn.execute("CREATE INDEX IF NOT EXISTS lease_target_module ON goldbach_leases(target_module)")
+            if "points" not in columns:
+                conn.execute("ALTER TABLE goldbach_leases ADD COLUMN points INTEGER")
+            conn.execute("""CREATE TABLE IF NOT EXISTS goldbach_task_openings (
+                gap TEXT PRIMARY KEY, opened_at INTEGER NOT NULL
+            )""")
+            now = int(time.time())
+            conn.executemany("INSERT OR IGNORE INTO goldbach_task_openings VALUES (?, ?)",
+                             [(gap, min(now, (openings or {}).get(gap, now))) for gap in self.gaps])
+            conn.execute("""CREATE TABLE IF NOT EXISTS goldbach_resolution_targets (
+                gap TEXT PRIMARY KEY, target TEXT NOT NULL
+            )""")
+            conn.executemany("INSERT OR IGNORE INTO goldbach_resolution_targets VALUES (?, ?)",
+                             self.refutation_targets.items())
+            conn.execute("""INSERT OR IGNORE INTO goldbach_task_openings
+                SELECT p.child, MIN(l.finished_at) FROM cut_premises p
+                JOIN cut_tasks t ON t.id=p.child JOIN goldbach_leases l ON l.run_id=p.run
+                WHERE l.finished_at IS NOT NULL GROUP BY p.child""")
+            conn.commit()
+            self.openings = dict(conn.execute("SELECT gap, opened_at FROM goldbach_task_openings"))
+
+    def points(self, gap, now, conn=None):
+        target = self.refutation_targets.get(gap, gap)
+        opened_at = self.openings.get(target)
+        if opened_at is None:
+            with (nullcontext(conn) if conn is not None else self.transaction()) as db:
+                opened_at, = db.execute("SELECT opened_at FROM goldbach_task_openings WHERE gap=?", (target,)).fetchone()
+        return 1 + max(0, now - opened_at) // 180
 
     @contextmanager
     def transaction(self, write=False):
@@ -225,6 +262,27 @@ class Desk:
                   AND COALESCE(json_extract(CAST(body AS TEXT), '$.kind'), 'prove') = 'prove'
             """)
         }
+
+    def resolution_group(self, gaps):
+        targets = {self.refutation_targets.get(gap, gap) for gap in gaps}
+        return targets | {gap for gap, target in self.refutation_targets.items() if target in targets}
+
+    def contrary_gaps(self, proved):
+        return ({gap for gap, target in self.refutation_targets.items() if target in proved}
+                | {target for gap, target in self.refutation_targets.items() if gap in proved})
+
+    def resolved_gaps(self, conn):
+        return self.resolution_group(self.proved_gaps(conn) | reductions.refutations(conn).keys())
+
+    def settle(self, conn, gap, kind, now):
+        settled = [(key,) for key in self.resolution_group({gap})]
+        disproved = {gap} if kind == "refute" else self.contrary_gaps({gap})
+        conn.executemany("UPDATE reductions SET state='superseded' WHERE parent=? AND state='live'", settled)
+        conn.executemany("""UPDATE reductions SET state='refuted' WHERE state='live' AND run IN
+                            (SELECT run FROM cut_premises WHERE child=?)""", [(key,) for key in disproved])
+        conn.executemany("""UPDATE goldbach_leases SET released_at = ?, release_reason = 'superseded'
+                            WHERE gap = ? AND released_at IS NULL AND finished_at IS NULL
+                                AND run_id IS NULL AND expires_at > ?""", [(now, key, now) for key, in settled])
 
     @staticmethod
     def lease_times(lease):
@@ -291,7 +349,7 @@ class Desk:
                 return error(429, "network_claim_limit")
 
             load = Counter(lease["gap"] for lease in active)
-            proved = self.proved_gaps(conn)
+            proved = self.resolved_gaps(conn)
             candidates = ((key for key, gap in gaps.items() if not gap.get("challenge_only") and not unavailable(key))
                           if requested_gap is None else (requested_gap,))
             if fleet is None and owned:
@@ -332,7 +390,7 @@ class Desk:
             """, (self.token_hash(token), selected, reductions.digest(gap["statement"]),
                   handle, ip_key, now, expires, absolute, kind, module))
             return 201, {
-                "gap": gap, "kind": kind,
+                "gap": {**gap, "points": self.points(selected, now, conn) if kind != "cut" else None}, "kind": kind,
                 "lease": {"token": token, "expires_at": expires, "absolute_expires_at": absolute},
             }
 
@@ -387,15 +445,16 @@ class Desk:
                     return 200, {"submitted": True, **self.lease_times(lease)}
                 return error(409, "lease_already_submitted")
 
+            points = self.points(lease["gap"], now, conn) if lease["kind"] != "cut" else None
             # A submitted proof waits for a hosted runner independently of its authoring lease.
             expires = now + SUBMISSION_SECONDS
             conn.execute("""
                 UPDATE goldbach_leases SET pr = ?, head = ?, submitted_at = ?, expires_at = ?,
-                    model = ?, harness = ?, harness_version = ?, agent_reported = ?
+                    model = ?, harness = ?, harness_version = ?, agent_reported = ?, points = ?
                 WHERE token_hash = ?
             """, (pr, head, now, expires, agent["model"], agent["harness"], agent["harness_version"],
-                  1, digest))
-            return 200, {"submitted": True, "expires_at": expires,
+                  1, points, digest))
+            return 200, {"submitted": True, "points": points, "expires_at": expires,
                          "absolute_expires_at": lease["absolute_expires_at"]}
 
     def signed(self, supplied, raw_body):
@@ -442,7 +501,7 @@ class Desk:
                 return 200, {"authorized": True}
             if lease["run_id"] is not None or lease["expires_at"] <= now:
                 return error(409, "submission_unavailable")
-            if gap in self.proved_gaps(conn) or gap in reductions.refutations(conn):
+            if gap in self.resolved_gaps(conn):
                 return error(409, "gap_already_proved")
             if conn.execute("SELECT 1 FROM goldbach_leases WHERE run_id = ?", (run_id,)).fetchone():
                 return error(409, "run_already_authorized")
@@ -527,20 +586,13 @@ class Desk:
                 if lease is None:
                     raise ValueError("Missing authorized cut lease")
                 gaps = reductions.catalogue(conn, self.gaps)
+                proved = self.proved_gaps(conn)
+                refuted = reductions.refutations(conn).keys()
                 reductions.register(conn, gaps[lease["gap"]], lease, record["manifest"]["children"],
-                                    gaps, self.slug, reductions.refutations(conn), self.proved_gaps(conn),
-                                    record["manifest"].get("child_descriptions"))
+                                    gaps, self.slug, refuted | self.contrary_gaps(proved),
+                                    self.resolution_group(proved | refuted), record["manifest"].get("child_descriptions"))
                 return
-            conn.execute("UPDATE reductions SET state='superseded' WHERE parent=? AND state='live'",
-                         (record["lemma_id"],))
-            if kind == "refute":
-                conn.execute("""UPDATE reductions SET state='refuted' WHERE state='live' AND run IN
-                                (SELECT run FROM cut_premises WHERE child=?)""", (record["lemma_id"],))
-            conn.execute("""
-                UPDATE goldbach_leases SET released_at = ?, release_reason = 'superseded'
-                WHERE gap = ? AND released_at IS NULL AND finished_at IS NULL
-                    AND run_id IS NULL AND expires_at > ?
-            """, (now, record["lemma_id"], now))
+            self.settle(conn, record["lemma_id"], kind, now)
 
     @staticmethod
     def active_assignments(conn, now):
@@ -555,14 +607,14 @@ class Desk:
     def progress_snapshot(self):
         with self.transaction() as conn:
             gaps = reductions.catalogue(conn, self.gaps)
-            refuted = reductions.refutations(conn)
             proved = self.proved_gaps(conn) & gaps.keys()
+            resolved = self.resolution_group(proved | reductions.refutations(conn).keys())
             assigned = self.active_assignments(conn, int(time.time()))
         available = sum(
-            not gap.get("claims_closed") and not gap.get("refutation") and gap_id not in refuted and gap_id not in proved and (gap_id not in assigned or gap.get("parallel") is True)
+            not gap.get("claims_closed") and not gap.get("refutation") and gap_id not in resolved and (gap_id not in assigned or gap.get("parallel") is True)
             for gap_id, gap in gaps.items()
         )
-        return len(proved), len(gaps), available, assigned.keys() - proved - refuted.keys()
+        return len(proved), len(gaps), available, assigned.keys() - resolved
 
     def progress(self):
         return self.progress_snapshot()[:3]
@@ -583,21 +635,23 @@ class Desk:
         # Same first-acceptance rule as the contributor leaderboard, one attribution per lemma.
         winners = conn.execute("""
             WITH accepted AS (
-                SELECT model, harness, finished_at,
-                       ROW_NUMBER() OVER (PARTITION BY gap ORDER BY finished_at, run_id) AS position
-                FROM goldbach_leases
-                WHERE kind = 'prove' AND verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
+                SELECT model, harness, finished_at, COALESCE(points, 0) AS points,
+                       ROW_NUMBER() OVER (PARTITION BY COALESCE(target, goldbach_leases.gap) ORDER BY finished_at, run_id) AS position
+                FROM goldbach_leases LEFT JOIN goldbach_resolution_targets USING (gap)
+                WHERE kind != 'cut' AND verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
             )
-            SELECT model, harness FROM accepted WHERE position = 1
+            SELECT model, harness, points FROM accepted WHERE position = 1
                 AND (model != 'unknown' OR harness != 'unknown')
         """, (now,)).fetchall()
         def ranking(column):
-            counts = Counter(
-                model_ranking_name(row[column]) if column == 0 else row[column]
-                for row in winners if row[column] != "unknown"
-            )
-            return [{"name": name, "accepted": count} for name, count in
-                    sorted(counts.items(), key=lambda pair: (-pair[1], pair[0]))]
+            counts, scores = Counter(), Counter()
+            for row in winners:
+                if row[column] != "unknown":
+                    name = model_ranking_name(row[column]) if column == 0 else row[column]
+                    counts[name] += 1
+                    scores[name] += row["points"]
+            return [{"name": name, "accepted": counts[name], "points": scores[name]}
+                    for name in sorted(counts, key=lambda name: (-scores[name], -counts[name], name))]
         return {"models": ranking(0), "harnesses": ranking(1), "proofs": len(winners)}
 
     def public_status(self):
@@ -640,42 +694,38 @@ class Desk:
                     ORDER BY at DESC, stage DESC, lemma_id LIMIT 30
                 """, (now,))
             ]
-            leaderboard = [
-                dict(row) for row in conn.execute("""
-                    SELECT handle, COUNT(DISTINCT gap) AS accepted FROM goldbach_leases
-                    WHERE kind = 'prove' AND verdict = 'ACCEPTED' GROUP BY handle ORDER BY accepted DESC, handle LIMIT 20
-                """)
-            ]
             first_acceptances = [
                 dict(row) for row in conn.execute("""
                     WITH accepted AS (
-                        SELECT gap, handle, finished_at,
-                               ROW_NUMBER() OVER (PARTITION BY gap ORDER BY finished_at, run_id) AS position
-                        FROM goldbach_leases
-                        WHERE kind = 'prove' AND verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
+                        SELECT gap, handle, finished_at, COALESCE(points, 0) AS points,
+                               ROW_NUMBER() OVER (PARTITION BY COALESCE(target, goldbach_leases.gap) ORDER BY finished_at, run_id) AS position
+                        FROM goldbach_leases LEFT JOIN goldbach_resolution_targets USING (gap)
+                        WHERE kind != 'cut' AND verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
                     )
-                    SELECT handle, COUNT(*) AS accepted, MAX(finished_at) AS latest_accepted_at,
+                    SELECT handle, COUNT(*) AS accepted, SUM(points) AS points,
+                           SUM(CASE WHEN finished_at >= ? THEN points ELSE 0 END) AS hour_points,
+                           MAX(finished_at) AS latest_accepted_at,
                            SUM(finished_at >= ?) AS hour_accepted,
                            MAX(CASE WHEN finished_at >= ? THEN finished_at END) AS hour_latest
                     FROM accepted WHERE position = 1 GROUP BY handle
-                    ORDER BY accepted DESC, latest_accepted_at DESC, handle
-                """, (now, now - 3600, now - 3600))
+                    ORDER BY points DESC, accepted DESC, latest_accepted_at DESC, handle
+                """, (now, now - 3600, now - 3600, now - 3600))
             ]
             agent_rankings = self.agent_rankings(conn, now)
         all_time = [
-            {key: row[key] for key in ("handle", "accepted", "latest_accepted_at")}
+            {key: row[key] for key in ("handle", "accepted", "points", "latest_accepted_at")}
             for row in first_acceptances
         ]
         hour = sorted(
             (
-                {"handle": row["handle"], "accepted": row["hour_accepted"], "latest_accepted_at": row["hour_latest"]}
+                {"handle": row["handle"], "accepted": row["hour_accepted"], "points": row["hour_points"], "latest_accepted_at": row["hour_latest"]}
                 for row in first_acceptances if row["hour_accepted"]
             ),
-            key=lambda row: (-row["accepted"], -row["latest_accepted_at"], row["handle"]),
+            key=lambda row: (-row["points"], -row["accepted"], -row["latest_accepted_at"], row["handle"]),
         )
         return {
             "active": active, "sessions": sessions, "assignments": assignments,
-            "activities": activities, "leaderboard": leaderboard, "agent_rankings": agent_rankings,
+            "activities": activities, "leaderboard": [{key: row[key] for key in ("handle", "accepted")} for row in all_time[:20]], "agent_rankings": agent_rankings,
             "rankings": {
                 "all_time": all_time,
                 "hour": hour,

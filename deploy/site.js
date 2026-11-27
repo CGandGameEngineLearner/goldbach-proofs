@@ -258,6 +258,7 @@ function gapStatus(gap) {
     const label = lang === 'zh' ? (verified ? '已证伪' : '反证待核验') : (verified ? 'Refuted' : 'Refutation under review');
     return { label, kind: 'occupied', style: 'in-progress' };
   }
+  if (gap.resolved && !gap.proved) return { label: lang === 'zh' ? '已解决' : 'Resolved', kind: 'verified', style: 'accepted' };
   if (gap.proved) return { label: strings.proved, kind: 'verified', style: 'accepted' };
   if (assigned(gap)) {
     return { label: strings.assignments[assignments[gap.id]], kind: 'occupied', style: 'in-progress' };
@@ -267,7 +268,7 @@ function gapStatus(gap) {
 }
 
 function canClaim(gap) {
-  return !gap.claims_closed && !gap.refutation && !gap.proved && (!assigned(gap) || gap.parallel === true);
+  return !gap.claims_closed && !gap.refutation && !gap.proved && !gap.resolved && (!assigned(gap) || gap.parallel === true);
 }
 
 function renderProgramCounts() {
@@ -412,6 +413,10 @@ function lemmaRow(gap) {
   button.addEventListener('click', () => openGap(gap.id));
   claim.append(element('code', gap.id, 'statement-id'), button);
   const context = programName(programOf(gap));
+  if (Number.isSafeInteger(gap.points)) {
+    const points = gap.points.toLocaleString(locale);
+    claim.append(element('span', lang === 'zh' ? points + ' 分' : points + ' pts', 'row-context'));
+  }
   if (context) claim.append(element('span', context, 'row-context'));
 
   const statusCell = element('td');
@@ -600,7 +605,7 @@ function renderRankingRow(contributor, index, mode) {
     identity.append(time);
   }
   const score = element('div', undefined, 'ranking-result');
-  const figure = element('span', '+' + contributor.accepted.toLocaleString(locale), 'ranking-score');
+  const figure = element('span', '+' + (contributor.points ?? contributor.accepted).toLocaleString(locale), 'ranking-score');
   figure.setAttribute('aria-hidden', 'true');
   score.append(figure, element('span', strings.verifiedCount(contributor.accepted), 'sr-only'),
     element('span', strings.rankingPeriods[mode], 'ranking-period'));
@@ -722,7 +727,7 @@ function renderAgentRankingRow(entry, index) {
   name.append(agentBrandIcon(entry.name), element('span', agentName(entry.name)));
   item.append(element('span', index + 1, 'ranking-position'), name);
   const result = element('div', undefined, 'ranking-result');
-  result.append(element('span', '+' + entry.accepted.toLocaleString(locale), 'ranking-score'),
+  result.append(element('span', '+' + (entry.points ?? entry.accepted).toLocaleString(locale), 'ranking-score'),
     element('span', strings.rankingPeriods.all_time, 'ranking-period'));
   item.append(result);
   return item;
@@ -775,7 +780,7 @@ function renderRankingMode() {
     ? (lang === 'zh' ? '模型与 Harness 贡献榜' : 'Model and harness contributions')
     : (lang === 'zh' ? '全部已核验贡献者' : 'All verified contributors');
   document.getElementById('rankings-summary').textContent = agents
-    ? (lang === 'zh' ? '按本研究台累计首次通过的引理数排列。' : 'Ranked by all-time first accepted lemmas on this research desk.')
+    ? (lang === 'zh' ? '按本研究台累计首次核验积分排列。' : 'Ranked by points from first accepted proofs on this research desk.')
     : strings.rankingsSummary(rankingsData.contributors.toLocaleString(locale), rankingsData.proofs.toLocaleString(locale));
   fillRankings(rankingsList, rows.slice(0, 6), rankingMode);
   document.getElementById('ranking-next-place').textContent = String(rows.length + 1);
@@ -853,45 +858,85 @@ function renderDesk(desk) {
   renderActivityPage();
 }
 
-const activityPageSize = 6;
-const activityPages = document.getElementById('activity-pages');
+function bindPageInput(input, getCurrent, getTotal, onJump) {
+  if (!input) return;
+  const commit = () => {
+    const raw = input.value.trim();
+    const total = Math.max(1, getTotal());
+    const parsed = Number.parseInt(raw, 10);
+    if (!Number.isFinite(parsed) || !/^[0-9]+$/.test(raw)) {
+      input.value = String(getCurrent());
+      return;
+    }
+    const target = Math.max(1, Math.min(total, parsed));
+    input.value = String(target);
+    if (target !== getCurrent()) onJump(target);
+  };
+  input.addEventListener('focus', () => input.select());
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      commit();
+      input.blur();
+    } else if (event.key === 'Escape') {
+      input.value = String(getCurrent());
+      input.blur();
+    }
+  });
+  input.addEventListener('blur', commit);
+}
+
+const activityPageSize = 9;
+const activityFirst = document.getElementById('activity-first');
 const activityPrev = document.getElementById('activity-prev');
 const activityNext = document.getElementById('activity-next');
+const activityLast = document.getElementById('activity-last');
+const activityInput = document.getElementById('activity-input');
+const activityTotal = document.getElementById('activity-total');
 const activityPageLabel = document.getElementById('activity-page');
 let activityItems = [];
 let activityPage = 0;
 
+function activityTotalPages() {
+  return Math.max(1, Math.ceil(activityItems.length / activityPageSize));
+}
+
 function renderActivityPage() {
-  const totalPages = Math.max(1, Math.ceil(activityItems.length / activityPageSize));
+  const totalPages = activityTotalPages();
   if (activityPage >= totalPages) activityPage = totalPages - 1;
   const start = activityPage * activityPageSize;
   const slice = activityItems.slice(start, start + activityPageSize);
   deskActivity.replaceChildren(...(slice.length
     ? slice.map(renderActivity) : [element('li', strings.noActivity, 'empty-state')]));
-  if (activityPages) {
-    activityPages.hidden = activityItems.length <= activityPageSize;
-    activityPrev.disabled = activityPage === 0;
-    activityNext.disabled = activityPage >= totalPages - 1;
+  const current = activityPage + 1;
+  if (activityFirst) activityFirst.disabled = current <= 1;
+  if (activityPrev) activityPrev.disabled = current <= 1;
+  if (activityNext) activityNext.disabled = current >= totalPages;
+  if (activityLast) activityLast.disabled = current >= totalPages;
+  if (activityInput) {
+    activityInput.value = String(current);
+    activityInput.disabled = totalPages <= 1;
+  }
+  if (activityTotal) activityTotal.textContent = String(totalPages);
+  if (activityPageLabel) {
     activityPageLabel.textContent = lang === 'zh'
-      ? '第 ' + (activityPage + 1) + ' / ' + totalPages + ' 页'
-      : 'Page ' + (activityPage + 1) + ' / ' + totalPages;
+      ? '第 ' + current + ' / ' + totalPages + ' 页'
+      : 'Page ' + current + ' of ' + totalPages;
   }
 }
 
-if (activityPrev && activityNext) {
-  activityPrev.addEventListener('click', () => {
-    if (activityPage > 0) {
-      activityPage -= 1;
-      renderActivityPage();
-    }
-  });
-  activityNext.addEventListener('click', () => {
-    if ((activityPage + 1) * activityPageSize < activityItems.length) {
-      activityPage += 1;
-      renderActivityPage();
-    }
-  });
+function goActivityPage(targetPage) {
+  const totalPages = activityTotalPages();
+  const clamped = Math.max(1, Math.min(totalPages, targetPage));
+  activityPage = clamped - 1;
+  renderActivityPage();
 }
+
+if (activityFirst) activityFirst.addEventListener('click', () => goActivityPage(1));
+if (activityPrev) activityPrev.addEventListener('click', () => goActivityPage(activityPage));
+if (activityNext) activityNext.addEventListener('click', () => goActivityPage(activityPage + 2));
+if (activityLast) activityLast.addEventListener('click', () => goActivityPage(activityTotalPages()));
+bindPageInput(activityInput, () => activityPage + 1, activityTotalPages, goActivityPage);
 
 function renderResults(results) {
   const snapshot = JSON.stringify(results);
@@ -911,100 +956,90 @@ function renderResults(results) {
   verificationLog.replaceChildren(...(entries.length ? entries : [element('p', strings.noRecords, 'empty-state')]));
 }
 
-// Each cursor identifies a boundary in this desk's immutable (run, attempt) order.
-// The API returns 12 records per cursor batch; display 6 per UI page to keep the card compact.
-const recordPageSize = 6;
-const recordStarts = [''];
+// Display 5 records per UI page so the right card naturally matches the left card's height.
+const recordPageSize = 5;
+const recordFirst = document.getElementById('record-first');
 const recordPrev = document.getElementById('record-prev');
 const recordNext = document.getElementById('record-next');
+const recordLast = document.getElementById('record-last');
+const recordInput = document.getElementById('record-input');
+const recordTotal = document.getElementById('record-total');
 const recordRetry = document.getElementById('record-retry');
+const recordStatus = document.getElementById('record-status');
 const recordPage = document.getElementById('record-page');
-let recordBatchIndex = -1;
-let recordBatchResults = [];
-let recordSubPage = 0;
-let currentRecordPage = 0;
-let nextRecordCursor = null;
+let currentRecordPage = 1;
+let totalRecordPages = 1;
+let recordLoaded = false;
 let recordPending = false;
 let recordVisible = false;
-let retryBatch = 0;
-let retrySub = 0;
+let retryRecordPage = 1;
 let latestRecordKey = '';
 let displayedHead = null;
 
 function syncRecordControls() {
-  if (recordBatchIndex < 0) {
-    recordPrev.disabled = true;
-    recordNext.disabled = true;
-    return;
+  const locked = recordPending || !recordLoaded;
+  if (recordFirst) recordFirst.disabled = locked || currentRecordPage <= 1;
+  if (recordPrev) recordPrev.disabled = locked || currentRecordPage <= 1;
+  if (recordNext) recordNext.disabled = locked || currentRecordPage >= totalRecordPages;
+  if (recordLast) recordLast.disabled = locked || currentRecordPage >= totalRecordPages;
+  if (recordInput) {
+    recordInput.value = String(currentRecordPage);
+    recordInput.disabled = locked || totalRecordPages <= 1;
   }
-  const hasNextInBatch = (recordSubPage + 1) * recordPageSize < recordBatchResults.length;
-  recordPrev.disabled = recordBatchIndex === 0 && recordSubPage === 0;
-  recordNext.disabled = !(hasNextInBatch || nextRecordCursor);
+  if (recordTotal) recordTotal.textContent = String(totalRecordPages);
 }
 
-function showRecordSlice(sub) {
-  const maxSub = Math.max(0, Math.ceil(recordBatchResults.length / recordPageSize) - 1);
-  recordSubPage = sub < 0 ? maxSub : Math.min(sub, maxSub);
-  currentRecordPage = recordBatchIndex * 2 + recordSubPage;
-  recordRetry.hidden = true;
-  const start = recordSubPage * recordPageSize;
-  renderResults(recordBatchResults.slice(start, start + recordPageSize));
-  recordPage.textContent = lang === 'zh'
-    ? '第 ' + (currentRecordPage + 1) + ' 页'
-    : 'Page ' + (currentRecordPage + 1);
-  syncRecordControls();
-}
-
-async function loadRecordPage(batchIndex, targetSub = 0) {
+async function loadRecordPage(targetPage) {
   if (recordPending) return;
-  const cursor = recordStarts[batchIndex];
+  const pageNum = Math.max(1, Math.floor(targetPage) || 1);
   const requestedHead = latestRecordKey;
   recordPending = true;
-  recordPrev.disabled = recordNext.disabled = true;
-  recordRetry.hidden = true;
+  syncRecordControls();
+  if (recordRetry) recordRetry.hidden = true;
+  if (recordStatus) recordStatus.hidden = true;
   try {
-    const response = await fetch('api/records' + (cursor ? '?before=' + encodeURIComponent(cursor) : ''),
+    const response = await fetch('api/records?page=' + encodeURIComponent(String(pageNum)) + '&limit=' + recordPageSize,
       {signal: AbortSignal.timeout(15000)});
     if (!response.ok) throw new Error('Records unavailable');
-    const page = await response.json();
-    recordBatchIndex = batchIndex;
-    recordBatchResults = Array.isArray(page.results) ? page.results : [];
-    recordStarts.length = batchIndex + 1;
-    nextRecordCursor = page.next;
-    if (!batchIndex && targetSub === 0) displayedHead = requestedHead;
-    showRecordSlice(targetSub);
+    const data = await response.json();
+    const results = Array.isArray(data.results) ? data.results : [];
+    const total = Number.isInteger(data.total) ? data.total : results.length;
+    totalRecordPages = Number.isInteger(data.pages) && data.pages > 0
+      ? data.pages : Math.max(1, Math.ceil(total / recordPageSize));
+    currentRecordPage = Number.isInteger(data.page) && data.page > 0
+      ? Math.min(data.page, totalRecordPages) : Math.min(pageNum, totalRecordPages);
+    recordLoaded = true;
+    if (currentRecordPage === 1) displayedHead = requestedHead;
+    renderResults(results);
+    if (recordPage) {
+      recordPage.textContent = lang === 'zh'
+        ? '第 ' + currentRecordPage + ' / ' + totalRecordPages + ' 页'
+        : 'Page ' + currentRecordPage + ' of ' + totalRecordPages;
+    }
   } catch {
-    retryBatch = batchIndex;
-    retrySub = targetSub;
-    recordRetry.hidden = false;
-    recordPage.textContent = strings.failure;
+    retryRecordPage = pageNum;
+    if (recordRetry) recordRetry.hidden = false;
+    if (recordStatus) {
+      recordStatus.textContent = strings.failure;
+      recordStatus.hidden = false;
+    }
   } finally {
     recordPending = false;
     syncRecordControls();
   }
 }
 
-recordPrev.addEventListener('click', () => {
-  if (recordPending || recordBatchIndex < 0) return;
-  if (recordSubPage > 0) {
-    showRecordSlice(recordSubPage - 1);
-  } else if (recordBatchIndex > 0) {
-    loadRecordPage(recordBatchIndex - 1, -1);
-  }
-});
-recordNext.addEventListener('click', () => {
-  if (recordPending || recordBatchIndex < 0) return;
-  if ((recordSubPage + 1) * recordPageSize < recordBatchResults.length) {
-    showRecordSlice(recordSubPage + 1);
-  } else if (nextRecordCursor) {
-    recordStarts[recordBatchIndex + 1] = nextRecordCursor;
-    loadRecordPage(recordBatchIndex + 1, 0);
-  }
-});
-recordRetry.addEventListener('click', () => loadRecordPage(retryBatch, retrySub));
+if (recordFirst) recordFirst.addEventListener('click', () => loadRecordPage(1));
+if (recordPrev) recordPrev.addEventListener('click', () => loadRecordPage(currentRecordPage - 1));
+if (recordNext) recordNext.addEventListener('click', () => loadRecordPage(currentRecordPage + 1));
+if (recordLast) recordLast.addEventListener('click', () => loadRecordPage(totalRecordPages));
+if (recordRetry) recordRetry.addEventListener('click', () => loadRecordPage(retryRecordPage));
+bindPageInput(recordInput, () => currentRecordPage, () => totalRecordPages, loadRecordPage);
 new IntersectionObserver(([entry]) => {
   recordVisible = entry.isIntersecting;
-  if (recordVisible && !currentRecordPage && displayedHead !== latestRecordKey) loadRecordPage(0, 0);
+  if (recordVisible && (!recordLoaded || (currentRecordPage === 1 && displayedHead !== latestRecordKey))) {
+    loadRecordPage(1);
+  }
 }, {rootMargin: '200px'}).observe(verificationLog);
 
 lemmaSearch.addEventListener('input', () => setPage(1));
@@ -1072,9 +1107,9 @@ function dist(id,seen=new Set()){if(distance.has(id))return distance.get(id);if(
 function closure(id,next){let set=new Set(),stack=[id];while(stack.length){let x=stack.pop();if(set.has(x))continue;set.add(x);for(const v of next(x))stack.push(v)}return set}
 let focus=null,hover=null,onlyChain=false,compact=true,horizontal=false,directionChosen=false,field=null,globalFilter='all',savedScrollY=0,currentTrack=null,observer=null,pendingGap=null,expanded=null,localFilter='all',localSearch='',indexMode=false;
 const directionKey='goldbach-map-direction',wideDirection=()=>window.innerWidth>=2400;try{const saved=localStorage.getItem(directionKey);if(saved==='horizontal'||saved==='vertical'){horizontal=saved==='horizontal';directionChosen=true}}catch{}if(!directionChosen)horizontal=wideDirection();function syncDirection(){root?.querySelectorAll('[data-direction]').forEach(x=>x.classList.toggle('active',(x.dataset.direction==='horizontal')===horizontal))}syncDirection();
-function status(g){if(g.refutation)return g.refutation.status==='verified'?'refuted':'progress';if(g.proved)return 'verified';if(assigned(g))return 'progress';if(g.claims_closed)return 'closed';return g.role==='target'?'target':'available'}
-function statusText(g){if(status(g)==='closed')return closedClaimLabel();if(g.refutation){const v=g.refutation.status==='verified';return lang==='zh'?(v?'已证伪':'反证待核验'):(v?'Refuted':'Refutation under review')}return ({verified:lang==='zh'?'已核查':'Verified',progress:lang==='zh'?'处理中':'In progress',target:lang==='zh'?'待突破':'Open target',available:lang==='zh'?'可领取':'Available'})[status(g)]}
-function stateOK(g,v){return v==='all'||(v==='open'&&!g.proved&&!g.refutation)||(v==='target'&&g.role==='target'&&!g.proved&&!g.refutation)}
+function status(g){if(g.refutation)return g.refutation.status==='verified'?'refuted':'progress';if(g.proved||g.resolved)return 'verified';if(assigned(g))return 'progress';if(g.claims_closed)return 'closed';return g.role==='target'?'target':'available'}
+function statusText(g){if(status(g)==='closed')return closedClaimLabel();if(g.refutation){const v=g.refutation.status==='verified';return lang==='zh'?(v?'已证伪':'反证待核验'):(v?'Refuted':'Refutation under review')}if(g.resolved&&!g.proved)return tr('已解决','Resolved');return ({verified:lang==='zh'?'已核查':'Verified',progress:lang==='zh'?'处理中':'In progress',target:lang==='zh'?'待突破':'Open target',available:lang==='zh'?'可领取':'Available'})[status(g)]}
+function stateOK(g,v){return v==='all'||(v==='open'&&!g.proved&&!g.resolved&&!g.refutation)||(v==='target'&&g.role==='target'&&!g.proved&&!g.resolved&&!g.refutation)}
 function counts(gs){let verified=gs.filter(g=>status(g)==='verified').length;return {verified,progress:gs.filter(g=>status(g)==='progress').length,available:gs.filter(g=>status(g)==='available').length,target:gs.filter(g=>status(g)==='target').length,pct:gs.length?100*verified/gs.length:0}}
 function program(t){let c={};for(const g of groups.get(t.id))c[g.program]=(c[g.program]||0)+1;return Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||'foundation'}
 function trackSets(id){return {up:closure(id,x=>upstream.get(x)||[]),down:closure(id,x=>T.get(x)?.feeds||[])}}
@@ -1082,7 +1117,7 @@ function scrollRestore(){requestAnimationFrame(()=>{window.scrollTo({top:savedSc
 function enterTrack(id,gap){if(!groups.has(id))return;if(!currentTrack)savedScrollY=window.scrollY;pendingGap=gap||null;if(location.hash===`#route=${encodeURIComponent(id)}`){renderRoute();return}location.hash=`route=${encodeURIComponent(id)}`}
 function goOverview(){if(currentTrack)location.hash='';else renderRoute()}
 function renderRoute(){let wasTrack=currentTrack;let m=location.hash.match(/^#route=(.+)$/),id=m?decodeURIComponent(m[1]):null;if(id&&!groups.has(id))id=null;currentTrack=id;observer?.disconnect();if(id){localFilter='all';localSearch='';indexMode=false;expanded=pendingGap;pendingGap=null;root.querySelector('#map-overview').hidden=true;root.querySelector('#map-route-view').hidden=false;root.querySelector('#map-focusbar').hidden=true;renderTrack();root.scrollIntoView({block:'start',behavior:'instant'});if(expanded)requestAnimationFrame(()=>root.querySelector(`[data-item="${CSS.escape(expanded)}"]`)?.scrollIntoView({block:'center'}));}else{root.querySelector('#map-overview').hidden=false;root.querySelector('#map-route-view').hidden=true;root.querySelector('#map-route-view').innerHTML='';renderBoard();renderFocus();if(wasTrack)scrollRestore()}}
-function renderBoard(){let html='';let active=focus||hover,sets=active?trackSets(active):null,board=root.querySelector('#rm-board'),isHorizontal=horizontal&&window.innerWidth>640;board.classList.toggle('horizontal',isHorizontal);board.classList.toggle('chain-horizontal',isHorizontal&&onlyChain&&!!focus);for(let d=0;d<=Math.max(...distance.values());d++){let list=tracks.filter(t=>dist(t.id)===d).filter(t=>!onlyChain||!focus||sets.up.has(t.id)||sets.down.has(t.id)).filter(t=>groups.get(t.id).some(g=>(!field||(topic?programOf(g)===field:g.program===field))&&stateOK(g,globalFilter))).sort((a,b)=>Number(b.id.startsWith('frontier-'))-Number(a.id.startsWith('frontier-'))||a.title[lang].localeCompare(b.title[lang],locale));if(!list.length)continue;html+=`<section class="level" data-depth="${d}"><h3>${lang==='zh'?'第 '+(d+1)+' 层':'Layer '+(d+1)} · ${d===0?tr('直接汇合','Direct convergence'):`${tr('依赖深度','Dependency depth')} ${d}`}</h3><div class="grid count-${Math.min(list.length,4)}">`;for(const t of list){let gs=groups.get(t.id),c=counts(gs),n=gs.filter(g=>g.role==='target'&&!g.proved&&!g.refutation).length,muted=active&&!sets.up.has(t.id)&&!sets.down.has(t.id);html+=`<div class="track ${compact?'compact':'full'} ${focus===t.id?'selected':''} ${muted?'dim':''}" data-track="${esc(t.id)}" style="--c:${palette[program(t)]}" tabindex="0" role="button" aria-label="${tr('聚焦','Focus')} ${esc(t.title[lang])}" title="${esc(t.description[lang])}"><div class="track-title"><strong>${esc(t.title[lang])}</strong>${n?`<span class="target-badge">${lang==='zh'?`${n} 待突破`:`${n} open target${n===1?'':'s'}`}</span>`:''}</div>${compact?'':`<span class="description">${esc(t.description[lang])}</span>`}<span class="stats">${tr('已核查 / 全部','Verified / Total')}：${c.verified} / ${gs.length}</span><span class="bar"><i style="width:${c.pct}%"></i></span><button class="enter-small" data-enter="${esc(t.id)}">${tr('查看','View')} ${gs.length} ${tr('条引理','lemmas')} →</button></div>`}html+='</div></section>'}root.querySelector('#rm-levels').innerHTML=html;requestAnimationFrame(drawBoard)}
+function renderBoard(){let html='';let active=focus||hover,sets=active?trackSets(active):null,board=root.querySelector('#rm-board'),isHorizontal=horizontal&&window.innerWidth>640;board.classList.toggle('horizontal',isHorizontal);board.classList.toggle('chain-horizontal',isHorizontal&&onlyChain&&!!focus);for(let d=0;d<=Math.max(...distance.values());d++){let list=tracks.filter(t=>dist(t.id)===d).filter(t=>!onlyChain||!focus||sets.up.has(t.id)||sets.down.has(t.id)).filter(t=>groups.get(t.id).some(g=>(!field||(topic?programOf(g)===field:g.program===field))&&stateOK(g,globalFilter))).sort((a,b)=>Number(b.id.startsWith('frontier-'))-Number(a.id.startsWith('frontier-'))||a.title[lang].localeCompare(b.title[lang],locale));if(!list.length)continue;html+=`<section class="level" data-depth="${d}"><h3>${lang==='zh'?'第 '+(d+1)+' 层':'Layer '+(d+1)} · ${d===0?tr('直接汇合','Direct convergence'):`${tr('依赖深度','Dependency depth')} ${d}`}</h3><div class="grid count-${Math.min(list.length,4)}">`;for(const t of list){let gs=groups.get(t.id),c=counts(gs),n=gs.filter(g=>g.role==='target'&&!g.proved&&!g.resolved&&!g.refutation).length,muted=active&&!sets.up.has(t.id)&&!sets.down.has(t.id);html+=`<div class="track ${compact?'compact':'full'} ${focus===t.id?'selected':''} ${muted?'dim':''}" data-track="${esc(t.id)}" style="--c:${palette[program(t)]}" tabindex="0" role="button" aria-label="${tr('聚焦','Focus')} ${esc(t.title[lang])}" title="${esc(t.description[lang])}"><div class="track-title"><strong>${esc(t.title[lang])}</strong>${n?`<span class="target-badge">${lang==='zh'?`${n} 待突破`:`${n} open target${n===1?'':'s'}`}</span>`:''}</div>${compact?'':`<span class="description">${esc(t.description[lang])}</span>`}<span class="stats">${tr('已核查 / 全部','Verified / Total')}：${c.verified} / ${gs.length}</span><span class="bar"><i style="width:${c.pct}%"></i></span><button class="enter-small" data-enter="${esc(t.id)}">${tr('查看','View')} ${gs.length} ${tr('条引理','lemmas')} →</button></div>`}html+='</div></section>'}root.querySelector('#rm-levels').innerHTML=html;requestAnimationFrame(drawBoard)}
 function drawBoard(){if(currentTrack)return;let board=root.querySelector('#rm-board'),svg=root.querySelector('#rm-board-svg');if(!board||!svg)return;let rect=board.getBoundingClientRect();svg.setAttribute('viewBox',`0 0 ${rect.width} ${rect.height}`);let active=focus||hover,sets=active?trackSets(active):null,isHorizontal=board.classList.contains('horizontal'),center=el=>{let r=el.getBoundingClientRect();return{x:r.left-rect.left+r.width/2,y:r.top-rect.top+r.height/2,left:r.left-rect.left,right:r.right-rect.left,top:r.top-rect.top,bottom:r.bottom-rect.top}},nodes=new Map([...board.querySelectorAll('[data-track]')].map(x=>[x.dataset.track,center(x)])),goal=center(root.querySelector('#rm-goal')),paths='';function edge(a,b,gold,op,from,to){let d;if(isHorizontal){let x1=a.right,x2=b.left-2,span=Math.max(0,x2-x1),lead=Math.min(12,Math.max(6,span*.22)),ex=x2-lead,dx=Math.max(8,(ex-x1)*.5);d=`M ${x1} ${a.y} C ${x1+dx} ${a.y}, ${ex-dx} ${b.y}, ${ex} ${b.y} L ${x2} ${b.y}`}else{let y1=a.top,y2=b.bottom+2,span=Math.max(0,y1-y2),lead=Math.min(12,Math.max(6,span*.22)),ey=y2+lead,dy=Math.max(10,(y1-ey)*.5);d=`M ${a.x} ${y1} C ${a.x} ${y1-dy}, ${b.x} ${ey+dy}, ${b.x} ${ey} L ${b.x} ${y2}`}paths+=`<path data-from="${esc(from)}" data-to="${esc(to)}" d="${d}" stroke="${gold?'#e3c580':'#a0c6a1'}" stroke-width="${active?2:0.85}" stroke-opacity="${op}" fill="none" marker-end="url(#arr-${gold?'gold':'mint'})"/>`}
 for(const t of tracks){if(!nodes.has(t.id))continue;for(const f of t.feeds||[]){if(!nodes.has(f))continue;let down=active&&sets.down.has(t.id)&&sets.down.has(f),up=active&&sets.up.has(t.id)&&sets.up.has(f);if(!active||down||up)edge(nodes.get(t.id),nodes.get(f),!!down,active?.95:.2,t.id,f)}if(!(t.feeds||[]).length&&(!active||sets.down.has(t.id)))edge(nodes.get(t.id),goal,!!active,active?.95:.2,t.id,'goal')}
 for(const el of board.querySelectorAll('[data-track]')){el.classList.toggle('selected',focus===el.dataset.track);el.classList.toggle('dim',!!active&&!sets.up.has(el.dataset.track)&&!sets.down.has(el.dataset.track))}svg.innerHTML=`<defs><marker id="arr-gold" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#e3c580"/></marker><marker id="arr-mint" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#a0c6a1"/></marker></defs>${paths}`}
@@ -1190,7 +1225,9 @@ async function loadStatus() {
         counts.accepted.toLocaleString(locale) + ' / ' + counts.published.toLocaleString(locale);
     }
     latestRecordKey = latest ? latest.run_id + '/' + latest.run_attempt : '';
-    if (recordVisible && !currentRecordPage && displayedHead !== latestRecordKey) loadRecordPage(0);
+    if (recordVisible && (!recordLoaded || (currentRecordPage === 1 && displayedHead !== latestRecordKey))) {
+      loadRecordPage(1);
+    }
     renderDesk(desk);
   } catch {
     renderExponent(null);
@@ -1277,6 +1314,307 @@ if (participation) {
   window.addEventListener('hashchange', openParticipationAnchor);
 }
 
+function initSponsorMarquee() {
+  const grid = document.querySelector('.sponsor-wall .sponsor-grid');
+  if (!grid) return;
+  const originals = Array.from(grid.children).filter(node => node.tagName === 'FIGURE');
+  if (originals.length < 4) return;
+
+  const prepCard = card => {
+    for (const el of card.querySelectorAll('a, img')) {
+      el.draggable = false;
+      if (el.tagName === 'IMG') el.loading = 'eager';
+    }
+    return card;
+  };
+  originals.forEach(prepCard);
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const BASE_SPEED = 24; // px/s gentle drift
+  let rafId = 0;
+  let lastFrame = 0;
+  let lastWidth = 0;
+  let isMarquee = false;
+  let stage = null;
+  let tracks = [];
+  let cycles = [0, 0];
+  let offsets = [0, 0];
+  let staggered = false;
+  let velocity = 0;
+  let resumeAt = 0;
+  let hovered = false;
+  let focusedWithin = false;
+  let dragging = false;
+  let inViewport = true;
+  let activePointer = null;
+  let startX = 0;
+  let lastX = 0;
+  let lastMoveTime = 0;
+  let dragMoved = false;
+  let suppressClickUntil = 0;
+
+  const wrap = (value, cycle) => (cycle > 0 ? ((value % cycle) + cycle) % cycle : 0);
+
+  function renderTracks() {
+    for (let i = 0; i < tracks.length; i++) {
+      const pos = wrap(offsets[i], cycles[i]);
+      tracks[i].style.transform = 'translate3d(' + (-pos).toFixed(2) + 'px, 0, 0)';
+    }
+  }
+
+  function step(now) {
+    rafId = 0;
+    if (!isMarquee) return;
+    const dt = lastFrame ? Math.min(0.05, Math.max(0, (now - lastFrame) / 1000)) : 0;
+    lastFrame = now;
+    if (dt > 0 && !dragging && inViewport && !document.hidden) {
+      if (Math.abs(velocity) > 2) {
+        const delta = velocity * dt;
+        offsets[0] += delta;
+        offsets[1] += delta;
+        velocity *= Math.exp(-dt * 5.5);
+      } else {
+        velocity = 0;
+        if (!hovered && !focusedWithin && !reducedMotion.matches && now >= resumeAt) {
+          const delta = BASE_SPEED * dt;
+          offsets[0] += delta;
+          offsets[1] += delta;
+        }
+      }
+      renderTracks();
+    }
+    rafId = window.requestAnimationFrame(step);
+  }
+
+  function startLoop() {
+    if (!rafId && isMarquee) {
+      lastFrame = 0;
+      rafId = window.requestAnimationFrame(step);
+    }
+  }
+
+  function stopLoop() {
+    if (rafId) {
+      window.cancelAnimationFrame(rafId);
+      rafId = 0;
+    }
+  }
+
+  function measureSingleRowWidth() {
+    const probe = document.createElement('div');
+    probe.style.cssText = 'position:absolute;left:-99999px;top:0;visibility:hidden;display:flex;flex-wrap:nowrap;gap:.5rem;pointer-events:none;width:max-content;';
+    for (const card of originals) probe.append(card.cloneNode(true));
+    grid.append(probe);
+    const width = probe.scrollWidth;
+    probe.remove();
+    return width;
+  }
+
+  function populateTrack(track, items, viewportWidth) {
+    track.replaceChildren();
+    for (const item of items) track.append(item);
+    // Append one clone set first so we can measure exact cycle distance including CSS gap.
+    const firstClones = items.map(item => {
+      const clone = prepCard(item.cloneNode(true));
+      clone.setAttribute('aria-hidden', 'true');
+      for (const link of clone.querySelectorAll('a')) link.tabIndex = -1;
+      return clone;
+    });
+    for (const clone of firstClones) track.append(clone);
+    const cycleWidth = firstClones[0].offsetLeft - items[0].offsetLeft;
+    if (cycleWidth <= 0) return 0;
+    const totalCopies = Math.min(12, Math.max(3, Math.ceil((viewportWidth + cycleWidth * 2) / cycleWidth)));
+    for (let c = 2; c < totalCopies; c++) {
+      for (const item of items) {
+        const clone = prepCard(item.cloneNode(true));
+        clone.setAttribute('aria-hidden', 'true');
+        for (const link of clone.querySelectorAll('a')) link.tabIndex = -1;
+        track.append(clone);
+      }
+    }
+    return cycleWidth;
+  }
+
+  function mountStatic() {
+    stopLoop();
+    isMarquee = false;
+    stage = null;
+    tracks = [];
+    cycles = [0, 0];
+    grid.classList.remove('is-marquee');
+    grid.replaceChildren(...originals);
+  }
+
+  function mountMarquee(viewportWidth) {
+    const prevRatios = [
+      cycles[0] > 0 ? wrap(offsets[0], cycles[0]) / cycles[0] : 0,
+      cycles[1] > 0 ? wrap(offsets[1], cycles[1]) / cycles[1] : 0,
+    ];
+    const rowItems = [[], []];
+    originals.forEach((card, index) => rowItems[index % 2].push(card));
+
+    const nextStage = document.createElement('div');
+    nextStage.className = 'sponsor-marquee-stage';
+    nextStage.tabIndex = 0;
+    nextStage.setAttribute('aria-label', lang === 'zh'
+      ? '赞助单位双行循环展示，支持拖动或横向滚轮控制'
+      : 'Sponsor logos in two looping rows; drag or scroll horizontally to browse');
+
+    const nextTracks = [0, 1].map(() => {
+      const row = document.createElement('div');
+      row.className = 'sponsor-marquee-row';
+      const track = document.createElement('div');
+      track.className = 'sponsor-marquee-track';
+      row.append(track);
+      nextStage.append(row);
+      return track;
+    });
+
+    grid.classList.add('is-marquee');
+    grid.replaceChildren(nextStage);
+
+    const nextCycles = [
+      populateTrack(nextTracks[0], rowItems[0], viewportWidth),
+      populateTrack(nextTracks[1], rowItems[1], viewportWidth),
+    ];
+    if (nextCycles[0] <= 0 || nextCycles[1] <= 0) {
+      mountStatic();
+      return;
+    }
+
+    stage = nextStage;
+    tracks = nextTracks;
+    cycles = nextCycles;
+    if (!staggered) {
+      const avgCard = cycles[1] / Math.max(1, rowItems[1].length);
+      offsets = [0, Math.round(avgCard * 0.55)];
+      staggered = true;
+    } else {
+      offsets = [prevRatios[0] * cycles[0], prevRatios[1] * cycles[1]];
+    }
+
+    stage.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hovered = true; });
+    stage.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') hovered = false; });
+    stage.addEventListener('focusin', () => { focusedWithin = true; });
+    stage.addEventListener('focusout', e => { if (!stage.contains(e.relatedTarget)) focusedWithin = false; });
+
+    stage.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      dragging = true;
+      activePointer = e.pointerId;
+      startX = lastX = e.clientX;
+      lastMoveTime = performance.now();
+      dragMoved = false;
+      velocity = 0;
+      stage.classList.add('is-dragging');
+    });
+
+    stage.addEventListener('pointermove', e => {
+      if (!dragging || e.pointerId !== activePointer) return;
+      const now = performance.now();
+      const dx = e.clientX - lastX;
+      if (!dragMoved && Math.abs(e.clientX - startX) >= 5) {
+        dragMoved = true;
+        try { stage.setPointerCapture(e.pointerId); } catch {}
+      }
+      if (dragMoved) {
+        offsets[0] -= dx;
+        offsets[1] -= dx;
+        const dt = Math.max(4, now - lastMoveTime) / 1000;
+        const instant = -dx / dt;
+        velocity = velocity * 0.65 + instant * 0.35;
+        renderTracks();
+      }
+      lastX = e.clientX;
+      lastMoveTime = now;
+    });
+
+    const endDrag = e => {
+      if (!dragging || e.pointerId !== activePointer) return;
+      dragging = false;
+      activePointer = null;
+      stage.classList.remove('is-dragging');
+      try { if (stage.hasPointerCapture(e.pointerId)) stage.releasePointerCapture(e.pointerId); } catch {}
+      if (dragMoved) {
+        suppressClickUntil = performance.now() + 260;
+        resumeAt = performance.now() + 900;
+        velocity = Math.max(-1400, Math.min(1400, velocity));
+      } else {
+        velocity = 0;
+      }
+    };
+    stage.addEventListener('pointerup', endDrag);
+    stage.addEventListener('pointercancel', endDrag);
+
+    stage.addEventListener('click', e => {
+      if (performance.now() < suppressClickUntil) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+
+    stage.addEventListener('wheel', e => {
+      const horizontal = Math.abs(e.deltaX) > 0 && Math.abs(e.deltaX) >= Math.abs(e.deltaY) * 0.5;
+      const shiftWheel = e.shiftKey && e.deltaY !== 0;
+      if (!horizontal && !shiftWheel) return;
+      e.preventDefault();
+      const scale = e.deltaMode === 1 ? 24 : 1;
+      const stepDelta = (horizontal ? e.deltaX : e.deltaY) * scale;
+      offsets[0] += stepDelta;
+      offsets[1] += stepDelta;
+      velocity = 0;
+      resumeAt = performance.now() + 1200;
+      renderTracks();
+    }, {passive: false});
+
+    stage.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      const delta = e.key === 'ArrowRight' ? 180 : -180;
+      offsets[0] += delta;
+      offsets[1] += delta;
+      velocity = 0;
+      resumeAt = performance.now() + 1400;
+      renderTracks();
+    });
+
+    isMarquee = true;
+    renderTracks();
+    startLoop();
+  }
+
+  function updateLayout(force = false) {
+    const viewportWidth = grid.clientWidth;
+    if (!viewportWidth) return;
+    if (!force && Math.abs(viewportWidth - lastWidth) < 2) return;
+    lastWidth = viewportWidth;
+    const singleRowWidth = measureSingleRowWidth();
+    if (singleRowWidth <= viewportWidth) {
+      if (isMarquee) mountStatic();
+    } else {
+      mountMarquee(viewportWidth);
+    }
+  }
+
+  new IntersectionObserver(([entry]) => {
+    inViewport = entry.isIntersecting;
+  }, {threshold: 0.01}).observe(grid);
+
+  if (typeof ResizeObserver === 'function') {
+    let timer = 0;
+    new ResizeObserver(() => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => updateLayout(false), 80);
+    }).observe(grid.parentElement || grid);
+  }
+
+  updateLayout(true);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => updateLayout(true));
+  }
+}
+
+initSponsorMarquee();
 loadStatus();
 window.setInterval(loadStatus, 120000);
 document.addEventListener('visibilitychange', loadStatus);

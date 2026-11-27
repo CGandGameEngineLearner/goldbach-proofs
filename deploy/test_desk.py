@@ -127,14 +127,13 @@ class DeskTests(unittest.TestCase):
         self.assertEqual(self.request("claim", {"handle": "Bob"})[1]["gap"]["id"], GAPS[1]["id"])
         self.assertEqual(self.status()["leaderboard"], [])
 
-    def test_only_one_participant_can_claim_the_same_gap_concurrently(self):
+    def test_participants_can_claim_the_same_gap_concurrently(self):
         def claim(i):
             return self.desk.claim({"handle": f"Agent{i}", "gap": GAPS[0]["id"]}, f"192.0.2.{i}", START)[0]
 
         with ThreadPoolExecutor(max_workers=8) as workers:
             outcomes = list(workers.map(claim, range(1, 17)))
-        self.assertEqual(outcomes.count(201), 1)
-        self.assertEqual(outcomes.count(409), 15)
+        self.assertEqual(outcomes, [201] * 16)
 
     def test_expiry_and_release(self):
         token = self.claim()
@@ -190,6 +189,43 @@ class DeskTests(unittest.TestCase):
         self.assertEqual(outcome["activities"][0]["kind"], "accepted")
         self.assertEqual(outcome["leaderboard"], [{"handle": "alice", "accepted": 1}])
 
+    def test_refutation_uses_original_opening_and_shares_first_acceptance(self):
+        original, negative = GAPS[:2]
+        negative = {**negative, "statement": f'¬ ({original["statement"]})'}
+        db = self.db.with_name("refutation.sqlite3")
+        desk = Desk(db, [original, negative], SECRET,
+                    {original["id"]: START - 360, negative["id"]: START})
+        self.assertEqual(desk.points(negative["id"], START), 3)
+        with desk.transaction(write=True) as conn:
+            for run, gap, handle, points in (
+                (1, negative["id"], "refuter", 3), (2, original["id"], "prover", 4)
+            ):
+                conn.execute("""INSERT INTO goldbach_leases
+                    (token_hash, gap, statement_sha256, handle, ip_key, claimed_at, expires_at,
+                     absolute_expires_at, run_id, finished_at, verdict, points)
+                    VALUES (?, ?, '', ?, '', 0, 0, 0, ?, ?, 'ACCEPTED', ?)""",
+                    (str(run), gap, handle, run, START + run, points))
+        with patch("deploy.desk.time.time", return_value=START + 100):
+            rankings = desk.public_status()["rankings"]["all_time"]
+        self.assertEqual([(row["handle"], row["points"]) for row in rankings], [("refuter", 3)])
+
+    def test_points_use_publication_age_and_freeze_when_submitted(self):
+        gap = GAPS[0]["id"]
+        db = self.db.with_name("points.sqlite3")
+        self.db = db
+        self.desk = Desk(db, GAPS, SECRET, {gap: START - 359})
+        self.assertEqual(self.desk.points(gap, START), 2)
+        self.assertEqual(self.desk.points(gap, START + 1), 3)
+        token = self.claim()
+        status, submission = self.submit(token)
+        self.assertEqual((status, submission["points"]), (200, 2))
+        self.assertEqual(self.request("authorize", self.authorization(), sign=True)[0], 200)
+        with patch("deploy.desk.time.time", return_value=START + 720):
+            self.record(102, gap, "ACCEPTED")
+        self.desk = Desk(db, GAPS, SECRET, {gap: START})
+        self.assertEqual(self.desk.openings[gap], START - 359)
+        self.assertEqual(self.status(START + 720)["rankings"]["all_time"][0]["points"], 2)
+
     def test_network_limit_groups_ipv6_neighbors_without_leaking_addresses(self):
         for i in range(1, 4):
             self.assertEqual(self.request("claim", {"handle": f"Agent{i}"}, ip=f"2001:db8::{i}")[0], 201)
@@ -207,7 +243,7 @@ class DeskTests(unittest.TestCase):
         self.assertEqual(allocated, ["foundation", "coverage", "exceptions"])
 
     def test_parallel_leases_preserve_checking_and_release_unstarted_after_acceptance(self):
-        self.desk = Desk(self.db, [GAPS[0] | {"parallel": True}], SECRET)
+        self.desk = Desk(self.db, [GAPS[0] | {"parallel": False}], SECRET)
         tokens = [self.claim(handle) for handle in ("Alice", "Bob", "Carol")]
         for i, token in enumerate(tokens):
             self.assertEqual(self.submit(token, pr=8+i)[0], 200)

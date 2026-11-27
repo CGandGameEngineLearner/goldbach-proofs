@@ -313,6 +313,19 @@ def main():
             except (OSError, ValueError, KeyError, RateLimited, subprocess.SubprocessError) as error:
                 logging.warning("Catalogue sync deferred: %s", error)
         drain(db, app, store, args.first_job_id, dry_run=args.dry_run)
+        if not args.dry_run:
+            from register_proof_imports import open_import_pr, pending_imports
+            try:
+                if pending_imports((store / "current").resolve(strict=True)):
+                    if installation["permissions"].get("pull_requests") != "write":
+                        logging.warning("Automatic import registration requires GitHub App Pull requests write")
+                        return
+                    registrar = GitHubApp(args.private_key, permissions={
+                        "contents": "write", "pull_requests": "write"
+                    }, request_interval=0.35)
+                    open_import_pr(registrar, store, ROOT, REPO, revision_tree, git_blob)
+            except (OSError, ValueError, KeyError, RateLimited, subprocess.SubprocessError) as error:
+                logging.warning("Automatic import registration deferred: %s", error)
 
 
 if __name__ == "__main__":
