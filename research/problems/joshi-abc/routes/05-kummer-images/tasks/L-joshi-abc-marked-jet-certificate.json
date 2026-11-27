@@ -20,7 +20,9 @@
     "L-joshi-abc-log-jet",
     "L-joshi-abc-marked-transport"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.MarkedTransport"
+  ],
   "track": "05-kummer-images",
   "module": "Conjectures.JoshiAbc.MarkedJetCertificate",
   "file": "lean/Conjectures/JoshiAbc/MarkedJetCertificate.lean"

@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-annihilator-index"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.AnnihilatorIndex"
+  ],
   "track": "04-trace-and-fourier",
   "module": "Conjectures.JoshiAbc.FourierDetection",
   "file": "lean/Conjectures/JoshiAbc/FourierDetection.lean"
