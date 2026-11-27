@@ -18,7 +18,6 @@
     "L-log-rank-cyclic-detector-family"
   ],
   "imports": [
-    "PEqualNP.Outside.L_log_rank_rank_sized_protocol",
     "PEqualNP.Outside.L_log_rank_interval_anchor",
     "PEqualNP.Outside.L_log_rank_cyclic_detector_family"
   ]
