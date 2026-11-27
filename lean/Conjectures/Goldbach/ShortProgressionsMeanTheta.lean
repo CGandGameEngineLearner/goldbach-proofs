@@ -22423,7 +22423,7 @@ section
 
 /-!
 Principal-character estimates. This fragment expects the existing ShortAP
-definitions and prime-power transfer lemmas, and the certified import
+definitions and prime-power transfer lemmas, and the certified module
 `PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli` at the file head.
 If the weaker principal-window bridge is already present, replace it with
 this fragment rather than defining the same theorem names twice.
