@@ -18,5 +18,8 @@
     "L-square-packing-seventeen-weighted-bridge-4661"
   ],
   "parallel": true,
-  "challenge_only": true
+  "challenge_only": true,
+  "imports": [
+    "Conjectures.SquarePacking.SeventeenWeightedBridge4661"
+  ]
 }

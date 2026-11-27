@@ -10586,10 +10586,12 @@
         ],
         "parallel": true,
         "challenge_only": true,
+        "imports": [
+          "Conjectures.SquarePacking.SeventeenWeightedBridge4661"
+        ],
         "file": "lean/Conjectures/SquarePacking/SeventeenLower4661.lean",
         "module": "Conjectures.SquarePacking.SeventeenLower4661",
-        "route_source": "seventeen-square-frontier",
-        "imports": []
+        "route_source": "seventeen-square-frontier"
       },
       {
         "id": "L-square-packing-seventeen-upper-46755",
@@ -10698,7 +10700,8 @@
         "parallel": true,
         "challenge_only": false,
         "imports": [
-          "PEqualNP.Outside.L_square_packing_rational_rotation"
+          "PEqualNP.Outside.L_square_packing_rational_rotation",
+          "Conjectures.SquarePacking.SeventeenChargeCellTransfer"
         ],
         "file": "lean/Conjectures/SquarePacking/SeventeenWeightedSites4661.lean",
         "module": "Conjectures.SquarePacking.SeventeenWeightedSites4661",

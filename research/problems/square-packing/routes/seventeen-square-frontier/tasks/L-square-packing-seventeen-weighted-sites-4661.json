@@ -22,6 +22,7 @@
   "parallel": true,
   "challenge_only": false,
   "imports": [
-    "PEqualNP.Outside.L_square_packing_rational_rotation"
+    "PEqualNP.Outside.L_square_packing_rational_rotation",
+    "Conjectures.SquarePacking.SeventeenChargeCellTransfer"
   ]
 }
