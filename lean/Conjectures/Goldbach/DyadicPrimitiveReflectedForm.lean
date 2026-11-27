@@ -324,10 +324,10 @@ theorem Conjectures.Goldbach.DyadicPrimitiveReflectedForm :
           (∑ x : (ZMod m)ˣ, star (v χ * χ (x : ZMod m)) *
             (v ψ * ψ ((N : ZMod m) - (x : ZMod m)))) / (m.totient : ℂ) := by
       dsimp only [H]
-      rw [Finset.sum_div]
       calc
-        _ = star (v χ) * (∑ x : (ZMod m)ˣ, (star (χ (x : ZMod m)) * ψ ((N : ZMod m) - (x : ZMod m))) / (m.totient : ℂ)) * v ψ := by rw [← Finset.sum_div]
+        _ = (star (v χ) * (∑ x : (ZMod m)ˣ, star (χ (x : ZMod m)) * ψ ((N : ZMod m) - (x : ZMod m))) * v ψ) / (m.totient : ℂ) := by ring
         _ = _ := by
+          congr 1
           rw [Finset.mul_sum,Finset.sum_mul]
           apply Finset.sum_congr rfl
           intro x hx
