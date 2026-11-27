@@ -921,3 +921,457 @@ private theorem energyPoint (h : BMOR) (n q : ℕ) (β : ℝ)
       _ ≤ _ := by
         rw [← mul_assoc]
         exact mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hD hcomp 2) (by positivity)
+
+
+private theorem polyIntegral (X Y l u : ℝ) :
+    (∫ t in l..u, (X+Y*t)^2) =
+      (u-l)*X^2+X*Y*(u^2-l^2)+Y^2*(u^3-l^3)/3 := by
+  have he : (fun t : ℝ => (X+Y*t)^2) =
+      fun t => X^2+(2*X*Y)*t+Y^2*t^2 := by
+    funext t
+    ring
+  rw [he,intervalIntegral.integral_add (by apply Continuous.intervalIntegrable; fun_prop)
+      (by apply Continuous.intervalIntegrable; fun_prop),
+    intervalIntegral.integral_add (by apply Continuous.intervalIntegrable; fun_prop)
+      (by apply Continuous.intervalIntegrable; fun_prop)]
+  rw [intervalIntegral.integral_const_mul,intervalIntegral.integral_const_mul,
+    intervalIntegral.integral_const,integral_id,integral_pow]
+  simp only [smul_eq_mul]
+  norm_num
+  ring
+
+private theorem absIntegral (X Y h : ℝ) (hh : 0 ≤ h) :
+    (∫ t in -h..h, (X+Y*|t|)^2) =
+      2*h*(X^2+X*Y*h+Y^2*h^2/3) := by
+  have hneg : (∫ t in -h..0, (X+Y*|t|)^2) =
+      ∫ t in -h..0, (X+(-Y)*t)^2 := by
+    apply intervalIntegral.integral_congr
+    intro t ht
+    rw [Set.uIcc_of_le (by linarith : -h ≤ 0)] at ht
+    rw [abs_of_nonpos ht.2]
+    ring
+  have hpos : (∫ t in 0..h, (X+Y*|t|)^2) =
+      ∫ t in 0..h, (X+Y*t)^2 := by
+    apply intervalIntegral.integral_congr
+    intro t ht
+    rw [Set.uIcc_of_le hh] at ht
+    rw [abs_of_nonneg ht.1]
+  have hf : Continuous (fun t : ℝ => (X+Y*|t|)^2) := by fun_prop
+  rw [← intervalIntegral.integral_add_adjacent_intervals (hf.intervalIntegrable (-h) 0)
+    (hf.intervalIntegrable 0 h),hneg,hpos,polyIntegral,polyIntegral]
+  ring
+
+private theorem energyIntegral (h : BMOR) (n q : ℕ)
+    (hn : 4000000000000000000 ≤ n) (hq : 1 ≤ q) (hq' : q ≤ 105) :
+    (∑ i ∈ A q, ∫ β in -(H n q)..H n q, ‖S n ((i:ℝ)/q+β)-M n q β‖^2) ≤
+      (n:ℝ)*budget q := by
+  let hq0 := H n q
+  let X : ℝ := (n:ℝ)*a q
+  let Y : ℝ := c q*(22/7)*(n:ℝ)^2/(840*34)
+  have hn0 : (n:ℝ) ≠ 0 := by exact_mod_cast (show n ≠ 0 by omega)
+  have hq0' : (q:ℝ) ≠ 0 := by exact_mod_cast (show q ≠ 0 by omega)
+  have hh : 0 ≤ hq0 := by unfold hq0 H; positivity
+  let g (i : ℕ) (β : ℝ) := ‖S n ((i:ℝ)/q+β)-M n q β‖^2
+  have hg (i : ℕ) : Continuous (g i) := by
+    unfold g S M V E
+    fun_prop
+  have hsum : Continuous (fun β : ℝ => ∑ i ∈ A q,g i β) := by fun_prop
+  have hp : Continuous (fun β : ℝ => (q:ℝ)*(q.totient:ℝ)*(X+Y*|β|)^2) := by fun_prop
+  change (∑ i ∈ A q, ∫ β in -hq0..hq0, g i β) ≤ _
+  rw [← intervalIntegral.integral_finsetSum (fun i _ => (hg i).intervalIntegrable (-hq0) hq0)]
+  calc
+    _ ≤ ∫ β in -hq0..hq0, (q:ℝ)*(q.totient:ℝ)*(X+Y*|β|)^2 := by
+      apply intervalIntegral.integral_mono_on (by linarith) (hsum.intervalIntegrable _ _) (hp.intervalIntegrable _ _)
+      intro β hβ
+      have hb : |β| ≤ H n q := abs_le.mpr hβ
+      have he := energyPoint h n q β hn hq hq' hb
+      dsimp only [g,X,Y]
+      convert he using 1 <;> ring
+    _ = _ := by
+      rw [intervalIntegral.integral_const_mul,absIntegral X Y hq0 hh]
+      have hY : Y*hq0 = (n:ℝ)*d q := by
+        dsimp [Y,hq0,H,d]
+        field_simp [hn0,hq0'] <;> ring
+      have hQ : (q:ℝ)*2*hq0*(n:ℝ) = 210 := by
+        dsimp [hq0,H]
+        field_simp [hn0,hq0']
+      have he : X^2+X*Y*hq0+Y^2*hq0^2/3 =
+          (n:ℝ)^2*(a q^2+a q*d q+d q^2/3) := by
+        calc
+          _ = X^2+X*(Y*hq0)+(Y*hq0)^2/3 := by ring
+          _ = _ := by rw [hY]; dsimp only [X]; ring
+      rw [he]
+      unfold budget
+      calc
+        _ = ((q:ℝ)*2*hq0*(n:ℝ))*(n:ℝ)*(q.totient:ℝ)*(a q^2+a q*d q+d q^2/3) := by ring
+        _ = _ := by rw [hQ]; ring
+
+private def upper : ℕ → ℕ
+  | 1 => 3765845
+  | 2 => 948392
+  | 3 => 212303
+  | 4 => 120296
+  | 5 => 155104
+  | 6 => 54249
+  | 7 => 120437
+  | 8 => 61919
+  | 9 => 73917
+  | 10 => 40204
+  | 11 => 83662
+  | 12 => 28323
+  | 13 => 72915
+  | 14 => 31661
+  | 15 => 37035
+  | 16 => 32782
+  | 17 => 58488
+  | 18 => 19703
+  | 19 => 53422
+  | 20 => 21580
+  | 21 => 29566
+  | 22 => 22607
+  | 23 => 45821
+  | 24 => 15410
+  | 25 => 35749
+  | 26 => 19969
+  | 27 => 27968
+  | 28 => 17457
+  | 29 => 38232
+  | 30 => 10279
+  | 31 => 36341
+  | 32 => 18314
+  | 33 => 21673
+  | 34 => 16445
+  | 35 => 23434
+  | 36 => 11151
+  | 37 => 31879
+  | 38 => 15214
+  | 39 => 19387
+  | 40 => 12369
+  | 41 => 29628
+  | 42 => 8527
+  | 43 => 28659
+  | 44 => 13121
+  | 45 => 15152
+  | 46 => 13380
+  | 47 => 26973
+  | 48 => 9055
+  | 49 => 22956
+  | 50 => 10568
+  | 51 => 16357
+  | 52 => 11877
+  | 53 => 24930
+  | 54 => 8368
+  | 55 => 18038
+  | 56 => 10508
+  | 57 => 15310
+  | 58 => 11574
+  | 59 => 23316
+  | 60 => 6260
+  | 61 => 22851
+  | 62 => 11131
+  | 63 => 13018
+  | 64 => 11283
+  | 65 => 16510
+  | 66 => 6715
+  | 67 => 21634
+  | 68 => 10247
+  | 69 => 13769
+  | 70 => 7343
+  | 71 => 20944
+  | 72 => 7027
+  | 73 => 20630
+  | 74 => 10100
+  | 75 => 10992
+  | 76 => 9693
+  | 77 => 15833
+  | 78 => 6210
+  | 79 => 19792
+  | 80 => 7967
+  | 81 => 13192
+  | 82 => 9593
+  | 83 => 19307
+  | 84 => 5551
+  | 85 => 14541
+  | 86 => 9378
+  | 87 => 12290
+  | 88 => 8632
+  | 89 => 18673
+  | 90 => 5011
+  | 91 => 14786
+  | 92 => 8893
+  | 93 => 11937
+  | 94 => 9010
+  | 95 => 13887
+  | 96 => 6080
+  | 97 => 17967
+  | 98 => 7746
+  | 99 => 10906
+  | 100 => 7167
+  | 101 => 17663
+  | 102 => 5575
+  | 103 => 17522
+  | 104 => 8135
+  | 105 => 8026
+  | _ => 0
+
+set_option maxHeartbeats 4000000 in
+private theorem budget_le_upper (q : ℕ) (hq : 1 ≤ q) (hq' : q ≤ 105) :
+    budget q ≤ (upper q:ℝ)/10^8 := by
+  interval_cases q
+  · have hφ : Nat.totient 1 = 1 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 2 = 1 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 3 = 2 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 4 = 2 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 5 = 4 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 6 = 2 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 7 = 6 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 8 = 4 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 9 = 6 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 10 = 4 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 11 = 10 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 12 = 4 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 13 = 12 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 14 = 6 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 15 = 8 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 16 = 8 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 17 = 16 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 18 = 6 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 19 = 18 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 20 = 8 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 21 = 12 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 22 = 10 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 23 = 22 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 24 = 8 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 25 = 20 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 26 = 12 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 27 = 18 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 28 = 12 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 29 = 28 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 30 = 8 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 31 = 30 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 32 = 16 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 33 = 20 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 34 = 16 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 35 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 36 = 12 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 37 = 36 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 38 = 18 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 39 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 40 = 16 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 41 = 40 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 42 = 12 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 43 = 42 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 44 = 20 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 45 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 46 = 22 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 47 = 46 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 48 = 16 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 49 = 42 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 50 = 20 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 51 = 32 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 52 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 53 = 52 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 54 = 18 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 55 = 40 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 56 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 57 = 36 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 58 = 28 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 59 = 58 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 60 = 16 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 61 = 60 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 62 = 30 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 63 = 36 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 64 = 32 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 65 = 48 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 66 = 20 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 67 = 66 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 68 = 32 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 69 = 44 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 70 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 71 = 70 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 72 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 73 = 72 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 74 = 36 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 75 = 40 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 76 = 36 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 77 = 60 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 78 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 79 = 78 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 80 = 32 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 81 = 54 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 82 = 40 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 83 = 82 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 84 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 85 = 64 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 86 = 42 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 87 = 56 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 88 = 40 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 89 = 88 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 90 = 24 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 91 = 72 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 92 = 44 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 93 = 60 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 94 = 46 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 95 = 72 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 96 = 32 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 97 = 96 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 98 = 42 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 99 = 60 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 100 = 40 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 101 = 100 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 102 = 32 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 103 = 102 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 104 = 48 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+  · have hφ : Nat.totient 105 = 48 := by decide
+    norm_num [budget,a,d,c,upper,hφ]
+
+set_option maxHeartbeats 4000000 in
+private theorem numericBudget :
+    (∑ q ∈ Icc 1 105, budget q) < (3/40:ℝ) := by
+  have hsum : (∑ q ∈ Icc 1 105, upper q) = 7331216 := by decide
+  have hc : (∑ q ∈ Icc 1 105, (upper q:ℝ)) = 7331216 := by exact_mod_cast hsum
+  calc
+    _ ≤ ∑ q ∈ Icc 1 105, (upper q:ℝ)/10^8 :=
+      sum_le_sum (fun q hq => budget_le_upper q (mem_Icc.mp hq).1 (mem_Icc.mp hq).2)
+    _ = (7331216:ℝ)/10^8 := by rw [← sum_div,hc]
+    _ < _ := by norm_num
+
+end Conjectures.Goldbach.FiniteMajorBmorConditionalEnergyAux
+
+open Conjectures.Goldbach.FiniteMajorBmorConditionalEnergyAux
+
+set_option maxHeartbeats 4000000 in
+theorem Conjectures.Goldbach.FiniteMajorBmorConditionalEnergy :
+    (∀ (q a m : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 8000000000 ≤ m →
+      |(∑ k ∈ (Finset.range (m+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) -
+        (m:ℝ)/Nat.totient q| ≤ (m:ℝ)/(840*Real.log (m:ℝ))) →
+    let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I)
+    let _J := fun (h : ℝ) (f : ℝ → ℂ) => intervalIntegral f (-h) h MeasureTheory.volume
+    let Jr := fun (h : ℝ) (f : ℝ → ℝ) => intervalIntegral f (-h) h MeasureTheory.volume
+    let V := fun (n : ℕ) (β : ℝ) => ∑ k ∈ Finset.Icc 1 n, E ((k:ℝ)*β)
+    let S := fun (n : ℕ) (α : ℝ) => ∑ k ∈ Finset.Icc 1 n, (ArithmeticFunction.vonMangoldt k:ℂ)*E ((k:ℝ)*α)
+    let M := fun (n q : ℕ) (β : ℝ) => ((ArithmeticFunction.moebius q:ℤ):ℂ)/(Nat.totient q:ℂ)*V n β
+    let H := fun (n q : ℕ) => (105:ℝ)/((q:ℝ)*(n:ℝ))
+    let Q := Finset.Icc (1:ℕ) 105
+    let A := fun (q : ℕ) => (Finset.range q).filter (fun a => Nat.Coprime a q)
+    let U := fun (n : ℕ) => ∑ q ∈ Q, ∑ a ∈ A q, Jr (H n q) (fun β => ‖S n ((a:ℝ)/q+β)-M n q β‖^2)
+    let c := fun (q : ℕ) => if q ≤ 2 then (2:ℝ) else 1
+    let a := fun (q : ℕ) => c q/(840*42) + 1/(10^8:ℝ)
+    let d := fun (q : ℕ) => c q*105*22/(7*840*34*(q:ℝ))
+    ∀ n : ℕ, 4000000000000000000 ≤ n → (n:ℝ) < Real.exp (Real.exp (19/5)) →
+      U n ≤ (n:ℝ) * ∑ q ∈ Q, 210*(Nat.totient q:ℝ) * ((a q)^2+a q*d q+(d q)^2/3) ∧
+      (∑ q ∈ Q, 210*(Nat.totient q:ℝ) * ((a q)^2+a q*d q+(d q)^2/3)) < (3/40:ℝ) := by
+  intro h
+  dsimp only
+  intro n hn hn'
+  change (∑ q ∈ Icc 1 105, ∑ i ∈ A q, ∫ β in -(H n q)..H n q,
+    ‖S n ((i:ℝ)/q+β)-M n q β‖^2) ≤ (n:ℝ)*∑ q ∈ Icc 1 105,budget q ∧
+      (∑ q ∈ Icc 1 105,budget q) < (3/40:ℝ)
+  refine ⟨?_,numericBudget⟩
+  rw [mul_sum]
+  exact sum_le_sum (fun q hq => energyIntegral h n q hn (mem_Icc.mp hq).1 (mem_Icc.mp hq).2)
+
