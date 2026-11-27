@@ -5,13 +5,17 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from build_checks import enqueue_formal_checks
+from build_checks import enqueue_formal_checks, refusal_summary
 from check_outbox import database
 from formal_proof import judge
 from prepare_proof import ProofRefused, report_guard_result
 
 
 class ProofRefusalTests(unittest.TestCase):
+    def test_modulo_refusal_suggests_explicit_arithmetic_only(self):
+        self.assertIn("Nat.mod p 30", refusal_summary('line 64: "p%" is not allowed in a proof file'))
+        self.assertNotIn("Nat.mod", refusal_summary('line 12: "macro" is not allowed in a proof file'))
+
     def test_only_an_explicit_guard_refusal_is_reported(self):
         with self.assertRaisesRegex(ProofRefused, "line 64"):
             report_guard_result(subprocess.CompletedProcess(
