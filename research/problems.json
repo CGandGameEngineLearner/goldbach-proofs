@@ -29357,7 +29357,9 @@
         "depends_on": [
           "L-joshi-abc-kronecker-determinant"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.KroneckerDeterminant"
+        ],
         "track": "01-haar-volume",
         "module": "Conjectures.JoshiAbc.NormalizedProduct",
         "file": "lean/Conjectures/JoshiAbc/NormalizedProduct.lean",
@@ -29630,7 +29632,9 @@
           "L-joshi-abc-theta-minimum",
           "L-joshi-abc-root-unit"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.ThetaMinimum"
+        ],
         "track": "02-scaled-log-and-theta",
         "module": "Conjectures.JoshiAbc.ThetaRatioNorm",
         "file": "lean/Conjectures/JoshiAbc/ThetaRatioNorm.lean",
@@ -29676,7 +29680,9 @@
         "depends_on": [
           "L-joshi-abc-deep-tate-inclusion"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.DeepTateInclusion"
+        ],
         "track": "03-local-generation",
         "module": "Conjectures.JoshiAbc.DeepTateDeficit",
         "file": "lean/Conjectures/JoshiAbc/DeepTateDeficit.lean",
@@ -29725,7 +29731,9 @@
           "L-joshi-abc-log-jet",
           "L-joshi-abc-three-jet-span"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.LogJet"
+        ],
         "track": "03-local-generation",
         "module": "Conjectures.JoshiAbc.LocalThetaGeneration",
         "file": "lean/Conjectures/JoshiAbc/LocalThetaGeneration.lean",
@@ -29773,7 +29781,9 @@
         "depends_on": [
           "L-joshi-abc-theta-minimum"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.ThetaMinimum"
+        ],
         "track": "03-local-generation",
         "module": "Conjectures.JoshiAbc.QuotientJet",
         "file": "lean/Conjectures/JoshiAbc/QuotientJet.lean",
@@ -29842,7 +29852,9 @@
           "L-joshi-abc-theta-minimum",
           "L-joshi-abc-root-unit"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.ThetaMinimum"
+        ],
         "track": "03-local-generation",
         "module": "Conjectures.JoshiAbc.SingleJet",
         "file": "lean/Conjectures/JoshiAbc/SingleJet.lean",
@@ -29866,7 +29878,9 @@
         "depends_on": [
           "L-joshi-abc-seventh-root"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.SeventhRoot"
+        ],
         "track": "03-local-generation",
         "module": "Conjectures.JoshiAbc.ThreeJetSpan",
         "file": "lean/Conjectures/JoshiAbc/ThreeJetSpan.lean",
@@ -30055,7 +30069,9 @@
         "depends_on": [
           "L-joshi-abc-annihilator-index"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.AnnihilatorIndex"
+        ],
         "track": "04-trace-and-fourier",
         "module": "Conjectures.JoshiAbc.FourierDetection",
         "file": "lean/Conjectures/JoshiAbc/FourierDetection.lean",
@@ -30123,7 +30139,9 @@
         "depends_on": [
           "L-joshi-abc-annihilator-index"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.AnnihilatorIndex"
+        ],
         "track": "04-trace-and-fourier",
         "module": "Conjectures.JoshiAbc.SubgroupDensity",
         "file": "lean/Conjectures/JoshiAbc/SubgroupDensity.lean",
@@ -30218,7 +30236,9 @@
           "L-joshi-abc-padic-isometry",
           "L-joshi-abc-kummer-quotient"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.KummerQuotient"
+        ],
         "track": "05-kummer-images",
         "module": "Conjectures.JoshiAbc.KummerResidue",
         "file": "lean/Conjectures/JoshiAbc/KummerResidue.lean",
@@ -30246,7 +30266,10 @@
           "L-joshi-abc-log-jet",
           "L-joshi-abc-marked-transport"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.LogJet",
+          "Conjectures.JoshiAbc.MarkedTransport"
+        ],
         "track": "05-kummer-images",
         "module": "Conjectures.JoshiAbc.MarkedJetCertificate",
         "file": "lean/Conjectures/JoshiAbc/MarkedJetCertificate.lean",
@@ -30320,7 +30343,10 @@
           "L-joshi-abc-frey-discriminant",
           "L-joshi-abc-frey-minimal"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.FreyDiscriminant",
+          "Conjectures.JoshiAbc.FreyMinimal"
+        ],
         "track": "06-common-hull-and-szpiro",
         "module": "Conjectures.JoshiAbc.BoundedLocalSzpiro",
         "file": "lean/Conjectures/JoshiAbc/BoundedLocalSzpiro.lean",
@@ -30344,7 +30370,9 @@
         "depends_on": [
           "L-joshi-abc-mean-square"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.MeanSquare"
+        ],
         "track": "06-common-hull-and-szpiro",
         "module": "Conjectures.JoshiAbc.ConstantHull",
         "file": "lean/Conjectures/JoshiAbc/ConstantHull.lean",
@@ -30438,7 +30466,9 @@
         "depends_on": [
           "L-joshi-abc-mean-square"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.MeanSquare"
+        ],
         "track": "06-common-hull-and-szpiro",
         "module": "Conjectures.JoshiAbc.LegendreThreshold",
         "file": "lean/Conjectures/JoshiAbc/LegendreThreshold.lean",
@@ -30488,7 +30518,9 @@
           "L-joshi-abc-linear-hull",
           "L-joshi-abc-constant-hull"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.LinearHull"
+        ],
         "track": "06-common-hull-and-szpiro",
         "module": "Conjectures.JoshiAbc.LossRatio",
         "file": "lean/Conjectures/JoshiAbc/LossRatio.lean",
@@ -30556,7 +30588,9 @@
         "depends_on": [
           "L-joshi-abc-codifferent-rounding"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.CodifferentRounding"
+        ],
         "track": "06-common-hull-and-szpiro",
         "module": "Conjectures.JoshiAbc.RoundingRadical",
         "file": "lean/Conjectures/JoshiAbc/RoundingRadical.lean",
@@ -30602,7 +30636,9 @@
         "depends_on": [
           "L-joshi-abc-height-bridge"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.HeightBridge"
+        ],
         "challenge_only": true,
         "track": "07-global-heights",
         "module": "Conjectures.JoshiAbc.Endpoint",
@@ -30627,7 +30663,9 @@
         "depends_on": [
           "L-joshi-abc-frey-minimal"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.FreyMinimal"
+        ],
         "track": "07-global-heights",
         "module": "Conjectures.JoshiAbc.FreyHeight",
         "file": "lean/Conjectures/JoshiAbc/FreyHeight.lean",
@@ -30749,7 +30787,9 @@
         "depends_on": [
           "L-joshi-abc-frey-hull-transfer"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.FreyHullTransfer"
+        ],
         "challenge_only": true,
         "track": "07-global-heights",
         "module": "Conjectures.JoshiAbc.UniformFreyUpper",

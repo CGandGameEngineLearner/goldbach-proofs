@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-seventh-root"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.SeventhRoot"
+  ],
   "track": "03-local-generation",
   "module": "Conjectures.JoshiAbc.ThreeJetSpan",
   "file": "lean/Conjectures/JoshiAbc/ThreeJetSpan.lean"
