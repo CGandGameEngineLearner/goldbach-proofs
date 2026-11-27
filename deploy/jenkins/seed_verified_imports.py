@@ -26,6 +26,7 @@ def export_records(directory):
 
 
 def seed(store, evidence, tree, revision):
+    store = store.resolve(strict=True)
     base = (store / "current").resolve(strict=True)
     tasks = json.loads((base / "research/gaps.json").read_bytes())["gaps"]
     for desk in json.loads((base / "research/problems.json").read_bytes()).values():
