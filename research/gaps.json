@@ -17134,6 +17134,32 @@
       "route_source": "major-arc-model-assembly"
     },
     {
+      "id": "L-goldbach-adaptive-minor-negative-tail",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let A := fun (n : ℕ) (r : ℕ → ℕ → ℝ) => {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q n ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ r q a * (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let T := fun (n : ℕ) (r : ℕ → ℕ → ℝ) => (intervalIntegral (fun t => (A n r)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, ∀ X ≥ N, ∃ D : Finset ℕ, (D.card:ℝ) ≤ C*(X:ℝ)^((4:ℝ)/7) ∧ ∀ n ∈ Finset.Icc X (2*X), Even n → n ∉ D → ∃ r : ℕ → ℕ → ℝ, (∀ q a, (1/2:ℝ) ≤ r q a ∧ r q a ≤ 2) ∧ -(3/4:ℝ)*(n:ℝ) ≤ T n r",
+      "plain_statement": {
+        "zh": "自适应弧宽下次弧负贡献的 4/7 尾界",
+        "en": "A four-sevenths tail for adaptive signed minor arcs"
+      },
+      "brief": {
+        "zh": "保留每个 n 的带符号 Fourier 系数；先研究一族可选的弧边界，估计所有选择都低于安全线的交集。只需找到一个好选择。已证主弧下界与同一选择合用，给出至少 n/4 的加权表示量。全体深次弧的绝对四次矩已有反例。可按 imports 引用核验引理。",
+        "en": "Estimate signed coefficients and the intersection of failures for a tractable family of boundaries. One good profile per target suffices. Combine it with the verified major floor for the same profile to obtain weight at least n/4. The blanket absolute fourth-moment route has a counterexample. Verified lemmas may be imported as listed."
+      },
+      "source": "https://arxiv.org/abs/2610.15559",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-major-numerator-dilation"
+      ],
+      "role": "lemma",
+      "imports": [
+        "Conjectures.Goldbach.MajorNumeratorDilation"
+      ],
+      "module": "Conjectures.Goldbach.AdaptiveMinorNegativeTail",
+      "file": "lean/Conjectures/Goldbach/AdaptiveMinorNegativeTail.lean",
+      "track": "minor-truncation",
+      "route_source": "minor-truncation"
+    },
+    {
       "id": "L-goldbach-bulk-binary-defect",
       "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let low := fun (n k : ℕ) => if k^3≤n then w k else 0; let high := fun (n k : ℕ) => w k-low n k; let I := fun (n:ℕ) (a b:ℕ→ℝ) => intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => S n a u*S n b u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; let L := fun n : ℕ => max 1 (Nat.log 2 n / 2); let K := fun (n : ℕ) (t : ℝ) => (∑ j ∈ Finset.range (L n), Real.cos (2*Real.pi*(2:ℝ)^(j+1)*t))/(L n:ℝ); let J := fun (n : ℕ) (v : ℝ → ℝ) => (intervalIntegral (fun t => (arcs n)ᶜ.indicator (fun u => (v u:ℂ)*S n (high n) u*S n (high n) u*E (-(n:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume).re; ∃ N : ℕ, ∀ n ≥ N, Even n → -(n:ℝ)/576 ≤ J n (fun t => 1-K n t)",
       "plain_statement": {
@@ -20534,6 +20560,28 @@
       "module": "Conjectures.Goldbach.ReflectedDivisorExactSplit",
       "file": "lean/Conjectures/Goldbach/ReflectedDivisorExactSplit.lean",
       "route_source": "representations"
+    },
+    {
+      "id": "L-goldbach-short-window-power-exceptions",
+      "statement": "∀ ε : ℝ, 0 < ε → ∃ δ C : ℝ, 0 < δ ∧ δ < 1 ∧ 0 < C ∧ ∃ N : ℕ, ∀ X H : ℕ, N ≤ X → H ≤ X → (X:ℝ)^((7:ℝ)/120 + ε) < (H:ℝ) → ((((Finset.Icc (X-H) X).filter (fun n => 4 ≤ n ∧ Even n ∧ ∀ p ∈ Finset.range (n+1), ¬ (Nat.Prime p ∧ Nat.Prime (n-p)))).card):ℝ) ≤ C*(H:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "在 Grimmelt 的全部短窗尺度上获得幂次例外界",
+        "en": "Power saving throughout Grimmelt’s short-window range"
+      },
+      "brief": {
+        "zh": "针对每个窗口的真实无表示偶数集，研究其 Fourier 变换与素数卷积的相关；在非负下界模型中定位只给对数节省的误差，争取一个依赖 ε 的幂次 δ。须对所有起点一致。改变 A 或仅缩短窗长的估计均不足。可按 imports 引用核验引理。",
+        "en": "Use the transform of the actual exceptional set in each window against the prime convolution. Isolate the logarithmic losses in the nonnegative minorant and seek a power gain depending on epsilon, uniformly in the endpoint. A larger fixed logarithmic saving or shorter windows alone do not suffice. Verified lemmas may be used according to task imports."
+      },
+      "source": "https://arxiv.org/pdf/1910.05187v2",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [],
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.ShortWindowPowerExceptions",
+      "file": "lean/Conjectures/Goldbach/ShortWindowPowerExceptions.lean",
+      "track": "representations",
+      "route_source": "representations",
+      "imports": []
     },
     {
       "id": "L-goldbach-switching-sieve-edge-integrals",
