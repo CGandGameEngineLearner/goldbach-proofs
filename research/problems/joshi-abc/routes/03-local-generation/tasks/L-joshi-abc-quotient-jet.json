@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-theta-minimum"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.ThetaMinimum"
+  ],
   "track": "03-local-generation",
   "module": "Conjectures.JoshiAbc.QuotientJet",
   "file": "lean/Conjectures/JoshiAbc/QuotientJet.lean"

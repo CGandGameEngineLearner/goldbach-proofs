@@ -14685,7 +14685,9 @@
       "file": "lean/Conjectures/Goldbach/ExceptionFourSeventhsUnconditional.lean",
       "module": "Conjectures.Goldbach.ExceptionFourSeventhsUnconditional",
       "route_source": "exceptional-set-four-sevenths",
-      "imports": []
+      "imports": [
+        "Conjectures.Goldbach.ExceptionFourSeventhsCountingBridge"
+      ]
     },
     {
       "id": "L-goldbach-binary-shift-central-hit",
@@ -18838,7 +18840,9 @@
       "depends_on": [
         "L-goldbach-dyadic-cell-mixed-difference"
       ],
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.DyadicCellMixedDifference"
+      ],
       "track": "odd-character-interference",
       "role": "conditional",
       "module": "Conjectures.Goldbach.DyadicCellWindowTransfer",
@@ -18995,8 +18999,8 @@
       "track": "representations",
       "role": "lemma",
       "imports": [],
-      "module": "Conjectures.Goldbach.BeaumontAlternateNormalShift",
       "file": "lean/Conjectures/Goldbach/BeaumontAlternateNormalShift.lean",
+      "module": "Conjectures.Goldbach.BeaumontAlternateNormalShift",
       "route_source": "representations"
     },
     {
@@ -19061,8 +19065,8 @@
       "track": "representations",
       "role": "lemma",
       "imports": [],
-      "module": "Conjectures.Goldbach.BeaumontCentralLocalPrediction",
       "file": "lean/Conjectures/Goldbach/BeaumontCentralLocalPrediction.lean",
+      "module": "Conjectures.Goldbach.BeaumontCentralLocalPrediction",
       "route_source": "representations"
     },
     {
@@ -19088,8 +19092,8 @@
       "imports": [
         "Conjectures.Goldbach.DynExceptionEnergy"
       ],
-      "module": "Conjectures.Goldbach.BeaumontCentralPredictionTransfer",
       "file": "lean/Conjectures/Goldbach/BeaumontCentralPredictionTransfer.lean",
+      "module": "Conjectures.Goldbach.BeaumontCentralPredictionTransfer",
       "route_source": "representations"
     },
     {
@@ -19220,8 +19224,8 @@
       "track": "representations",
       "role": "lemma",
       "imports": [],
-      "module": "Conjectures.Goldbach.BeaumontOneSidedHoleCluster",
       "file": "lean/Conjectures/Goldbach/BeaumontOneSidedHoleCluster.lean",
+      "module": "Conjectures.Goldbach.BeaumontOneSidedHoleCluster",
       "route_source": "representations"
     },
     {
@@ -19330,8 +19334,8 @@
       "track": "representations",
       "role": "lemma",
       "imports": [],
-      "module": "Conjectures.Goldbach.BeaumontScaledDeletionSurvival",
       "file": "lean/Conjectures/Goldbach/BeaumontScaledDeletionSurvival.lean",
+      "module": "Conjectures.Goldbach.BeaumontScaledDeletionSurvival",
       "route_source": "representations"
     },
     {
@@ -21129,7 +21133,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [
-        "PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli"
+        "PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli",
+        "Conjectures.Goldbach.WideSignedRemainderBridge"
       ],
       "file": "lean/Conjectures/Goldbach/WideSignedUnconditional.lean",
       "module": "Conjectures.Goldbach.WideSignedUnconditional",
