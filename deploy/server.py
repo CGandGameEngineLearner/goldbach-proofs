@@ -13,6 +13,7 @@ from contextlib import closing
 from datetime import datetime
 from functools import lru_cache
 from html import escape
+from math import ceil
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import BoundedSemaphore, Lock, Thread
@@ -478,6 +479,25 @@ WEB_SNAPSHOTS = {}
 
 RAW_STATUS_CLIENTS = OrderedDict()
 RAW_STATUS_LOCK = Lock()
+
+FULL_STATUS_TRANSFERS = OrderedDict()
+FULL_STATUS_LOCK = Lock()
+FULL_STATUS_BURST_BYTES = 32 * 1024**2
+FULL_STATUS_REFILL_PER_SECOND = 1024**2 / 60
+FULL_STATUS_MIN_BYTES = 128 * 1024
+
+
+def full_status_retry_after(client, size):
+    now = time.monotonic()
+    charge = min(size, FULL_STATUS_BURST_BYTES)
+    with FULL_STATUS_LOCK:
+        credit, updated = FULL_STATUS_TRANSFERS.pop(client, (FULL_STATUS_BURST_BYTES, now))
+        credit = min(FULL_STATUS_BURST_BYTES, credit + (now - updated) * FULL_STATUS_REFILL_PER_SECOND)
+        wait = ceil(max(0, charge - credit) / FULL_STATUS_REFILL_PER_SECOND)
+        FULL_STATUS_TRANSFERS[client] = (credit if wait else credit - charge, now)
+        if len(FULL_STATUS_TRANSFERS) > 4096:
+            FULL_STATUS_TRANSFERS.popitem(last=False)
+        return wait
 
 
 def raw_status_allowed(ip):
@@ -1043,11 +1063,21 @@ class Handler(BaseHTTPRequestHandler):
         if self.command != "HEAD":
             self.wfile.write(body)
 
-    def public_conditional(self, body, content_type="application/json", encoding=None, cache="public, max-age=10", vary=False):
+    def public_conditional(self, body, content_type="application/json", encoding=None, cache="public, max-age=10",
+                           vary=False, limit_full_status=False):
         etag = '"' + hashlib.sha256(body).hexdigest() + '"'
         validators = {item.strip().removeprefix("W/") for item in self.headers.get("If-None-Match", "").split(",")}
         if etag in validators or "*" in validators:
             return self.reply(304, b"", content_type, cache=cache, etag=etag, vary=vary)
+        if limit_full_status and self.command == "GET" and len(body) >= FULL_STATUS_MIN_BYTES:
+            client = self.client_ip()
+            wait = 0 if client.is_loopback else full_status_retry_after(client, len(body))
+            if wait:
+                return self.reply(
+                    429, b'{"error":"Full status transfer limit. Use /api/tasks for available tasks, '
+                    b'or send If-None-Match with the last ETag to check for changes."}',
+                    vary=vary, retry_after=wait,
+                )
         return self.reply(200, body, content_type, encoding=encoding, cache=cache, etag=etag, vary=vary)
 
     def public_json(self, payload, cache="public, max-age=10"):
@@ -1354,7 +1384,9 @@ class Handler(BaseHTTPRequestHandler):
             except sqlite3.Error as error:
                 self.log_error("Unable to read verdicts: %s", error)
                 return self.reply(503, b'{"error":"verdicts unavailable"}')
-            return self.public_conditional(body, encoding="gzip" if compress else None, vary=True)
+            return self.public_conditional(
+                body, encoding="gzip" if compress else None, vary=True, limit_full_status=not web_view,
+            )
         if path == "/platform-logo.svg":
             path = "/goldbach-icon.svg"
         if path in ASSETS:

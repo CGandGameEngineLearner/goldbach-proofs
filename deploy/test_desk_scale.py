@@ -31,6 +31,8 @@ PROBLEMS = json.loads((ROOT / "research/problems.json").read_text(encoding="utf-
 
 
 class DeskServerTestCase(unittest.TestCase):
+    server_setup = ""
+
     def configure_catalogue(self, folder):
         pass
 
@@ -62,6 +64,7 @@ class DeskServerTestCase(unittest.TestCase):
         # Use the production TLS/thread/SQLite handlers with a random loopback port and test-only state.
         launcher = (
             "from server import Server, Handler\n"
+            f"{self.server_setup}"
             "Handler.log_request = lambda *args: None\n"
             "with Server(('127.0.0.1', 0), Handler) as server:\n"
             "    print(server.server_port, flush=True)\n"
@@ -507,6 +510,40 @@ class DeskScaleTest(DeskServerTestCase):
             self.assertIn('id="brand-nex-agi"', sprite_svg)
             self.assertIn('id="brand-antigravity"', sprite_svg)
             self.assertIn('id="brand-tool-other"', sprite_svg)
+
+
+class FullStatusTransferTest(DeskServerTestCase):
+    server_setup = (
+        "import server\n"
+        "server.FULL_STATUS_BURST_BYTES = 1\n"
+        "server.FULL_STATUS_MIN_BYTES = 1\n"
+        "server.FULL_STATUS_REFILL_PER_SECOND = 1e-8\n"
+    )
+
+    def test_only_limit_full_body_transfers(self):
+        headers = {"Accept-Encoding": "gzip", "X-Goldbach-Client-IP": "1.1.1.1"}
+        with closing(HTTPSConnection("127.0.0.1", self.port, context=self.context)) as conn:
+            conn.request("GET", "/api/status", headers=headers)
+            response = conn.getresponse()
+            self.assertEqual(response.status, 200)
+            etag = response.getheader("ETag")
+            self.assertIn("statement", json.loads(gzip.decompress(response.read()))["gaps"][0])
+
+            conn.request("GET", "/api/status", headers={**headers, "If-None-Match": etag})
+            response = conn.getresponse()
+            self.assertEqual(response.status, 304)
+            self.assertEqual(response.read(), b"")
+
+            conn.request("GET", "/api/status", headers=headers)
+            response = conn.getresponse()
+            self.assertEqual(response.status, 429)
+            self.assertGreater(int(response.getheader("Retry-After")), 0)
+            self.assertIn("/api/tasks", json.load(response)["error"])
+
+            conn.request("GET", "/api/status?view=board-index-gzip", headers=headers)
+            response = conn.getresponse()
+            self.assertEqual(response.status, 200)
+            self.assertNotIn("statement", json.loads(gzip.decompress(response.read()))["gaps"][0])
 
 
 if __name__ == "__main__":
