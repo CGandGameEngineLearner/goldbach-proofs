@@ -13,8 +13,6 @@
   "program": "correlation",
   "parallel": false,
   "depends_on": [],
-  "file": "lean/PEqualNP/Outside/L_goldbach_antispike_shared_coefficient_error.lean",
-  "module": "PEqualNP.Outside.L_goldbach_antispike_shared_coefficient_error",
   "imports": [],
   "track": "frontier-moment-antispike",
   "role": "lemma"

@@ -1,0 +1,26 @@
+{
+  "id": "L-twin-primes-prescribed-energy",
+  "file": "lean/PEqualNP/Outside/L_twin_primes_prescribed_energy.lean",
+  "module": "PEqualNP.Outside.L_twin_primes_prescribed_energy",
+  "statement": "let w := fun (X : ℕ) => (Finset.range (2*X+1)).filter (fun n => X < n ∧ 50*n < 51*X); let N := fun (X : ℕ) => 2*X+5; let f := fun (X n : ℕ) => if n ∈ w X ∧ n.Prime then Real.log n else 0; let energy := fun (X : ℕ) => letI : NeZero (N X) := ⟨by dsimp [N]; omega⟩; ∑ k : ZMod (N X), (ZMod.stdAddChar (N:=N X) (2*k)).re * ‖ZMod.dft (fun j : ZMod (N X) => ((f X j.val:ℝ):ℂ)) k‖^2; ∀ B : ℕ, ∃ X : ℕ, B<X ∧ 0<energy X",
+  "plain_statement": {
+    "zh": "新路线 · 指定平移的 Θ 提升 · TP-0052 · 在无界尺度估计指定差二测试的谱能量",
+    "en": "New route · Theta lift for a prescribed shift · TP-0052 · Bound the signed energy of the prescribed gap-two test on unbounded scales"
+  },
+  "brief": {
+    "zh": "旧声明在检查证明前触发 #2833 报告的辅助声明错误。新任务 L-twin-primes-prescribed-energy-v2 接续，历史记录和原租约仍认此编号。",
+    "en": "The original type triggers the auxiliary declaration error reported in #2833. Use L-twin-primes-prescribed-energy-v2 for new work. The original ID identifies its history and any prior lease."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/LocalTypeDictionary/ThetaLiftPeterssonNormEqRallisIntegral.lean#L972",
+  "program": "correlation",
+  "role": "target",
+  "parallel": true,
+  "depends_on": [
+    "L-twin-primes-sifted-correlation",
+    "L-twin-primes-cosine-plancherel",
+    "L-twin-primes-theta-error-budget"
+  ],
+  "imports": [],
+  "challenge_only": true,
+  "claims_closed": true
+}

@@ -2,7 +2,7 @@ import Mathlib
 
 /-- Sharp transfer of a joint squared error budget to the anti-spike comparison.
 The coefficient at the left endpoint occurs on both sides of the comparison. -/
-theorem PEqualNP.Outside.L_goldbach_antispike_shared_coefficient_error :
+theorem Conjectures.Goldbach.AntispikeSharedCoefficientError :
     ∀ (n : ℕ) (a w : ℕ → ℝ) (δ T : ℝ), 0 ≤ δ →
     let s := Finset.Icc n (2 * n)
     ((∀ c : ℕ → ℝ, (∑ m ∈ s, (c m - a m) ^ 2) ≤ δ ^ 2 →
