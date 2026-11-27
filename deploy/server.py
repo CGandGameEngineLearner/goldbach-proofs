@@ -15,7 +15,7 @@ from functools import lru_cache
 from html import escape
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from threading import BoundedSemaphore, Lock
+from threading import BoundedSemaphore, Lock, Thread
 from urllib.parse import parse_qs, urlsplit
 
 from desk import Desk, QUEUE_BATCH
@@ -101,6 +101,31 @@ with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn, conn:
     conn.execute("CREATE TABLE IF NOT EXISTS page_views (source TEXT PRIMARY KEY, total INTEGER NOT NULL)")
     conn.execute("INSERT OR IGNORE INTO page_views VALUES ('live', 0)")
 
+def read_presence_counts(visitor=None):
+    counts = PRESENCE.snapshot(visitor)
+    try:
+        with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn:
+            counts["page_views"] = conn.execute("SELECT sum(total) FROM page_views").fetchone()[0]
+            counts["unique_ips"] = conn.execute("SELECT count(*) FROM visitor_ips").fetchone()[0]
+    except sqlite3.Error:
+        counts["page_views"] = counts["unique_ips"] = None
+    return counts
+
+
+# Cache the initial HTML counts so page rendering does not wait for SQLite.
+PRESENCE_COUNTS = read_presence_counts()
+
+
+def refresh_presence_counts():
+    global PRESENCE_COUNTS
+    while True:
+        time.sleep(10)
+        PRESENCE_COUNTS = read_presence_counts()
+
+
+Thread(target=refresh_presence_counts, name="presence-counts", daemon=True).start()
+
+
 ASSETS = {
     "/agent-icons.png": "image/png",
     "/core-team-signup.png": "image/png",
@@ -177,6 +202,11 @@ def core_team_copy(lang):
 
 def presence_widget(lang, prefix, *, variant="inline"):
     zh = lang == "zh"
+    counts = {**PRESENCE_COUNTS, "visitors": PRESENCE.visitor_count()}
+    def number(key):
+        value = counts[key]
+        return f"{value:,}" if isinstance(value, int) else "—"
+
     visitors = "在线访客" if zh else "Visitors"
     agents = "在研 Agent" if zh else "Agents"
     views = "累计浏览" if zh else "Views"
@@ -191,12 +221,12 @@ def presence_widget(lang, prefix, *, variant="inline"):
               "Each active, unsubmitted research lease counts as one agent seat. Updates every 30 seconds.")
     title_html = f'<strong class="presence-heading">{heading}</strong>' if variant == "footer" else ""
     return (
-        f'<details class="presence-widget presence-{variant}" data-endpoint="{prefix}api/presence" hidden>'
+        f'<details class="presence-widget presence-{variant}" data-endpoint="{prefix}api/presence">'
         f'<summary>{title_html}<span class="presence-items">'
-        f'<span><i aria-hidden="true"></i>{visitors} <b data-count="visitors">—</b></span>'
-        f'<span>{agents} <b data-count="agents">—</b></span>'
-        f'<span>{views} <b data-count="page_views">—</b></span>'
-        f'<span>{ips} <b data-count="unique_ips">—</b></span>'
+        f'<span><i aria-hidden="true"></i>{visitors} <b data-count="visitors">{number("visitors")}</b></span>'
+        f'<span>{agents} <b data-count="agents">{number("agents")}</b></span>'
+        f'<span>{views} <b data-count="page_views">{number("page_views")}</b></span>'
+        f'<span>{ips} <b data-count="unique_ips">{number("unique_ips")}</b></span>'
         f'</span></summary><p>{detail}</p></details>'
     )
 
@@ -869,13 +899,7 @@ class Handler(BaseHTTPRequestHandler):
         return DESK, path, "goldbach"
 
     def reply_presence(self, visitor=None):
-        counts = PRESENCE.snapshot(visitor)
-        try:
-            with closing(sqlite3.connect(PAGE_VIEWS_DB)) as conn:
-                counts["page_views"] = conn.execute("SELECT sum(total) FROM page_views").fetchone()[0]
-                counts["unique_ips"] = conn.execute("SELECT count(*) FROM visitor_ips").fetchone()[0]
-        except sqlite3.Error:
-            counts["page_views"] = counts["unique_ips"] = None
+        counts = read_presence_counts(visitor)
         return self.reply(200, json.dumps(counts).encode())
 
     def do_GET(self):
