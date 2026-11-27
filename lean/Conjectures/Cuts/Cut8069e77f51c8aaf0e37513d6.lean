@@ -56,6 +56,7 @@ theorem Conjectures.Cuts.Cut8069e77f51c8aaf0e37513d6 :
   obtain ⟨δ, hδ, hTail⟩ := hTail
   have hSmall : ∀ᶠ X in Filter.atTop, S X ∈ Set.Ioi (-(δ / 2)) :=
     hStrip.eventually (Ioi_mem_nhds (neg_lt_zero.mpr (half_pos hδ)))
+  -- Take the long-tail witness beyond the strip's eventual threshold.
   obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp hSmall
   have hl : ∃ κ : ℝ, 0 < κ ∧ ∀ B : ℕ, ∃ X : ℕ, B < X ∧ -2 * C / 50 + κ < L X := by
     refine ⟨δ / 2, half_pos hδ, fun B => ?_⟩
