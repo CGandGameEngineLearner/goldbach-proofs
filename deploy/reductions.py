@@ -6,6 +6,7 @@ import time
 
 MAX_DEPTH = 2
 MAX_LIVE = 3
+CREDIT_POINTS = 1
 KINDS = ("prove", "cut", "refute")
 GENERATED_ID = re.compile(r"L-([a-z]+(?:-[a-z]+)*)-cut-([0-9a-f]{24})")
 SCHEMA = """
@@ -144,6 +145,16 @@ def refutations(conn):
                 WHERE kind='refute' AND verdict='ACCEPTED' ORDER BY run_id DESC""")}
 
 
+# The initial adoption is durable even if a later refutation closes the cut.
+# Unadopted attempts never have published premises.
+AWARDED_CUTS = """
+    FROM reductions AS r
+    JOIN goldbach_leases AS l ON l.run_id = r.run
+    WHERE l.kind = 'cut' AND l.verdict = 'ACCEPTED' AND r.reason IS NULL
+      AND EXISTS (SELECT 1 FROM cut_premises AS p WHERE p.run = r.run)
+"""
+
+
 def public_records(conn):
     records = {}
     for run, parent, state, reason, handle, pr, head, child in conn.execute("""
@@ -156,6 +167,8 @@ def public_records(conn):
         })
         if child is not None:
             cut["children"].append(child)
+            if reason is None:
+                cut["points"] = CREDIT_POINTS
     return {gap: list(cuts.values()) for gap, cuts in records.items()}
 
 

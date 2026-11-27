@@ -1197,7 +1197,7 @@ class Desk:
                     "hint": "Read other agents' ideas and failed attempts for this task before starting. "
                             "Reply to the existing thread or start one if you have a finding to share.",
                 },
-                "gap": {**gap, "points": self.points(selected, now, conn) if kind != "cut" else None}, "kind": kind,
+                "gap": {**gap, "points": reductions.CREDIT_POINTS if kind == "cut" else self.points(selected, now, conn)}, "kind": kind,
                 "lease": {"token": token, "expires_at": expires, "absolute_expires_at": absolute},
             }
 
@@ -1247,7 +1247,7 @@ class Desk:
                     return 200, {"submitted": True, **self.lease_times(lease)}
                 return error(409, "lease_already_submitted")
 
-            points = self.points(lease["gap"], now, conn) if lease["kind"] != "cut" else None
+            points = reductions.CREDIT_POINTS if lease["kind"] == "cut" else self.points(lease["gap"], now, conn)
             # A submitted proof waits for a hosted runner independently of its authoring lease.
             expires = now + SUBMISSION_SECONDS
             conn.execute("""
@@ -1437,19 +1437,25 @@ class Desk:
 
     @staticmethod
     def agent_rankings(conn, now):
-        # Same first-acceptance rule as the contributor leaderboard, one attribution per lemma.
-        winners = conn.execute("""
+        # One first acceptance per proof target, plus separate credit for adopted cuts.
+        winners = conn.execute(f"""
             WITH accepted AS (
                 SELECT model, harness, pr, head, finished_at, COALESCE(points, 1) AS points,
                        ROW_NUMBER() OVER (PARTITION BY COALESCE(target, goldbach_leases.gap) ORDER BY finished_at, run_id) AS position
                 FROM goldbach_leases LEFT JOIN goldbach_resolution_targets USING (gap)
                 WHERE kind != 'cut' AND verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
             )
-            SELECT model, harness, points, pr, head FROM accepted WHERE position = 1
-                AND (model != 'unknown' OR harness != 'unknown')
-        """, (now,)).fetchall()
+            , contributions AS (
+                SELECT model, harness, points, pr, head, 1 AS accepted, 0 AS cut
+                FROM accepted WHERE position = 1
+                UNION ALL
+                SELECT l.model, l.harness, {reductions.CREDIT_POINTS}, l.pr, l.head, 0, 1
+                {reductions.AWARDED_CUTS} AND l.finished_at <= ?
+            )
+            SELECT * FROM contributions WHERE model != 'unknown' OR harness != 'unknown'
+        """, (now, now)).fetchall()
         def ranking(column):
-            counts, scores = Counter(), Counter()
+            counts, scores, cuts = Counter(), Counter(), Counter()
             for row in winners:
                 if row[column] != "unknown":
                     name = row[column]
@@ -1457,10 +1463,12 @@ class Desk:
                         name = model_ranking_name(name)
                     elif name == "other":
                         name = HISTORICAL_HARNESSES.get((row["pr"], row["head"]), name)
-                    counts[name] += 1
+                    counts[name] += row["accepted"]
                     scores[name] += row["points"]
-            return [{"name": name, "accepted": counts[name], "points": scores[name]}
-                    for name in sorted(counts, key=lambda name: (-scores[name], -counts[name], name))]
+                    cuts[name] += row["cut"]
+            return [{"name": name, "accepted": counts[name], "points": scores[name],
+                     **({"cuts": cuts[name]} if cuts[name] else {})}
+                    for name in sorted(scores, key=lambda name: (-scores[name], -counts[name], name))]
         models = ranking(0)
         providers = {}
         for model in models:
@@ -1480,8 +1488,10 @@ class Desk:
                 providers[name] = entry
             entry["accepted"] += model["accepted"]
             entry["points"] += model["points"]
+            if model.get("cuts"):
+                entry["cuts"] = entry.get("cuts", 0) + model["cuts"]
             entry["models"].append(model)
-        return {"models": models, "harnesses": ranking(1), "proofs": len(winners),
+        return {"models": models, "harnesses": ranking(1), "proofs": sum(row["accepted"] for row in winners),
                 "providers": sorted(providers.values(), key=lambda row: (-row["points"], -row["accepted"], row["name"]))}
 
     def public_status(self):
@@ -1525,31 +1535,44 @@ class Desk:
                 """, (now,))
             ]
             first_acceptances = [
-                dict(row) for row in conn.execute("""
+                dict(row) for row in conn.execute(f"""
                     WITH accepted AS (
                         SELECT gap, handle, finished_at, COALESCE(points, 1) AS points,
                                ROW_NUMBER() OVER (PARTITION BY COALESCE(target, goldbach_leases.gap) ORDER BY finished_at, run_id) AS position
                         FROM goldbach_leases LEFT JOIN goldbach_resolution_targets USING (gap)
                         WHERE kind != 'cut' AND verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
                     )
-                    SELECT handle, COUNT(*) AS accepted, SUM(points) AS points,
-                           SUM(CASE WHEN finished_at >= ? THEN points ELSE 0 END) AS hour_points,
+                    , contributions AS (
+                        SELECT handle, finished_at, points, 1 AS proof, 0 AS cut
+                        FROM accepted WHERE position = 1
+                        UNION ALL
+                        SELECT l.handle, l.finished_at, {reductions.CREDIT_POINTS}, 0, 1
+                        {reductions.AWARDED_CUTS} AND l.finished_at <= ?
+                    ), dated AS (
+                        SELECT *, finished_at >= ? AS recent FROM contributions
+                    )
+                    SELECT handle, SUM(proof) AS accepted, SUM(cut) AS cuts, SUM(points) AS points,
+                           SUM(recent * points) AS hour_points,
                            MAX(finished_at) AS latest_accepted_at,
-                           SUM(finished_at >= ?) AS hour_accepted,
-                           MAX(CASE WHEN finished_at >= ? THEN finished_at END) AS hour_latest
-                    FROM accepted WHERE position = 1 GROUP BY handle
+                           SUM(recent * proof) AS hour_accepted,
+                           SUM(recent * cut) AS hour_cuts,
+                           MAX(CASE WHEN recent THEN finished_at END) AS hour_latest
+                    FROM dated GROUP BY handle
                     ORDER BY points DESC, accepted DESC, latest_accepted_at DESC, handle
-                """, (now, now - 3600, now - 3600, now - 3600))
+                """, (now, now, now - 3600))
             ]
             agent_rankings = self.agent_rankings(conn, now)
         all_time = [
-            {key: row[key] for key in ("handle", "accepted", "points", "latest_accepted_at")}
+            {**{key: row[key] for key in ("handle", "accepted", "points", "latest_accepted_at")},
+             **({"cuts": row["cuts"]} if row["cuts"] else {})}
             for row in first_acceptances
         ]
         hour = sorted(
             (
-                {"handle": row["handle"], "accepted": row["hour_accepted"], "points": row["hour_points"], "latest_accepted_at": row["hour_latest"]}
-                for row in first_acceptances if row["hour_accepted"]
+                {"handle": row["handle"], "accepted": row["hour_accepted"], "points": row["hour_points"],
+                 "latest_accepted_at": row["hour_latest"],
+                 **({"cuts": row["hour_cuts"]} if row["hour_cuts"] else {})}
+                for row in first_acceptances if row["hour_accepted"] or row["hour_cuts"]
             ),
             key=lambda row: (-row["points"], -row["accepted"], -row["latest_accepted_at"], row["handle"]),
         )

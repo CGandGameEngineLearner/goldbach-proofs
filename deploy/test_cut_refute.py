@@ -60,7 +60,7 @@ class CutFlow(DeskServerTestCase):
             frozen = self.request(DESK + "task?module=" + gap["module"])["gap"]
             self.assertEqual(frozen, {key: value for key, value in gap.items() if key != "points"})
         if kind == "cut":
-            self.assertIsNone(gap["points"])
+            self.assertEqual(gap["points"], 1)
         else:
             self.assertGreaterEqual(gap["points"], 1)
         self.request(DESK + "beat", {}, token=token)
@@ -181,8 +181,8 @@ class CutFlow(DeskServerTestCase):
         self.assertTrue(board[a]["resolved"])
         self.assertIsNone(board[a]["points"])
         rankings = self.request("/api/status")["desk"]["rankings"]["all_time"]
-        self.assertEqual([r["handle"] for r in rankings], ["counterexample"])
-        self.assertGreaterEqual(rankings[0]["points"], 1)
+        scores = {r["handle"]: (r["accepted"], r["points"], r.get("cuts", 0)) for r in rankings}
+        self.assertEqual(scores, {"counterexample": (1, 1, 0), "split-one": (0, 1, 1), "split-two": (0, 1, 1)})
         self.request(DESK + "claim", {"gap": a, "kind": "prove", "handle": "late"}, expected=409)
         self.assertEqual([x["status"] for x in board[PARENT]["cuts"]], ["refuted", "live"])
         self.assertFalse(board[PARENT]["proved"])
@@ -213,7 +213,8 @@ class CutFlow(DeskServerTestCase):
         self.assertIsNone(gaps[PARENT]["points"])
         self.assertEqual([r["status"] for r in gaps[PARENT]["cuts"]], ["superseded"])
         self.assertEqual([r["status"] for r in gaps[OTHER]["cuts"]], ["refuted", "refuted"])
-        self.assertEqual([r["handle"] for r in status["desk"]["rankings"]["all_time"]], ["legacy-refuter"])
+        scores = {r["handle"]: r["points"] for r in status["desk"]["rankings"]["all_time"]}
+        self.assertEqual(scores, {"legacy-refuter": 1, "split-original": 1, "split-other": 1})
         self.request(DESK + "claim", {"gap": PARENT, "handle": "late"}, expected=409)
 
     def test_refuted_cut_cancels_only_its_exclusive_work(self):
@@ -246,6 +247,15 @@ class CutFlow(DeskServerTestCase):
         self.assertEqual(cuts[3]["reason"], "cut_limit")
         self.assertFalse(cuts[3]["children"])
         self.assertEqual(gaps[PARENT]["reductions_live"], 3)
+        self.assertEqual([cut.get("points", 0) for cut in cuts], [1, 1, 0, 0, 1])
+        rankings = self.request("/api/status")["desk"]
+        for period in ("hour", "all_time"):
+            self.assertEqual({r["handle"]: (r["accepted"], r["points"], r["cuts"])
+                              for r in rankings["rankings"][period]}, {"c1": (0, 1, 1), "c2": (0, 1, 1), "c3": (0, 1, 1)})
+        self.assertEqual(rankings["rankings"]["proofs"], 0)
+        for dimension in ("models", "harnesses", "providers"):
+            self.assertEqual([(r["accepted"], r["points"], r["cuts"])
+                              for r in rankings["agent_rankings"][dimension]], [(0, 3, 3)])
         self.assertEqual(gaps[PARENT]["cut_reason"], "cut_limit")
         self.assertEqual(self.request(DESK + "claim", {"gap": PARENT, "handle": "full", "kind": "cut"},
                                       expected=409)["error"], "cut_limit")
@@ -260,6 +270,12 @@ class CutFlow(DeskServerTestCase):
         for child in by_id[a]["cuts"][0]["children"]:
             self.assertEqual(by_id[child]["depth"], 2)
             self.assertEqual(by_id[child]["cut_reason"], "cut_depth_limit")
+
+        self.submit_task(PARENT, "prove", "first-proof", P)
+        scores = {r["handle"]: r for r in self.request("/api/status")["desk"]["rankings"]["all_time"]}
+        self.assertEqual(scores["first-proof"]["accepted"], 1)
+        self.assertNotIn("cuts", scores["first-proof"])
+        self.assertEqual(scores["c1"]["points"], 1)
 
     def test_cli_receipt_and_templates(self):
         for kind in ("cut", "refute"):

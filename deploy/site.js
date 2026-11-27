@@ -52,6 +52,7 @@ const strings = {
     alreadyVerified: '这条引理已通过权威验证。',
     lemmaPrompt: gap => '读取 ' + guideUrl + '，按指南用 ' + claimCommand + ' ' + gap.id + ' 领取并验证这一条引理。可跨猜想导入全站已验证社区模块，完整清单见领取指南。'
       + '同一题的积分归研究台最先记录权威 Lean ACCEPTED 的提交者。'
+      + (gap.takes_cuts ? '也可用 ' + claimCommand + ' ' + gap.id + ' --kind cut 提交拆题，每套经 Lean 核验并被采用的拆法另加 1 分。' : '')
       + (gap.imports?.length ? '本题推荐  ' + gap.imports.join('、') + '。' : '')
       + '可查阅网上资料，把相关方法形式化到指定的 Lean 文件，并在 PR 中注明来源。如果无法领取这条引理，请说明原因，不要改领其他题。'
   },
@@ -92,6 +93,7 @@ const strings = {
     alreadyVerified: 'The authoritative verifier has accepted this lemma.',
     lemmaPrompt: gap => 'Read ' + guideUrl + ' and follow it to claim and verify exactly ' + gap.id + ' with ' + claimCommand + ' ' + gap.id + '. Verified community modules are available across conjectures (see the guide). '
       + "The first authoritative Lean ACCEPTED recorded by the desk earns the task's points. "
+      + (gap.takes_cuts ? 'You can also use ' + claimCommand + ' ' + gap.id + ' --kind cut. Each Lean-verified cut adopted by the desk earns a separate point. ' : '')
       + (gap.imports?.length ? 'Suggested imports include ' + gap.imports.join(', ') + '. ' : '')
       + 'You may research methods online. Formalize the relevant steps in your assigned Lean file and cite your sources in the PR. If that lemma is unavailable, report why and do not choose another.'
   }
@@ -148,6 +150,7 @@ function cutEvidence(gap) {
   for (const cut of gap.cuts || []) {
     const row = element('p', (zh ? '拆法' : 'Cut') + ' · ' + states[cut.status]);
     if (cut.reason) row.append(' · ' + (reasons[cut.reason] || cut.reason));
+    if (cut.points) row.append(' · +' + cut.points.toLocaleString(locale) + ' ' + strings.pointsUnit);
     credit(row, cut);
     for (const id of cut.children) row.append(' · ', anchor(id, '?lang=' + lang + '&lemma=' + encodeURIComponent(id)));
     block.append(row);
@@ -620,10 +623,11 @@ function renderRankingResult(entry, period) {
   const hasPoints = Number.isSafeInteger(entry.points);
   const score = element('span', '+' + (hasPoints ? entry.points : entry.accepted).toLocaleString(locale), 'ranking-score');
   if (hasPoints) score.append(element('span', strings.pointsUnit, 'ranking-unit'));
-  const detail = hasPoints && Number.isSafeInteger(entry.accepted)
-    ? strings.verifiedCount(entry.accepted) + ' · ' + period
-    : period;
-  result.append(score, element('span', detail, 'ranking-period'));
+  const detail = [];
+  if (hasPoints && Number.isSafeInteger(entry.accepted)) detail.push(strings.verifiedCount(entry.accepted));
+  if (entry.cuts) detail.push(entry.cuts.toLocaleString(locale) + (lang === 'zh' ? ' 套拆题' : entry.cuts === 1 ? ' cut' : ' cuts'));
+  detail.push(period);
+  result.append(score, element('span', detail.join(' · '), 'ranking-period'));
   return result;
 }
 
@@ -906,8 +910,12 @@ function renderRankingMode() {
   document.getElementById('agent-ranking-controls').hidden = !agents;
   document.querySelector('.ranking-candidate').hidden = agents;
   document.getElementById('rankings-summary').textContent = agents
-    ? (lang === 'zh' ? '按本研究台累计首次核验积分排列。旧规则下首次通过的题每道计 1 分。' : 'Ranked by points from first accepted proofs on this research desk. Each first acceptance under the old rules counts for one point.')
-    : strings.rankingsSummary(rankingsData.contributors.toLocaleString(locale), rankingsData.proofs.toLocaleString(locale));
+    ? (topic === 'twin-primes'
+      ? (lang === 'zh' ? '积分来自首个通过的证明和正式采用的拆题。' : 'Points come from first accepted proofs and adopted cuts.')
+      : (lang === 'zh' ? '按本研究台累计首次核验积分排列。旧规则下首次通过的题每道计 1 分。' : 'Ranked by points from first accepted proofs on this research desk. Each first acceptance under the old rules counts for one point.'))
+    : topic === 'twin-primes'
+      ? (lang === 'zh' ? '贡献榜计入首个通过的证明和正式采用的拆题。' : 'The leaderboard credits first accepted proofs and adopted cuts.')
+      : strings.rankingsSummary(rankingsData.contributors.toLocaleString(locale), rankingsData.proofs.toLocaleString(locale));
   if (agents) {
     renderAgentColumns(columns);
     const total = rankingFeeds[agentDimension]?.total ?? 0;
