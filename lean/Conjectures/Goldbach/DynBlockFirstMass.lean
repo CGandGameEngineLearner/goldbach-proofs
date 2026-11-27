@@ -304,8 +304,9 @@ private theorem mass_of_short (input : ∃ N : ℕ, ∀ y ≥ N, ∀ h : ℕ,
   linarith only [both]
 
 
-theorem _root_.Conjectures.Goldbach.DynBlockFirstMass :
+end Goldbach.LocalPrimeMass
+
+open Goldbach.LocalPrimeMass in
+theorem Conjectures.Goldbach.DynBlockFirstMass :
     let E := fun X : ℕ => (Finset.Icc X (2*X)).filter (fun n => Even n); let P := fun X : ℕ => (Finset.Icc (Nat.sqrt X) (2*Nat.sqrt X)).filter Nat.Prime; let H := fun (X n : ℕ) => ((P X).filter (fun p => p ≤ n ∧ Nat.Prime (n-p))).card; let W := fun X : ℕ => Nat.sqrt X * Nat.sqrt (Nat.sqrt X); let B := fun (X y : ℕ) => (E X).filter (fun n => y ≤ n ∧ n < y + W X); let M := fun X : ℕ => Real.sqrt (X:ℝ) / (Real.log (X:ℝ))^2; ∃ c : ℝ, 0 < c ∧ ∃ X₀ : ℕ, ∀ X ≥ X₀, ∀ y : ℕ, X ≤ y → y + W X ≤ 2*X → c*(W X:ℝ)*M X ≤ ∑ n ∈ B X y, (H X n:ℝ) := by
   exact mass_of_short short_theta
-
-end Goldbach.LocalPrimeMass
