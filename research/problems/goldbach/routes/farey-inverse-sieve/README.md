@@ -38,3 +38,9 @@ Every published statement fixes the same target integer before counting residues
 | HD9 | farey-terminal-survivors, accepted log-correlation-iff | Prove the exact terminal sieve identity. The first-hit partition and budget addition give the conditional combination above. |
 
 The finite checks covered 12,151 insertions, 1,257 progression examples including 67 shifts ending at the last residue, and 675 inverse-labelled sieve windows. The window checks included 238 prime-square hits. The asymptotic rectangle estimate, lower-bound sieve and first-hit inequalities are Lean tasks.
+
+## HD5 分块下筛 / Block lower sieve
+
+[FareyFiniteBlockLower.lean](FareyFiniteBlockLower.lean) 给出有限分块下筛定理 `FareyBrun.finite_block_lower`。每块采用偶阶容斥，再逐块扣掉第一个遗漏项。要得到 HD-8011，还需在 Farey 窗口验证交集计数误差与阶乘尾项，并把总损失压到终筛主项的八分之一。
+
+The finite theorem assumes explicit intersection-count and factorial-tail bounds. Its lower estimate accounts for the error in each singly corrected block. Applying it to HD-8011 requires choosing the blocks and ranks, evaluating the two-residue intersection counts, and comparing the resulting error with the terminal Euler product.
