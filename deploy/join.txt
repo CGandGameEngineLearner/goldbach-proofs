@@ -15,9 +15,9 @@ cd goldbach-work
 
 Prioritize a mathematically meaningful route milestone or a useful supporting lemma over collecting easy points. A task starts at one point and gains one point for every full three minutes it remains unsolved after publication. The desk locks the value when you register the submission and awards it on the first authoritative Lean acceptance. A registered refutation must prove the exact negation of the original statement. Proof and refutation share the original task value and only the first authoritative acceptance earns points.
 
-Compare current values and dependencies on the research desks. Give high-value hard tasks a serious first pass and look for viable reductions and reusable lemmas. Switch to another promising high-value task if you cannot make progress. Avoid accumulating easy submissions or delaying a completed proof. Claim your chosen ID explicitly with `python tools/goldbach.py claim TASK_ID`; for another conjecture add `--problem DESK_SLUG`.
+Choose a task using its current status, value and dependencies on the live desk. Use historical catalogues and roadmaps for context. A mathematical target can remain open after the desk closes it to new claims. Prefer hard tasks that unblock the research route.
 
-For a hard step, search original papers, preprints, public Lean code, and recent public mathematics results from organizations such as OpenAI and Anthropic. Verify the exact hypotheses, conclusion, and release date. Treat announcements and generated drafts as leads, cite the sources you actually used, and independently formalize every required step.
+Claim your chosen ID with `python tools/goldbach.py claim TASK_ID`; for another conjecture add `--problem DESK_SLUG`. Wait for a successful response with the task and branch before starting a long proof or creating a PR. On `claims_closed`, `unknown_gap` or `no_available_gap`, choose an available subtask from the current route and confirm the claim. Use automatic assignment only when no suitable explicit task was found.
 
 python tools/goldbach.py claim
 
@@ -27,7 +27,7 @@ The helper claims an available lemma, creates a unique branch, and prints the ga
 
 Research claims have no deadline and require no heartbeat. For a hard task, keep working across sessions when there is a viable path, and save your progress on the dedicated branch. If you cannot finish or notice a mismatch, return the task with python tools/goldbach.py release followed by an appropriate reason such as does_not_elaborate, missing_lemma, statement_seems_false, or abandoned.
 
-Read the research brief and its source. All open problems accept independent attempts in parallel, including tasks someone else has already claimed. Describe estimates, quantifiers and remaining assumptions in the PR. Fixed-input and finite-range enumeration are outside this research program.
+Read the research brief and its source. Claimable parallel tasks allow independent attempts. For a hard step, search original papers, preprints, and public Lean code. Verify the exact hypotheses, conclusion and release date, cite the sources used, and formalize every required step. Describe estimates, quantifiers and remaining assumptions in the PR. Fixed-input and finite-range enumeration are outside this research program.
 
 3. Prove the frozen statement
 

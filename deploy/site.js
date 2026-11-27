@@ -201,10 +201,10 @@ function gapStatus(gap) {
   }
   if (gap.resolved && !gap.proved) return { label: lang === 'zh' ? '已解决' : 'Resolved', kind: 'verified', style: 'accepted' };
   if (gap.proved) return { label: strings.proved, kind: 'verified', style: 'accepted' };
+  if (gap.claims_closed) return { label: closedClaimLabel(), kind: 'closed', style: '' };
   if (assigned(gap)) {
     return { label: strings.assignments[assignments[gap.id]], kind: 'occupied', style: 'in-progress' };
   }
-  if (gap.claims_closed) return { label: closedClaimLabel(), kind: 'closed', style: '' };
   return { label: strings.open, kind: 'available', style: '' };
 }
 
@@ -1104,7 +1104,7 @@ function dist(id,seen=new Set()){if(distance.has(id))return distance.get(id);if(
 function closure(id,next){let set=new Set(),stack=[id];while(stack.length){let x=stack.pop();if(set.has(x))continue;set.add(x);for(const v of next(x))stack.push(v)}return set}
 let focus=null,hover=null,onlyChain=false,compact=true,horizontal=false,directionChosen=false,field=null,globalFilter='all',savedScrollY=0,currentTrack=null,observer=null,pendingGap=null,expanded=null,localFilter='all',localSearch='',indexMode=false;
 const directionKey='goldbach-map-direction',wideDirection=()=>window.innerWidth>=2400;try{const saved=localStorage.getItem(directionKey);if(saved==='horizontal'||saved==='vertical'){horizontal=saved==='horizontal';directionChosen=true}}catch{}if(!directionChosen)horizontal=wideDirection();function syncDirection(){root?.querySelectorAll('[data-direction]').forEach(x=>x.classList.toggle('active',(x.dataset.direction==='horizontal')===horizontal))}syncDirection();
-function status(g){if(g.refutation)return 'progress';if(g.proved)return 'verified';if(assigned(g))return 'progress';if(g.claims_closed)return 'closed';return g.role==='target'?'target':'available'}
+function status(g){if(g.refutation)return 'progress';if(g.proved)return 'verified';if(g.claims_closed)return 'closed';if(assigned(g))return 'progress';return g.role==='target'?'target':'available'}
 function statusText(g){if(status(g)==='closed')return closedClaimLabel();if(g.refutation){const v=g.refutation.status==='verified';return lang==='zh'?(v?'已证伪':'反证待核验'):(v?'Refuted':'Refutation under review')}return ({verified:lang==='zh'?'已核查':'Verified',progress:lang==='zh'?'处理中':'In progress',target:lang==='zh'?'待突破':'Open target',available:lang==='zh'?'可领取':'Available'})[status(g)]}
 function stateOK(g,v){return v==='all'||(v==='open'&&status(g)!=='verified')||(v==='target'&&g.role==='target'&&status(g)!=='verified')}
 function counts(gs){let verified=gs.filter(g=>status(g)==='verified').length;return {verified,progress:gs.filter(g=>status(g)==='progress').length,available:gs.filter(g=>status(g)==='available').length,target:gs.filter(g=>status(g)==='target').length,pct:gs.length?100*verified/gs.length:0}}
