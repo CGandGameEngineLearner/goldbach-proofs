@@ -224,7 +224,9 @@ private theorem principal_count {q : ℕ} [NeZero q] (m : ZMod q) :
         simp [hu,hv,MulChar.one_apply,MulChar.map_nonunit]
     _ = _ := by simp
 
-private theorem chars_le_units {q : ℕ} [NeZero q] (χ ψ : DirichletCharacter ℂ q)
+/-- Absolute values of the finite twisted residue counts are bounded by the
+ordinary count on the same modulus, including composite moduli. -/
+theorem chars_le_units {q : ℕ} [NeZero q] (χ ψ : DirichletCharacter ℂ q)
     (m : ZMod q) : ‖∑ x : ZMod q, χ x * ψ (m-x)‖ ≤
       ‖∑ x : ZMod q, (1 : DirichletCharacter ℂ q) x * (1 : DirichletCharacter ℂ q) (m-x)‖ := by
   rw [principal_count,Complex.norm_natCast]
@@ -430,7 +432,9 @@ private theorem cofinal_divisors (L : ℕ) (hL : L ≠ 0) :
   exact Nat.mem_divisors.mpr ⟨(Nat.dvd_factorial (Nat.pos_of_ne_zero h) hdn).trans
     (dvd_mul_left n.factorial L),mul_ne_zero hL n.factorial_ne_zero⟩
 
-private theorem partial_limit {r s : ℕ} [NeZero r] [NeZero s]
+/-- Complete divisor sums at L times n! exhaust the absolutely convergent
+series, starting from any positive base level L. -/
+theorem partial_limit {r s : ℕ} [NeZero r] [NeZero s]
     (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) (hm : 0 < m)
     (L : ℕ) (hL : L ≠ 0) :
     Tendsto (fun n : ℕ => ∑ d ∈ (L*n.factorial).divisors, coefficient α β m d)
