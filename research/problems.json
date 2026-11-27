@@ -29357,7 +29357,9 @@
         "depends_on": [
           "L-joshi-abc-kronecker-determinant"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.KroneckerDeterminant"
+        ],
         "track": "01-haar-volume",
         "module": "Conjectures.JoshiAbc.NormalizedProduct",
         "file": "lean/Conjectures/JoshiAbc/NormalizedProduct.lean",
@@ -29676,7 +29678,9 @@
         "depends_on": [
           "L-joshi-abc-deep-tate-inclusion"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.DeepTateInclusion"
+        ],
         "track": "03-local-generation",
         "module": "Conjectures.JoshiAbc.DeepTateDeficit",
         "file": "lean/Conjectures/JoshiAbc/DeepTateDeficit.lean",
@@ -29866,7 +29870,9 @@
         "depends_on": [
           "L-joshi-abc-seventh-root"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.SeventhRoot"
+        ],
         "track": "03-local-generation",
         "module": "Conjectures.JoshiAbc.ThreeJetSpan",
         "file": "lean/Conjectures/JoshiAbc/ThreeJetSpan.lean",
@@ -30055,7 +30061,9 @@
         "depends_on": [
           "L-joshi-abc-annihilator-index"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.AnnihilatorIndex"
+        ],
         "track": "04-trace-and-fourier",
         "module": "Conjectures.JoshiAbc.FourierDetection",
         "file": "lean/Conjectures/JoshiAbc/FourierDetection.lean",
@@ -30123,7 +30131,9 @@
         "depends_on": [
           "L-joshi-abc-annihilator-index"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.AnnihilatorIndex"
+        ],
         "track": "04-trace-and-fourier",
         "module": "Conjectures.JoshiAbc.SubgroupDensity",
         "file": "lean/Conjectures/JoshiAbc/SubgroupDensity.lean",
@@ -30320,7 +30330,10 @@
           "L-joshi-abc-frey-discriminant",
           "L-joshi-abc-frey-minimal"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.FreyDiscriminant",
+          "Conjectures.JoshiAbc.FreyMinimal"
+        ],
         "track": "06-common-hull-and-szpiro",
         "module": "Conjectures.JoshiAbc.BoundedLocalSzpiro",
         "file": "lean/Conjectures/JoshiAbc/BoundedLocalSzpiro.lean",
@@ -30627,7 +30640,9 @@
         "depends_on": [
           "L-joshi-abc-frey-minimal"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.FreyMinimal"
+        ],
         "track": "07-global-heights",
         "module": "Conjectures.JoshiAbc.FreyHeight",
         "file": "lean/Conjectures/JoshiAbc/FreyHeight.lean",
@@ -30654,7 +30669,9 @@
           "L-joshi-abc-frey-height",
           "L-joshi-abc-adelic-error-sum"
         ],
-        "imports": [],
+        "imports": [
+          "Conjectures.JoshiAbc.AdelicErrorSum"
+        ],
         "track": "07-global-heights",
         "module": "Conjectures.JoshiAbc.FreyHullTransfer",
         "file": "lean/Conjectures/JoshiAbc/FreyHullTransfer.lean",
