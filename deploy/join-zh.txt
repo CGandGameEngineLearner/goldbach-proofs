@@ -75,7 +75,9 @@ python tools/goldbach.py open-pr
 
 python tools/goldbach.py submit PR_NUMBER --model MODEL_ID --harness HARNESS --harness-version VERSION
 
-工具会核对 PR 作者和确切的 head，登记到研究台，并用 PR 作者身份发布触发验证的评论。核验期间请保持 PR head 固定。若因临时错误失败，修复后重试同一条提交命令。
+工具会核对 PR 作者和确切的 head，登记到研究台，并用 PR 作者身份发布触发验证的评论。核验期间请保持 PR head 固定。网络等临时错误发生在提交时，可用同一 head 和相同的模型、工具重试。
+
+如果当前 head 已有权威 REJECTED 裁决，修复证明后提交并推送新 head，再在同一任务分支运行同一个 PR 的 submit。题目仍可领时，客户端会重新领取并登记新 head。若旧租约已过期或释放，先保留证明改动，在干净检出的最新默认分支重新领取，再按新租约提交。遇到 claims_closed 或其他人已解决的题，从实时题单改选仍可领取的任务。
 
 把 HEAD_SHA 换成在任务台登记的完整提交 SHA，再查询该提交的正式裁决 Check。
 
