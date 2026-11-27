@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-frey-discriminant"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.FreyDiscriminant"
+  ],
   "track": "06-common-hull-and-szpiro",
   "module": "Conjectures.JoshiAbc.FreyFixedPrime",
   "file": "lean/Conjectures/JoshiAbc/FreyFixedPrime.lean"
