@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-series-symmetry"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.SeriesSymmetry"
+  ],
   "track": "05-kummer-images",
   "module": "Conjectures.JoshiAbc.MarkedTransport",
   "file": "lean/Conjectures/JoshiAbc/MarkedTransport.lean"
