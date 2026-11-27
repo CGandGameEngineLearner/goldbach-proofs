@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-deep-tate-inclusion"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.DeepTateInclusion"
+  ],
   "track": "03-local-generation",
   "module": "Conjectures.JoshiAbc.DeepTateDeficit",
   "file": "lean/Conjectures/JoshiAbc/DeepTateDeficit.lean"
