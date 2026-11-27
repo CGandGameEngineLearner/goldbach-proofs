@@ -43,3 +43,11 @@ The third leaderboard tab displays all-time model contributions, alongside harne
 模型字段不是枚举：国内外新模型均可直接填写符合格式的实际模型标识和版本。榜单仅归并已识别的 GPT Astra/Sol/Terra/Luna 名称写法及推理强度档位；例如 `6.2 astrahigh`、`gpt-6.2 astra high` 归入 `gpt-6.2-astra`，但 `gpt-6.1-astra`、`gpt-6.2-sol` 保持独立。原始申报、验证记录和同一 head 的重试规则保持不变。
 
 新增 Harness 名称按产品官方文档核对：[Kimi Code](https://www.kimi.com/coding/en)、[Qwen Code](https://qwenlm.github.io/qwen-code-docs/en/index)、[Qoder](https://docs.qoder.com/cli/overview)、[Qoder CN／原通义灵码](https://help.aliyun.com/zh/lingma/what-is-qoder-cn)、[TRAE](https://www.trae.ai/ide/)、[CodeBuddy](https://intl.cloud.tencent.com/document/product/1316/84467)、[Comate](https://comate.baidu.com/docs/vscode.html)、[GitHub Copilot](https://docs.github.com/en/copilot)、[Kilo](https://kilo.ai/)、[Kiro](https://kiro.dev/)、[Junie](https://junie.jetbrains.com/)、[Mistral Vibe](https://github.com/mistralai/mistral-vibe)。保留历史工具名称用于如实申报；枚举包含某工具不代表该工具当前仍提供服务。未列出的工具填 `other`，不知道实际工具时填 `unknown`。
+
+
+### Optional Lean advisory runs
+
+A proof pull request goes through authoritative verification when registered with the desk.
+Maintainers can add the `lean-advisory` label to request a separate diagnostic run. While the
+label is present, new commits refresh the advisory result and cancel obsolete advisory runs
+for that pull request.

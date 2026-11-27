@@ -7,6 +7,9 @@ name: advisory
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, labeled]
+    paths:
+      - 'lean/PEqualNP/Outside/**'
 
 # Least privilege: read the code, nothing else. No credentials are used anywhere in this file.
 permissions:
@@ -18,6 +21,9 @@ concurrency:
 
 jobs:
   check:
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'lean-advisory') &&
+      (github.event.action != 'labeled' || github.event.label.name == 'lean-advisory')
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     env:
