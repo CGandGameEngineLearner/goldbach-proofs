@@ -6,8 +6,8 @@
     "en": "Reduce single-square charge verification to orientations between 0 and 45 degrees."
   },
   "brief": {
-    "zh": "改变正方形局部坐标的符号或顺序，保持每个见证点的内部归属。",
-    "en": "Use sign changes and swaps of the local coordinates to preserve each site's interior membership."
+    "zh": "正方形的四分之一转保持每个见证点的归属。进一步缩减到 0 至 45 度需要反射，任意给定的见证点及其权重未必在反射下保持。参见同路线的完整证伪任务。",
+    "en": "Quarter turns preserve site membership. Reducing further to 0–45 degrees uses a reflection, under which arbitrary weighted sites need not be invariant. See the exact-refutation task on this route."
   },
   "source": "https://squaremath.org/cases/17.html",
   "program": "correlation",
@@ -18,9 +18,10 @@
     "L-square-packing-rotated-square-containment"
   ],
   "parallel": true,
-  "challenge_only": false,
+  "challenge_only": true,
   "imports": [
     "PEqualNP.Outside.L_square_packing_rotation_norm",
     "PEqualNP.Outside.L_square_packing_rotated_square_containment"
-  ]
+  ],
+  "claims_closed": true
 }
