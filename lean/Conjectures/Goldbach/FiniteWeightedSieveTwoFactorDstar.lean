@@ -172,34 +172,10 @@ lemma yPar_cube (n : ℕ) : n ≤ (yPar n) ^ 3 := by
     _ ≤ (yPar n) ^ 2 * (yPar n) := Nat.mul_le_mul_left _ h1
     _ = (yPar n) ^ 3 := by ring
 
-/-! ## 层 4：底集非空
+/-! ## 层 4：底集非空（由层 5 推出，不再单独需要）
 
-先做纯逻辑转换（已证）：`23`-rough 的素数余量必落在 `A0` 中。
-再给出该余量的存在性（筛法核心）。
-
-**为什么不是初等的**：`n ≤ y³` 与 `n ≤ z·y²` 联立强制 `y ≥ n^{1/3}`、`z ≥ n/y²`，
-于是 `A n z` 非空要求存在素数 `p` 使 `n - p` 无小于 `n^{1/3}` 量级的素因子，
-即 `n - p` 至多两个素因子（Chen 型 `P₂`）。这需要 `[23, n^{1/3})` 上的
-Buchstab 下界筛，不是有限枚举能给出的。 -/
-
-/-- 纯逻辑转换：`23`-rough 的素数余量落在底集 `A0` 中。 -/
-lemma mem_A0_of_witness (n : ℕ) {p : ℕ}
-    (hpp : p.Prime) (hple : p ≤ n) (h2 : 2 ≤ n - p) (hndvd : ¬ p ∣ n)
-    (hrough : ((Finset.Ico 2 23).filter (fun q => Nat.Prime q ∧ q ∣ (n - p))) = ∅) :
-    p ∈ A0 n zPar := by
-  rw [A0_mem_iff, mem_A_iff]
-  exact ⟨⟨hple, hpp, hndvd, hrough⟩, h2⟩
-
-/-- 筛法核心（一）：底集非空。 -/
-lemma A0_witness (n : ℕ) (hn : 4000000000000000000 < n) (h30 : 30 ∣ n) :
-    ∃ p : ℕ, p.Prime ∧ p ≤ n ∧ 2 ≤ n - p ∧ ¬ p ∣ n ∧
-      ((Finset.Ico 2 23).filter (fun q => Nat.Prime q ∧ q ∣ (n - p))) = ∅ := by
-  sorry
-
-lemma A0_nonempty (n : ℕ) (hn : 4000000000000000000 < n) (h30 : 30 ∣ n) :
-    0 < (A0 n zPar).card := by
-  obtain ⟨p, hpp, hple, h2, hndvd, hrough⟩ := A0_witness n hn h30
-  exact Finset.card_pos.mpr ⟨p, mem_A0_of_witness n hpp hple h2 hndvd hrough⟩
+层 5 的 `D₁ + D₂ < 2·|A0|` 右端非负，故 `|A0| > 0`：底集非空是层 5 的推论，
+无需另行假设。这一点很关键——它说明整个命题只剩**一个**解析输入。 -/
 
 /-! ## 层 5：扣除上界
 
