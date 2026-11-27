@@ -216,4 +216,92 @@ theorem frozen_of_dyadic_four_sevenths (hd : let bad := fun n : ℕ => 4 ≤ n �
   have hB := absorb_real (hK.trans (Nat.cast_le.mpr hK')) hcard
   exact finish_count hx (hB.trans (Nat.pow_le_pow_left (by omega) 3)) hc
 
+
+/-- A fixed dyadic 17/24 estimate suffices. Sum dyadic blocks geometrically
+before invoking the existing cumulative exception bound. -/
+theorem frozen_of_dyadic_two_thirds
+    (hd : let bad := fun n : ℕ => 4 ≤ n ∧ Even n ∧
+              ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n
+          ∃ (C : ℝ) (N : ℕ), ∀ X : ℕ, N ≤ X →
+            ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Icc X (2*X))).card : ℝ)
+              ≤ C * (X:ℝ) ^ ((17:ℝ)/24)) : let G := fun m : ℕ => ((Finset.range (m+1)).filter (fun p => Nat.Prime p ∧ Nat.Prime (m-p))).card; ∃ X₀ : ℕ, ∀ X ≥ X₀, let L := Nat.log 2 X / 2; let E := (Finset.Ico X (2*X)).filter (fun n => Even n ∧ 0 < ((Finset.Icc 1 L).filter (fun e => G (n-2^e)=0)).card); E.card^5 ≤ X^4 := by
+  classical
+  apply of_exception_bound
+  obtain ⟨C,N,H⟩ := hd
+  let a : ℝ := 17/24
+  let r : ℝ := 2^a
+  have ha : 0 < a := by norm_num [a]
+  have hr : 1 < r := Real.one_lt_rpow (by norm_num) ha
+  have hr0 : 0 ≤ r := by linarith
+  have scale (k : ℕ) : ((2^k : ℕ):ℝ)^a = r^k := by
+    push_cast
+    dsimp only [r]
+    rw [← Real.rpow_natCast_mul (by norm_num : (0:ℝ) ≤ 2),
+        ← Real.rpow_mul_natCast (by norm_num : (0:ℝ) ≤ 2), mul_comm (k:ℝ) a]
+  let A := fun k : ℕ => ((exceptions (2^k)).card : ℝ)
+  let D := max (A N) (C/(r-1))
+  have hA0 (k : ℕ) : 0 ≤ A k := Nat.cast_nonneg _
+  have hD : 0 ≤ D := (hA0 N).trans (le_max_left ..)
+  have hDr : C ≤ D*(r-1) := (div_le_iff₀ (sub_pos.mpr hr)).mp (le_max_right ..)
+  have series (k : ℕ) (hk : N ≤ k) : A k ≤ D*r^k := by
+    induction k,hk using Nat.le_induction with
+    | base =>
+      exact (le_max_left ..).trans
+        (le_mul_of_one_le_right hD (one_le_pow₀ hr.le))
+    | succ k hk ih =>
+      let t := 2^k
+      let F := exc (Icc t (2*t))
+      have hsub : exceptions (2^(k+1)) ⊆ exceptions t ∪ F := by
+        intro m hm
+        have h := mem_filter.mp hm
+        have hI := mem_Icc.mp h.1
+        by_cases hmle : m ≤ t
+        · exact mem_union_left _ (mem_filter.mpr ⟨mem_Icc.mpr ⟨hI.1,hmle⟩,h.2⟩)
+        · apply mem_union_right
+          apply mem_filter.mpr
+          exact ⟨mem_Icc.mpr ⟨by omega, by simpa [t,pow_succ,mul_comm] using hI.2⟩,bad_of_mem hm⟩
+      have hcnt : A (k+1) ≤ A k + (F.card:ℝ) := by
+        dsimp only [A]
+        exact_mod_cast (card_le_card hsub).trans (card_union_le _ _)
+      have ht : N ≤ t := hk.trans (Nat.le_of_lt (Nat.lt_two_pow_self))
+      have hf : (F.card:ℝ) ≤ C*r^k := (H t ht).trans_eq (by rw [← scale])
+      calc
+        _ ≤ _ := hcnt
+        _ ≤ D*r^k + C*r^k := add_le_add ih hf
+        _ ≤ D*r^k + (D*(r-1))*r^k :=
+          add_le_add_right (mul_le_mul_of_nonneg_right hDr (pow_nonneg hr0 k)) _
+        _ = D*r^(k+1) := by rw [pow_succ]; ring
+  obtain ⟨K,hK⟩ := exists_nat_ge ((D*r)^24)
+  refine ⟨max (2^N) K, ?_⟩
+  intro Y hY
+  have hNY := (le_max_left _ _).trans hY
+  have hKY := (le_max_right _ _).trans hY
+  have hy : Y ≠ 0 := Nat.ne_of_gt ((pow_pos (by decide : 0 < (2:ℕ)) N).trans_le hNY)
+  let k := Nat.log 2 Y
+  have hk : N ≤ k := (Nat.le_log_iff_pow_le (by decide) hy).mpr hNY
+  have hupper : Y ≤ 2^(k+1) := (Nat.lt_pow_succ_log_self (by decide) Y).le
+  have hsub : exceptions Y ⊆ exceptions (2^(k+1)) := by
+    intro m hm
+    have h := mem_filter.mp hm
+    have hi := mem_Icc.mp h.1
+    exact mem_filter.mpr ⟨mem_Icc.mpr ⟨hi.1,hi.2.trans hupper⟩,h.2⟩
+  have h_rk : r^k ≤ (Y:ℝ)^a := by
+    rw [← scale]
+    exact Real.rpow_le_rpow (Nat.cast_nonneg _) (Nat.cast_le.mpr (Nat.pow_log_le_self 2 hy)) ha.le
+  have hb : ((exceptions Y).card:ℝ) ≤ D*r*(Y:ℝ)^a := calc
+    _ ≤ A (k+1) := Nat.cast_le.mpr (card_le_card hsub)
+    _ ≤ _ := series _ (by omega)
+    _ = D*r*r^k := by rw [pow_succ]; ring
+    _ ≤ _ := mul_le_mul_of_nonneg_left h_rk (mul_nonneg hD hr0)
+  have hp := pow_le_pow_left₀ (Nat.cast_nonneg _ : (0:ℝ) ≤ (exceptions Y).card) hb 24
+  rw [mul_pow, ← Real.rpow_mul_natCast (Nat.cast_nonneg Y) _ 24,
+      show a * (24:ℕ) = (17:ℕ) by norm_num [a], Real.rpow_natCast] at hp
+  have h24 : ((exceptions Y).card:ℝ)^24 ≤ (Y:ℝ)^18 := calc
+    _ ≤ _ := hp
+    _ ≤ (Y:ℝ)*(Y:ℝ)^17 := mul_le_mul_of_nonneg_right (hK.trans (Nat.cast_le.mpr hKY)) (by positivity)
+    _ = _ := by ring
+  apply (Nat.pow_le_pow_iff_left (n:=6) (by decide)).mp
+  rw [← pow_mul, ← pow_mul]
+  exact_mod_cast h24
+
 end GoldbachBinaryShiftReduction
