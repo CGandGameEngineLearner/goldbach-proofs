@@ -17,5 +17,7 @@
   "depends_on": [
     "L-quadratic-primes-switched-cofactor-small-sieve"
   ],
-  "imports": []
+  "imports": [
+    "Conjectures.QuadraticPrimes.SwitchedCofactorSmallSieve"
+  ]
 }
