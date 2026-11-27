@@ -14685,7 +14685,9 @@
       "file": "lean/Conjectures/Goldbach/ExceptionFourSeventhsUnconditional.lean",
       "module": "Conjectures.Goldbach.ExceptionFourSeventhsUnconditional",
       "route_source": "exceptional-set-four-sevenths",
-      "imports": []
+      "imports": [
+        "Conjectures.Goldbach.ExceptionFourSeventhsCountingBridge"
+      ]
     },
     {
       "id": "L-goldbach-binary-shift-central-hit",
@@ -17450,8 +17452,8 @@
       "imports": [
         "Conjectures.Goldbach.MajorFixed144"
       ],
-      "module": "Conjectures.Goldbach.MajorDenominatorDilationRefute",
       "file": "lean/Conjectures/Goldbach/MajorDenominatorDilationRefute.lean",
+      "module": "Conjectures.Goldbach.MajorDenominatorDilationRefute",
       "route_source": "minor-truncation"
     },
     {
@@ -17476,8 +17478,8 @@
       "imports": [
         "Conjectures.Goldbach.MajorFixed144"
       ],
-      "module": "Conjectures.Goldbach.MajorDenominatorDilation",
       "file": "lean/Conjectures/Goldbach/MajorDenominatorDilation.lean",
+      "module": "Conjectures.Goldbach.MajorDenominatorDilation",
       "route_source": "minor-truncation"
     },
     {
@@ -17502,8 +17504,8 @@
       "imports": [
         "Conjectures.Goldbach.MajorFixed144"
       ],
-      "module": "Conjectures.Goldbach.MajorDilationOscillationRefute",
       "file": "lean/Conjectures/Goldbach/MajorDilationOscillationRefute.lean",
+      "module": "Conjectures.Goldbach.MajorDilationOscillationRefute",
       "route_source": "minor-truncation"
     },
     {
@@ -17528,8 +17530,8 @@
       "imports": [
         "Conjectures.Goldbach.MajorFixed144"
       ],
-      "module": "Conjectures.Goldbach.MajorDilationOscillation",
       "file": "lean/Conjectures/Goldbach/MajorDilationOscillation.lean",
+      "module": "Conjectures.Goldbach.MajorDilationOscillation",
       "route_source": "minor-truncation"
     },
     {
@@ -17576,8 +17578,8 @@
       "imports": [
         "Conjectures.Goldbach.MajorFixed144"
       ],
-      "module": "Conjectures.Goldbach.MajorNumeratorDilationRefute",
       "file": "lean/Conjectures/Goldbach/MajorNumeratorDilationRefute.lean",
+      "module": "Conjectures.Goldbach.MajorNumeratorDilationRefute",
       "route_source": "minor-truncation"
     },
     {
@@ -17602,8 +17604,8 @@
       "imports": [
         "Conjectures.Goldbach.MajorFixed144"
       ],
-      "module": "Conjectures.Goldbach.MajorNumeratorDilation",
       "file": "lean/Conjectures/Goldbach/MajorNumeratorDilation.lean",
+      "module": "Conjectures.Goldbach.MajorNumeratorDilation",
       "route_source": "minor-truncation"
     },
     {
@@ -19018,7 +19020,9 @@
       "depends_on": [
         "L-goldbach-dyadic-sum-avoiding-mask"
       ],
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.DyadicSumAvoidingMask"
+      ],
       "track": "odd-character-interference",
       "role": "lemma",
       "module": "Conjectures.Goldbach.DyadicProgressionCountermodel",
@@ -21285,7 +21289,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [
-        "PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli"
+        "PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli",
+        "Conjectures.Goldbach.WideSignedRemainderBridge"
       ],
       "file": "lean/Conjectures/Goldbach/WideSignedUnconditional.lean",
       "module": "Conjectures.Goldbach.WideSignedUnconditional",
