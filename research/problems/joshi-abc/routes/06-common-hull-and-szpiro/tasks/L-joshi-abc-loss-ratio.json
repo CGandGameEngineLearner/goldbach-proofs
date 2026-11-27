@@ -17,7 +17,9 @@
     "L-joshi-abc-linear-hull",
     "L-joshi-abc-constant-hull"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.LinearHull"
+  ],
   "track": "06-common-hull-and-szpiro",
   "module": "Conjectures.JoshiAbc.LossRatio",
   "file": "lean/Conjectures/JoshiAbc/LossRatio.lean"
