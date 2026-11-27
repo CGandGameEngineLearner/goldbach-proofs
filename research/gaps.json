@@ -14685,7 +14685,9 @@
       "file": "lean/Conjectures/Goldbach/ExceptionFourSeventhsUnconditional.lean",
       "module": "Conjectures.Goldbach.ExceptionFourSeventhsUnconditional",
       "route_source": "exceptional-set-four-sevenths",
-      "imports": []
+      "imports": [
+        "Conjectures.Goldbach.ExceptionFourSeventhsCountingBridge"
+      ]
     },
     {
       "id": "L-goldbach-binary-shift-central-hit",
@@ -20750,7 +20752,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [
-        "PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli"
+        "PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli",
+        "Conjectures.Goldbach.WideSignedRemainderBridge"
       ],
       "file": "lean/Conjectures/Goldbach/WideSignedUnconditional.lean",
       "module": "Conjectures.Goldbach.WideSignedUnconditional",
