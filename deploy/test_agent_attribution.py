@@ -51,6 +51,26 @@ class AttributionTests(unittest.TestCase):
         self.assertEqual(self.submit(token, {'harness': 'made-up'})[0], 400)
         self.assertEqual(self.submit(token, self.agent)[0], 200)
 
+    def test_historical_harness_alias_requires_matching_pr_and_head(self):
+        head = "a" * 40
+        rows = [(101, head, "other"), (101, "b" * 40, "other"), (102, head, "other")]
+        with self.desk.transaction(write=True) as conn:
+            for run, (pr, revision, harness) in enumerate(rows, 1):
+                conn.execute("""
+                    INSERT INTO goldbach_leases
+                      (token_hash, gap, statement_sha256, handle, ip_key, claimed_at, expires_at,
+                       absolute_expires_at, pr, head, run_id, finished_at, verdict, model, harness, points)
+                    VALUES (?, ?, 'hash', 'alice', 'network', 0, 0, 0, ?, ?, ?, ?, 'ACCEPTED', 'model-a', ?, 5)
+                """, (str(run), GAPS[run - 1]["id"], pr, revision, run, START + run, harness))
+            with patch("deploy.desk.HISTORICAL_HARNESSES", {(101, head): "minimax-code"}):
+                ranking = self.desk.agent_rankings(conn, START + 10)
+            self.assertEqual(ranking["harnesses"], [
+                {"name": "other", "accepted": 2, "points": 10},
+                {"name": "minimax-code", "accepted": 1, "points": 5},
+            ])
+            self.assertEqual(ranking["models"], [{"name": "model-a", "accepted": 3, "points": 15}])
+            self.assertEqual(conn.execute("SELECT DISTINCT harness FROM goldbach_leases").fetchone()[0], "other")
+
     def test_harness_catalogue_matches_cli_display_and_guides(self):
         root = Path(__file__).resolve().parents[1]
         self.assertEqual(set(HARNESS_NAMES), set(goldbach.HARNESS_NAMES))

@@ -574,6 +574,7 @@ const harnessLabels = {
   "opencode": "OpenCode",
   "kimi-code": "Kimi Code",
   "minimax-code": "MiniMax Code",
+  "zcode": "ZCode",
   "qwen-code": "Qwen Code",
   "qoder": "Qoder",
   "qoder-cn": "Qoder CN",
@@ -679,7 +680,7 @@ function renderAgentRankingRow(entry, index) {
 }
 
 let agentDimension = 'providers';
-const agentFilters = {models: '', harnesses: ''};
+let selectedModel = '';
 
 function renderAgentColumns(container, limit = Infinity) {
   const labels = lang === 'zh'
@@ -707,39 +708,23 @@ function renderAgentColumns(container, limit = Infinity) {
   }
   list.setAttribute('aria-label', labels[agentDimension]);
   container.replaceChildren(controls);
-  if (dimension !== 'providers') {
-    const harnesses = dimension === 'harnesses';
-    const names = harnesses
-      ? [...new Set([...Object.keys(harnessLabels), 'other', ...rows.map(row => row.name)])]
-        .sort((a, b) => agentName(a).localeCompare(agentName(b), locale))
-      : rows.map(row => row.name);
+  if (dimension === 'models') {
     const filter = element('select');
-    const label = harnesses ? (lang === 'zh' ? '选择 Harness 工具' : 'Select harness')
-      : (lang === 'zh' ? '选择模型' : 'Select model');
-    const all = harnesses ? (lang === 'zh' ? '全部 Harness 工具' : 'All harnesses')
-      : (lang === 'zh' ? '全部模型' : 'All models');
-    filter.setAttribute('aria-label', label);
-    filter.append(new Option(all, ''));
-    for (const name of names) filter.append(new Option(agentName(name), name));
-    filter.value = names.includes(agentFilters[dimension]) ? agentFilters[dimension] : '';
-    agentFilters[dimension] = filter.value;
+    filter.setAttribute('aria-label', lang === 'zh' ? '选择模型' : 'Select model');
+    filter.append(new Option(lang === 'zh' ? '全部模型' : 'All models', ''));
+    for (const row of rows) filter.append(new Option(agentName(row.name), row.name));
+    filter.value = rows.some(row => row.name === selectedModel) ? selectedModel : '';
     filter.onchange = () => {
-      agentFilters[dimension] = filter.value;
+      selectedModel = filter.value;
       renderRankingMode();
       container.querySelector('select')?.focus();
     };
     controls.append(filter);
   }
-  const selected = agentFilters[dimension];
-  if (selected) {
-    const index = rows.findIndex(row => row.name === selected);
-    if (index >= 0) list.append(renderAgentRankingRow(rows[index], index));
-    else {
-      const status = !agentRankingsData ? strings.rankingsUnavailable
-        : (lang === 'zh' ? '暂无计分记录' : 'No scored contributions yet');
-      list.append(element('li', agentName(selected) + ' · ' + status, 'ranking-empty'));
-    }
-  } else fillRankings(list, rows.slice(0, limit), 'agents');
+  const index = dimension === 'models' && selectedModel
+    ? rows.findIndex(row => row.name === selectedModel) : -1;
+  if (index >= 0) list.append(renderAgentRankingRow(rows[index], index));
+  else fillRankings(list, dimension === 'harnesses' ? rows : rows.slice(0, limit), 'agents');
   if (agentDimension === 'providers') {
     rows.slice(0, limit).forEach((provider, i) => {
       const item = list.children[i];

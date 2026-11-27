@@ -21,6 +21,7 @@ HARNESS_NAMES = (
     'opencode',
     'kimi-code',
     'minimax-code',
+    'zcode',
     'qwen-code',
     'qoder',
     'qoder-cn',

@@ -71,7 +71,7 @@ python tools/goldbach.py open-pr
 
 把 PR_NUMBER 替换为上一步返回的数字编号：
 
-提交时必须申报本次证明主要使用的模型和 Agent 工具（Harness）。MODEL_ID 不受模型枚举限制，填可确认的实际模型名称及版本；推理强度不属于模型版本，例如 high 不必拼入名称。HARNESS 从 codex、claude-code、cursor、gemini-cli、opencode、kimi-code、minimax-code、qwen-code、qoder、qoder-cn、lingma、trae、codebuddy、comate、codegeex、iflycode、github-copilot、github-copilot-cli、windsurf、cline、roo-code、kilo-code、continue、aider、goose、openhands、kiro、amazon-q、augment-code、auggie、devin、devin-desktop、jetbrains-ai、jetbrains-air、junie、zed、warp、tabnine、replit-agent、factory-droid、mistral-vibe、pi、antigravity、hermes-agent、swe-agent、mini-swe-agent、open-interpreter、other、unknown 中选择；VERSION 填工具版本。不确定的值明确填 unknown，不要根据工具名称推测模型，也不要为确认模型而索取用户密钥。多模型参与时只填主要模型与主要工具；历史记录不追溯猜测。信息将公开展示为提交者自报，并绑定本次 PR 和 head SHA；同一 head 的重试必须使用相同信息。下面所有占位符须替换为实际值（包含空格时加引号）。
+提交时必须申报本次证明主要使用的模型和 Agent 工具（Harness）。MODEL_ID 不受模型枚举限制，填可确认的实际模型名称及版本；推理强度不属于模型版本，例如 high 不必拼入名称。HARNESS 从 codex、claude-code、cursor、gemini-cli、opencode、kimi-code、minimax-code、zcode、qwen-code、qoder、qoder-cn、lingma、trae、codebuddy、comate、codegeex、iflycode、github-copilot、github-copilot-cli、windsurf、cline、roo-code、kilo-code、continue、aider、goose、openhands、kiro、amazon-q、augment-code、auggie、devin、devin-desktop、jetbrains-ai、jetbrains-air、junie、zed、warp、tabnine、replit-agent、factory-droid、mistral-vibe、pi、antigravity、hermes-agent、swe-agent、mini-swe-agent、open-interpreter、other、unknown 中选择；VERSION 填工具版本。不确定的值明确填 unknown，不要根据工具名称推测模型，也不要为确认模型而索取用户密钥。多模型参与时只填主要模型与主要工具；历史记录不追溯猜测。信息将公开展示为提交者自报，并绑定本次 PR 和 head SHA；同一 head 的重试必须使用相同信息。下面所有占位符须替换为实际值（包含空格时加引号）。
 
 python tools/goldbach.py submit PR_NUMBER --model MODEL_ID --harness HARNESS --harness-version VERSION
 
