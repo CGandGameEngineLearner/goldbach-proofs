@@ -28120,6 +28120,83 @@
         "file": "lean/Conjectures/LogRank/CyclicSmallRows.lean",
         "track": "explore-new-columns-at-one-third-density",
         "route_source": "explore-new-columns-at-one-third-density"
+      },
+      {
+        "id": "L-log-rank-minimal-slice-protocol",
+        "statement": "∃ K : ℕ, ∀ k : ℕ, K ≤ k → 2 ≤ k → let n := 3*k+1; let layer := (Finset.univ : Finset (Fin n)).powersetCard k; let adj := fun (A B : Finset (Fin n)) (a : ℤ) => ((A ∩ B).card : ℤ) = a ∨ ((A ∩ B).card : ℤ) = a+1; let detects := fun (Y : Finset (Finset (Fin n))) => ∀ A : Finset (Fin n), 2 ≤ A.card → A.card + 2 ≤ n → ∀ a : ℤ, ∃ B ∈ Y, ¬ adj A B a; let lin := fun (w : Fin n → ℝ) (B : Finset (Fin n)) => Finset.sum B w; let uniqueOn := fun (Y : Finset (Finset (Fin n))) => ∀ (w : Fin n → ℝ) (c : ℝ), (∀ B ∈ Y, lin w B = c) → ∀ B ∈ layer, lin w B = c; ∃ Y : Finset (Finset (Fin n)), Y.Nonempty ∧ Y ⊆ layer ∧ Y.card = n ∧ detects Y ∧ uniqueOn Y ∧ ∀ (m : ℕ) (A : Fin m → Finset (Fin n)) (a : ℤ), (∀ i, ∀ B ∈ Y, adj (A i) B a) → let M : Matrix (Fin m) (↥Y) ℝ := fun i j => (((A i ∩ j.val).card : ℝ) - (a : ℝ)); ∃ send : Fin m → Fin (M.rank+1), ∃ reply : Fin (M.rank+1) → ↥Y → Bool, ∃ out : Fin m → Bool → Bool, ∀ i j, (out i (reply (send i) j) = true ↔ M i j = 1)",
+        "plain_statement": {
+          "zh": "猜想：恰用 n 列同时实现全行检测、仿射唯一性和按受限矩阵秩计费的协议",
+          "en": "Conjecture: exactly n columns suffice for detection, affine uniqueness and a rank-sized protocol"
+        },
+        "brief": {
+          "zh": "仿射维数给出 n 列下界。难点是同一组恰好 n 列同时检测所有内部行；只构造仿射基或只完成协议推导都不足够。",
+          "en": "Find a minimal affine basis that simultaneously detects every interior row. Apply the proved protocol only after both properties hold."
+        },
+        "program": "correlation",
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/1133bda2e6/lean/PEqualNP/Outside/L_log_rank_cyclic_detector_family.lean",
+        "parallel": true,
+        "depends_on": [
+          "L-log-rank-rank-sized-protocol",
+          "L-log-rank-interval-anchor",
+          "L-log-rank-cyclic-detector-family"
+        ],
+        "imports": [
+          "PEqualNP.Outside.L_log_rank_rank_sized_protocol",
+          "PEqualNP.Outside.L_log_rank_interval_anchor",
+          "PEqualNP.Outside.L_log_rank_cyclic_detector_family"
+        ],
+        "module": "Conjectures.LogRank.MinimalSliceProtocol",
+        "file": "lean/Conjectures/LogRank/MinimalSliceProtocol.lean",
+        "track": "explore-new-columns-at-one-third-density",
+        "route_source": "explore-new-columns-at-one-third-density"
+      },
+      {
+        "id": "L-log-rank-two-orbit-full-detector",
+        "statement": "∃ K : ℕ, ∀ k : ℕ, K ≤ k → 2 ≤ k → let n := 3*k+1; let adj := fun (A B : Finset (Fin n)) (a : ℤ) => ((A ∩ B).card : ℤ) = a ∨ ((A ∩ B).card : ℤ) = a+1; let detects := fun (Y : Finset (Finset (Fin n))) => ∀ A : Finset (Fin n), 2 ≤ A.card → A.card + 2 ≤ n → ∀ a : ℤ, ∃ B ∈ Y, ¬ adj A B a; let shift := fun (S : Finset (Fin n)) (t : Fin n) => S.image (fun i => i+t); let orbit := fun (S : Finset (Fin n)) => (Finset.univ : Finset (Fin n)).image (shift S); let I := (Finset.univ : Finset (Fin n)).filter (fun i => i.val < k); ∃ S : Finset (Fin n), S.card = k ∧ detects (orbit I ∪ orbit S)",
+        "plain_statement": {
+          "zh": "猜想：一个循环区间和一个种子的平移即可检测全部内部行",
+          "en": "Conjecture: an interval orbit and one seed orbit detect all interior rows"
+        },
+        "brief": {
+          "zh": "已证构造用至多 8010 个轨道。目标是两个轨道、同一批列覆盖全部行。可搜索小参数；证伪须给出任意阈值以上的障碍。",
+          "en": "Reduce 8010 orbits to two without weakening the detection quantifiers. A refutation needs arbitrarily large counterexamples."
+        },
+        "program": "correlation",
+        "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/1133bda2e6/lean/PEqualNP/Outside/L_log_rank_cyclic_detector_family.lean",
+        "parallel": true,
+        "depends_on": [
+          "L-log-rank-cyclic-detector-family",
+          "L-log-rank-cyclic-small-rows"
+        ],
+        "imports": [
+          "PEqualNP.Outside.L_log_rank_cyclic_detector_family",
+          "Conjectures.LogRank.CyclicSmallRows"
+        ],
+        "module": "Conjectures.LogRank.TwoOrbitFullDetector",
+        "file": "lean/Conjectures/LogRank/TwoOrbitFullDetector.lean",
+        "track": "explore-new-columns-at-one-third-density",
+        "route_source": "explore-new-columns-at-one-third-density"
+      },
+      {
+        "id": "L-log-rank-improved-general-rectangle-exponent",
+        "statement": "∃ C : ℝ, 0 < C ∧ ∀ (m n : ℕ) (M : Matrix (Fin m) (Fin n) ℝ), 0 < m → 0 < n → (∀ i j, M i j = 0 ∨ M i j = 1) → 1 ≤ M.rank → ∃ (A : Finset (Fin m)) (B : Finset (Fin n)) (v : ℝ), (∀ i ∈ A, ∀ j ∈ B, M i j = v) ∧ (m : ℝ) * n ≤ (A.card : ℝ) * B.card * Real.rpow 2 (C * Real.rpow (M.rank : ℝ) (49999 / 100000 : ℝ))",
+        "plain_statement": {
+          "zh": "猜想：任意正实秩布尔矩阵都有密度至少 2^(−C r^0.49999) 的单色矩形",
+          "en": "Conjecture: every positive-rank Boolean matrix has a monochromatic rectangle of density at least 2^(−C r^0.49999)"
+        },
+        "brief": {
+          "zh": "Cogentic 的指数是 0.499995。本题保持任意矩阵与统一常数，要求将指数降至 0.49999。审计偏置稳定矩阵归约中造成指数损失的步骤；减小乘法常数不足以得证。",
+          "en": "Audit the exponent losses in the biased stable matrix reduction (Theorem 3.1). Improve the exponent uniformly for all Boolean matrices; a smaller prefactor alone is insufficient."
+        },
+        "program": "correlation",
+        "source": "https://github.com/google-research/google-research/tree/master/cogentic_research_papers/logrank_conjecture",
+        "parallel": true,
+        "depends_on": [],
+        "imports": [],
+        "module": "Conjectures.LogRank.ImprovedGeneralRectangleExponent",
+        "file": "lean/Conjectures/LogRank/ImprovedGeneralRectangleExponent.lean",
+        "track": "general-monochromatic-rectangles",
+        "route_source": "general-monochromatic-rectangles"
       }
     ],
     "roadmap": [
@@ -28256,6 +28333,18 @@
             "id": "L-log-rank-cyclic-small-rows",
             "zh": "当 k≥6、n=3k+1 时，集合 S={0,…,k−2}∪{2k−3} 恰含 k 个坐标。若一行或其补集的大小为 2 或 3，则 S 的循环平移与该行的交集大小不可能全落在任意指定的两个相邻整数中。",
             "en": "For k≥6 and n=3k+1, the k-set S={0,…,k−2}∪{2k−3} has a translation orbit that detects every row of size 2 or 3 and every complement of such a row.",
+            "route_source": "explore-new-columns-at-one-third-density"
+          },
+          {
+            "id": "L-log-rank-minimal-slice-protocol",
+            "zh": "猜想：恰用 n 列同时实现全行检测、仿射唯一性和按受限矩阵秩计费的协议",
+            "en": "Conjecture: exactly n columns suffice for detection, affine uniqueness and a rank-sized protocol",
+            "route_source": "explore-new-columns-at-one-third-density"
+          },
+          {
+            "id": "L-log-rank-two-orbit-full-detector",
+            "zh": "猜想：一个循环区间和一个种子的平移即可检测全部内部行",
+            "en": "Conjecture: an interval orbit and one seed orbit detect all interior rows",
             "route_source": "explore-new-columns-at-one-third-density"
           }
         ],
@@ -29199,6 +29288,25 @@
           }
         ],
         "route_id": "construct-layer-rectangles-in-intersection-matrices"
+      },
+      {
+        "en": [
+          "Monochromatic rectangle exponent for general matrices",
+          "Seek larger monochromatic rectangles than the Cogentic real-rank bound guarantees."
+        ],
+        "zh": [
+          "一般矩阵的单色矩形指数",
+          "对标 Cogentic 的一般实秩界，寻找更大的单色矩形。"
+        ],
+        "tasks": [
+          {
+            "id": "L-log-rank-improved-general-rectangle-exponent",
+            "zh": "猜想：任意正实秩布尔矩阵都有密度至少 2^(−C r^0.49999) 的单色矩形",
+            "en": "Conjecture: every positive-rank Boolean matrix has a monochromatic rectangle of density at least 2^(−C r^0.49999)",
+            "route_source": "general-monochromatic-rectangles"
+          }
+        ],
+        "route_source": "general-monochromatic-rectangles"
       }
     ]
   },
