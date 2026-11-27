@@ -18,7 +18,8 @@
     "L-goldbach-finite-rough-factor-power"
   ],
   "imports": [
-    "PEqualNP.Outside.L_goldbach_finite_rough_factor_power"
+    "PEqualNP.Outside.L_goldbach_finite_rough_factor_power",
+    "Conjectures.Goldbach.FiniteRoughPrototypeConstants19"
   ],
   "track": "representations",
   "role": "lemma",
