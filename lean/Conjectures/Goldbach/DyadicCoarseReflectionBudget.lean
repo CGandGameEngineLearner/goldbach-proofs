@@ -194,8 +194,7 @@ private theorem finiteParseval (m : ℕ) [NeZero m] (S : Finset ℕ)
       intro b hb
       rw [← mul_sum, orth a b ha hb]
     rw [hs, sum_eq_single a]
-    · simp
-      ring
+    · simp <;> ring
     · intro b hb hba
       simp [Ne.symm hba]
     · exact fun h => (h ha).elim
@@ -237,7 +236,7 @@ private theorem layerEnergy (N k : ℕ) (hN : 4 ≤ N) (hk : 1 ≤ k) (B : ℝ) 
     ⟨mem_range.mp (mem_filter.mp ha).1, hcop a (mem_filter.mp ha).2⟩
   have hgs : (∑ a ∈ S, g a ^ 2) = 2 * ∑ a ∈ O, D a ^ 2 := by
     change (∑ a ∈ (range m).filter Odd, g a ^ 2) = _
-    rw [hm, oddSplit q hqe]
+    rw [show (range m).filter Odd = (range (2*q)).filter Odd by rw [hm], oddSplit q hqe]
     have h1 : (∑ a ∈ O, g a ^ 2) = ∑ a ∈ O, D a ^ 2 := by
       apply sum_congr rfl
       intro a ha
@@ -272,19 +271,18 @@ private theorem layerEnergy (N k : ℕ) (hN : 4 ≤ N) (hk : 1 ≤ k) (B : ℝ) 
     · exact (hχ ((hprim χ).mpr h)).elim
   have hch (χ : DirichletCharacter ℂ m) (a : ℕ) (ha : a ∈ O) :
       χ ((a+q : ℕ) : ZMod m) = χ (a : ZMod m) * z χ := by
-    rw [hshift a (mem_filter.mp ha).2, map_mul]
+    rw [hshift a (mem_filter.mp ha).2, map_mul] <;> rfl
   have hT (χ : DirichletCharacter ℂ m) :
       T χ = ∑ a ∈ O, (D a : ℂ) * (χ (a : ZMod m) - χ ((a+q : ℕ) : ZMod m)) := by
     change (∑ a ∈ (range m).filter Odd, (g a : ℂ)*χ (a : ZMod m)) = _
-    rw [hm, oddSplit q hqe]
+    rw [show (range m).filter Odd = (range (2*q)).filter Odd by rw [hm], oddSplit q hqe]
     change (∑ a ∈ O, (g a : ℂ)*χ (a : ZMod m)) +
       (∑ a ∈ O, (g (a+q) : ℂ)*χ ((a+q : ℕ) : ZMod m)) = _
     rw [← sum_add_distrib]
     apply sum_congr rfl
     intro a ha
     simp [g, mem_range.mp (mem_filter.mp ha).1, show ¬ a+q<q by omega,
-      show a+q-q=a by omega]
-    ring
+      show a+q-q=a by omega] <;> ring
   have hUodd (χ : DirichletCharacter ℂ m) :
       U χ = ∑ a ∈ S, (A a : ℂ)*χ (a : ZMod m) := by
     change _ = ∑ a ∈ (range m).filter Odd, _
@@ -338,7 +336,7 @@ private theorem layerEnergy (N k : ℕ) (hN : 4 ≤ N) (hk : 1 ≤ k) (B : ℝ) 
       have heU : U χ = ∑ a ∈ O, (D a : ℂ)*χ (a : ZMod m) := by
         rw [hUodd]
         change (∑ a ∈ (range m).filter Odd, (A a : ℂ)*χ (a : ZMod m)) = _
-        rw [hm, oddSplit q hqe]
+        rw [show (range m).filter Odd = (range (2*q)).filter Odd by rw [hm], oddSplit q hqe]
         change (∑ a ∈ O, (A a : ℂ)*χ (a : ZMod m)) +
           (∑ a ∈ O, (A (a+q) : ℂ)*χ ((a+q : ℕ) : ZMod m)) = _
         rw [← sum_add_distrib]
