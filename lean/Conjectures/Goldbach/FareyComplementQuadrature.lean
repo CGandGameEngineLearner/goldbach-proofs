@@ -366,7 +366,7 @@ open GoldbachFarey
 
 /-- The complement of the project's reduced-rational arcs has an exact measure and
 a disjoint integration formula, even when the original arcs overlap. -/
-theorem PEqualNP.Outside.L_goldbach_farey_complement_quadrature :
+theorem Conjectures.Goldbach.FareyComplementQuadrature :
     ∀ (Q : ℕ) (δ : ℝ), 0 < Q → 0 ≤ δ →
       let A := {x : ℝ | ∃ d c : ℕ, 1 ≤ d ∧ d ≤ Q ∧ c ≤ d ∧ c.Coprime d ∧ |x-(c:ℝ)/d| ≤ δ/d}
       let D := ((Finset.Icc 1 Q) ×ˢ (Finset.Icc 1 Q)).filter (fun p => Q < p.1+p.2 ∧ p.1.Coprime p.2)
