@@ -230,4 +230,116 @@ theorem upper_tail {ι : Type*} (Z : Finset ι) (l : ι → ℝ) {a y δ : ℝ}
       mul_le_mul_of_nonneg_right (add_le_add_right hδ 1) (by unfold factor; positivity)
     _ < 10.4 := (budgets y).2.2 hy
 
+
+/-- Symmetry allows the two factors at different zeros to be replaced by a
+square at one zero, even if several indices represent the same zero. -/
+private theorem symmetric_pair_sum {ι : Type*} (Z : Finset ι) (u : ι → ℝ)
+    (K : ι → ι → ℝ) (hK : ∀ i j, 0 ≤ K i j) (hsym : ∀ i j, K i j = K j i) :
+    ∑ i ∈ Z, ∑ j ∈ Z, u i * u j * K i j ≤
+      ∑ i ∈ Z, u i ^ 2 * ∑ j ∈ Z, K i j := by
+  have cross : (∑ i ∈ Z, ∑ j ∈ Z, u j^2 * K i j) =
+      ∑ i ∈ Z, ∑ j ∈ Z, u i^2 * K i j := by
+    rw [Finset.sum_comm]
+    exact Finset.sum_congr rfl (fun i _ => Finset.sum_congr rfl
+      (fun j _ => by rw [hsym j i]))
+  have am : (∑ i ∈ Z, ∑ j ∈ Z, 2 * (u i * u j * K i j)) ≤
+      ∑ i ∈ Z, ∑ j ∈ Z, (u i^2 * K i j + u j^2 * K i j) := by
+    apply Finset.sum_le_sum
+    intro i _
+    apply Finset.sum_le_sum
+    intro j _
+    nlinarith [mul_nonneg (sq_nonneg (u i - u j)) (hK i j)]
+  simp only [← Finset.mul_sum, Finset.sum_add_distrib] at am
+  simp only [← Finset.mul_sum] at cross
+  rw [cross] at am
+  linarith
+
+private theorem damped_row {w x y err row : ℝ} (hw : 0 ≤ w) (hx : 0 < x)
+    (hy : 0 < y) (herr : 0 ≤ err) (hrow : row ≤ B w x + err) :
+    Real.exp (-w * max 0 (y-x)) * row ≤ B w y + err := by
+  have hD := Real.exp_le_one_iff.mpr
+    (mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.mpr hw) (le_max_left 0 (y-x)))
+  calc
+    _ ≤ Real.exp (-w * max 0 (y-x)) * (B w x + err) :=
+      mul_le_mul_of_nonneg_left hrow (Real.exp_pos _).le
+    _ ≤ _ := by
+      rw [mul_add]
+      exact add_le_add (damped_B_le_at_cutoff hw hx hy)
+        (by simpa using mul_le_mul_of_nonneg_right hD herr)
+
+noncomputable def deficit (y x : ℝ) : ℝ := max 0 (y-x)
+
+noncomputable def pairWeight (t y x : ℝ) : ℝ :=
+  Real.exp (-t*x - (5/12)*deficit y x)
+
+noncomputable def zeroWeight (t y x : ℝ) : ℝ :=
+  Real.exp (-2*t*x - (5/12)*deficit y x)
+
+/-- Equations (5.29)–(5.36) for the parameters of Corollary 1. The kernels
+may vanish outside any symmetric set of nearby pairs of zeros. The row error
+and the constant in the quadratic density estimate are explicit. -/
+theorem density_of_row_bounds {ι : Type*} (Z : Finset ι) (l : ι → ℝ)
+    (K R : ι → ι → ℝ) {t y err c : ℝ} (hy : 0 < y) (herr : 0 ≤ err) (hc : 0 ≤ c)
+    (hl : ∀ i ∈ Z, 0 < l i) (hK : ∀ i j, 0 ≤ K i j) (hR : ∀ i j, 0 ≤ R i j)
+    (symK : ∀ i j, K i j = K j i) (symR : ∀ i j, R i j = R j i)
+    (rowsK : ∀ i ∈ Z, ∑ j ∈ Z, K i j ≤ B (1/6) (l i) + err)
+    (rowsR : ∀ i ∈ Z, ∑ j ∈ Z, R i j ≤ B (2/3) (l i) + err)
+    (quad : (∑ i ∈ Z, zeroWeight t y (l i))^2 ≤ c *
+      ∑ i ∈ Z, ∑ j ∈ Z, pairWeight t y (l i) * pairWeight t y (l j) *
+        (Real.sqrt (K i j) * Real.sqrt (R i j))) :
+    ∑ i ∈ Z, zeroWeight t y (l i) ≤
+      c * Real.sqrt ((B (1/6) y + err) * (B (2/3) y + err)) := by
+  let d := fun i => deficit y (l i)
+  let u := fun i => pairWeight t y (l i)
+  let w := fun i => zeroWeight t y (l i)
+  let M := fun i j => Real.sqrt (K i j) * Real.sqrt (R i j)
+  let T := Real.sqrt ((B (1/6) y + err) * (B (2/3) y + err))
+  have hrow (i) (hi : i ∈ Z) : u i ^ 2 * ∑ j ∈ Z, M i j ≤ w i * T := by
+    let A := ∑ j ∈ Z, K i j
+    let D := ∑ j ∈ Z, R i j
+    have hA : 0 ≤ A := Finset.sum_nonneg (fun j _ => hK i j)
+    have hD : 0 ≤ D := Finset.sum_nonneg (fun j _ => hR i j)
+    have hcs : ∑ j ∈ Z, M i j ≤ Real.sqrt (A * D) := by
+      rw [Real.sqrt_mul hA]
+      exact Real.sum_sqrt_mul_sqrt_le Z (hK i) (hR i)
+    have hweight : u i ^ 2 = w i * Real.exp (-(5/12)*d i) := by
+      dsimp [u, w, pairWeight, zeroWeight, d]
+      rw [sq, ← Real.exp_add, ← Real.exp_add]
+      congr 1
+      ring
+    have hscale : Real.exp (-(5/12)*d i) * Real.sqrt (A*D) =
+        Real.sqrt ((Real.exp (-(1/6)*d i)*A) * (Real.exp (-(2/3)*d i)*D)) := by
+      have hexp : Real.exp (-(1/6)*d i) * Real.exp (-(2/3)*d i) =
+          Real.exp (-(5/12)*d i)^2 := by
+        rw [sq, ← Real.exp_add, ← Real.exp_add]
+        congr 1
+        ring
+      rw [mul_mul_mul_comm, hexp, Real.sqrt_mul (sq_nonneg _),
+        Real.sqrt_sq (Real.exp_pos _).le]
+    calc
+      _ ≤ u i ^ 2 * Real.sqrt (A*D) := mul_le_mul_of_nonneg_left hcs (sq_nonneg _)
+      _ = w i * Real.sqrt ((Real.exp (-(1/6)*d i)*A) * (Real.exp (-(2/3)*d i)*D)) := by
+        rw [hweight, mul_assoc, hscale]
+      _ ≤ _ := by
+        apply mul_le_mul_of_nonneg_left _ (Real.exp_pos _).le
+        apply Real.sqrt_le_sqrt
+        exact mul_le_mul
+          (damped_row (by norm_num) (hl i hi) hy herr (rowsK i hi))
+          (damped_row (by norm_num) (hl i hi) hy herr (rowsR i hi))
+          (mul_nonneg (Real.exp_pos _).le hD)
+          (add_nonneg (B_nonneg (by norm_num) hy) herr)
+  have hs := symmetric_pair_sum Z u M (fun i j => mul_nonneg (Real.sqrt_nonneg _) (Real.sqrt_nonneg _))
+    (fun i j => by simp only [M, symK i j, symR i j])
+  have hp : (∑ i ∈ Z, w i)^2 ≤ c * ((∑ i ∈ Z, w i)*T) :=
+    quad.trans (mul_le_mul_of_nonneg_left (hs.trans (by
+      rw [Finset.sum_mul]
+      exact Finset.sum_le_sum hrow)) hc)
+  have hpos : 0 ≤ ∑ i ∈ Z, w i := Finset.sum_nonneg (fun i _ => (Real.exp_pos _).le)
+  change ∑ i ∈ Z, w i ≤ c*T
+  by_cases hz : ∑ i ∈ Z, w i = 0
+  · rw [hz]
+    exact mul_nonneg hc (Real.sqrt_nonneg _)
+  · apply (mul_le_mul_iff_right₀ (lt_of_le_of_ne hpos (Ne.symm hz))).mp
+    nlinarith only [hp]
+
 end PintzWeightedDensity
