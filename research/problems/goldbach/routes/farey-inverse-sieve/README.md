@@ -32,7 +32,10 @@ Every published statement fixes the same target integer before counting residues
 | HD3 | farey-hyperbola-shift, farey-hyperbola-rectangles, farey-hyperbola-sieve-transfer, farey-sieve-root-total | Produce one canonical rectangle per root. Apply the composite-modulus literature bound and sum the root-weighted discrepancies. |
 | HD4 | farey-sieve-terminal-floor, farey-sieve-cutoff-ratio | Account for prime factors above the terminal cutoff and compare two sieve products. Reuse the finite Euler-product bounds. |
 | HD5 | farey-initial-sieve-lower | Formalize the dimension-two lower-bound sieve with its error stated on the terminal scale. This opt-in task requires analytic infrastructure. |
+| HD5b | farey-initial-sieve-upper | Upper-bound counterpart of HD5 at the small cutoff. Proven; imports the accepted lower-sieve module. |
 | HD6 | farey-first-hit-middle | Open challenge for the entire middle band. It retains the least-factor restriction on both sides. |
+| HD6a | farey-first-hit-middle-lower | Lower-bound sieve at z1 = n^(1/3) with terminal-scale error. This is the parity/level barrier behind HD6; open. |
+| HD6b | farey-first-hit-middle-reduction | Given HD6a, HD5b and the sift difference, the frozen HD6 target follows. Proven; imports HD5b. |
 | HD7 | farey-late-first-hit-factor-switch, farey-late-prime-square-loss | Compute the two semiprime sums with the same inverse labels and bound their square terms. |
 | HD8 | farey-first-hit-late | Open challenge for the late band. The rough cofactor restriction applies to the opposite denominator. |
 | HD8 input | farey-cube-sqrt-density-ratio | Determine the limiting ratio of the two sieve volumes for the same even target. |
