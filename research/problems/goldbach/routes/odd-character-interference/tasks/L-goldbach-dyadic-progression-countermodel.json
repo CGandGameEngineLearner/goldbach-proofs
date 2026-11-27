@@ -15,7 +15,9 @@
   "depends_on": [
     "L-goldbach-dyadic-sum-avoiding-mask"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.DyadicSumAvoidingMask"
+  ],
   "track": "odd-character-interference",
   "role": "lemma",
   "module": "Conjectures.Goldbach.DyadicProgressionCountermodel",
