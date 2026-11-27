@@ -83,7 +83,7 @@ private theorem factor_budget (P : Finset ℕ) (hOne : 1 ∉ P) :
       rw [← mul_sum]
       have hz := hasSum_zeta_two.summable.sum_le_tsum (insert 1 P) (fun p _ => by positivity)
       rw [sum_insert hOne, hasSum_zeta_two.tsum_eq] at hz
-      norm_num at hz
+      simp only [Nat.cast_one, one_pow, div_one] at hz
       linarith
 
 /-- Removing index 1 saves a factor of exp 6 for every cutoff. -/
@@ -137,7 +137,9 @@ theorem budget (X : ℕ) :
     _ = _ := sum_comm
     _ ≤ _ := sum_le_sum row
     _ = (∏ p ∈ P, (1+weight p / p))*harm := by rw [prod_one_add, sum_mul]
-    _ ≤ _ := mul_le_mul (factor_budget P (by simp [P])) hh hp0 (Real.exp_pos _).le
+    _ ≤ _ := by
+      have hOne : 1 ∉ P := fun h => Nat.not_prime_one (mem_filter.mp h).2
+      exact mul_le_mul (factor_budget P hOne) hh hp0 (Real.exp_pos _).le
 
 end
 end Conjectures.Goldbach.PacketTotientHarmonicBudget_aux
