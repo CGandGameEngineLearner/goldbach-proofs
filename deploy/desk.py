@@ -1,12 +1,18 @@
 import hashlib
 import hmac
 import ipaddress
+import json
 import re
 import secrets
 import sqlite3
 import time
 from collections import Counter
-from contextlib import closing, contextmanager
+from contextlib import closing, contextmanager, nullcontext
+
+if __package__:
+    from . import reductions
+else:
+    import reductions
 
 NO_RESEARCH_DEADLINE = 253402300799  # Keep the existing integer lease protocol.
 SUBMISSION_SECONDS = 12 * 60 * 60
@@ -388,7 +394,8 @@ def error(status, code):
 
 
 class Desk:
-    def __init__(self, db_path, gaps, secret, openings=None):
+    def __init__(self, db_path, gaps, secret, openings=None, *, slug="goldbach"):
+        self.slug = slug
         self.db_path = db_path
         self.gaps = {gap["id"]: {**gap, "parallel": True} for gap in gaps}
         self.statement_hashes = {
@@ -433,7 +440,12 @@ class Desk:
                 CREATE UNIQUE INDEX IF NOT EXISTS goldbach_leases_authorized_head
                     ON goldbach_leases(pr, head) WHERE run_id IS NOT NULL;
             """)
+            conn.executescript(reductions.SCHEMA)
             columns = {row[1] for row in conn.execute("PRAGMA table_info(goldbach_leases)")}
+            if "kind" not in columns:
+                conn.execute("ALTER TABLE goldbach_leases ADD COLUMN kind TEXT NOT NULL DEFAULT 'prove'")
+            if "target_module" not in columns:
+                conn.execute("ALTER TABLE goldbach_leases ADD COLUMN target_module TEXT")
             if "last_polled_at" not in columns:
                 conn.execute("ALTER TABLE goldbach_leases ADD COLUMN last_polled_at INTEGER")
             # Additive migration keeps existing leases/verdicts and old clients usable.
@@ -443,6 +455,7 @@ class Desk:
             if "agent_reported" not in columns:
                 conn.execute("ALTER TABLE goldbach_leases ADD COLUMN agent_reported INTEGER NOT NULL DEFAULT 0")
 
+            conn.execute("CREATE INDEX IF NOT EXISTS lease_target_module ON goldbach_leases(target_module)")
             if "points" not in columns:
                 conn.execute("ALTER TABLE goldbach_leases ADD COLUMN points INTEGER")
             conn.execute("""CREATE TABLE IF NOT EXISTS goldbach_task_openings (
@@ -461,6 +474,10 @@ class Desk:
             )""")
             conn.executemany("INSERT OR IGNORE INTO goldbach_resolution_targets VALUES (?, ?)",
                              self.refutation_targets.items())
+            conn.execute("""INSERT OR IGNORE INTO goldbach_task_openings
+                SELECT p.child, MIN(l.finished_at) FROM cut_premises p
+                JOIN cut_tasks t ON t.id=p.child JOIN goldbach_leases l ON l.run_id=p.run
+                WHERE l.finished_at IS NOT NULL GROUP BY p.child""")
             conn.commit()
             self.openings = dict(conn.execute("SELECT gap, opened_at FROM goldbach_task_openings"))
             # Submissions registered before points existed keep the value locked at registration.
@@ -475,8 +492,13 @@ class Desk:
             ])
             conn.commit()
 
-    def points(self, gap, now):
-        return 1 + max(0, now - self.openings[self.refutation_targets.get(gap, gap)]) // 180
+    def points(self, gap, now, conn=None):
+        target = self.refutation_targets.get(gap, gap)
+        opened_at = self.openings.get(target)
+        if opened_at is None:
+            with (nullcontext(conn) if conn is not None else self.transaction()) as db:
+                opened_at, = db.execute("SELECT opened_at FROM goldbach_task_openings WHERE gap=?", (target,)).fetchone()
+        return 1 + max(0, now - opened_at) // 180
 
     @contextmanager
     def transaction(self, write=False):
@@ -498,17 +520,35 @@ class Desk:
     def proved_gaps(conn):
         if not conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='verdicts'").fetchone():
             return set()
-        return {
+        return {gap for gap, in conn.execute("SELECT gap FROM assembled_proofs")} | {
             row[0] for row in conn.execute("""
                 SELECT DISTINCT json_extract(CAST(body AS TEXT), '$.lemma_id')
                 FROM verdicts
                 WHERE json_extract(CAST(body AS TEXT), '$.verdict') = 'ACCEPTED'
+                  AND COALESCE(json_extract(CAST(body AS TEXT), '$.kind'), 'prove') = 'prove'
             """)
         }
 
+    def resolution_group(self, gaps):
+        targets = {self.refutation_targets.get(gap, gap) for gap in gaps}
+        return targets | {gap for gap, target in self.refutation_targets.items() if target in targets}
+
+    def contrary_gaps(self, proved):
+        return ({gap for gap, target in self.refutation_targets.items() if target in proved}
+                | {target for gap, target in self.refutation_targets.items() if gap in proved})
+
     def resolved_gaps(self, conn):
-        resolved = {self.refutation_targets.get(gap, gap) for gap in self.proved_gaps(conn)}
-        return resolved | {gap for gap, target in self.refutation_targets.items() if target in resolved}
+        return self.resolution_group(self.proved_gaps(conn) | reductions.refutations(conn).keys())
+
+    def settle(self, conn, gap, kind, now):
+        settled = [(key,) for key in self.resolution_group({gap})]
+        disproved = {gap} if kind == "refute" else self.contrary_gaps({gap})
+        conn.executemany("UPDATE reductions SET state='superseded' WHERE parent=? AND state='live'", settled)
+        conn.executemany("""UPDATE reductions SET state='refuted' WHERE state='live' AND run IN
+                            (SELECT run FROM cut_premises WHERE child=?)""", [(key,) for key in disproved])
+        conn.executemany("""UPDATE goldbach_leases SET released_at = ?, release_reason = 'superseded'
+                            WHERE gap = ? AND released_at IS NULL AND finished_at IS NULL
+                                AND run_id IS NULL AND expires_at > ?""", [(now, key, now) for key, in settled])
 
     @staticmethod
     def lease_times(lease):
@@ -524,12 +564,9 @@ class Desk:
         requested_gap = body.get("gap")
         if not handle or not ip_key or (requested_gap is not None and not isinstance(requested_gap, str)):
             return error(400, "invalid_claim")
-        if requested_gap is not None and requested_gap not in self.gaps:
-            return error(404, "unknown_gap")
-        if requested_gap and self.gaps[requested_gap].get("refutation"):
-            return error(409, "refutation_" + self.gaps[requested_gap]["refutation"]["status"])
-        if requested_gap and self.gaps[requested_gap].get("claims_closed"):
-            return error(409, "claims_closed")
+        kind = body.get("kind", "prove")
+        if kind not in reductions.KINDS:
+            return error(400, "invalid_kind")
         if fleet is not None:
             match = re.fullmatch(r"v1\.([0-9]{1,12})\.[a-f0-9]{64}", fleet)
             if (not match or int(match[1]) <= now
@@ -538,6 +575,27 @@ class Desk:
             # A registered fleet has its own bucket, including behind a shared university NAT.
             ip_key = "fleet:" + handle
         with self.transaction(write=True) as conn:
+            gaps = reductions.catalogue(conn, self.gaps)
+            refuted = reductions.refutations(conn)
+            live = dict(conn.execute("SELECT parent,count(*) FROM reductions WHERE state='live' GROUP BY parent"))
+
+            def unavailable(gap_id):
+                gap = gaps[gap_id]
+                refutation = refuted.get(gap_id) or gap.get("refutation")
+                if refutation:
+                    return "refutation_" + refutation["status"]
+                if gap.get("claims_closed"):
+                    return "claims_closed"
+                if kind == "cut":
+                    return reductions.cut_reason(gap, live.get(gap_id, 0))
+                return None
+
+            if requested_gap is not None:
+                if requested_gap not in gaps:
+                    return error(404, "unknown_gap")
+                reason = unavailable(requested_gap)
+                if reason:
+                    return error(409, reason)
             active = conn.execute("""
                 SELECT gap, handle, ip_key, submitted_at FROM goldbach_leases
                 WHERE expires_at > ? AND released_at IS NULL AND finished_at IS NULL
@@ -558,33 +616,49 @@ class Desk:
 
             load = Counter(lease["gap"] for lease in active)
             proved = self.resolved_gaps(conn)
-            candidates = ((key for key, gap in self.gaps.items() if not gap.get("challenge_only") and not gap.get("claims_closed") and not gap.get("refutation"))
+            candidates = ((key for key, gap in gaps.items() if not gap.get("challenge_only") and not unavailable(key))
                           if requested_gap is None else (requested_gap,))
             if fleet is None and owned:
                 candidates = (gap for gap in candidates if gap != owned[0]["gap"])
-            program_load = Counter(self.gaps[row["gap"]].get("program", "foundation")
-                                   for row in active if row["gap"] in self.gaps)
+            program_load = Counter(gaps[row["gap"]].get("program", "foundation")
+                                   for row in active if row["gap"] in gaps)
             available = (g for g in candidates if g not in proved and
-                         (not load[g] or self.gaps[g].get("parallel") is True))
+                         (not load[g] or gaps[g].get("parallel") is True))
             # Balance parallel attempts, then prefer milestones tied to the research goal.
             selected = min(available, key=lambda g: (
                 load[g],
-                self.gaps[g].get("role") not in {"endpoint", "target", "conditional"},
-                program_load[self.gaps[g].get("program", "foundation")],
+                gaps[g].get("role") not in {"endpoint", "target", "conditional"},
+                program_load[gaps[g].get("program", "foundation")],
             ), default=None)
             if selected is None:
                 return error(409, "no_available_gap")
 
             token = secrets.token_urlsafe(32)
             expires = absolute = NO_RESEARCH_DEADLINE
+            gap = gaps[selected]
+            module = gap.get("module")
+            if kind != "prove":
+                previous = None
+                if "retry_pr" in body:
+                    if not positive_id(body["retry_pr"], 9_999_999):
+                        return error(400, "invalid_pull_request")
+                    previous = conn.execute("""
+                        SELECT target_module FROM goldbach_leases WHERE pr=? AND handle=? AND gap=?
+                          AND kind=? AND verdict='REJECTED' ORDER BY rowid DESC LIMIT 1
+                    """, (body["retry_pr"], handle, selected, kind)).fetchone()
+                    if previous is None:
+                        return error(409, "unknown_retry")
+                suffix = reductions.digest(selected)[:24] if kind == "refute" else secrets.token_hex(12)
+                module = previous[0] if previous else "Conjectures.Cuts." + kind.title() + suffix
+                gap = reductions.target(gap, module)
             conn.execute("""
                 INSERT INTO goldbach_leases
-                    (token_hash, gap, statement_sha256, handle, ip_key, claimed_at, expires_at, absolute_expires_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """, (self.token_hash(token), selected, self.statement_hashes[selected],
-                  handle, ip_key, now, expires, absolute))
+                    (token_hash, gap, statement_sha256, handle, ip_key, claimed_at, expires_at, absolute_expires_at, kind, target_module)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (self.token_hash(token), selected, reductions.digest(gap["statement"]),
+                  handle, ip_key, now, expires, absolute, kind, module))
             return 201, {
-                "gap": {**self.gaps[selected], "points": self.points(selected, now)},
+                "gap": {**gap, "points": self.points(selected, now, conn) if kind != "cut" else None}, "kind": kind,
                 "lease": {"token": token, "expires_at": expires, "absolute_expires_at": absolute},
             }
 
@@ -634,6 +708,7 @@ class Desk:
                     return 200, {"submitted": True, **self.lease_times(lease)}
                 return error(409, "lease_already_submitted")
 
+            points = self.points(lease["gap"], now, conn) if lease["kind"] != "cut" else None
             # A submitted proof waits for a hosted runner independently of its authoring lease.
             expires = now + SUBMISSION_SECONDS
             conn.execute("""
@@ -641,8 +716,8 @@ class Desk:
                     model = ?, harness = ?, harness_version = ?, agent_reported = ?, points = ?
                 WHERE token_hash = ?
             """, (pr, head, now, expires, agent["model"], agent["harness"], agent["harness_version"],
-                  1, self.points(lease["gap"], now), digest))
-            return 200, {"submitted": True, "points": self.points(lease["gap"], now), "expires_at": expires,
+                  1, points, digest))
+            return 200, {"submitted": True, "points": points, "expires_at": expires,
                          "absolute_expires_at": lease["absolute_expires_at"]}
 
     def signed(self, supplied, raw_body):
@@ -680,7 +755,10 @@ class Desk:
             """, (pr, head, handle, gap, run_id)).fetchone()
             if (lease is None or lease["released_at"] is not None
                     or lease["statement_sha256"] != statement_hash
-                    or self.statement_hashes.get(gap) != statement_hash):
+                    or lease["kind"] != body.get("kind", "prove")
+                    or ((lease["kind"] != "prove" or reductions.GENERATED_ID.fullmatch(gap) or body.get("module"))
+                        and (lease["target_module"] or self.gaps.get(gap, {}).get("module")) != body.get("module"))
+                    or reductions.digest(reductions.catalogue(conn, self.gaps).get(gap, {}).get("statement", "")) != statement_hash):
                 return error(409, "no_matching_submission")
             if lease["run_id"] == run_id and lease["expires_at"] > now and lease["finished_at"] is None:
                 return 200, {"authorized": True}
@@ -701,6 +779,37 @@ class Desk:
             """, (run_id, now, now + CHECK_SECONDS, lease["token_hash"]))
             return 200, {"authorized": True}
 
+    def resolve_module(self, module):
+        with self.transaction() as conn:
+            row = conn.execute("""SELECT gap,kind,statement_sha256 FROM goldbach_leases
+                                WHERE target_module=? ORDER BY rowid DESC LIMIT 1""", (module,)).fetchone()
+            if not row:
+                return None
+            gap = reductions.catalogue(conn, self.gaps).get(row["gap"])
+            if not gap or reductions.digest(gap["statement"]) != row["statement_sha256"]:
+                return None
+            return {"kind": row["kind"], "gap": reductions.target(gap, module)}
+
+    def research_gaps(self, conn):
+        gaps = reductions.catalogue(conn, self.gaps)
+        refs = reductions.refutations(conn)
+        cuts = reductions.public_records(conn)
+        assemblies = dict(conn.execute("SELECT gap,certificate FROM assembled_proofs"))
+        for key, gap in gaps.items():
+            entries = cuts.get(key, [])
+            live = sum(c["status"] == "live" for c in entries)
+            reason = reductions.cut_reason(gap, live)
+            gap = {**gap, "depth": gap.get("depth", 0), "reductions": gap.get("reductions", False),
+                   "reductions_live": live, "cuts": entries}
+            if key in refs:
+                gap["refutation"] = refs[key]
+            if key in assemblies:
+                gap["assembly"] = json.loads(assemblies[key])
+            gap["cut_reason"] = ("settled" if gap.get("refutation") or gap.get("assembly") else
+                                 "claims_closed" if gap.get("claims_closed") else reason)
+            gap["takes_cuts"] = gap["cut_reason"] is None
+            yield gap
+
     def dispatch(self, path, body, headers, client_ip, raw_body):
         if not isinstance(body, dict):
             return error(400, "invalid_json")
@@ -717,8 +826,7 @@ class Desk:
             return self.update_lease(path.rsplit("/", 1)[1], body, headers.get("Authorization", ""), now)
         return error(404, "unknown_endpoint")
 
-    @staticmethod
-    def record_verdict(record, conn):
+    def record_verdict(self, record, conn):
         # An accepted rerun supersedes a rejection, while a failed rerun cannot erase credit.
         verdict = record["verdict"]
         now = int(time.time())
@@ -729,11 +837,25 @@ class Desk:
         """, (now, verdict, record["run_id"], record["lemma_id"], verdict))
 
         if verdict == "ACCEPTED":
-            conn.execute("""
-                UPDATE goldbach_leases SET released_at = ?, release_reason = 'superseded'
-                WHERE gap = ? AND released_at IS NULL AND finished_at IS NULL
-                    AND run_id IS NULL AND expires_at > ?
-            """, (now, record["lemma_id"], now))
+            cursor = conn.cursor()
+            cursor.row_factory = sqlite3.Row
+            lease = cursor.execute("SELECT * FROM goldbach_leases WHERE run_id=? AND gap=?",
+                                   (record["run_id"], record["lemma_id"])).fetchone()
+            kind = record.get("kind", "prove")
+            if lease and (lease["kind"] != kind or
+                          (record.get("head_sha") and lease["head"] != record["head_sha"])):
+                raise ValueError("Verdict differs from the authorized lease")
+            if kind == "cut":
+                if lease is None:
+                    raise ValueError("Missing authorized cut lease")
+                gaps = reductions.catalogue(conn, self.gaps)
+                proved = self.proved_gaps(conn)
+                refuted = reductions.refutations(conn).keys()
+                reductions.register(conn, gaps[lease["gap"]], lease, record["manifest"]["children"],
+                                    gaps, self.slug, refuted | self.contrary_gaps(proved),
+                                    self.resolution_group(proved | refuted), record["manifest"].get("child_descriptions"))
+                return
+            self.settle(conn, record["lemma_id"], kind, now)
 
     @staticmethod
     def active_assignments(conn, now):
@@ -747,13 +869,15 @@ class Desk:
 
     def progress_snapshot(self):
         with self.transaction() as conn:
-            proved = self.proved_gaps(conn) & self.gaps.keys()
+            gaps = reductions.catalogue(conn, self.gaps)
+            proved = self.proved_gaps(conn) & gaps.keys()
+            resolved = self.resolution_group(proved | reductions.refutations(conn).keys())
             assigned = self.active_assignments(conn, int(time.time()))
         available = sum(
-            not gap.get("claims_closed") and not gap.get("refutation") and gap_id not in proved and (gap_id not in assigned or gap.get("parallel") is True)
-            for gap_id, gap in self.gaps.items()
+            not gap.get("claims_closed") and not gap.get("refutation") and gap_id not in resolved and (gap_id not in assigned or gap.get("parallel") is True)
+            for gap_id, gap in gaps.items()
         )
-        return len(proved), len(self.gaps), available, assigned.keys() - proved
+        return len(proved), len(gaps), available, assigned.keys() - resolved
 
     def progress(self):
         return self.progress_snapshot()[:3]
@@ -777,7 +901,7 @@ class Desk:
                 SELECT model, harness, pr, head, finished_at, COALESCE(points, 1) AS points,
                        ROW_NUMBER() OVER (PARTITION BY COALESCE(target, goldbach_leases.gap) ORDER BY finished_at, run_id) AS position
                 FROM goldbach_leases LEFT JOIN goldbach_resolution_targets USING (gap)
-                WHERE verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
+                WHERE kind != 'cut' AND verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
             )
             SELECT model, harness, points, pr, head FROM accepted WHERE position = 1
                 AND (model != 'unknown' OR harness != 'unknown')
@@ -852,7 +976,7 @@ class Desk:
                         SELECT gap, handle, finished_at, COALESCE(points, 1) AS points,
                                ROW_NUMBER() OVER (PARTITION BY COALESCE(target, goldbach_leases.gap) ORDER BY finished_at, run_id) AS position
                         FROM goldbach_leases LEFT JOIN goldbach_resolution_targets USING (gap)
-                        WHERE verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
+                        WHERE kind != 'cut' AND verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
                     )
                     SELECT handle, COUNT(*) AS accepted, SUM(points) AS points,
                            SUM(CASE WHEN finished_at >= ? THEN points ELSE 0 END) AS hour_points,
