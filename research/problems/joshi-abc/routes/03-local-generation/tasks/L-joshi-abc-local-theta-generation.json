@@ -19,7 +19,10 @@
     "L-joshi-abc-log-jet",
     "L-joshi-abc-three-jet-span"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.LogJet",
+    "Conjectures.JoshiAbc.ThreeJetSpan"
+  ],
   "track": "03-local-generation",
   "module": "Conjectures.JoshiAbc.LocalThetaGeneration",
   "file": "lean/Conjectures/JoshiAbc/LocalThetaGeneration.lean"
