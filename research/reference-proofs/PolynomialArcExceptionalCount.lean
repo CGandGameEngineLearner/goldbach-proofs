@@ -551,4 +551,3 @@ theorem Conjectures.Goldbach.PolynomialArcExceptionalCount :
       ((2*X : ℕ) : ℝ)^(1/4 : ℝ) ≤ 2*P ∧ ((bulkMajor X P Y).card : ℝ) ≤ (X : ℝ)^(3/4 : ℝ)) →
       ∃ N : ℕ, ∀ X ≥ N, (failedShifts X).card^5 ≤ X^4) :=
   ⟨count_bound,residual_bound,of_bulk_major⟩
-
