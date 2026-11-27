@@ -1,5 +1,12 @@
 import Mathlib
 
+/-!
+The finite first-bank classification is reproduced from the verified Goldbach
+PR #3896. The large anchors reuse the mathematical projective ECPP checker from
+Goldbach PR #3919, with the Apache-2.0 and original source notices below.
+The final argument combines the first forty offsets with six explicit repairs.
+-/
+
 /- Exact mathematical checker excerpt, no numeric rows.
 Upstream Goldbach PR #3919 head 8662a92a3ae5497613140406ac50b630be0fef0d.
 Original author GARERYIES, Hex ECPP by Kim Morrison, Apache-2.0. -/
