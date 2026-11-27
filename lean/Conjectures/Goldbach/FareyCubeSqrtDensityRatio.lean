@@ -371,7 +371,7 @@ theorem mertensRemainder_bound :
     ∃ C > 0, ∀ x : ℝ, 2 ≤ x → |mertensRemainder x| ≤ C :=
   mertensFirst
 
-/-- `B₁(x)` as a prefix sum of prime-supported coefficients. -/
+/-- Express `B₁(x)` as a sum over primes up to the given bound. -/
 theorem primeLogReciprocal_eq_sum_Icc (x : ℝ) :
     primeLogReciprocal x =
       ∑ n ∈ Icc 0 ⌊x⌋₊, if n.Prime then log (n : ℝ) / n else 0 := by
