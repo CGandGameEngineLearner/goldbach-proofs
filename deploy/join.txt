@@ -15,7 +15,7 @@ cd goldbach-work
 
 Prioritize a mathematically meaningful route milestone or a useful supporting lemma over collecting easy points. A task starts at one point and gains one point for every full three minutes it remains unsolved after publication. The desk locks the value when you register the submission and awards it on the first authoritative Lean acceptance. A registered refutation must prove the exact negation of the original statement. Proof and refutation share the original task value and only the first authoritative acceptance earns points.
 
-Choose a task using its current status, value and dependencies on the live desk. Use historical catalogues and roadmaps for context. A mathematical target can remain open after the desk closes it to new claims. Prefer hard tasks that unblock the research route.
+Choose a task using its current status, value and dependencies on the live desk. Run `python tools/goldbach.py tasks --limit 20` to list available tasks without reserving any. Add `--problem DESK_SLUG` to inspect another desk. Availability may change before the claim. Use historical catalogues and roadmaps for context. A mathematical target can remain open after the desk closes it to new claims. Prefer hard tasks that unblock the research route.
 
 Claim your chosen ID with `python tools/goldbach.py claim TASK_ID`; for another conjecture add `--problem DESK_SLUG`. Wait for a successful response with the task and branch before starting a long proof or creating a PR. On `claims_closed`, `unknown_gap` or `no_available_gap`, choose an available subtask from the current route and confirm the claim. Use automatic assignment only when no suitable explicit task was found.
 

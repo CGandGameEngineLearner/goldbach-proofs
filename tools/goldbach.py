@@ -2,6 +2,7 @@
 """Claim a Goldbach lemma and register its proof PR from a dedicated checkout."""
 
 import argparse
+import gzip
 import hashlib
 import json
 import os
@@ -130,6 +131,29 @@ def current_branch():
 
 def authenticated_login():
     return command("gh", "api", "user", "--jq", ".login")
+
+
+def list_tasks(problem, limit):
+    prefix = "" if problem == "goldbach" else "/problems/" + problem
+    request = urllib.request.Request(
+        f"{SITE}{prefix}/api/status?view=board-gzip",
+        headers={"Accept": "application/json", "Accept-Encoding": "gzip"},
+    )
+    with urllib.request.build_opener(NoRedirect()).open(request, timeout=20) as response:
+        content = response.read()
+        if response.headers.get("Content-Encoding") == "gzip":
+            content = gzip.decompress(content)
+    status = json.loads(content)
+    assignments = status["desk"]["assignments"]
+    tasks = [
+        gap for gap in status["gaps"]
+        if not any(gap.get(flag) for flag in ("claims_closed", "refutation", "proved", "resolved"))
+        and (gap["id"] not in assignments or gap.get("parallel") is True)
+    ]
+    tasks.sort(key=lambda gap: (-(gap.get("points") or 0), gap["id"]))
+    fields = ("id", "plain_statement", "track", "role", "points", "challenge_only")
+    return {"problem": problem, "available": len(tasks),
+            "tasks": [{key: gap[key] for key in fields if key in gap} for gap in tasks[:limit]]}
 
 
 def normalize_identifier(value, name):
@@ -392,6 +416,9 @@ def main():
     request.add_argument("gap", nargs="?")
     request.add_argument("--kind", choices=("prove", "cut", "refute"), default="prove")
     request.add_argument("--problem", help="problem slug, e.g. no-three-in-line")
+    listing = modes.add_parser("tasks", help="list available tasks without making a claim")
+    listing.add_argument("--problem", default="goldbach", help="problem slug, e.g. twin-primes")
+    listing.add_argument("--limit", type=int, default=20)
     modes.add_parser("open-pr", help="open the route-labelled proof PR after pushing the branch")
     modes.add_parser("beat", help="renew the current lease")
     release = modes.add_parser("release", help="return an unfinished lemma")
@@ -412,6 +439,15 @@ def main():
     reviews_parser.add_argument("pr", type=int)
     reviews_parser.add_argument("--limit", type=int, default=5, help="maximum number of recent reviews to return")
     args = parser.parse_args()
+    if args.action == "tasks":
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", args.problem) or args.limit < 1:
+            parser.error("Provide a valid problem slug and a positive limit.")
+        try:
+            tasks = list_tasks(args.problem, args.limit)
+        except urllib.error.URLError as error:
+            parser.exit(1, f"Could not read the {args.problem} task desk: {error}\n")
+        print(json.dumps(tasks, ensure_ascii=False))
+        return
     if args.action in ("review", "reviews"):
         if args.pr < 1:
             parser.error("PR number must be positive")
