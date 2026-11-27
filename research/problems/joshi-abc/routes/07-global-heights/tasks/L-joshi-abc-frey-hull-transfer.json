@@ -19,7 +19,9 @@
     "L-joshi-abc-frey-height",
     "L-joshi-abc-adelic-error-sum"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.AdelicErrorSum"
+  ],
   "track": "07-global-heights",
   "module": "Conjectures.JoshiAbc.FreyHullTransfer",
   "file": "lean/Conjectures/JoshiAbc/FreyHullTransfer.lean"
