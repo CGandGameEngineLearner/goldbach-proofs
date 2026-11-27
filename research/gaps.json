@@ -14249,8 +14249,8 @@
       "imports": [
         "PEqualNP.Outside.L_goldbach_arc_major_floor"
       ],
-      "module": "Conjectures.Goldbach.ExceptionFourSeventhsCountingBridge",
       "file": "lean/Conjectures/Goldbach/ExceptionFourSeventhsCountingBridge.lean",
+      "module": "Conjectures.Goldbach.ExceptionFourSeventhsCountingBridge",
       "route_source": "exceptional-set-four-sevenths"
     },
     {
@@ -14277,8 +14277,8 @@
       "imports": [
         "PEqualNP.Outside.L_goldbach_frontier_uncond_deep_second_moment"
       ],
-      "module": "Conjectures.Goldbach.ExceptionFourSeventhsNegativeEnergy",
       "file": "lean/Conjectures/Goldbach/ExceptionFourSeventhsNegativeEnergy.lean",
+      "module": "Conjectures.Goldbach.ExceptionFourSeventhsNegativeEnergy",
       "route_source": "exceptional-set-four-sevenths"
     },
     {
@@ -14302,8 +14302,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.ExceptionFourSeventhsUnconditional",
       "file": "lean/Conjectures/Goldbach/ExceptionFourSeventhsUnconditional.lean",
+      "module": "Conjectures.Goldbach.ExceptionFourSeventhsUnconditional",
       "route_source": "exceptional-set-four-sevenths",
       "imports": []
     },
@@ -14479,8 +14479,8 @@
       "role": "lemma",
       "parallel": true,
       "depends_on": [],
-      "module": "Conjectures.Goldbach.FareyCubeSqrtDensityRatio",
       "file": "lean/Conjectures/Goldbach/FareyCubeSqrtDensityRatio.lean",
+      "module": "Conjectures.Goldbach.FareyCubeSqrtDensityRatio",
       "track": "farey-inverse-sieve",
       "route_source": "farey-inverse-sieve",
       "imports": []
@@ -15971,7 +15971,9 @@
       "module": "Conjectures.Goldbach.DynPathSecondMoment",
       "file": "lean/Conjectures/Goldbach/DynPathSecondMoment.lean",
       "imports": [
-        "Conjectures.Goldbach.DynFactorialCollisions"
+        "Conjectures.Goldbach.DynFactorialCollisions",
+        "Conjectures.Goldbach.DynShiftSieve",
+        "Conjectures.Goldbach.DynShiftFactorMean"
       ],
       "track": "representations",
       "role": "lemma",
@@ -16270,8 +16272,8 @@
       "depends_on": [],
       "role": "lemma",
       "imports": [],
-      "module": "Conjectures.Goldbach.B13BilateralVaughanReduction",
       "file": "lean/Conjectures/Goldbach/B13BilateralVaughanReduction.lean",
+      "module": "Conjectures.Goldbach.B13BilateralVaughanReduction",
       "track": "signed-factor-windows",
       "route_source": "signed-factor-windows"
     },
@@ -16293,8 +16295,8 @@
       "depends_on": [],
       "role": "lemma",
       "imports": [],
-      "module": "Conjectures.Goldbach.B13BoundedStepProductSaving",
       "file": "lean/Conjectures/Goldbach/B13BoundedStepProductSaving.lean",
+      "module": "Conjectures.Goldbach.B13BoundedStepProductSaving",
       "track": "signed-factor-windows",
       "route_source": "signed-factor-windows"
     },
@@ -16316,8 +16318,8 @@
       "depends_on": [],
       "role": "lemma",
       "imports": [],
-      "module": "Conjectures.Goldbach.B13FarInnerArithmeticCuts",
       "file": "lean/Conjectures/Goldbach/B13FarInnerArithmeticCuts.lean",
+      "module": "Conjectures.Goldbach.B13FarInnerArithmeticCuts",
       "track": "signed-factor-windows",
       "route_source": "signed-factor-windows"
     },
@@ -16339,8 +16341,8 @@
       "depends_on": [],
       "role": "lemma",
       "imports": [],
-      "module": "Conjectures.Goldbach.B13NondividingResidueReduction",
       "file": "lean/Conjectures/Goldbach/B13NondividingResidueReduction.lean",
+      "module": "Conjectures.Goldbach.B13NondividingResidueReduction",
       "track": "signed-factor-windows",
       "route_source": "signed-factor-windows"
     },
@@ -16730,7 +16732,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [
-        "PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli"
+        "PEqualNP.Outside.L_goldbach_frontier_skirt_polylog_moduli",
+        "Conjectures.Goldbach.WideSignedRemainderBridge"
       ],
       "file": "lean/Conjectures/Goldbach/WideSignedUnconditional.lean",
       "module": "Conjectures.Goldbach.WideSignedUnconditional",
