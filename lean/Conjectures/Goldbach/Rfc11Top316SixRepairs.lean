@@ -4319,14 +4319,12 @@ def hit (i : ℕ) : Bool := anchors.any (fun t => Rfc11SmallPrime.check (t - 2*i
 
 set_option maxRecDepth 400000 in
 set_option maxHeartbeats 0 in
-theorem coverage : ((List.range 12289).drop 1).all hit = true := by decide +kernel
+theorem coverage : (List.range 12289).all hit = true := by decide +kernel
 
 theorem witness {i : ℕ} (h1 : 1 ≤ i) (h2 : i ≤ 12288) :
     ∃ t ∈ anchors, Nat.Prime (t - 2*i) := by
   have hcov : hit i = true := by
-    have hmem : i ∈ (List.range 12289).drop 1 := by
-      simp only [List.mem_drop, List.mem_range]
-      omega
+    have hmem : i ∈ List.range 12289 := List.mem_range.mpr (by omega)
     exact List.all_eq_true.mp coverage i hmem
   unfold hit at hcov
   obtain ⟨t, ht, hc⟩ := List.any_eq_true.mp hcov
