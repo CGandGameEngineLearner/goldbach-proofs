@@ -17,7 +17,9 @@
     "L-joshi-abc-padic-isometry",
     "L-joshi-abc-kummer-quotient"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.KummerQuotient"
+  ],
   "track": "05-kummer-images",
   "module": "Conjectures.JoshiAbc.KummerResidue",
   "file": "lean/Conjectures/JoshiAbc/KummerResidue.lean"

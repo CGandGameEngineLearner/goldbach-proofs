@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-frey-minimal"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.FreyMinimal"
+  ],
   "track": "07-global-heights",
   "module": "Conjectures.JoshiAbc.FreyHeight",
   "file": "lean/Conjectures/JoshiAbc/FreyHeight.lean"
