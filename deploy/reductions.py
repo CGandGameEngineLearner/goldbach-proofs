@@ -193,8 +193,9 @@ def assembly_plans(conn, gaps, after=0):
                              evidence(conn.execute(ordinary, (gap,)).fetchone(), gap))
         return resolved[gap]
 
+    inactive = inactive_tasks(conn)
     for run, parent in live:
-        if parent not in gaps or gaps[parent].get("refutation") or child_proof(parent):
+        if parent in inactive or parent not in gaps or gaps[parent].get("refutation") or child_proof(parent):
             continue
         children = [key for key, in conn.execute(
             "SELECT child FROM cut_premises WHERE run=? ORDER BY position", (run,))]
