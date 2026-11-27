@@ -1,0 +1,24 @@
+{
+  "id": "L-goldbach-finite-rough-fourteen-fortyseven",
+  "file": "lean/PEqualNP/Outside/L_goldbach_finite_rough_fourteen_fortyseven.lean",
+  "module": "PEqualNP.Outside.L_goldbach_finite_rough_fourteen_fortyseven",
+  "statement": "∀ n : ℕ, 4 ≤ n → Even n → (n:ℝ) < Real.exp (Real.exp 5) → ∃ p : ℕ, Nat.Prime p ∧ 2 ≤ n-p ∧ (n-p).primeFactorsList.length ≤ 47 ∧ ((n:ℝ) < Real.exp (Real.exp (19/5)) → (n-p).primeFactorsList.length ≤ 14)",
+  "plain_statement": {
+    "zh": "新路线 · 小偶数覆盖续批 · FR-8005 · 把两个原型区间的因子数上界降到 14 和 47",
+    "en": "New route · Finite-range coverage II · FR-8005 · Improve the two prototype factor bounds to 14 and 47"
+  },
+  "brief": {
+    "zh": "用 23^Ω≤n−p 并验证 exp(3.8)<15 log 23、exp(5)<48 log 23。小于 210235 时 n=4 单列，其余偶数取 p=3 后用奇因子 ≥3。",
+    "en": "Use 23^Ω≤n−p and verify exp(3.8)<15 log 23 and exp(5)<48 log 23. Below 210235 handle 4 separately and take p=3 for the other evens, whose remainder has only odd factors."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "finite-rfc-second",
+  "role": "lemma",
+  "depends_on": [
+    "L-goldbach-finite-wheel-rough-twentythree",
+    "L-goldbach-finite-rough-factor-power"
+  ]
+}

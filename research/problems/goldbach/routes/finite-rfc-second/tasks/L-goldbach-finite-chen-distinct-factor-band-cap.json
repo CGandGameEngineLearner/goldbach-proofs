@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-finite-chen-distinct-factor-band-cap",
+  "file": "lean/PEqualNP/Outside/L_goldbach_finite_chen_distinct_factor_band_cap.lean",
+  "module": "PEqualNP.Outside.L_goldbach_finite_chen_distinct_factor_band_cap",
+  "statement": "∀ (n D E Q : ℕ) (w : ℕ → ℝ) (B : ℝ), 0 ≤ B → (∀ p ≤ n, w p ≤ B) → let P := (Finset.range (n+1)).filter (fun p => Nat.Prime p ∧ ((Finset.Ioc D E).filter (fun r => Nat.Prime r ∧ ((Finset.Ioc r Q).filter (fun q => Nat.Prime q ∧ p+r*q=n)).Nonempty)).Nonempty); (∑ p ∈ P, w p) ≤ B * (∑ r ∈ (Finset.Ioc D E).filter Nat.Prime, ((min Q (n/r)-r:ℕ):ℝ))",
+  "plain_statement": {
+    "zh": "新路线 · 小偶数覆盖续批 · FR-8008 · 为明确较小因子带内的平方自由半素数贡献给出上界",
+    "en": "New route · Finite-range coverage II · FR-8008 · Bound the distinct-factor semiprime mass in a specified smaller-factor band"
+  },
+  "brief": {
+    "zh": "用唯一较小素因子分拆候选。固定 r，把候选注入 r<q≤min(Q,n/r) 的区间。计算所得上界可与同权的陈氏下界比较，完整因子区间仍需逐 n 的更精细估计。",
+    "en": "Partition by the unique smaller prime factor. For each r, inject into the interval r<q≤min(Q,n/r). A same-weight Chen lower bound can be compared with this budget. The full factor range still needs sharper bounds for each n."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "finite-rfc-second",
+  "role": "lemma",
+  "depends_on": [
+    "L-goldbach-finite-chen-square-reindex"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-fourth-band-rational-resonance",
+  "file": "lean/PEqualNP/Outside/L_goldbach_fourth_band_rational_resonance.lean",
+  "module": "PEqualNP.Outside.L_goldbach_fourth_band_rational_resonance",
+  "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (A B h q a : ℕ), 0 < q → Nat.Coprime a q → let z := E ((a:ℝ)*h/q); ‖∑ l ∈ Finset.Ioc A B, E ((a:ℝ)*h*l/q)‖ ≤ if q ∣ h then ((B-A:ℕ):ℝ) else min ((B-A:ℕ):ℝ) (2/‖1-z‖)",
+  "plain_statement": {
+    "zh": "新路线 · 裙边与显式算术输入 · SI-8002 · 在有理中心显式分出自由因子的共振类",
+    "en": "New route · Skirts and explicit arithmetic inputs · SI-8002 · Separate the resonant free factors at a rational center"
+  },
+  "brief": {
+    "zh": "取 h=bd。既约性使共振条件等于 q∣bd；对其余项求几何级数。偏离中心的相位和与第三带的交项仍待估计。",
+    "en": "Take h=bd. Coprimality makes q∣bd the exact resonance condition. Sum the geometric series off resonance. Nearby phases and the cross term with band three still need estimates."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "explicit-skirt-inputs",
+  "role": "lemma",
+  "depends_on": []
+}

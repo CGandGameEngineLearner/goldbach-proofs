@@ -6,17 +6,17 @@
 //   node outside-guard.mjs pr <pr.json> <files.json> <tree.json> <repo> <default branch> <out dir>
 //   node outside-guard.mjs gap <gaps.json> <gap id> <file path> <out dir>
 //   node outside-guard.mjs gap-of-file <gaps.json> <file path> <out dir>
-//   node outside-guard.mjs imports <lean file> <imports.json>
+//   node outside-guard.mjs imports <lean file> <imports.json> [build-imports.json]
 //   node outside-guard.mjs closure <base dir> <imports.json> <judged file path> <out dir>
 //
 // Exit 0: the guard holds. Exit 1: REFUSED, with one line saying why. Exit 3: bad usage.
 import { lstatSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-export const FILE_RE = /^lean\/PEqualNP\/Outside\/L_[a-z0-9_]+\.lean$/;
+export const FILE_RE = /^lean\/(?:PEqualNP\/Outside\/L_[a-z0-9_]+|Conjectures\/[A-Z][A-Za-z0-9]*\/[A-Z][A-Za-z0-9]*)\.lean$/;
 export const GAP_RE = /^L-[a-z0-9]+(-[a-z0-9]+)*$/;
-export const MODULE_RE = /^PEqualNP(\.[A-Za-z][A-Za-z0-9_]*)+$/;
-export const MAX_BYTES = 512 * 1024;
+export const MODULE_RE = /^(?:PEqualNP|Conjectures)(\.[A-Za-z][A-Za-z0-9_]*)+$/;
+export const MAX_BYTES = 2 * 1024 * 1024;
 const SHA_RE = /^[0-9a-f]{40}$/;
 const LOGIN_RE = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})(\[bot\])?$/;
 
@@ -39,7 +39,7 @@ export function checkPr(pr, files, tree, repo, defaultBranch) {
   if (pr.changed_files !== 1) refuse(`the pull request changes ${pr.changed_files} files; it must add exactly one`);
   if (!Array.isArray(files) || files.length !== 1) refuse('the pull request must add exactly one file');
   const f = files[0];
-  if (typeof f.filename !== 'string' || !FILE_RE.test(f.filename)) refuse('the one file must be lean/PEqualNP/Outside/L_<gap>.lean');
+  if (typeof f.filename !== 'string' || !FILE_RE.test(f.filename)) refuse('the one file must be a registered community proof path');
   if (f.status !== 'added') refuse(`the file must be added, not ${f.status}`);
   if (!SHA_RE.test(f.sha ?? '')) refuse('the file list names no content hash');
   // The tree says what kind of entry it is. 100644 is a plain file: a symbolic link is 120000,
@@ -88,7 +88,7 @@ export function checkImports(bytes, allowed) {
     const m = /^import ([A-Za-z][A-Za-z0-9_]*(?:\.[A-Za-z][A-Za-z0-9_]*)*)[ \t]*$/.exec(l);
     if (!m) break;
     const name = m[1];
-    if (!(name === 'Mathlib' || name.startsWith('Mathlib.') || ok.has(name))) refuse(`line ${i + 1}: import ${name} is not allowed (only Mathlib and the modules the gap lists)`);
+    if (!(name === 'Mathlib' || name.startsWith('Mathlib.') || ok.has(name) || (ok.has('PEqualNP.GRH') && name.startsWith('PEqualNP.GRHSource.')))) refuse(`line ${i + 1}: import ${name} is not allowed (only Mathlib and the modules the gap lists)`);
     seen.push(name);
   }
   for (; i < lines.length; i += 1) {
@@ -159,11 +159,11 @@ export function checkPlain(text) {
 // CONSEQUENCE: a fleet module that imports an outside proof can never be a listed import. A
 // file that builds on outside proofs imports the outside modules themselves, and the gap lists
 // them; fleet helpers built on outside proofs stay off the lists.
-export const OUTSIDE_MODULE_RE = /^PEqualNP\.Outside\.L_[a-z0-9_]+$/;
+export const OUTSIDE_MODULE_RE = /^(?:PEqualNP\.Outside\.L_[a-z0-9_]+|Conjectures\.[A-Z][A-Za-z0-9]*\.[A-Z][A-Za-z0-9]*)$/;
 export const MAX_OUTSIDE = 16;
-const PROJECT_RE = /^(PEqualNP|CheckerSuite)(\.[A-Za-z][A-Za-z0-9_]*)*$/;
-const BASE_ROOT_RE = /^PEqualNP(\.[A-Za-z][A-Za-z0-9_]*)*$/;
-const isOutside = (m) => m === 'PEqualNP.Outside' || m.startsWith('PEqualNP.Outside.');
+const PROJECT_RE = /^(PEqualNP|Conjectures|CheckerSuite)(\.[A-Za-z][A-Za-z0-9_]*)*$/;
+const BASE_ROOT_RE = /^(?:PEqualNP|Conjectures)(\.[A-Za-z][A-Za-z0-9_]*)*$/;
+const isOutside = (m) => ['PEqualNP.Outside', 'Conjectures'].some(root => m === root || m.startsWith(root + '.'));
 
 // The import lines of a base module, read the way Lean reads a header: comments, `module`,
 // `prelude` and the modifiers `public`, `meta`, `private`, `all` are passed over. Base files are
@@ -206,11 +206,11 @@ export function headerImports(text, name) {
   return out;
 }
 
-export function importClosure(listed, read, judged) {
+export function importClosure(listed, read, judged, buildOrder = []) {
   const outside = new Set(), base = new Set();
   const visit = (m, from) => {
     if (outside.has(m) || base.has(m)) return;
-    if (!BASE_ROOT_RE.test(m)) refuse(`${from ? `${from} imports` : 'the gap lists'} ${m}, which is not under the PEqualNP root`);
+    if (!BASE_ROOT_RE.test(m)) refuse(`${from ? `${from} imports` : 'the gap lists'} ${m}, which is not under an allowed project root`);
     if (m === judged) refuse(`${from ? `${from} imports` : 'the gap lists'} ${m}, the file being judged`);
     const bytes = read(m);
     if (bytes === null) refuse(`${from ? `${from} imports` : 'the gap lists'} ${m}, which is not a plain file of the base tree`);
@@ -222,6 +222,7 @@ export function importClosure(listed, read, judged) {
       let imports;
       try { imports = checkImports(bytes, (x) => PROJECT_RE.test(x)); } catch (e) { if (e instanceof Refused) refuse(`the listed outside module ${m}: ${e.message}`); throw e; }
       for (const x of imports) if (PROJECT_RE.test(x)) visit(x, m);
+      buildOrder.push(m);
     } else {
       base.add(m);
       for (const x of headerImports(new TextDecoder().decode(bytes), m)) {
@@ -250,22 +251,26 @@ const main = () => {
     put(out, 'statement.txt', g.statement);          // the posted text, byte for byte
     put(out, 'imports.json', JSON.stringify(g.imports));
     put(out, 'imports.txt', g.imports.map((m) => `${m}\n`).join(''));
-  } else if (cmd === 'imports' && a.length === 2) {
-    const seen = checkImports(readFileSync(a[0]), json(a[1]));
+  } else if (cmd === 'imports' && (a.length === 2 || a.length === 3)) {
+    const listed = json(a[1]);
+    const seen = checkImports(readFileSync(a[0]), listed);
+    if (a[2]) writeFileSync(a[2], JSON.stringify([...new Set([...listed, ...seen.filter((m) => MODULE_RE.test(m))])]));
     process.stdout.write(`imports allowed: ${seen.join(' ') || '(none)'}\n`);
   } else if (cmd === 'closure' && a.length === 4) {
     const [baseDir, importsPath, judgedFile, out] = a;
-    if (!FILE_RE.test(judgedFile)) refuse('the judged file is not lean/PEqualNP/Outside/L_<gap>.lean');
+    if (!FILE_RE.test(judgedFile)) refuse('the judged file is not a registered community proof path');
     const listed = json(importsPath);
     if (!Array.isArray(listed) || !listed.every((m) => typeof m === 'string' && MODULE_RE.test(m))) refuse('the listed imports are malformed');
-    // A module's file in the base tree: a plain file (not a link), at most 512 KiB, else null.
+    // A module's file in the base tree: a plain file (not a link), at most 2 MiB, else null.
     const read = (m) => {
       const p = join(baseDir, 'lean', ...m.split('.')) + '.lean';
       let st; try { st = lstatSync(p); } catch { return null; }
       if (!st.isFile() || st.size > MAX_BYTES) return null;
       return readFileSync(p);
     };
-    const r = importClosure(listed, read, moduleOf(judgedFile));
+    const buildOrder = [];
+    const r = importClosure(listed, read, moduleOf(judgedFile), buildOrder);
+    put(out, 'outside-build-order.txt', buildOrder.map((m) => `${m}\n`).join(''));
     put(out, 'base-imports.txt', r.base.map((m) => `${m}\n`).join(''));
     put(out, 'outside-imports.txt', r.outside.map((m) => `${m}\n`).join(''));
     put(out, 'outside-sources.txt', r.outside.map((m) => `base/lean/${m.split('.').join('/')}.lean\n`).join(''));

@@ -1,17 +1,25 @@
 import re
 """Check the public research queue and the scope of its analytic targets."""
 
+import hashlib
 import json
 import unittest
 from pathlib import Path
 from urllib.parse import urlparse
 
+from research.build_catalogue import proof_location
 
 GAPS = json.loads(Path(__file__).with_name("gaps.json").read_text(encoding="utf-8"))["gaps"]
 PROBLEMS = json.loads(Path(__file__).with_name("problems.json").read_text(encoding="utf-8"))
 
 
 class CatalogueTests(unittest.TestCase):
+    def check_proof_location(self, slug, gap):
+        legacy = "PEqualNP.Outside." + gap["id"].replace("-", "_")
+        location = ({"module": legacy, "file": f"lean/{legacy.replace('.', '/')}.lean"}
+                    if gap["module"] == legacy else proof_location(slug, gap["id"]))
+        self.assertEqual({key: gap[key] for key in location}, location)
+
     def test_problem_tasks_have_unique_names_and_respect_scope(self):
         all_gaps = GAPS + [gap for problem in PROBLEMS.values() for gap in problem["gaps"]]
         for key in ("id", "file", "module"):
@@ -24,9 +32,7 @@ class CatalogueTests(unittest.TestCase):
                 with self.subTest(problem=slug, gap=gap["id"]):
                     self.assertRegex(gap["id"], rf"^L-{slug}-[a-z0-9]+(?:-[a-z0-9]+)*$")
                     self.assertLessEqual(len(gap["id"]), 64)
-                    name = gap["id"].replace("-", "_")
-                    self.assertEqual(gap["file"], f"lean/PEqualNP/Outside/{name}.lean")
-                    self.assertEqual(gap["module"], f"PEqualNP.Outside.{name}")
+                    self.check_proof_location(slug, gap)
                     self.assertIn(gap["program"], {"foundation", "correlation"})
                     for lang in ("en", "zh"):
                         self.assertTrue(gap["plain_statement"][lang].strip())
@@ -57,9 +63,7 @@ class CatalogueTests(unittest.TestCase):
             with self.subTest(gap=gap["id"]):
                 self.assertRegex(gap["id"], r"^L-goldbach-[a-z0-9]+(?:-[a-z0-9]+)*$")
                 self.assertLessEqual(len(gap["id"]), 64)
-                name = gap["id"].replace("-", "_")
-                self.assertEqual(gap["module"], f"PEqualNP.Outside.{name}")
-                self.assertEqual(gap["file"], f"lean/PEqualNP/Outside/{name}.lean")
+                self.check_proof_location("goldbach", gap)
                 for lang in ("en", "zh"):
                     self.assertTrue(gap["plain_statement"][lang].strip())
 
@@ -75,6 +79,32 @@ class CatalogueTests(unittest.TestCase):
         self.assertTrue(all(g["role"] in {"lemma", "conditional", "target"} for g in tasks))
         self.assertEqual([g["id"] for g in GAPS if g.get("role") == "endpoint"],
                          ["L-goldbach-binary-pointwise-positivity"])
+
+    def test_audited_claim_policy_and_fourth_moment_refutation(self):
+        gaps = {g["id"].removeprefix("L-goldbach-"): g for g in GAPS}
+        closed = ("binary-pointwise-positivity", "dyadic-correlation-floor", "arc-minor-saving",
+                  "bulk-signed-floor", "frontier-spatial-diag-series-margin")
+        explicit = (
+            "frontier-antispike-shift-transfer", "frontier-no-siegel-zero", "frontier-bv-three-fifths-level",
+            "dyadic-central-prime-mass", "frontier-deep-three-quarters-saving", "frontier-skirt-medium-moduli",
+            "frontier-sqrt-modulus-arc-band", "finite-fixed-progression-unit-error",
+            "frontier-grh-medium-zones", "frontier-skirt-polylog-moduli", "deep-fourth-moment-refutation",
+            *("frontier-type2-" + cell for cell in
+              ("b1-b1", "b1-b2", "b1-b3", "b2-b2", "b2-b3", "b3-b3-parity", "b1-b4", "b2-b4", "b3-b4")),
+        )
+        for key in (*closed, *explicit):
+            with self.subTest(gap=key):
+                self.assertIs(gaps[key].get("challenge_only"), True)
+                self.assertEqual(gaps[key].get("claims_closed", False), key in closed)
+        retired = gaps["frontier-deep-fourth-moment-conjecture"]
+        self.assertIs(retired.get("challenge_only"), True)
+        self.assertIs(retired.get("claims_closed"), True)
+        self.assertEqual(retired["refutation"]["pr"], 2508)
+        negation = gaps["deep-fourth-moment-refutation"]["statement"]
+        self.assertTrue(negation.startswith("¬ (") and negation.endswith(")"))
+        self.assertEqual(negation[3:-1], retired["statement"])
+        frozen = hashlib.sha256(retired["statement"].encode("utf-8")).hexdigest()
+        self.assertEqual(frozen, "41dcb3eeed67239ec1493cf89db1dffea1df1fc0bd2453ca4bb75a641add1476")
 
     def test_new_route_labels_and_dependencies(self):
         from graphlib import TopologicalSorter

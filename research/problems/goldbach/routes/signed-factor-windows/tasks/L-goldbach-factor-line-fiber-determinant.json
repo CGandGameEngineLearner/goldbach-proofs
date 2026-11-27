@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-factor-line-fiber-determinant",
+  "file": "lean/PEqualNP/Outside/L_goldbach_factor_line_fiber_determinant.lean",
+  "module": "PEqualNP.Outside.L_goldbach_factor_line_fiber_determinant",
+  "statement": "∀ (a b N r₀ s₀ g i j : ℤ), 0 < g → g ∣ a → g ∣ b → a*r₀+b*s₀=N → (r₀+(b/g)*i)*(s₀-(a/g)*j)-(r₀+(b/g)*j)*(s₀-(a/g)*i)=-(N/g)*(j-i)",
+  "plain_statement": {
+    "zh": "新路线 · 有符号因子与移位窗 · FW-8007 · 计算反射纤维的两点行列式",
+    "en": "New route · Signed factors and shift windows · FW-8007 · Compute the determinant of two points on a reflected fiber"
+  },
+  "brief": {
+    "zh": "先还原整除下的约化步长，再展开。远非对角项的行列式随目标增长。",
+    "en": "Use exact division of the steps and expand. The determinant off the diagonal grows with the target."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2495",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "signed-factor-windows",
+  "role": "lemma",
+  "depends_on": []
+}

@@ -1,0 +1,16 @@
+{
+  "id": "character-arc-windows",
+  "title": {
+    "zh": "特征与分母扩窗",
+    "en": "Characters and extended arcs"
+  },
+  "description": {
+    "zh": "在有限特征和与实际弧带上核验例外项、模数扩窗和均方预算。",
+    "en": "Compute exceptional character terms, arc extensions and mean-square budgets with the actual denominators and masks."
+  },
+  "feeds": [
+    "frontier-grh-and-zero-chains",
+    "frontier-medium-arc-scales",
+    "odd-character-interference"
+  ]
+}

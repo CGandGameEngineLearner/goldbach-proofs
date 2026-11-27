@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-exceptional-character-reflection",
+  "file": "lean/PEqualNP/Outside/L_goldbach_exceptional_character_reflection.lean",
+  "module": "PEqualNP.Outside.L_goldbach_exceptional_character_reflection",
+  "statement": "∀ (d n : ℕ) [NeZero d] (χ : DirichletCharacter ℂ d), d ∣ n → χ^2 = 1 → (∑ a : (ZMod d)ˣ, χ (a : ZMod d) * χ ((n : ZMod d) - (a : ZMod d))) = (Nat.totient d : ℂ) * χ (-1)",
+  "plain_statement": {
+    "zh": "新路线 · 特征与分母扩窗 · CW-8001 · 计算导子整除目标时实特征对的反射项",
+    "en": "New route · Characters and extended arcs · CW-8001 · Evaluate the reflected quadratic-character pair at multiples of the conductor"
+  },
+  "brief": {
+    "zh": "在单位群上把 n−a 换成 −a，再用 χ²=1。奇特征给 −φ(d)，偶特征给正号。剩余零点和交叉项仍须估计。",
+    "en": "On the units n−a equals −a. Apply χ²=1 there. Odd parity gives −φ(d), even parity gives the positive sign. Other zeros and cross terms still need estimates."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "character-arc-windows",
+  "role": "lemma",
+  "depends_on": []
+}

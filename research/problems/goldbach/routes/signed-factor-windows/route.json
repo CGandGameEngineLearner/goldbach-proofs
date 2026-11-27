@@ -1,0 +1,15 @@
+{
+  "id": "signed-factor-windows",
+  "title": {
+    "zh": "有符号因子与移位窗",
+    "en": "Signed factors and shift windows"
+  },
+  "description": {
+    "zh": "展开真实双线性权，比较冻结深弧遮罩上的偶移平均与指定系数。",
+    "en": "Unfold the arithmetic bilinear weights and compare even-shift averages with the prescribed coefficient under a fixed deep-arc mask."
+  },
+  "feeds": [
+    "frontier-type2-dyadic-matrix",
+    "frontier-moment-antispike"
+  ]
+}

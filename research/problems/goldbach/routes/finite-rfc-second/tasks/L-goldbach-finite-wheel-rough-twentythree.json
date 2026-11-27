@@ -1,0 +1,24 @@
+{
+  "id": "L-goldbach-finite-wheel-rough-twentythree",
+  "file": "lean/PEqualNP/Outside/L_goldbach_finite_wheel_rough_twentythree.lean",
+  "module": "PEqualNP.Outside.L_goldbach_finite_wheel_rough_twentythree",
+  "statement": "∀ n : ℕ, 210235 ≤ n → Even n → ∃ p : ℕ, Nat.Prime p ∧ p ≤ 210233 ∧ 2 ≤ n-p ∧ Nat.Coprime (n-p) 9699690",
+  "plain_statement": {
+    "zh": "新路线 · 小偶数覆盖续批 · FR-8004 · 在完整模 9699690 的轮筛上构造 23 粗余项",
+    "en": "New route · Finite-range coverage II · FR-8004 · Construct a 23-rough remainder on the full 9699690 wheel"
+  },
+  "brief": {
+    "zh": "先用 n%30030 选基类，再从三候选删去模 17 或 19 命中的至多两项。整数门槛保证差至少为二。",
+    "en": "Use n%30030 for the base class. Among its three candidates remove at most two forbidden by 17 and 19. The integer cutoff leaves a difference of at least two."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "finite-rfc-second",
+  "role": "lemma",
+  "depends_on": [
+    "L-goldbach-finite-wheel-unit-base",
+    "L-goldbach-finite-wheel-three-prime-lifts"
+  ]
+}

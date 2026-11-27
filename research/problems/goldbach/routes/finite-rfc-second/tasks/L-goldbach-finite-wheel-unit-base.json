@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-finite-wheel-unit-base",
+  "file": "lean/PEqualNP/Outside/L_goldbach_finite_wheel_unit_base.lean",
+  "module": "PEqualNP.Outside.L_goldbach_finite_wheel_unit_base",
+  "statement": "∀ a : ℕ, a < 30030 → Even a → ∃ r ∈ ({17,19,23,181,29,37,41,43,31,47,53,67} : Finset ℕ), Nat.Coprime r 30030 ∧ Nat.Coprime ((a+30030-r)%30030) 30030",
+  "plain_statement": {
+    "zh": "新路线 · 小偶数覆盖续批 · FR-8002 · 找到本身也为单位的模 30030 覆盖表",
+    "en": "New route · Finite-range coverage II · FR-8002 · Cover modulus 30030 with base candidates that are units"
+  },
+  "brief": {
+    "zh": "逐项删除已覆盖的偶类。旧表含 3、5、7、11，这些素数的本类无法容纳三个素数提升。本表各基类均可继续提升。",
+    "en": "Remove the covered even classes in order. The previous table included 3,5,7,11, whose classes cannot contain three prime lifts. Each new base class can be lifted."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "finite-rfc-second",
+  "role": "lemma",
+  "depends_on": []
+}

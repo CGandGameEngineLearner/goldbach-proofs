@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-factor-band-unfold",
+  "file": "lean/PEqualNP/Outside/L_goldbach_factor_band_unfold.lean",
+  "module": "PEqualNP.Outside.L_goldbach_factor_band_unfold",
+  "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let Λ := ArithmeticFunction.vonMangoldt; ∀ (n U L R : ℕ) (t : ℝ), let M := fun a : ℕ => ∑ d ∈ (Nat.divisors a).filter (fun d => U < d), μ d; let T := fun m : ℕ => ∑ a ∈ (Nat.divisors m).filter (fun a => L < a ∧ a ≤ R ∧ U < m/a), M a * Λ (m/a); (∑ m ∈ Finset.range (n+1), (T m : ℂ) * E ((m:ℝ)*t)) = ∑ a ∈ Finset.Ioc L (min R n), ∑ b ∈ Finset.Ioc U (n/a), ((M a * Λ b : ℝ):ℂ) * E ((a*b:ℕ)*t)",
+  "plain_statement": {
+    "zh": "新路线 · 有符号因子与移位窗 · FW-8001 · 把 Vaughan 带谱展开为带乘积截断的双和",
+    "en": "New route · Signed factors and shift windows · FW-8001 · Unfold a Vaughan band into a product-truncated double sum"
+  },
+  "brief": {
+    "zh": "用 m=ab 双射，分别处理 m=0 和下降的区间。L、R 可取前三带的真实整数端点。供六个双线性格共用。",
+    "en": "Use m=ab and the exact floors, including m=0 and empty intervals. Substituting the first three bands serves all six core cells."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "signed-factor-windows",
+  "role": "lemma",
+  "depends_on": []
+}

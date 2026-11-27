@@ -1,0 +1,22 @@
+{
+  "id": "L-goldbach-deep-fourth-moment-refutation",
+  "file": "lean/PEqualNP/Outside/L_goldbach_deep_fourth_moment_refutation.lean",
+  "module": "PEqualNP.Outside.L_goldbach_deep_fourth_moment_refutation",
+  "statement": "¬ (let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; ∀ η : ℝ, 0 < η → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => ‖S n w u‖ ^ 4) t) (0 : ℝ) 1 MeasureTheory.volume ≤ (n : ℝ) ^ (2 + η))",
+  "plain_statement": {
+    "zh": "新路线 · 深次弧四次矩反驳 · MR-8001 · 反驳已撤下的深次弧四次矩上界",
+    "en": "New route · Deep fourth-moment refutation · MR-8001 · Refute the retired deep-arc fourth-moment bound"
+  },
+  "brief": {
+    "zh": "取 η=1/6，在立方根截断刚外侧选择平方自由分母。对全部既约分子求和，用 Ramanujan 和、Farey 分离及 Hölder 给出任意大尺度的反例。提交整个冻结声明的否定。",
+    "en": "Take η=1/6 and squarefree denominators just beyond the cube-root cutoff. Sum over reduced numerators, use Ramanujan sums, Farey separation and Hölder, and obtain counterexamples at arbitrarily large cutoffs."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/ROADMAP.md",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "deep-moment-refutation",
+  "role": "target",
+  "depends_on": [],
+  "challenge_only": true
+}

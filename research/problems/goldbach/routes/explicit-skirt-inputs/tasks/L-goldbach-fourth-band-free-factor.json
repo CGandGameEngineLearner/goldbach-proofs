@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-fourth-band-free-factor",
+  "file": "lean/PEqualNP/Outside/L_goldbach_fourth_band_free_factor.lean",
+  "module": "PEqualNP.Outside.L_goldbach_fourth_band_free_factor",
+  "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let μ := fun d : ℕ => ((ArithmeticFunction.moebius d : ℤ) : ℝ); let Λ := ArithmeticFunction.vonMangoldt; ∀ (n U B : ℕ) (t : ℝ), 1 ≤ B → let T := fun m : ℕ => ∑ a ∈ (Nat.divisors m).filter (fun a => B < a ∧ U < m / a), (∑ d ∈ (Nat.divisors a).filter (fun d => U < d), μ d) * Λ (m/a); (∑ m ∈ Finset.range (n+1), (T m:ℂ)*E ((m:ℝ)*t)) = -(∑ b ∈ Finset.Ioc U (n/(B+1)), ∑ d ∈ Finset.Icc 1 U, ((Λ b * μ d:ℝ):ℂ) * ∑ l ∈ Finset.Ioc (B/d) ((n/b)/d), E ((b*d*l:ℕ)*t))",
+  "plain_statement": {
+    "zh": "新路线 · 裙边与显式算术输入 · SI-8001 · 从第四带的短除数补和中露出无权长变量",
+    "en": "New route · Skirts and explicit arithmetic inputs · SI-8001 · Expose the unweighted variable in the fourth band"
+  },
+  "brief": {
+    "zh": "a>B≥1 时全 Möbius 除数和为零。把补和取负，写 a=dℓ，保留 b≤n/(B+1) 和 ℓ 的两个取整端点。取 B=⌊n^(2/3)⌋。",
+    "en": "For a>B≥1 the full Möbius divisor sum vanishes. Negate the short complement, set a=dℓ and keep both floors and b≤n/(B+1). Use B=⌊n^(2/3)⌋."
+  },
+  "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-type2-b3-b4",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "explicit-skirt-inputs",
+  "role": "lemma",
+  "depends_on": []
+}

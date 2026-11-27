@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-progression-unit-fourier-variance",
+  "file": "lean/PEqualNP/Outside/L_goldbach_progression_unit_fourier_variance.lean",
+  "module": "PEqualNP.Outside.L_goldbach_progression_unit_fourier_variance",
+  "statement": "let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let Λ := ArithmeticFunction.vonMangoldt; ∀ (q n : ℕ), 0 < q → let D := fun r : ℕ => if Nat.Coprime r q then (∑ k ∈ (Finset.range (n+1)).filter (fun k => k%q=r), Λ k) - (n:ℝ)/Nat.totient q else 0; (∑ a ∈ Finset.range q, ‖∑ r ∈ Finset.range q, (D r:ℂ)*E ((a:ℝ)*r/q)‖^2) = (q:ℝ)*(∑ r ∈ Finset.range q, (D r)^2)",
+  "plain_statement": {
+    "zh": "新路线 · 特征与分母扩窗 · CW-8004 · 把有理频率总能量精确还原为单位余类方差",
+    "en": "New route · Characters and extended arcs · CW-8004 · Recover the unit-class variance from the rational-frequency energy"
+  },
+  "brief": {
+    "zh": "对所有分子取平方均值并用加法正交。非单位类按零延拓。用于检验频率预算，3/5 水平的逐类最大误差及模数和另需输入。",
+    "en": "Sum over every numerator and apply additive orthogonality with zero extension on nonunits. The maximum class error and the sum over moduli at level 3/5 need additional bounds."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "character-arc-windows",
+  "role": "lemma",
+  "depends_on": []
+}

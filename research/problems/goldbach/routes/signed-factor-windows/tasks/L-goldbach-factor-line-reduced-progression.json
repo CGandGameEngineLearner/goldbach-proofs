@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-factor-line-reduced-progression",
+  "file": "lean/PEqualNP/Outside/L_goldbach_factor_line_reduced_progression.lean",
+  "module": "PEqualNP.Outside.L_goldbach_factor_line_reduced_progression",
+  "statement": "let Λ := ArithmeticFunction.vonMangoldt; ∀ (n a b U : ℕ), 0 < a → 0 < b → let g := Nat.gcd a b; (∑ r ∈ Finset.Ioc U (n/a), ∑ s ∈ (Finset.Ioc U (n/b)).filter (fun s => a*r+b*s=n), Λ r * Λ s) = if g ∣ n then ∑ r ∈ (Finset.Ioc U (n/a)).filter (fun r => (a/g)*r % (b/g) = (n/g) % (b/g) ∧ U < (n-a*r)/b), Λ r * Λ ((n-a*r)/b) else 0",
+  "plain_statement": {
+    "zh": "新路线 · 有符号因子与移位窗 · FW-8002 · 把固定因子线的 Mangoldt 对限制到约化同余类",
+    "en": "New route · Signed factors and shift windows · FW-8002 · Restrict the Mangoldt pair on each factor line to a reduced congruence"
+  },
+  "brief": {
+    "zh": "固定 a,b；g 不整除目标时直线为空。否则先除 g 再取余，整除和 a r≤n 同时保证第二余因子的取值与端点。对应全圆对角；深弧还须扣宽弧。",
+    "en": "Fix a,b. Divide by the gcd before taking the congruence. Divisibility and ar≤n determine the other cofactor and its endpoints. This treats the full-circle diagonal. The wide-arc subtraction remains."
+  },
+  "source": "https://github.com/leanprover-community/riemann-hypothesis/blob/fcb6eac7534875d32d68030967e2deae6d686151/src/Development/AbelianVarietyTheory/Proofs/FoundationProofs/DirichletCharFiniteFourierTransformProperties.lean#L85",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "signed-factor-windows",
+  "role": "lemma",
+  "depends_on": []
+}

@@ -1,7 +1,7 @@
 {
   "id": "L-goldbach-deep-arc-second-moment-floor",
-  "file": "lean/PEqualNP/Outside/L_goldbach_deep_arc_second_moment_floor.lean",
-  "module": "PEqualNP.Outside.L_goldbach_deep_arc_second_moment_floor",
+  "file": "lean/Conjectures/Goldbach/DeepArcSecondMomentFloor.lean",
+  "module": "Conjectures.Goldbach.DeepArcSecondMomentFloor",
   "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; ∃ c : ℝ, 0 < c ∧ ∃ N : ℕ, ∀ n : ℕ, N ≤ n → c * (n : ℝ) * Real.log (n : ℝ) ≤ intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => ‖S n w u‖ ^ 2) t) (0 : ℝ) 1 MeasureTheory.volume",
   "plain_statement": {
     "zh": "对所有充分大的整数 n，立方根截断的宽主弧之外，素数对数权指数和的二阶矩至少为 c n log n，其中 c>0 与 n 无关。",

@@ -1,0 +1,36 @@
+name: GRH proof verification
+on:
+  push:
+    branches: [ci/grh-compact]
+  pull_request:
+    paths:
+      - 'lean/PEqualNP/GRH.lean'
+      - 'lean/PEqualNP/GRHSource/**'
+      - 'lean/CheckerSuite/GRHConsumer*'
+      - 'lean/CheckLemma.lean'
+      - 'lean/lake*'
+      - 'lean/lean-toolchain'
+      - '.github/workflows/grh.yml'
+permissions:
+  contents: read
+env:
+  LEAN_NUM_THREADS: "1"
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lean
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Lean and fetch Mathlib
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          "$HOME/.elan/bin/lake" exe cache get
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Check a proof that uses all five GRH theorems
+        run: |
+          lake build checklemma +CheckerSuite.GRHConsumer
+          lake env .lake/build/bin/checklemma CheckerSuite.GRHConsumer CheckerSuite/GRHConsumer.statement check

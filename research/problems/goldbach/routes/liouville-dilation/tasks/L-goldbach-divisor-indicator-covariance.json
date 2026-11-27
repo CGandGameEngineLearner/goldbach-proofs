@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-divisor-indicator-covariance",
+  "file": "lean/PEqualNP/Outside/L_goldbach_divisor_indicator_covariance.lean",
+  "module": "PEqualNP.Outside.L_goldbach_divisor_indicator_covariance",
+  "statement": "let X := fun (p t : ℕ) => (p:ℝ)*(if p ∣ t then 1 else 0)-1; ∀ (N p q : ℕ), 0 < N → Nat.Prime p → Nat.Prime q → p ∣ N → q ∣ N → ((∑ t ∈ Finset.range N, X p t * X q t)/(N:ℝ)) = if p=q then (p:ℝ)-1 else 0",
+  "plain_statement": {
+    "zh": "新路线 · Liouville 相关的整除膨胀 · LD-8001 · 计算模 N 均匀测度下素因子整除指示的协方差",
+    "en": "New route · Dilation of Liouville correlations · LD-8001 · Compute covariance of prime divisibility indicators modulo N"
+  },
+  "brief": {
+    "zh": "统计 [0,N) 内的 p 倍数。异素数时，交集为 pq 的倍数，且 pq 整除 N。",
+    "en": "Count multiples of p in [0,N). For distinct primes the intersection consists of multiples of pq, which divides N."
+  },
+  "source": "https://arxiv.org/abs/1509.05422",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "liouville-dilation",
+  "role": "lemma",
+  "depends_on": []
+}

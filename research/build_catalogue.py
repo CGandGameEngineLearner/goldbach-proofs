@@ -8,6 +8,25 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 MARK = "route_source"
+COMMUNITY_PROOF = re.compile(
+    r"(?:Conjectures\.[A-Z][A-Za-z0-9]*\.[A-Z][A-Za-z0-9]*|PEqualNP\.Outside\.L_[a-z0-9_]+)"
+)
+
+
+def proof_location(slug, ident):
+    prefix = f"L-{slug}-"
+    suffix = ident.removeprefix(prefix)
+    if suffix == ident or not SLUG.fullmatch(suffix):
+        raise ValueError(f"Invalid task ID for {slug}: {ident}")
+
+    def pascal(words):
+        return "".join(word.capitalize() for word in words.split("-"))
+
+    name = pascal(suffix)
+    if name[0].isdigit():
+        name = "Lemma" + name
+    module = f"Conjectures.{pascal(slug)}.{name}"
+    return {"module": module, "file": f"lean/{module.replace('.', '/')}.lean"}
 
 
 def read(path):
@@ -24,10 +43,12 @@ def build(root):
     desks = {"goldbach": gold, **others}
     seen = set()
     old_statements = {}
+    old_locations = {}
     for slug, desk in desks.items():
         for g in desk["gaps"]:
             if MARK in g:
                 old_statements[g["id"]] = g["statement"]
+                old_locations[g["id"]] = {key: g[key] for key in ("file", "module")}
             else:
                 seen.add(g["id"])
         desk["gaps"] = [g for g in desk["gaps"] if MARK not in g]
@@ -79,9 +100,18 @@ def build(root):
                 raise ValueError(f"Missing bilingual task description: {task}")
             if ident in old_statements and g["statement"] != old_statements[ident]:
                 raise ValueError(f"Frozen statement changed: {ident}; create a new ID")
+            location = old_locations.get(ident) or proof_location(slug, ident)
+            for key, expected in location.items():
+                # Old authoring tools may still emit the legacy path for a new ID.
+                legacy_module = "PEqualNP.Outside." + ident.replace("-", "_")
+                legacy = legacy_module if key == "module" else f"lean/{legacy_module.replace('.', '/')}.lean"
+                if g.get(key, expected) not in (expected, legacy):
+                    raise ValueError(f"Unexpected {key} for {ident}")
+            g.update(location)
             seen.add(ident)
             consumed.add(task)
             g.update(track=route, route_source=route)
+            g.setdefault("imports", [])
             desk["gaps"].append(g)
             if slug != "goldbach":
                 existing["tasks"].append({"id": ident, **g["plain_statement"], MARK: route})
@@ -89,6 +119,10 @@ def build(root):
         raise ValueError(f"Unclassified JSON: {sources - consumed}")
     if old_statements.keys() - seen:
         raise ValueError("A published task source was removed")
+    for key in ("file", "module"):
+        paths = [g[key].casefold() for desk in desks.values() for g in desk["gaps"] if key in g]
+        if len(paths) != len(set(paths)):
+            raise ValueError(f"Conflicting proof {key} in the catalogue")
     for desk in desks.values():
         ids = {g["id"] for g in desk["gaps"]}
         graph = TopologicalSorter()
@@ -105,18 +139,56 @@ def build(root):
     return {"gaps.json": gold, "problems.json": others}
 
 
+def register_community_imports(root, catalogue, *, proof_available=None):
+    """Persist available direct dependencies without changing frozen statements."""
+    gaps = catalogue["gaps.json"]["gaps"] + [
+        gap for desk in catalogue["problems.json"].values() for gap in desk["gaps"]
+    ]
+    sources = {path.stem: path for path in (root / "problems").glob("*/routes/*/tasks/*.json")}
+    available = {}
+    for gap in gaps:
+        module = gap.get("module", "")
+        file = f"lean/{module.replace('.', '/')}.lean"
+        proof = root.parent / file
+        exists = (proof.is_file() and not proof.is_symlink() if proof_available is None
+                  else proof_available(file))
+        if COMMUNITY_PROOF.fullmatch(module) and gap.get("file") == file and exists:
+            available[gap["id"]] = module
+    for gap in gaps:
+        if gap["id"] in available:
+            continue
+        imports = list(dict.fromkeys([
+            *gap.get("imports", []),
+            *(available[dep] for dep in gap.get("depends_on", []) if dep in available),
+        ]))
+        gap["imports"] = imports
+        if gap["id"] in sources and imports:
+            path = sources[gap["id"]]
+            source = read(path)
+            if source.get("imports") != imports:
+                source["imports"] = imports
+                write(path, source)
+
+
+def write(path, data):
+    path.write_bytes((json.dumps(data, ensure_ascii=False, indent=2) + "\n").encode())
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--write", action="store_true")
+    parser.add_argument("--write", action="store_true",
+                        help="regenerate the catalogue and register available community dependencies")
     args = parser.parse_args()
     compiled = build(ROOT)
+    if args.write:
+        register_community_imports(ROOT, compiled)
     for name, data in compiled.items():
         path = ROOT / name
         if data == read(path):
             continue
         if not args.write:
             parser.exit(1, f"{name} needs regeneration: python research/build_catalogue.py --write\n")
-        path.write_bytes((json.dumps(data, ensure_ascii=False, indent=2) + "\n").encode())
+        write(path, data)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-finite-post-boundary-prime-block",
+  "file": "lean/PEqualNP/Outside/L_goldbach_finite_post_boundary_prime_block.lean",
+  "module": "PEqualNP.Outside.L_goldbach_finite_post_boundary_prime_block",
+  "statement": "∀ j : ℕ, 1 ≤ j → j ≤ 64 → let n : ℕ := 4000000000000000000 + 2*j; ∃ p ∈ ({3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,67,71,127,131,137,139,149,151,163,181,211,227,239,251,313,317,337,367,379,509,769,1213} : Finset ℕ), Nat.Prime p ∧ p < n ∧ Nat.Prime (n-p)",
+  "plain_statement": {
+    "zh": "新路线 · 小偶数覆盖续批 · FR-8001 · 核验已发表端点之后连续 64 个偶数的素数见证",
+    "en": "New route · Finite-range coverage II · FR-8001 · Verify prime witnesses for the next 64 even numbers beyond the published cutoff"
+  },
+  "brief": {
+    "zh": "RFC 列出按 j 排序的候选。逐行核验两侧素性，可用 n−p−1 的因子证书。覆盖 C+2 至 C+128 的所有偶数。",
+    "en": "The RFC lists candidates by j. Verify both primes in each row, for example with certificates factoring n−p−1. The block covers every even integer from C+2 to C+128."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/RFC1-%E5%B0%8F%E5%81%B6%E6%95%B0%E4%B8%8A%E7%9A%84Goldbach.md",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "finite-rfc-second",
+  "role": "lemma",
+  "depends_on": [
+    "L-goldbach-finite-witness-translate-bitset"
+  ]
+}

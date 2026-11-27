@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-shift-normalized-support",
+  "file": "lean/PEqualNP/Outside/L_goldbach_shift_normalized_support.lean",
+  "module": "PEqualNP.Outside.L_goldbach_shift_normalized_support",
+  "statement": "∀ (n : ℕ) (e η : ℝ) (ω : ℕ → ℝ), 0 < n → 0 < e → 0 < η → let W := (Finset.Icc n (2*n)).filter (fun m => Even m ∧ ω m ≠ 0); (∑ m ∈ W, ω m) = 1 → (∑ m ∈ W, (ω m)^2) * (n:ℝ)^(8/3+η) ≤ ((e/2)*(n:ℝ))^2 → 4*(n:ℝ)^(2/3+η) ≤ e^2*(W.card:ℝ)",
+  "plain_statement": {
+    "zh": "新路线 · 有符号因子与移位窗 · FW-8003 · 算出归一化偶移核的最短有效支撑",
+    "en": "New route · Signed factors and shift windows · FW-8003 · Lower-bound the support of a normalized even-shift kernel"
+  },
+  "brief": {
+    "zh": "对和为一的窗用 Cauchy–Schwarz，插入原预算。该长度排除了极短平滑窗；仍需推回指定 n。",
+    "en": "Apply Cauchy–Schwarz to the unit mass and insert the frozen energy budget. This excludes short windows. Transfer to n is a separate estimate."
+  },
+  "source": "https://www.goldbach.tech/?lemma=L-goldbach-frontier-antispike-shift-transfer",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "signed-factor-windows",
+  "role": "lemma",
+  "depends_on": []
+}

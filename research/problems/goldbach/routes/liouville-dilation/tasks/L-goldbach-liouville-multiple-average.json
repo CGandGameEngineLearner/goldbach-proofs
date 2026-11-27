@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-liouville-multiple-average",
+  "file": "lean/PEqualNP/Outside/L_goldbach_liouville_multiple_average.lean",
+  "module": "PEqualNP.Outside.L_goldbach_liouville_multiple_average",
+  "statement": "let L := fun n : ℕ => if n=0 then (0:ℝ) else (-1:ℝ)^n.primeFactorsList.length; let C := fun n : ℕ => (∑ t ∈ Finset.range n, L t * L (n-t))/(n:ℝ); ∀ (N p : ℕ), 0 < N → Nat.Prime p → p ∣ N → (∑ t ∈ (Finset.range N).filter (fun t => p ∣ t), L t * L (N-t))/((N/p:ℕ):ℝ)=C (N/p)",
+  "plain_statement": {
+    "zh": "新路线 · Liouville 相关的整除膨胀 · LD-8002 · 计算整除纤维上 Liouville 二元相关的平均",
+    "en": "New route · Dilation of Liouville correlations · LD-8002 · Compute the mean Liouville pair correlation on a divisibility fiber"
+  },
+  "brief": {
+    "zh": "以 t=pu 换元。两个 Liouville 因子各乘 −1，端点按 L(0)=0 处理。",
+    "en": "Reindex t=pu. Each Liouville factor gains a minus sign. Handle the endpoint with L(0)=0."
+  },
+  "source": "https://arxiv.org/abs/1509.05422",
+  "program": "correlation",
+  "parallel": true,
+  "imports": [],
+  "track": "liouville-dilation",
+  "role": "lemma",
+  "depends_on": []
+}

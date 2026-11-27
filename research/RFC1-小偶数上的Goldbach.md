@@ -168,3 +168,43 @@ assert counts == [48, 33, 18, 4, 2] and not remaining
 | [L-goldbach-finite-residue-rough-30030](https://www.goldbach.tech/?lemma=L-goldbach-finite-residue-rough-30030) | 十个候选覆盖模 30030 的偶数类 |
 | [L-goldbach-finite-rough-prototype-15](https://www.goldbach.tech/?lemma=L-goldbach-finite-rough-prototype-15) | 将第 75 带的因子上界降至十五 |
 | [L-goldbach-finite-rough-prototype-52](https://www.goldbach.tech/?lemma=L-goldbach-finite-rough-prototype-52) | 将原型全域因子上界降至五十二 |
+
+## 2026-11-26 · 第二批有限区间任务
+
+沿用 $C=4\cdot10^{18}$、$X(t)=\exp(\exp t)$ 和带重数的 $\Omega$。本批提出一段 $G_1$ 的完整见证、覆盖两个原型范围的 $G_{14}$ 与 $G_{47}$ 估计，以及陈氏候选中的平方余项与一个给定因子带的预算。[八条冻结任务](problems/goldbach/routes/finite-rfc-second/tasks)
+
+| 任务 | 验收范围与证明入口 |
+| --- | --- |
+| FR-8001 · `finite-post-boundary-prime-block` | 对 $1\le j\le64$ 逐个交付 $C+2j=p_j+q_j$ 和二者的素性。首点是 $C+2=211+3999999999999999791$。 |
+| FR-8002 · `finite-wheel-unit-base` | 用下表首列筛完模 30030 的 15015 个偶数类。所有基类自身与 30030 互素，因而还能选取同类的多个素数。 |
+| FR-8003 · `finite-wheel-three-prime-lifts` | 逐行核验三个素数同基类，各自在模 17 和模 19 两两不同，最大候选为 210233。 |
+| FR-8004 · `finite-wheel-rough-twentythree` | 对偶数 $n\ge210235$，先选中一行，再从至多两个被排除的候选之外取 $p$。此时 $n-p\ge2$ 且 $\gcd(n-p,9699690)=1$。 |
+| FR-8005 · `finite-rough-fourteen-fortyseven` | 对同一见证，$4\le n<X(3.8)$ 的全部偶数有 $\Omega(n-p)\le14$，整个 $4\le n<X(5)$ 有 $\Omega(n-p)\le47$。两段原有预算分别为 15 和 52。 |
+| FR-8006 · `finite-chen-square-reindex` | 在 $p+a^2=n$ 上按素数 $a\le\lfloor\sqrt n\rfloor$ 重排，右侧保留原权 $v(n-a^2)$。 |
+| FR-8007 · `finite-chen-square-numeric-loss` | 对所有 $n\ge C$，无权平方余项数至多 $10^{-6}n/\log^2 n$。与已公布陈氏下界比较时需同时满足其原起点 $n>T$。仍需控制余项为两个不同素数乘积的候选。 |
+| FR-8008 · `finite-chen-distinct-factor-band-cap` | 对固定 $n$、同一候选权 $w$，把 $n-p=rq$、$D<r\le E$、$r<q\le Q$ 的候选按较小素因子分开。用 $B$ 控制单项权，每个 $r$ 支付 $B\max(0,\min(Q,\lfloor n/r\rfloor)-r)$。要推出正性，完整平方自由半素数区间的总上界还须低于扣除平方后的同权下界。 |
+
+**素数见证与覆盖表。** 仓库附带仅用 Python 标准库的证书。小素数用试除，大素数给出 $q-1$ 的全部不同素因子和一个 Lucas 见证，再递归验素。64 行共用 12 个不同的大素数。运行 `python3 -B research/checkpoint/verify_rfc1_batch2.py` 可逐行复核见证、轮模覆盖和端点不等式。研究台的通过状态以相应任务的 Lean 裁决为准。[证书与核验程序](checkpoint/verify_rfc1_batch2.py)
+
+| 基类及同类的三个素数 | 基类及同类的三个素数 |
+| --- | --- |
+| 17, 30047, 60077 | 19, 150169, 210229 |
+| 23, 60083, 210233 | 181, 30211, 90271 |
+| 29, 30059, 60089 | 37, 90127, 120157 |
+| 41, 30071, 60101 | 43, 60103, 120163 |
+| 31, 60091, 90121 | 47, 60107, 120167 |
+| 53, 150203, 180233 | 67, 30097, 60127 |
+
+$30030\cdot17\cdot19=9699690$ 含所有小于 23 的素因子。故 $23^{\Omega(n-p)}\le n-p<n$。有理 Taylor 界给出 $e^{3.8}<45<15\log 23$ 和 $e^5<297/2<48\log 23$。对 $6\le n<210235$ 的偶数取 $p=3$，余项为至少 3 的奇数且小于 $3^{15}$；首点为 $4=2+2$。这两种因子预算覆盖整个相应原型区间，尚待证明余项为素数的偶数仍须逐片处理。
+
+平方损失只用 $\#\{p:n-p=a^2,\ p,a\text{ 素}\}\le\sqrt n$。函数 $\log^2 x/\sqrt x$ 在 $x>e^4$ 递减。$e^4>50$ 与 $50^{11}>C$ 给 $\log C<44$，而 $44^2\cdot10^6<\sqrt C$。
+
+在 $D_*$ 的主弧上，SI-8004–8006 接续在审 #2484 的 BMOR 命题。令 $T_0=8\cdot10^9$，$D_m=\psi(m;q,a)-m/\varphi(q)$。对 $n\ge C$、$3\le q\le105$、$0\le a<q$ 且 $(a,q)=1$、$|\beta|\le105/(qn)$，目标为
+
+$$
+\left|\sum_{k=1}^n \left(\mathbf{1}_{k\equiv a\, (q)}\Lambda(k)-1/\varphi(q)\right)e(k\beta)\right|
+\le \frac{n}{10^{12}}+\frac{n}{840\log n}
++\frac{105\pi n}{840q\log T_0}.
+$$
+
+SI-8004 以 $|D_m|\le m(\log T_0+1)$ 计入 $0\le m<T_0$。SI-8005 在 BMOR 前提下利用 $\sum_{m=T_0}^{n-1}m\le n^2/2$，并保留 $D_n$。SI-8006 用相邻相位弦长 $\le2\pi|\beta|$ 拼合两段。模一、模二的原无相位估计沿用 #2484；整条主弧还须合并单位类和非单位项并积分。此处尚缺与次弧统一的正余量。[BMOR 分拆 #2484](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2484) · [显式相位任务](problems/goldbach/routes/explicit-skirt-inputs/tasks)

@@ -138,13 +138,23 @@ def error(status, code):
 
 
 class Desk:
-    def __init__(self, db_path, gaps, secret):
+    def __init__(self, db_path, gaps, secret, openings=None):
         self.db_path = db_path
-        self.gaps = {gap["id"]: gap for gap in gaps}
+        self.gaps = {gap["id"]: {**gap, "parallel": True} for gap in gaps}
         self.statement_hashes = {
             gap_id: hashlib.sha256(gap["statement"].encode("utf-8")).hexdigest()
             for gap_id, gap in self.gaps.items()
         }
+        statements = {}
+        for gap_id, gap in self.gaps.items():
+            statements.setdefault(gap["statement"], []).append(gap_id)
+        self.refutation_targets = {}
+        for gap_id, gap in self.gaps.items():
+            statement = gap["statement"]
+            if statement.startswith("¬ (") and statement.endswith(")"):
+                targets = statements.get(statement[3:-1], [])
+                if len(targets) == 1:
+                    self.refutation_targets[gap_id] = targets[0]
         self.secret = secret
         with closing(sqlite3.connect(db_path)) as conn:
             conn.execute("PRAGMA journal_mode=WAL")
@@ -183,6 +193,36 @@ class Desk:
             if "agent_reported" not in columns:
                 conn.execute("ALTER TABLE goldbach_leases ADD COLUMN agent_reported INTEGER NOT NULL DEFAULT 0")
 
+            if "points" not in columns:
+                conn.execute("ALTER TABLE goldbach_leases ADD COLUMN points INTEGER")
+            conn.execute("""CREATE TABLE IF NOT EXISTS goldbach_task_openings (
+                gap TEXT PRIMARY KEY, opened_at INTEGER NOT NULL
+            )""")
+            now = int(time.time())
+            conn.executemany("INSERT OR IGNORE INTO goldbach_task_openings VALUES (?, ?)",
+                             [(gap, min(now, (openings or {}).get(gap, now))) for gap in self.gaps])
+            conn.execute("""CREATE TABLE IF NOT EXISTS goldbach_resolution_targets (
+                gap TEXT PRIMARY KEY, target TEXT NOT NULL
+            )""")
+            conn.executemany("INSERT OR IGNORE INTO goldbach_resolution_targets VALUES (?, ?)",
+                             self.refutation_targets.items())
+            conn.commit()
+            self.openings = dict(conn.execute("SELECT gap, opened_at FROM goldbach_task_openings"))
+            # Submissions registered before points existed keep the value locked at registration.
+            legacy = conn.execute("""
+                SELECT token_hash, gap, submitted_at FROM goldbach_leases
+                WHERE points IS NULL AND typeof(submitted_at) = 'integer'
+            """).fetchall()
+            conn.executemany("UPDATE goldbach_leases SET points = ? WHERE token_hash = ?", [
+                (self.points(gap, submitted_at) if self.refutation_targets.get(gap, gap) in self.openings else 1,
+                 token_hash)
+                for token_hash, gap, submitted_at in legacy
+            ])
+            conn.commit()
+
+    def points(self, gap, now):
+        return 1 + max(0, now - self.openings[self.refutation_targets.get(gap, gap)]) // 180
+
     @contextmanager
     def transaction(self, write=False):
         with closing(sqlite3.connect(self.db_path, timeout=15)) as conn, conn:
@@ -211,6 +251,10 @@ class Desk:
             """)
         }
 
+    def resolved_gaps(self, conn):
+        resolved = {self.refutation_targets.get(gap, gap) for gap in self.proved_gaps(conn)}
+        return resolved | {gap for gap, target in self.refutation_targets.items() if target in resolved}
+
     @staticmethod
     def lease_times(lease):
         return {key: lease[key] for key in ("expires_at", "absolute_expires_at")}
@@ -229,6 +273,8 @@ class Desk:
             return error(404, "unknown_gap")
         if requested_gap and self.gaps[requested_gap].get("refutation"):
             return error(409, "refutation_" + self.gaps[requested_gap]["refutation"]["status"])
+        if requested_gap and self.gaps[requested_gap].get("claims_closed"):
+            return error(409, "claims_closed")
         if fleet is not None:
             match = re.fullmatch(r"v1\.([0-9]{1,12})\.[a-f0-9]{64}", fleet)
             if (not match or int(match[1]) <= now
@@ -256,8 +302,8 @@ class Desk:
                 return error(429, "network_claim_limit")
 
             load = Counter(lease["gap"] for lease in active)
-            proved = self.proved_gaps(conn)
-            candidates = ((key for key, gap in self.gaps.items() if not gap.get("challenge_only") and not gap.get("refutation"))
+            proved = self.resolved_gaps(conn)
+            candidates = ((key for key, gap in self.gaps.items() if not gap.get("challenge_only") and not gap.get("claims_closed") and not gap.get("refutation"))
                           if requested_gap is None else (requested_gap,))
             if fleet is None and owned:
                 candidates = (gap for gap in candidates if gap != owned[0]["gap"])
@@ -281,7 +327,7 @@ class Desk:
             """, (self.token_hash(token), selected, self.statement_hashes[selected],
                   handle, ip_key, now, expires, absolute))
             return 201, {
-                "gap": self.gaps[selected],
+                "gap": {**self.gaps[selected], "points": self.points(selected, now)},
                 "lease": {"token": token, "expires_at": expires, "absolute_expires_at": absolute},
             }
 
@@ -340,11 +386,11 @@ class Desk:
             expires = now + SUBMISSION_SECONDS
             conn.execute("""
                 UPDATE goldbach_leases SET pr = ?, head = ?, submitted_at = ?, expires_at = ?,
-                    model = ?, harness = ?, harness_version = ?, agent_reported = ?
+                    model = ?, harness = ?, harness_version = ?, agent_reported = ?, points = ?
                 WHERE token_hash = ?
             """, (pr, head, now, expires, agent["model"], agent["harness"], agent["harness_version"],
-                  1, digest))
-            return 200, {"submitted": True, "expires_at": expires,
+                  1, self.points(lease["gap"], now), digest))
+            return 200, {"submitted": True, "points": self.points(lease["gap"], now), "expires_at": expires,
                          "absolute_expires_at": lease["absolute_expires_at"]}
 
     def signed(self, supplied, raw_body):
@@ -388,7 +434,7 @@ class Desk:
                 return 200, {"authorized": True}
             if lease["run_id"] is not None or lease["expires_at"] <= now:
                 return error(409, "submission_unavailable")
-            if gap in self.proved_gaps(conn):
+            if gap in self.resolved_gaps(conn):
                 return error(409, "gap_already_proved")
             if conn.execute("SELECT 1 FROM goldbach_leases WHERE run_id = ?", (run_id,)).fetchone():
                 return error(409, "run_already_authorized")
@@ -452,7 +498,7 @@ class Desk:
             proved = self.proved_gaps(conn) & self.gaps.keys()
             assigned = self.active_assignments(conn, int(time.time()))
         available = sum(
-            not gap.get("refutation") and gap_id not in proved and (gap_id not in assigned or gap.get("parallel") is True)
+            not gap.get("claims_closed") and not gap.get("refutation") and gap_id not in proved and (gap_id not in assigned or gap.get("parallel") is True)
             for gap_id, gap in self.gaps.items()
         )
         return len(proved), len(self.gaps), available, assigned.keys() - proved
@@ -476,21 +522,23 @@ class Desk:
         # Same first-acceptance rule as the contributor leaderboard, one attribution per lemma.
         winners = conn.execute("""
             WITH accepted AS (
-                SELECT model, harness, finished_at,
-                       ROW_NUMBER() OVER (PARTITION BY gap ORDER BY finished_at, run_id) AS position
-                FROM goldbach_leases
+                SELECT model, harness, finished_at, COALESCE(points, 1) AS points,
+                       ROW_NUMBER() OVER (PARTITION BY COALESCE(target, goldbach_leases.gap) ORDER BY finished_at, run_id) AS position
+                FROM goldbach_leases LEFT JOIN goldbach_resolution_targets USING (gap)
                 WHERE verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
             )
-            SELECT model, harness FROM accepted WHERE position = 1
+            SELECT model, harness, points FROM accepted WHERE position = 1
                 AND (model != 'unknown' OR harness != 'unknown')
         """, (now,)).fetchall()
         def ranking(column):
-            counts = Counter(
-                model_ranking_name(row[column]) if column == 0 else row[column]
-                for row in winners if row[column] != "unknown"
-            )
-            return [{"name": name, "accepted": count} for name, count in
-                    sorted(counts.items(), key=lambda pair: (-pair[1], pair[0]))]
+            counts, scores = Counter(), Counter()
+            for row in winners:
+                if row[column] != "unknown":
+                    name = model_ranking_name(row[column]) if column == 0 else row[column]
+                    counts[name] += 1
+                    scores[name] += row["points"]
+            return [{"name": name, "accepted": counts[name], "points": scores[name]}
+                    for name in sorted(counts, key=lambda name: (-scores[name], -counts[name], name))]
         return {"models": ranking(0), "harnesses": ranking(1), "proofs": len(winners)}
 
     def public_status(self):
@@ -506,67 +554,65 @@ class Desk:
                 for row in conn.execute("""
                     WITH events AS (
                         SELECT claimed_at AS at, 'claimed' AS kind, gap AS lemma_id,
-                               NULL AS handle, NULL AS pr, NULL AS run_id, NULL AS reason, 0 AS stage
+                               NULL AS handle, NULL AS pr, NULL AS run_id,
+                               NULL AS head_sha, NULL AS reason, 0 AS stage
                         FROM goldbach_leases
                         UNION ALL
-                        SELECT submitted_at, 'submitted', gap, NULL, NULL, NULL, NULL, 1
+                        SELECT submitted_at, 'submitted', gap, NULL, NULL, NULL, NULL, NULL, 1
                         FROM goldbach_leases WHERE submitted_at IS NOT NULL
                         UNION ALL
-                        SELECT checking_at, 'checking', gap, handle, pr, run_id, NULL, 2
+                        SELECT checking_at, 'checking', gap, handle, pr, run_id, head, NULL, 2
                         FROM goldbach_leases WHERE checking_at IS NOT NULL
                         UNION ALL
-                        SELECT released_at, 'released', gap, NULL, NULL, NULL, release_reason, 3
+                        SELECT released_at, 'released', gap, NULL, NULL, NULL, NULL, release_reason, 3
                         FROM goldbach_leases WHERE released_at IS NOT NULL
                         UNION ALL
-                        SELECT finished_at, lower(verdict), gap, handle, pr, run_id, NULL, 3
+                        SELECT finished_at, lower(verdict), gap, handle, pr, run_id, head, NULL, 3
                         FROM goldbach_leases WHERE finished_at IS NOT NULL
                         UNION ALL
                         SELECT expires_at, 'expired', gap,
                                CASE WHEN run_id IS NOT NULL THEN handle END,
-                               CASE WHEN run_id IS NOT NULL THEN pr END, run_id, NULL, 3
+                               CASE WHEN run_id IS NOT NULL THEN pr END, run_id,
+                               CASE WHEN run_id IS NOT NULL THEN head END, NULL, 3
                         FROM goldbach_leases
                         WHERE expires_at <= ? AND released_at IS NULL AND finished_at IS NULL
                     )
-                    SELECT at, kind, lemma_id, handle, pr, run_id, reason FROM events
+                    SELECT at, kind, lemma_id, handle, pr, run_id, head_sha, reason FROM events
                     ORDER BY at DESC, stage DESC, lemma_id LIMIT 30
                 """, (now,))
-            ]
-            leaderboard = [
-                dict(row) for row in conn.execute("""
-                    SELECT handle, COUNT(DISTINCT gap) AS accepted FROM goldbach_leases
-                    WHERE verdict = 'ACCEPTED' GROUP BY handle ORDER BY accepted DESC, handle LIMIT 20
-                """)
             ]
             first_acceptances = [
                 dict(row) for row in conn.execute("""
                     WITH accepted AS (
-                        SELECT gap, handle, finished_at,
-                               ROW_NUMBER() OVER (PARTITION BY gap ORDER BY finished_at, run_id) AS position
-                        FROM goldbach_leases
+                        SELECT gap, handle, finished_at, COALESCE(points, 1) AS points,
+                               ROW_NUMBER() OVER (PARTITION BY COALESCE(target, goldbach_leases.gap) ORDER BY finished_at, run_id) AS position
+                        FROM goldbach_leases LEFT JOIN goldbach_resolution_targets USING (gap)
                         WHERE verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
                     )
-                    SELECT handle, COUNT(*) AS accepted, MAX(finished_at) AS latest_accepted_at,
+                    SELECT handle, COUNT(*) AS accepted, SUM(points) AS points,
+                           SUM(CASE WHEN finished_at >= ? THEN points ELSE 0 END) AS hour_points,
+                           MAX(finished_at) AS latest_accepted_at,
                            SUM(finished_at >= ?) AS hour_accepted,
                            MAX(CASE WHEN finished_at >= ? THEN finished_at END) AS hour_latest
                     FROM accepted WHERE position = 1 GROUP BY handle
-                    ORDER BY accepted DESC, latest_accepted_at DESC, handle
-                """, (now, now - 3600, now - 3600))
+                    ORDER BY points DESC, accepted DESC, latest_accepted_at DESC, handle
+                """, (now, now - 3600, now - 3600, now - 3600))
             ]
             agent_rankings = self.agent_rankings(conn, now)
         all_time = [
-            {key: row[key] for key in ("handle", "accepted", "latest_accepted_at")}
+            {key: row[key] for key in ("handle", "accepted", "points", "latest_accepted_at")}
             for row in first_acceptances
         ]
         hour = sorted(
             (
-                {"handle": row["handle"], "accepted": row["hour_accepted"], "latest_accepted_at": row["hour_latest"]}
+                {"handle": row["handle"], "accepted": row["hour_accepted"], "points": row["hour_points"], "latest_accepted_at": row["hour_latest"]}
                 for row in first_acceptances if row["hour_accepted"]
             ),
-            key=lambda row: (-row["accepted"], -row["latest_accepted_at"], row["handle"]),
+            key=lambda row: (-row["points"], -row["accepted"], -row["latest_accepted_at"], row["handle"]),
         )
         return {
             "active": active, "sessions": sessions, "assignments": assignments,
-            "activities": activities, "leaderboard": leaderboard, "agent_rankings": agent_rankings,
+            "activities": activities, "leaderboard": [{key: row[key] for key in ("handle", "accepted")} for row in all_time[:20]], "agent_rankings": agent_rankings,
             "rankings": {
                 "all_time": all_time,
                 "hour": hour,

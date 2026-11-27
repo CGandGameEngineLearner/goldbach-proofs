@@ -71,7 +71,7 @@ import { importClosure, headerImports } from './outside-guard.mjs';
 const tree = (files) => (m) => (m in files ? new TextEncoder().encode(files[m]) : null);
 const proof = (imports, name = 'PEqualNP.Outside.L_x_2') => `${imports.map((m) => `import ${m}\n`).join('')}\ntheorem ${name} : True := trivial\n`;
 const judged = 'PEqualNP.Outside.L_x_1';
-const closure = (listed, files) => importClosure(listed, tree(files), judged);
+const closure = (listed, files, buildOrder) => importClosure(listed, tree(files), judged, buildOrder);
 const closureRefused = (name, listed, files, word) => test(`closure refused: ${name}`, () => {
   assert.throws(() => closure(listed, files), (e) => e.message.includes(word), 'not refused, or for another reason');
 });
@@ -81,14 +81,26 @@ test('closure: base modules only, as before', () => {
     { outside: [], base: ['PEqualNP.Defs', 'PEqualNP.Gct.A', 'PEqualNP.Gct.B'] });
 });
 test('closure: a listed outside module is never handed to the base step; the base modules it imports are', () => {
+  const buildOrder = [];
   const r = closure(['PEqualNP.Outside.L_meta_473'], {
     'PEqualNP.Outside.L_meta_473': proof(['Mathlib', 'PEqualNP.Defs', 'PEqualNP.Outside.L_meta_9'], 'PEqualNP.Outside.L_meta_473'),
     'PEqualNP.Outside.L_meta_9': proof(['Mathlib', 'PEqualNP.Gct.L090'], 'PEqualNP.Outside.L_meta_9'),
-    'PEqualNP.Defs': 'import Mathlib\n', 'PEqualNP.Gct.L090': 'import PEqualNP.Defs\n' });
+    'PEqualNP.Defs': 'import Mathlib\n', 'PEqualNP.Gct.L090': 'import PEqualNP.Defs\n' }, buildOrder);
+  assert.deepEqual(buildOrder, ['PEqualNP.Outside.L_meta_9', 'PEqualNP.Outside.L_meta_473']);
   assert.deepEqual(r, { outside: ['PEqualNP.Outside.L_meta_473', 'PEqualNP.Outside.L_meta_9'], base: ['PEqualNP.Defs', 'PEqualNP.Gct.L090'] });
 });
 closureRefused('the judged file itself', [judged], {}, 'the file being judged');
 closureRefused('an outside module that imports the judged file', ['PEqualNP.Outside.L_x_2'], { 'PEqualNP.Outside.L_x_2': proof([judged]) }, 'the file being judged');
+test('closure: new module may import a legacy proof', () => {
+  const old = 'PEqualNP.Outside.L_x_2';
+  const current = 'Conjectures.Goldbach.Sample';
+  const order = [];
+  importClosure([current], tree({
+    [current]: proof([old], current),
+    [old]: proof(['Mathlib'], old),
+  }), 'Conjectures.Goldbach.Downstream', order);
+  assert.deepEqual(order, [old, current]);
+});
 closureRefused('a listed module missing from the base', ['PEqualNP.Outside.L_x_9'], {}, 'not a plain file of the base tree');
 closureRefused('a listed base module missing from the base', ['PEqualNP.Gct.Nope'], {}, 'not a plain file of the base tree');
 closureRefused('a base module that imports an outside module', ['PEqualNP.Gct.A'], { 'PEqualNP.Gct.A': 'import PEqualNP.Gct.B\n', 'PEqualNP.Gct.B': '/- x -/ import PEqualNP.Outside.L_x_2\n', 'PEqualNP.Outside.L_x_2': proof(['Mathlib']) }, 'imports the outside-written');
@@ -111,9 +123,9 @@ test('header: an import line below the header is refused, never passed over', ()
 
 // Reached base modules are under the PEqualNP root only, and outside modules are capped.
 import { MAX_OUTSIDE } from './outside-guard.mjs';
-closureRefused('a listed fixture module', ['CheckerSuite.Pass'], { 'CheckerSuite.Pass': 'import Mathlib\n' }, 'not under the PEqualNP root');
-closureRefused('a base module that imports a fixture module', ['PEqualNP.Gct.A'], { 'PEqualNP.Gct.A': 'import CheckerSuite.Pass\n', 'CheckerSuite.Pass': 'import Mathlib\n' }, 'not under the PEqualNP root');
-closureRefused('an outside module that imports a fixture module', ['PEqualNP.Outside.L_x_2'], { 'PEqualNP.Outside.L_x_2': proof(['CheckerSuite.Pass']), 'CheckerSuite.Pass': 'import Mathlib\n' }, 'not under the PEqualNP root');
+closureRefused('a listed fixture module', ['CheckerSuite.Pass'], { 'CheckerSuite.Pass': 'import Mathlib\n' }, 'not under an allowed project root');
+closureRefused('a base module that imports a fixture module', ['PEqualNP.Gct.A'], { 'PEqualNP.Gct.A': 'import CheckerSuite.Pass\n', 'CheckerSuite.Pass': 'import Mathlib\n' }, 'not under an allowed project root');
+closureRefused('an outside module that imports a fixture module', ['PEqualNP.Outside.L_x_2'], { 'PEqualNP.Outside.L_x_2': proof(['CheckerSuite.Pass']), 'CheckerSuite.Pass': 'import Mathlib\n' }, 'not under an allowed project root');
 const many = (n) => Object.fromEntries(Array.from({ length: n }, (_, k) => [`PEqualNP.Outside.L_x_${k + 10}`, proof(['Mathlib'], `PEqualNP.Outside.L_x_${k + 10}`)]));
 test(`closure: ${MAX_OUTSIDE} outside modules pass`, () => {
   assert.equal(MAX_OUTSIDE, 16);
@@ -124,4 +136,21 @@ test(`closure refused: ${MAX_OUTSIDE + 1} outside modules, one listed and the re
   const files = many(MAX_OUTSIDE);
   files['PEqualNP.Outside.L_x_1000'] = proof(Object.keys(many(MAX_OUTSIDE)), 'PEqualNP.Outside.L_x_1000');
   assert.throws(() => closure(['PEqualNP.Outside.L_x_1000'], files), /more than 16 outside modules/);
+});
+
+test('accepts a 2 MiB proof and refuses one extra byte', () => {
+  const limit = 2 * 1024 * 1024;
+  const proof = Buffer.alloc(limit + 1, 0x20);
+  proof.write(head + thm);
+  assert.deepEqual(checkImports(proof.subarray(0, limit), ['PEqualNP.Defs']), ['Mathlib', 'PEqualNP.Defs']);
+  assert.throws(() => checkImports(proof, ['PEqualNP.Defs']), /2097152 bytes/);
+});
+
+test('allows the GRH source modules for a task that opts in', () => {
+  const proof = Buffer.from('import PEqualNP.GRH\n' + thm);
+  assert.deepEqual(checkImports(proof, ['PEqualNP.GRH']), ['PEqualNP.GRH']);
+  assert.throws(() => checkImports(proof, []), /PEqualNP\.GRH is not allowed/);
+  const internal = Buffer.from('import PEqualNP.GRHSource.Main\n' + thm);
+  assert.deepEqual(checkImports(internal, ['PEqualNP.GRH']), ['PEqualNP.GRHSource.Main']);
+  assert.throws(() => checkImports(internal, []), /PEqualNP\.GRHSource\.Main is not allowed/);
 });

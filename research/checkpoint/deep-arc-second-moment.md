@@ -61,7 +61,7 @@ For $D=\lfloor\sqrt n/\ell^4\rfloor$ we have $LH/n=O(\ell^{-2})$ and $\log_2(L/D
 
 ## Lean proofs accompanying the calculation
 
-The window lemmas prove separation from the published arc set and pairwise disjointness for arbitrary real shifts. The energy lemmas prove the pointwise Cauchy–Schwarz estimate and integrate it to obtain $n/(384q)$ from the lower bound on the sum over numerators. The complete single-file proof combines these lemmas with the Ramanujan-sum evaluation, the squarefree count and disjoint-window summation. It proves both rows of the table, including the square-root cutoff result as a separate theorem. [Full proof in PR #2520](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2520). [Window proofs](DeepArcWindows.lean) · [Energy proofs](ResidueEnergy.lean)
+The window lemmas prove separation from the published arc set and pairwise disjointness for arbitrary real shifts. The energy lemmas prove the pointwise Cauchy–Schwarz estimate and integrate it to obtain $n/(384q)$ from the lower bound on the sum over numerators. The complete single-file proof combines these lemmas with the Ramanujan-sum evaluation, the squarefree count and disjoint-window summation. It proves the lower bound in each row of the table, with the square-root cutoff in a separate theorem. The full-circle upper bound follows from the Parseval calculation above. [Full proof in PR #2520](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2520). [Window proofs](DeepArcWindows.lean) · [Energy proofs](ResidueEnergy.lean)
 
 Both files can be checked from the repository's **lean** directory.
 

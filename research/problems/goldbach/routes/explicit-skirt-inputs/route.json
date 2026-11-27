@@ -1,0 +1,16 @@
+{
+  "id": "explicit-skirt-inputs",
+  "title": {
+    "zh": "裙边与显式算术输入",
+    "en": "Skirts and explicit arithmetic inputs"
+  },
+  "description": {
+    "zh": "隔离第四带自由变量、小分母裙边核及显式等差数列常数。",
+    "en": "Isolate the free variable in band four, the small-modulus skirt kernel and explicit progression constants."
+  },
+  "feeds": [
+    "frontier-type2-dyadic-matrix",
+    "frontier-medium-arc-scales",
+    "representations"
+  ]
+}

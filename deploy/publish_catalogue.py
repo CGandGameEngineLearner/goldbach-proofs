@@ -9,6 +9,7 @@ import tempfile
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 REPO = "CGandGameEngineLearner/goldbach-proofs"
@@ -17,6 +18,7 @@ STORE = Path("/opt/goldbach-catalogues")
 APP = Path("/opt/goldbach-web")
 CURRENT = STORE / "current"
 FILES = ("gaps.json", "problems.json")
+MISSING = object()
 
 
 def git(*args):
@@ -24,8 +26,14 @@ def git(*args):
 
 
 def api(path):
-    with urlopen(Request("https://api.github.com/repos/" + REPO + path,
-                         headers={"Accept": "application/vnd.github+json"}), timeout=15) as reply:
+    request = Request("https://api.github.com/repos/" + REPO + path,
+                      headers={"Accept": "application/vnd.github+json"})
+    credentials = os.environ.get("CREDENTIALS_DIRECTORY")
+    if credentials:
+        token = Path(credentials) / "github-token"
+        if token.is_file():
+            request.add_unredirected_header("Authorization", f"Bearer {token.read_text().strip()}")
+    with urlopen(request, timeout=15) as reply:
         return json.load(reply)
 
 
@@ -66,6 +74,31 @@ def reload_revision(sha):
     raise RuntimeError("Production health did not confirm revision " + sha)
 
 
+def circleci_api(path):
+    request = Request("https://circleci.com/api/v2/" + path, headers={"Accept": "application/json"})
+    with urlopen(request, timeout=15) as response:
+        return json.load(response)
+
+
+def circleci_release(sha):
+    # A success on a contributor branch or a different revision cannot authorize publication.
+    project = "gh/" + REPO
+    source = "https://github.com/" + REPO
+    pipelines = circleci_api(f"project/{project}/pipeline?branch=main")["items"]
+    for pipeline in pipelines:
+        vcs = pipeline.get("vcs", {})
+        if (pipeline.get("project_slug") != project or vcs.get("branch") != "main"
+                or vcs.get("revision") != sha or vcs.get("target_repository_url") != source):
+            continue
+        for workflow in circleci_api(f"pipeline/{pipeline['id']}/workflow")["items"]:
+            if workflow["name"] != "catalogue-pilot" or workflow["status"] != "success":
+                continue
+            jobs = circleci_api(f"workflow/{workflow['id']}/job")["items"]
+            if any(job["name"] == "lean-catalogue" and job["status"] == "success" for job in jobs):
+                return {"id": int(pipeline["number"]), "provider": "circleci"}
+    return None
+
+
 def approved(sha):
     prs = api("/commits/" + sha + "/pulls")
     pr = next((p for p in prs if p["merge_commit_sha"] == sha and p["base"]["ref"] == "main"
@@ -76,8 +109,52 @@ def approved(sha):
     allowed = {OWNER_ID, *(int(uid) for uid in os.environ.get("GOLDBACH_CATALOGUE_MERGER_IDS", "").split())}
     if (detail.get("merged_by") or {}).get("id") not in allowed:
         raise RuntimeError("Catalogue PR requires an authorized research task publisher")
+    if os.environ.get("GOLDBACH_CATALOGUE_CI") == "circleci":
+        run = circleci_release(sha)
+        return (detail, run) if run else None
+    if os.environ.get("GOLDBACH_CATALOGUE_CI") == "jenkins":
+        run = jenkins_release(sha)
+        return (detail, {"id": run["id"], "provider": "jenkins"}) if run else None
     runs = api("/actions/workflows/catalogue.yml/runs?event=push&branch=main&head_sha=" + sha)["workflow_runs"]
     return next(((detail, r) for r in runs if r["head_sha"] == sha and r["conclusion"] == "success"), None)
+
+
+def jenkins_release(sha):
+    name = "Goldbach CI / catalogue release"
+    query = urlencode({"check_name": name, "app_id": 5932842, "per_page": 100})
+    runs = api(f"/commits/{sha}/check-runs?{query}")["check_runs"]
+    return next((run for run in runs
+                 if run.get("head_sha") == sha
+                 and run.get("name") == name
+                 and (run.get("app") or {}).get("id") == 5932842
+                 and run.get("external_id") == f"main:catalogue:{sha}"
+                 and run.get("status") == "completed"
+                 and run.get("conclusion") == "success"), None)
+
+
+def merge_catalogue(base, live, candidate, path):
+    if live == base or live == candidate:
+        return candidate
+    if candidate == base:
+        return live
+    values = (base, live, candidate)
+    if all(isinstance(value, dict) for value in values):
+        merged = {}
+        for key in dict.fromkeys((*candidate, *live, *base)):
+            value = merge_catalogue(base.get(key, MISSING), live.get(key, MISSING),
+                                    candidate.get(key, MISSING), f"{path}.{key}")
+            if value is not MISSING:
+                merged[key] = value
+        return merged
+    if path.endswith((".gaps", ".tracks")) and all(isinstance(value, list) for value in values):
+        indexed = []
+        for records in values:
+            by_id = {record["id"]: record for record in records}
+            if len(by_id) != len(records):
+                raise ValueError(f"Duplicate ID at {path}")
+            indexed.append(by_id)
+        return list(merge_catalogue(*indexed, path).values())
+    raise ValueError(f"Conflicting catalogue changes at {path}")
 
 
 def activate(sha, parent, pr, run):
@@ -94,15 +171,13 @@ def activate(sha, parent, pr, run):
             elif live == original:
                 result = candidate
             else:
-                paths = [Path(tmp) / key for key in ("live", "original", "candidate")]
-                for f, data in zip(paths, (live, original, candidate)):
-                    f.write_bytes(data)
-                result = subprocess.check_output(["git", "merge-file", "-p", *paths])
+                merged = merge_catalogue(*(json.loads(data) for data in (original, live, candidate)), name)
+                result = (json.dumps(merged, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
             json.loads(result)
             (stage / name).write_bytes(result)
         history = json.loads((old / "history.json").read_bytes())
         history.append(dict(sha=sha, pr=pr["number"], title=pr["title"], actor=pr["merged_by"]["login"],
-                            run=run["id"], at=datetime.now(timezone.utc).isoformat(timespec="seconds")))
+                            run=run["id"], provider=run.get("provider", "github"), at=datetime.now(timezone.utc).isoformat(timespec="seconds")))
         (stage / "history.json").write_text(json.dumps(history, ensure_ascii=False), encoding="utf-8")
         prepared = finish(stage, sha)
         (STORE / "pending").write_text(sha)
@@ -124,7 +199,8 @@ def main():
     STORE.mkdir(exist_ok=True)
     if not (STORE / "git").exists():
         subprocess.run(["git", "init", "--bare", STORE / "git"], check=True)
-    git("fetch", "--quiet", "https://github.com/" + REPO + ".git", "refs/heads/main")
+    git("-c", "http.version=HTTP/1.1", "-c", "protocol.version=0",
+        "fetch", "--quiet", "https://github.com/" + REPO + ".git", "refs/heads/main")
     if args.bootstrap:
         sha = args.bootstrap
         if CURRENT.exists() or not re.fullmatch("[a-f0-9]{40}", sha):

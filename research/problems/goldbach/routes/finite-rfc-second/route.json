@@ -1,0 +1,14 @@
+{
+  "id": "finite-rfc-second",
+  "title": {
+    "zh": "小偶数覆盖续批",
+    "en": "Finite-range coverage II"
+  },
+  "description": {
+    "zh": "在计算边界外核验真素数对，提升粗数轮模，并精确计数陈氏候选中的平方余项。",
+    "en": "Verify prime pairs above the computation boundary, lift the rough-number wheel and count square remainders among Chen candidates."
+  },
+  "feeds": [
+    "representations"
+  ]
+}
