@@ -20135,6 +20135,37 @@
       "route_source": "representations"
     },
     {
+      "id": "L-goldbach-dyn-short-restricted-power-saving",
+      "statement": "let W := fun y : ℕ => Nat.floor ((y : ℝ) ^ ((13 : ℝ) / 225)); ∃ C δ : ℝ, 0 < C ∧ 0 < δ ∧ ∃ X₀ : ℕ, ∀ X ≥ X₀, ∀ y : ℕ, X ≤ y → y + W y ≤ 2 * X → (((Finset.Icc y (y + W y)).filter (fun n => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ Nat.sqrt X ≤ p ∧ p ≤ 2 * Nat.sqrt X ∧ p + q = n))).card : ℝ) ≤ C * ((W y : ℝ) + 1) * (X : ℝ) ^ (-δ)",
+      "plain_statement": {
+        "zh": "短窗内平方根量级加数的漏点数有幂次节省",
+        "en": "Power-saving exceptional set with a square-root-sized summand in every short window"
+      },
+      "brief": {
+        "zh": "待证。对充分大的 X，每个完整落在 [X,2X] 的闭窗 [y,y+⌊y^(13/225)⌋] 中，不能写成 p+q 且 ⌊√X⌋≤p≤2⌊√X⌋ 的偶数至多为 C(⌊y^(13/225)⌋+1)X^(-δ) 个。p、q 都是素数。尝试为实际受限计数构造带奇异级数的正主项，并用逐窗局部均方误差和已证漏点能量引理计数。Li 定理 6 在同窗给出无加数限制的密度趋一结论。本题同时限制加数并要求幂次节省。可引用全站已核验的 Lean 模块；见 https://jenkins-hook.goldbach.tech/verified-imports.json。",
+        "en": "Open. For large X, every closed window [y,y+floor(y^(13/225))] inside [X,2X] has at most C(floor(y^(13/225))+1)X^(-δ) even integers without a prime pair p+q with floor(sqrt X) ≤ p ≤ 2 floor(sqrt X). Try a positive singular-series main term and a uniform local mean-square error to which the verified exception-energy lemma applies. Li's Theorem 6 gives density one on the same window with unrestricted summands. This target adds a summand constraint and a power saving. You may import verified Lean modules listed at https://jenkins-hook.goldbach.tech/verified-imports.json."
+      },
+      "depends_on": [
+        "L-goldbach-dyn-exception-energy",
+        "L-goldbach-dyn-block-first-mass",
+        "L-goldbach-dyn-block-collision-budget"
+      ],
+      "source": "https://arxiv.org/html/2308.04458v8#S7",
+      "program": "correlation",
+      "parallel": true,
+      "module": "Conjectures.Goldbach.DynShortRestrictedPowerSaving",
+      "file": "lean/Conjectures/Goldbach/DynShortRestrictedPowerSaving.lean",
+      "imports": [
+        "Mathlib",
+        "Conjectures.Goldbach.DynExceptionEnergy",
+        "Conjectures.Goldbach.DynBlockFirstMass",
+        "Conjectures.Goldbach.DynBlockCollisionBudget"
+      ],
+      "track": "representations",
+      "role": "target",
+      "route_source": "representations"
+    },
+    {
       "id": "L-goldbach-dyn-surplus-certificate",
       "statement": "let W := fun (A B : Finset ℕ) (n : ℕ) => ((A ×ˢ B).filter (fun t => t.1+t.2=n)).card; ∀ (m n : ℕ) (A B : Finset ℕ), n < m → (∀ a ∈ A, a < m) → (∀ b ∈ B, b < m) → min ((A.filter (fun a => n < a)).card) ((B.filter (fun b => n < b)).card) < ((A ×ˢ B).filter (fun t => (t.1+t.2)%m=n)).card → 0 < W A B n",
       "plain_statement": {
@@ -20179,6 +20210,30 @@
       "imports": [],
       "track": "representations",
       "role": "lemma",
+      "route_source": "representations"
+    },
+    {
+      "id": "L-goldbach-dyn-ultrashort-restricted-hit",
+      "statement": "let W := fun y : ℕ => Nat.floor ((y : ℝ) ^ ((26 : ℝ) / 1075)); ∃ X₀ : ℕ, ∀ X ≥ X₀, ∀ y : ℕ, X ≤ y → y + W y ≤ 2 * X → ∃ n : ℕ, y ≤ n ∧ n ≤ y + W y ∧ Even n ∧ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ Nat.sqrt X ≤ p ∧ p ≤ 2 * Nat.sqrt X ∧ p + q = n)",
+      "plain_statement": {
+        "zh": "每个超短窗都有一个带平方根量级素数加数的哥德巴赫数",
+        "en": "A Goldbach hit with a square-root-sized prime in every ultra-short window"
+      },
+      "brief": {
+        "zh": "待证。对充分大的 X，每个完整落在 [X,2X] 的闭窗 [y,y+⌊y^(26/1075)⌋] 中，至少一个偶数能写成两个素数之和，且其中一个素数在 [⌊√X⌋,2⌊√X⌋]。可从 Li 定理 7 的短窗存在性及其筛法输入入手，研究短区间素数指示函数与平方根带素数的加权平均，直接证明一个非负短窗权下的总表示数为正。该窗明显短于 13/225 密度题；需要排除同窗全漏，长窗矩估计无法直接定位这个窗。可引用全站已核验的 Lean 模块；见 https://jenkins-hook.goldbach.tech/verified-imports.json。",
+        "en": "Open. For large X, each closed window [y,y+floor(y^(26/1075))] inside [X,2X] contains an even sum of two primes, one in [floor(sqrt X),2 floor(sqrt X)]. Start from the sieve inputs behind Li's Theorem 7 and seek a positive weighted short-window average against primes in the square-root band. The window is shorter than the 13/225 density window. The challenge is to rule out a wholly missed window at this scale. You may import verified Lean modules listed at https://jenkins-hook.goldbach.tech/verified-imports.json."
+      },
+      "depends_on": [],
+      "source": "https://arxiv.org/html/2308.04458v8#S7",
+      "program": "correlation",
+      "parallel": true,
+      "module": "Conjectures.Goldbach.DynUltrashortRestrictedHit",
+      "file": "lean/Conjectures/Goldbach/DynUltrashortRestrictedHit.lean",
+      "imports": [
+        "Mathlib"
+      ],
+      "track": "representations",
+      "role": "target",
       "route_source": "representations"
     },
     {

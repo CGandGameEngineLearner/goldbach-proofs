@@ -8,6 +8,12 @@
 
 对每个偶数 $n\ge4$，要证明存在素数 $p,q$ 使 $p+q=n$。取素数权 $w(p)=\log p$，非素数处令 $w=0$。定义 $R(n)=\sum_{p=0}^n w(p)w(n-p)$。每项非负，每个真正的素数对贡献严格正值，故目标精确地等价于 $R(n)>0$。这给出了所有分析任务共用的终点。[强哥德巴赫命题](strong-goldbach.lean)
 
+## 平方根量级加数的短窗挑战 / Short windows with a square-root-sized prime
+
+在 Li 的短窗尺度上，研究带平方根量级素数加数的表示。第一题要求在 13/225 窗内对漏点数取得幂次节省，第二题要求在更短的 26/1075 窗内排除全漏。两题均为待证；逐偶数消除例外仍是主猜想的独立瓶颈。[文献对照与证明切入口](problems/goldbach/routes/representations/dynamical-hitting.md#可对照文献的短窗目标--short-window-benchmarks)
+
+The challenge tasks keep one prime in the square-root band. They ask for a power-saving exception bound in windows of exponent 13/225 and at least one hit in windows of exponent 26/1075. Both are open.
+
 ## 2026-11-27 · 哥德巴赫研究任务拆分 #3
 
 本轮取样时，主站 689 题中已验收 669 题。第一章把第三因子带的盒计数和近对角能量接到真实 Möbius–Mangoldt 权，并为同一偶数的深弧系数给出公共中点网格。第二章在二幂商里分解反射相关，在 Farey 分母线上保留模逆元位置和筛的首次命中。第三章接续 Levent 工程的有限特征变换、导子分层及带重数的截断显式公式。逐偶数细层相关的符号仍是独立的算术问题。[因子线与深弧](problems/goldbach/routes/signed-factor-windows/split-3.md) · [二幂反射](problems/goldbach/routes/dyadic-reflection) · [Farey 逆元筛](problems/goldbach/routes/farey-inverse-sieve)
