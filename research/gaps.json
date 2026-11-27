@@ -16339,6 +16339,32 @@
       "route_source": "finite-rfc-third"
     },
     {
+      "id": "L-goldbach-finite-sifted-square-cost-handoff",
+      "statement": "∀ n : ℕ, 4000000000000000000<n → (n:ℝ)<Real.exp (Real.exp (19/5)) →\nlet z := ⌈(n:ℝ)^((1:ℝ)/5)⌉₊\nlet y := max ⌈(n:ℝ)^((1:ℝ)/3)⌉₊ ⌈Real.sqrt ((n:ℝ)/(z:ℝ))⌉₊\nlet A := (Finset.range (n+1)).filter (fun p => p.Prime ∧ ¬p∣n ∧\n  ((Finset.Ico 2 z).filter (fun q => q.Prime ∧ q∣n-p))=∅)\nlet B := A.filter (fun p => 2≤n-p)\nlet P := (Finset.Ico z y).filter Nat.Prime\nlet W (s : ℕ) : ℤ := 2-((P.filter (fun q => q∣s)).card:ℤ)-\n  ((P.filter (fun q => q^2∣s)).card:ℤ)\n2<z ∧ z<y ∧ n≤y^3 ∧ n≤z*y^2 ∧\n(∑ q∈P, ((B.filter (fun p => q^2∣n-p)).card:ℝ)) < (n:ℝ)/(100*(Real.log n)^2) ∧\n((n:ℝ)/(100*(Real.log n)^2) ≤ 2*(B.card:ℝ)-\n  (∑ q∈P, ((B.filter (fun p => q∣n-p)).card:ℝ)) →\n  0<(∑ p∈B,W (n-p)))",
+      "plain_statement": {
+        "zh": "把原加权筛中素数平方整除的损失压到百分之一",
+        "en": "Bound repeated prime-square divisibility by one hundredth of the normalized sieve budget"
+      },
+      "brief": {
+        "zh": "沿用 F09 的五次根 z 和 y 以及原筛集。若 q² 整除余项 n−p，正整数 m=(n−p)/q² 与 30030 互素。用模 30030 的 5760 个单位剩余类作单射计数，再求和；同一个余项上的不同素数平方分别计费。给出原带符号整数和为正的充分条件。",
+        "en": "Use the F09 fifth-root parameters and the original sifted summands. For each square divisor q² of n−p, the positive cofactor is coprime to 30030. Counting quotient blocks and the 5760 unit residues bounds every square incidence. Sum over q with multiplicity and apply the verified signed-sieve identity."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ffe27af00c8df03bd77f7afd279cd836b6cbb1ee/research/checkpoint/%E5%93%A5%E5%BE%B7%E5%B7%B4%E8%B5%AB%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%864.md#L175-L199",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-finite-weighted-sieve-supported-region"
+      ],
+      "imports": [
+        "Conjectures.Goldbach.FiniteWeightedSieveSupportedRegion"
+      ],
+      "module": "Conjectures.Goldbach.FiniteSiftedSquareCostHandoff",
+      "file": "lean/Conjectures/Goldbach/FiniteSiftedSquareCostHandoff.lean",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
       "id": "L-goldbach-finite-weighted-sieve-factor-cap",
       "statement": "let W := fun (z y s : ℕ) => let P := (Finset.Ico z y).filter Nat.Prime; (2:ℤ)-((P.filter (fun p => p∣s)).card:ℤ)-((P.filter (fun p => p^2∣s)).card:ℤ); ∀ (n z y s r : ℕ), 2 ≤ z → z < y → 2 ≤ s → s < n → (∀ p : ℕ, p.Prime → (p ∣ s) → z ≤ p) → n ≤ y^(r+1) → n ≤ z*y^r → 0 < W z y s → s.primeFactorsList.length ≤ r",
       "plain_statement": {
