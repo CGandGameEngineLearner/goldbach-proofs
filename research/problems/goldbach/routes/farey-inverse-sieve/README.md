@@ -35,6 +35,13 @@ Every published statement fixes the same target integer before counting residues
 | HD6 | farey-first-hit-middle | Open challenge for the entire middle band. It retains the least-factor restriction on both sides. |
 | HD7 | farey-late-first-hit-factor-switch, farey-late-prime-square-loss | Compute the two semiprime sums with the same inverse labels and bound their square terms. |
 | HD8 | farey-first-hit-late | Open challenge for the late band. The rough cofactor restriction applies to the opposite denominator. |
+| HD8 input | farey-cube-sqrt-density-ratio | Determine the limiting ratio of the two sieve volumes for the same even target. |
 | HD9 | farey-terminal-survivors, accepted log-correlation-iff | Prove the exact terminal sieve identity. The first-hit partition and budget addition give the conditional combination above. |
 
 The finite checks covered 12,151 insertions, 1,257 progression examples including 67 shifts ending at the last residue, and 675 inverse-labelled sieve windows. The window checks included 238 prime-square hits. The asymptotic rectangle estimate, lower-bound sieve and first-hit inequalities are Lean tasks.
+
+### 末段筛主项的比值 · Late cutoff ratio
+
+设 $z=\lfloor n^{1/3}\rfloor$、$y=\lfloor\sqrt n\rfloor$。从 $V_n(y)/V_n(z)$ 中消去公共因子，留下 $z<p\le y$ 且 $p\nmid n$ 上的乘积。Mertens 素数倒数和公式给出这段的倒数和趋于 $\log(3/2)$。其中整除 $n$ 的素因子个数有一致上界，删去它们的误差趋于零。于是 $V_n(z)/V_n(y)\to 9/4$，HD-8015 右侧除以 $V_n(y)$ 后趋于 $7/4$。左侧仍需在每个充分大的偶数上控制另一分母满足粗糙条件的首次命中数。
+
+For the same even target, cancel the common local factors below the cube root. The reciprocal sum of the primes between the two cutoffs tends to $\log(3/2)$. The number of primes in this band dividing the target is uniformly bounded, and the sum of squared reciprocals tends to zero. The terminal product relative to the cube-root product therefore tends to $4/9$. This determines the limiting allowance for HD-8015. Bounding the actual late first-hit count on that scale remains open.
