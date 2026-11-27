@@ -162,7 +162,7 @@ def compressed_asset(content):
     return gzip.compress(content, compresslevel=6, mtime=0)
 
 
-DISCUSSION_EXPIRES = datetime.fromisoformat("2026-12-02T00:00:00+08:00")
+DISCUSSION_EXPIRES = datetime.fromisoformat("2026-12-04T00:00:00+08:00")
 
 
 def discussion_copy(lang):
@@ -173,10 +173,10 @@ def discussion_copy(lang):
     return {
         "short": "扫码进群" if zh else "WeChat group",
         "label": "扫码进群 · 讨论进度" if zh else "Join WeChat group",
-        "name": "知乎 AI4S 讨论组（哥猜 3 群）" if zh else "Zhihu AI4S Goldbach group 3",
+        "name": "知乎 AI4S 讨论组（哥猜 4 群）" if zh else "Zhihu AI4S Goldbach group 4",
         "instructions": "微信扫码，讨论研究进度" if zh else "Scan in WeChat to discuss progress",
         "validity": f"{cutoff.month} 月 {cutoff.day} 日前有效" if zh else f"Valid before {cutoff:%Y-%m-%d} (UTC+8)",
-        "alt": "知乎 AI4S 讨论组（哥猜 3 群）微信群二维码" if zh else "WeChat QR code for the Zhihu AI4S Goldbach discussion group 3",
+        "alt": "知乎 AI4S 讨论组（哥猜 4 群）微信群二维码" if zh else "WeChat QR code for the Zhihu AI4S Goldbach discussion group 4",
     }
 
 
@@ -245,7 +245,7 @@ def hero_community_card(lang, prefix):
             f'<div class="community-item-body"><div class="community-copy">'
             f'<strong class="community-title"><img class="wechat-mark" src="{prefix}wechat.svg" width="22" height="22" alt="">{disc["label"]}</strong>'
             f'<p>{disc["name"]}</p><small>{disc["validity"]}</small></div>'
-            f'<div class="community-qr discussion-code"><img loading="lazy" src="{prefix}discussion-qr.png" alt="{disc["alt"]}" width="800" height="1198"></div>'
+            f'<div class="community-qr discussion-code"><img loading="lazy" src="{prefix}discussion-qr.png" alt="{disc["alt"]}" width="444" height="444"></div>'
             f'</div></details>'
         )
     items.append(
@@ -272,7 +272,7 @@ def site_dock(lang, prefix, *, inline=False):
             f'<div class="community-band-cell band-qr">'
             f'<div class="community-copy"><strong class="community-title"><img class="wechat-mark" src="{prefix}wechat.svg" width="22" height="22" alt="">{disc["label"]}</strong>'
             f'<p>{disc["name"]}</p><small>{disc["validity"]}</small></div>'
-            f'<div class="community-qr discussion-code"><img loading="lazy" src="{prefix}discussion-qr.png" alt="{disc["alt"]}" width="800" height="1198"></div>'
+            f'<div class="community-qr discussion-code"><img loading="lazy" src="{prefix}discussion-qr.png" alt="{disc["alt"]}" width="444" height="444"></div>'
             f'</div>'
         )
     cells.append(

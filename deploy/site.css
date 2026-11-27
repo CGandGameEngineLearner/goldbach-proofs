@@ -1627,9 +1627,7 @@ body:not([data-problem]) .hero .open-status { vertical-align: middle; }
   position: relative;
 }
 .discussion-code img {
-  /* Frame the 408px square at (196, 462), including the QR quiet zone. */
-  position: absolute; width: 196.078431%; max-width: none; height: auto;
-  left: -48.039216%; top: -113.235294%;
+  display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated;
 }
 .core-qr img {
   display: block; width: 100%; height: 100%;
