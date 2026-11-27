@@ -1346,17 +1346,18 @@ body:not([data-problem]) .hero .open-status { vertical-align: middle; }
 .agent-attribution { margin: 0 0 .55rem; padding: 0 1rem; overflow-wrap: anywhere; }
 
 .agent-ranking-columns[hidden], .ranking-list[hidden] { display: none; }
-.agent-ranking-views { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .75rem; }
-.agent-ranking-views button, .agent-ranking-views select {
-  font: inherit;
-  color: inherit;
-  background: transparent;
-  border: 1px solid currentColor;
-  border-radius: 5px;
-  padding: .3rem .65rem;
+.agent-ranking-views { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-bottom: .75rem; }
+.agent-ranking-views .rankings-modes { margin: 0; max-width: 100%; flex-wrap: wrap; }
+.agent-ranking-views select {
+  min-height: 2.5rem;
+  max-width: 100%;
+  padding: .26rem .58rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--sheet);
+  color: var(--ink);
+  font-size: .84rem;
 }
-.agent-ranking-views button[aria-pressed="true"] { background: #152820; color: #fff; }
-.agent-ranking-views select { max-width: 100%; }
 .provider-models { grid-column: 2 / -1; min-width: 0; font-size: .85rem; }
 .provider-models summary { cursor: pointer; }
 

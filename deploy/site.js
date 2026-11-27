@@ -679,15 +679,20 @@ function renderAgentRankingRow(entry, index) {
 }
 
 let agentDimension = 'providers';
-let selectedModel = '';
+const agentFilters = {models: '', harnesses: ''};
 
 function renderAgentColumns(container, limit = Infinity) {
   const labels = lang === 'zh'
     ? {providers: '模型厂商', models: '具体模型', harnesses: 'Harness 工具'}
     : {providers: 'Model providers', models: 'Models', harnesses: 'Harness tools'};
   const controls = element('div', undefined, 'agent-ranking-views');
+  const modes = element('div', undefined, 'rankings-modes');
+  modes.setAttribute('role', 'group');
+  modes.setAttribute('aria-label', lang === 'zh' ? '榜单分类' : 'Leaderboard categories');
+  controls.append(modes);
   const list = element('ol', undefined, 'ranking-list');
-  const rows = agentRankingsData?.[agentDimension] || [];
+  const dimension = agentDimension;
+  const rows = agentRankingsData?.[dimension] || [];
   for (const [key, label] of Object.entries(labels)) {
     const button = element('button', label);
     button.type = 'button';
@@ -698,27 +703,43 @@ function renderAgentColumns(container, limit = Infinity) {
       renderRankingMode();
       container.querySelector('[data-agent-dimension="' + key + '"]')?.focus();
     };
-    controls.append(button);
+    modes.append(button);
   }
   list.setAttribute('aria-label', labels[agentDimension]);
   container.replaceChildren(controls);
-  if (agentDimension === 'models') {
+  if (dimension !== 'providers') {
+    const harnesses = dimension === 'harnesses';
+    const names = harnesses
+      ? [...new Set([...Object.keys(harnessLabels), 'other', ...rows.map(row => row.name)])]
+        .sort((a, b) => agentName(a).localeCompare(agentName(b), locale))
+      : rows.map(row => row.name);
     const filter = element('select');
-    filter.setAttribute('aria-label', lang === 'zh' ? '选择模型' : 'Select model');
-    filter.append(new Option(lang === 'zh' ? '全部模型' : 'All models', ''));
-    for (const row of rows) filter.append(new Option(agentName(row.name), row.name));
-    filter.value = rows.some(row => row.name === selectedModel) ? selectedModel : '';
+    const label = harnesses ? (lang === 'zh' ? '选择 Harness 工具' : 'Select harness')
+      : (lang === 'zh' ? '选择模型' : 'Select model');
+    const all = harnesses ? (lang === 'zh' ? '全部 Harness 工具' : 'All harnesses')
+      : (lang === 'zh' ? '全部模型' : 'All models');
+    filter.setAttribute('aria-label', label);
+    filter.append(new Option(all, ''));
+    for (const name of names) filter.append(new Option(agentName(name), name));
+    filter.value = names.includes(agentFilters[dimension]) ? agentFilters[dimension] : '';
+    agentFilters[dimension] = filter.value;
     filter.onchange = () => {
-      selectedModel = filter.value;
+      agentFilters[dimension] = filter.value;
       renderRankingMode();
       container.querySelector('select')?.focus();
     };
     controls.append(filter);
   }
-  const index = agentDimension === 'models' && selectedModel
-    ? rows.findIndex(row => row.name === selectedModel) : -1;
-  if (index >= 0) list.append(renderAgentRankingRow(rows[index], index));
-  else fillRankings(list, rows.slice(0, limit), 'agents');
+  const selected = agentFilters[dimension];
+  if (selected) {
+    const index = rows.findIndex(row => row.name === selected);
+    if (index >= 0) list.append(renderAgentRankingRow(rows[index], index));
+    else {
+      const status = !agentRankingsData ? strings.rankingsUnavailable
+        : (lang === 'zh' ? '暂无计分记录' : 'No scored contributions yet');
+      list.append(element('li', agentName(selected) + ' · ' + status, 'ranking-empty'));
+    }
+  } else fillRankings(list, rows.slice(0, limit), 'agents');
   if (agentDimension === 'providers') {
     rows.slice(0, limit).forEach((provider, i) => {
       const item = list.children[i];
