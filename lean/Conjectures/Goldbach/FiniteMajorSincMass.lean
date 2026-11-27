@@ -1,6 +1,6 @@
 import Mathlib
 
-/-! Re-submission: PR body now records method, quantifiers and sources (join-zh §3/§5). -/
+/-! Re-submission: PR body records method, quantifiers and sources; fork renamed back to `goldbach-proofs` so the verification job can resolve the head repository. -/
 /-!
 # f176 -- the finite major-arc `sinc²` mass  (fork side)
 
@@ -582,4 +582,5 @@ theorem Conjectures.Goldbach.FiniteMajorSincMass (h : ℝ) (hh : 0 < h) :
     let k := intervalIntegral (fun t : ℝ => Real.sinc (Real.pi * t) ^ 2) (-h) h MeasureTheory.volume
     0 ≤ k ∧ k ≤ 1 ∧ 1 - 2 / (9 * h) ≤ k :=
   ourproof64_finite_major_sinc_mass h hh
+
 
