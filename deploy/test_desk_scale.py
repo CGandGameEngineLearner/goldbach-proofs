@@ -20,6 +20,7 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from http.client import HTTPSConnection
 from pathlib import Path
+from urllib.parse import urlencode
 
 from deploy.desk import QUEUE_BATCH, fleet_pass
 
@@ -134,6 +135,25 @@ class DeskScaleTest(DeskServerTestCase):
             self.assertNotIn("manifest", latest)
             self.assertEqual(latest["lemma_id"], gap["id"])
             self.assertEqual(status["results"][0]["agent"], {**agent, "source": "self_reported"})
+            summary = self.request(path + "/api/records?view=summary&page=1&limit=5")["results"][0]
+            self.assertTrue(summary["has_manifest"])
+            self.assertNotIn("manifest", summary)
+            self.assertEqual(summary["agent"], status["results"][0]["agent"])
+            manifest = f"{path}/api/record-manifest?run={run_id}&attempt=1"
+            self.assertEqual(self.request(manifest)["manifest"], record["manifest"])
+            self.request(manifest[:-1] + "2", expected=404)
+
+            detail = path + "/api/task?" + urlencode({"lemma": gap["id"]})
+            self.assertEqual(self.request(detail)["statement"], gap["statement"])
+            self.assertEqual(self.request(detail)["cut_reason"], "settled")
+            token_query = urlencode({"q": gap["statement"][:40], "lang": "zh", "scope": "all"})
+            self.assertIn(gap["id"], self.request(path + "/api/task-search?" + token_query)["ids"])
+            other_path = "/problems/log-rank" if not path else ""
+            self.request(other_path + "/api/task?" + urlencode({"lemma": gap["id"]}), expected=404)
+            listing = self.request(path + "/api/tasks?limit=3")
+            self.assertEqual(listing["problem"], "log-rank" if path else "goldbach")
+            self.assertLessEqual(len(listing["tasks"]), 3)
+            self.assertNotIn(gap["id"], {task["id"] for task in listing["tasks"]})
             self.assertEqual({k: v for k, v in status["desk"]["agent_rankings"].items() if k != "providers"}, {
                 "models": [{"name": "model-test-v1", "accepted": 1, "points": 1}],
                 "harnesses": [{"name": "codex", "accepted": 1, "points": 1, "icon": "codex"}], "proofs": 1})
@@ -437,6 +457,18 @@ class DeskScaleTest(DeskServerTestCase):
         self.assertEqual(board["desk"]["rankings"]["all_time_total"], 18)
         self.assertEqual(len(board["desk"]["agent_rankings"]["models"]), 12)
         self.assertEqual(board["desk"]["agent_rankings"]["totals"]["models"], 18)
+        index = self.request("/api/status?view=board-index-gzip")
+        delta = self.request("/api/status?view=board-index-delta-gzip")
+        self.assertEqual(index["counts"], board["counts"])
+        self.assertEqual(index["tracks"], board["tracks"])
+        self.assertEqual(index["desk"]["rankings"], board["desk"]["rankings"])
+        self.assertNotIn("tracks", delta)
+        self.assertEqual([g["id"] for g in index["gaps"]], [g["id"] for g in board["gaps"]])
+        self.assertIn("statement", board["gaps"][0])
+        self.assertIn("plain_statement", index["gaps"][0])
+        self.assertNotIn("plain_statement", delta["gaps"][0])
+        for gap in index["gaps"] + delta["gaps"]:
+            self.assertFalse({"statement", "brief", "source", "file", "imports", "cuts", "assembly"} & gap.keys())
 
         page1 = self.request("/api/rankings?mode=all_time&offset=0&limit=12")
         self.assertEqual(len(page1["items"]), 12)

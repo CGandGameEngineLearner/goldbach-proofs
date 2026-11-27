@@ -343,7 +343,23 @@ def rankings_page(desk, mode, offset, limit):
     }
 
 
-def research_status(desk=DESK, *, compact=False, board=False):
+def verdict_summary(prefix="", *, manifest=False):
+    body = f"CAST({prefix}body AS TEXT)"
+    fields = [
+        f"'lemma_id', json_extract({body}, '$.lemma_id')",
+        f"'kind', coalesce(json_extract({body}, '$.kind'),'prove')",
+        f"'verdict', json_extract({body}, '$.verdict')",
+        f"'run_id', {prefix}run_id",
+        f"'run_attempt', {prefix}attempt",
+        f"'check_id', json_extract({body}, '$.check_id')",
+        f"'head_sha', json_extract({body}, '$.head_sha')",
+    ]
+    if manifest:
+        fields.append(f"'has_manifest', coalesce(json_type({body}, '$.manifest') != 'null', 0)")
+    return "json_object(" + ", ".join(fields) + ")"
+
+
+def research_status(desk=DESK, *, compact=False, board=False, index=False):
     db = desk.db_path
     results = []
     latest = {}
@@ -356,18 +372,13 @@ def research_status(desk=DESK, *, compact=False, board=False):
             if desk is DESKS.get("quadratic-primes"):
                 extra["lpf_record"] = exponent_record(desk, conn)
             if conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='verdicts'").fetchone():
-                projection = (
-                    "json_object('lemma_id', json_extract(CAST(body AS TEXT), '$.lemma_id'), "
-                    "'kind', coalesce(json_extract(CAST(body AS TEXT), '$.kind'),'prove'), "
-                    "'verdict', json_extract(CAST(body AS TEXT), '$.verdict'), "
-                    "'run_id', run_id, 'run_attempt', attempt, "
-                    "'check_id', json_extract(CAST(body AS TEXT), '$.check_id'), "
-                    "'head_sha', json_extract(CAST(body AS TEXT), '$.head_sha'))"
-                ) if board else "body"
+                projection = verdict_summary() if board else "body"
                 results = [json.loads(body) for (body,) in conn.execute(
                     f"SELECT {projection} FROM verdicts ORDER BY run_id DESC, attempt DESC LIMIT ?", (1 if board else 12,)
                 )]
                 payload = "json_remove(CAST(v.body AS TEXT), '$.manifest')" if compact else "v.body"
+                if index:
+                    payload = verdict_summary("v.")
                 rows = conn.execute(f"""
                     WITH runs AS (
                         SELECT run_id, attempt,
@@ -392,7 +403,8 @@ def research_status(desk=DESK, *, compact=False, board=False):
                     attempts += count
                 if not board:
                     desk.annotate_verdicts(results, conn)
-                desk.annotate_verdicts([result for result, _ in latest.values()], conn)
+                if not index:
+                    desk.annotate_verdicts([result for result, _ in latest.values()], conn)
 
             descriptors = list(desk.research_gaps(conn))
             settled = {key for key, (_, proved) in latest.items() if proved}
@@ -488,8 +500,75 @@ def accepts_gzip(value):
     return False
 
 
-def status_body(desk, web_view, board=False, compress=False, delta=False):
-    key = (desk, web_view, board, delta)
+TASK_DETAIL_FIELDS = (
+    "id", "statement", "brief", "source", "file", "imports", "cuts", "cut_origin",
+    "takes_cuts", "cut_reason", "depth", "reductions_live", "refutation", "assembly",
+)
+BOARD_TASK_FIELDS = (
+    "plain_statement", "route_id", "route_parent", "track", "program", "role", "depends_on",
+    "parallel", "challenge_only",
+)
+
+
+def task_index(gap, *, delta):
+    row = {key: gap[key] for key in ("id", "proved", "points", "resolved")}
+    latest = gap.get("latest")
+    row["latest"] = None
+    if latest:
+        link = {"run_id": latest["run_id"]}
+        check_id = latest.get("check_id")
+        if type(check_id) is int and 0 < check_id < 2**53:
+            link["check_id"] = check_id
+        elif latest.get("head_sha"):
+            link["head_sha"] = latest["head_sha"]
+        row["latest"] = link
+    row["claims_closed"] = bool(gap.get("claims_closed"))
+    refutation = gap.get("refutation")
+    row["refutation"] = {"status": refutation["status"]} if refutation else None
+    if not delta or gap.get("route_parent"):
+        row.update((key, gap[key]) for key in BOARD_TASK_FIELDS if key in gap)
+    return row
+
+
+def task_detail(desk, gap_id):
+    with desk.transaction() as conn:
+        gap = next(desk.research_gaps(conn, gap_id), None)
+        if gap is None:
+            return None
+        if gap_id in desk.resolved_gaps(conn):
+            gap.update(takes_cuts=False, cut_reason="settled")
+        return {key: gap[key] for key in TASK_DETAIL_FIELDS if key in gap}
+
+
+def available_tasks(desk, limit):
+    with desk.transaction() as conn:
+        now = int(time.time())
+        catalogue = reductions.catalogue(conn, desk.gaps)
+        resolved = desk.resolved_gaps(conn) | reductions.inactive_tasks(conn)
+        assignments = desk.active_assignments(conn, now)
+        available = [gap for key, gap in catalogue.items()
+                     if key not in resolved and not gap.get("claims_closed") and not gap.get("refutation")
+                     and (key not in assignments or gap.get("parallel") is True)]
+        scores = {gap["id"]: desk.points(gap["id"], now, conn) for gap in available}
+    available.sort(key=lambda gap: (-(scores[gap["id"]] or 0), gap["id"]))
+    fields = ("id", "plain_statement", "track", "role", "challenge_only")
+    tasks = [{**{key: gap[key] for key in fields if key in gap}, "points": scores[gap["id"]]}
+             for gap in available[:limit]]
+    return {"problem": desk.slug, "available": len(available), "tasks": tasks}
+
+
+def search_task_details(desk, query, lang, scope):
+    with desk.transaction() as conn:
+        catalogue = reductions.catalogue(conn, desk.gaps)
+    return {"ids": [
+        gap["id"] for gap in catalogue.values()
+        if query in gap.get("brief", {}).get(lang, "").lower()
+        or (scope == "all" and query in gap["statement"].lower())
+    ]}
+
+
+def status_body(desk, web_view, board=False, compress=False, delta=False, index=False):
+    key = (desk, web_view, board, delta, index)
     cached = WEB_SNAPSHOTS.get(key) if compress else None
     if cached and cached[0] > time.monotonic():
         return cached[1]
@@ -498,11 +577,14 @@ def status_body(desk, web_view, board=False, compress=False, delta=False):
             cached = WEB_SNAPSHOTS.get(key)
             if cached and cached[0] > time.monotonic():
                 return cached[1]
-        status = research_status(desk, compact=web_view, board=board)
-        if delta:
+        status = research_status(desk, compact=web_view, board=board, index=index)
+        if index:
+            status["gaps"] = [task_index(gap, delta=delta) for gap in status["gaps"]]
+        elif delta:
             fields = ("id", "latest", "proved", "resolved", "points", "takes_cuts", "cut_reason", "reductions_live", "cuts", "refutation", "assembly")
             status["gaps"] = [gap if gap.get("route_parent") else {k: gap[k] for k in fields if k in gap}
                               for gap in status["gaps"]]
+        if delta:
             status.pop("tracks", None)
         body = json.dumps(status, ensure_ascii=False, separators=(",", ":")).encode()
         if compress:
@@ -968,6 +1050,13 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(304, b"", content_type, cache=cache, etag=etag, vary=vary)
         return self.reply(200, body, content_type, encoding=encoding, cache=cache, etag=etag, vary=vary)
 
+    def public_json(self, payload, cache="public, max-age=10"):
+        body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode()
+        compress = accepts_gzip(self.headers.get("Accept-Encoding", ""))
+        if compress:
+            body = gzip.compress(body, compresslevel=3, mtime=0)
+        return self.public_conditional(body, encoding="gzip" if compress else None, cache=cache, vary=True)
+
     def client_ip(self):
         peer = ipaddress.ip_address(self.client_address[0])
         peer = getattr(peer, "ipv4_mapped", None) or peer
@@ -1077,8 +1166,63 @@ class Handler(BaseHTTPRequestHandler):
                     f'<link rel="stylesheet" href="site.css"><main class="shell"><h1>{title}</h1>'
                     f'{("<ol>"+rows+"</ol>") if rows else empty}<nav>{" · ".join(nav)}</nav></main></html>')
             return self.reply(200, page.encode(), "text/html")
+        if path == "/api/tasks":
+            query = parse_qs(url.query, keep_blank_values=True)
+            limit = query.get("limit", ["20"])
+            if (not set(query) <= {"limit"} or len(limit) != 1
+                    or not re.fullmatch(r"[1-9][0-9]{0,2}", limit[0]) or not 1 <= int(limit[0]) <= 100):
+                return self.reply(400, b'{"error":"invalid limit"}')
+            try:
+                return self.public_json(available_tasks(desk, int(limit[0])))
+            except sqlite3.Error:
+                return self.reply(503, b'{"error":"tasks unavailable"}')
+        if path == "/api/task":
+            query = parse_qs(url.query, keep_blank_values=True)
+            key = query.get("lemma", [])
+            if set(query) != {"lemma"} or len(key) != 1 or not re.fullmatch(r"L-[A-Za-z0-9_.-]{1,160}", key[0]):
+                return self.reply(400, b'{"error":"invalid lemma"}')
+            try:
+                detail = task_detail(desk, key[0])
+            except sqlite3.Error:
+                return self.reply(503, b'{"error":"task unavailable"}')
+            if detail is None:
+                return self.reply(404, b'{"error":"task not found"}')
+            return self.public_json(detail)
+        if path == "/api/task-search":
+            query = parse_qs(url.query, keep_blank_values=True)
+            term, lang, scope = (query.get(key, []) for key in ("q", "lang", "scope"))
+            if (set(query) != {"q", "lang", "scope"} or len(term) != 1 or not 1 <= len(term[0].strip()) <= 500
+                    or len(lang) != 1 or lang[0] not in {"zh", "en"}
+                    or len(scope) != 1 or scope[0] not in {"all", "brief"}):
+                return self.reply(400, b'{"error":"invalid search"}')
+            try:
+                matches = search_task_details(desk, term[0].strip().lower(), lang[0], scope[0])
+            except sqlite3.Error:
+                return self.reply(503, b'{"error":"search unavailable"}')
+            return self.public_json(matches)
+        if path == "/api/record-manifest":
+            query = parse_qs(url.query, keep_blank_values=True)
+            run, attempt = (query.get(key, []) for key in ("run", "attempt"))
+            if (set(query) != {"run", "attempt"} or len(run) != 1 or not re.fullmatch(r"[1-9][0-9]{0,17}", run[0])
+                    or len(attempt) != 1 or not re.fullmatch(r"[1-9][0-9]{0,8}", attempt[0])):
+                return self.reply(400, b'{"error":"invalid record"}')
+            try:
+                with desk.transaction() as conn:
+                    row = conn.execute(
+                        "SELECT json_extract(CAST(body AS TEXT), '$.manifest') FROM verdicts WHERE run_id=? AND attempt=?",
+                        (int(run[0]), int(attempt[0])),
+                    ).fetchone()
+            except sqlite3.Error:
+                return self.reply(503, b'{"error":"record unavailable"}')
+            if row is None or row[0] is None:
+                return self.reply(404, b'{"error":"manifest not found"}')
+            return self.public_json({"manifest": json.loads(row[0])}, cache="public, max-age=300")
         if path == "/api/records":
             query = parse_qs(url.query, keep_blank_values=True)
+            view = query.pop("view", None)
+            if view is not None and view != ["summary"]:
+                return self.reply(400, b'{"error":"invalid records view"}')
+            projection = verdict_summary(manifest=True) if view else "body"
             before = query.get("before", [])
             page_param = query.get("page", [])
             limit_param = query.get("limit", [])
@@ -1110,14 +1254,14 @@ class Handler(BaseHTTPRequestHandler):
                             page_num = min(page_num, total_pages)
                             offset = (page_num - 1) * limit
                             rows = conn.execute(
-                                "SELECT run_id, attempt, body FROM verdicts "
+                                f"SELECT run_id, attempt, {projection} FROM verdicts "
                                 "ORDER BY run_id DESC, attempt DESC LIMIT ? OFFSET ?",
                                 (limit + 1, offset),
                             ).fetchall()
                         else:
                             where = "WHERE (run_id, attempt) < (?, ?)" if cursor else ""
                             rows = conn.execute(
-                                f"SELECT run_id, attempt, body FROM verdicts {where} "
+                                f"SELECT run_id, attempt, {projection} FROM verdicts {where} "
                                 "ORDER BY run_id DESC, attempt DESC LIMIT 13",
                                 cursor,
                             ).fetchall()
@@ -1197,15 +1341,16 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/status":
             try:
                 view = parse_qs(url.query).get("view")
-                delta = view == ["board-delta-gzip"]
-                board = delta or view == ["board-gzip"]
+                delta = view in (["board-delta-gzip"], ["board-index-delta-gzip"])
+                index = view in (["board-index-gzip"], ["board-index-delta-gzip"])
+                board = delta or index or view == ["board-gzip"]
                 web_view = board or view == ["web-gzip"]
                 compress = web_view or accepts_gzip(self.headers.get("Accept-Encoding", ""))
                 if (not compress and self.command == "GET" and not self.client_ip().is_loopback
                         and not raw_status_allowed(self.client_ip())):
                     return self.reply(429, b'{"error":"Use Accept-Encoding: gzip for frequent status requests"}',
                                       vary=True, retry_after=30)
-                body = status_body(desk, web_view, board, compress=compress, delta=delta)
+                body = status_body(desk, web_view, board, compress=compress, delta=delta, index=index)
             except sqlite3.Error as error:
                 self.log_error("Unable to read verdicts: %s", error)
                 return self.reply(503, b'{"error":"verdicts unavailable"}')
