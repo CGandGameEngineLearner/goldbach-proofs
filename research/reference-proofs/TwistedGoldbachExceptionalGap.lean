@@ -116,7 +116,7 @@ private theorem reduced_prime_part {L p : ℕ} (hp : p.Prime) (hL : L ≠ 0) (m 
     q/(m.gcd q) = p^(L/(m.gcd L)).factorization p := by
   intro q
   let g := m.gcd L
-  have gd : g ∣ L := Nat.gcd_dvd_right .. 
+  have gd : g ∣ L := Nat.gcd_dvd_right ..
   have Q : q ∣ L := Nat.ordProj_dvd L p
   have same : m.gcd q = q.gcd g := by
     change m.gcd q = q.gcd (m.gcd L)
@@ -203,7 +203,7 @@ theorem reduced_gap {r s : ℕ} [NeZero r] [NeZero s] {α : DirichletCharacter �
   classical
   intro L outside
   let j := L/(m.gcd L)
-  let hr : r ∣ L := Nat.dvd_lcm_left .. 
+  let hr : r ∣ L := Nat.dvd_lcm_left ..
   let hs : s ∣ L := Nat.dvd_lcm_right ..
   let d := (inversePair α β).conductor
   by_cases good : supported r s L d j
@@ -226,7 +226,7 @@ theorem reduced_gap {r s : ℕ} [NeZero r] [NeZero s] {α : DirichletCharacter �
   let A := component e (changeLevel hr α) i
   let B := component e (changeLevel hs β) i
   let t := Q/(m.gcd Q)
-  have qpos : 0 < Q := Nat.ordProj_pos .. 
+  have qpos : 0 < Q := Nat.ordProj_pos ..
   have tpos : 0 < t := Nat.pos_of_dvd_of_pos (Nat.div_dvd_of_dvd (Nat.gcd_dvd_right m Q)) qpos
   have eqt : t=p^j.factorization p := reduced_prime_part hp lp.ne' m
   have lift (k : ℕ) (H : p^k ∣ j) : p^k ∣ t := eqt ▸ (hp.pow_dvd_iff_dvd_ordProj jp.ne').mp H
