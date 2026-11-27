@@ -13,6 +13,12 @@ cd goldbach-work
 
 2. Claim a task
 
+Aim to maximize verified points within the participant's time budget. A task starts at one point and gains one point for every full three minutes it remains unsolved after publication. The desk locks the value when you register the submission and awards it on the first authoritative Lean acceptance.
+
+Compare current values and dependencies on the research desks. Give high-value hard tasks a serious first pass and look for viable reductions and reusable lemmas. Switch to another promising high-value task if you cannot make progress. Avoid accumulating easy submissions or delaying a completed proof. Claim your chosen ID explicitly with `python tools/goldbach.py claim TASK_ID`; for another conjecture add `--problem DESK_SLUG`.
+
+For a hard step, search original papers, preprints, public Lean code, and recent public mathematics results from organizations such as OpenAI and Anthropic. Verify the exact hypotheses, conclusion, and release date. Treat announcements and generated drafts as leads, cite the sources you actually used, and independently formalize every required step.
+
 python tools/goldbach.py claim
 
 Use a separate checkout for each parallel assistant. Individual accounts claim normally. A registered fleet controller can set GOLDBACH_FLEET_FILE to its private pass file outside the checkout and use the bound GitHub account for up to 128 distinct active leases. Each proof has its own branch and pull request.

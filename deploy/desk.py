@@ -138,7 +138,7 @@ def error(status, code):
 
 
 class Desk:
-    def __init__(self, db_path, gaps, secret):
+    def __init__(self, db_path, gaps, secret, openings=None):
         self.db_path = db_path
         self.gaps = {gap["id"]: gap for gap in gaps}
         self.statement_hashes = {
@@ -182,6 +182,20 @@ class Desk:
                     conn.execute(f"ALTER TABLE goldbach_leases ADD COLUMN {column} TEXT NOT NULL DEFAULT 'unknown'")
             if "agent_reported" not in columns:
                 conn.execute("ALTER TABLE goldbach_leases ADD COLUMN agent_reported INTEGER NOT NULL DEFAULT 0")
+
+            if "points" not in columns:
+                conn.execute("ALTER TABLE goldbach_leases ADD COLUMN points INTEGER")
+            conn.execute("""CREATE TABLE IF NOT EXISTS goldbach_task_openings (
+                gap TEXT PRIMARY KEY, opened_at INTEGER NOT NULL
+            )""")
+            now = int(time.time())
+            conn.executemany("INSERT OR IGNORE INTO goldbach_task_openings VALUES (?, ?)",
+                             [(gap, min(now, (openings or {}).get(gap, now))) for gap in self.gaps])
+            conn.commit()
+            self.openings = dict(conn.execute("SELECT gap, opened_at FROM goldbach_task_openings"))
+
+    def points(self, gap, now):
+        return 1 + max(0, now - self.openings[gap]) // 180
 
     @contextmanager
     def transaction(self, write=False):
@@ -283,7 +297,7 @@ class Desk:
             """, (self.token_hash(token), selected, self.statement_hashes[selected],
                   handle, ip_key, now, expires, absolute))
             return 201, {
-                "gap": self.gaps[selected],
+                "gap": {**self.gaps[selected], "points": self.points(selected, now)},
                 "lease": {"token": token, "expires_at": expires, "absolute_expires_at": absolute},
             }
 
@@ -342,11 +356,11 @@ class Desk:
             expires = now + SUBMISSION_SECONDS
             conn.execute("""
                 UPDATE goldbach_leases SET pr = ?, head = ?, submitted_at = ?, expires_at = ?,
-                    model = ?, harness = ?, harness_version = ?, agent_reported = ?
+                    model = ?, harness = ?, harness_version = ?, agent_reported = ?, points = ?
                 WHERE token_hash = ?
             """, (pr, head, now, expires, agent["model"], agent["harness"], agent["harness_version"],
-                  1, digest))
-            return 200, {"submitted": True, "expires_at": expires,
+                  1, self.points(lease["gap"], now), digest))
+            return 200, {"submitted": True, "points": self.points(lease["gap"], now), "expires_at": expires,
                          "absolute_expires_at": lease["absolute_expires_at"]}
 
     def signed(self, supplied, raw_body):
@@ -478,21 +492,23 @@ class Desk:
         # Same first-acceptance rule as the contributor leaderboard, one attribution per lemma.
         winners = conn.execute("""
             WITH accepted AS (
-                SELECT model, harness, finished_at,
+                SELECT model, harness, finished_at, COALESCE(points, 0) AS points,
                        ROW_NUMBER() OVER (PARTITION BY gap ORDER BY finished_at, run_id) AS position
                 FROM goldbach_leases
                 WHERE verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
             )
-            SELECT model, harness FROM accepted WHERE position = 1
+            SELECT model, harness, points FROM accepted WHERE position = 1
                 AND (model != 'unknown' OR harness != 'unknown')
         """, (now,)).fetchall()
         def ranking(column):
-            counts = Counter(
-                model_ranking_name(row[column]) if column == 0 else row[column]
-                for row in winners if row[column] != "unknown"
-            )
-            return [{"name": name, "accepted": count} for name, count in
-                    sorted(counts.items(), key=lambda pair: (-pair[1], pair[0]))]
+            counts, scores = Counter(), Counter()
+            for row in winners:
+                if row[column] != "unknown":
+                    name = model_ranking_name(row[column]) if column == 0 else row[column]
+                    counts[name] += 1
+                    scores[name] += row["points"]
+            return [{"name": name, "accepted": counts[name], "points": scores[name]}
+                    for name in sorted(counts, key=lambda name: (-scores[name], -counts[name], name))]
         return {"models": ranking(0), "harnesses": ranking(1), "proofs": len(winners)}
 
     def public_status(self):
@@ -535,42 +551,38 @@ class Desk:
                     ORDER BY at DESC, stage DESC, lemma_id LIMIT 30
                 """, (now,))
             ]
-            leaderboard = [
-                dict(row) for row in conn.execute("""
-                    SELECT handle, COUNT(DISTINCT gap) AS accepted FROM goldbach_leases
-                    WHERE verdict = 'ACCEPTED' GROUP BY handle ORDER BY accepted DESC, handle LIMIT 20
-                """)
-            ]
             first_acceptances = [
                 dict(row) for row in conn.execute("""
                     WITH accepted AS (
-                        SELECT gap, handle, finished_at,
+                        SELECT gap, handle, finished_at, COALESCE(points, 0) AS points,
                                ROW_NUMBER() OVER (PARTITION BY gap ORDER BY finished_at, run_id) AS position
                         FROM goldbach_leases
                         WHERE verdict = 'ACCEPTED' AND run_id IS NOT NULL AND finished_at <= ?
                     )
-                    SELECT handle, COUNT(*) AS accepted, MAX(finished_at) AS latest_accepted_at,
+                    SELECT handle, COUNT(*) AS accepted, SUM(points) AS points,
+                           SUM(CASE WHEN finished_at >= ? THEN points ELSE 0 END) AS hour_points,
+                           MAX(finished_at) AS latest_accepted_at,
                            SUM(finished_at >= ?) AS hour_accepted,
                            MAX(CASE WHEN finished_at >= ? THEN finished_at END) AS hour_latest
                     FROM accepted WHERE position = 1 GROUP BY handle
-                    ORDER BY accepted DESC, latest_accepted_at DESC, handle
-                """, (now, now - 3600, now - 3600))
+                    ORDER BY points DESC, accepted DESC, latest_accepted_at DESC, handle
+                """, (now, now - 3600, now - 3600, now - 3600))
             ]
             agent_rankings = self.agent_rankings(conn, now)
         all_time = [
-            {key: row[key] for key in ("handle", "accepted", "latest_accepted_at")}
+            {key: row[key] for key in ("handle", "accepted", "points", "latest_accepted_at")}
             for row in first_acceptances
         ]
         hour = sorted(
             (
-                {"handle": row["handle"], "accepted": row["hour_accepted"], "latest_accepted_at": row["hour_latest"]}
+                {"handle": row["handle"], "accepted": row["hour_accepted"], "points": row["hour_points"], "latest_accepted_at": row["hour_latest"]}
                 for row in first_acceptances if row["hour_accepted"]
             ),
-            key=lambda row: (-row["accepted"], -row["latest_accepted_at"], row["handle"]),
+            key=lambda row: (-row["points"], -row["accepted"], -row["latest_accepted_at"], row["handle"]),
         )
         return {
             "active": active, "sessions": sessions, "assignments": assignments,
-            "activities": activities, "leaderboard": leaderboard, "agent_rankings": agent_rankings,
+            "activities": activities, "leaderboard": [{key: row[key] for key in ("handle", "accepted")} for row in all_time[:20]], "agent_rankings": agent_rankings,
             "rankings": {
                 "all_time": all_time,
                 "hour": hour,

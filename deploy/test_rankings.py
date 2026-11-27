@@ -34,12 +34,12 @@ class RankingTests(unittest.TestCase):
                 payload = desk.public_status()
             self.assertEqual(payload["rankings"], {
                 "all_time": [
-                    {"handle": "alpha", "accepted": 2, "latest_accepted_at": now - 3600},
-                    {"handle": "gamma", "accepted": 1, "latest_accepted_at": now - 120},
+                    {"handle": "alpha", "accepted": 2, "points": 0, "latest_accepted_at": now - 3600},
+                    {"handle": "gamma", "accepted": 1, "points": 0, "latest_accepted_at": now - 120},
                 ],
                 "hour": [
-                    {"handle": "gamma", "accepted": 1, "latest_accepted_at": now - 120},
-                    {"handle": "alpha", "accepted": 1, "latest_accepted_at": now - 3600},
+                    {"handle": "gamma", "accepted": 1, "points": 0, "latest_accepted_at": now - 120},
+                    {"handle": "alpha", "accepted": 1, "points": 0, "latest_accepted_at": now - 3600},
                 ],
                 "contributors": 2,
                 "proofs": 3,

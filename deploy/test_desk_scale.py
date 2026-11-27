@@ -104,8 +104,8 @@ class DeskScaleTest(unittest.TestCase):
             self.assertEqual(latest["lemma_id"], gap["id"])
             self.assertEqual(status["results"][0]["agent"], {**agent, "source": "self_reported"})
             self.assertEqual(status["desk"]["agent_rankings"], {
-                "models": [{"name": "model-test-v1", "accepted": 1}],
-                "harnesses": [{"name": "codex", "accepted": 1}], "proofs": 1})
+                "models": [{"name": "model-test-v1", "accepted": 1, "points": 1}],
+                "harnesses": [{"name": "codex", "accepted": 1, "points": 1}], "proofs": 1})
             self.assertEqual(status["desk"]["rankings"]["proofs"], 1)
             for lang in ("zh", "en"):
                 page = self.request(path + "/?lang=" + lang, text=True)

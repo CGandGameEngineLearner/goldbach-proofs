@@ -190,6 +190,23 @@ class DeskTests(unittest.TestCase):
         self.assertEqual(outcome["activities"][0]["kind"], "accepted")
         self.assertEqual(outcome["leaderboard"], [{"handle": "alice", "accepted": 1}])
 
+    def test_points_use_publication_age_and_freeze_when_submitted(self):
+        gap = GAPS[0]["id"]
+        db = self.db.with_name("points.sqlite3")
+        self.db = db
+        self.desk = Desk(db, GAPS, SECRET, {gap: START - 359})
+        self.assertEqual(self.desk.points(gap, START), 2)
+        self.assertEqual(self.desk.points(gap, START + 1), 3)
+        token = self.claim()
+        status, submission = self.submit(token)
+        self.assertEqual((status, submission["points"]), (200, 2))
+        self.assertEqual(self.request("authorize", self.authorization(), sign=True)[0], 200)
+        with patch("deploy.desk.time.time", return_value=START + 720):
+            self.record(102, gap, "ACCEPTED")
+        self.desk = Desk(db, GAPS, SECRET, {gap: START})
+        self.assertEqual(self.desk.openings[gap], START - 359)
+        self.assertEqual(self.status(START + 720)["rankings"]["all_time"][0]["points"], 2)
+
     def test_network_limit_groups_ipv6_neighbors_without_leaking_addresses(self):
         for i in range(1, 4):
             self.assertEqual(self.request("claim", {"handle": f"Agent{i}"}, ip=f"2001:db8::{i}")[0], 201)

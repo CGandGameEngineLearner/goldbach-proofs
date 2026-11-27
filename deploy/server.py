@@ -38,9 +38,37 @@ ZHIHU = ZhihuOAuth(DB.with_name("contributor-links.sqlite3"), json.loads(oauth_c
 LIVE_RELEASE = Path("/opt/goldbach-catalogues/current")
 CATALOGUE_ROOT = LIVE_RELEASE.resolve(strict=True) if LIVE_RELEASE.is_symlink() else ROOT
 RELEASE_SHA = (CATALOGUE_ROOT / "revision").read_text() if CATALOGUE_ROOT != ROOT else None
+def catalogue_openings():
+    """Recover first public appearance from activated catalogue snapshots."""
+    if not RELEASE_SHA:
+        return {}
+    history_file = CATALOGUE_ROOT / "history.json"
+    history = json.loads(history_file.read_bytes())
+    snapshots = [(entry["sha"], int(datetime.fromisoformat(entry["at"]).timestamp()))
+                 for entry in history]
+    # The initial snapshot predates the history log. Its history file was written at bootstrap.
+    for snapshot in CATALOGUE_ROOT.parent.iterdir():
+        log = snapshot / "history.json"
+        if re.fullmatch(r"[a-f0-9]{40}", snapshot.name) and log.is_file() and json.loads(log.read_bytes()) == []:
+            snapshots.append((snapshot.name, int(log.stat().st_mtime)))
+    openings = {}
+    for sha, opened_at in sorted(snapshots, key=lambda snapshot: snapshot[1]):
+        snapshot = CATALOGUE_ROOT.parent / sha
+        if not snapshot.is_dir():
+            continue
+        goldbach = json.loads((snapshot / "gaps.json").read_bytes())
+        problem_file = snapshot / "problems.json"
+        problems = json.loads(problem_file.read_bytes()) if problem_file.is_file() else {}
+        for problem in (goldbach, *problems.values()):
+            for gap in problem["gaps"]:
+                openings.setdefault(gap["id"], opened_at)
+    return openings
+
+
+OPENINGS = catalogue_openings()
 GOLDBACH_CATALOGUE = json.loads((CATALOGUE_ROOT / "gaps.json").read_text(encoding="utf-8"))
 GAPS = GOLDBACH_CATALOGUE["gaps"]
-DESK = Desk(DB, GAPS, SECRET)
+DESK = Desk(DB, GAPS, SECRET, OPENINGS)
 PROBLEM_FILE = CATALOGUE_ROOT / "problems.json"
 PROBLEMS = json.loads(PROBLEM_FILE.read_text(encoding="utf-8")) if PROBLEM_FILE.exists() else {}
 PUBLIC_SITE = "https://www.movan.tech/goldbach/"
@@ -53,7 +81,7 @@ for slug, problem in PROBLEMS.items():
             raise ValueError(f"Invalid or duplicate task: {gap['id']}")
         problem_ids.add(gap["id"])
 DESKS = {"goldbach": DESK, **{
-    slug: Desk(DB.with_name(slug + ".sqlite3"), problem["gaps"], SECRET)
+    slug: Desk(DB.with_name(slug + ".sqlite3"), problem["gaps"], SECRET, OPENINGS)
     for slug, problem in PROBLEMS.items()
 }}
 GAP_DESKS = {
@@ -264,9 +292,12 @@ def research_status(desk=DESK, *, compact=False, board=False):
                 desk.annotate_verdicts([result for result, _ in latest.values()], conn)
 
     gaps = []
+    now = int(time.time())
     for gap in desk.gaps.values():
         result, proved = latest.get(gap["id"], (None, False))
-        gaps.append({**gap, "latest": result, "proved": proved, "route_id": TASK_ROUTE[gap["id"]]})
+        points = None if proved or gap.get("refutation") else desk.points(gap["id"], now)
+        gaps.append({**gap, "latest": result, "proved": proved, "points": points,
+                     "route_id": TASK_ROUTE[gap["id"]]})
     accepted = sum(gap["proved"] for gap in gaps)
     desk_status = desk.public_status()
     rankings = desk_status["rankings"]
@@ -332,7 +363,7 @@ def status_body(desk, web_view, board=False, compress=False, delta=False):
                 return cached[1]
         status = research_status(desk, compact=web_view, board=board)
         if delta:
-            status["gaps"] = [{k: gap[k] for k in ("id", "latest", "proved")} for gap in status["gaps"]]
+            status["gaps"] = [{k: gap[k] for k in ("id", "latest", "proved", "points")} for gap in status["gaps"]]
             status.pop("tracks", None)
         body = json.dumps(status, ensure_ascii=False, separators=(",", ":")).encode()
         if compress:

@@ -350,6 +350,10 @@ function lemmaRow(gap) {
   button.addEventListener('click', () => openGap(gap.id));
   claim.append(element('code', gap.id, 'statement-id'), button);
   const context = programName(programOf(gap));
+  if (Number.isSafeInteger(gap.points)) {
+    const points = gap.points.toLocaleString(locale);
+    claim.append(element('span', lang === 'zh' ? points + ' 分' : points + ' pts', 'row-context'));
+  }
   if (context) claim.append(element('span', context, 'row-context'));
 
   const statusCell = element('td');
@@ -537,7 +541,7 @@ function renderRankingRow(contributor, index, mode) {
     identity.append(time);
   }
   const score = element('div', undefined, 'ranking-result');
-  const figure = element('span', '+' + contributor.accepted.toLocaleString(locale), 'ranking-score');
+  const figure = element('span', '+' + (contributor.points ?? contributor.accepted).toLocaleString(locale), 'ranking-score');
   figure.setAttribute('aria-hidden', 'true');
   score.append(figure, element('span', strings.verifiedCount(contributor.accepted), 'sr-only'),
     element('span', strings.rankingPeriods[mode], 'ranking-period'));
@@ -659,7 +663,7 @@ function renderAgentRankingRow(entry, index) {
   name.append(agentBrandIcon(entry.name), element('span', agentName(entry.name)));
   item.append(element('span', index + 1, 'ranking-position'), name);
   const result = element('div', undefined, 'ranking-result');
-  result.append(element('span', '+' + entry.accepted.toLocaleString(locale), 'ranking-score'),
+  result.append(element('span', '+' + (entry.points ?? entry.accepted).toLocaleString(locale), 'ranking-score'),
     element('span', strings.rankingPeriods.all_time, 'ranking-period'));
   item.append(result);
   return item;
@@ -712,7 +716,7 @@ function renderRankingMode() {
     ? (lang === 'zh' ? '模型与 Harness 贡献榜' : 'Model and harness contributions')
     : (lang === 'zh' ? '全部已核验贡献者' : 'All verified contributors');
   document.getElementById('rankings-summary').textContent = agents
-    ? (lang === 'zh' ? '按本研究台累计首次通过的引理数排列。' : 'Ranked by all-time first accepted lemmas on this research desk.')
+    ? (lang === 'zh' ? '按本研究台累计首次核验积分排列。' : 'Ranked by points from first accepted proofs on this research desk.')
     : strings.rankingsSummary(rankingsData.contributors.toLocaleString(locale), rankingsData.proofs.toLocaleString(locale));
   fillRankings(rankingsList, rows.slice(0, 6), rankingMode);
   document.getElementById('ranking-next-place').textContent = String(rows.length + 1);
