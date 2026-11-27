@@ -17,7 +17,9 @@
     "L-joshi-abc-frey-upper-at-seven",
     "L-joshi-abc-frey-height"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.FreyHeight"
+  ],
   "track": "07-global-heights",
   "module": "Conjectures.JoshiAbc.WeakFromFrey",
   "file": "lean/Conjectures/JoshiAbc/WeakFromFrey.lean"
