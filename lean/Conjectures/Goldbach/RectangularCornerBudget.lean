@@ -201,7 +201,7 @@ private theorem rectCostBound (n A D B H : ℕ) (hn : 0<n) (hB : 0<B) (hH : B≤
         ring
       linarith
 
-theorem PEqualNP.Outside.L_goldbach_rectangular_corner_budget :
+theorem Conjectures.Goldbach.RectangularCornerBudget :
     ∀ (n A D B H : ℕ), 0<n → 0<B → B≤H →
       let L := fun N : ℕ => ∑ q ∈ Finset.Icc 1 N,(q:ℝ)⁻¹
       let C := fun u v : ℕ => (1+Real.log ((n:ℝ)+2))^2 +
