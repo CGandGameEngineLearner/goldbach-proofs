@@ -10,7 +10,7 @@ The project window and residue-energy lemmas are from PR 2519. The Ramanujan-sum
 evaluations below are adapted from PRs 183 and 207 with attribution at their definitions.
 -/
 
-namespace PEqualNP.Outside.L_goldbach_deep_arc_second_moment_floor
+namespace Conjectures.Goldbach.DeepArcSecondMomentFloor
 
 section
 namespace GoldbachSupport
@@ -1035,11 +1035,11 @@ theorem sqrtArcSecondMoment :
       GoldbachCount.sqrtMaskScales d hd hm
 end
 
-end PEqualNP.Outside.L_goldbach_deep_arc_second_moment_floor
+end Conjectures.Goldbach.DeepArcSecondMomentFloor
 
 open Filter
-open PEqualNP.Outside.L_goldbach_deep_arc_second_moment_floor in
-theorem PEqualNP.Outside.L_goldbach_deep_arc_second_moment_floor :
+open Conjectures.Goldbach.DeepArcSecondMomentFloor in
+theorem Conjectures.Goldbach.DeepArcSecondMomentFloor :
     let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; ∃ c : ℝ, 0 < c ∧ ∃ N : ℕ, ∀ n : ℕ, N ≤ n → c * (n : ℝ) * Real.log (n : ℝ) ≤ intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => ‖S n w u‖ ^ 2) t) (0 : ℝ) 1 MeasureTheory.volume := by
   let D := fun n : ℕ => ⌊(n : ℝ) ^ (1/3 : ℝ)⌋₊
   let H := fun n : ℕ => 256 * D n * (Nat.log 2 (n+2))^2
