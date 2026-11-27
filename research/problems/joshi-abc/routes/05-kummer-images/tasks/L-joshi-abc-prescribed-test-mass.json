@@ -17,7 +17,10 @@
     "L-joshi-abc-finite-affine-transform",
     "L-joshi-abc-measurable-density"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.FiniteAffineTransform",
+    "Conjectures.JoshiAbc.MeasurableDensity"
+  ],
   "track": "05-kummer-images",
   "module": "Conjectures.JoshiAbc.PrescribedTestMass",
   "file": "lean/Conjectures/JoshiAbc/PrescribedTestMass.lean"

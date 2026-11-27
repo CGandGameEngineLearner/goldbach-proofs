@@ -15,7 +15,9 @@
   "depends_on": [
     "L-goldbach-dyadic-cell-mixed-difference"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.DyadicCellMixedDifference"
+  ],
   "track": "odd-character-interference",
   "role": "conditional",
   "module": "Conjectures.Goldbach.DyadicCellWindowTransfer",
