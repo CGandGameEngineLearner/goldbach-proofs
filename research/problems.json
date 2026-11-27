@@ -4900,6 +4900,7 @@
           "Conjectures.TwinPrimes.SharpWindowContamination"
         ],
         "challenge_only": true,
+        "reductions": true,
         "track": "01-gap-two-windows",
         "route_source": "01-gap-two-windows"
       },
@@ -5876,6 +5877,7 @@
           "Conjectures.TwinPrimes.EnergyBridgeV2"
         ],
         "challenge_only": true,
+        "reductions": true,
         "track": "06-theta-for-shift",
         "route_source": "06-theta-for-shift"
       },
@@ -10745,8 +10747,8 @@
         "track": "seventeen-square-frontier",
         "role": "lemma",
         "imports": [],
-        "module": "Conjectures.SquarePacking.SeventeenWeightedSites4661Refute",
         "file": "lean/Conjectures/SquarePacking/SeventeenWeightedSites4661Refute.lean",
+        "module": "Conjectures.SquarePacking.SeventeenWeightedSites4661Refute",
         "route_source": "seventeen-square-frontier"
       },
       {
@@ -28172,8 +28174,8 @@
           "PEqualNP.Outside.L_log_rank_interval_anchor",
           "PEqualNP.Outside.L_log_rank_cyclic_detector_family"
         ],
-        "module": "Conjectures.LogRank.MinimalSliceProtocol",
         "file": "lean/Conjectures/LogRank/MinimalSliceProtocol.lean",
+        "module": "Conjectures.LogRank.MinimalSliceProtocol",
         "track": "explore-new-columns-at-one-third-density",
         "route_source": "explore-new-columns-at-one-third-density"
       },
@@ -28199,8 +28201,8 @@
           "PEqualNP.Outside.L_log_rank_cyclic_detector_family",
           "Conjectures.LogRank.CyclicSmallRows"
         ],
-        "module": "Conjectures.LogRank.TwoOrbitFullDetector",
         "file": "lean/Conjectures/LogRank/TwoOrbitFullDetector.lean",
+        "module": "Conjectures.LogRank.TwoOrbitFullDetector",
         "track": "explore-new-columns-at-one-third-density",
         "route_source": "explore-new-columns-at-one-third-density"
       },
@@ -28220,8 +28222,8 @@
         "parallel": true,
         "depends_on": [],
         "imports": [],
-        "module": "Conjectures.LogRank.ImprovedGeneralRectangleExponent",
         "file": "lean/Conjectures/LogRank/ImprovedGeneralRectangleExponent.lean",
+        "module": "Conjectures.LogRank.ImprovedGeneralRectangleExponent",
         "track": "general-monochromatic-rectangles",
         "route_source": "general-monochromatic-rectangles"
       }
