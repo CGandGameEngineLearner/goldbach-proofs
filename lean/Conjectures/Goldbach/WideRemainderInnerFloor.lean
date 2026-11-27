@@ -387,5 +387,126 @@ lemma measurableSet_arc_family (Q : ℕ) (B : ℕ → ℝ) :
     rw [heq]
     exact MeasurableSet.empty
 
+/-! ### The frozen regions and the route partition -/
+
+noncomputable def Qf (n : ℕ) : ℕ := (Nat.log 2 (n+2))^2
+noncomputable def Q1f (n : ℕ) : ℕ := ⌊(n:ℝ)^(1/3:ℝ)⌋₊
+noncomputable def Hf (n : ℕ) : ℕ := 256 * Q1f n * Qf n
+
+noncomputable def arcsRegion (n : ℕ) : Set ℝ :=
+  {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Qf n ∧ a ≤ q ∧ Nat.Coprime a q
+    ∧ |t - (a:ℝ)/(q:ℝ)| ≤ (Qf n:ℝ)/((q:ℝ)*(n:ℝ))}
+
+noncomputable def wideArcsRegion (n : ℕ) : Set ℝ :=
+  {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q1f n ∧ a ≤ q ∧ Nat.Coprime a q
+    ∧ |t - (a:ℝ)/(q:ℝ)| ≤ (Hf n:ℝ)/((q:ℝ)*(n:ℝ))}
+
+noncomputable def lowWideArcsRegion (n : ℕ) : Set ℝ :=
+  {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Qf n ∧ a ≤ q ∧ Nat.Coprime a q
+    ∧ |t - (a:ℝ)/(q:ℝ)| ≤ (Hf n:ℝ)/((q:ℝ)*(n:ℝ))}
+
+noncomputable def innerRegion (n : ℕ) : Set ℝ :=
+  {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q1f n ∧ a ≤ q ∧ Nat.Coprime a q
+    ∧ |t - (a:ℝ)/(q:ℝ)| ≤ (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ))}
+
+noncomputable def lowPartRegion (n : ℕ) : Set ℝ := lowWideArcsRegion n \ arcsRegion n
+
+noncomputable def remainderRegion (n : ℕ) : Set ℝ :=
+  (wideArcsRegion n \ arcsRegion n) \ lowPartRegion n
+
+lemma measurableSet_arcsRegion (n : ℕ) : MeasurableSet (arcsRegion n) :=
+  measurableSet_arc_family (Qf n) (fun q => (Qf n:ℝ)/((q:ℝ)*(n:ℝ)))
+
+lemma measurableSet_wideArcsRegion (n : ℕ) : MeasurableSet (wideArcsRegion n) :=
+  measurableSet_arc_family (Q1f n) (fun q => (Hf n:ℝ)/((q:ℝ)*(n:ℝ)))
+
+lemma measurableSet_lowWideArcsRegion (n : ℕ) : MeasurableSet (lowWideArcsRegion n) :=
+  measurableSet_arc_family (Qf n) (fun q => (Hf n:ℝ)/((q:ℝ)*(n:ℝ)))
+
+lemma measurableSet_innerRegion (n : ℕ) : MeasurableSet (innerRegion n) :=
+  measurableSet_arc_family (Q1f n) (fun q => (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)))
+
+lemma measurableSet_lowPartRegion (n : ℕ) : MeasurableSet (lowPartRegion n) :=
+  (measurableSet_lowWideArcsRegion n).diff (measurableSet_arcsRegion n)
+
+lemma measurableSet_remainderRegion (n : ℕ) : MeasurableSet (remainderRegion n) :=
+  ((measurableSet_wideArcsRegion n).diff (measurableSet_arcsRegion n)).diff
+    (measurableSet_lowPartRegion n)
+
+/-- **The route partition.** The weighted Goldbach count `JG n univ` splits exactly into
+the five route pieces: major arcs, low-modulus skirt, the target band
+(`remainder ∩ inner`), the outer skirt (`remainder \ inner`) and the deep minor arcs.
+Hence the target band equals the count minus the other four — the master checklist of
+the `wide-arc-signed-remainder` route. The containments `arcs ⊆ wideArcs`,
+`lowWideArcs ⊆ wideArcs`, `inner ⊆ wideArcs` hold asymptotically (`Q ≤ Q₁`, `Q ≤ H`,
+`Q·n^{1/6} ≤ H`). -/
+lemma JG_partition (n : ℕ)
+    (hsub1 : arcsRegion n ⊆ wideArcsRegion n)
+    (hsub2 : lowWideArcsRegion n ⊆ wideArcsRegion n)
+    (hsub3 : innerRegion n ⊆ wideArcsRegion n) :
+    JG n (remainderRegion n ∩ innerRegion n)
+      = JG n Set.univ - JG n (arcsRegion n) - JG n (lowPartRegion n)
+        - JG n (remainderRegion n \ innerRegion n)
+        - JG n (Set.univ \ wideArcsRegion n) := by
+  have hUW : MeasurableSet (Set.univ \ wideArcsRegion n) :=
+    MeasurableSet.univ.diff (measurableSet_wideArcsRegion n)
+  have hWAdiff : MeasurableSet (wideArcsRegion n \ arcsRegion n) :=
+    (measurableSet_wideArcsRegion n).diff (measurableSet_arcsRegion n)
+  have h1 : JG n Set.univ = JG n (wideArcsRegion n) + JG n (Set.univ \ wideArcsRegion n) := by
+    have hdisj : Disjoint (wideArcsRegion n) (Set.univ \ wideArcsRegion n) := by
+      rw [Set.disjoint_iff_inter_eq_empty]
+      ext t
+      simp
+    have hthis := JG_add n (measurableSet_wideArcsRegion n) hUW hdisj
+    rw [← Set.compl_eq_univ_diff, Set.union_compl_self, Set.compl_eq_univ_diff] at hthis
+    exact hthis
+  have h2 : JG n (wideArcsRegion n)
+      = JG n (arcsRegion n) + JG n (wideArcsRegion n \ arcsRegion n) := by
+    have hdisj : Disjoint (arcsRegion n) (wideArcsRegion n \ arcsRegion n) := by
+      rw [Set.disjoint_iff_inter_eq_empty]
+      ext t
+      simp
+    have hthis := JG_add n (measurableSet_arcsRegion n) hWAdiff hdisj
+    rw [Set.union_diff_self, Set.union_eq_self_of_subset_left hsub1] at hthis
+    exact hthis
+  have h3 : JG n (wideArcsRegion n \ arcsRegion n)
+      = JG n (lowPartRegion n) + JG n (remainderRegion n) := by
+    have hseteq : wideArcsRegion n \ arcsRegion n
+        = lowPartRegion n ∪ remainderRegion n := by
+      ext t
+      simp only [lowPartRegion, remainderRegion, Set.mem_diff, Set.mem_union]
+      by_cases h1t : t ∈ arcsRegion n
+      · simp [h1t]
+      · by_cases h2t : t ∈ lowWideArcsRegion n
+        · simp [h1t, h2t, hsub2 h2t]
+        · simp [h1t, h2t]
+    have hdisj : Disjoint (lowPartRegion n) (remainderRegion n) := by
+      rw [Set.disjoint_iff_inter_eq_empty]
+      ext t
+      simp [lowPartRegion, remainderRegion]
+    rw [hseteq]
+    exact JG_add n (measurableSet_lowPartRegion n) (measurableSet_remainderRegion n) hdisj
+  have h4 : JG n (remainderRegion n)
+      = JG n (remainderRegion n ∩ innerRegion n)
+        + JG n (remainderRegion n \ innerRegion n) := by
+    have hseteq : remainderRegion n
+        = remainderRegion n ∩ innerRegion n ∪ (remainderRegion n \ innerRegion n) := by
+      ext t
+      simp only [remainderRegion, Set.mem_inter_iff, Set.mem_diff, Set.mem_union]
+      tauto
+    have hdisj : Disjoint (remainderRegion n ∩ innerRegion n)
+        (remainderRegion n \ innerRegion n) := by
+      rw [Set.disjoint_iff_inter_eq_empty]
+      ext t
+      simp [remainderRegion]
+    nth_rewrite 1 [hseteq]
+    exact JG_add n
+      ((measurableSet_remainderRegion n).inter (measurableSet_innerRegion n))
+      ((measurableSet_remainderRegion n).diff (measurableSet_innerRegion n)) hdisj
+  rw [h4] at h3
+  rw [h3] at h2
+  rw [h2] at h1
+  linarith
+
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
   sorry
