@@ -16,7 +16,9 @@
   "depends_on": [
     "L-joshi-abc-kronecker-determinant"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.JoshiAbc.KroneckerDeterminant"
+  ],
   "track": "01-haar-volume",
   "module": "Conjectures.JoshiAbc.NormalizedProduct",
   "file": "lean/Conjectures/JoshiAbc/NormalizedProduct.lean"
