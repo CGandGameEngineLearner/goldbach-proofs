@@ -20136,7 +20136,7 @@
     },
     {
       "id": "L-goldbach-dyn-short-restricted-power-saving",
-      "statement": "let W := fun y : ℕ => Nat.floor ((y : ℝ) ^ ((13 : ℝ) / 225)); ∃ C δ : ℝ, 0 < C ∧ 0 < δ ∧ ∃ X₀ : ℕ, ∀ X ≥ X₀, ∀ y : ℕ, X ≤ y → y + W y ≤ 2 * X → (((Finset.Icc y (y + W y)).filter (fun n => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ Nat.sqrt X ≤ p ∧ p ≤ 2 * Nat.sqrt X ∧ p + q = n))).card : ℝ) ≤ C * ((W y : ℝ) + 1) * (X : ℝ) ^ (-δ)",
+      "statement": "let W := fun y : ℕ => Nat.floor ((y : ℝ) ^ ((13 : ℝ) / 225)); let P := fun X : ℕ => (Finset.Icc (Nat.sqrt X) (2 * Nat.sqrt X)).filter Nat.Prime; let R := fun (X n : ℕ) => ((P X).filter (fun p => p ≤ n ∧ Nat.Prime (n-p))).card; ∃ C δ : ℝ, 0 < C ∧ 0 < δ ∧ ∃ X₀ : ℕ, ∀ X ≥ X₀, ∀ y : ℕ, X ≤ y → y + W y ≤ 2 * X → (((Finset.Icc y (y + W y)).filter (fun n => Even n ∧ R X n = 0)).card : ℝ) ≤ C * ((W y : ℝ) + 1) * (X : ℝ) ^ (-δ)",
       "plain_statement": {
         "zh": "短窗内平方根量级加数的漏点数有幂次节省",
         "en": "Power-saving exceptional set with a square-root-sized summand in every short window"
