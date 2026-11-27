@@ -211,5 +211,3 @@ by
         ((q:ℝ)≤Real.exp (2*t*u) → R≤C*N*Real.exp (-(t*u))) :=
 by
   with_unfolding_all exact ExceptionalZeroRationalCenters.rational_centers
-
-
