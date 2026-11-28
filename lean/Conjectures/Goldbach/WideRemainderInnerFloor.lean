@@ -525,6 +525,198 @@ theorem JG_target_floor (n : ℕ) {ε : ℝ} (hε : 0 < ε)
   linarith
 
 /-!
+### Off-diagonal reduction
+
+The band integral splits into the nonnegative diagonal term `R(n) · K(0)` — where
+`K(0) = Re ∫_B 1 ≥ 0` — plus an explicit off-diagonal signed series with real weights
+`GW k1 * GW k2` and oscillatory factors `Re ∫_B E((k1+k2−n)t)`. The floor `−εn ≤ JG n B`
+therefore reduces to a lower bound on that discrete series.
+-/
+section OffDiag
+open scoped Classical
+
+lemma GE_zero : GE 0 = 1 := by
+  show Complex.exp ((2 * Real.pi * 0 : ℝ) * Complex.I) = 1
+  have h0 : ((2 * Real.pi * 0 : ℝ) : ℂ) = 0 := by norm_num
+  rw [h0, zero_mul, Complex.exp_zero]
+
+/-- Integrability of the indicator of a measurable set against a continuous function. -/
+lemma intervalIntegrable_indicator_continuous {g : ℝ → ℂ} (hg : Continuous g)
+    {B : Set ℝ} (hB : MeasurableSet B) :
+    IntervalIntegrable (fun t => B.indicator g t) MeasureTheory.volume (0:ℝ) 1 := by
+  have hb : (0:ℝ) ≤ 1 := by norm_num
+  have hIntOn : MeasureTheory.IntegrableOn g (Set.Icc (0:ℝ) 1) MeasureTheory.volume :=
+    hg.continuousOn.integrableOn_Icc
+  have h' : MeasureTheory.IntegrableOn (B.indicator g) (Set.Icc (0:ℝ) 1)
+      MeasureTheory.volume :=
+    (show MeasureTheory.Integrable g
+        (MeasureTheory.volume.restrict (Set.Icc (0:ℝ) 1)) from hIntOn).indicator hB
+  have h : MeasureTheory.IntegrableOn (B.indicator g) (Set.uIcc (0:ℝ) 1)
+      MeasureTheory.volume := by
+    rwa [← Set.uIcc_of_le hb] at h'
+  exact h.intervalIntegrable
+
+/-- Pointwise-form finite-sum integrability. -/
+lemma intervalIntegrable_sum_pointwise {ι : Type*} {F : ι → ℝ → ℂ} (s : Finset ι)
+    (hF : ∀ i ∈ s, IntervalIntegrable (F i) MeasureTheory.volume (0:ℝ) 1) :
+    IntervalIntegrable (fun t => ∑ i ∈ s, F i t) MeasureTheory.volume (0:ℝ) 1 := by
+  exact (IntervalIntegrable.sum s hF).congr (fun t _ => by rw [Finset.sum_apply])
+
+/-- Finite-sum interchange for interval integrals. -/
+lemma intervalIntegral_sum {ι : Type*} (F : ι → ℝ → ℂ) (s : Finset ι)
+    (hF : ∀ i ∈ s, IntervalIntegrable (F i) MeasureTheory.volume (0:ℝ) 1) :
+    (∫ t in (0:ℝ)..1, ∑ i ∈ s, F i t)
+      = ∑ i ∈ s, (∫ t in (0:ℝ)..1, F i t) := by
+  classical
+  revert hF
+  induction s using Finset.induction_on with
+  | empty => intro _; simp
+  | insert i s hi ih =>
+    intro hF
+    have hFi : IntervalIntegrable (F i) MeasureTheory.volume (0:ℝ) 1 :=
+      hF i (Finset.mem_insert_self i s)
+    have hs : ∀ j ∈ s, IntervalIntegrable (F j) MeasureTheory.volume (0:ℝ) 1 :=
+      fun j hj => hF j (Finset.mem_insert_of_mem hj)
+    have hsum : IntervalIntegrable (fun t => ∑ j ∈ s, F j t) MeasureTheory.volume (0:ℝ) 1 :=
+      intervalIntegrable_sum_pointwise s hs
+    have hcongr : Set.EqOn (fun t => ∑ j ∈ insert i s, F j t)
+        (fun t => F i t + ∑ j ∈ s, F j t) (Set.uIcc (0:ℝ) 1) := fun t _ => by
+      show ∑ j ∈ insert i s, F j t = F i t + ∑ j ∈ s, F j t
+      rw [Finset.sum_insert hi]
+    calc (∫ t in (0:ℝ)..1, ∑ j ∈ insert i s, F j t)
+        = ∫ t in (0:ℝ)..1, (F i t + ∑ j ∈ s, F j t) :=
+          intervalIntegral.integral_congr hcongr
+      _ = (∫ t in (0:ℝ)..1, F i t) + (∫ t in (0:ℝ)..1, ∑ j ∈ s, F j t) :=
+          intervalIntegral.integral_add hFi hsum
+      _ = ∑ j ∈ insert i s, (∫ t in (0:ℝ)..1, F j t) := by
+          rw [Finset.sum_insert hi, ← ih hs]
+
+/-- Pulling a complex scalar out of a band integral. -/
+theorem integral_indicator_smul (c : ℂ) (g : ℝ → ℂ) (r : ℝ) (hcg : Continuous g)
+    {B : Set ℝ} (hB : MeasurableSet B) :
+    (intervalIntegral (fun t => B.indicator (fun t => c * g (r * t)) t) (0:ℝ) 1
+        MeasureTheory.volume)
+      = c * (intervalIntegral (fun t => B.indicator (fun t => g (r * t)) t) (0:ℝ) 1
+        MeasureTheory.volume) := by
+  rw [intervalIntegral.integral_congr
+    (f := fun t => B.indicator (fun t => c * g (r * t)) t)
+    (g := fun t => c * B.indicator (fun t => g (r * t)) t)
+    (by intro t _; by_cases ht : t ∈ B <;> simp [ht])]
+  rw [intervalIntegral.integral_of_le (by norm_num : (0:ℝ) ≤ 1)]
+  rw [intervalIntegral.integral_of_le (by norm_num : (0:ℝ) ≤ 1)]
+  exact MeasureTheory.integral_const_mul c _
+
+/-- The diagonal term `K(0) = Re ∫_B 1` is nonnegative. -/
+theorem K_zero_nonneg {B : Set ℝ} (hB : MeasurableSet B) :
+    0 ≤ (intervalIntegral (fun t => B.indicator (fun _ => GE 0) t) (0:ℝ) 1
+      MeasureTheory.volume).re := by
+  have hcongr : Set.EqOn (fun t => B.indicator (fun _ => GE 0) t)
+      (fun t => ((B.indicator (fun _ => (1:ℝ)) t : ℝ) : ℂ)) (Set.uIcc (0:ℝ) 1) := by
+    intro t _
+    by_cases ht : t ∈ B
+    · simp [ht, GE_zero]
+    · simp [ht]
+  rw [intervalIntegral.integral_congr
+    (f := fun t => B.indicator (fun _ => GE 0) t)
+    (g := fun t => ((B.indicator (fun _ => (1:ℝ)) t : ℝ) : ℂ)) hcongr,
+    intervalIntegral.integral_of_le (by norm_num : (0:ℝ) ≤ 1),
+    integral_complex_ofReal, Complex.ofReal_re]
+  exact MeasureTheory.integral_nonneg (fun t => by by_cases ht : t ∈ B <;> simp [ht])
+
+/-- On a diagonal pair the oscillatory factor is `K(0)`. -/
+theorem K_diag (n : ℕ) {B : Set ℝ} (hB : MeasurableSet B) {k1 k2 : ℕ} (hn : k1 + k2 = n) :
+    (intervalIntegral
+      (fun t => B.indicator (fun t => GE (((k1:ℝ) + (k2:ℝ) - (n:ℝ)) * t)) t) (0:ℝ) 1
+        MeasureTheory.volume)
+      = intervalIntegral (fun t => B.indicator (fun _ => GE 0) t) (0:ℝ) 1
+        MeasureTheory.volume := by
+  have h0 : ((k1:ℝ) + (k2:ℝ) - (n:ℝ)) = 0 := by
+    have hcast : ((k1:ℝ) + (k2:ℝ)) = (n:ℝ) := by rw [← Nat.cast_add, hn]
+    rw [hcast, sub_self]
+  apply intervalIntegral.integral_congr
+  intro t _
+  simp only [h0, zero_mul]
+
+/-- **Off-diagonal expansion.** The band integral expands into the double sum with the
+real weights `GW k1 * GW k2` outside the real part of each oscillatory band integral. -/
+theorem JG_offdiag_expand (n : ℕ) {B : Set ℝ} (hB : MeasurableSet B) :
+    JG n B = ∑ k1 ∈ Finset.range (n+1), ∑ k2 ∈ Finset.range (n+1),
+        (GW k1 * GW k2 : ℝ) * (intervalIntegral
+          (fun t => B.indicator (fun t => GE (((k1:ℝ) + (k2:ℝ) - (n:ℝ)) * t)) t)
+            (0:ℝ) 1 MeasureTheory.volume).re := by
+  have hmain : (intervalIntegral (fun t => B.indicator (fG n) t) (0:ℝ) 1 MeasureTheory.volume)
+      = ∑ k1 ∈ Finset.range (n+1), ∑ k2 ∈ Finset.range (n+1),
+          ((GW k1 * GW k2 : ℝ) : ℂ) * (intervalIntegral
+            (fun t => B.indicator (fun t => GE (((k1:ℝ) + (k2:ℝ) - (n:ℝ)) * t)) t)
+              (0:ℝ) 1 MeasureTheory.volume) := by
+    have hint : Set.EqOn (B.indicator (fG n))
+        (fun t => ∑ k1 ∈ Finset.range (n+1), ∑ k2 ∈ Finset.range (n+1),
+          B.indicator (fun t => ((GW k1 * GW k2 : ℝ) : ℂ) * GE (((k1:ℝ) + (k2:ℝ) - (n:ℝ)) * t)) t)
+        (Set.uIcc (0:ℝ) 1) := by
+      intro t _
+      show B.indicator (fG n) t = ∑ k1 ∈ Finset.range (n+1), ∑ k2 ∈ Finset.range (n+1),
+        B.indicator (fun t => ((GW k1 * GW k2 : ℝ) : ℂ) * GE (((k1:ℝ) + (k2:ℝ) - (n:ℝ)) * t)) t
+      by_cases ht : t ∈ B
+      · rw [Set.indicator_apply (B) (fG n) t, if_pos ht]
+        simp only [fG]
+        rw [pointwise_expand n t]
+        refine Finset.sum_congr rfl fun k1 _ => Finset.sum_congr rfl fun k2 _ => ?_
+        rw [Set.indicator_apply, if_pos ht]
+      · rw [Set.indicator_apply (B) (fG n) t, if_neg ht]
+        refine Eq.symm (Finset.sum_eq_zero fun k1 _ => Finset.sum_eq_zero fun k2 _ => ?_)
+        rw [Set.indicator_apply, if_neg ht]
+    rw [intervalIntegral.integral_congr hint]
+    rw [intervalIntegral_sum
+      (fun k1 t => ∑ k2 ∈ Finset.range (n+1),
+        B.indicator (fun t => ((GW k1 * GW k2 : ℝ) : ℂ) * GE (((k1:ℝ) + (k2:ℝ) - (n:ℝ)) * t)) t)
+      (Finset.range (n+1))
+      (fun k1 _ => intervalIntegrable_sum_pointwise (Finset.range (n+1))
+        (fun k2 _ => intervalIntegrable_indicator_continuous
+          (continuous_const_mul_GE _ _) hB))]
+    refine Finset.sum_congr rfl fun k1 _ => ?_
+    rw [intervalIntegral_sum
+      (fun k2 t => B.indicator
+        (fun t => ((GW k1 * GW k2 : ℝ) : ℂ) * GE (((k1:ℝ) + (k2:ℝ) - (n:ℝ)) * t)) t)
+      (Finset.range (n+1))
+      (fun k2 _ => intervalIntegrable_indicator_continuous
+        (continuous_const_mul_GE _ _) hB)]
+    refine Finset.sum_congr rfl fun k2 _ => ?_
+    exact integral_indicator_smul ((GW k1 * GW k2 : ℝ) : ℂ) GE ((k1:ℝ) + (k2:ℝ) - (n:ℝ))
+      continuous_GE hB
+  unfold JG
+  rw [hmain, Complex.re_sum]
+  refine Finset.sum_congr rfl fun k1 _ => ?_
+  rw [Complex.re_sum]
+  refine Finset.sum_congr rfl fun k2 _ => ?_
+  rw [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero]
+
+/-- **Floor from the off-diagonal bound.** The diagonal contribution is nonnegative
+(`R(n) · K(0) ≥ 0`), so the floor `−εn ≤ JG n B` holds as soon as the off-diagonal
+signed series (diagonal pairs zeroed out) is bounded below by `−εn`. -/
+theorem floor_of_offdiag (n : ℕ) {B : Set ℝ} (hB : MeasurableSet B) {ε : ℝ} (hε : 0 < ε)
+    (hoff : -ε * n ≤ ∑ k1 ∈ Finset.range (n+1), ∑ k2 ∈ Finset.range (n+1),
+        (if k1 + k2 = n then 0 else (GW k1 * GW k2 : ℝ)) *
+          (intervalIntegral
+            (fun t => B.indicator (fun t => GE (((k1:ℝ) + (k2:ℝ) - (n:ℝ)) * t)) t)
+              (0:ℝ) 1 MeasureTheory.volume).re) :
+    -ε * n ≤ JG n B := by
+  have hge : ∑ k1 ∈ Finset.range (n+1), ∑ k2 ∈ Finset.range (n+1),
+      (if k1 + k2 = n then 0 else (GW k1 * GW k2 : ℝ)) *
+        (intervalIntegral
+          (fun t => B.indicator (fun t => GE (((k1:ℝ) + (k2:ℝ) - (n:ℝ)) * t)) t)
+            (0:ℝ) 1 MeasureTheory.volume).re
+      ≤ JG n B := by
+    rw [JG_offdiag_expand n hB]
+    refine Finset.sum_le_sum fun k1 _ => Finset.sum_le_sum fun k2 _ => ?_
+    by_cases h : k1 + k2 = n
+    · rw [if_pos h, K_diag n hB h, zero_mul]
+      exact mul_nonneg (mul_nonneg (GW_nonneg k1) (GW_nonneg k2)) (K_zero_nonneg hB)
+    · rw [if_neg h]
+  linarith
+
+end OffDiag
+
+/-!
 ### Route 2: character mean-square dilution
 
 The engine for the "character mean-square (L²) → pointwise transfer" route over the
