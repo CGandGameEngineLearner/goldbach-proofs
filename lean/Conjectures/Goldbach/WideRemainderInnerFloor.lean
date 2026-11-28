@@ -1609,7 +1609,245 @@ theorem arcMass_bound (n q : ℕ) [NeZero q] (δ : ℝ) (hδ : 0 ≤ δ) (hδ1 :
     rw [hkey]
   exact add_le_add hmain le_rfl
 
+/-! ### Kernel mass bounds on symmetric intervals (skirt infrastructure) -/
+
+lemma phase_eq_GE (x : ℝ) : GoldbachExplicitModeledMajor.phase x = GE x := rfl
+
+lemma phase_add (x y : ℝ) : GoldbachExplicitModeledMajor.phase x * GoldbachExplicitModeledMajor.phase y
+    = GoldbachExplicitModeledMajor.phase (x + y) := by
+  unfold GoldbachExplicitModeledMajor.phase
+  rw [← Complex.exp_add]
+  congr 1
+  push_cast
+  ring
+
+lemma conj_phase (x : ℝ) : conj (GoldbachExplicitModeledMajor.phase x)
+    = GoldbachExplicitModeledMajor.phase (-x) := by
+  have h1 : GoldbachExplicitModeledMajor.phase x = GE x := rfl
+  have h2 : GoldbachExplicitModeledMajor.phase (-x) = GE (-x) := rfl
+  rw [h1, h2, conj_GE]
+
+lemma phase_nat (k : ℕ) : GoldbachExplicitModeledMajor.phase (k:ℝ) = 1 := by
+  unfold GoldbachExplicitModeledMajor.phase
+  have h := Complex.exp_int_mul_two_pi_mul_I (k:ℤ)
+  have he : ((2 * Real.pi * (k:ℝ) : ℝ) : ℂ) * Complex.I = ((k:ℤ) : ℂ) * (2 * Real.pi * Complex.I) := by
+    push_cast
+    ring
+  rw [he, h]
+
+lemma continuous_phase : Continuous (fun x : ℝ => GoldbachExplicitModeledMajor.phase x) := by
+  unfold GoldbachExplicitModeledMajor.phase
+  exact Complex.continuous_exp.comp
+    ((Complex.continuous_ofReal.comp (continuous_const.mul continuous_id)).mul continuous_const)
+
+lemma continuous_kernel (n : ℕ) :
+    Continuous (fun x : ℝ => GoldbachExplicitModeledMajor.kernel n x) := by
+  unfold GoldbachExplicitModeledMajor.kernel
+  exact continuous_finsetSum _ (fun k _ => continuous_phase.comp
+    (continuous_const.mul continuous_id))
+
+lemma continuous_kernel_norm (n : ℕ) :
+    Continuous (fun x : ℝ => ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2) :=
+  (continuous_kernel n).norm.pow 2
+
+/-- Pointwise: the geometric kernel has norm at most `n+1`. -/
+lemma kernel_norm_le_card (n : ℕ) (β : ℝ) :
+    ‖GoldbachExplicitModeledMajor.kernel n β‖ ≤ (n + 1 : ℝ) := by
+  unfold GoldbachExplicitModeledMajor.kernel
+  refine le_trans (norm_sum_le _ _) ?_
+  have h1 : ∀ k : ℕ, ‖GoldbachExplicitModeledMajor.phase ((k:ℝ) * β)‖ = (1:ℝ) := fun k =>
+    Complex.norm_exp_ofReal_mul_I _
+  rw [Finset.sum_congr rfl (fun k _ => h1 k)]
+  simp
+
+/-- Telescoping identity for the geometric kernel. -/
+lemma kernel_mul_one_sub_phase (n : ℕ) (β : ℝ) :
+    GoldbachExplicitModeledMajor.kernel n β * (1 - GoldbachExplicitModeledMajor.phase β)
+      = 1 - GoldbachExplicitModeledMajor.phase ((n + 1 : ℕ) * β) := by
+  induction n with
+  | zero =>
+    have h : GoldbachExplicitModeledMajor.kernel 0 β = 1 := by
+      unfold GoldbachExplicitModeledMajor.kernel
+      simp [GoldbachExplicitModeledMajor.phase]
+    rw [h]
+    simp [GoldbachExplicitModeledMajor.phase]
+  | succ m ih =>
+    have hsum : GoldbachExplicitModeledMajor.kernel (m + 1) β
+        = GoldbachExplicitModeledMajor.kernel m β
+          + GoldbachExplicitModeledMajor.phase ((m + 1 : ℕ) * β) := by
+      unfold GoldbachExplicitModeledMajor.kernel
+      rw [Finset.sum_range_succ]
+    have hmul : GoldbachExplicitModeledMajor.phase ((m + 1 : ℕ) * β)
+        * GoldbachExplicitModeledMajor.phase β
+      = GoldbachExplicitModeledMajor.phase ((m + 1 + 1 : ℕ) * β) := by
+      rw [phase_add]
+      congr 1
+      push_cast
+      ring
+    rw [hsum, add_mul, ih, mul_sub, mul_one, hmul]
+    ring
+
+/-- Parseval for the geometric kernel over a full period. -/
+lemma kernelMass_half (n : ℕ) : GoldbachExplicitModeledMajor.kernelMass n (1/2) = (n + 1 : ℝ) := by
+  have hper : ∀ β : ℝ, ‖GoldbachExplicitModeledMajor.kernel n (β + 1)‖ ^ 2
+      = ‖GoldbachExplicitModeledMajor.kernel n β‖ ^ 2 := by
+    intro β
+    have h1 : GoldbachExplicitModeledMajor.kernel n (β + 1)
+        = GoldbachExplicitModeledMajor.kernel n β := by
+      unfold GoldbachExplicitModeledMajor.kernel
+      refine Finset.sum_congr rfl fun k _ => ?_
+      rw [show ((k:ℝ)*(β+1)) = ((k:ℝ)*β + (k:ℝ)) from by ring, ← phase_add, phase_nat, mul_one]
+    rw [h1]
+  have hp : Function.Periodic (fun x : ℝ => ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2) 1 :=
+    fun x => hper x
+  have hshift : GoldbachExplicitModeledMajor.kernelMass n (1/2)
+      = ∫ u in (0:ℝ)..1, ‖GoldbachExplicitModeledMajor.kernel n u‖ ^ 2 := by
+    unfold GoldbachExplicitModeledMajor.kernelMass
+    have h2 := hp.intervalIntegral_add_eq (-(1/2 : ℝ)) 0
+    rw [show (-(1/2 : ℝ) + 1) = 1/2 from by ring, show ((0:ℝ) + 1) = 1 from by ring] at h2
+    exact h2
+  have hpoint : ∀ u : ℝ, GoldbachExplicitModeledMajor.kernel n u
+        * conj (GoldbachExplicitModeledMajor.kernel n u)
+      = ∑ k ∈ Finset.range (n+1), ∑ l ∈ Finset.range (n+1),
+          GoldbachExplicitModeledMajor.phase (((k:ℝ) - (l:ℝ)) * u) := by
+    intro u
+    unfold GoldbachExplicitModeledMajor.kernel
+    rw [map_sum (starRingEnd ℂ), Finset.sum_mul_sum]
+    refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun l _ => ?_
+    rw [conj_phase, phase_add]
+    congr 1
+    ring
+  have hterm : ∀ k l : ℕ, (∫ u in (0:ℝ)..1,
+        GoldbachExplicitModeledMajor.phase (((k:ℝ) - (l:ℝ)) * u))
+      = (if ((k:ℤ) - (l:ℤ) : ℤ) = 0 then (1:ℂ) else 0) := by
+    intro k l
+    have hfreq : ((k:ℝ) - (l:ℝ)) = (((k:ℤ) - (l:ℤ) : ℤ) : ℝ) := by push_cast; ring
+    rw [hfreq]
+    exact integral_GE_freq ((k:ℤ) - (l:ℤ))
+  have hcollapse : (∑ k ∈ Finset.range (n+1), ∑ l ∈ Finset.range (n+1),
+        (if ((k:ℤ) - (l:ℤ) : ℤ) = 0 then (1:ℂ) else 0))
+      = ((n + 1 : ℕ) : ℂ) := by
+    have hinner : ∀ k ∈ Finset.range (n+1), (∑ l ∈ Finset.range (n+1),
+          (if ((k:ℤ) - (l:ℤ) : ℤ) = 0 then (1:ℂ) else 0)) = (1:ℂ) := by
+      intro k hk
+      rw [Finset.sum_eq_single k]
+      · rw [if_pos (by push_cast; ring)]
+      · intro l _ hl
+        rw [if_neg (by omega)]
+      · intro hcon
+        exact absurd hk hcon
+    calc (∑ k ∈ Finset.range (n+1), ∑ l ∈ Finset.range (n+1),
+            (if ((k:ℤ) - (l:ℤ) : ℤ) = 0 then (1:ℂ) else 0))
+        = ∑ k ∈ Finset.range (n+1), (1:ℂ) := Finset.sum_congr rfl (fun k hk => hinner k hk)
+      _ = ((n + 1 : ℕ) : ℂ) := by simp
+  have hint1 : ∀ k l : ℕ, IntervalIntegrable
+      (fun u : ℝ => GoldbachExplicitModeledMajor.phase (((k:ℝ)-(l:ℝ))*u))
+      MeasureTheory.volume 0 1 :=
+    fun k l => Continuous.intervalIntegrable
+      (continuous_phase.comp (continuous_const.mul continuous_id)) 0 1
+  have hsumint : ∀ k : ℕ, IntervalIntegrable (fun u : ℝ => ∑ l ∈ Finset.range (n+1),
+        GoldbachExplicitModeledMajor.phase (((k:ℝ)-(l:ℝ))*u)) MeasureTheory.volume 0 1 :=
+    fun k => Continuous.intervalIntegrable
+      (continuous_finsetSum _ (fun l _ => continuous_phase.comp
+        (continuous_const.mul continuous_id))) 0 1
+  have hint2 : IntervalIntegrable (fun u : ℝ => GoldbachExplicitModeledMajor.kernel n u
+      * conj (GoldbachExplicitModeledMajor.kernel n u)) MeasureTheory.volume 0 1 :=
+    ((continuous_kernel n).mul
+      (Complex.continuous_conj.comp (continuous_kernel n))).intervalIntegrable 0 1
+  have hintR : MeasureTheory.Integrable (fun u : ℝ => GoldbachExplicitModeledMajor.kernel n u
+      * conj (GoldbachExplicitModeledMajor.kernel n u))
+      (MeasureTheory.volume.restrict (Set.Ioc 0 1)) := by
+    rw [← Set.uIoc_of_le (by norm_num : (0:ℝ) ≤ 1)]
+    exact hint2.def'
+  have hcomplex : ∫ u in (0:ℝ)..1, GoldbachExplicitModeledMajor.kernel n u
+        * conj (GoldbachExplicitModeledMajor.kernel n u)
+      = ((n + 1 : ℕ) : ℂ) := by
+    simp only [hpoint]
+    rw [intervalIntegral.integral_finsetSum (fun k _ => hsumint k)]
+    have h2 : ∀ k : ℕ, (∫ u in (0:ℝ)..1, ∑ l ∈ Finset.range (n+1),
+          GoldbachExplicitModeledMajor.phase (((k:ℝ)-(l:ℝ))*u))
+        = ∑ l ∈ Finset.range (n+1), (if ((k:ℤ)-(l:ℤ):ℤ) = 0 then (1:ℂ) else 0) := by
+      intro k
+      rw [intervalIntegral.integral_finsetSum (fun l _ => hint1 k l)]
+      exact Finset.sum_congr rfl (fun l _ => hterm k l)
+    rw [Finset.sum_congr rfl (fun k _ => h2 k), hcollapse]
+  have hcomplexM : ∫ u, GoldbachExplicitModeledMajor.kernel n u
+        * conj (GoldbachExplicitModeledMajor.kernel n u)
+        ∂(MeasureTheory.volume.restrict (Set.Ioc 0 1))
+      = ((n + 1 : ℕ) : ℂ) := by
+    rw [← intervalIntegral.integral_of_le (by norm_num : (0:ℝ) ≤ 1)]
+    exact hcomplex
+  have hbridge : ∫ u in (0:ℝ)..1, ‖GoldbachExplicitModeledMajor.kernel n u‖ ^ 2
+      = (∫ u, GoldbachExplicitModeledMajor.kernel n u
+          * conj (GoldbachExplicitModeledMajor.kernel n u)
+          ∂(MeasureTheory.volume.restrict (Set.Ioc 0 1))).re := by
+    rw [intervalIntegral.integral_of_le (by norm_num : (0:ℝ) ≤ 1),
+      MeasureTheory.integral_congr_ae (MeasureTheory.ae_of_all _ fun u =>
+        norm_sq_eq_re_mul_conj (GoldbachExplicitModeledMajor.kernel n u))]
+    exact integral_re hintR
+  rw [hshift, hbridge, hcomplexM]
+  simp
+
+/-- The kernel mass over a symmetric interval is at most a full period's mass. -/
+lemma kernelMass_le_card (n : ℕ) (b : ℝ) (hb : 0 ≤ b) (hb2 : b ≤ 1/2) :
+    GoldbachExplicitModeledMajor.kernelMass n b ≤ (n + 1 : ℝ) := by
+  have h1 : GoldbachExplicitModeledMajor.kernelMass n b
+      ≤ GoldbachExplicitModeledMajor.kernelMass n (1/2) :=
+    GoldbachExplicitModeledMajor.kernelMass_mono hb (by linarith) n
+  rw [kernelMass_half n] at h1
+  exact h1
+
+/-- The kernel mass over a symmetric interval is at most length times the peak. -/
+lemma kernelMass_le_length (n : ℕ) (b : ℝ) (hb : 0 ≤ b) :
+    GoldbachExplicitModeledMajor.kernelMass n b ≤ 2 * b * ((n + 1 : ℝ) ^ 2) := by
+  have hint : IntervalIntegrable (fun β : ℝ => ‖GoldbachExplicitModeledMajor.kernel n β‖ ^ 2)
+      MeasureTheory.volume (-b) b := (continuous_kernel_norm n).intervalIntegrable (-b) b
+  have hconst : IntervalIntegrable (fun _ : ℝ => ((n + 1 : ℝ) ^ 2))
+      MeasureTheory.volume (-b) b := continuous_const.intervalIntegrable (-b) b
+  unfold GoldbachExplicitModeledMajor.kernelMass
+  calc ∫ β in -b..b, ‖GoldbachExplicitModeledMajor.kernel n β‖ ^ 2
+      ≤ ∫ β in -b..b, ((n + 1 : ℝ) ^ 2) :=
+        intervalIntegral.integral_mono (by linarith) hint hconst
+          (fun β => pow_le_pow_left₀ (by positivity) (kernel_norm_le_card n β) 2)
+    _ = 2 * b * ((n + 1 : ℝ) ^ 2) := by
+        rw [intervalIntegral.integral_const, show (b:ℝ) - (-b) = 2 * b from by ring,
+          smul_eq_mul]
+
+/-- The annulus kernel mass is at most a full period's mass. -/
+lemma kernelMass_annulus_le_card (n : ℕ) (h k : ℝ) (hh : 0 ≤ h) (hkh : h ≤ k) (hk2 : k ≤ 1/2) :
+    GoldbachExplicitModeledMajor.kernelMass n k - GoldbachExplicitModeledMajor.kernelMass n h
+      ≤ (n + 1 : ℝ) := by
+  have hnonneg : 0 ≤ GoldbachExplicitModeledMajor.kernelMass n h := by
+    have h0 : GoldbachExplicitModeledMajor.kernelMass n 0 = 0 := by
+      unfold GoldbachExplicitModeledMajor.kernelMass
+      rw [neg_zero, intervalIntegral.integral_same]
+    exact h0 ▸ GoldbachExplicitModeledMajor.kernelMass_mono (by norm_num) hh n
+  have h1 : GoldbachExplicitModeledMajor.kernelMass n k - GoldbachExplicitModeledMajor.kernelMass n h
+      ≤ GoldbachExplicitModeledMajor.kernelMass n k := by linarith
+  exact le_trans h1 (kernelMass_le_card n k (hh.trans hkh) hk2)
+
+/-- The annulus kernel mass is at most its length times the peak. -/
+lemma kernelMass_annulus_le_length (n : ℕ) (h k : ℝ) (hh : 0 ≤ h) (hkh : h ≤ k) :
+    GoldbachExplicitModeledMajor.kernelMass n k - GoldbachExplicitModeledMajor.kernelMass n h
+      ≤ 2 * k * ((n + 1 : ℝ) ^ 2) := by
+  have hnonneg : 0 ≤ GoldbachExplicitModeledMajor.kernelMass n h := by
+    have h0 : GoldbachExplicitModeledMajor.kernelMass n 0 = 0 := by
+      unfold GoldbachExplicitModeledMajor.kernelMass
+      rw [neg_zero, intervalIntegral.integral_same]
+    exact h0 ▸ GoldbachExplicitModeledMajor.kernelMass_mono (by norm_num) hh n
+  have h1 : GoldbachExplicitModeledMajor.kernelMass n k - GoldbachExplicitModeledMajor.kernelMass n h
+      ≤ GoldbachExplicitModeledMajor.kernelMass n k := by linarith
+  exact le_trans h1 (kernelMass_le_length n k (hh.trans hkh))
+
+/-- The annulus kernel mass obeys both bounds. -/
+theorem kernelMass_annulus_le (n : ℕ) (h k : ℝ) (hh : 0 ≤ h) (hkh : h ≤ k) (hk2 : k ≤ 1/2) :
+    GoldbachExplicitModeledMajor.kernelMass n k - GoldbachExplicitModeledMajor.kernelMass n h
+      ≤ min ((n + 1 : ℝ)) (2 * k * ((n + 1 : ℝ) ^ 2)) :=
+  le_min (kernelMass_annulus_le_card n h k hh hkh hk2)
+    (kernelMass_annulus_le_length n h k hh hkh)
+
 end CharExpand
+
 
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
   sorry
