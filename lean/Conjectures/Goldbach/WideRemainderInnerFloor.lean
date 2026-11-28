@@ -1156,6 +1156,132 @@ theorem SG_arc_L2 (n q : ℕ) [NeZero q] (β : ℝ) :
         simp only [hcdef]
         field_simp
 
+/-- A Dirichlet character is nonzero on units. -/
+theorem chi_ne_zero {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) {j : ZMod q}
+    (hj : IsUnit j) : (χ j : ℂ) ≠ 0 := by
+  intro hc
+  have h1 : ‖(χ j : ℂ)‖ = 1 := by
+    rw [← hj.unit_spec]
+    exact χ.unit_norm_eq_one hj.unit
+  rw [hc] at h1
+  simp at h1
+
+/-- Conjugation of the standard exponential reverses the frequency. -/
+lemma conj_GE (x : ℝ) : conj (GE x) = GE (-x) := by
+  rw [GE, ← Complex.exp_conj, map_mul (starRingEnd ℂ), Complex.conj_ofReal, Complex.conj_I, GE]
+  congr 1
+  push_cast
+  ring
+
+/-- **Parseval for the character-twisted sum.** The full-line L² norm of the
+character-twisted Goldbach sum is the diagonal weight sum over units:
+`∫₀¹ ‖SChi n q χ β‖² dβ = ∑_{k≤n} |χ(k)|² w(k)² = ∑_{k≤n, (k,q)=1} w(k)²`,
+since characters are `1` on units and vanish off them. This is the orthogonality
+input of the character mean-square route. -/
+theorem SChi_L2 (n q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q) :
+    ∫ β in (0:ℝ)..1, ‖SChi n q χ β‖ ^ 2
+      = ∑ k ∈ Finset.range (n+1), (if IsUnit ((k:ℕ):ZMod q) then (GW k : ℝ) ^ 2 else 0) := by
+  classical
+  have hcontSChi : Continuous (fun β => SChi n q χ β) := by
+    show Continuous (fun β => ∑ k ∈ Finset.range (n+1), χ (k:ZMod q) * (GW k : ℂ) * GE ((k:ℝ)*β))
+    exact continuous_finsetSum _ (fun k _ => continuous_const.mul
+      (continuous_GE.comp (continuous_const.mul continuous_id)))
+  have hint : IntervalIntegrable (fun β => SChi n q χ β * conj (SChi n q χ β))
+      MeasureTheory.volume 0 1 :=
+    (hcontSChi.mul (Complex.continuous_conj.comp hcontSChi)).intervalIntegrable 0 1
+  -- conjugate sum in terms of the inverse character (valid on units and non-units alike)
+  have hconj' : ∀ β : ℝ, conj (SChi n q χ β)
+      = ∑ l ∈ Finset.range (n+1), χ⁻¹ (l:ZMod q) * (GW l : ℂ) * GE (-((l:ℝ) * β)) := by
+    intro β
+    rw [SChi, map_sum (starRingEnd ℂ)]
+    refine Finset.sum_congr rfl fun l _ => ?_
+    rw [map_mul, map_mul, conj_char_apply_eq_inv, Complex.conj_ofReal, conj_GE]
+  -- pointwise expansion of |SChi β|² as the (k, l) double sum
+  have hpoint : ∀ β : ℝ, SChi n q χ β * conj (SChi n q χ β)
+      = ∑ k ∈ Finset.range (n+1), ∑ l ∈ Finset.range (n+1),
+          ((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q)) * GE (((k:ℝ) - (l:ℝ)) * β) := by
+    intro β
+    rw [hconj' β, SChi, Finset.sum_mul_sum]
+    refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun l _ => ?_
+    have hE : GE ((k:ℝ)*β) * GE (-((l:ℝ)*β)) = GE (((k:ℝ) - (l:ℝ)) * β) := by
+      rw [GE_add]
+      congr 1
+      ring
+    push_cast
+    rw [← hE]
+    ring
+  -- each term integrates to the coefficient times the frequency Kronecker delta
+  have hterm : ∀ k l : ℕ, (∫ β in (0:ℝ)..1,
+        ((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q)) * GE (((k:ℝ) - (l:ℝ)) * β))
+      = ((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q))
+        * (if ((k:ℤ) - (l:ℤ) : ℤ) = 0 then (1:ℂ) else 0) := by
+    intro k l
+    have hfreq : ((k:ℝ) - (l:ℝ)) = (((k:ℤ) - (l:ℤ) : ℤ) : ℝ) := by push_cast; ring
+    rw [hfreq, intervalIntegral.integral_const_mul, integral_GE_freq]
+  -- the delta collapses the double sum to the diagonal
+  have hcollapse : ∀ k ∈ Finset.range (n+1),
+      (∑ l ∈ Finset.range (n+1), ((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q))
+          * (if ((k:ℤ) - (l:ℤ) : ℤ) = 0 then (1:ℂ) else 0))
+        = (if IsUnit ((k:ℕ):ZMod q) then ((GW k : ℝ) ^ 2 : ℂ) else 0) := by
+    intro k hk
+    rw [Finset.sum_eq_single k]
+    · by_cases hu : IsUnit ((k:ℕ):ZMod q)
+      · rw [if_pos (show (((k:ℤ)-(k:ℤ):ℤ) = 0) by push_cast; ring), if_pos hu,
+          MulChar.inv_apply_eq_inv', mul_inv_cancel₀ (chi_ne_zero χ hu)]
+        push_cast
+        ring
+      · rw [if_neg hu, MulCharClass.map_nonunit χ hu]
+        simp
+    · intro l _ hl
+      rw [if_neg (by omega), mul_zero]
+    · intro hcon
+      exact absurd hk hcon
+  -- the complex integral identity
+  have hcomplex : ∫ β in (0:ℝ)..1, SChi n q χ β * conj (SChi n q χ β)
+      = ∑ k ∈ Finset.range (n+1), (if IsUnit ((k:ℕ):ZMod q) then ((GW k : ℝ) ^ 2 : ℂ) else 0) := by
+    have hsumint : ∀ k : ℕ, IntervalIntegrable (fun β => ∑ l ∈ Finset.range (n+1),
+          ((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q)) * GE (((k:ℝ) - (l:ℝ)) * β))
+        MeasureTheory.volume 0 1 :=
+      fun k => Continuous.intervalIntegrable
+        (continuous_finsetSum (Finset.range (n+1))
+          (fun l _ => continuous_const_mul_GE
+            (((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q))) ((k:ℝ) - (l:ℝ)))) 0 1
+    have houter : (∫ β in (0:ℝ)..1, ∑ k ∈ Finset.range (n+1), ∑ l ∈ Finset.range (n+1),
+          ((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q)) * GE (((k:ℝ) - (l:ℝ)) * β))
+        = ∑ k ∈ Finset.range (n+1), ∫ β in (0:ℝ)..1, ∑ l ∈ Finset.range (n+1),
+          ((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q)) * GE (((k:ℝ) - (l:ℝ)) * β) :=
+      intervalIntegral.integral_finsetSum (fun k _ => hsumint k)
+    have hinnerint : ∀ k : ℕ, (∫ β in (0:ℝ)..1, ∑ l ∈ Finset.range (n+1),
+          ((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q)) * GE (((k:ℝ) - (l:ℝ)) * β))
+        = ∑ l ∈ Finset.range (n+1), ∫ β in (0:ℝ)..1,
+          ((GW k * GW l : ℝ) : ℂ) * (χ (k:ZMod q) * χ⁻¹ (l:ZMod q)) * GE (((k:ℝ) - (l:ℝ)) * β) :=
+      fun k => intervalIntegral.integral_finsetSum
+        (fun l (_ : l ∈ Finset.range (n+1)) => intervalIntegrable_const_mul_GE _ _)
+    simp only [hpoint]
+    rw [houter, Finset.sum_congr rfl (fun k _ => hinnerint k),
+      Finset.sum_congr rfl (fun k _ => Finset.sum_congr rfl (fun l _ => hterm k l)),
+      Finset.sum_congr rfl (fun k hk => hcollapse k hk)]
+  have hcomplexR : ∫ β, SChi n q χ β * conj (SChi n q χ β)
+        ∂(MeasureTheory.volume.restrict (Set.Ioc 0 1))
+      = ∑ k ∈ Finset.range (n+1), (if IsUnit ((k:ℕ):ZMod q) then ((GW k : ℝ) ^ 2 : ℂ) else 0) := by
+    rw [← intervalIntegral.integral_of_le (le_of_lt zero_lt_one)]
+    exact hcomplex
+  have hintR : MeasureTheory.Integrable (fun β => SChi n q χ β * conj (SChi n q χ β))
+      (MeasureTheory.volume.restrict (Set.Ioc 0 1)) := by
+    rw [← Set.uIoc_of_le (le_of_lt zero_lt_one)]
+    exact IntervalIntegrable.def' hint
+  -- bridge the real norm square through the real part
+  have hbridge : ∫ β in (0:ℝ)..1, ‖SChi n q χ β‖ ^ 2
+      = (∫ β, SChi n q χ β * conj (SChi n q χ β)
+          ∂(MeasureTheory.volume.restrict (Set.Ioc 0 1))).re := by
+    rw [intervalIntegral.integral_of_le (le_of_lt zero_lt_one),
+      MeasureTheory.integral_congr_ae (MeasureTheory.ae_of_all _ fun β =>
+        norm_sq_eq_re_mul_conj (SChi n q χ β))]
+    exact integral_re hintR
+  rw [hbridge, hcomplexR, Complex.re_sum]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  by_cases hu : IsUnit ((k:ℕ):ZMod q) <;> simp [hu, Complex.ofReal_re, ← Complex.ofReal_pow]
+
 end CharExpand
 
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
