@@ -66,8 +66,8 @@ python tools/goldbach.py claim TASK_ID --kind refute
 
 Claim a task with either command above. For a cut, replace the sample premises with 2–4 closed propositions and prove that they imply the frozen parent. For a refutation, prove the negation of the frozen statement. Use the usual heartbeat, one-file PR and exact-head submission. The desk publishes checked premises, credits the contributors to each complete proof, and records which alternatives lost a premise to a verified refutation. Compare bilingual descriptions with the displayed Lean statements during review.
 
-在已开放拆题的研究台（含哥德巴赫主站），根题计为第 0 层，沿依赖路径最多拆到第 8 层，每个父题最多保留 3 套有效拆法。通过权威 Lean 核验并且被研究台采用的每套拆法，给拆题者加 1 分。重复或未采用的拆法不计分。拆题积分和父题首解积分分别记账，拆法以后被证伪仍保留已发的拆题分。新子题从发布时开始累计积分，原题的证明和反驳共用一次首解积分。
+各研究台的开放任务都可拆分。根题计为第 0 层，沿依赖路径最多拆到第 8 层，每个父题最多保留 3 套有效拆法。通过权威 Lean 核验并且被研究台采用的每套拆法，给拆题者加 1 分。重复或未采用的拆法不计分。拆题积分和父题首解积分分别记账，拆法以后被证伪仍保留已发的拆题分。新子题从发布时开始累计积分，原题的证明和反驳共用一次首解积分。
 
 A new premise starts accruing points when it is published. A proof and a refutation share the original task’s first-resolution award. The cut record credits the contributor who proposed it.
 
-维护者可在任务目录源文件中设置 `"reductions": true`。缺省为关闭。新子题继承开启，复用任务保留其原设置。根题深度为 0，深度达到 2 时停止继续拆分，每题最多同时保留 3 套有效拆法。管理员仍可使用已有的研究路线发布流程。
+任务目录中的 `"reductions": true` 保留用于正式反驳资格。拆分生成的新子题可提交正式反驳。管理员仍可使用已有的研究路线发布流程。

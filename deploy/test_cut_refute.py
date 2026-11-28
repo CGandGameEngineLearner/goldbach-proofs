@@ -13,7 +13,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 from unittest import skipUnless
 
-from deploy.test_desk_scale import DeskServerTestCase, ROOT
+from deploy.test_desk_scale import DeskServerTestCase, PROBLEMS, ROOT
 
 sys.path.insert(0, str(ROOT / "deploy/jenkins"))
 from tools import goldbach as cli
@@ -39,7 +39,6 @@ class CutFlow(DeskServerTestCase):
         root = {**data["gaps"][0], "id": PARENT, "statement": P, "parallel": True,
                 "module": "Conjectures.Fixtures.Parent", "file": "lean/Conjectures/Fixtures/Parent.lean",
                 "reductions": True}
-        self.disabled = data["gaps"][0]["id"]
         data["gaps"].append(root)
         for key, statement, name in ((NEGATIVE, f"¬ ({P})", "Negative"), (OTHER, "True", "Other")):
             data["gaps"].append({**root, "id": key, "statement": statement,
@@ -155,7 +154,6 @@ class CutFlow(DeskServerTestCase):
 
     def exercise(self, native):
         self.native = native
-        self.request(DESK + "claim", {"gap": self.disabled, "handle": "x", "kind": "cut"}, expected=409)
         _, first = self.submit_task(PARENT, "cut", "split-one", [A, B])
         _, second = self.submit_task(PARENT, "cut", "split-two", [C, B])
         def gaps():
@@ -267,6 +265,26 @@ class CutFlow(DeskServerTestCase):
         self.request(DESK + "claim", {"gap": exclusive, "handle": "late"}, expected=409)
         self.request(DESK + "claim", {"gap": PARENT, "handle": "direct"}, expected=201)
 
+    def test_open_tasks_can_be_split_across_desks(self):
+        unflagged = json.loads((self.published / "gaps.json").read_bytes())["gaps"][0]
+        without_flags = [("", unflagged)] + [
+            (f"/problems/{slug}", next(gap for gap in problem["gaps"] if not gap.get("reductions")
+                                     and not gap.get("claims_closed") and not gap.get("refutation")))
+            for slug, problem in PROBLEMS.items()
+        ]
+        for index, (prefix, task) in enumerate(without_flags):
+            with self.subTest(desk=prefix):
+                ident = task["id"]
+                self.assertTrue(self.request(f"{prefix}/api/task?lemma={ident}")["takes_cuts"])
+                self.assertEqual(self.request(prefix + DESK + "claim", {
+                    "gap": ident, "kind": "refute", "handle": f"smoke-{index}",
+                }, expected=409)["error"], "refutations_disabled")
+                receipt = self.request(prefix + DESK + "claim", {
+                    "gap": ident, "kind": "cut", "handle": f"smoke-{index}",
+                }, expected=201)
+                self.assertEqual(receipt["gap"]["id"], ident)
+                self.request(prefix + DESK + "release", {"reason": "other"}, token=receipt["lease"]["token"])
+
     def test_limits_inheritance_and_reuse(self):
         self.native = False
         known = json.loads((self.published / "gaps.json").read_bytes())["gaps"][0]
@@ -296,7 +314,7 @@ class CutFlow(DeskServerTestCase):
                                       expected=409)["error"], "cut_limit")
         a, reused = cuts[0]["children"]
         self.assertEqual(reused, known["id"])
-        self.assertFalse(gaps[reused]["takes_cuts"])
+        self.assertTrue(gaps[reused]["takes_cuts"])
         self.submit_task(a, "cut", "recursive", ["X", "Y"])
         self.submit_task(a, "cut", "cycle", [P, "Z"])
         board = self.request("/fixture-status?view=board-delta-gzip")

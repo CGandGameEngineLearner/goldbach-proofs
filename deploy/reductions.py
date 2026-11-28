@@ -38,8 +38,6 @@ def target(gap, module):
 
 
 def cut_reason(gap, live, depth=0):
-    if gap.get("reductions") is not True:
-        return "cuts_disabled"
     if max(gap.get("depth", 0), depth) >= MAX_DEPTH:
         return "cut_depth_limit"
     if live >= MAX_LIVE:

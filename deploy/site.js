@@ -179,7 +179,6 @@ function cutEvidence(gap) {
   const zh = lang === 'zh';
   const block = element('div', undefined, 'detail-context');
   const reasons = {
-    cuts_disabled: zh ? '此题未开启拆题' : 'Cuts are disabled for this task',
     cut_depth_limit: zh ? '已到拆题深度上限' : 'Cut depth limit reached',
     cut_limit: zh ? '有效拆法数已达上限' : 'Live cut limit reached',
     claims_closed: closedClaimLabel(),
