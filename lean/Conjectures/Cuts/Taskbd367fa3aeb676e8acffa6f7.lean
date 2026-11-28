@@ -11,15 +11,15 @@ theorem Conjectures.Cuts.Taskbd367fa3aeb676e8acffa6f7 : (have x1 : Finset ℕ :=
   have hstep (k : ℕ) : count (k + 1) = count k + count 1 := by
     simp only [count, Finset.card_eq_sum_ones, Finset.sum_filter, Nat.mul_add,
       Nat.mul_one, Finset.sum_range_add]
-    congr 1
+    apply congrArg (fun t : ℕ => (∑ x ∈ Finset.range (18 * k),
+      if x % 18 ∈ A ∧ (N % 18 + 18 - x % 18) % 18 ∈ A then 1 else 0) + t)
     apply Finset.sum_congr rfl
     intro r hr
-    simp [Nat.add_mod, Nat.mul_mod]
+    simp [Nat.add_mod]
   have hcount (k : ℕ) : count k = k * count 1 := by
     induction k with
     | zero => simp [count]
     | succ k ih =>
-      change count (k + 1) = (k + 1) * count 1
       rw [hstep, ih, Nat.add_mul, one_mul]
   have hpositive : 1 ≤ count 1 := by
     have heven : (N % 18) % 2 = 0 := by
@@ -29,7 +29,7 @@ theorem Conjectures.Cuts.Taskbd367fa3aeb676e8acffa6f7 : (have x1 : Finset ℕ :=
         1 ≤ ((Finset.range 18).filter
           (fun x => x % 18 ∈ A ∧ (r + 18 - x % 18) % 18 ∈ A)).card := by
       intro r hr he
-      interval_cases r <;> norm_num at he ⊢ <;> decide
+      interval_cases r <;> norm_num at he <;> decide
     simpa only [count, Nat.mul_one] using
       hfinite (N % 18) (Nat.mod_lt N (by decide)) heven
   constructor
