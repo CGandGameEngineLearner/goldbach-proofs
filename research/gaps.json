@@ -17673,6 +17673,29 @@
       "route_source": "large-sieve-dispersion"
     },
     {
+      "id": "L-goldbach-fraction-shifted-mangoldt-second-moment",
+      "statement": "let S := fun (w : ℝ → ℝ) (X t : ℝ) => ∑ n ∈ Finset.range (⌊X⌋₊+1), (((ArithmeticFunction.vonMangoldt n : ℝ)*w ((n : ℝ)/X) : ℝ) : ℂ)*Complex.exp (((2*Real.pi*(n : ℝ)*t : ℝ) : ℂ)*Complex.I); ∀ w : ℝ → ℝ, ContDiff ℝ ⊤ w → Function.support w ⊆ Set.Icc 0 1 → ∀ ε : ℝ, 0 < ε → ∃ C : ℝ, 0 < C ∧ ∀ X D x : ℝ, 2 ≤ X → 1 ≤ D → D ≤ X → x ∈ Set.Icc 0 1 → ∀ q : ℕ, 0 < q → ∀ a : ℤ, Nat.Coprime a.natAbs q → |x-(a : ℝ)/(q : ℝ)| ≤ 1/(q : ℝ)^2 → (∑ d ∈ Finset.Icc ⌈D⌉₊ ⌊2*D⌋₊, ∑ b ∈ Finset.range d, ‖S w X (x+(b : ℝ)/(d : ℝ))‖^2) ≤ C*X^(2+ε)*(D/(q : ℝ)+(q : ℝ)*D/X+D^2/X^(3/8 : ℝ))",
+      "plain_statement": {
+        "zh": "在整段 D 至 2D 的分母与全部剩余类上，对平移 Mangoldt 指数和的平方求和，将次弧误差 D²X^(−1/3) 改进为 D²X^(−3/8)。",
+        "en": "Improve the D²X^(−1/3) contribution to D²X^(−3/8) in the mean square of smoothed Mangoldt sums shifted by all fractions b/d in a dyadic denominator block."
+      },
+      "brief": {
+        "zh": "对标定理 2.1；保留 D/q 与 qD/X 两个共振项。论文的 1/6 障碍来自最后一项：在 D≤X^(3/16−δ) 时新项有幂节省。先研究频率聚集的 Type II 块；尚需另外核对主弧与切换筛，不能仅凭这一界宣称新的分布水平。",
+        "en": "Keep both resonance terms from Theorem 2.1. The proposed last term saves a power up to D≤X^(3/16−δ). Analyze clusters of shifted rational phases in the Type II terms. Other major-arc and switched-sieve inputs still have to be checked."
+      },
+      "track": "large-sieve-dispersion",
+      "program": "correlation",
+      "role": "target",
+      "depends_on": [],
+      "imports": [],
+      "parallel": true,
+      "challenge_only": true,
+      "source": "https://arxiv.org/html/2606.29559v1#S2",
+      "module": "Conjectures.Goldbach.FractionShiftedMangoldtSecondMoment",
+      "file": "lean/Conjectures/Goldbach/FractionShiftedMangoldtSecondMoment.lean",
+      "route_source": "large-sieve-dispersion"
+    },
+    {
       "id": "L-goldbach-sobolev-gallagher-window",
       "statement": "let E (x : ℝ) := Complex.exp (((2 * Real.pi * x : ℝ) : ℂ) * Complex.I); ∀ (M N : ℕ) (c : ℕ → ℂ) (a δ : ℝ), 0 < δ → let S (t : ℝ) := ∑ k ∈ Finset.Ico M (M + N), c k * E ((k : ℝ) * t); ‖S a‖ ^ 2 ≤ (intervalIntegral (fun t => ‖S t‖ ^ 2) (a-δ) (a+δ) MeasureTheory.volume) / (2 * δ) + intervalIntegral (fun t => ‖S t‖ * ‖deriv S t‖) (a-δ) (a+δ) MeasureTheory.volume",
       "plain_statement": {
@@ -20054,6 +20077,29 @@
       "route_source": "progressions"
     },
     {
+      "id": "L-goldbach-quadratic-diagnostic-semialmost-primes",
+      "statement": "let bad := fun n : ℕ => 6 ∣ n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ (2*p*q+1).primeFactorsList.length ≤ 7; ∀ A : ℕ, ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → (((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Ioc (X/2) X)).card : ℝ)*(Real.log (X : ℝ))^A) ≤ (X : ℝ)",
+      "plain_statement": {
+        "zh": "对几乎所有 6 的倍数，寻找素数对 p+q=n，使二次式 2pq+1 至多有七个素因子（计重），保留任意对数幂的例外节省。",
+        "en": "For almost all multiples of six, represent n=p+q by primes with at most seven prime factors of 2pq+1, preserving arbitrary logarithmic savings in the exceptional set."
+      },
+      "brief": {
+        "zh": "对标定理 1.3 的十三个因子。固定 n 后筛二次式 2p(n−p)+1，按素模上的零点数与重根分别估计，不将它当线性多项式。保留 6|n 消除模 3 的固定因子问题。七因子目标需要新的筛估计；该约束检验双素数解在二次剩余类上的分布。",
+        "en": "Compare Theorem 1.3. Sieve the polynomial 2p(n−p)+1, keeping split roots and repeated roots separate at each prime. Retain the multiple-of-six condition. An upper bound for a linear shift alone cannot provide the required quadratic distribution."
+      },
+      "track": "progressions",
+      "program": "correlation",
+      "role": "target",
+      "depends_on": [],
+      "imports": [],
+      "parallel": true,
+      "challenge_only": true,
+      "source": "https://arxiv.org/html/2606.29559v1#S4.SS2",
+      "module": "Conjectures.Goldbach.QuadraticDiagnosticSemialmostPrimes",
+      "file": "lean/Conjectures/Goldbach/QuadraticDiagnosticSemialmostPrimes.lean",
+      "route_source": "progressions"
+    },
+    {
       "id": "L-goldbach-twisted-cutoff-residual",
       "statement": "∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (c : ℝ) (s : ℂ), 1 ≤ c → 1 < s.re → let w : ℕ → ℂ := fun n => if 1 ≤ n ∧ (n : ℝ) < c then ((Real.log c - Real.log (n : ℝ) : ℝ) : ℂ) else 0; let r : ℕ → ℂ := (Real.log c : ℂ) • LSeries.delta - LSeries.convolution (fun n : ℕ => (ArithmeticFunction.moebius n : ℂ)) w; LSeries (fun n : ℕ => χ (n : ZMod N) * r n) s = (Real.log c : ℂ) - LSeries (fun n : ℕ => χ (n : ZMod N) * w n) s / χ.LFunction s",
       "plain_statement": {
@@ -20094,6 +20140,29 @@
       "role": "lemma",
       "module": "Conjectures.Goldbach.AlmostPrimeParityDetector",
       "file": "lean/Conjectures/Goldbach/AlmostPrimeParityDetector.lean",
+      "route_source": "representations"
+    },
+    {
+      "id": "L-goldbach-balanced-three-factor-gap",
+      "statement": "let bad := fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ q < p ∧ (p-q)^2 ≤ n ∧ (p-q+1).primeFactorsList.length ≤ 3; ∀ A : ℕ, ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → (((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Ioc (X/2) X)).card : ℝ)*(Real.log (X : ℝ))^A) ≤ (X : ℝ)",
+      "plain_statement": {
+        "zh": "除去任意对数幂节省的例外，每个偶数 n 都可写成 p+q，其中 0<p−q≤√n，且 p−q+1 至多有三个素因子（计重）。",
+        "en": "For all but O_A(X/log^A X) even targets in (X/2,X], find primes with 0<p−q≤sqrt(n) and at most three prime factors of p−q+1, counted with multiplicity."
+      },
+      "brief": {
+        "zh": "对照 Akeno 定理 1.2，在同一例外集尺度上，把四个因子降到三个，并约束在中点附近。尝试在短对称窗上估计原筛与切换筛的分布误差；全长版本的 0.267 门槛不能直接搬到这个窗口。q<p 排除了用差零反复贡献。",
+        "en": "Compare Theorem 1.2. Localize both summands near n/2 and study the switched and original sieve in the same short window. The full-range switched-sieve criterion does not supply this localization. Strict ordering excludes a zero-gap shortcut."
+      },
+      "track": "representations",
+      "program": "correlation",
+      "role": "target",
+      "depends_on": [],
+      "imports": [],
+      "parallel": true,
+      "challenge_only": true,
+      "source": "https://arxiv.org/html/2606.29559v1#S1",
+      "module": "Conjectures.Goldbach.BalancedThreeFactorGap",
+      "file": "lean/Conjectures/Goldbach/BalancedThreeFactorGap.lean",
       "route_source": "representations"
     },
     {
