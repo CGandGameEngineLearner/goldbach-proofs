@@ -2094,6 +2094,108 @@ lemma kernelMass_le_decay (n : ℕ) (h k : ℝ) (hh : 0 < h) (hkh : h ≤ k) (hk
   rw [hchain]
   exact le_trans hbound2 hfinal
 
+/-- Bridge: `1 - phase y = -2i·phase(y/2)·sin(πy)`. -/
+lemma one_sub_phase (y : ℝ) :
+    (1:ℂ) - GoldbachExplicitModeledMajor.phase y
+      = -2 * Complex.I * GoldbachExplicitModeledMajor.phase (y / 2)
+          * (Real.sin (Real.pi * y) : ℂ) := by
+  have key : ∀ E : ℂ, 1 - Complex.exp E
+      = -2 * Complex.I * Complex.exp (E / 2)
+          * ((Complex.exp (-(E / 2)) - Complex.exp (E / 2)) * Complex.I / 2) := by
+    intro E
+    have hunit : Complex.exp (E / 2) * Complex.exp (-(E / 2)) = 1 := by
+      rw [← Complex.exp_add, add_neg_cancel, Complex.exp_zero]
+    have hA2 : Complex.exp E = Complex.exp (E / 2) ^ 2 := by
+      rw [pow_two, ← Complex.exp_add]
+      congr 1
+      ring
+    have hI2 : (Complex.I * Complex.I : ℂ) = -1 := Complex.I_mul_I
+    have hrw : -2 * Complex.I * Complex.exp (E / 2)
+          * ((Complex.exp (-(E / 2)) - Complex.exp (E / 2)) * Complex.I / 2)
+        = (Complex.I * Complex.I)
+          * (Complex.exp (E / 2) ^ 2
+            - Complex.exp (E / 2) * Complex.exp (-(E / 2))) := by
+      ring
+    rw [hA2, hrw, hI2, hunit]
+    ring
+  have hsin : Complex.sin ((Real.pi * y : ℝ) : ℂ)
+      = (Complex.exp (-((Real.pi * y : ℝ) : ℂ) * Complex.I)
+          - Complex.exp (((Real.pi * y : ℝ) : ℂ) * Complex.I)) * Complex.I / 2 := rfl
+  unfold GoldbachExplicitModeledMajor.phase
+  rw [key (((2 * Real.pi * y : ℝ) : ℂ) * Complex.I), Complex.ofReal_sin, hsin]
+  have hX1 : ((2 * Real.pi * y : ℝ) : ℂ) * Complex.I / 2
+      = ((Real.pi * y : ℝ) : ℂ) * Complex.I := by
+    have h : (2 * Real.pi * y : ℝ) = 2 * (Real.pi * y) := by ring
+    rw [h]
+    push_cast
+    ring
+  have hX2 : ((2 * Real.pi * (y / 2) : ℝ) : ℂ) * Complex.I
+      = ((Real.pi * y : ℝ) : ℂ) * Complex.I := by
+    have h : (2 * Real.pi * (y / 2) : ℝ) = Real.pi * y := by ring
+    rw [h]
+  rw [hX1, hX2]
+  ring
+
+/-- Closed form of the geometric kernel away from the integers:
+`K_n(β) = phase(nβ/2) · sin(π(n+1)β) / sin(πβ)`. -/
+lemma kernel_eq_phase_sin (n : ℕ) (β : ℝ) (hβ : Real.sin (Real.pi * β) ≠ 0) :
+    GoldbachExplicitModeledMajor.kernel n β
+      = GoldbachExplicitModeledMajor.phase ((n:ℝ) / 2 * β)
+          * ((Real.sin (Real.pi * ((n:ℝ) + 1) * β)
+              / Real.sin (Real.pi * β) : ℝ) : ℂ) := by
+  have hp2ne : GoldbachExplicitModeledMajor.phase (β / 2) ≠ 0 := by
+    unfold GoldbachExplicitModeledMajor.phase
+    exact Complex.exp_ne_zero _
+  have hs2c : ((Real.sin (Real.pi * β) : ℝ) : ℂ) ≠ 0 := by
+    intro hz
+    rw [Complex.ofReal_eq_zero] at hz
+    exact hβ hz
+  have hp1 : GoldbachExplicitModeledMajor.phase (((n + 1 : ℕ) * β) / 2)
+      = GoldbachExplicitModeledMajor.phase ((n:ℝ) / 2 * β)
+          * GoldbachExplicitModeledMajor.phase (β / 2) := by
+    rw [phase_add]
+    congr 1
+    push_cast
+    ring
+  have hsinarg : (Real.pi * ((n + 1 : ℕ) * β) : ℝ) = Real.pi * ((n:ℝ) + 1) * β := by
+    push_cast
+    ring
+  have hstep : GoldbachExplicitModeledMajor.kernel n β
+      * ((Real.sin (Real.pi * β) : ℝ) : ℂ)
+      = GoldbachExplicitModeledMajor.phase ((n:ℝ) / 2 * β)
+          * ((Real.sin (Real.pi * ((n:ℝ) + 1) * β) : ℝ) : ℂ) := by
+    have hkey := kernel_mul_one_sub_phase n β
+    rw [one_sub_phase β, one_sub_phase ((n + 1 : ℕ) * β), hp1, hsinarg] at hkey
+    have hD : (-2:ℂ) * Complex.I * GoldbachExplicitModeledMajor.phase (β / 2)
+        * ((Real.sin (Real.pi * β) : ℝ) : ℂ) ≠ 0 := by
+      refine mul_ne_zero (mul_ne_zero (mul_ne_zero (by norm_num) Complex.I_ne_zero) hp2ne) hs2c
+    have h2 : GoldbachExplicitModeledMajor.kernel n β
+        * ((Real.sin (Real.pi * β) : ℝ) : ℂ)
+        * ((-2:ℂ) * Complex.I * GoldbachExplicitModeledMajor.phase (β / 2)
+            * ((Real.sin (Real.pi * β) : ℝ) : ℂ))
+      = GoldbachExplicitModeledMajor.phase ((n:ℝ) / 2 * β)
+        * ((Real.sin (Real.pi * ((n:ℝ) + 1) * β) : ℝ) : ℂ)
+        * ((-2:ℂ) * Complex.I * GoldbachExplicitModeledMajor.phase (β / 2)
+            * ((Real.sin (Real.pi * β) : ℝ) : ℂ)) := by
+      have h1 := congrArg (fun z : ℂ => z * ((Real.sin (Real.pi * β) : ℝ) : ℂ)) hkey
+      have h3 : GoldbachExplicitModeledMajor.kernel n β
+          * ((Real.sin (Real.pi * β) : ℝ) : ℂ)
+          * ((-2:ℂ) * Complex.I * GoldbachExplicitModeledMajor.phase (β / 2)
+              * ((Real.sin (Real.pi * β) : ℝ) : ℂ))
+        = (GoldbachExplicitModeledMajor.kernel n β
+            * ((-2:ℂ) * Complex.I * GoldbachExplicitModeledMajor.phase (β / 2)
+                * ((Real.sin (Real.pi * β) : ℝ) : ℂ)))
+          * ((Real.sin (Real.pi * β) : ℝ) : ℂ) := by
+        ring
+      rw [h3, h1]
+      ring
+    exact mul_right_cancel₀ hD h2
+  have hdiv : ((Real.sin (Real.pi * ((n:ℝ) + 1) * β) : ℝ) : ℂ)
+      / ((Real.sin (Real.pi * β) : ℝ) : ℂ)
+      = ((Real.sin (Real.pi * ((n:ℝ) + 1) * β) / Real.sin (Real.pi * β) : ℝ) : ℂ) := by
+    rw [Complex.ofReal_div]
+  rw [(eq_div_iff hs2c).mpr hstep, mul_div_assoc, hdiv]
+
 end CharExpand
 
 
