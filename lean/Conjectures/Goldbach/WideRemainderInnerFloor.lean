@@ -1055,6 +1055,107 @@ theorem abs_nonunit_error_le (n q : ℕ) [NeZero q] (a : ℕ) (β : ℝ) :
     _ = Real.log (∏ p ∈ Nat.primeFactors q, (p:ℝ)) := hlogprod.symm
     _ ≤ Real.log (q:ℝ) := hlogle
 
+/-- `‖x + y‖² ≤ 2‖x‖² + 2‖y‖²` over `ℂ`. -/
+theorem norm_add_sq_le_two (x y : ℂ) : ‖x + y‖ ^ 2 ≤ 2 * ‖x‖ ^ 2 + 2 * ‖y‖ ^ 2 := by
+  have h1 : ‖x + y‖ ≤ ‖x‖ + ‖y‖ := norm_add_le x y
+  have h2 : (‖x‖ + ‖y‖) ^ 2 ≤ 2 * ‖x‖ ^ 2 + 2 * ‖y‖ ^ 2 := by
+    nlinarith [sq_nonneg (‖x‖ - ‖y‖)]
+  nlinarith [h1, h2, norm_nonneg x, norm_nonneg y, norm_nonneg (x + y)]
+
+/-- **Arc-sum L² bridge.** Summing the major-arc character expansion over the unit
+residue classes `a mod q` and applying Dirichlet orthogonality (`char_L2_dilution`;
+non-units contribute nothing because characters vanish there), the total squared mass
+of the Goldbach sums over the unit arcs at offset `β` is bounded by the character
+mean-square term plus the non-coprime error:
+`∑_{a unit} ‖SG n (a/q+β)‖² ≤ (2/φ) ∑_χ ‖τ(χ⁻¹) SChi χ β‖² + 2φ(log q)²`. -/
+theorem SG_arc_L2 (n q : ℕ) [NeZero q] (β : ℝ) :
+    ∑ a ∈ Finset.univ.filter (fun a : ZMod q => IsUnit a),
+      ‖SG n ((a.val:ℝ)/(q:ℝ) + β)‖ ^ 2
+      ≤ (2 / (q.totient : ℝ)) * ∑ χ : DirichletCharacter ℂ q,
+          ‖gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β‖ ^ 2
+        + 2 * (q.totient : ℝ) * (Real.log q) ^ 2 := by
+  classical
+  set F : Finset (ZMod q) := Finset.univ.filter (fun a : ZMod q => IsUnit a) with hFdef
+  set c : DirichletCharacter ℂ q → ℂ :=
+    fun χ => gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β with hcdef
+  have hφ : ((q.totient : ℕ) : ℝ) ≠ 0 := by
+    have hp : 0 < q.totient := Nat.totient_pos.mpr (NeZero.pos q)
+    exact Nat.cast_ne_zero.mpr (by omega)
+  have hiff : ∀ a : ZMod q, IsUnit a ↔ a.val.Coprime q := fun a =>
+    Iff.trans (by rw [ZMod.natCast_zmod_val a]) (ZMod.isUnit_iff_coprime a.val q)
+  have hcard : F.card = q.totient := by
+    have h1 : Fintype.card {a : ZMod q // IsUnit a} = F.card :=
+      Fintype.card_of_subtype F (fun a => by simp [hFdef, Finset.mem_filter])
+    have h2 : Fintype.card {a : ZMod q // IsUnit a}
+        = Fintype.card {x : ZMod q // x.val.Coprime q} :=
+      Fintype.card_congr (Equiv.subtypeEquivRight hiff)
+    exact h1.symm.trans (h2.trans
+      ((Fintype.card_congr (ZMod.unitsEquivCoprime)).symm.trans (ZMod.card_units_eq_totient q)))
+  have hexp : ∀ a ∈ F, SG n ((a.val:ℝ)/(q:ℝ) + β)
+      = ((q.totient : ℂ))⁻¹ * ∑ χ : DirichletCharacter ℂ q, c χ * χ a
+        + ∑ k ∈ Finset.range (n+1),
+            if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a.val:ℝ)/(q:ℝ) + β)) := by
+    intro a ha
+    have hcop : Nat.Coprime (a.val) q := (hiff a).mp (Finset.mem_filter.mp ha).2
+    rw [SG_char_expansion n q a.val hcop β]
+    have hsum : ∑ χ : DirichletCharacter ℂ q,
+        χ ((a.val:ℕ):ZMod q) * gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β
+        = ∑ χ : DirichletCharacter ℂ q, c χ * χ a := by
+      refine Finset.sum_congr rfl fun χ _ => ?_
+      rw [ZMod.natCast_zmod_val a]
+      simp only [hcdef]
+      ring
+    rw [hsum]
+  have hdil : ∑ a ∈ F, ‖∑ χ : DirichletCharacter ℂ q, c χ * χ a‖ ^ 2
+      = (q.totient : ℝ) * ∑ χ : DirichletCharacter ℂ q, ‖c χ‖ ^ 2 := by
+    have h1 : ∑ a ∈ F, ‖∑ χ : DirichletCharacter ℂ q, c χ * χ a‖ ^ 2
+        = ∑ a : ZMod q, ‖∑ χ : DirichletCharacter ℂ q, c χ * χ a‖ ^ 2 := by
+      refine Finset.sum_subset (Finset.subset_univ F) fun a _ hnot => ?_
+      have hna : ¬ IsUnit a := fun h => by
+        refine hnot ?_
+        rw [hFdef]
+        simp [h]
+      have hz : (∑ χ : DirichletCharacter ℂ q, c χ * χ a) = 0 := by
+        refine Finset.sum_eq_zero fun χ _ => ?_
+        rw [MulCharClass.map_nonunit χ hna, mul_zero]
+      rw [hz, norm_zero]
+      norm_num
+    rw [h1, char_L2_dilution q c]
+  have herr : ∑ a ∈ F, ‖∑ k ∈ Finset.range (n+1),
+      if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a.val:ℝ)/(q:ℝ) + β))‖ ^ 2
+      ≤ (q.totient : ℝ) * (Real.log q) ^ 2 := by
+    have h1 : ∑ a ∈ F, ‖∑ k ∈ Finset.range (n+1),
+        if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a.val:ℝ)/(q:ℝ) + β))‖ ^ 2
+        ≤ ∑ a ∈ F, (Real.log q) ^ 2 :=
+      Finset.sum_le_sum fun a _ =>
+        pow_le_pow_left₀ (norm_nonneg _) (abs_nonunit_error_le n q a.val β) 2
+    rw [Finset.sum_const, nsmul_eq_mul, hcard] at h1
+    exact h1
+  calc ∑ a ∈ F, ‖SG n ((a.val:ℝ)/(q:ℝ) + β)‖ ^ 2
+      ≤ ∑ a ∈ F, (2 * ‖((q.totient : ℂ))⁻¹ * ∑ χ : DirichletCharacter ℂ q, c χ * χ a‖ ^ 2
+          + 2 * ‖∑ k ∈ Finset.range (n+1),
+              if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a.val:ℝ)/(q:ℝ) + β))‖ ^ 2) :=
+        Finset.sum_le_sum fun a ha => by rw [hexp a ha]; exact norm_add_sq_le_two _ _
+    _ = 2 * ∑ a ∈ F, ‖((q.totient : ℂ))⁻¹ * ∑ χ : DirichletCharacter ℂ q, c χ * χ a‖ ^ 2
+        + 2 * ∑ a ∈ F, ‖∑ k ∈ Finset.range (n+1),
+              if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a.val:ℝ)/(q:ℝ) + β))‖ ^ 2 := by
+        rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum]
+    _ = 2 * ((q.totient : ℝ))⁻¹ ^ 2 * ∑ a ∈ F, ‖∑ χ : DirichletCharacter ℂ q, c χ * χ a‖ ^ 2
+        + 2 * ∑ a ∈ F, ‖∑ k ∈ Finset.range (n+1),
+              if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a.val:ℝ)/(q:ℝ) + β))‖ ^ 2 := by
+        simp only [norm_mul, norm_inv, RCLike.norm_natCast, mul_pow]
+        rw [← Finset.mul_sum]
+        ring
+    _ ≤ 2 * ((q.totient : ℝ))⁻¹ ^ 2 * ((q.totient : ℝ) * ∑ χ : DirichletCharacter ℂ q, ‖c χ‖ ^ 2)
+        + 2 * (q.totient : ℝ) * (Real.log q) ^ 2 := by
+        rw [hdil]
+        linarith [herr]
+    _ = (2 / (q.totient : ℝ)) * ∑ χ : DirichletCharacter ℂ q,
+          ‖gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β‖ ^ 2
+        + 2 * (q.totient : ℝ) * (Real.log q) ^ 2 := by
+        simp only [hcdef]
+        field_simp
+
 end CharExpand
 
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
