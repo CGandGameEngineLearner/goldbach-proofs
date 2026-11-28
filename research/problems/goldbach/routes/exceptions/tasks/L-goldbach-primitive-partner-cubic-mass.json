@@ -14,7 +14,9 @@
   "role": "target",
   "challenge_only": true,
   "parallel": true,
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.NearExtremalPartnerCount"
+  ],
   "depends_on": [
     "L-goldbach-near-extremal-partner-count"
   ]
