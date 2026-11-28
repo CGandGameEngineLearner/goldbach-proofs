@@ -1,0 +1,18 @@
+{
+  "id": "L-goldbach-binary-shift-peripheral-desert",
+  "statement": "∀ B H K X : ℕ, ∃ n : ℕ, X ≤ n ∧ Even n ∧ K ≤ ((Finset.range (n+1)).filter (fun p => p < n-p ∧ p.Prime ∧ (n-p).Prime)).card ∧ ∀ d ≤ H, ∀ p : ℕ, p.Prime → p ≤ B → ¬ (n-d-p).Prime ∧ ¬ (n+2-d-p).Prime",
+  "plain_statement": {
+    "zh": "排除相邻移位偶数上所有固定上界的小素数加数，同时保留任意多种真正的素数分解",
+    "en": "Exclude every bounded small prime at two shifted targets while the unshifted even number has arbitrarily many distinct prime pairs"
+  },
+  "brief": {
+    "zh": "给定小素数上界 B、移位窗 H、表示数 K 和下界 X。构造某个 n≥X，使 n 至少有 K 种不同的不等素数无序分解。对每个 d≤H，n−d 和 n+2−d 均无法用任何 p≤B 的素数配对。取 M=(B+H+2)!，用模 M 的 −1 类素数和、等差数列素数定理与抽屉原理构造 n；用 M 的小因子逐个排除两边的补数。",
+    "en": "Given bounds B and H, multiplicity K and starting point X, construct an even n≥X with at least K distinct unordered decompositions into unequal primes. For every d≤H neither n−d nor n+2−d has a representation with a prime at most B. Use prime summands congruent to −1 modulo (B+H+2)!, the prime number theorem in arithmetic progressions, and pigeonholing. Each excluded complement has an explicit proper divisor."
+  },
+  "source": "https://www.preprints.org/manuscript/202610.2486/v1",
+  "program": "exceptions",
+  "role": "lemma",
+  "parallel": true,
+  "depends_on": [],
+  "imports": []
+}
