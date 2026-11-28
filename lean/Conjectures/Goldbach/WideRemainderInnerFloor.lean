@@ -1846,6 +1846,242 @@ theorem kernelMass_annulus_le (n : ℕ) (h k : ℝ) (hh : 0 ≤ h) (hkh : h ≤ 
   le_min (kernelMass_annulus_le_card n h k hh hkh hk2)
     (kernelMass_annulus_le_length n h k hh hkh)
 
+/-! ### Frequency decay of the kernel
+
+On the annulus `h < |β| ≤ k` away from the integers the kernel satisfies
+`|K_n(β)| ≤ 1/(2|β|)`, so the annulus mass decays like `1/(2h) = qn/(2Q)`.
+This is the bound that captures the `1/β²` tail of the Dirichlet kernel. -/
+
+/-- `|sin(πβ)| = sin(π|β|)` for `|β| ≤ 1/2`. -/
+lemma abs_sin_eq_sin_abs (β : ℝ) (hβ : |β| ≤ 1/2) :
+    |Real.sin (Real.pi * β)| = Real.sin (Real.pi * |β|) := by
+  rcases le_total 0 β with h0 | h0
+  · rw [abs_of_nonneg h0]
+    exact abs_of_nonneg (Real.sin_nonneg_of_nonneg_of_le_pi (by nlinarith [h0, Real.pi_pos])
+      (by nlinarith [hβ, le_abs_self β, h0, Real.pi_pos]))
+  · have hb : |β| = -β := abs_of_nonpos h0
+    have hble : -β ≤ 1 / 2 := by rw [← hb]; exact hβ
+    have hsin : Real.sin (Real.pi * β) = -Real.sin (Real.pi * (-β)) := by
+      rw [← Real.sin_neg]
+      congr 1
+      ring
+    rw [hsin, abs_neg, abs_of_nonneg
+      (Real.sin_nonneg_of_nonneg_of_le_pi (by nlinarith [h0, Real.pi_pos])
+        (by nlinarith [Real.pi_pos, hble])), hb]
+
+/-- `|sin(πβ)| ≥ 2|β|` for `|β| ≤ 1/2`. -/
+lemma abs_sin_ge_two_mul_abs (β : ℝ) (hβ : |β| ≤ 1/2) :
+    2 * |β| ≤ |Real.sin (Real.pi * β)| := by
+  rw [abs_sin_eq_sin_abs β hβ]
+  have hpi : Real.pi * |β| ≤ Real.pi / 2 := by
+    calc Real.pi * |β| ≤ Real.pi * (1 / 2) := by nlinarith [hβ, abs_nonneg β, Real.pi_pos]
+      _ = Real.pi / 2 := by ring
+  have h1 : 2 / Real.pi * (Real.pi * |β|) ≤ Real.sin (Real.pi * |β|) :=
+    Real.mul_le_sin (by nlinarith [abs_nonneg β, Real.pi_pos]) (by linarith [hpi, Real.pi_pos])
+  have h2 : (2:ℝ) / Real.pi * (Real.pi * |β|) = 2 * |β| := by
+    field_simp [Real.pi_pos.ne]
+  rw [h2] at h1
+  exact h1
+
+/-- The kernel is conjugate-symmetric: `K_n(-x) = conj K_n(x)`. -/
+lemma kernel_neg (n : ℕ) (x : ℝ) :
+    GoldbachExplicitModeledMajor.kernel n (-x) = conj (GoldbachExplicitModeledMajor.kernel n x) := by
+  unfold GoldbachExplicitModeledMajor.kernel
+  rw [map_sum (starRingEnd ℂ)]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  rw [conj_phase, show (k:ℝ) * (-x) = -((k:ℝ) * x) from by ring]
+
+/-- `|1 - phase β| = 2|sin(πβ)|`. -/
+lemma norm_one_sub_phase (β : ℝ) :
+    ‖(1:ℂ) - GoldbachExplicitModeledMajor.phase β‖ = 2 * |Real.sin (Real.pi * β)| := by
+  have hsplit : (1:ℂ) - GoldbachExplicitModeledMajor.phase β
+      = GoldbachExplicitModeledMajor.phase (β / 2)
+          * (GoldbachExplicitModeledMajor.phase (-(β / 2))
+              - GoldbachExplicitModeledMajor.phase (β / 2)) := by
+    have h1 := phase_add (β / 2) (β / 2)
+    have h2 := phase_add (β / 2) (-(β / 2))
+    have h3 : GoldbachExplicitModeledMajor.phase (0:ℝ) = 1 := by
+      unfold GoldbachExplicitModeledMajor.phase; simp
+    have h4 : GoldbachExplicitModeledMajor.phase (β / 2)
+        * (GoldbachExplicitModeledMajor.phase (-(β / 2))
+            - GoldbachExplicitModeledMajor.phase (β / 2))
+        = GoldbachExplicitModeledMajor.phase (β / 2) * GoldbachExplicitModeledMajor.phase (-(β / 2))
+            - GoldbachExplicitModeledMajor.phase (β / 2) * GoldbachExplicitModeledMajor.phase (β / 2) := by
+      ring
+    rw [show (β / 2 + β / 2 : ℝ) = β from by ring] at h1
+    rw [show (β / 2 + -(β / 2) : ℝ) = 0 from by ring] at h2
+    rw [h4, h2, h3, h1]
+  have hdiff : GoldbachExplicitModeledMajor.phase (-(β / 2))
+      - GoldbachExplicitModeledMajor.phase (β / 2)
+      = -2 * Complex.I * (Real.sin (Real.pi * β) : ℂ) := by
+    unfold GoldbachExplicitModeledMajor.phase
+    have hu : (2 * Real.pi * (β / 2) : ℝ) = Real.pi * β := by ring
+    have hv : (2 * Real.pi * (-(β / 2)) : ℝ) = -(Real.pi * β) := by ring
+    rw [hu, hv, Complex.ofReal_sin]
+    have hsin : Complex.sin ((Real.pi * β : ℝ) : ℂ)
+        = (Complex.exp (-((Real.pi * β : ℝ) : ℂ) * Complex.I)
+            - Complex.exp (((Real.pi * β : ℝ) : ℂ) * Complex.I)) * Complex.I / 2 := rfl
+    rw [hsin]
+    have hI2 : (Complex.I * Complex.I : ℂ) = -1 := Complex.I_mul_I
+    have hkey2 : ∀ a b : ℂ, -2 * Complex.I * ((b - a) * Complex.I / 2) = b - a := by
+      intro a b
+      have hexp : (-2:ℂ) * Complex.I * ((b - a) * Complex.I / 2)
+          = ((-2:ℂ) * Complex.I * Complex.I) * (b - a) / 2 := by ring
+      have h2 : ((-2:ℂ) * Complex.I * Complex.I) = 2 := by
+        rw [show (-2:ℂ) * Complex.I * Complex.I = -2 * (Complex.I * Complex.I) from by ring, hI2]
+        ring
+      rw [hexp, h2]
+      ring
+    rw [hkey2]
+    push_cast
+    ring
+  rw [hsplit, hdiff, norm_mul, norm_mul, norm_mul]
+  have hp : ‖GoldbachExplicitModeledMajor.phase (β / 2)‖ = 1 := by
+    unfold GoldbachExplicitModeledMajor.phase
+    exact Complex.norm_exp_ofReal_mul_I _
+  have hI : ‖(Complex.I:ℂ)‖ = 1 := Complex.norm_I
+  have hsn : ‖(Real.sin (Real.pi * β) : ℂ)‖ = |Real.sin (Real.pi * β)| := by
+    rw [Complex.norm_real, Real.norm_eq_abs]
+  have h2c : ‖(2:ℂ)‖ = 2 := Complex.norm_two
+  rw [hp, norm_neg, h2c, hI, hsn]
+  ring
+
+/-- Pointwise frequency bound: `|K_n(β)| ≤ 1/(2|β|)` away from `0` (and the integers). -/
+lemma kernel_norm_le_freq (n : ℕ) (β : ℝ) (hβ0 : β ≠ 0) (hβ : |β| ≤ 1/2) :
+    ‖GoldbachExplicitModeledMajor.kernel n β‖ ≤ 1 / (2 * |β|) := by
+  have hkey := kernel_mul_one_sub_phase n β
+  have habs : |Real.sin (Real.pi * β)| = Real.sin (Real.pi * |β|) := abs_sin_eq_sin_abs β hβ
+  have hsinpos : (0:ℝ) < |Real.sin (Real.pi * β)| := by
+    rw [habs]
+    exact Real.sin_pos_of_pos_of_lt_pi (by nlinarith [abs_pos.mpr hβ0, Real.pi_pos])
+      (by nlinarith [abs_pos.mpr hβ0, abs_nonneg β, Real.pi_pos, hβ])
+  have h1 : ‖GoldbachExplicitModeledMajor.kernel n β‖
+      * ‖(1:ℂ) - GoldbachExplicitModeledMajor.phase β‖
+      = ‖(1:ℂ) - GoldbachExplicitModeledMajor.phase ((n+1:ℕ) * β)‖ := by
+    rw [← norm_mul, hkey]
+  have h2 : ‖(1:ℂ) - GoldbachExplicitModeledMajor.phase ((n+1:ℕ) * β)‖ ≤ 2 := by
+    have h3 : ‖(1:ℂ) - GoldbachExplicitModeledMajor.phase ((n+1:ℕ) * β)‖
+        ≤ ‖(1:ℂ)‖ + ‖GoldbachExplicitModeledMajor.phase ((n+1:ℕ) * β)‖ := norm_sub_le _ _
+    have h4 : ‖GoldbachExplicitModeledMajor.phase ((n+1:ℕ) * β)‖ = 1 := by
+      unfold GoldbachExplicitModeledMajor.phase
+      exact Complex.norm_exp_ofReal_mul_I _
+    rw [norm_one] at h3
+    linarith
+  have hbound : 2 * |β| ≤ |Real.sin (Real.pi * β)| := abs_sin_ge_two_mul_abs β hβ
+  have hpos : (0:ℝ) < ‖(1:ℂ) - GoldbachExplicitModeledMajor.phase β‖ := by
+    rw [norm_one_sub_phase β]; linarith
+  calc ‖GoldbachExplicitModeledMajor.kernel n β‖
+      ≤ 2 / ‖(1:ℂ) - GoldbachExplicitModeledMajor.phase β‖ :=
+        le_div_iff₀ hpos |>.mpr (le_trans (le_of_eq h1) h2)
+    _ ≤ 1 / (2 * |β|) := by
+        rw [norm_one_sub_phase β]
+        have hx : (0:ℝ) < |β| := abs_pos.mpr hβ0
+        have hs : (0:ℝ) < |Real.sin (Real.pi * β)| := hsinpos
+        have hgoal : (1:ℝ) / |Real.sin (Real.pi * β)| ≤ 1 / (2 * |β|) := by
+          refine (div_le_div_iff_of_pos_left (by norm_num) (by linarith) (by linarith)).mpr ?_
+          exact hbound
+        have hkey2 : (2:ℝ) / (2 * |Real.sin (Real.pi * β)|)
+            = 1 / |Real.sin (Real.pi * β)| := by
+          field_simp
+        rw [hkey2]
+        exact hgoal
+
+/-- The annulus kernel mass decays like `1/(2h)`: `∫_{h<|β|≤k} |K_n|² ≤ 1/(2h)`. -/
+lemma kernelMass_le_decay (n : ℕ) (h k : ℝ) (hh : 0 < h) (hkh : h ≤ k) (hk2 : k ≤ 1/2) :
+    GoldbachExplicitModeledMajor.kernelMass n k - GoldbachExplicitModeledMajor.kernelMass n h
+      ≤ 1 / (2 * h) := by
+  have hsplit : GoldbachExplicitModeledMajor.kernelMass n k
+      = GoldbachExplicitModeledMajor.kernelMass n h
+        + 2 * ∫ x in h..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2 := by
+    unfold GoldbachExplicitModeledMajor.kernelMass
+    have hintA : IntervalIntegrable (fun x : ℝ => ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2)
+        MeasureTheory.volume (-k) (-h) := (continuous_kernel_norm n).intervalIntegrable (-k) (-h)
+    have hintB : IntervalIntegrable (fun x : ℝ => ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2)
+        MeasureTheory.volume (-h) k := (continuous_kernel_norm n).intervalIntegrable (-h) k
+    have hintC : IntervalIntegrable (fun x : ℝ => ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2)
+        MeasureTheory.volume (-h) h := (continuous_kernel_norm n).intervalIntegrable (-h) h
+    have hintD : IntervalIntegrable (fun x : ℝ => ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2)
+        MeasureTheory.volume h k := (continuous_kernel_norm n).intervalIntegrable h k
+    have hA : (∫ x in (-k:ℝ)..(-h), ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2)
+        + (∫ x in (-h:ℝ)..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2)
+        = ∫ x in (-k:ℝ)..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2 :=
+      intervalIntegral.integral_add_adjacent_intervals hintA hintB
+    have hB : (∫ x in (-h:ℝ)..h, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2)
+        + (∫ x in h..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2)
+        = ∫ x in (-h:ℝ)..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2 :=
+      intervalIntegral.integral_add_adjacent_intervals hintC hintD
+    have heven : ∀ x : ℝ, ‖GoldbachExplicitModeledMajor.kernel n (-x)‖ ^ 2
+        = ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2 := fun x =>
+      by rw [kernel_neg, Complex.norm_conj]
+    have hC : ∫ x in (-k:ℝ)..(-h), ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2
+        = ∫ x in h..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2 := by
+      rw [← intervalIntegral.integral_comp_neg]
+      exact intervalIntegral.integral_congr_ae (MeasureTheory.ae_of_all _ fun x _ => heven x)
+    rw [← hA, ← hB, hC]
+    ring
+  have hint2 : IntervalIntegrable (fun x : ℝ => 1 / (4 * x ^ 2)) MeasureTheory.volume h k := by
+    refine ContinuousOn.intervalIntegrable ?_
+    have hc : ContinuousOn (fun x : ℝ => 1 / (4 * x ^ 2)) (Set.uIcc h k) := by
+      rw [Set.uIcc_of_le hkh]
+      exact ContinuousOn.div continuousOn_const
+        (Continuous.continuousOn (by fun_prop : Continuous (fun x : ℝ => 4 * x ^ 2)))
+        (fun x hx => by
+          have hxpos : (0:ℝ) < x := by nlinarith [hh, hx.1]
+          exact ne_of_gt (show (0:ℝ) < 4 * x ^ 2 by nlinarith [hxpos, hxpos]))
+    exact hc
+  have hmono : ∫ x in h..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2
+      ≤ ∫ x in h..k, (1 / (4 * x ^ 2)) := by
+    have hint : IntervalIntegrable (fun x : ℝ => ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2)
+        MeasureTheory.volume h k := (continuous_kernel_norm n).intervalIntegrable h k
+    exact intervalIntegral.integral_mono_on (by linarith) hint hint2
+      (fun x hx => by
+        have hxpos : (0:ℝ) < x := by nlinarith [hh, hx.1]
+        have hxfreq := kernel_norm_le_freq n x (ne_of_gt hxpos) (by
+          rw [abs_of_pos hxpos]; nlinarith [hx.2, hk2])
+        rw [abs_of_pos hxpos] at hxfreq
+        have h1 : ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2
+            ≤ (1 / (2 * x)) ^ 2 := pow_le_pow_left₀ (by positivity) hxfreq 2
+        have h2 : (1 / (2 * x)) ^ 2 = 1 / (4 * x ^ 2) := by
+          rw [div_pow, mul_pow]; norm_num
+        rw [h2] at h1
+        exact h1)
+  have hval : ∫ x in h..k, (1 / (4 * x ^ 2)) = 1 / (4 * h) - 1 / (4 * k) := by
+    have hderiv : ∀ x : ℝ, x ≠ 0 → HasDerivAt (fun y : ℝ => -((1:ℝ)/4)/y) (1 / (4 * x ^ 2)) x := by
+      intro x hx
+      have h1 := hasDerivAt_inv hx
+      have h2 := h1.const_mul (-((1:ℝ)/4))
+      have h3 : (fun y : ℝ => -((1:ℝ)/4)/y) = fun y : ℝ => -((1:ℝ)/4) * y⁻¹ := by
+        funext y; field_simp
+      rw [← h3] at h2
+      have h4 : (-((1:ℝ)/4)) * (-(x ^ 2)⁻¹) = 1 / (4 * x ^ 2) := by
+        field_simp
+      rw [h4] at h2
+      exact h2
+    have hres := intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (fun x hx => hderiv x (ne_of_gt (show (0:ℝ) < x by
+        have hx' : x ∈ Set.Icc h k := by rwa [Set.uIcc_of_le hkh] at hx
+        nlinarith [hh, hx'.1]))) hint2
+    exact hres.trans (by field_simp; ring)
+  have hchain : GoldbachExplicitModeledMajor.kernelMass n k
+      - GoldbachExplicitModeledMajor.kernelMass n h
+      = 2 * ∫ x in h..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2 := by
+    rw [hsplit]; ring
+  have hbound2 : 2 * ∫ x in h..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2
+      ≤ 2 * (1 / (4 * h) - 1 / (4 * k)) := by
+    calc 2 * ∫ x in h..k, ‖GoldbachExplicitModeledMajor.kernel n x‖ ^ 2
+        ≤ 2 * ∫ x in h..k, 1 / (4 * x ^ 2) := mul_le_mul_of_nonneg_left hmono (by positivity)
+      _ = 2 * (1 / (4 * h) - 1 / (4 * k)) := by rw [hval]
+  have hfinal : 2 * (1 / (4 * h) - 1 / (4 * k)) ≤ 1 / (2 * h) := by
+    have h6 : (0:ℝ) < k := by nlinarith [hh, hkh]
+    have h7 : (0:ℝ) ≤ 1 / (2 * k) := div_nonneg (by norm_num) (by linarith)
+    have h8 : 2 * (1 / (4 * h) - 1 / (4 * k)) = 1 / (2 * h) - 1 / (2 * k) := by
+      field_simp
+      ring
+    rw [h8]
+    linarith
+  rw [hchain]
+  exact le_trans hbound2 hfinal
+
 end CharExpand
 
 
