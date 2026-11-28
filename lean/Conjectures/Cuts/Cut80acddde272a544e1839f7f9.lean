@@ -52,6 +52,13 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
   obtain ⟨C2, hC2, b2⟩ := Conjectures.Cuts.Taskf7c18a375028fb1ff2783f5b P (by omega) ε hε
   refine ⟨2 * Csum + 2 * Csq + 2 * Cres + 256 * C2, by positivity, ?_⟩
   intro M hM A hA
+  have hcard_filter_eq {α : Type*} {s₁ s₂ : Finset α} {p₁ p₂ : α → Prop}
+      [DecidablePred p₁] [DecidablePred p₂]
+      (hs : s₁ = s₂) (hp : ∀ x, p₁ x ↔ p₂ x) :
+      (s₁.filter p₁).card = (s₂.filter p₂).card := by
+    congr 1
+    ext x
+    simp only [Finset.mem_filter, hs, hp]
   let f : ℕ → ℤ := fun n => P.eval (n : ℤ)
   let tuples (k : ℕ) : Finset (Fin k → ℕ) := Fintype.piFinset fun _ : Fin k => A
   let score {k : ℕ} (u : Fin k → ℕ) : ℤ := ∑ i : Fin k, f (u i)
@@ -144,7 +151,7 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
       (Nat.add_le_add_left (hSharedCard 3) _))
   let K : ℝ → ℂ := fun t => ∑ n ∈ A, DyadicMixedB4Fourier.mode (f n) t
   have hKcont : Continuous K :=
-    continuous_finset_sum A fun n _ => DyadicMixedB4Fourier.continuous_mode (f n)
+    continuous_finsetSum A fun n _ => DyadicMixedB4Fourier.continuous_mode (f n)
   have hMoment (k : ℕ) :
       ∫ t in (0 : ℝ)..1, ‖K t‖ ^ (2 * k) = ((collisions k).card : ℝ) := by
     let Q := tuples k
@@ -162,7 +169,7 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
       apply Finset.sum_congr rfl
       intro i _
       ring
-    let ProdQ := (tuples k).product (tuples k)
+    let ProdQ := Q ×ˢ Q
     let delta (p : (Fin k → ℕ) × (Fin k → ℕ)) := score p.1 - score p.2
     have hpoint (t : ℝ) : ((‖K t‖ ^ (2 * k) : ℝ) : ℂ) =
         ∑ p ∈ ProdQ, DyadicMixedB4Fourier.mode (delta p) t := by
@@ -183,10 +190,13 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
             intervalIntegral.integral_finsetSum fun p _ =>
               (DyadicMixedB4Fourier.continuous_mode _).intervalIntegrable _ _
       _ = (((collisions k).card : ℝ) : ℂ) := by
-            dsimp only [collisions, ProdQ, Q]
             simp only [DyadicMixedB4Fourier.mode_integral, delta, sub_eq_zero,
-              ← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_one,
-              Finset.filter_congr_decidable]
+              ← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_one]
+            have heq : (ProdQ.filter fun p => score p.1 = score p.2).card =
+                (collisions k).card :=
+              hcard_filter_eq (by ext p; simp only [ProdQ, Q, Finset.mem_product])
+                (fun _ => Iff.rfl)
+            rw [heq]
             norm_cast
   have hCS : ((collisions 3).card : ℝ) ^ 2 ≤
       ((collisions 2).card : ℝ) * ((collisions 4).card : ℝ) := by
@@ -232,14 +242,12 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
       have hneg : E2 * (E2 * E4 - E3 ^ 2) < 0 :=
         mul_neg_of_pos_of_neg hE2pos (by linarith only [hlt])
       linarith only [hnonneg, hneg]
-    · have hEmpty : A = ∅ := Finset.not_nonempty_iff_eq_empty.mp hA
-      have h3 : (collisions 3).card = 0 := by
-        rw [Finset.card_eq_zero, Finset.eq_empty_iff_forall_not_mem]
-        intro p hp
+    · have h3 : (collisions 3).card = 0 := by
+        by_contra hne
+        obtain ⟨p, hp⟩ := Finset.card_pos.mp (Nat.pos_of_ne_zero hne)
         have hm := (Finset.mem_filter.mp hp).1
-        have hp1 := Fintype.mem_piFinset.mp (Finset.mem_product.mp hm).1 0
-        rw [hEmpty] at hp1
-        exact Finset.not_mem_empty _ hp1
+        have hp1 : p.1 0 ∈ A := Fintype.mem_piFinset.mp (Finset.mem_product.mp hm).1 0
+        exact hA ⟨p.1 0, hp1⟩
       rw [h3]
       norm_num
       positivity
@@ -308,10 +316,15 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
       refine ⟨(fun i => ⟨p.1 i, hL i⟩, fun i => ⟨p.2 i, hR i⟩),
         Finset.mem_filter.mpr ⟨Finset.mem_univ _, hsum⟩, rfl⟩
   have hE2 : ((collisions 2).card : ℝ) ≤ C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 2 := by
-    rw [hcard2]
     have h := b2 M hM A hA
     dsimp only at h
-    simpa only [Finset.filter_congr_decidable] using h
+    have heq : (collisions 2).card =
+        ({z ∈ (Finset.univ : Finset ((Fin 2 → ↥A) × (Fin 2 → ↥A))) |
+          (∑ i : Fin 2, P.eval ((z.1 i : ℕ) : ℤ)) =
+            ∑ i : Fin 2, P.eval ((z.2 i : ℕ) : ℤ)}).card :=
+      hcard2.trans (hcard_filter_eq rfl fun _ => Iff.rfl)
+    rw [heq]
+    exact h
   let T4 := Fintype.piFinset (fun _ : Fin 4 => A)
   let w4 := fun u : Fin 4 → ℕ => ∑ j : Fin 4, P.eval (u j : ℤ)
   let Ssum := (T4.product T4).filter (fun z => w4 z.1 = w4 z.2 ∧
@@ -360,20 +373,23 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
     exact_mod_cast hNat
   have hSumBound : (Ssum.card : ℝ) ≤ Csum * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by
     have h := bSum M hM A hA
-    dsimp only [Ssum, T4, w4]
     dsimp only at h
-    simpa only [Finset.filter_congr_decidable] using h
+    have heq : Ssum.card = _ := hcard_filter_eq rfl fun _ => Iff.rfl
+    rw [heq]
+    exact h
   have hSqBound : (Ssq.card : ℝ) ≤ Csq * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by
     have h := bSq M hM A hA
-    dsimp only [Ssq, T4, w4]
     dsimp only at h
-    simpa only [Finset.filter_congr_decidable] using h
+    have heq : Ssq.card = _ := hcard_filter_eq rfl fun _ => Iff.rfl
+    rw [heq]
+    exact h
   let k : ℕ := if P.natDegree = 3 then 5 else 4
   have hResBound : (Sres.card : ℝ) ≤ Cres * (M : ℝ) ^ ε * (A.card : ℝ) ^ k := by
     have h := bRes M hM A hA
-    dsimp only [Sres, T4, w4, k]
     dsimp only at h
-    simpa only [Finset.filter_congr_decidable] using h
+    have heq : Sres.card = _ := hcard_filter_eq rfl fun _ => Iff.rfl
+    rw [heq]
+    exact h
   have hpow4 : (A.card : ℝ) ^ 4 ≤ (A.card : ℝ) ^ k := by
     by_cases hz : A.card = 0
     · dsimp [k]
@@ -422,4 +438,6 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
     linarith only [hcomb, hfactor]
   dsimp only [k] at hFinal
   dsimp only
-  simpa only [Finset.filter_congr_decidable] using hFinal
+  have heq : _ = off.card := hcard_filter_eq rfl fun _ => Iff.rfl
+  rw [heq]
+  exact hFinal
