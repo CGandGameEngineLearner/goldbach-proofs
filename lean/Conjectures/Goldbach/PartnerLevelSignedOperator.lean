@@ -96,8 +96,7 @@ private theorem H_eq_admissible_card (D m : ℕ) [NeZero D] :
       exact hu1
     · rw [hmod, ← ZMod.isUnit_iff_coprime]
       have hcast : ((m + D - z.val : ℕ) : ZMod D) = (m : ZMod D) - z := by
-        rw [Nat.cast_sub (by omega : z.val ≤ m + D), Nat.cast_add, ZMod.natCast_self,
-          add_zero, ZMod.natCast_zmod_val]
+        rw [Nat.cast_sub (by omega : z.val ≤ m + D), Nat.cast_add, ZMod.natCast_self, add_zero, ZMod.natCast_zmod_val]
       rw [hcast]
       exact hu2
 
@@ -460,7 +459,7 @@ by
   let P := (1 : DirichletCharacter ℂ 1)
   let B := Σ s : ℕ, DirichletCharacter ℂ s
   let valid := fun b : B => b.1 ≠ 0 ∧ b.2.IsPrimitive
-  exact ∀ D m : ℕ, 0 < D → 0 < m → Even m → ∃ F : Finset B, (∀ b, b ∈ F ↔ valid b ∧ b.1 ∣ D) ∧ (let H := ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(x%D)).Coprime D)).card; let scale := ‖O m‖*(D.totient:ℝ)/(H:ℝ); let normSq := fun w : B → ℂ => ∑ a ∈ F, ‖w a‖^2; let applyRow := fun (w : B → ℂ) (a : B) => ∑ b ∈ F, S a.2 b.2 m * w b; (∀ w : B → ℂ, normSq (applyRow w) ≤ scale^2 * normSq w) ∧ ∃ w : B → ℂ, 0 < normSq w ∧ normSq (applyRow w) = scale^2 * normSq w) := by
+  exact ∀ D m : ℕ, 0 < D → 0 < m → Even m → ∃ F : Finset B, (∀ b, b ∈ F ↔ valid b ∧ b.1 ∣ D) ∧ (let H := ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(x % D)).Coprime D)).card; let scale := ‖O m‖*(D.totient:ℝ)/(H:ℝ); let normSq := fun w : B → ℂ => ∑ a ∈ F, ‖w a‖^2; let applyRow := fun (w : B → ℂ) (a : B) => ∑ b ∈ F, S a.2 b.2 m * w b; (∀ w : B → ℂ, normSq (applyRow w) ≤ scale^2 * normSq w) ∧ ∃ w : B → ℂ, 0 < normSq w ∧ normSq (applyRow w) = scale^2 * normSq w) := by
   classical
   dsimp only
   exact PartnerLevelSignedOperatorProof.main_theorem
