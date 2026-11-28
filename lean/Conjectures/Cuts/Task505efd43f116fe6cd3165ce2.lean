@@ -12,7 +12,7 @@ private lemma nonneg_of_deriv_nonneg {f f' : ℝ → ℝ} (h0 : 0 ≤ f 0)
       (fun y _ => (hd y).continuousAt.continuousWithinAt)
       (fun y _ => (hd y).differentiableAt.differentiableWithinAt)
       (fun y hy => by rw [(hd y).deriv]; exact hpos y (interior_subset hy))
-  exact h0.trans (hmono Set.left_mem_Ici hx hx)
+  exact h0.trans (hmono (Set.mem_Ici.mpr le_rfl) hx hx)
 
 private lemma cos_ge_taylor2 {x : ℝ} (hx : 0 ≤ x) : 1 - x ^ 2 / 2 ≤ Real.cos x := by
   have h := nonneg_of_deriv_nonneg (f := fun t => Real.cos t - (1 - t ^ 2 / 2))
@@ -33,7 +33,7 @@ private lemma sin_ge_taylor3 {x : ℝ} (hx : 0 ≤ x) : x - x ^ 3 / 6 ≤ Real.s
     (by simp)
     (fun t => by
       have h1 := Real.hasDerivAt_sin t
-      have h2 := (hasDerivAt_id t).sub ((hasDerivAt_pow 3 t).div_const 6)
+      have h2 := (hasDerivAt_id' t).sub ((hasDerivAt_pow 3 t).div_const 6)
       convert h1.sub h2 using 1
       ring)
     (fun t ht => by linarith [cos_ge_taylor2 ht])
@@ -60,7 +60,7 @@ private lemma sin_le_taylor5 {x : ℝ} (hx : 0 ≤ x) :
     (f' := fun t => (1 - t ^ 2 / 2 + t ^ 4 / 24) - Real.cos t)
     (by simp)
     (fun t => by
-      have h1 := ((hasDerivAt_id t).sub ((hasDerivAt_pow 3 t).div_const 6)).add
+      have h1 := ((hasDerivAt_id' t).sub ((hasDerivAt_pow 3 t).div_const 6)).add
         ((hasDerivAt_pow 5 t).div_const 120)
       have h2 := Real.hasDerivAt_sin t
       convert h1.sub h2 using 1
@@ -129,26 +129,36 @@ private lemma check_total_int :
     (7442 : ℤ) * (200 ^ 8 : ℕ) * 100 ≤ sumPow2 8 0 (fun m => w8Int m * cosLBInt m) := by
   decide
 
-private lemma check_ent_nat :
-    ((2 ^ 100) ^ 5 * 2 ^ 23) * (17 ^ 106) * ((183 ^ 104) ^ 11) < (200 ^ 125) ^ 10 := by
-  decide
-
 private lemma check_ent_real :
     ((17 / 200 : ℝ) ^ 212) * ((183 / 200 : ℝ) ^ 2288) ≤ ((2 : ℝ) ^ 1046)⁻¹ := by
-  have hnat : 2 ^ 523 * 17 ^ 106 * 183 ^ 1144 < 200 ^ 1250 := by
-    have h := check_ent_nat
-    convert h using 1 <;> ring
-  have hreal : (2 : ℝ) ^ 523 * 17 ^ 106 * 183 ^ 1144 ≤ 200 ^ 1250 := by
-    exact_mod_cast hnat.le
-  have hsq : ((2 : ℝ) ^ 523 * 17 ^ 106 * 183 ^ 1144) ^ 2 ≤ ((200 : ℝ) ^ 1250) ^ 2 := by
-    nlinarith [show (0 : ℝ) ≤ (2 : ℝ) ^ 523 * 17 ^ 106 * 183 ^ 1144 by positivity]
-  have h200 : (0 : ℝ) < (200 : ℝ) ^ 2500 := by positivity
-  have h2 : (0 : ℝ) < (2 : ℝ) ^ 1046 := by positivity
-  rw [div_pow, div_pow, ← mul_div_mul_comm, ← pow_add, le_inv_iff_mul_le₀ h2]
-  rw [div_mul_eq_mul_div, div_le_one h200]
-  have h1 : ((2 : ℝ) ^ 523 * 17 ^ 106 * 183 ^ 1144) ^ 2 = (17 : ℝ) ^ 212 * 183 ^ 2288 * 2 ^ 1046 := by ring
-  have h2' : ((200 : ℝ) ^ 1250) ^ 2 = (200 : ℝ) ^ 2500 := by ring
-  linarith
+  have h1 : (17 / 200 : ℝ) ^ 9 ≤ ((2 : ℝ) ^ 32)⁻¹ := by
+    rw [div_pow, inv_eq_one_div, div_le_div_iff₀ (by norm_num) (by norm_num)]
+    norm_num
+  have h2 : (183 / 200 : ℝ) ^ 86 ≤ ((2 : ℝ) ^ 11)⁻¹ := by
+    rw [div_pow, inv_eq_one_div, div_le_div_iff₀ (pow_pos (by norm_num) 86) (by norm_num)]
+    norm_num
+  have h1p : ((17 / 200 : ℝ) ^ 106) ^ (9 * 86) ≤ (((2 : ℝ) ^ 32)⁻¹) ^ (106 * 86) := by
+    have : ((17 / 200 : ℝ) ^ 106) ^ (9 * 86) = ((17 / 200 : ℝ) ^ 9) ^ (106 * 86) := by
+      rw [← pow_mul, ← pow_mul]
+    rw [this]
+    exact pow_le_pow_left₀ (pow_nonneg (by norm_num) _) h1 _
+  have h2p : ((183 / 200 : ℝ) ^ 1144) ^ (9 * 86) ≤ (((2 : ℝ) ^ 11)⁻¹) ^ (1144 * 9) := by
+    have : ((183 / 200 : ℝ) ^ 1144) ^ (9 * 86) = ((183 / 200 : ℝ) ^ 86) ^ (1144 * 9) := by
+      rw [← pow_mul, ← pow_mul]
+    rw [this]
+    exact pow_le_pow_left₀ (pow_nonneg (by norm_num) _) h2 _
+  have hprod : ((17 / 200 : ℝ) ^ 106 * (183 / 200 : ℝ) ^ 1144) ^ (9 * 86) ≤
+      (((2 : ℝ) ^ 523)⁻¹) ^ (9 * 86) := by
+    rw [mul_pow]
+    refine (mul_le_mul h1p h2p (pow_nonneg (pow_nonneg (by norm_num) _) _)
+      (pow_nonneg (inv_nonneg.mpr (pow_nonneg (by norm_num) _)) _)).trans ?_
+    rw [← inv_pow, ← inv_pow, ← inv_pow, ← pow_mul, ← pow_mul, ← pow_mul, ← pow_add]
+    exact pow_le_pow_of_le_one (by norm_num) (by norm_num) (by omega)
+  have hhalf : (17 / 200 : ℝ) ^ 106 * (183 / 200 : ℝ) ^ 1144 ≤ ((2 : ℝ) ^ 523)⁻¹ :=
+    le_of_pow_le_pow_left₀ (by norm_num) (inv_nonneg.mpr (pow_nonneg (by norm_num) _)) hprod
+  have hsq := pow_le_pow_left₀ (mul_nonneg (pow_nonneg (by norm_num) _) (pow_nonneg (by norm_num) _)) hhalf 2
+  rw [mul_pow, ← pow_mul, ← pow_mul, ← inv_pow, ← pow_mul, inv_pow] at hsq
+  simpa only [show 106 * 2 = 212 by rfl, show 1144 * 2 = 2288 by rfl, show 523 * 2 = 1046 by rfl] using hsq
 
 private lemma nat_div_le_real (a b : ℕ) (hb : 0 < b) : ((a / b : ℕ) : ℝ) ≤ (a : ℝ) / (b : ℝ) := by
   rw [le_div_iff₀ (by exact_mod_cast hb : (0 : ℝ) < b)]
@@ -159,6 +169,7 @@ private lemma nat_ceil_div_ge_real (a b : ℕ) (hb : 0 < b) :
   rw [div_le_iff₀ (by exact_mod_cast hb : (0 : ℝ) < b)]
   have h : a ≤ ((a + (b - 1)) / b) * b := by
     have h1 := Nat.div_add_mod (a + (b - 1)) b
+    rw [mul_comm] at h1
     have h2 : (a + (b - 1)) % b < b := Nat.mod_lt _ hb
     omega
   exact_mod_cast h
@@ -207,7 +218,15 @@ private lemma cosLBInt_le_cos {m : ℕ} (hm : m < 256) {t : ℝ}
     have ht2 := nat_ceil_div_ge_real (u * u) 200 (by norm_num)
     have ht4 := nat_div_le_real (u * u * (u * u)) 240000000000 (by norm_num)
     have ht6 := nat_ceil_div_ge_real (u * u * (u * u) * (u * u)) 720000000000000000000 (by norm_num)
-    push_cast at ht2 ht4 ht6 ⊢
+    push_cast at ht2 ht4 ht6
+    simp only [Int.cast_sub, Int.cast_add, Int.cast_natCast, Int.cast_ofNat]
+    have hu2 : (u : ℝ) * u = (u : ℝ) ^ 2 := by ring
+    have hu4 : (u : ℝ) * u * ((u : ℝ) * u) = (u : ℝ) ^ 4 := by ring
+    have hu6 : (u : ℝ) * u * ((u : ℝ) * u) * ((u : ℝ) * u) = (u : ℝ) ^ 6 := by ring
+    rw [hu2] at ht2; rw [hu4] at ht4; rw [hu6] at ht6
+    have hp : 1 - ((u : ℝ) / 10000) ^ 2 / 2 + ((u : ℝ) / 10000) ^ 4 / 24 - ((u : ℝ) / 10000) ^ 6 / 720 =
+        (1000000 - (u : ℝ) ^ 2 / 200 + (u : ℝ) ^ 4 / 240000000000 - (u : ℝ) ^ 6 / 720000000000000000000) / 1000000 := by ring
+    rw [hp]
     linarith
   · set v : ℕ := (62830 * (255 - m)) / 512
     have hm_ge : 128 ≤ m := Nat.le_of_not_lt h128
@@ -244,7 +263,13 @@ private lemma cosLBInt_le_cos {m : ℕ} (hm : m < 256) {t : ℝ}
       hcos_v.trans htay
     have ht2 := nat_div_le_real (v * v) 200 (by norm_num)
     have ht4 := nat_ceil_div_ge_real (v * v * (v * v)) 240000000000 (by norm_num)
-    push_cast at ht2 ht4 ⊢
+    push_cast at ht2 ht4
+    simp only [Int.cast_sub, Int.cast_natCast, Int.cast_ofNat]
+    have hv2 : (v : ℝ) * v = (v : ℝ) ^ 2 := by ring
+    have hv4 : (v : ℝ) * v * ((v : ℝ) * v) = (v : ℝ) ^ 4 := by ring
+    rw [hv2] at ht2; rw [hv4] at ht4
+    have hp : -(1 - ((v : ℝ) / 10000) ^ 2 / 2 + ((v : ℝ) / 10000) ^ 4 / 24) =
+        ((v : ℝ) ^ 2 / 200 - 1000000 - (v : ℝ) ^ 4 / 240000000000) / 1000000 := by ring
     linarith
 
 private lemma cosLBInt_le_cos_sym {m : ℕ} (hm : m < 512) {t : ℝ}
@@ -302,7 +327,8 @@ private lemma bitAt_succ {n : ℕ} (b0 : Bool) (d : Fin n → Bool) (i : Fin n) 
   cases hdi : d i
   · simp
   · simp only [↓reduceIte, Finset.card_insert_of_notMem hnotmem]
-    cases b0 <;> simp <;> omega
+    set c := (Finset.univ.filter (fun j : Fin n => j.1 < i.1 ∧ d j = true)).card
+    cases b0 <;> by_cases hc : c % 2 = 1 <;> simp [hc, Nat.add_mod] <;> omega
 
 private def toNatBits {n : ℕ} (b0 : Bool) (d : Fin n → Bool) : ℕ :=
   ∑ i : Fin (n + 1), if bitAt b0 d i.1 then 2 ^ (n - i.1) else 0
@@ -312,7 +338,9 @@ private lemma toNatBits_lt {n : ℕ} (b0 : Bool) (d : Fin n → Bool) :
   unfold toNatBits
   have hle : ∑ i : Fin (n + 1), (if bitAt b0 d i.1 then 2 ^ (n - i.1) else 0) ≤
       ∑ i : Fin (n + 1), 2 ^ (n - i.1) := by
-    apply Finset.sum_le_sum; intro i _; split_ifs <;> omega
+    apply Finset.sum_le_sum; intro i _; split_ifs
+    · exact le_rfl
+    · exact Nat.zero_le _
   have hsum : ∑ i : Fin (n + 1), 2 ^ (n - i.1) = 2 ^ (n + 1) - 1 := by
     have h1 : ∑ i : Fin (n + 1), 2 ^ (n - i.1) = ∑ i ∈ Finset.range (n + 1), 2 ^ i := by
       rw [Fin.sum_univ_eq_sum_range (fun k => 2 ^ (n - k))]
@@ -348,19 +376,21 @@ private lemma toNatBits_injective {n : ℕ} :
           have h1 : ∑ j ∈ Finset.univ.filter (fun j : Fin (n + 1) => k < j.1),
               (if bitAt b d j.1 then 2 ^ (n - j.1) else 0) ≤
               ∑ j ∈ Finset.univ.filter (fun j : Fin (n + 1) => k < j.1), 2 ^ (n - j.1) := by
-            apply Finset.sum_le_sum; intro j _; split_ifs <;> omega
+            apply Finset.sum_le_sum; intro j _; split_ifs
+            · exact le_rfl
+            · exact Nat.zero_le _
           refine h1.trans (le_of_eq ?_)
           apply Finset.sum_nbij (fun j => n - j.1)
           · intro j hj
             simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hj
-            simp only [Finset.mem_range]; omega
+            exact Finset.mem_range.mpr (by omega)
           · intro j1 hj1 j2 hj2 heq
-            simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hj1 hj2
+            simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hj1 hj2
+            dsimp only at heq
             exact Fin.ext (by omega)
           · intro r hr
-            simp only [Finset.mem_range] at hr
-            refine ⟨⟨n - r, by omega⟩, ?_, by omega⟩
-            simp only [Finset.mem_filter, Finset.mem_univ, true_and]; omega
+            simp only [Finset.mem_coe, Finset.mem_range] at hr
+            refine ⟨⟨n - r, by omega⟩, Finset.mem_coe.mpr (Finset.mem_filter.mpr ⟨Finset.mem_univ _, by dsimp only; omega⟩), by dsimp only; omega⟩
           · intro _ _; rfl
         have hgeom : ∑ j ∈ Finset.range (n - k), 2 ^ j = 2 ^ (n - k) - 1 := by
           simpa using Nat.geomSum_eq (show 2 ≤ 2 by norm_num) (n - k)
@@ -406,7 +436,8 @@ private lemma toNatBits_injective {n : ℕ} :
         rw [hprefix j (Finset.mem_filter.mp hj).2]
       have ht1 := htail b1 d1
       have ht2 := htail b2 d2
-      rw [hi]
+      dsimp only at h
+      rw [h] at hs1
       cases hb1 : bitAt b1 d1 k <;> cases hb2 : bitAt b2 d2 k
       · rfl
       · simp only [hb1, hb2, Bool.false_eq_true, ↓reduceIte] at hs1 hs2; omega
@@ -421,7 +452,7 @@ private lemma toNatBits_injective {n : ℕ} :
   have h1 := hbits ⟨j.1, by omega⟩
   have h2 := hbits ⟨j.1 + 1, by omega⟩
   rw [bitAt_succ, bitAt_succ, h1] at h2
-  cases bitAt b1 d2 j.1 <;> cases d1 j <;> cases d2 j <;> simp_all
+  cases bitAt b1 d2 j.1 <;> cases hd1 : d1 j <;> cases hd2 : d2 j <;> simp_all
 
 -- Extract the 9-bit window starting at position k (when k + 9 ≤ n + 1)
 private def window9 {n : ℕ} (b0 : Bool) (d : Fin n → Bool) (k : ℕ) : ℕ :=
@@ -432,7 +463,9 @@ private lemma window9_lt {n : ℕ} (b0 : Bool) (d : Fin n → Bool) (k : ℕ) :
   unfold window9
   have hle : ∑ j : Fin 9, (if bitAt b0 d (k + j.1) then 2 ^ (8 - j.1) else 0) ≤
       ∑ j : Fin 9, 2 ^ (8 - j.1) := by
-    apply Finset.sum_le_sum; intro j _; split_ifs <;> omega
+    apply Finset.sum_le_sum; intro j _; split_ifs
+    · exact le_rfl
+    · exact Nat.zero_le _
   have h511 : ∑ j : Fin 9, 2 ^ (8 - j.1) = 511 := by decide
   omega
 
@@ -478,15 +511,15 @@ private lemma floor_phase_window9 {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k 
           have hval : i1.1 - k = i2.1 - k := congrArg Fin.val heq
           exact Fin.ext (by omega)
         · intro j _
-          refine ⟨⟨k + j.1, by omega⟩, ?_, ?_⟩
-          · simp only [Finset.mem_filter, Finset.mem_univ, true_and]; omega
-          · exact Fin.ext (by omega)
+          have hj := j.2
+          refine ⟨⟨k + j.1, by omega⟩, Finset.mem_filter.mpr ⟨Finset.mem_filter.mpr ⟨Finset.mem_univ _, by dsimp only; omega⟩, by dsimp only; omega⟩, ?_⟩
+          exact Fin.ext (by dsimp only; omega)
         · intro i hi
           simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi
           have hki : k + (i.1 - k) = i.1 := by omega
           rw [hki]
           split_ifs
-          · rw [← pow_add]; congr 1; omega
+          · rw [← pow_add]; congr 1; dsimp only; omega
           · simp
     · apply Finset.sum_congr
       · ext i; simp only [Finset.mem_filter, Finset.mem_univ, true_and]; omega
@@ -499,19 +532,21 @@ private lemma floor_phase_window9 {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k 
       have h1 : ∑ i ∈ Finset.univ.filter (fun i : Fin (n + 1) => k + 9 ≤ i.1),
           (if bitAt b0 d i.1 then 2 ^ (n - i.1) else 0) ≤
           ∑ i ∈ Finset.univ.filter (fun i : Fin (n + 1) => k + 9 ≤ i.1), 2 ^ (n - i.1) := by
-        apply Finset.sum_le_sum; intro i _; split_ifs <;> omega
+        apply Finset.sum_le_sum; intro i _; split_ifs
+        · exact le_rfl
+        · exact Nat.zero_le _
       refine h1.trans (le_of_eq ?_)
       apply Finset.sum_nbij (fun i => n - i.1)
       · intro i hi
         simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi
-        simp only [Finset.mem_range]; omega
+        exact Finset.mem_range.mpr (by omega)
       · intro i1 hi1 i2 hi2 heq
-        simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi1 hi2
+        simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hi1 hi2
+        dsimp only at heq
         exact Fin.ext (by omega)
       · intro r hr
-        simp only [Finset.mem_range] at hr
-        refine ⟨⟨n - r, by omega⟩, ?_, by omega⟩
-        simp only [Finset.mem_filter, Finset.mem_univ, true_and]; omega
+        simp only [Finset.mem_coe, Finset.mem_range] at hr
+        refine ⟨⟨n - r, by omega⟩, Finset.mem_coe.mpr (Finset.mem_filter.mpr ⟨Finset.mem_univ _, by dsimp only; omega⟩), by dsimp only; omega⟩
       · intro _ _; rfl
     have hgeom : ∑ j ∈ Finset.range (n + 1 - k - 9), 2 ^ j = 2 ^ (n + 1 - k - 9) - 1 := by
       simpa using Nat.geomSum_eq (show 2 ≤ 2 by norm_num) (n + 1 - k - 9)
@@ -561,7 +596,7 @@ private lemma floor_phase_window9 {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k 
       have : (fl : ℝ) < ((65536 * high + 128 * mid + 128 : ℕ) : ℝ) := by exact_mod_cast hfl_lt
       push_cast at this; linarith
     linarith
-  · ring
+  · exact (add_sub_cancel _ _).symm
 
 private lemma term_re_ge_cosLB {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k : ℕ}
     (hk : k + 9 ≤ n + 1) :
@@ -593,18 +628,17 @@ private lemma pState_nonneg {n : ℕ} (x : Bool × (Fin n → Bool)) : 0 ≤ pSt
   mul_nonneg (by norm_num) (pDiff_nonneg x.2)
 
 private lemma sum_wBool : ∑ b : Bool, wBool b = 1 := by
-  simp [wBool, qR]; ring
+  simp [wBool, qR]
 
 private lemma sum_pDiff (n : ℕ) : ∑ d : Fin n → Bool, pDiff d = 1 := by
   unfold pDiff
   rw [← Fintype.prod_sum]
-  simp [sum_wBool]
+  simp only [sum_wBool, Finset.prod_const_one]
 
 private lemma sum_pState (n : ℕ) : ∑ x : Bool × (Fin n → Bool), pState x = 1 := by
   unfold pState
   rw [Fintype.sum_prod_type]
   simp [← Finset.mul_sum, sum_pDiff]
-  ring
 
 -- Relate window9 to differential bits (d_k, ..., d_{k+7})
 private def maskFromDiff8 (d8 : Fin 8 → Bool) : ℕ :=
@@ -616,7 +650,9 @@ private lemma maskFromDiff8_lt (d8 : Fin 8 → Bool) : maskFromDiff8 d8 < 256 :=
   unfold maskFromDiff8
   have hle : ∑ j : Fin 8, (if decide ((Finset.univ.filter (fun i : Fin 8 => i.1 ≤ j.1 ∧ d8 i = true)).card % 2 = 1)
       then 2 ^ (7 - j.1) else 0) ≤ ∑ j : Fin 8, 2 ^ (7 - j.1) := by
-    apply Finset.sum_le_sum; intro j _; split_ifs <;> omega
+    apply Finset.sum_le_sum; intro j _; split_ifs
+    · exact le_rfl
+    · exact Nat.zero_le _
   have h255 : ∑ j : Fin 8, 2 ^ (7 - j.1) = 255 := by decide
   omega
 
@@ -659,7 +695,7 @@ private lemma window9_reduced_eq {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k :
           · intro ⟨h1, h2⟩
             rcases Nat.lt_succ_iff_lt_or_eq.mp h1 with hlt | heq
             · exact ⟨hlt, h2⟩
-            · exfalso; exact hdj (by rwa [← Fin.ext heq])
+            · exfalso; have : i = fj := Fin.ext heq; subst this; exact hdj h2
           · intro ⟨hlt, h2⟩; exact ⟨Nat.lt_succ_of_lt hlt, h2⟩
       have hnotmem : fj ∉ Finset.univ.filter (fun i : Fin 8 => i.1 < j ∧ d8 i = true) := by simp [fj]
       have hd_eq : d ⟨k + j, by omega⟩ = d8 fj := rfl
@@ -672,7 +708,8 @@ private lemma window9_reduced_eq {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k :
         cases hdj : d8 fj
         · simp
         · simp only [↓reduceIte, Finset.card_insert_of_notMem hnotmem]
-          cases bk <;> simp <;> omega
+          set c := (Finset.univ.filter (fun i : Fin 8 => i.1 < j' + 1 ∧ d8 i = true)).card
+          cases bk <;> by_cases hc : c % 2 = 1 <;> simp [hc, Nat.add_mod] <;> omega
   have hmask_eq : ∀ b : Bool,
       window9 b0 d k = (if bk then 511 - maskFromDiff8 d8 else maskFromDiff8 d8) := by
     intro _
@@ -680,6 +717,7 @@ private lemma window9_reduced_eq {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k :
     rw [Fin.sum_univ_succ]
     have h0 := hbit_rel 0
     simp only [Fin.val_zero, add_zero, ↓reduceIte, Bool.xor_false] at h0
+    simp only [Fin.val_zero, add_zero, Nat.sub_zero]
     rw [h0]
     have htail : ∀ j : Fin 8,
         bitAt b0 d (k + (j.succ).1) = xor bk
@@ -687,15 +725,16 @@ private lemma window9_reduced_eq {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k :
       intro j
       have := hbit_rel j.succ
       simp only [Fin.val_succ, Nat.succ_ne_zero, ↓reduceIte] at this
+      simp only [Fin.val_succ]
       rw [this]
-      congr 2; congr 1; congr 1
-      ext i; simp only [Finset.mem_filter, Finset.mem_univ, true_and]; omega
+      congr 2
     cases hbk : bk
     · simp only [Bool.false_eq_true, ↓reduceIte, zero_add]
       apply Finset.sum_congr rfl
       intro j _
       rw [htail j, hbk, Bool.false_xor]
-      have : 8 - (j.succ).1 = 7 - j.1 := by omega
+      have hj := j.2
+      have : 8 - (j.succ).1 = 7 - j.1 := by simp only [Fin.val_succ]; omega
       rw [this]
     · simp only [↓reduceIte]
       have hsum255 : ∑ j : Fin 8, 2 ^ (7 - j.1) = 255 := by decide
@@ -706,7 +745,8 @@ private lemma window9_reduced_eq {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k :
         apply Finset.sum_congr rfl
         intro j _
         rw [htail j, hbk, Bool.true_xor]
-        have : 8 - (j.succ).1 = 7 - j.1 := by omega
+        have hj := j.2
+        have : 8 - (j.succ).1 = 7 - j.1 := by simp only [Fin.val_succ]; omega
         rw [this]
         cases decide ((Finset.univ.filter (fun i : Fin 8 => i.1 ≤ j.1 ∧ d8 i = true)).card % 2 = 1) <;> simp
       have hlt := maskFromDiff8_lt d8
@@ -714,11 +754,13 @@ private lemma window9_reduced_eq {n : ℕ} (b0 : Bool) (d : Fin n → Bool) {k :
       omega
   have hm_eq := hmask_eq false
   have hlt := maskFromDiff8_lt d8
+  dsimp only
   rw [hm_eq]
   cases bk
-  · simp [hlt]
+  · simp only [Bool.false_eq_true, ↓reduceIte, hlt]; rfl
   · have hge : ¬ (511 - maskFromDiff8 d8 < 256) := by omega
-    simp [hge]
+    simp only [↓reduceIte, hge]
+    change 511 - (511 - maskFromDiff8 d8) = maskFromDiff8 d8
     omega
 
 private lemma flips8_maskFromDiff8 (d8 : Fin 8 → Bool) :
@@ -763,7 +805,7 @@ private lemma flips8_maskFromDiff8 (d8 : Fin 8 → Bool) :
             ext i; simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton]
             constructor
             · intro ⟨_, heq⟩; exact Fin.ext heq
-            · rintro rfl; omega
+            · rintro rfl; exact ⟨by dsimp only; omega, rfl⟩
           rw [hsing, Finset.sum_singleton]
           dsimp [c]; simp only [hj, ↓reduceDIte]
           split_ifs <;> simp
@@ -779,19 +821,19 @@ private lemma flips8_maskFromDiff8 (d8 : Fin 8 → Bool) :
             ∑ i ∈ Finset.univ.filter (fun i : Fin 8 => j < i.1), 2 ^ (7 - i.1) := by
           apply Finset.sum_le_sum; intro i _
           have hc : c i.1 ≤ 1 := by dsimp [c]; split_ifs <;> omega
-          nlinarith
+          simpa using Nat.mul_le_mul_right (2 ^ (7 - i.1)) hc
         refine h1.trans (le_of_eq ?_)
         apply Finset.sum_nbij (fun i => 7 - i.1)
         · intro i hi
           simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi
-          simp only [Finset.mem_range]; omega
+          exact Finset.mem_range.mpr (by omega)
         · intro i1 hi1 i2 hi2 heq
-          simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi1 hi2
+          simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hi1 hi2
+          dsimp only at heq
           exact Fin.ext (by omega)
         · intro r hr
-          simp only [Finset.mem_range] at hr
-          refine ⟨⟨7 - r, by omega⟩, ?_, by omega⟩
-          simp only [Finset.mem_filter, Finset.mem_univ, true_and]; omega
+          simp only [Finset.mem_coe, Finset.mem_range] at hr
+          refine ⟨⟨7 - r, by omega⟩, Finset.mem_coe.mpr (Finset.mem_filter.mpr ⟨Finset.mem_univ _, by dsimp only; omega⟩), by dsimp only; omega⟩
         · intro _ _; rfl
       have hgeom : ∑ r ∈ Finset.range (7 - j), 2 ^ r = 2 ^ (7 - j) - 1 := by
         simpa using Nat.geomSum_eq (show 2 ≤ 2 by norm_num) (7 - j)
@@ -809,9 +851,9 @@ private lemma flips8_maskFromDiff8 (d8 : Fin 8 → Bool) :
       rw [heq, Nat.add_mul_div_right _ _ hpos, Nat.div_eq_of_lt hlow, zero_add]
     rw [hdiv]
     have hcj : c j = if decide ((Finset.univ.filter (fun i : Fin 8 => i.1 ≤ j ∧ d8 i = true)).card % 2 = 1) then 1 else 0 := by
-      dsimp [c]; simp only [hj, ↓reduceDIte]
+      dsimp [c]; simp only [hj, ↓reduceIte]
     rw [hcj]
-    split_ifs <;> omega
+    split_ifs <;> simp [Nat.add_mod]
   unfold flips8
   have hlen : ((List.range 8).filter (fun j =>
       (if j == 0 then 0 else (maskFromDiff8 d8 / 2 ^ (8 - j)) % 2) !=
@@ -840,7 +882,8 @@ private lemma flips8_maskFromDiff8 (d8 : Fin 8 → Bool) :
             · intro ⟨h1, _⟩; exact Fin.ext (by omega)
             · rintro rfl; exact ⟨le_rfl, h0⟩
           · ext i; simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.notMem_empty, iff_false]
-            intro ⟨h1, h2⟩; exact h0 (by rwa [← Fin.ext (show i.1 = 0 by omega)])
+            intro ⟨h1, h2⟩; have : i = 0 := Fin.ext (by omega); subst this; exact h0 h2
+        simp only [Fin.val_zero, beq_self_eq_true, ↓reduceIte]
         rw [hset]
         cases d8 0 <;> simp
       · have hnz : (j.1 == 0) = false := by simp; omega
@@ -864,7 +907,7 @@ private lemma flips8_maskFromDiff8 (d8 : Fin 8 → Bool) :
             · intro ⟨h1, h2⟩
               rcases lt_or_eq_of_le h1 with hlt | heq
               · exact ⟨by omega, h2⟩
-              · exfalso; exact hdj (by rwa [← Fin.ext heq])
+              · exfalso; have : i = j := Fin.ext heq; subst this; exact hdj h2
             · intro ⟨hle, h2⟩; exact ⟨by omega, h2⟩
         have hnm : j ∉ Finset.univ.filter (fun i : Fin 8 => i.1 ≤ j.1 - 1 ∧ d8 i = true) := by
           simp; omega
@@ -873,53 +916,54 @@ private lemma flips8_maskFromDiff8 (d8 : Fin 8 → Bool) :
         · simp
         · simp only [↓reduceIte, Finset.card_insert_of_notMem hnm]
           set c := (Finset.univ.filter (fun i : Fin 8 => i.1 ≤ j.1 - 1 ∧ d8 i = true)).card
-          by_cases hc : c % 2 = 1 <;> simp [hc] <;> omega
+          by_cases hc : c % 2 = 1 <;> simp [hc, Nat.add_mod] <;> omega
     have h1 : ((List.range 8).filter (fun j =>
         (if j == 0 then 0 else (maskFromDiff8 d8 / 2 ^ (8 - j)) % 2) !=
         (if j + 1 == 0 then 0 else (maskFromDiff8 d8 / 2 ^ (8 - (j + 1))) % 2))).length =
         (Finset.univ.filter (fun j : Fin 8 =>
           (if j.1 == 0 then 0 else (maskFromDiff8 d8 / 2 ^ (8 - j.1)) % 2) !=
           (if j.1 + 1 == 0 then 0 else (maskFromDiff8 d8 / 2 ^ (8 - (j.1 + 1))) % 2))).card := by
-      rw [← List.card_toFinset]
-      · apply Finset.card_bij (fun a ha => ⟨a, by
-          have := List.mem_filter.mp (List.mem_toFinset.mp ha)
-          exact List.mem_range.mp this.1⟩)
-        · intro a ha
-          have := List.mem_filter.mp (List.mem_toFinset.mp ha)
-          simp [this.2]
-        · intro a1 _ a2 _ heq; exact congrArg Fin.val heq
-        · intro b hb
-          refine ⟨b.1, ?_, Fin.ext rfl⟩
-          rw [List.mem_toFinset, List.mem_filter, List.mem_range]
-          exact ⟨b.2, (Finset.mem_filter.mp hb).2⟩
-      · exact (List.nodup_range).filter _
+      rw [← List.toFinset_card_of_nodup ((List.nodup_range).filter _)]
+      apply Finset.card_bij (fun a ha => (⟨a, by
+        have := List.mem_filter.mp (List.mem_toFinset.mp ha)
+        exact List.mem_range.mp this.1⟩ : Fin 8))
+      · intro a ha
+        have := List.mem_filter.mp (List.mem_toFinset.mp ha)
+        exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, this.2⟩
+      · intro a1 _ a2 _ heq; exact congrArg Fin.val heq
+      · intro b hb
+        refine ⟨b.1, ?_, Fin.ext rfl⟩
+        rw [List.mem_toFinset, List.mem_filter, List.mem_range]
+        exact ⟨b.2, (Finset.mem_filter.mp hb).2⟩
     rw [h1]
-    congr 1; ext j; simp [hpred j]
+    congr 1; ext j; simp only [Finset.mem_filter, Finset.mem_univ, true_and, hpred j]
   exact hlen
 
 private lemma maskFromDiff8_eq_toNatBits (d8 : Fin 8 → Bool) :
     maskFromDiff8 d8 = toNatBits false d8 := by
   unfold maskFromDiff8 toNatBits
-  rw [Fin.sum_univ_succ]
+  conv_rhs => rw [Fin.sum_univ_succ]
   simp only [Fin.val_zero, bitAt_zero, Bool.false_eq_true, ↓reduceIte, zero_add]
   apply Finset.sum_congr rfl
   intro i _
-  have hsub : 8 - (i.succ).1 = 7 - i.1 := by omega
+  have hi := i.2
+  have hsub : 8 - (i.succ).1 = 7 - i.1 := by simp only [Fin.val_succ]; omega
   rw [hsub]
   unfold bitAt
   simp only [Bool.false_xor]
-  congr 2; congr 1; congr 1
-  ext r; simp only [Finset.mem_filter, Finset.mem_univ, true_and, Fin.val_succ]; omega
+  congr 2
 
 private lemma maskFromDiff8_bijective :
     Function.Bijective (fun d8 : Fin 8 → Bool => (⟨maskFromDiff8 d8, maskFromDiff8_lt d8⟩ : Fin 256)) := by
-  rw [Fintype.bijective_iff_injective_and_card]
-  refine ⟨?_, by simp⟩
-  intro d1 d2 heq
-  have hval : maskFromDiff8 d1 = maskFromDiff8 d2 := congrArg Fin.val heq
-  rw [maskFromDiff8_eq_toNatBits, maskFromDiff8_eq_toNatBits] at hval
-  have hpair := toNatBits_injective hval
-  exact congrArg Prod.snd hpair
+  have hinj : Function.Injective (fun d8 : Fin 8 → Bool => (⟨maskFromDiff8 d8, maskFromDiff8_lt d8⟩ : Fin 256)) := by
+    intro d1 d2 heq
+    have hval : maskFromDiff8 d1 = maskFromDiff8 d2 := congrArg Fin.val heq
+    rw [maskFromDiff8_eq_toNatBits, maskFromDiff8_eq_toNatBits] at hval
+    have hpair := @toNatBits_injective 8 (false, d1) (false, d2) hval
+    exact congrArg Prod.snd hpair
+  have hcard : Fintype.card (Fin 8 → Bool) = Fintype.card (Fin 256) := by
+    rw [Fintype.card_fun, Fintype.card_bool, Fintype.card_fin, Fintype.card_fin]; norm_num
+  exact (Fintype.bijective_iff_injective_and_card _).mpr ⟨hinj, hcard⟩
 
 private lemma pDiff_eq_w8Int (d8 : Fin 8 → Bool) :
     pDiff d8 = (w8Int (maskFromDiff8 d8) : ℝ) / (200 : ℝ) ^ 8 := by
@@ -934,7 +978,7 @@ private lemma pDiff_eq_w8Int (d8 : Fin 8 → Bool) :
     simp_rw [h1]
     rw [Finset.prod_ite, Finset.prod_const, Finset.prod_const]
     have hcomp : (Finset.univ.filter (fun j : Fin 8 => ¬ d8 j = true)).card = 8 - f := by
-      have htot := Finset.filter_card_add_filter_neg_card_eq_card (s := (Finset.univ : Finset (Fin 8)))
+      have htot := Finset.card_filter_add_card_filter_not (s := (Finset.univ : Finset (Fin 8)))
         (p := fun j => d8 j = true)
       simp only [Finset.card_univ, Fintype.card_fin] at htot
       omega
@@ -960,23 +1004,23 @@ private lemma sum_pDiff_cosLB8 :
       push_cast
       ring
     rw [hstep1, ← Finset.sum_div]
-    congr 1
+    apply congrArg (· / ((200 : ℝ) ^ 8 * 1000000))
     exact Fintype.sum_bijective (fun d8 : Fin 8 → Bool => (⟨maskFromDiff8 d8, maskFromDiff8_lt d8⟩ : Fin 256))
       maskFromDiff8_bijective _ _ (fun _ => rfl)
   rw [hre]
   have hsum_eq : ∑ m : Fin 256, ((w8Int m.1 * cosLBInt m.1 : ℤ) : ℝ) =
       (sumPow2 8 0 (fun m => w8Int m * cosLBInt m) : ℝ) := by
     rw [sumPow2_eq_sum_Ico]
-    push_cast
-    rw [Fin.sum_univ_eq_sum_range (fun m => ((w8Int m * cosLBInt m : ℤ) : ℝ))]
     have hico : Finset.Ico 0 (0 + 2 ^ 8) = Finset.range 256 := by
       ext m; simp only [Finset.mem_Ico, Finset.mem_range]; omega
-    rw [hico]
-  rw [hsum_eq, le_div_iff₀ (by positivity : (0 : ℝ) < (200 : ℝ) ^ 8 * 1000000)]
-  have hint : ((7442 : ℤ) * (200 ^ 8 : ℕ) * 100 : ℝ) ≤ (sumPow2 8 0 (fun m => w8Int m * cosLBInt m) : ℝ) := by
+    rw [hico, Int.cast_sum, Fin.sum_univ_eq_sum_range (fun m => ((w8Int m * cosLBInt m : ℤ) : ℝ))]
+  rw [hsum_eq, le_div_iff₀ (mul_pos (pow_pos (by norm_num) 8) (by norm_num) : (0 : ℝ) < (200 : ℝ) ^ 8 * 1000000)]
+  have hint : (((7442 : ℤ) * (200 ^ 8 : ℕ) * 100 : ℤ) : ℝ) ≤ (sumPow2 8 0 (fun m => w8Int m * cosLBInt m) : ℝ) := by
     exact_mod_cast check_total_int
-  push_cast at hint
-  linarith
+  have hcast : (((7442 : ℤ) * (200 ^ 8 : ℕ) * 100 : ℤ) : ℝ) = (7442 / 10000 : ℝ) * ((200 : ℝ) ^ 8 * 1000000) := by
+    push_cast; ring
+  rw [← hcast]
+  exact hint
 
 private lemma sum_pDiff_marginal {n : ℕ} {k : ℕ} (hk : k + 8 ≤ n)
     (f : (Fin 8 → Bool) → ℝ) :
@@ -984,7 +1028,7 @@ private lemma sum_pDiff_marginal {n : ℕ} {k : ℕ} (hk : k + 8 ≤ n)
       ∑ d8 : Fin 8 → Bool, pDiff d8 * f d8 := by
   let P : Fin n → Prop := fun i => k ≤ i.1 ∧ i.1 < k + 8
   let e := Equiv.piEquivPiSubtypeProd P (fun _ : Fin n => Bool)
-  rw [← Fintype.sum_equiv e _ (fun x => pDiff (e.symm x) * f (fun j : Fin 8 => (e.symm x) ⟨k + j.1, by omega⟩))
+  rw [Fintype.sum_equiv e _ (fun x => pDiff (e.symm x) * f (fun j : Fin 8 => (e.symm x) ⟨k + j.1, by omega⟩))
     (fun d => by simp)]
   rw [Fintype.sum_prod_type]
   have hsplit : ∀ (d1 : {i : Fin n // P i} → Bool) (d2 : {i : Fin n // ¬ P i} → Bool),
@@ -994,34 +1038,34 @@ private lemma sum_pDiff_marginal {n : ℕ} {k : ℕ} (hk : k + 8 ≤ n)
     unfold pDiff
     rw [← Fintype.prod_subtype_mul_prod_subtype P (fun i => wBool (e.symm (d1, d2) i))]
     congr 1
-    · apply Finset.prod_congr rfl; intro i _; simp [e]
-    · apply Finset.prod_congr rfl; intro i _; simp [e]
+    · apply Finset.prod_congr rfl; intro i _; simp [e, i.2]
+    · apply Finset.prod_congr rfl; intro i _; simp [e, i.2]
+  let idx (j : Fin 8) : {i : Fin n // P i} :=
+    ⟨⟨k + j.1, by have := j.2; omega⟩, ⟨by dsimp only; omega, by have := j.2; dsimp only; omega⟩⟩
   have hf_eq : ∀ (d1 : {i : Fin n // P i} → Bool) (d2 : {i : Fin n // ¬ P i} → Bool),
-      (fun j : Fin 8 => (e.symm (d1, d2)) ⟨k + j.1, by omega⟩) =
-        fun j : Fin 8 => d1 ⟨⟨k + j.1, by omega⟩, ⟨by omega, by omega⟩⟩ := by
-    intro d1 d2; ext j; simp [e]
+      (fun j : Fin 8 => (e.symm (d1, d2)) ⟨k + j.1, by omega⟩) = fun j : Fin 8 => d1 (idx j) := by
+    intro d1 d2; ext j
+    have hP : P ⟨k + j.1, by have := j.2; omega⟩ := (idx j).2
+    simp [e, hP, idx]
   simp_rw [hsplit, hf_eq]
   have hinner : ∀ d1 : {i : Fin n // P i} → Bool,
       ∑ d2 : {i : Fin n // ¬ P i} → Bool,
         (∏ i : {i : Fin n // P i}, wBool (d1 i)) * (∏ i : {i : Fin n // ¬ P i}, wBool (d2 i)) *
-          f (fun j : Fin 8 => d1 ⟨⟨k + j.1, by omega⟩, ⟨by omega, by omega⟩⟩) =
-      (∏ i : {i : Fin n // P i}, wBool (d1 i)) *
-        f (fun j : Fin 8 => d1 ⟨⟨k + j.1, by omega⟩, ⟨by omega, by omega⟩⟩) := by
+          f (fun j : Fin 8 => d1 (idx j)) =
+      (∏ i : {i : Fin n // P i}, wBool (d1 i)) * f (fun j : Fin 8 => d1 (idx j)) := by
     intro d1
     have h1 : ∀ d2 : {i : Fin n // ¬ P i} → Bool,
         (∏ i : {i : Fin n // P i}, wBool (d1 i)) * (∏ i : {i : Fin n // ¬ P i}, wBool (d2 i)) *
-          f (fun j : Fin 8 => d1 ⟨⟨k + j.1, by omega⟩, ⟨by omega, by omega⟩⟩) =
-        ((∏ i : {i : Fin n // P i}, wBool (d1 i)) *
-          f (fun j : Fin 8 => d1 ⟨⟨k + j.1, by omega⟩, ⟨by omega, by omega⟩⟩)) *
+          f (fun j : Fin 8 => d1 (idx j)) =
+        ((∏ i : {i : Fin n // P i}, wBool (d1 i)) * f (fun j : Fin 8 => d1 (idx j))) *
           (∏ i : {i : Fin n // ¬ P i}, wBool (d2 i)) := by intro d2; ring
-    simp_rw [h1, ← Finset.mul_sum, ← Fintype.prod_sum]
-    simp [sum_wBool]
+    simp_rw [h1, ← Finset.mul_sum, ← Fintype.prod_sum, sum_wBool, Finset.prod_const_one, mul_one]
   simp_rw [hinner]
   let idxEquiv : Fin 8 ≃ {i : Fin n // P i} := {
-    toFun := fun j => ⟨⟨k + j.1, by omega⟩, ⟨by omega, by omega⟩⟩
+    toFun := idx
     invFun := fun i => ⟨i.1.1 - k, by have := i.2; dsimp [P] at this; omega⟩
-    left_inv := fun j => Fin.ext (by simp)
-    right_inv := fun i => Subtype.ext (Fin.ext (by have := i.2; dsimp [P] at this; simp; omega))
+    left_inv := fun j => Fin.ext (by simp [idx])
+    right_inv := fun i => Subtype.ext (Fin.ext (by have := i.2; dsimp [P] at this; simp [idx]; omega))
   }
   let piEquiv : ({i : Fin n // P i} → Bool) ≃ (Fin 8 → Bool) :=
     Equiv.piCongrLeft' (fun _ => Bool) idxEquiv.symm
@@ -1032,7 +1076,6 @@ private lemma sum_pDiff_marginal {n : ℕ} {k : ℕ} (hk : k + 8 ≤ n)
     symm
     exact Fintype.prod_equiv idxEquiv (fun j => wBool (piEquiv d1 j)) (fun i => wBool (d1 i))
       (fun j => by simp [piEquiv, Equiv.piCongrLeft'])
-  · congr 1; ext j; simp [piEquiv, Equiv.piCongrLeft', idxEquiv]
 
 private lemma expected_re_ge {n : ℕ} (hn : 9 ≤ n) :
     ((n + 1 - 9 : ℕ) : ℝ) * (7442 / 10000 : ℝ) - 9 ≤
@@ -1116,23 +1159,24 @@ private def flipCount {n : ℕ} (d : Fin n → Bool) : ℕ :=
 private lemma sum_pDiff_one_coord {n : ℕ} (i : Fin n) (g : Bool → ℝ) :
     ∑ d : Fin n → Bool, pDiff d * g (d i) = ∑ b : Bool, wBool b * g b := by
   let e := Equiv.piEquivPiSubtypeProd (fun j : Fin n => j = i) (fun _ : Fin n => Bool)
-  rw [← Fintype.sum_equiv e _ (fun x => pDiff (e.symm x) * g ((e.symm x) i)) (fun d => by simp)]
+  rw [Fintype.sum_equiv e _ (fun x => pDiff (e.symm x) * g ((e.symm x) i)) (fun d => by simp)]
   rw [Fintype.sum_prod_type]
-  have hsplit : ∀ (d1 : {j : Fin n // j = i} → Bool) (d2 : {j : Fin n // j ≠ i} → Bool),
+  have hsplit : ∀ (d1 : {j : Fin n // j = i} → Bool) (d2 : {j : Fin n // ¬ j = i} → Bool),
       pDiff (e.symm (d1, d2)) * g ((e.symm (d1, d2)) i) =
-      (wBool (d1 ⟨i, rfl⟩) * g (d1 ⟨i, rfl⟩)) * (∏ j : {j : Fin n // j ≠ i}, wBool (d2 j)) := by
+      (wBool (d1 ⟨i, rfl⟩) * g (d1 ⟨i, rfl⟩)) * (∏ j : {j : Fin n // ¬ j = i}, wBool (d2 j)) := by
     intro d1 d2
     unfold pDiff
     rw [← Fintype.prod_subtype_mul_prod_subtype (fun j : Fin n => j = i) (fun j => wBool (e.symm (d1, d2) j))]
     have h1 : ∏ j : {j : Fin n // j = i}, wBool (e.symm (d1, d2) j) = wBool (d1 ⟨i, rfl⟩) := by
       have hunique : (Finset.univ : Finset {j : Fin n // j = i}) = {⟨i, rfl⟩} := by
-        ext ⟨j, hj⟩; simp [hj]
+        ext ⟨j, hj⟩; simp only [Finset.mem_univ, Finset.mem_singleton, Subtype.mk.injEq, true_iff]; exact hj
       rw [hunique, Finset.prod_singleton]; simp [e]
-    have h2 : ∏ j : {j : Fin n // j ≠ i}, wBool (e.symm (d1, d2) j) =
-        ∏ j : {j : Fin n // j ≠ i}, wBool (d2 j) := by
-      apply Finset.prod_congr rfl; intro j _; simp [e]
+    have h2 : ∏ j : {j : Fin n // ¬ j = i}, wBool (e.symm (d1, d2) j) =
+        ∏ j : {j : Fin n // ¬ j = i}, wBool (d2 j) := by
+      apply Finset.prod_congr rfl; intro j _; simp [e, j.2]
     have h3 : (e.symm (d1, d2)) i = d1 ⟨i, rfl⟩ := by simp [e]
-    rw [h1, h2, h3]; ring
+    rw [mul_right_comm, h3]
+    convert congrArg₂ (· * ·) (congrArg (· * g (d1 ⟨i, rfl⟩)) h1) h2
   simp_rw [hsplit, ← Finset.mul_sum, ← Fintype.prod_sum, sum_wBool, Finset.prod_const_one, mul_one]
   let e1 : ({j : Fin n // j = i} → Bool) ≃ Bool := {
     toFun := fun d1 => d1 ⟨i, rfl⟩
@@ -1147,7 +1191,7 @@ private lemma sum_pDiff_two_coords {n : ℕ} {i j : Fin n} (hij : i ≠ j) (g1 g
       (∑ b : Bool, wBool b * g1 b) * (∑ b : Bool, wBool b * g2 b) := by
   let P : Fin n → Prop := fun r => r = i ∨ r = j
   let e := Equiv.piEquivPiSubtypeProd P (fun _ : Fin n => Bool)
-  rw [← Fintype.sum_equiv e _ (fun x => pDiff (e.symm x) * (g1 ((e.symm x) i) * g2 ((e.symm x) j)))
+  rw [Fintype.sum_equiv e _ (fun x => pDiff (e.symm x) * (g1 ((e.symm x) i) * g2 ((e.symm x) j)))
     (fun d => by simp)]
   rw [Fintype.sum_prod_type]
   have hsplit : ∀ (d1 : {r : Fin n // P r} → Bool) (d2 : {r : Fin n // ¬ P r} → Bool),
@@ -1163,14 +1207,16 @@ private lemma sum_pDiff_two_coords {n : ℕ} {i j : Fin n} (hij : i ≠ j) (g1 g
       exact hr
     have hne : (⟨i, Or.inl rfl⟩ : {r : Fin n // P r}) ≠ ⟨j, Or.inr rfl⟩ := by
       intro h; exact hij (congrArg Subtype.val h)
+    have hPi : P i := Or.inl rfl
+    have hPj : P j := Or.inr rfl
     have h1 : ∏ r : {r : Fin n // P r}, wBool (e.symm (d1, d2) r) =
         wBool (d1 ⟨i, Or.inl rfl⟩) * wBool (d1 ⟨j, Or.inr rfl⟩) := by
-      rw [hpair, Finset.prod_pair hne]; simp [e]
+      rw [hpair, Finset.prod_pair hne]; simp [e, hPi, hPj]
     have h2 : ∏ r : {r : Fin n // ¬ P r}, wBool (e.symm (d1, d2) r) =
         ∏ r : {r : Fin n // ¬ P r}, wBool (d2 r) := by
-      apply Finset.prod_congr rfl; intro r _; simp [e]
-    have h3 : (e.symm (d1, d2)) i = d1 ⟨i, Or.inl rfl⟩ := by simp [e]
-    have h4 : (e.symm (d1, d2)) j = d1 ⟨j, Or.inr rfl⟩ := by simp [e]
+      apply Finset.prod_congr rfl; intro r _; simp [e, r.2]
+    have h3 : (e.symm (d1, d2)) i = d1 ⟨i, Or.inl rfl⟩ := by simp [e, hPi]
+    have h4 : (e.symm (d1, d2)) j = d1 ⟨j, Or.inr rfl⟩ := by simp [e, hPj]
     rw [h1, h2, h3, h4]; ring
   simp_rw [hsplit, ← Finset.mul_sum, ← Fintype.prod_sum, sum_wBool, Finset.prod_const_one, mul_one]
   let e2 : ({r : Fin n // P r} → Bool) ≃ Bool × Bool := {
@@ -1183,8 +1229,12 @@ private lemma sum_pDiff_two_coords {n : ℕ} {i j : Fin n} (hij : i ≠ j) (g1 g
       · simp [hij.symm]
     right_inv := fun ⟨b1, b2⟩ => by simp [hij.symm]
   }
-  rw [Fintype.sum_equiv e2 _ (fun p => (wBool p.1 * g1 p.1) * (wBool p.2 * g2 p.2)) (fun _ => rfl)]
-  rw [Fintype.sum_prod_type]
+  have heq2 : ∑ d1 : {r : Fin n // P r} → Bool,
+      wBool (d1 ⟨i, Or.inl rfl⟩) * g1 (d1 ⟨i, Or.inl rfl⟩) *
+        (wBool (d1 ⟨j, Or.inr rfl⟩) * g2 (d1 ⟨j, Or.inr rfl⟩)) =
+      ∑ p : Bool × Bool, (wBool p.1 * g1 p.1) * (wBool p.2 * g2 p.2) :=
+    Fintype.sum_equiv e2 _ (fun p => (wBool p.1 * g1 p.1) * (wBool p.2 * g2 p.2)) (fun _ => rfl)
+  rw [heq2, Fintype.sum_prod_type]
   simp [← Finset.mul_sum, ← Finset.sum_mul]
 
 private lemma variance_flipCount (n : ℕ) :
@@ -1239,11 +1289,13 @@ private lemma pDiff_pow_2500_le {n : ℕ} {d : Fin n → Bool}
     simp_rw [h1]
     rw [Finset.prod_ite, Finset.prod_const, Finset.prod_const]
     have hcomp : (Finset.univ.filter (fun j : Fin n => ¬ d j = true)).card = n - r := by
-      have htot := Finset.filter_card_add_filter_neg_card_eq_card (s := (Finset.univ : Finset (Fin n)))
+      have htot := Finset.card_filter_add_card_filter_not (s := (Finset.univ : Finset (Fin n)))
         (p := fun j => d j = true)
       simp only [Finset.card_univ, Fintype.card_fin] at htot
+      have hr_eq : (Finset.univ.filter (fun j : Fin n => d j = true)).card = r := rfl
       omega
     rw [hcomp]
+    rfl
   rw [hp_eq, mul_pow, ← pow_mul, ← pow_mul]
   have h212 : 212 * (n + 1) ≤ r * 2500 := by omega
   have hdiff_eq : (n - r) * 2500 + 2500 = 2500 * (n + 1) - r * 2500 := by omega
@@ -1251,8 +1303,7 @@ private lemma pDiff_pow_2500_le {n : ℕ} {d : Fin n → Bool}
       ((17 / 200 : ℝ) ^ (r * 2500) * (183 / 200 : ℝ) ^ (2500 * (n + 1) - r * 2500)) *
         (200 / 183 : ℝ) ^ 2500 := by
     have h183 : (183 / 200 : ℝ) ^ 2500 * (200 / 183 : ℝ) ^ 2500 = 1 := by
-      rw [← mul_pow]; norm_num
-    rw [mul_assoc, ← pow_add, hdiff_eq]
+      rw [← mul_pow, show (183 / 200 : ℝ) * (200 / 183) = 1 by norm_num, one_pow]
     calc (17 / 200 : ℝ) ^ (r * 2500) * (183 / 200 : ℝ) ^ ((n - r) * 2500)
         = (17 / 200 : ℝ) ^ (r * 2500) * ((183 / 200 : ℝ) ^ ((n - r) * 2500) *
             ((183 / 200 : ℝ) ^ 2500 * (200 / 183 : ℝ) ^ 2500)) := by rw [h183, mul_one]
@@ -1260,38 +1311,87 @@ private lemma pDiff_pow_2500_le {n : ℕ} {d : Fin n → Bool}
             (200 / 183 : ℝ) ^ 2500) := by rw [pow_add, mul_assoc]
       _ = (17 / 200 : ℝ) ^ (r * 2500) * ((183 / 200 : ℝ) ^ (2500 * (n + 1) - r * 2500) *
             (200 / 183 : ℝ) ^ 2500) := by rw [hdiff_eq]
-      _ = _ := by ring
+      _ = _ := by rw [mul_assoc]
   rw [hmul]
-  apply mul_le_mul_of_nonneg_right _ (by positivity)
+  apply mul_le_mul_of_nonneg_right _ (pow_nonneg (by norm_num : (0 : ℝ) ≤ 200 / 183) 2500)
+  set rem := 2500 * (n + 1) - r * 2500
   set delta := r * 2500 - 212 * (n + 1)
-  have hr_split : r * 2500 = 212 * (n + 1) + delta := by omega
-  have hrem_split : 2288 * (n + 1) = (2500 * (n + 1) - r * 2500) + delta := by omega
-  have hmono : (17 / 200 : ℝ) ^ (r * 2500) * (183 / 200 : ℝ) ^ (2500 * (n + 1) - r * 2500) ≤
+  have hr_split : r * 2500 = 212 * (n + 1) + delta := (Nat.add_sub_of_le h212).symm
+  have hrem_split : 2288 * (n + 1) = rem + delta := by
+    have hle : r * 2500 ≤ 2500 * (n + 1) := by omega
+    dsimp [rem, delta]; omega
+  have hmono : (17 / 200 : ℝ) ^ (r * 2500) * (183 / 200 : ℝ) ^ rem ≤
       (17 / 200 : ℝ) ^ (212 * (n + 1)) * (183 / 200 : ℝ) ^ (2288 * (n + 1)) := by
     rw [hr_split, hrem_split, pow_add, pow_add]
     have hle_delta : (17 / 200 : ℝ) ^ delta ≤ (183 / 200 : ℝ) ^ delta :=
       pow_le_pow_left₀ (by norm_num) (by norm_num) delta
     have h1 : (17 / 200 : ℝ) ^ (212 * (n + 1)) * (17 / 200 : ℝ) ^ delta *
-        (183 / 200 : ℝ) ^ (2500 * (n + 1) - r * 2500) =
-        ((17 / 200 : ℝ) ^ (212 * (n + 1)) * (183 / 200 : ℝ) ^ (2500 * (n + 1) - r * 2500)) *
+        (183 / 200 : ℝ) ^ rem =
+        ((17 / 200 : ℝ) ^ (212 * (n + 1)) * (183 / 200 : ℝ) ^ rem) *
           (17 / 200 : ℝ) ^ delta := by ring
     have h2 : (17 / 200 : ℝ) ^ (212 * (n + 1)) *
-        ((183 / 200 : ℝ) ^ (2500 * (n + 1) - r * 2500) * (183 / 200 : ℝ) ^ delta) =
-        ((17 / 200 : ℝ) ^ (212 * (n + 1)) * (183 / 200 : ℝ) ^ (2500 * (n + 1) - r * 2500)) *
+        ((183 / 200 : ℝ) ^ rem * (183 / 200 : ℝ) ^ delta) =
+        ((17 / 200 : ℝ) ^ (212 * (n + 1)) * (183 / 200 : ℝ) ^ rem) *
           (183 / 200 : ℝ) ^ delta := by ring
     rw [h1, h2]
-    exact mul_le_mul_of_nonneg_left hle_delta (by positivity)
+    exact mul_le_mul_of_nonneg_left hle_delta
+      (mul_nonneg (pow_nonneg (by norm_num) _) (pow_nonneg (by norm_num) _))
   refine hmono.trans ?_
   rw [pow_mul, pow_mul, ← mul_pow]
-  exact pow_le_pow_left₀ (by positivity) check_ent_real (n + 1)
+  exact pow_le_pow_left₀ (mul_nonneg (pow_nonneg (by norm_num) _) (pow_nonneg (by norm_num) _)) check_ent_real (n + 1)
+
+private lemma card_pow_K_of_bound {n K M : ℕ} (hK : K = 2500) (hn : 9999999999999 ≤ n) {c : ℝ}
+    (hpowK : (1 / 100000 : ℝ) ^ K ≤ c ^ K * (((2 : ℝ) ^ (M + 1))⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ K)) :
+    (2 : ℝ) ^ (M * (n + 1)) ≤ c ^ K := by
+  have h2_M : (0 : ℝ) < (2 : ℝ) ^ (M + 1) := pow_pos two_pos (M + 1)
+  have h2_M_pos : (0 : ℝ) < ((2 : ℝ) ^ (M + 1)) ^ (n + 1) := pow_pos h2_M (n + 1)
+  have h200_pos : (0 : ℝ) < (200 / 183 : ℝ) ^ K := pow_pos (by norm_num : (0 : ℝ) < 200 / 183) K
+  have h100k_nn : (0 : ℝ) ≤ (1 / 100000 : ℝ) ^ K := pow_nonneg (by norm_num : (0 : ℝ) ≤ 1 / 100000) K
+  have hmul : (1 / 100000 : ℝ) ^ K * ((2 : ℝ) ^ (M + 1)) ^ (n + 1) ≤
+      c ^ K * (200 / 183 : ℝ) ^ K := by
+    have h := mul_le_mul_of_nonneg_right hpowK h2_M_pos.le
+    have hinv : (((2 : ℝ) ^ (M + 1))⁻¹ ^ (n + 1)) * ((2 : ℝ) ^ (M + 1)) ^ (n + 1) = 1 := by
+      rw [← mul_pow, inv_mul_cancel₀ h2_M.ne', one_pow]
+    calc (1 / 100000 : ℝ) ^ K * ((2 : ℝ) ^ (M + 1)) ^ (n + 1)
+        ≤ c ^ K * (((2 : ℝ) ^ (M + 1))⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ K) *
+            ((2 : ℝ) ^ (M + 1)) ^ (n + 1) := h
+      _ = c ^ K * (200 / 183 : ℝ) ^ K *
+            ((((2 : ℝ) ^ (M + 1))⁻¹ ^ (n + 1)) * ((2 : ℝ) ^ (M + 1)) ^ (n + 1)) := by
+              rw [mul_comm (((2 : ℝ) ^ (M + 1))⁻¹ ^ (n + 1)), ← mul_assoc, mul_assoc (c ^ K * (200 / 183 : ℝ) ^ K)]
+      _ = c ^ K * (200 / 183 : ℝ) ^ K := by rw [hinv, mul_one]
+  have hconst : (200 / 183 : ℝ) ^ K * (100000 : ℝ) ^ K ≤ (2 : ℝ) ^ (n + 1) := by
+    have h1 : (200 / 183 : ℝ) * 100000 ≤ (2 : ℝ) ^ 18 := by norm_num
+    have h2 : ((200 / 183 : ℝ) * 100000) ^ K ≤ ((2 : ℝ) ^ 18) ^ K :=
+      pow_le_pow_left₀ (by norm_num) h1 K
+    rw [mul_pow, ← pow_mul] at h2
+    refine h2.trans ?_
+    exact pow_le_pow_right₀ (by norm_num) (by omega)
+  have hsplit2 : ((2 : ℝ) ^ (M + 1)) ^ (n + 1) = (2 : ℝ) ^ (M * (n + 1)) * (2 : ℝ) ^ (n + 1) := by
+    rw [← pow_mul, ← pow_add]; congr 1; ring
+  rw [hsplit2] at hmul
+  have hstep : (2 : ℝ) ^ (M * (n + 1)) * (200 / 183 : ℝ) ^ K ≤
+      (1 / 100000 : ℝ) ^ K * ((2 : ℝ) ^ (M * (n + 1)) * (2 : ℝ) ^ (n + 1)) := by
+    have h1 : (200 / 183 : ℝ) ^ K ≤ (1 / 100000 : ℝ) ^ K * (2 : ℝ) ^ (n + 1) := by
+      have hinv : (1 / 100000 : ℝ) ^ K * (100000 : ℝ) ^ K = 1 := by
+        rw [← mul_pow, show (1 / 100000 : ℝ) * 100000 = 1 by norm_num, one_pow]
+      calc (200 / 183 : ℝ) ^ K
+          = (1 / 100000 : ℝ) ^ K * ((200 / 183 : ℝ) ^ K * (100000 : ℝ) ^ K) := by
+              rw [← mul_assoc, mul_comm ((1 / 100000 : ℝ) ^ K), mul_assoc, hinv, mul_one]
+        _ ≤ (1 / 100000 : ℝ) ^ K * (2 : ℝ) ^ (n + 1) :=
+              mul_le_mul_of_nonneg_left hconst h100k_nn
+    calc (2 : ℝ) ^ (M * (n + 1)) * (200 / 183 : ℝ) ^ K
+        ≤ (2 : ℝ) ^ (M * (n + 1)) * ((1 / 100000 : ℝ) ^ K * (2 : ℝ) ^ (n + 1)) :=
+            mul_le_mul_of_nonneg_left h1 (pow_nonneg (by norm_num) _)
+      _ = _ := by rw [mul_left_comm]
+  exact le_of_mul_le_mul_right (hstep.trans hmul) h200_pos
 
 theorem main_theorem :
     (have x1 : ℕ → ℝ → ℂ := fun (x1 : ℕ) (x2 : ℝ) => ∑ x3 ∈ Finset.range x1, Complex.exp (↑((2 : ℝ) * Real.pi * ↑⌊(65536 : ℝ) * (2 : ℝ) ^ x3 * x2⌋ / (65536 : ℝ)) * Complex.I); ∃ (x2 : ℕ), ∀ x3 ≥ x2, ∃ x5 ⊆ Finset.range ((2 : ℕ) ^ x3), (2 : ℝ) ^ (-((291 / 500 : ℝ) * ↑x3)) ≤ ↑x5.card / (2 : ℝ) ^ x3 ∧ ∀ x6 ∈ x5, (93 / 125 : ℝ) * ↑x3 + (2 : ℝ) * Real.pi / (65536 : ℝ) * ↑x3 + (2 : ℝ) * Real.pi < ‖x1 x3 (↑x6 / (2 : ℝ) ^ x3)‖) := by
   dsimp only
-  refine ⟨200000000, ?_⟩
+  refine ⟨10000000000000, ?_⟩
   intro L hL
   obtain ⟨n, rfl⟩ : ∃ n, L = n + 1 := ⟨L - 1, by omega⟩
-  have hn : 199999999 ≤ n := by omega
+  have hn : 9999999999999 ≤ n := by omega
   let S (x : Bool × (Fin n → Bool)) : ℂ :=
     ∑ k ∈ Finset.range (n + 1),
       Complex.exp (↑((2 : ℝ) * Real.pi * ↑⌊(65536 : ℝ) * (2 : ℝ) ^ k * ((toNatBits x.1 x.2 : ℝ) / (2 : ℝ) ^ (n + 1))⌋ / (65536 : ℝ)) * Complex.I)
@@ -1306,7 +1406,7 @@ theorem main_theorem :
       intro x hx
       have hlt : 625 * flipCount x.2 < 53 * (n + 1) := (Finset.mem_filter.mp hx).2
       have hlt_r : 625 * (flipCount x.2 : ℝ) ≤ 53 * ((n + 1 : ℕ) : ℝ) := by exact_mod_cast hlt.le
-      have hn_r : (199999999 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+      have hn_r : (9999999999999 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
       dsimp [qR]
       push_cast at hlt_r ⊢
       linarith
@@ -1320,7 +1420,10 @@ theorem main_theorem :
               apply mul_le_mul_of_nonneg_left _ (pState_nonneg x)
               have h1 := hdev_lb x hx
               have h0 : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ) / 10000 := by positivity
-              nlinarith
+              have hsq1 : (((n + 1 : ℕ) : ℝ) / 10000) ^ 2 ≤ ((n : ℝ) * qR - (flipCount x.2 : ℝ)) ^ 2 :=
+                pow_le_pow_left₀ h0 h1 2
+              have hsym : ((n : ℝ) * qR - (flipCount x.2 : ℝ)) ^ 2 = ((flipCount x.2 : ℝ) - (n : ℝ) * qR) ^ 2 := by ring
+              rwa [hsym] at hsq1
         _ ≤ ∑ x : Bool × (Fin n → Bool), pState x * ((flipCount x.2 : ℝ) - (n : ℝ) * qR) ^ 2 := by
               apply Finset.sum_le_univ_sum_of_nonneg
               intro x; exact mul_nonneg (pState_nonneg x) (sq_nonneg _)
@@ -1333,11 +1436,23 @@ theorem main_theorem :
                 intro d; simp; ring
               simp_rw [hb]
               exact variance_flipCount n
-    have hn_r : (199999999 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+    have hn_r : (9999999999999 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
     have hpos : (0 : ℝ) < (((n + 1 : ℕ) : ℝ) / 10000) ^ 2 := by positivity
-    dsimp [qR] at hmarkov
-    push_cast at hmarkov ⊢
-    nlinarith
+    have h1 : (n : ℝ) * qR * (1 - qR) ≤ (((n + 1 : ℕ) : ℝ) / 10000) ^ 2 * (1 / 100000 : ℝ) := by
+      dsimp [qR]
+      push_cast
+      have h2 : (10000000000000 : ℝ) ≤ (n : ℝ) + 1 := by linarith
+      have h3 : (n : ℝ) * (17 / 200) * (1 - 17 / 200) ≤ (n : ℝ) + 1 := by linarith
+      have h4 : (n : ℝ) + 1 ≤ (((n : ℝ) + 1) / 10000) ^ 2 * (1 / 100000 : ℝ) := by
+        have hpos1 : (0 : ℝ) ≤ (n : ℝ) + 1 := by linarith
+        have hsq : (10000000000000 : ℝ) * ((n : ℝ) + 1) ≤ ((n : ℝ) + 1) * ((n : ℝ) + 1) :=
+          mul_le_mul_of_nonneg_right h2 hpos1
+        have heq : (((n : ℝ) + 1) / 10000) ^ 2 * (1 / 100000 : ℝ) =
+            ((n : ℝ) + 1) * ((n : ℝ) + 1) / 10000000000000 := by ring
+        rw [heq]
+        linarith
+      linarith
+    exact le_of_mul_le_mul_left (hmarkov.trans h1) hpos
   -- Step 2: P(Good) ≥ 1 / 100000
   have hS_ub : ∀ x : Bool × (Fin n → Bool), (S x).re ≤ ((n + 1 : ℕ) : ℝ) := by
     intro x
@@ -1381,9 +1496,8 @@ theorem main_theorem :
           · simp only [hG, hB, ↓reduceIte, zero_add]
             have hle_th : (S x).re ≤ thresh := by
               by_contra hgt
-              push_neg at hgt
+              push Not at hgt
               have hnotBad : 53 * (n + 1) ≤ 625 * flipCount x.2 := by
-                have := mt (Finset.mem_filter.mpr)
                 have hnb : ¬ (625 * flipCount x.2 < 53 * (n + 1)) := fun hc =>
                   hB (Finset.mem_filter.mpr ⟨Finset.mem_univ x, hc⟩)
                 omega
@@ -1403,7 +1517,7 @@ theorem main_theorem :
               rw [← Finset.sum_mul, ← Finset.sum_mul, ← Finset.sum_mul, sum_pState, one_mul]
               ring
     have hpi_hi : Real.pi < (31416 / 10000 : ℝ) := by linarith [Real.pi_lt_d4]
-    have hn_r : (199999999 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+    have hn_r : (9999999999999 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
     have hsub_r : ((n + 1 - 9 : ℕ) : ℝ) = (n : ℝ) - 8 := by
       have : (n + 1 - 9 : ℕ) + 9 = n + 1 := by omega
       have hcast : ((n + 1 - 9 : ℕ) : ℝ) + 9 = (n : ℝ) + 1 := by exact_mod_cast this
@@ -1411,21 +1525,27 @@ theorem main_theorem :
     have hth_ub : thresh ≤ (7441 / 10000 : ℝ) * ((n : ℝ) + 1) + 7 := by
       dsimp [thresh]
       push_cast
-      nlinarith
+      have h1 : (2 : ℝ) * Real.pi / 65536 * ((n : ℝ) + 1) ≤ (2 * (31416 / 10000 : ℝ) / 65536) * ((n : ℝ) + 1) :=
+        mul_le_mul_of_nonneg_right (by linarith) (by linarith)
+      linarith
     have hcomb : ((n : ℝ) - 8) * (7442 / 10000 : ℝ) - 9 ≤
         ((n : ℝ) + 1) * (∑ x ∈ Good, pState x) + ((n : ℝ) + 1) * (1 / 100000 : ℝ) +
           ((7441 / 10000 : ℝ) * ((n : ℝ) + 1) + 7) := by
-      rw [← hsub_r]
       have h1 : ((n + 1 - 9 : ℕ) : ℝ) * (7442 / 10000 : ℝ) - 9 ≤
           ((n + 1 : ℕ) : ℝ) * (∑ x ∈ Good, pState x) +
           ((n + 1 : ℕ) : ℝ) * (∑ x ∈ Bad, pState x) + thresh := hexp.trans hupper
+      rw [hsub_r] at h1
       have h2 : ((n + 1 : ℕ) : ℝ) * (∑ x ∈ Bad, pState x) ≤ ((n + 1 : ℕ) : ℝ) * (1 / 100000 : ℝ) :=
         mul_le_mul_of_nonneg_left hBad (by positivity)
       push_cast at h1 h2
       linarith
-    nlinarith
+    have hstep_g : ((n : ℝ) + 1) * (1 / 100000 : ℝ) ≤ ((n : ℝ) + 1) * (∑ x ∈ Good, pState x) := by
+      linarith
+    exact le_of_mul_le_mul_left hstep_g (by linarith : (0 : ℝ) < (n : ℝ) + 1)
   -- Step 3: Lower bound on Good.card using 2500-th power
   have hGood_card : (2 : ℝ) ^ ((209 / 500 : ℝ) * ((n + 1 : ℕ) : ℝ)) ≤ (Good.card : ℝ) := by
+    have hB_nn : (0 : ℝ) ≤ ((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ 2500 :=
+      mul_nonneg (pow_nonneg (inv_nonneg.mpr (pow_nonneg (by norm_num) 1046)) _) (pow_nonneg (by norm_num) 2500)
     have hsum_le : ∑ x ∈ Good, pState x ≤
         (Good.card : ℝ) * (((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ 2500) ^ ((1 : ℝ) / 2500) := by
       calc ∑ x ∈ Good, pState x
@@ -1439,64 +1559,28 @@ theorem main_theorem :
                 exact (pow_le_pow_left₀ (pState_nonneg x) h1 2500).trans (pDiff_pow_2500_le hge)
               have hpow_eq : ((((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ 2500) ^ ((1 : ℝ) / 2500)) ^ (2500 : ℕ) =
                   ((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ 2500 := by
-                rw [← Real.rpow_natCast, ← Real.rpow_mul (by positivity)]
-                norm_num
-              exact le_of_pow_le_pow_left₀ (by norm_num : (2500 : ℕ) ≠ 0) (by positivity) (by rw [hpow_eq]; exact hp2500)
+                rw [← Real.rpow_natCast, ← Real.rpow_mul hB_nn,
+                    show ((1 : ℝ) / 2500) * (2500 : ℕ) = 1 by norm_num, Real.rpow_one]
+              exact le_of_pow_le_pow_left₀ (by norm_num : (2500 : ℕ) ≠ 0) (Real.rpow_nonneg hB_nn _) (by rw [hpow_eq]; exact hp2500)
         _ = _ := by rw [Finset.sum_const, nsmul_eq_mul]
     have hpow2500 : (1 / 100000 : ℝ) ^ 2500 ≤
         (Good.card : ℝ) ^ 2500 * (((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ 2500) := by
-      have h1 := pow_le_pow_left₀ (by positivity) (hGood_prob.trans hsum_le) 2500
+      have h1 := pow_le_pow_left₀ (by norm_num : (0 : ℝ) ≤ 1 / 100000) (hGood_prob.trans hsum_le) 2500
       rw [mul_pow] at h1
       have hpow_eq : ((((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ 2500) ^ ((1 : ℝ) / 2500)) ^ (2500 : ℕ) =
           ((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ 2500 := by
-        rw [← Real.rpow_natCast, ← Real.rpow_mul (by positivity)]
-        norm_num
+        rw [← Real.rpow_natCast, ← Real.rpow_mul hB_nn,
+            show ((1 : ℝ) / 2500) * (2500 : ℕ) = 1 by norm_num, Real.rpow_one]
       rwa [hpow_eq] at h1
-    have hcard_pow : (2 : ℝ) ^ (1045 * (n + 1)) ≤ (Good.card : ℝ) ^ 2500 := by
-      have h2_1046_pos : (0 : ℝ) < ((2 : ℝ) ^ 1046) ^ (n + 1) := by positivity
-      have hmul : (1 / 100000 : ℝ) ^ 2500 * ((2 : ℝ) ^ 1046) ^ (n + 1) ≤
-          (Good.card : ℝ) ^ 2500 * (200 / 183 : ℝ) ^ 2500 := by
-        have h := mul_le_mul_of_nonneg_right hpow2500 h2_1046_pos.le
-        have hinv : (((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1)) * ((2 : ℝ) ^ 1046) ^ (n + 1) = 1 := by
-          rw [← mul_pow, inv_mul_cancel₀ (by positivity), one_pow]
-        calc (1 / 100000 : ℝ) ^ 2500 * ((2 : ℝ) ^ 1046) ^ (n + 1)
-            ≤ (Good.card : ℝ) ^ 2500 * (((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1) * (200 / 183 : ℝ) ^ 2500) *
-                ((2 : ℝ) ^ 1046) ^ (n + 1) := h
-          _ = (Good.card : ℝ) ^ 2500 * (200 / 183 : ℝ) ^ 2500 *
-                ((((2 : ℝ) ^ 1046)⁻¹ ^ (n + 1)) * ((2 : ℝ) ^ 1046) ^ (n + 1)) := by ring
-          _ = (Good.card : ℝ) ^ 2500 * (200 / 183 : ℝ) ^ 2500 := by rw [hinv, mul_one]
-      have hconst : (200 / 183 : ℝ) ^ 2500 * (100000 : ℝ) ^ 2500 ≤ (2 : ℝ) ^ (n + 1) := by
-        have h1 : (200 / 183 : ℝ) * 100000 ≤ (2 : ℝ) ^ 18 := by norm_num
-        have h2 : ((200 / 183 : ℝ) * 100000) ^ 2500 ≤ ((2 : ℝ) ^ 18) ^ 2500 :=
-          pow_le_pow_left₀ (by positivity) h1 2500
-        rw [mul_pow, ← pow_mul] at h2
-        refine h2.trans ?_
-        exact pow_le_pow_right₀ (by norm_num) (by omega)
-      have hsplit2 : ((2 : ℝ) ^ 1046) ^ (n + 1) = (2 : ℝ) ^ (1045 * (n + 1)) * (2 : ℝ) ^ (n + 1) := by
-        rw [← pow_mul, ← pow_add]; congr 1; ring
-      rw [hsplit2] at hmul
-      have hstep : (2 : ℝ) ^ (1045 * (n + 1)) * (200 / 183 : ℝ) ^ 2500 ≤
-          (1 / 100000 : ℝ) ^ 2500 * ((2 : ℝ) ^ (1045 * (n + 1)) * (2 : ℝ) ^ (n + 1)) := by
-        have h1 : (200 / 183 : ℝ) ^ 2500 ≤ (1 / 100000 : ℝ) ^ 2500 * (2 : ℝ) ^ (n + 1) := by
-          have hinv : (1 / 100000 : ℝ) ^ 2500 * (100000 : ℝ) ^ 2500 = 1 := by
-            rw [← mul_pow]; norm_num
-          calc (200 / 183 : ℝ) ^ 2500
-              = (1 / 100000 : ℝ) ^ 2500 * ((200 / 183 : ℝ) ^ 2500 * (100000 : ℝ) ^ 2500) := by
-                  rw [← mul_assoc, mul_comm ((1 / 100000 : ℝ) ^ 2500), mul_assoc, hinv, mul_one]
-            _ ≤ (1 / 100000 : ℝ) ^ 2500 * (2 : ℝ) ^ (n + 1) :=
-                  mul_le_mul_of_nonneg_left hconst (by positivity)
-        calc (2 : ℝ) ^ (1045 * (n + 1)) * (200 / 183 : ℝ) ^ 2500
-            ≤ (2 : ℝ) ^ (1045 * (n + 1)) * ((1 / 100000 : ℝ) ^ 2500 * (2 : ℝ) ^ (n + 1)) :=
-                mul_le_mul_of_nonneg_left h1 (by positivity)
-          _ = _ := by ring
-      exact le_of_mul_le_mul_right (hstep.trans hmul) (by positivity : (0 : ℝ) < (200 / 183 : ℝ) ^ 2500)
+    have hcard_pow : (2 : ℝ) ^ (1045 * (n + 1)) ≤ (Good.card : ℝ) ^ 2500 :=
+      card_pow_K_of_bound (M := 1045) rfl hn hpow2500
     have hrpow_eq : ((2 : ℝ) ^ ((209 / 500 : ℝ) * ((n + 1 : ℕ) : ℝ))) ^ (2500 : ℕ) =
         (2 : ℝ) ^ (1045 * (n + 1)) := by
-      rw [← Real.rpow_natCast, ← Real.rpow_mul (by positivity)]
+      rw [← Real.rpow_natCast, ← Real.rpow_mul (by norm_num : (0 : ℝ) ≤ 2)]
       have hexp : (209 / 500 : ℝ) * ((n + 1 : ℕ) : ℝ) * (2500 : ℕ) = ((1045 * (n + 1) : ℕ) : ℝ) := by
         push_cast; ring
       rw [hexp, Real.rpow_natCast]
-    exact le_of_pow_le_pow_left₀ (by norm_num : (2500 : ℕ) ≠ 0) (by positivity) (by rw [hrpow_eq]; exact hcard_pow)
+    exact le_of_pow_le_pow_left₀ (by norm_num : (2500 : ℕ) ≠ 0) (Nat.cast_nonneg _) (by rw [hrpow_eq]; exact hcard_pow)
   -- Step 4: Map Good into Finset.range (2 ^ (n + 1))
   let x5 : Finset ℕ := Good.image (fun x => toNatBits x.1 x.2)
   refine ⟨x5, ?_, ?_, ?_⟩
