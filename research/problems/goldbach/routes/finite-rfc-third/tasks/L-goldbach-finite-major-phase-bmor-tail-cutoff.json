@@ -1,0 +1,18 @@
+{
+  "id": "L-goldbach-finite-major-phase-bmor-tail-cutoff",
+  "statement": "(∀ (q a m : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 3000000000000 ≤ m → |(∑ k ∈ (Finset.range (m+1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (m:ℝ)/Nat.totient q| ≤ (m:ℝ)/(840*Real.log (m:ℝ))) → let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); ∀ (q a n : ℕ) (β : ℝ), 3≤q → q≤105 → a<q → Nat.Coprime a q → 4000000000000000000≤n → |β|≤105/(n:ℝ) → ‖∑ k ∈ Finset.Icc 1 n, (((if k%q=a then ArithmeticFunction.vonMangoldt k else 0) - 1/(Nat.totient q:ℝ):ℝ):ℂ)*E ((k:ℝ)*β)‖ ≤ (n:ℝ)*(1/(10^9:ℝ)+1/(840*42)) + Real.pi * |β| * (n:ℝ)^2/(840*34)",
+  "plain_statement": {
+    "zh": "仅用三万亿以上的 BMOR 偏差界，恢复原有限主弧相位误差预算",
+    "en": "Recover the original finite major-arc phase budget from BMOR discrepancies above three trillion"
+  },
+  "brief": {
+    "zh": "保持三段 Abel 估计的结论与全部参数。用 Mathlib 的 Chebyshev 估计把低段的偏差界为 3m，合并低段和中段的加权误差仍在 n/10^9 以内。显式 BMOR 偏差界从 3×10^12 起供给。",
+    "en": "Keep the conclusion and parameters of the three-range Abel estimate. Use Mathlib's Chebyshev estimate to bound low-prefix discrepancies by 3m and absorb the low and middle ranges into n/10^9. The explicit BMOR input starts at 3×10^12."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/problems/goldbach/routes/finite-rfc-third/tasks/L-goldbach-finite-major-phase-bmor-three-ranges.json",
+  "program": "correlation",
+  "role": "conditional",
+  "parallel": true,
+  "depends_on": [],
+  "imports": []
+}
