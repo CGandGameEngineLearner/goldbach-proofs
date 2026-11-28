@@ -2820,6 +2820,23 @@ lemma model_sum_floor_of_arith_bound (s : Finset ℕ) (n : ℕ) (ε : ℝ)
       ≥ -(ε * (n : ℝ)) :=
   model_sum_floor_deltaJ s n ε hq hsq ((skirt_negMass_le_decay s n hq hn hr).trans hbound)
 
+/-- Pointwise equality of the squared kernel modulus with the signed integrand:
+`|K_n(β)|² = K_n(β)²·e(-nβ) = (sin π(n+1)β / sin πβ)²`.  Hence the skirt mass
+`deltaJ` is exactly the integral of the signed model integrand off the integers. -/
+lemma kernel_norm_sq_eq_sin (n : ℕ) (β : ℝ) (hβ : Real.sin (Real.pi * β) ≠ 0) :
+    ‖GoldbachExplicitModeledMajor.kernel n β‖ ^ 2
+      = (Real.sin (Real.pi * ((n:ℝ) + 1) * β) / Real.sin (Real.pi * β)) ^ 2 := by
+  have h1 := kernel_sq_phase_sin n β hβ
+  have hphase : ‖GoldbachExplicitModeledMajor.phase (-(n:ℝ) * β)‖ = 1 := by
+    rw [phase_eq_GE]
+    exact norm_GE (-(n:ℝ) * β)
+  have h2 : ‖GoldbachExplicitModeledMajor.kernel n β‖ ^ 2
+      = ‖GoldbachExplicitModeledMajor.kernel n β ^ 2
+          * GoldbachExplicitModeledMajor.phase (-(n:ℝ) * β)‖ := by
+    rw [norm_mul, norm_pow, hphase, mul_one]
+  rw [h2, h1, norm_pow, Complex.norm_real, Real.norm_eq_abs, ← abs_pow (Real.sin
+    (Real.pi * ((n:ℝ) + 1) * β) / Real.sin (Real.pi * β)) 2, abs_eq_self.mpr (sq_nonneg _)]
+
 end Ramanujan
 
 
