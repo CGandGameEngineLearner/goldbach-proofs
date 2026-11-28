@@ -11,6 +11,8 @@ import Mathlib.Tactic.Positivity
 import Mathlib.Tactic.Linarith
 import Mathlib.Basic.Real.Basic
 import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Data.Nat.Bits
+import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise
 
 /-!
 # Fixed-transition words for the dyadic mean-real-part lemma
@@ -568,3 +570,386 @@ end DyadicWords
 theorem DyadicWords.frozen_mean_from_certificate (h : DyadicWords.lossCertificate) :
     (have x1 : ℕ → ℝ → ℂ := fun (x1 : ℕ) (x2 : ℝ) => ∑ x3 ∈ Finset.range x1, Complex.exp (↑((2 : ℝ) * Real.pi * ↑⌊(65536 : ℝ) * (2 : ℝ) ^ x3 * x2⌋ / (65536 : ℝ)) * Complex.I); ∀ (x2 : ℕ),   (2000 : ℕ) ≤ x2 →     have x4 : ℕ := (1000 : ℕ) * x2 + (1 : ℕ);     ∃ x5 ⊆ Finset.range ((2 : ℕ) ^ x4), (2 : ℕ) * ((1000 : ℕ) * x2).choose ((85 : ℕ) * x2) ≤ x5.card ∧ (745 / 1000 : ℝ) * ↑x4 * ↑x5.card < ∑ x6 ∈ x5, (x1 x4 (↑x6 / (2 : ℝ) ^ x4)).re) :=
   fun t ht => DyadicWords.mean_from_finite_certificate h t ht
+
+/-! Two conditional Fourier sums track all 16-bit windows exactly. -/
+namespace DyadicTransfer
+open DyadicWords DyadicWordPopulation
+
+def factor (b d : Bool) : ℕ := if b ≠ d then 17 else 183
+
+def weight (n a : ℕ) : ℕ :=
+  ∏ i ∈ range n, factor (a.testBit (i+1)) (a.testBit i)
+
+noncomputable def mass (n a : ℕ) : ℝ := (weight n a:ℝ)/(2*200^n)
+
+theorem mass_fifteen (a : ℕ) : mass 15 a = iidMass (changes a).card := by
+  unfold mass weight factor
+  rw [prod_ite]
+  let p (i : ℕ) := a.testBit (i+1) ≠ a.testBit i
+  have h := card_filter_add_card_filter_not (s := range 15) p
+  have hnot : ((range 15).filter (fun i => ¬p i)).card = 15-(changes a).card := by
+    change ((range 15).filter p).card + _ = _ at h
+    change _ = 15-((range 15).filter p).card
+    rw [card_range] at h
+    omega
+  change ((↑((∏ _i ∈ (range 15).filter p, (17:ℕ)) *
+              (∏ _i ∈ (range 15).filter (fun i => ¬p i), (183:ℕ))) : ℝ)/_) = _
+  simp only [prod_const,hnot,Nat.cast_mul,Nat.cast_pow,Nat.cast_ofNat]
+  rfl
+
+theorem mass_append (n a : ℕ) (b : Bool) :
+    mass (n+1) (Nat.bit b a) = mass n a * (factor (a.testBit 0) b : ℝ)/200 := by
+  have h : weight (n+1) (Nat.bit b a) = weight n a * factor (a.testBit 0) b := by
+    unfold weight
+    rw [prod_range_succ']
+    simp only [Nat.testBit_bit_succ,Nat.testBit_bit_zero]
+  unfold mass
+  rw [h,pow_succ]
+  push_cast
+  ring
+
+theorem sum_bits {M : Type*} [AddCommMonoid M] (f : ℕ → M) (D : ℕ) :
+    ∑ k ∈ range (2*D), f k =
+      (∑ k ∈ range D, f (Nat.bit false k)) + (∑ k ∈ range D, f (Nat.bit true k)) := by
+  induction D with
+  | zero => simp
+  | succ D ih =>
+    rw [show 2*(D+1) = 2*D+1+1 by omega, sum_range_succ, sum_range_succ, ih,
+      sum_range_succ _ D, sum_range_succ _ D]
+    simp only [Nat.bit_val, Bool.toNat_false, Bool.toNat_true, Nat.add_zero]
+    ac_rfl
+
+noncomputable def cis (x : ℝ) : ℂ := Complex.exp ((x:ℂ)*Complex.I)
+noncomputable def wave (x : ℝ) (n a : ℕ) := cis (x*a/2^n)
+noncomputable def amp (x : ℝ) (n : ℕ) (b : Bool) : ℂ :=
+  ∑ k ∈ range (2^n), (mass n (Nat.bit b k):ℂ)*wave x n (Nat.bit b k)
+
+@[simp] theorem cis_zero : cis 0=1 := by simp [cis]
+theorem wave_append (x : ℝ) (n a : ℕ) (b : Bool) :
+    wave x (n+1) (Nat.bit b a) = wave x n a * cis (x*b.toNat/2^(n+1)) := by
+  unfold wave cis
+  rw [←Complex.exp_add,Nat.bit_val,pow_succ]
+  congr 1
+  push_cast
+  field_simp
+
+theorem advance (x : ℝ) (n : ℕ) (b : Bool) :
+    amp x (n+1) b = cis (x*b.toNat/2^(n+1)) *
+      (((factor false b:ℕ):ℂ)/200*amp x n false +
+       ((factor true b:ℕ):ℂ)/200*amp x n true) := by
+  let f (a : ℕ) : ℂ := (mass (n+1) (Nat.bit b a):ℂ)*wave x (n+1) (Nat.bit b a)
+  change ∑ a ∈ range (2^(n+1)), f a = _
+  rw [pow_succ',sum_bits]
+  have one (d : Bool) : ∑ k ∈ range (2^n), f (Nat.bit d k) =
+      cis (x*b.toNat/2^(n+1)) * (((factor d b:ℕ):ℂ)/200*amp x n d) := by
+    rw [amp,mul_sum,mul_sum]
+    apply sum_congr rfl
+    intro k _
+    dsimp only [f]
+    rw [mass_append,wave_append,Nat.testBit_bit_zero]
+    push_cast
+    ring
+  rw [one,one,mul_add]
+
+theorem amp_base (x : ℝ) (b : Bool) : amp x 0 b = cis (x*b.toNat)/2 := by
+  cases b <;> simp [amp,mass,weight,wave,Nat.bit_val]; ring
+
+theorem zero_amp (n : ℕ) (b : Bool) : amp 0 n b = 1/2 := by
+  induction n generalizing b with
+  | zero => simp [amp_base]
+  | succ n ih => rw [advance,ih,ih]; cases b <;> norm_num [factor]
+
+theorem total (x : ℝ) (n : ℕ) :
+    ∑ k ∈ range (2^(n+1)), (mass n k:ℂ)*wave x n k = amp x n false + amp x n true := by
+  rw [pow_succ',sum_bits]; rfl
+
+set_option linter.constructorNameAsVariable false in
+theorem loss_of_final (good : (1863/2500:ℝ) < (amp Real.pi 15 false + amp Real.pi 15 true).re) :
+    lossCertificate := by
+  have eqsum (x : ℝ) : ∑ a ∈ range 65536, mass 15 a * Real.cos (x*a/2^15) =
+      (amp x 15 false + amp x 15 true).re := by
+    have h := congrArg Complex.re (total x 15)
+    rw [show (2:ℕ)^(15+1)=65536 by decide] at h
+    simpa only [Complex.re_sum,Complex.re_ofReal_mul,wave,cis,Complex.exp_ofReal_mul_I_re] using h
+  have unit := eqsum 0
+  simp only [zero_mul,zero_div,Real.cos_zero,mul_one,zero_amp] at unit
+  norm_num at unit
+  have e (a : ℕ) : loss a = 1-Real.cos (Real.pi*a/2^15) := by
+    unfold loss
+    rw [show (2*Real.pi*(a:ℝ)/65536) = Real.pi*a/2^15 by ring]
+  unfold lossCertificate
+  simp_rw [←mass_fifteen,e,mul_sub,mul_one]
+  rw [sum_sub_distrib]
+  have H := congrArg₂ (fun a b : ℝ => a-b) unit (eqsum Real.pi)
+  rw [H]
+  generalize (amp Real.pi 15 false + amp Real.pi 15 true).re = z at good ⊢
+  linarith only [good]
+
+end DyadicTransfer
+
+namespace DyadicIntervals
+
+structure Box where
+  lo : ℚ
+  hi : ℚ
+deriving DecidableEq
+
+def Holds (b : Box) (x : ℝ) : Prop := b.lo ≤ x ∧ x ≤ b.hi
+abbrev Wider (c b : Box) := c.lo ≤ b.lo ∧ b.hi ≤ c.hi
+
+theorem widen {b c : Box} {x : ℝ} (h : Holds b x) (hc : Wider c b) : Holds c x :=
+  ⟨le_trans (by exact_mod_cast hc.1) h.1,le_trans h.2 (by exact_mod_cast hc.2)⟩
+
+def add (a b : Box) : Box := ⟨a.lo+b.lo,a.hi+b.hi⟩
+def sub (a b : Box) : Box := ⟨a.lo-b.hi,a.hi-b.lo⟩
+def point (q : ℚ) : Box := ⟨q,q⟩
+theorem hold_point (q : ℚ) : Holds (point q) (q:ℝ) := ⟨le_rfl,le_rfl⟩
+
+theorem hold_add {a b : Box} {x y : ℝ} (ha : Holds a x) (hb : Holds b y) :
+    Holds (add a b) (x+y) := by
+  simpa [Holds,add] using And.intro (add_le_add ha.1 hb.1) (add_le_add ha.2 hb.2)
+
+theorem hold_sub {a b : Box} {x y : ℝ} (ha : Holds a x) (hb : Holds b y) :
+    Holds (sub a b) (x-y) := by
+  simpa [Holds,sub] using And.intro (sub_le_sub ha.1 hb.2) (sub_le_sub ha.2 hb.1)
+
+def mul (a b : Box) : Box :=
+  ⟨min (min (a.lo*b.lo) (a.lo*b.hi)) (min (a.hi*b.lo) (a.hi*b.hi)),
+   max (max (a.lo*b.lo) (a.lo*b.hi)) (max (a.hi*b.lo) (a.hi*b.hi))⟩
+
+private theorem corner {x y a b c d l u : ℝ}
+    (hx : a ≤ x ∧ x ≤ b) (hy : c ≤ y ∧ y ≤ d)
+    (hlo : (l ≤ a*c ∧ l ≤ a*d) ∧ (l ≤ b*c ∧ l ≤ b*d))
+    (hhi : (a*c ≤ u ∧ a*d ≤ u) ∧ (b*c ≤ u ∧ b*d ≤ u)) :
+    l ≤ x*y ∧ x*y ≤ u := by
+  have lower (z : ℝ) (hc : l ≤ z*c) (hd : l ≤ z*d) : l ≤ z*y := by
+    rcases le_total 0 z with e | e
+    · exact hc.trans (mul_le_mul_of_nonneg_left hy.1 e)
+    · exact hd.trans (mul_le_mul_of_nonpos_left hy.2 e)
+  have upper (z : ℝ) (hc : z*c ≤ u) (hd : z*d ≤ u) : z*y ≤ u := by
+    rcases le_total 0 z with e | e
+    · exact (mul_le_mul_of_nonneg_left hy.2 e).trans hd
+    · exact (mul_le_mul_of_nonpos_left hy.1 e).trans hc
+  rcases le_total 0 y with e | e
+  · exact ⟨(lower a hlo.1.1 hlo.1.2).trans (mul_le_mul_of_nonneg_right hx.1 e),
+      (mul_le_mul_of_nonneg_right hx.2 e).trans (upper b hhi.2.1 hhi.2.2)⟩
+  · exact ⟨(lower b hlo.2.1 hlo.2.2).trans (mul_le_mul_of_nonpos_right hx.2 e),
+      (mul_le_mul_of_nonpos_right hx.1 e).trans (upper a hhi.1.1 hhi.1.2)⟩
+
+theorem hold_mul {a b : Box} {x y : ℝ} (ha : Holds a x) (hb : Holds b y) :
+    Holds (mul a b) (x*y) := by
+  apply corner ha hb
+  · simp only [←le_min_iff]
+    simp [mul]
+  · simp only [←max_le_iff]
+    simp [mul]
+
+structure Rect where
+  x : Box
+  y : Box
+
+def Rect.Holds (b : Rect) (z : ℂ) := DyadicIntervals.Holds b.x z.re ∧ DyadicIntervals.Holds b.y z.im
+abbrev Rect.Wider (c b : Rect) := DyadicIntervals.Wider c.x b.x ∧ DyadicIntervals.Wider c.y b.y
+theorem Rect.widen {b c : Rect} {z : ℂ} (h : b.Holds z) (hc : c.Wider b) : c.Holds z :=
+  ⟨DyadicIntervals.widen h.1 hc.1, DyadicIntervals.widen h.2 hc.2⟩
+
+def plus (a b : Rect) : Rect := ⟨add a.x b.x,add a.y b.y⟩
+def times (a b : Rect) : Rect :=
+  ⟨sub (mul a.x b.x) (mul a.y b.y), add (mul a.x b.y) (mul a.y b.x)⟩
+def realPoint (q : ℚ) : Rect := ⟨point q,point 0⟩
+theorem hold_plus {a b : Rect} {z w : ℂ} (ha : a.Holds z) (hb : b.Holds w) :
+    (plus a b).Holds (z+w) := ⟨hold_add ha.1 hb.1,hold_add ha.2 hb.2⟩
+theorem hold_times {a b : Rect} {z w : ℂ} (ha : a.Holds z) (hb : b.Holds w) :
+    (times a b).Holds (z*w) :=
+  ⟨hold_sub (hold_mul ha.1 hb.1) (hold_mul ha.2 hb.2),
+   hold_add (hold_mul ha.1 hb.2) (hold_mul ha.2 hb.1)⟩
+theorem hold_realPoint (q : ℚ) : (realPoint q).Holds ((q:ℝ):ℂ) := by
+  exact ⟨hold_point _,by simp [DyadicIntervals.Holds,realPoint,point]⟩
+
+abbrev HalfOK (p c s : Box) :=
+  (0 ≤ c.hi ∧ c.lo^2 ≤ (1+p.lo)/2 ∧ (1+p.hi)/2 ≤ c.hi^2) ∧
+  (0 ≤ s.hi ∧ s.lo^2 ≤ (1-p.hi)/2 ∧ (1-p.lo)/2 ≤ s.hi^2)
+
+theorem enclose_half {p c s : Box} {x : ℝ} (pos : 0 ≤ x) (small : x ≤ Real.pi)
+    (hx : Holds p (Real.cos x)) (ok : HalfOK p c s) :
+    Holds c (Real.cos (x/2)) ∧ Holds s (Real.sin (x/2)) := by
+  have hr {b : Box} {y : ℝ} (h : 0 ≤ b.hi) (lo : (b.lo:ℝ)^2 ≤ y) (hi : y ≤ (b.hi:ℝ)^2) :
+      Holds b (Real.sqrt y) :=
+    ⟨Real.le_sqrt_of_sq_le lo, Real.sqrt_le_iff.mpr ⟨by exact_mod_cast h,hi⟩⟩
+  rw [Real.cos_half (by linarith [Real.pi_pos]) small,
+      Real.sin_half_eq_sqrt pos (by linarith [Real.pi_pos])]
+  constructor
+  · apply hr ok.1.1
+    · have h : (c.lo:ℝ)^2 ≤ (1+(p.lo:ℝ))/2 := by exact_mod_cast ok.1.2.1
+      linarith only [h,hx.1]
+    · have h : (1+(p.hi:ℝ))/2 ≤ (c.hi:ℝ)^2 := by exact_mod_cast ok.1.2.2
+      linarith only [h,hx.2]
+  · apply hr ok.2.1
+    · have h : (s.lo:ℝ)^2 ≤ (1-(p.hi:ℝ))/2 := by exact_mod_cast ok.2.2.1
+      linarith only [h,hx.2]
+    · have h : (1-(p.lo:ℝ))/2 ≤ (s.hi:ℝ)^2 := by exact_mod_cast ok.2.2.2
+      linarith only [h,hx.1]
+
+end DyadicIntervals
+
+namespace DyadicTransfer
+open DyadicIntervals
+
+noncomputable def angle (n : ℕ) : ℝ := Real.pi / 2^n
+noncomputable def rot (n : ℕ) := cis (angle n)
+
+theorem next_rot (n : ℕ) {old new : Rect} (hb : old.Holds (rot n))
+    (hc : HalfOK old.x new.x new.y) : new.Holds (rot (n+1)) := by
+  have hpi : angle n ≤ Real.pi := by
+    unfold angle
+    exact div_le_self Real.pi_pos.le (one_le_pow₀ (by norm_num))
+  have pos : 0 ≤ angle n := by unfold angle; positivity
+  have cosbound : Holds old.x (Real.cos (angle n)) := by
+    simpa only [rot,cis,Complex.exp_ofReal_mul_I_re] using hb.1
+  have step := enclose_half pos hpi cosbound hc
+  have ang : angle (n+1) = angle n/2 := by unfold angle; rw [pow_succ,div_mul_eq_div_div]
+  simpa only [Rect.Holds,rot,cis,Complex.exp_ofReal_mul_I_re,Complex.exp_ofReal_mul_I_im,ang] using step
+
+def mix (a b : Rect) (q p : ℚ) := plus (times (realPoint q) a) (times (realPoint p) b)
+
+theorem hold_mix {a b : Rect} {z w : ℂ} (ha : a.Holds z) (hb : b.Holds w) (q p : ℚ) :
+    (mix a b q p).Holds (((q:ℝ):ℂ)*z+((p:ℝ):ℂ)*w) :=
+  hold_plus (hold_times (hold_realPoint q) ha) (hold_times (hold_realPoint p) hb)
+
+theorem advance_box (n : ℕ) {a b r c d : Rect}
+    (states : a.Holds (amp Real.pi n false) ∧ b.Holds (amp Real.pi n true))
+    (hr : r.Holds (rot (n+1)))
+    (enclose : c.Wider (mix a b (183/200) (17/200)) ∧
+      d.Wider (times r (mix a b (17/200) (183/200)))) :
+    c.Holds (amp Real.pi (n+1) false) ∧ d.Holds (amp Real.pi (n+1) true) := by
+  have ff : factor false false = 183 := rfl
+  have tf : factor true false = 17 := rfl
+  have ft : factor false true = 17 := rfl
+  have tt : factor true true = 183 := rfl
+  obtain ⟨ha,hb⟩ := states
+  constructor
+  · have h := Rect.widen (hold_mix ha hb (183/200) (17/200)) enclose.1
+    rw [advance]
+    simpa only [Bool.toNat_false,Nat.cast_zero,mul_zero,zero_div,cis_zero,one_mul,ff,tf,Nat.cast_ofNat,
+      Rat.cast_div,Rat.cast_ofNat,Complex.ofReal_div,Complex.ofReal_ofNat] using h
+  · have h := Rect.widen (hold_times hr (hold_mix ha hb (17/200) (183/200))) enclose.2
+    rw [advance]
+    simpa only [Bool.toNat_true,Nat.cast_one,mul_one,rot,angle,ft,tt,Nat.cast_ofNat,
+      Rat.cast_div,Rat.cast_ofNat,Complex.ofReal_div,Complex.ofReal_ofNat] using h
+
+end DyadicTransfer
+
+namespace DyadicTransfer
+open DyadicIntervals
+
+/- The two conditional amplitudes start at +1/2 and -1/2. The endpoint data below
+are proposed rational enclosures. Every half-angle, interval product, and outward
+rounding inequality is checked in the kernel by the proof of final_boxes. -/
+private def u0 : Rect := ⟨⟨1/2, 1/2⟩, ⟨0, 0⟩⟩
+private def v0 : Rect := ⟨⟨-1/2, -1/2⟩, ⟨0, 0⟩⟩
+private def rotation1 : Rect := ⟨⟨0, 0⟩, ⟨1, 1⟩⟩
+private def u1 : Rect := ⟨⟨83/200, 83/200⟩, ⟨0, 0⟩⟩
+private def v1 : Rect := ⟨⟨0, 0⟩, ⟨-83/200, -83/200⟩⟩
+private def rotation2 : Rect := ⟨⟨1767766952966368811/2500000000000000000, 70710678118654752441/100000000000000000000⟩, ⟨1767766952966368811/2500000000000000000, 70710678118654752441/100000000000000000000⟩⟩
+private def u2 : Rect := ⟨⟨15189/40000, 15189/40000⟩, ⟨-1411/40000, -1411/40000⟩⟩
+private def v2 : Rect := ⟨⟨14672465709620861131/50000000000000000000, 3668116427405215283/12500000000000000000⟩, ⟨-24356293077970629479/100000000000000000000, -24356293077970629477/100000000000000000000⟩⟩
+private def rotation3 : Rect := ⟨⟨23096988312782168903/25000000000000000000, 46193976625564337807/50000000000000000000⟩, ⟨9567085809127244293/25000000000000000000, 38268343236508977173/100000000000000000000⟩⟩
+private def u3 : Rect := ⟨⟨4654894583829443299/12500000000000000000, 37239156670635546393/100000000000000000000⟩, ⟨-2648973705813751753/50000000000000000000, -1059589482325500701/20000000000000000000⟩⟩
+private def v3 : Rect := ⟨⟨18215965677976345257/50000000000000000000, 910798283898817263/2500000000000000000⟩, ⟨-9356143115176340083/100000000000000000000, -2339035778794085019/25000000000000000000⟩⟩
+private def rotation4 : Rect := ⟨⟨6129908002520190307/6250000000000000000, 98078528040323044913/100000000000000000000⟩, ⟨19509032201612826783/100000000000000000000, 9754516100806413393/50000000000000000000⟩⟩
+private def u4 : Rect := ⟨⟨37170542518887503641/100000000000000000000, 7434108503777500729/20000000000000000000⟩, ⟨-705361755803644327/12500000000000000000, -5642894046429154613/100000000000000000000⟩⟩
+private def v4 : Rect := ⟨⟨586831171621063077/1562500000000000000, 37557194983748036939/100000000000000000000⟩, ⟨-1717145689911212531/100000000000000000000, -1717145689911212517/100000000000000000000⟩⟩
+private def rotation5 : Rect := ⟨⟨6219904541701230539/6250000000000000000, 796147781337757509/800000000000000000⟩, ⟨4900857016478030099/50000000000000000000, 9801714032956060201/100000000000000000000⟩⟩
+private def u5 : Rect := ⟨⟨37203407978400648969/100000000000000000000, 2325212998650040561/6250000000000000000⟩, ⟨-265460271806256477/5000000000000000000, -5309205436125129533/100000000000000000000⟩⟩
+private def v5 : Rect := ⟨⟨37544656534530021579/100000000000000000000, 18772328267265010797/50000000000000000000⟩, ⟨1637068500239937977/100000000000000000000, 327413700047987599/20000000000000000000⟩⟩
+private def rotation6 : Rect := ⟨⟨99879545620517239271/100000000000000000000, 12484943202564654909/12500000000000000000⟩, ⟨2453383716370900711/50000000000000000000, 1226691858185450357/25000000000000000000⟩⟩
+private def u6 : Rect := ⟨⟨930810352641791141/2500000000000000000, 744648282113432913/2000000000000000000⟩, ⟨-2359386075767049401/50000000000000000000, -589846518941762349/12500000000000000000⟩⟩
+private def v6 : Rect := ⟨⟨7483821041490194349/20000000000000000000, 9354776301862742941/25000000000000000000⟩, ⟨2886180214059102117/100000000000000000000, 2886180214059102141/100000000000000000000⟩⟩
+private def rotation7 : Rect := ⟨⟨99969881869620422011/100000000000000000000, 24992470467405105503/25000000000000000000⟩, ⟨2454122852291228797/100000000000000000000, 2454122852291228809/100000000000000000000⟩⟩
+private def u7 : Rect := ⟨⟨18624141424661444179/50000000000000000000, 3724828284932288837/10000000000000000000⟩, ⟨-162894048018347069/4000000000000000000, -509043900057334589/12500000000000000000⟩⟩
+private def v7 : Rect := ⟨⟨1166781402011443371/3125000000000000000, 37337004864366187897/100000000000000000000⟩, ⟨3157006062923300791/100000000000000000000, 3157006062923300823/100000000000000000000⟩⟩
+private def rotation8 : Rect := ⟨⟨24998117545978613523/25000000000000000000, 99992470183914454093/100000000000000000000⟩, ⟨1227153828571992599/100000000000000000000, 61357691428599631/5000000000000000000⟩⟩
+private def u8 : Rect := ⟨⟨2328489013787598051/6250000000000000000, 37255824220601568831/100000000000000000000⟩, ⟨-3457855833071208637/100000000000000000000, -3457855833071208621/100000000000000000000⟩⟩
+private def v8 : Rect := ⟨⟨745909042715972731/2000000000000000000, 37295452135798636579/100000000000000000000⟩, ⟨3000409189597311149/100000000000000000000, 375051148699663899/12500000000000000000⟩⟩
+private def rotation9 : Rect := ⟨⟨19999623505652022853/20000000000000000000, 49999058764130057133/50000000000000000000⟩, ⟨613588464915447501/100000000000000000000, 613588464915447543/100000000000000000000⟩⟩
+private def u9 : Rect := ⟨⟨9314798148348329893/25000000000000000000, 37259192593393319591/100000000000000000000⟩, ⟨-363612913268048057/12500000000000000000, -727225826536096109/25000000000000000000⟩⟩
+private def v9 : Rect := ⟨⟨37276339894764285367/100000000000000000000, 37276339894764285399/100000000000000000000⟩, ⟨2680230438988013447/100000000000000000000, 670057609747003377/25000000000000000000⟩⟩
+private def rotation10 : Rect := ⟨⟨1999990587619152343/2000000000000000000, 97655790411091423/97656250000000000⟩, ⟨153397838148298801/50000000000000000000, 76698919074149421/25000000000000000000⟩⟩
+private def u10 : Rect := ⟨⟨2328790632125615729/6250000000000000000, 7452130022801970337/20000000000000000000⟩, ⟨-608456734452032659/25000000000000000000, -2433826937808130609/100000000000000000000⟩⟩
+private def v10 : Rect := ⟨⟨7453588326821767341/20000000000000000000, 37267941634108836743/100000000000000000000⟩, ⟨2319501420245317113/100000000000000000000, 2319501420245317203/100000000000000000000⟩⟩
+private def rotation11 : Rect := ⟨⟨6249992646573136937/6250000000000000000, 49999941172585095497/50000000000000000000⟩, ⟨19174752328559553/12500000000000000000, 613592074513907/400000000000000000⟩⟩
+private def u11 : Rect := ⟨⟨37261269893218265391/100000000000000000000, 4657658736652283177/12500000000000000000⟩, ⟨-1014897013686793789/50000000000000000000, -253724253421698443/12500000000000000000⟩⟩
+private def v11 : Rect := ⟨⟨37264339717354818079/100000000000000000000, 37264339717354818127/100000000000000000000⟩, ⟨394526717898174641/20000000000000000000, 246579198686359177/12500000000000000000⟩⟩
+private def rotation12 : Rect := ⟨⟨19999994117257644383/20000000000000000000, 99999970586288221917/100000000000000000000⟩, ⟨38349515937135047/50000000000000000000, 76699031874270747/100000000000000000000⟩⟩
+private def u12 : Rect := ⟨⟨2328845676766867023/6250000000000000000, 37261530828269872397/100000000000000000000⟩, ⟨-422396919985027103/25000000000000000000, -1689587679940108361/100000000000000000000⟩⟩
+private def v12 : Rect := ⟨⟨18631407882831885717/50000000000000000000, 4657851970707971437/12500000000000000000⟩, ⟨1661007949562841929/100000000000000000000, 1661007949562842373/100000000000000000000⟩⟩
+private def rotation13 : Rect := ⟨⟨49999996323285892557/50000000000000000000, 19999998529314357023/20000000000000000000⟩, ⟨38349518757138921/100000000000000000000, 19174759378570113/50000000000000000000⟩⟩
+private def u13 : Rect := ⟨⟨37261640047948353787/100000000000000000000, 18630820023974176911/50000000000000000000⟩, ⟨-702393525716178817/50000000000000000000, -351196762858089387/25000000000000000000⟩⟩
+private def v13 : Rect := ⟨⟨3726217603701418807/10000000000000000000, 745243520740283763/2000000000000000000⟩, ⟨43453040265404499/3125000000000000000, 1390497288492944869/100000000000000000000⟩⟩
+private def rotation14 : Rect := ⟨⟨4999999908082146469/5000000000000000000, 99999998161642929381/100000000000000000000⟩, ⟨19174759731069643/100000000000000000000, 4793689932767737/25000000000000000000⟩⟩
+private def u14 : Rect := ⟨⟨372616856070189497/1000000000000000000, 37261685607018949741/100000000000000000000⟩, ⟨-1167187882538706999/100000000000000000000, -583593941269353421/50000000000000000000⟩⟩
+private def v14 : Rect := ⟨⟨745238174549764093/2000000000000000000, 7452381745497640949/20000000000000000000⟩, ⟨290010755598683147/25000000000000000000, 116004302239473391/10000000000000000000⟩⟩
+private def rotation15 : Rect := ⟨⟨12499999942551341411/12500000000000000000, 9999999954041073129/10000000000000000000⟩, ⟨9587379909597303/100000000000000000000, 1198422488699989/12500000000000000000⟩⟩
+private def u15 : Rect := ⟨⟨3726170457225883637/10000000000000000000, 18630852286129418209/50000000000000000000⟩, ⟨-242343313904841159/25000000000000000000, -969373255619364377/100000000000000000000⟩⟩
+private def v15 : Rect := ⟨⟨37261797338504799037/100000000000000000000, 37261797338504799157/100000000000000000000⟩, ⟨193160165997218773/20000000000000000000, 965800829986096063/100000000000000000000⟩⟩
+
+private theorem from_bounds {a b : Rect} {z w : ℂ} (h : a.Holds z ∧ b.Holds w)
+    (q : (1863/2500:ℚ) < a.x.lo+b.x.lo) : (1863/2500:ℝ) < (z+w).re := by
+  have hq := (Rat.cast_lt (K := ℝ)).mpr q
+  push_cast at hq
+  exact hq.trans_le (add_le_add h.1.1.1 h.2.1.1)
+
+private theorem final_boxes : u15.Holds (amp Real.pi (14+1) false) ∧ v15.Holds (amp Real.pi (14+1) true) := by
+  have r1 : rotation1.Holds (rot 1) := by
+    norm_num [Rect.Holds, DyadicIntervals.Holds, rot, angle, cis, Complex.exp_ofReal_mul_I_re,
+      Complex.exp_ofReal_mul_I_im, rotation1, Real.cos_pi_div_two, Real.sin_pi_div_two]
+  have h0 : u0.Holds (amp Real.pi 0 false) ∧ v0.Holds (amp Real.pi 0 true) := by
+    rw [amp_base,amp_base]
+    norm_num [u0,v0,Rect.Holds,DyadicIntervals.Holds,cis,Complex.exp_pi_mul_I]
+  have h1 := advance_box 0 (c := u1) (d := v1) h0 r1 (by decide +kernel)
+  have r2 := next_rot 1 (new := rotation2) r1 (by decide +kernel)
+  have h2 := advance_box 1 (c := u2) (d := v2) h1 r2 (by decide +kernel)
+  have r3 := next_rot 2 (new := rotation3) r2 (by decide +kernel)
+  have h3 := advance_box 2 (c := u3) (d := v3) h2 r3 (by decide +kernel)
+  have r4 := next_rot 3 (new := rotation4) r3 (by decide +kernel)
+  have h4 := advance_box 3 (c := u4) (d := v4) h3 r4 (by decide +kernel)
+  have r5 := next_rot 4 (new := rotation5) r4 (by decide +kernel)
+  have h5 := advance_box 4 (c := u5) (d := v5) h4 r5 (by decide +kernel)
+  have r6 := next_rot 5 (new := rotation6) r5 (by decide +kernel)
+  have h6 := advance_box 5 (c := u6) (d := v6) h5 r6 (by decide +kernel)
+  have r7 := next_rot 6 (new := rotation7) r6 (by decide +kernel)
+  have h7 := advance_box 6 (c := u7) (d := v7) h6 r7 (by decide +kernel)
+  have r8 := next_rot 7 (new := rotation8) r7 (by decide +kernel)
+  have h8 := advance_box 7 (c := u8) (d := v8) h7 r8 (by decide +kernel)
+  have r9 := next_rot 8 (new := rotation9) r8 (by decide +kernel)
+  have h9 := advance_box 8 (c := u9) (d := v9) h8 r9 (by decide +kernel)
+  have r10 := next_rot 9 (new := rotation10) r9 (by decide +kernel)
+  have h10 := advance_box 9 (c := u10) (d := v10) h9 r10 (by decide +kernel)
+  have r11 := next_rot 10 (new := rotation11) r10 (by decide +kernel)
+  have h11 := advance_box 10 (c := u11) (d := v11) h10 r11 (by decide +kernel)
+  have r12 := next_rot 11 (new := rotation12) r11 (by decide +kernel)
+  have h12 := advance_box 11 (c := u12) (d := v12) h11 r12 (by decide +kernel)
+  have r13 := next_rot 12 (new := rotation13) r12 (by decide +kernel)
+  have h13 := advance_box 12 (c := u13) (d := v13) h12 r13 (by decide +kernel)
+  have r14 := next_rot 13 (new := rotation14) r13 (by decide +kernel)
+  have h14 := advance_box 13 (c := u14) (d := v14) h13 r14 (by decide +kernel)
+  have r15 := next_rot 14 (new := rotation15) r14 (by decide +kernel)
+  have h15 := advance_box 14 (c := u15) (d := v15) h14 r15 (by decide +kernel)
+  exact h15
+
+private theorem final_comparison : (1863/2500:ℚ) < u15.x.lo+v15.x.lo := by decide +kernel
+
+attribute [local irreducible] amp
+
+theorem numeric_bound : (1863/2500:ℝ) < (amp Real.pi (14+1) false + amp Real.pi (14+1) true).re :=
+  @from_bounds u15 v15 (amp Real.pi (14+1) false) (amp Real.pi (14+1) true) final_boxes final_comparison
+
+theorem certified_loss : DyadicWords.lossCertificate := by
+  apply loss_of_final
+  simpa only [Nat.reduceAdd] using numeric_bound
+
+end DyadicTransfer
+
+theorem Conjectures.Cuts.Taskb98f3332b3a9cab8abb1dd40 :
+    (have x1 : ℕ → ℝ → ℂ := fun (x1 : ℕ) (x2 : ℝ) => ∑ x3 ∈ Finset.range x1, Complex.exp (↑((2 : ℝ) * Real.pi * ↑⌊(65536 : ℝ) * (2 : ℝ) ^ x3 * x2⌋ / (65536 : ℝ)) * Complex.I); ∀ (x2 : ℕ),   (2000 : ℕ) ≤ x2 →     have x4 : ℕ := (1000 : ℕ) * x2 + (1 : ℕ);     ∃ x5 ⊆ Finset.range ((2 : ℕ) ^ x4), (2 : ℕ) * ((1000 : ℕ) * x2).choose ((85 : ℕ) * x2) ≤ x5.card ∧ (745 / 1000 : ℝ) * ↑x4 * ↑x5.card < ∑ x6 ∈ x5, (x1 x4 (↑x6 / (2 : ℝ) ^ x4)).re) :=
+  DyadicWords.frozen_mean_from_certificate DyadicTransfer.certified_loss
