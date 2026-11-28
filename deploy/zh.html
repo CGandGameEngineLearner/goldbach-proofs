@@ -154,7 +154,8 @@
       <div class="rankings-heading">
         <div>
           <h2 id="rankings-title">公开贡献榜</h2>
-          <p id="rankings-summary">按权威 Lean 首次核验积分排列，同时显示通过题数。</p>
+          <p id="rankings-summary">按本研究台的贡献积分排列。</p>
+          <p>每题初始 1 分，发布后每满 3 分钟仍未解决加 1 分。登记提交时锁定分值，由研究台最先记录权威 Lean 核验通过的提交获得。证明和证伪共用同一份首证积分。每套经权威 Lean 核验并正式采用的拆题另计 1 分，重复拆法只计一次。</p>
           <p class="ranking-attribution">贡献按 GitHub 账号记录。你也可以在榜单上公开知乎昵称和头像。<a href="auth/zhihu?lang=zh">管理知乎署名</a></p>
         </div>
         <div class="rankings-links">
@@ -167,7 +168,7 @@
         <button type="button" data-ranking-mode="agents" aria-pressed="false">模型贡献榜</button>
       </div>
       <div class="agent-ranking-controls" id="agent-ranking-controls" hidden>
-        <p>按累计首次核验积分排列，并同步显示首次通过的不同引理数；模型与工具由提交者自报，厂商榜按模型开发方汇总，无法识别的模型归入「未识别厂商」。模型保留版本区分，已识别的 GPT 名称写法及推理强度档位合并统计，工具跨版本合并。部分早期归为「其他工具」的记录按对应 PR 明确申报的工具单列。验证记录保留原始申报。每份证明在每张榜最多计一次，数量不相加；这不是模型能力评测。</p>
+        <p>按累计贡献积分排列，并显示首次通过的引理数和采用的拆题数。模型与工具由提交者自报，厂商榜按模型开发方汇总，无法识别的模型归入「未识别厂商」。模型保留版本区分，已识别的 GPT 名称写法及推理强度档位合并统计，工具跨版本合并。部分早期归为「其他工具」的记录按对应 PR 明确申报的工具单列。验证记录保留原始申报。每份证明在每张榜最多计一次，数量不相加；这不是模型能力评测。</p>
       </div>
       <div class="rankings-stage" id="rankings-stage">
         <div class="agent-ranking-columns" id="agent-ranking-columns" hidden></div>

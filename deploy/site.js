@@ -31,7 +31,7 @@ const strings = {
     noHourContributors: '最近一小时暂无首次通过的引理。',
     rankingsUnavailable: '暂时无法获取贡献榜。',
     rankingsCount: n => '共 ' + n + ' 位贡献者。',
-    rankingsSummary: (people, proofs) => people + ' 位贡献者共通过 ' + proofs + ' 条引理，按首次核验积分排列。',
+    rankingsSummary: (people, proofs) => people + ' 位贡献者共通过 ' + proofs + ' 条引理，榜单按贡献积分排列。',
     rankingPeriods: { hour: '最近一小时', all_time: '累计' },
     justNow: '刚刚',
     participant: '参与者',
@@ -994,12 +994,8 @@ function renderRankingMode() {
   document.getElementById('agent-ranking-controls').hidden = !agents;
   document.querySelector('.ranking-candidate').hidden = agents;
   document.getElementById('rankings-summary').textContent = agents
-    ? (topic === 'twin-primes'
-      ? (lang === 'zh' ? '积分来自首个通过的证明和正式采用的拆题。' : 'Points come from first accepted proofs and adopted cuts.')
-      : (lang === 'zh' ? '按本研究台累计首次核验积分排列。旧规则下首次通过的题每道计 1 分。' : 'Ranked by points from first accepted proofs on this research desk. Each first acceptance under the old rules counts for one point.'))
-    : topic === 'twin-primes'
-      ? (lang === 'zh' ? '贡献榜计入首个通过的证明和正式采用的拆题。' : 'The leaderboard credits first accepted proofs and adopted cuts.')
-      : strings.rankingsSummary(rankingsData.contributors.toLocaleString(locale), rankingsData.proofs.toLocaleString(locale));
+    ? (lang === 'zh' ? '按本研究台的累计贡献积分排列。' : 'Ranked by total contribution points on this research desk.')
+    : strings.rankingsSummary(rankingsData.contributors.toLocaleString(locale), rankingsData.proofs.toLocaleString(locale));
   if (agents) {
     renderAgentColumns(columns);
     const total = rankingFeeds[agentDimension]?.total ?? 0;
