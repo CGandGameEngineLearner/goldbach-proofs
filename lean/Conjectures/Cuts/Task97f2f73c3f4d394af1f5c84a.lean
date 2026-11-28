@@ -34,8 +34,8 @@ private theorem wheelPrefix (n h : ℕ) (hh : h < 30) :
       rw [he, Finset.sum_range_add, Nat.add_mul]
       have hs (i : ℕ) : wheelTerm (30 + i) h = wheelTerm i h := by
         unfold wheelTerm
-        rw [show (30+i)%30 = i%30 by omega,
-            show (30+i+h)%30 = (i+h)%30 by omega]
+        rw [show (30+i) % 30 = i % 30 by omega,
+            show (30+i+h) % 30 = (i+h) % 30 by omega]
       simp only [hs]
       rw [wheelPeriod ⟨h, hh⟩]
       omega
