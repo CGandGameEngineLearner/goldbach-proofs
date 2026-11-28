@@ -15,7 +15,10 @@
     "L-goldbach-abel-theta-to-pi-li",
     "L-goldbach-rh-schoenfeld-psi"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.ExplicitPsiSubTheta",
+    "Conjectures.Goldbach.AbelThetaToPiLi"
+  ],
   "parallel": true,
   "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
   "track": "explicit-sieve-analytic-inputs",
