@@ -1,0 +1,30 @@
+{
+  "id": "L-goldbach-finite-collar-signed-budget",
+  "statement": "(∀ (q a m : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → 8000000000 ≤ m →\n      |(∑ k ∈ (Finset.range (m+1)).filter (fun k => k%q=a%q), ArithmeticFunction.vonMangoldt k) -\n         (m:ℝ)/q.totient| ≤ (m:ℝ)/(840*Real.log (m:ℝ))) →\nlet arcs := fun (n : ℕ) (w : ℝ) => {t : ℝ | ∃ (q a : ℕ) (z : ℤ),\n  1≤q ∧ q≤105 ∧ a<q ∧ Nat.Coprime a q ∧ |t-((a:ℝ)/q+(z:ℝ))|≤w/((q:ℝ)*n)}\nlet E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I)\nlet S := fun (n : ℕ) (t : ℝ) => ∑ k∈Finset.Icc 1 n, (ArithmeticFunction.vonMangoldt k:ℂ)*E ((k:ℝ)*t)\nlet Z := fun (n : ℕ) (t : ℝ) => (S n t)^2*E (-(n:ℝ)*t)\nlet off := fun (n : ℕ) (w : ℝ) => (∫ t in Set.Icc (0:ℝ) 1 \\ arcs n w, Z n t).re\n∀ n : ℕ, 4000000000000000000≤n →\n  (∫ t in (Set.Icc (0:ℝ) 1 \\ arcs n 105) ∩ arcs n 140, ‖S n t‖^2) < (9/40:ℝ)*n ∧\n  -(9/40:ℝ)*n < (∫ t in (Set.Icc (0:ℝ) 1 \\ arcs n 105) ∩ arcs n 140, Z n t).re ∧\n  (-(63/40:ℝ)*n ≤ off n 140 → -(9/5:ℝ)*n ≤ off n 105)",
+  "plain_statement": {
+    "zh": "在原 BMOR 前提下将固定主弧 105 到 140 的薄带能量限制在 9n/40 以内",
+    "en": "Bound the energy on the fixed 105-to-140 major-arc collar by 9n/40 under the original BMOR estimate"
+  },
+  "brief": {
+    "zh": "分母仍为 1 至 105，半宽从 105/(qn) 扩到 140/(qn)。对所有 n≥4×10¹⁸，估计实际 von Mangoldt 和的薄带能量及其带符号积分。用小相位上的正弦下界改进几何和，再对各分母分别为模型与误差选择有理权。宽弧真补集的实部下界 −63n/40 足以恢复 FR-9015 的 −9n/5。可导入推荐的已验证模块。",
+    "en": "Keep denominators 1 through 105 and increase the half-width from 105/(qn) to 140/(qn). Bound the actual von Mangoldt energy and signed integral on the collar for every n ≥ 4×10¹⁸. Refine the geometric sum with a small-angle sine estimate and balance the model and error separately at each denominator using rational weights. A floor of −63n/40 on the complement of the wider arcs suffices for the −9n/5 floor in FR-9015. The recommended verified modules can be imported."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ffe27af00c8df03bd77f7afd279cd836b6cbb1ee/research/checkpoint/%E5%93%A5%E5%BE%B7%E5%B7%B4%E8%B5%AB%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%864.md#L170-L194",
+  "program": "correlation",
+  "role": "conditional",
+  "parallel": true,
+  "depends_on": [
+    "L-goldbach-finite-phase-abel-two-ranges",
+    "L-goldbach-finite-fixed-nonunit-mangoldt",
+    "L-goldbach-finite-fixed-chi-constant-mode",
+    "L-goldbach-discrete-parseval",
+    "L-goldbach-b13-bilateral-vaughan-reduction"
+  ],
+  "imports": [
+    "PEqualNP.Outside.L_goldbach_finite_phase_abel_two_ranges",
+    "PEqualNP.Outside.L_goldbach_finite_fixed_nonunit_mangoldt",
+    "PEqualNP.Outside.L_goldbach_finite_fixed_chi_constant_mode",
+    "PEqualNP.Outside.L_goldbach_discrete_parseval",
+    "Conjectures.Goldbach.B13BilateralVaughanReduction"
+  ]
+}
