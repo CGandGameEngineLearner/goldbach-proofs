@@ -17,5 +17,7 @@
     "L-quadratic-primes-semiprime-gap-conic-bijection",
     "L-quadratic-primes-odd-quadratic-root-average"
   ],
-  "imports": []
+  "imports": [
+    "Conjectures.QuadraticPrimes.SemiprimeGapConicBijection"
+  ]
 }
