@@ -14059,8 +14059,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.AsgbFixedFiberMatrixClassification",
       "file": "lean/Conjectures/Goldbach/AsgbFixedFiberMatrixClassification.lean",
+      "module": "Conjectures.Goldbach.AsgbFixedFiberMatrixClassification",
       "track": "dyadic-reflection",
       "route_source": "dyadic-reflection"
     },
@@ -14083,8 +14083,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.BalancedChenPrimePairs",
       "file": "lean/Conjectures/Goldbach/BalancedChenPrimePairs.lean",
+      "module": "Conjectures.Goldbach.BalancedChenPrimePairs",
       "route_source": "dyadic-reflection"
     },
     {
@@ -14670,8 +14670,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.DyadicExceptionLittleOSqrt",
       "file": "lean/Conjectures/Goldbach/DyadicExceptionLittleOSqrt.lean",
+      "module": "Conjectures.Goldbach.DyadicExceptionLittleOSqrt",
       "route_source": "exceptional-set-four-sevenths"
     },
     {
@@ -14778,8 +14778,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LogSquareWindowDensity",
       "file": "lean/Conjectures/Goldbach/LogSquareWindowDensity.lean",
+      "module": "Conjectures.Goldbach.LogSquareWindowDensity",
       "route_source": "exceptional-set-four-sevenths"
     },
     {
@@ -14801,8 +14801,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.BalancedLinearSquareRoot",
       "file": "lean/Conjectures/Goldbach/BalancedLinearSquareRoot.lean",
+      "module": "Conjectures.Goldbach.BalancedLinearSquareRoot",
       "route_source": "exceptions"
     },
     {
@@ -14980,8 +14980,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.BinaryShiftSimultaneousRichness",
       "file": "lean/Conjectures/Goldbach/BinaryShiftSimultaneousRichness.lean",
+      "module": "Conjectures.Goldbach.BinaryShiftSimultaneousRichness",
       "route_source": "exceptions"
     },
     {
@@ -15025,8 +15025,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenForcedThree",
       "file": "lean/Conjectures/Goldbach/ChenForcedThree.lean",
+      "module": "Conjectures.Goldbach.ChenForcedThree",
       "route_source": "exceptions"
     },
     {
@@ -15048,8 +15048,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenPrescribedProgressions",
       "file": "lean/Conjectures/Goldbach/ChenPrescribedProgressions.lean",
+      "module": "Conjectures.Goldbach.ChenPrescribedProgressions",
       "route_source": "exceptions"
     },
     {
@@ -15071,8 +15071,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenShortTargetWindow",
       "file": "lean/Conjectures/Goldbach/ChenShortTargetWindow.lean",
+      "module": "Conjectures.Goldbach.ChenShortTargetWindow",
       "route_source": "exceptions"
     },
     {
@@ -15094,8 +15094,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenSquareTargets",
       "file": "lean/Conjectures/Goldbach/ChenSquareTargets.lean",
+      "module": "Conjectures.Goldbach.ChenSquareTargets",
       "route_source": "exceptions"
     },
     {
@@ -15117,8 +15117,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenTwoFactorWindows",
       "file": "lean/Conjectures/Goldbach/ChenTwoFactorWindows.lean",
+      "module": "Conjectures.Goldbach.ChenTwoFactorWindows",
       "route_source": "exceptions"
     },
     {
@@ -15140,8 +15140,8 @@
       "parallel": true,
       "program": "correlation",
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.DigitSetIntrinsicSquareRoot",
       "file": "lean/Conjectures/Goldbach/DigitSetIntrinsicSquareRoot.lean",
+      "module": "Conjectures.Goldbach.DigitSetIntrinsicSquareRoot",
       "route_source": "exceptions"
     },
     {
@@ -15172,8 +15172,8 @@
         "Conjectures.Goldbach.ThreeQuartersExceptionalDirichletWindows",
         "PEqualNP.Outside.L_goldbach_frontier_no_siegel_zero"
       ],
-      "module": "Conjectures.Goldbach.FixedModulusZeroClassSquare",
       "file": "lean/Conjectures/Goldbach/FixedModulusZeroClassSquare.lean",
+      "module": "Conjectures.Goldbach.FixedModulusZeroClassSquare",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -15196,8 +15196,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.FixedShiftSexticGoldbach",
       "file": "lean/Conjectures/Goldbach/FixedShiftSexticGoldbach.lean",
+      "module": "Conjectures.Goldbach.FixedShiftSexticGoldbach",
       "route_source": "exceptions"
     },
     {
@@ -15219,8 +15219,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.LinnikAsymmetricSupportSurplus",
       "file": "lean/Conjectures/Goldbach/LinnikAsymmetricSupportSurplus.lean",
+      "module": "Conjectures.Goldbach.LinnikAsymmetricSupportSurplus",
       "route_source": "exceptions"
     },
     {
@@ -15242,8 +15242,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.LocalDensityHalfEndpoint",
       "file": "lean/Conjectures/Goldbach/LocalDensityHalfEndpoint.lean",
+      "module": "Conjectures.Goldbach.LocalDensityHalfEndpoint",
       "route_source": "exceptions"
     },
     {
@@ -15267,8 +15267,8 @@
       "imports": [
         "Conjectures.Goldbach.NearExtremalReducedConductor"
       ],
-      "module": "Conjectures.Goldbach.NearExtremalPartnerCount",
       "file": "lean/Conjectures/Goldbach/NearExtremalPartnerCount.lean",
+      "module": "Conjectures.Goldbach.NearExtremalPartnerCount",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -15293,8 +15293,8 @@
       "imports": [
         "Conjectures.Goldbach.SharpSingularSeriesRatios"
       ],
-      "module": "Conjectures.Goldbach.NearExtremalReducedConductor",
       "file": "lean/Conjectures/Goldbach/NearExtremalReducedConductor.lean",
+      "module": "Conjectures.Goldbach.NearExtremalReducedConductor",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -15321,8 +15321,8 @@
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerDyadicZeroBlock",
       "file": "lean/Conjectures/Goldbach/PartnerDyadicZeroBlock.lean",
+      "module": "Conjectures.Goldbach.PartnerDyadicZeroBlock",
       "route_source": "exceptions"
     },
     {
@@ -15341,13 +15341,15 @@
       "role": "target",
       "challenge_only": true,
       "parallel": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.PartnerLevelParseval"
+      ],
       "depends_on": [
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerHeightRenormalizedSquare",
       "file": "lean/Conjectures/Goldbach/PartnerHeightRenormalizedSquare.lean",
+      "module": "Conjectures.Goldbach.PartnerHeightRenormalizedSquare",
       "route_source": "exceptions"
     },
     {
@@ -15371,8 +15373,8 @@
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerLevelParseval",
       "file": "lean/Conjectures/Goldbach/PartnerLevelParseval.lean",
+      "module": "Conjectures.Goldbach.PartnerLevelParseval",
       "route_source": "exceptions"
     },
     {
@@ -15391,13 +15393,15 @@
       "role": "target",
       "challenge_only": true,
       "parallel": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.PartnerLevelParseval"
+      ],
       "depends_on": [
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerLevelSignedOperator",
       "file": "lean/Conjectures/Goldbach/PartnerLevelSignedOperator.lean",
+      "module": "Conjectures.Goldbach.PartnerLevelSignedOperator",
       "route_source": "exceptions"
     },
     {
@@ -15424,8 +15428,8 @@
         "L-goldbach-partner-sharp-cubic-level"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerOptimalGlobalCubic",
       "file": "lean/Conjectures/Goldbach/PartnerOptimalGlobalCubic.lean",
+      "module": "Conjectures.Goldbach.PartnerOptimalGlobalCubic",
       "route_source": "exceptions"
     },
     {
@@ -15444,13 +15448,15 @@
       "role": "target",
       "challenge_only": true,
       "parallel": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.PartnerLevelParseval"
+      ],
       "depends_on": [
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerPrincipalAmplitudeTail",
       "file": "lean/Conjectures/Goldbach/PartnerPrincipalAmplitudeTail.lean",
+      "module": "Conjectures.Goldbach.PartnerPrincipalAmplitudeTail",
       "route_source": "exceptions"
     },
     {
@@ -15469,13 +15475,15 @@
       "role": "target",
       "challenge_only": true,
       "parallel": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.PartnerLevelParseval"
+      ],
       "depends_on": [
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerPrincipalRowPhase",
       "file": "lean/Conjectures/Goldbach/PartnerPrincipalRowPhase.lean",
+      "module": "Conjectures.Goldbach.PartnerPrincipalRowPhase",
       "route_source": "exceptions"
     },
     {
@@ -15499,8 +15507,8 @@
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerQuadraticObstruction",
       "file": "lean/Conjectures/Goldbach/PartnerQuadraticObstruction.lean",
+      "module": "Conjectures.Goldbach.PartnerQuadraticObstruction",
       "route_source": "exceptions"
     },
     {
@@ -15519,13 +15527,15 @@
       "role": "target",
       "challenge_only": true,
       "parallel": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.PrimitivePartnerCubicMass"
+      ],
       "depends_on": [
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerSharpCubicLevel",
       "file": "lean/Conjectures/Goldbach/PartnerSharpCubicLevel.lean",
+      "module": "Conjectures.Goldbach.PartnerSharpCubicLevel",
       "route_source": "exceptions"
     },
     {
@@ -15544,13 +15554,15 @@
       "role": "target",
       "challenge_only": true,
       "parallel": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.PartnerLevelParseval"
+      ],
       "depends_on": [
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerSignedHeightCancellation",
       "file": "lean/Conjectures/Goldbach/PartnerSignedHeightCancellation.lean",
+      "module": "Conjectures.Goldbach.PartnerSignedHeightCancellation",
       "route_source": "exceptions"
     },
     {
@@ -15569,13 +15581,15 @@
       "role": "target",
       "challenge_only": true,
       "parallel": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.PrimitivePartnerCubicMass"
+      ],
       "depends_on": [
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerSuperquadratic",
       "file": "lean/Conjectures/Goldbach/PartnerSuperquadratic.lean",
+      "module": "Conjectures.Goldbach.PartnerSuperquadratic",
       "route_source": "exceptions"
     },
     {
@@ -15597,8 +15611,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.PolynomialEighthMomentSupport",
       "file": "lean/Conjectures/Goldbach/PolynomialEighthMomentSupport.lean",
+      "module": "Conjectures.Goldbach.PolynomialEighthMomentSupport",
       "route_source": "exceptions"
     },
     {
@@ -15620,8 +15634,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.PolynomialFourierTransference",
       "file": "lean/Conjectures/Goldbach/PolynomialFourierTransference.lean",
+      "module": "Conjectures.Goldbach.PolynomialFourierTransference",
       "route_source": "exceptions"
     },
     {
@@ -15643,8 +15657,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.PolynomialTripleCollisions",
       "file": "lean/Conjectures/Goldbach/PolynomialTripleCollisions.lean",
+      "module": "Conjectures.Goldbach.PolynomialTripleCollisions",
       "route_source": "exceptions"
     },
     {
@@ -15666,8 +15680,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.PrimeLocalCompatibleColors",
       "file": "lean/Conjectures/Goldbach/PrimeLocalCompatibleColors.lean",
+      "module": "Conjectures.Goldbach.PrimeLocalCompatibleColors",
       "route_source": "exceptions"
     },
     {
@@ -15690,8 +15704,8 @@
       "depends_on": [
         "L-goldbach-near-extremal-partner-count"
       ],
-      "module": "Conjectures.Goldbach.PrimitivePartnerCubicMass",
       "file": "lean/Conjectures/Goldbach/PrimitivePartnerCubicMass.lean",
+      "module": "Conjectures.Goldbach.PrimitivePartnerCubicMass",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -15714,8 +15728,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.QuadraticValuesManyPrimePairs",
       "file": "lean/Conjectures/Goldbach/QuadraticValuesManyPrimePairs.lean",
+      "module": "Conjectures.Goldbach.QuadraticValuesManyPrimePairs",
       "route_source": "exceptions"
     },
     {
@@ -15735,12 +15749,14 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.ReflectedMajorSharpFloor"
+      ],
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedContinuousDistribution",
       "file": "lean/Conjectures/Goldbach/ReflectedContinuousDistribution.lean",
+      "module": "Conjectures.Goldbach.ReflectedContinuousDistribution",
       "route_source": "exceptions"
     },
     {
@@ -15760,12 +15776,14 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.ReflectedMajorSharpFloor"
+      ],
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedLowerTailDensity",
       "file": "lean/Conjectures/Goldbach/ReflectedLowerTailDensity.lean",
+      "module": "Conjectures.Goldbach.ReflectedLowerTailDensity",
       "route_source": "exceptions"
     },
     {
@@ -15787,8 +15805,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ReflectedMajorSharpFloor",
       "file": "lean/Conjectures/Goldbach/ReflectedMajorSharpFloor.lean",
+      "module": "Conjectures.Goldbach.ReflectedMajorSharpFloor",
       "route_source": "exceptions"
     },
     {
@@ -15808,12 +15826,14 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.ReflectedMajorSharpFloor"
+      ],
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedMeanSquareEulerTail",
       "file": "lean/Conjectures/Goldbach/ReflectedMeanSquareEulerTail.lean",
+      "module": "Conjectures.Goldbach.ReflectedMeanSquareEulerTail",
       "route_source": "exceptions"
     },
     {
@@ -15833,12 +15853,14 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.ReflectedMajorSharpFloor"
+      ],
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedShiftedPairMoment",
       "file": "lean/Conjectures/Goldbach/ReflectedShiftedPairMoment.lean",
+      "module": "Conjectures.Goldbach.ReflectedShiftedPairMoment",
       "route_source": "exceptions"
     },
     {
@@ -15858,12 +15880,14 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.ReflectedMajorSharpFloor"
+      ],
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedShortProgressionMean",
       "file": "lean/Conjectures/Goldbach/ReflectedShortProgressionMean.lean",
+      "module": "Conjectures.Goldbach.ReflectedShortProgressionMean",
       "route_source": "exceptions"
     },
     {
@@ -15883,12 +15907,14 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.ReflectedMajorSharpFloor"
+      ],
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedUpperEnvelope",
       "file": "lean/Conjectures/Goldbach/ReflectedUpperEnvelope.lean",
+      "module": "Conjectures.Goldbach.ReflectedUpperEnvelope",
       "route_source": "exceptions"
     },
     {
@@ -15910,8 +15936,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.RomanovCriticalTwoShiftScale",
       "file": "lean/Conjectures/Goldbach/RomanovCriticalTwoShiftScale.lean",
+      "module": "Conjectures.Goldbach.RomanovCriticalTwoShiftScale",
       "route_source": "exceptions"
     },
     {
@@ -15933,8 +15959,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.RomanovLocalUnique",
       "file": "lean/Conjectures/Goldbach/RomanovLocalUnique.lean",
+      "module": "Conjectures.Goldbach.RomanovLocalUnique",
       "route_source": "exceptions"
     },
     {
@@ -15956,8 +15982,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.RomanovSeparatedBandSupport",
       "file": "lean/Conjectures/Goldbach/RomanovSeparatedBandSupport.lean",
+      "module": "Conjectures.Goldbach.RomanovSeparatedBandSupport",
       "route_source": "exceptions"
     },
     {
@@ -15979,8 +16005,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.RomanovShortWindowDensity",
       "file": "lean/Conjectures/Goldbach/RomanovShortWindowDensity.lean",
+      "module": "Conjectures.Goldbach.RomanovShortWindowDensity",
       "route_source": "exceptions"
     },
     {
@@ -16008,8 +16034,8 @@
         "Conjectures.Goldbach.DeepThreeQuartersExceptionalZeroCriterion",
         "Conjectures.Goldbach.BinaryShiftOrderTail"
       ],
-      "module": "Conjectures.Goldbach.SharpSingularSeriesRatios",
       "file": "lean/Conjectures/Goldbach/SharpSingularSeriesRatios.lean",
+      "module": "Conjectures.Goldbach.SharpSingularSeriesRatios",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -16053,8 +16079,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.ThinPrimeReservoir",
       "file": "lean/Conjectures/Goldbach/ThinPrimeReservoir.lean",
+      "module": "Conjectures.Goldbach.ThinPrimeReservoir",
       "route_source": "exceptions"
     },
     {
@@ -16076,8 +16102,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.TransferenceFourthObstruction",
       "file": "lean/Conjectures/Goldbach/TransferenceFourthObstruction.lean",
+      "module": "Conjectures.Goldbach.TransferenceFourthObstruction",
       "route_source": "exceptions"
     },
     {
@@ -16099,8 +16125,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.TransferenceLinearFloor",
       "file": "lean/Conjectures/Goldbach/TransferenceLinearFloor.lean",
+      "module": "Conjectures.Goldbach.TransferenceLinearFloor",
       "route_source": "exceptions"
     },
     {
@@ -16122,8 +16148,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.TransferenceLogEndpoint",
       "file": "lean/Conjectures/Goldbach/TransferenceLogEndpoint.lean",
+      "module": "Conjectures.Goldbach.TransferenceLogEndpoint",
       "route_source": "exceptions"
     },
     {
@@ -16145,8 +16171,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.TransferenceMixedRestriction",
       "file": "lean/Conjectures/Goldbach/TransferenceMixedRestriction.lean",
+      "module": "Conjectures.Goldbach.TransferenceMixedRestriction",
       "route_source": "exceptions"
     },
     {
@@ -16168,8 +16194,8 @@
       "parallel": true,
       "program": "correlation",
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.TwoGaussianNormPrimeExceptions",
       "file": "lean/Conjectures/Goldbach/TwoGaussianNormPrimeExceptions.lean",
+      "module": "Conjectures.Goldbach.TwoGaussianNormPrimeExceptions",
       "route_source": "exceptions"
     },
     {
@@ -16432,8 +16458,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.CentralRoughChenMass",
       "file": "lean/Conjectures/Goldbach/CentralRoughChenMass.lean",
+      "module": "Conjectures.Goldbach.CentralRoughChenMass",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -16455,8 +16481,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.FareyBuchstabReflectedLimit",
       "file": "lean/Conjectures/Goldbach/FareyBuchstabReflectedLimit.lean",
+      "module": "Conjectures.Goldbach.FareyBuchstabReflectedLimit",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -16861,8 +16887,8 @@
       "imports": [
         "Conjectures.Goldbach.FareyLateFirstHitFactorSwitch"
       ],
-      "module": "Conjectures.Goldbach.FareyLatePositiveExcess",
       "file": "lean/Conjectures/Goldbach/FareyLatePositiveExcess.lean",
+      "module": "Conjectures.Goldbach.FareyLatePositiveExcess",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -16908,8 +16934,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.FareyMatchedSemiprimeCofactors",
       "file": "lean/Conjectures/Goldbach/FareyMatchedSemiprimeCofactors.lean",
+      "module": "Conjectures.Goldbach.FareyMatchedSemiprimeCofactors",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -16929,8 +16955,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.FareyReturnDigitLine",
       "file": "lean/Conjectures/Goldbach/FareyReturnDigitLine.lean",
+      "module": "Conjectures.Goldbach.FareyReturnDigitLine",
       "track": "farey-inverse-sieve",
       "route_source": "farey-inverse-sieve"
     },
@@ -16953,8 +16979,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.FareySemiprimeFactorRectangle",
       "file": "lean/Conjectures/Goldbach/FareySemiprimeFactorRectangle.lean",
+      "module": "Conjectures.Goldbach.FareySemiprimeFactorRectangle",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -16976,8 +17002,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.FareyShortWindowRoughVariance",
       "file": "lean/Conjectures/Goldbach/FareyShortWindowRoughVariance.lean",
+      "module": "Conjectures.Goldbach.FareyShortWindowRoughVariance",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -17094,8 +17120,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.MovingWindowTwoFactorChen",
       "file": "lean/Conjectures/Goldbach/MovingWindowTwoFactorChen.lean",
+      "module": "Conjectures.Goldbach.MovingWindowTwoFactorChen",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -17690,8 +17716,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.FinitePostBoundaryThrough524288",
       "file": "lean/Conjectures/Goldbach/FinitePostBoundaryThrough524288.lean",
+      "module": "Conjectures.Goldbach.FinitePostBoundaryThrough524288",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -17927,8 +17953,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11CmParameterLocalDensity",
       "file": "lean/Conjectures/Goldbach/Rfc11CmParameterLocalDensity.lean",
+      "module": "Conjectures.Goldbach.Rfc11CmParameterLocalDensity",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -17949,8 +17975,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11CompatibleTwoFieldClasses",
       "file": "lean/Conjectures/Goldbach/Rfc11CompatibleTwoFieldClasses.lean",
+      "module": "Conjectures.Goldbach.Rfc11CompatibleTwoFieldClasses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -17971,8 +17997,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DescendingTail",
       "file": "lean/Conjectures/Goldbach/Rfc11DescendingTail.lean",
+      "module": "Conjectures.Goldbach.Rfc11DescendingTail",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -17993,8 +18019,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DyadicCmPrimeAnchors",
       "file": "lean/Conjectures/Goldbach/Rfc11DyadicCmPrimeAnchors.lean",
+      "module": "Conjectures.Goldbach.Rfc11DyadicCmPrimeAnchors",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18015,8 +18041,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DyadicCover",
       "file": "lean/Conjectures/Goldbach/Rfc11DyadicCover.lean",
+      "module": "Conjectures.Goldbach.Rfc11DyadicCover",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18037,8 +18063,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DyadicLeftEndpointWitnesses",
       "file": "lean/Conjectures/Goldbach/Rfc11DyadicLeftEndpointWitnesses.lean",
+      "module": "Conjectures.Goldbach.Rfc11DyadicLeftEndpointWitnesses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18059,8 +18085,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11ExtendedDyadicEdgeWitnesses",
       "file": "lean/Conjectures/Goldbach/Rfc11ExtendedDyadicEdgeWitnesses.lean",
+      "module": "Conjectures.Goldbach.Rfc11ExtendedDyadicEdgeWitnesses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18081,8 +18107,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Primorial757Repairs",
       "file": "lean/Conjectures/Goldbach/Rfc11Primorial757Repairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11Primorial757Repairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18103,8 +18129,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11ResidualDomainGlue",
       "file": "lean/Conjectures/Goldbach/Rfc11ResidualDomainGlue.lean",
+      "module": "Conjectures.Goldbach.Rfc11ResidualDomainGlue",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18125,8 +18151,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Rfc12CutpointWitness",
       "file": "lean/Conjectures/Goldbach/Rfc11Rfc12CutpointWitness.lean",
+      "module": "Conjectures.Goldbach.Rfc11Rfc12CutpointWitness",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18147,8 +18173,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11SeamSixRepairs",
       "file": "lean/Conjectures/Goldbach/Rfc11SeamSixRepairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11SeamSixRepairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18169,8 +18195,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11SecondBlockExceptionRepair",
       "file": "lean/Conjectures/Goldbach/Rfc11SecondBlockExceptionRepair.lean",
+      "module": "Conjectures.Goldbach.Rfc11SecondBlockExceptionRepair",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18191,8 +18217,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11ThirdBlockSeventyOneRepairs",
       "file": "lean/Conjectures/Goldbach/Rfc11ThirdBlockSeventyOneRepairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11ThirdBlockSeventyOneRepairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18213,8 +18239,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11TopFirst4096Witnesses",
       "file": "lean/Conjectures/Goldbach/Rfc11TopFirst4096Witnesses.lean",
+      "module": "Conjectures.Goldbach.Rfc11TopFirst4096Witnesses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18235,8 +18261,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Top316AnchorBank",
       "file": "lean/Conjectures/Goldbach/Rfc11Top316AnchorBank.lean",
+      "module": "Conjectures.Goldbach.Rfc11Top316AnchorBank",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18257,8 +18283,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Top316FirstBankCover",
       "file": "lean/Conjectures/Goldbach/Rfc11Top316FirstBankCover.lean",
+      "module": "Conjectures.Goldbach.Rfc11Top316FirstBankCover",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18279,8 +18305,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Top316SixRepairs",
       "file": "lean/Conjectures/Goldbach/Rfc11Top316SixRepairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11Top316SixRepairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18301,8 +18327,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11WheelConvolutionMain",
       "file": "lean/Conjectures/Goldbach/Rfc11WheelConvolutionMain.lean",
+      "module": "Conjectures.Goldbach.Rfc11WheelConvolutionMain",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18748,8 +18774,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.MixedB13ShortEvenMean",
       "file": "lean/Conjectures/Goldbach/MixedB13ShortEvenMean.lean",
+      "module": "Conjectures.Goldbach.MixedB13ShortEvenMean",
       "route_source": "frontier-type2-dyadic-matrix"
     },
     {
@@ -18965,8 +18991,8 @@
       "parallel": true,
       "challenge_only": true,
       "source": "https://arxiv.org/html/2606.29559v1#S2",
-      "module": "Conjectures.Goldbach.FractionShiftedMangoldtSecondMoment",
       "file": "lean/Conjectures/Goldbach/FractionShiftedMangoldtSecondMoment.lean",
+      "module": "Conjectures.Goldbach.FractionShiftedMangoldtSecondMoment",
       "route_source": "large-sieve-dispersion"
     },
     {
@@ -19449,8 +19475,8 @@
       "depends_on": [],
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.DyadicTailEntropyFloor",
       "file": "lean/Conjectures/Goldbach/DyadicTailEntropyFloor.lean",
+      "module": "Conjectures.Goldbach.DyadicTailEntropyFloor",
       "route_source": "minor-truncation"
     },
     {
@@ -19590,8 +19616,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LinnikFiveUnconditional",
       "file": "lean/Conjectures/Goldbach/LinnikFiveUnconditional.lean",
+      "module": "Conjectures.Goldbach.LinnikFiveUnconditional",
       "route_source": "minor-truncation"
     },
     {
@@ -19613,8 +19639,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LinnikSixSubpowerShift",
       "file": "lean/Conjectures/Goldbach/LinnikSixSubpowerShift.lean",
+      "module": "Conjectures.Goldbach.LinnikSixSubpowerShift",
       "route_source": "minor-truncation"
     },
     {
@@ -19636,8 +19662,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LinnikSixUnconditional",
       "file": "lean/Conjectures/Goldbach/LinnikSixUnconditional.lean",
+      "module": "Conjectures.Goldbach.LinnikSixUnconditional",
       "route_source": "minor-truncation"
     },
     {
@@ -19659,8 +19685,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LinnikTripleCenteredEnergy",
       "file": "lean/Conjectures/Goldbach/LinnikTripleCenteredEnergy.lean",
+      "module": "Conjectures.Goldbach.LinnikTripleCenteredEnergy",
       "route_source": "minor-truncation"
     },
     {
@@ -21165,8 +21191,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.ShiftedPrimePairSieve566",
       "file": "lean/Conjectures/Goldbach/ShiftedPrimePairSieve566.lean",
+      "module": "Conjectures.Goldbach.ShiftedPrimePairSieve566",
       "route_source": "minor-truncation"
     },
     {
@@ -21210,8 +21236,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.WheelModelLogSquareDecay",
       "file": "lean/Conjectures/Goldbach/WheelModelLogSquareDecay.lean",
+      "module": "Conjectures.Goldbach.WheelModelLogSquareDecay",
       "route_source": "minor-truncation"
     },
     {
@@ -21438,8 +21464,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenPairAdmissibleShifts",
       "file": "lean/Conjectures/Goldbach/ChenPairAdmissibleShifts.lean",
+      "module": "Conjectures.Goldbach.ChenPairAdmissibleShifts",
       "route_source": "progressions"
     },
     {
@@ -21461,8 +21487,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.PrescribedResiduesSquareRootModuli",
       "file": "lean/Conjectures/Goldbach/PrescribedResiduesSquareRootModuli.lean",
+      "module": "Conjectures.Goldbach.PrescribedResiduesSquareRootModuli",
       "route_source": "progressions"
     },
     {
@@ -21484,8 +21510,8 @@
       "parallel": true,
       "challenge_only": true,
       "source": "https://arxiv.org/html/2606.29559v1#S4.SS2",
-      "module": "Conjectures.Goldbach.SevenFactorProductShift",
       "file": "lean/Conjectures/Goldbach/SevenFactorProductShift.lean",
+      "module": "Conjectures.Goldbach.SevenFactorProductShift",
       "route_source": "progressions"
     },
     {
@@ -21550,8 +21576,8 @@
       "parallel": true,
       "challenge_only": true,
       "source": "https://arxiv.org/html/2606.29559v1#S1",
-      "module": "Conjectures.Goldbach.BalancedThreeFactorGap",
       "file": "lean/Conjectures/Goldbach/BalancedThreeFactorGap.lean",
+      "module": "Conjectures.Goldbach.BalancedThreeFactorGap",
       "route_source": "representations"
     },
     {
@@ -21573,8 +21599,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.BeattyCommonExceptions",
       "file": "lean/Conjectures/Goldbach/BeattyCommonExceptions.lean",
+      "module": "Conjectures.Goldbach.BeattyCommonExceptions",
       "route_source": "representations"
     },
     {
@@ -22797,8 +22823,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.MixedPiatetskiShapiroAsymptotic",
       "file": "lean/Conjectures/Goldbach/MixedPiatetskiShapiroAsymptotic.lean",
+      "module": "Conjectures.Goldbach.MixedPiatetskiShapiroAsymptotic",
       "route_source": "representations"
     },
     {
@@ -22933,8 +22959,8 @@
       "imports": [],
       "depends_on": [],
       "track": "rh-grh-windows",
-      "module": "Conjectures.Goldbach.CenteredTriangleLogSaving",
       "file": "lean/Conjectures/Goldbach/CenteredTriangleLogSaving.lean",
+      "module": "Conjectures.Goldbach.CenteredTriangleLogSaving",
       "route_source": "rh-grh-windows"
     },
     {
@@ -22956,8 +22982,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.SelbergThetaSingleLog",
       "file": "lean/Conjectures/Goldbach/SelbergThetaSingleLog.lean",
+      "module": "Conjectures.Goldbach.SelbergThetaSingleLog",
       "route_source": "rh-grh-windows"
     },
     {
@@ -23820,8 +23846,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.MangoldtDenominatorDecay",
       "file": "lean/Conjectures/Goldbach/MangoldtDenominatorDecay.lean",
+      "module": "Conjectures.Goldbach.MangoldtDenominatorDecay",
       "route_source": "vaughan-bilinear"
     },
     {
@@ -23843,8 +23869,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.PrimeSquareDenominatorCancellation",
       "file": "lean/Conjectures/Goldbach/PrimeSquareDenominatorCancellation.lean",
+      "module": "Conjectures.Goldbach.PrimeSquareDenominatorCancellation",
       "route_source": "vaughan-bilinear"
     },
     {
@@ -23929,8 +23955,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.WorstNumeratorQuadraticMean",
       "file": "lean/Conjectures/Goldbach/WorstNumeratorQuadraticMean.lean",
+      "module": "Conjectures.Goldbach.WorstNumeratorQuadraticMean",
       "route_source": "vaughan-bilinear"
     },
     {
@@ -23952,8 +23978,8 @@
         "zh": "讨论 #3806 更正后尝试把负部单独压到 o(N)。本题检验其障碍：固定奇素数 p，N 为不含 p 的素数连乘，取 q=pd、d|N，则 q 平方自由且 c_q(N)=−φ(d)。在 Q<q≤2Q 时积分应包含一个远离零点、长度与 1/N 同阶的区间。另需证明该倍段内有正比例的平方自由、与 p 互素、素因子不超过 y 的 d。常数可依赖 p。若得证，仅排除丢弃正项的估计，原带符号下界仍开放。",
         "en": "Discussion #3806 proposes discarding the positive model terms. At a primorial missing p take q=pd with d dividing N. Then q is squarefree and its Ramanujan sum at N is −φ(d). Bound the kernel mass below on a fixed interval scaled by 1/N and count y-smooth squarefree divisors in the moving dyadic window. Constants may depend on p. A proof rules out the negative-only estimate while leaving the signed floor open."
       },
-      "module": "Conjectures.Goldbach.SkirtOmittedPrimeNegativeMass",
       "file": "lean/Conjectures/Goldbach/SkirtOmittedPrimeNegativeMass.lean",
+      "module": "Conjectures.Goldbach.SkirtOmittedPrimeNegativeMass",
       "route_source": "wide-arc-signed-remainder"
     },
     {
