@@ -16,5 +16,7 @@
   "depends_on": [
     "L-twin-primes-quadratic-square-sieve-residues"
   ],
-  "imports": []
+  "imports": [
+    "Conjectures.TwinPrimes.QuadraticSquareSieveResidues"
+  ]
 }
