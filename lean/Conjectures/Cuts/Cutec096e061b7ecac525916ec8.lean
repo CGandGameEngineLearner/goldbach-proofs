@@ -8,7 +8,7 @@ This cut reduces the global counting task to two closed analytic statements: a u
 positive linear floor for the published major arcs (premise 1) and the four-sevenths
 negative-energy bound for the minor arcs (premise 2). The verified bridge module
 `Conjectures.Goldbach.ExceptionFourSeventhsCountingBridge` turns those two premises into a
-dyadic bound `#bad ∩ [X, 2X] ≼ X^(4/7+ε)`.  The proof below spreads the whole range
+dyadic bound `the bad set on [X, 2X] ≼ X^(4/7+ε)`.  The proof below spreads the whole range
 `[4, X]` over the dyadic blocks `[2^j, 2^(j+1)]`, absorbs the geometric series
 `∑_j (2^(4/7+ε))^j` and the finitely many small blocks into a single constant, and
 finally enlarges that constant by the factor `X^(4/7+ε) ≥ 1`.
