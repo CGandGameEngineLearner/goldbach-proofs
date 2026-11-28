@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "problem": "goldbach",
+  "base_revision": "272d7a3ae2bca0beefd610160acd4813d991e099",
+  "request_id": "type2-close-pair-divisor-mass",
+  "parent": {
+    "id": "L-goldbach-frontier-type2-b1-b1",
+    "statement_sha256": "7399d30d1b2ef53f1a1146bf79984a323b92f72e20a36e146c306497efcf4d7e"
+  },
+  "motivation": {
+    "zh": "在固定靶点的第一带分离近素数对，保留需估计的有符号远距离项。",
+    "en": "Separate close prime pairs at a fixed first-band target and isolate the signed distant contribution."
+  },
+  "tasks": [
+    {
+      "id": "L-goldbach-type2-close-pair-divisor-mass",
+      "statement": "∀ (n B D T : ℕ) (P : Finset ℕ) (c : ℕ → ℕ → ℂ) (M : ℝ), (∀ m : ℕ, 0 < m → m ≤ B*D → m.divisors.card ≤ T) → (∀ p : ℕ, c p 0 = 0) → (∀ p ∈ P, ∀ a ≤ B, ‖c p a‖ ≤ M) → let e := fun (k : ℤ) (t : ℝ) => Complex.exp (((k : ℂ) * (2 * (Real.pi : ℂ) * Complex.I)) * (t : ℂ)); let R := fun (p : ℕ) (t : ℝ) => ∑ j ∈ Finset.range (B+1), c p j * e (j : ℤ) ((p : ℝ)*t); let pairs := (P.product P).filter (fun z : ℕ × ℕ => |(z.1 : ℤ) - z.2| ≤ D); ‖intervalIntegral (fun t => (∑ z ∈ pairs, R z.1 t * R z.2 t) * e (-(n : ℤ)) t) (0 : ℝ) 1 MeasureTheory.volume‖ ≤ ((min (B^2*(2*D+1)) (B^2 + 2*B*(2*D+1)*T) : ℕ) : ℝ) * M^2",
+      "plain_statement": {
+        "zh": "用因子数控制 Type-II 全圆系数中相距至多 D 的余因子对",
+        "en": "Bound close cofactor pairs in a full-circle Type-II coefficient by divisor counts"
+      },
+      "brief": {
+        "zh": "对每个固定 n，令正短因子 a,b≤B，余因子 p,q 来自同一有限集，且 |p−q|≤D。T 控制 1 到 BD 内各整数的因子个数。在已有 B²(2D+1)M² 界外，证明同一系数还至多为 (B²+2B(2D+1)T)M²。对角 p=q 单独计数。对 p≠q 固定 s=a+b 及 p，则 p 距 ⌊n/s⌋ 至多 D，且 b 是非零整数 |n−sp| 的因子。第一带中可取 D=⌊n^(5/8)⌋。可引用全站已验模块。",
+        "en": "Fix the target n, positive short factors a,b≤B, and cofactors p,q in the same finite set with |p−q|≤D. Let T bound divisor counts on [1,BD]. In addition to the existing B²(2D+1)M² bound, prove (B²+2B(2D+1)T)M² for the same coefficient. Count p=q separately. For p≠q, fix s=a+b and p. The endpoint p is within D of floor(n/s), and b divides the nonzero integer |n−sp|. The first band admits D=floor(n^(5/8)). Verified modules from any desk may be used."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/35c37addd4a46ffcef40c7c4b91ae538d24a86db/lean/Conjectures/Goldbach/Type2FixedTargetReciprocalError.lean#L1815",
+      "program": "correlation",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-type2-fixed-target-reciprocal-error"
+      ],
+      "route": "frontier-type2-dyadic-matrix",
+      "assumptions": []
+    }
+  ],
+  "links": [
+    {
+      "kind": "input",
+      "inputs": [
+        "L-goldbach-type2-close-pair-divisor-mass"
+      ],
+      "output": "L-goldbach-frontier-type2-b1-b1",
+      "explanation": {
+        "zh": "第一带全圆项可先去掉 |p−q|≤⌊n^(5/8)⌋ 的素数对。剩余远素数对的逆元和与包含全部大素数对的宽弧积分之间，仍须对每个充分大的偶数证明 o(n) 抵消。",
+        "en": "On the first band one can remove prime pairs within floor(n^(5/8)) from the full-circle term. The distant inverse-residue sum must still match the wide-arc integral of all large-prime pairs to o(n) at every sufficiently large even target."
+      }
+    }
+  ],
+  "route_note": {
+    "zh": "第一带全圆项可先去掉 |p−q|≤⌊n^(5/8)⌋ 的素数对。剩余远素数对的逆元和与包含全部大素数对的宽弧积分之间，仍须对每个充分大的偶数证明 o(n) 抵消。",
+    "en": "On the first band one can remove prime pairs within floor(n^(5/8)) from the full-circle term. The distant inverse-residue sum must still match the wide-arc integral of all large-prime pairs to o(n) at every sufficiently large even target."
+  }
+}
