@@ -17,6 +17,7 @@ pass ``--yes`` to write.  Back up the database first, for example:
 import argparse
 import sqlite3
 import time
+from contextlib import closing
 from pathlib import Path
 
 from desk import RELEASE_REASONS
@@ -53,72 +54,72 @@ def main():
         raise SystemExit("handle must not be empty")
 
     now = int(time.time())
-    conn = sqlite3.connect(f"file:{args.db}?mode=rw", uri=True, timeout=15)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA busy_timeout=15000")
+    with closing(sqlite3.connect(f"file:{args.db}?mode=rw", uri=True, timeout=15)) as conn:
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA busy_timeout=15000")
 
-    query = """
-        SELECT rowid, token_hash, gap, kind, claimed_at, expires_at,
-               submitted_at, run_id
-        FROM goldbach_leases
-        WHERE lower(handle) = ?
-          AND released_at IS NULL
-          AND finished_at IS NULL
-          AND expires_at > ?
-    """
-    params = [handle, now]
-    if args.gap:
-        query += " AND gap = ?"
-        params.append(args.gap)
-    if args.older_than_minutes > 0:
-        query += " AND claimed_at <= ?"
-        params.append(now - args.older_than_minutes * 60)
-    query += " ORDER BY claimed_at, rowid"
-
-    rows = conn.execute(query, params).fetchall()
-    if not rows:
-        print(f"No active leases found for handle {handle!r}.")
-        return
-
-    eligible = []
-    print(f"Active leases for {handle!r}:")
-    for row in rows:
-        state = "orphaned" if row["submitted_at"] is None and row["run_id"] is None else "in use"
-        age = max(0, now - int(row["claimed_at"])) // 60
-        print(
-            f"  rowid={row['rowid']} gap={row['gap']} kind={row['kind']} "
-            f"claimed={age}m ago state={state} run_id={row['run_id']}"
-        )
-        if state == "orphaned":
-            eligible.append(row)
-
-    if not eligible:
-        print("No orphaned unsubmitted leases to release.")
-        return
-
-    if not args.yes:
-        print(
-            f"Dry run: {len(eligible)} orphaned lease(s) would be marked "
-            f"released_at=now, release_reason={args.reason!r}. Pass --yes to write."
-        )
-        return
-
-    with conn:
-        conn.execute("BEGIN IMMEDIATE")
-        cursor = conn.executemany(
-            """
-            UPDATE goldbach_leases
-            SET released_at = ?, release_reason = ?
-            WHERE token_hash = ?
-              AND submitted_at IS NULL
-              AND run_id IS NULL
+        query = """
+            SELECT rowid, token_hash, gap, kind, claimed_at, expires_at,
+                   submitted_at, run_id
+            FROM goldbach_leases
+            WHERE lower(handle) = ?
               AND released_at IS NULL
               AND finished_at IS NULL
-            """,
-            [(now, args.reason, row["token_hash"]) for row in eligible],
-        )
-        released = cursor.rowcount
-    print(f"Released {released} orphaned lease(s) for {handle!r}.")
+              AND expires_at > ?
+        """
+        params = [handle, now]
+        if args.gap:
+            query += " AND gap = ?"
+            params.append(args.gap)
+        if args.older_than_minutes > 0:
+            query += " AND claimed_at <= ?"
+            params.append(now - args.older_than_minutes * 60)
+        query += " ORDER BY claimed_at, rowid"
+
+        rows = conn.execute(query, params).fetchall()
+        if not rows:
+            print(f"No active leases found for handle {handle!r}.")
+            return
+
+        eligible = []
+        print(f"Active leases for {handle!r}:")
+        for row in rows:
+            state = "orphaned" if row["submitted_at"] is None and row["run_id"] is None else "in use"
+            age = max(0, now - int(row["claimed_at"])) // 60
+            print(
+                f"  rowid={row['rowid']} gap={row['gap']} kind={row['kind']} "
+                f"claimed={age}m ago state={state} run_id={row['run_id']}"
+            )
+            if state == "orphaned":
+                eligible.append(row)
+
+        if not eligible:
+            print("No orphaned unsubmitted leases to release.")
+            return
+
+        if not args.yes:
+            print(
+                f"Dry run: {len(eligible)} orphaned lease(s) would be marked "
+                f"released_at=now, release_reason={args.reason!r}. Pass --yes to write."
+            )
+            return
+
+        with conn:
+            conn.execute("BEGIN IMMEDIATE")
+            cursor = conn.executemany(
+                """
+                UPDATE goldbach_leases
+                SET released_at = ?, release_reason = ?
+                WHERE token_hash = ?
+                  AND submitted_at IS NULL
+                  AND run_id IS NULL
+                  AND released_at IS NULL
+                  AND finished_at IS NULL
+                """,
+                [(now, args.reason, row["token_hash"]) for row in eligible],
+            )
+            released = cursor.rowcount
+        print(f"Released {released} orphaned lease(s) for {handle!r}.")
 
 
 if __name__ == "__main__":
