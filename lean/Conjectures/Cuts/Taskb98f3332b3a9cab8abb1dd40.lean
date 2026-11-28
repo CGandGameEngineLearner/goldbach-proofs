@@ -448,8 +448,10 @@ open DyadicWordPopulation
 noncomputable def loss (a : ℕ) := 1 - Real.cos (2*Real.pi*(a:ℝ)/65536)
 
 /-- The one length-independent finite inequality used by the construction. -/
-@[irreducible] def lossCertificate : Prop :=
-  (∑ a ∈ range 65536, iidMass (changes a).card * loss a) < (637/2500:ℝ)
+structure LossBound (s : Finset ℕ) : Prop where
+  bound : (∑ a ∈ s, iidMass (changes a).card * loss a) < (637/2500:ℝ)
+
+abbrev lossCertificate := LossBound (range 65536)
 
 theorem sample_card (B r : ℕ) : (sample B r).card = 2*B.choose r := by simp [sample]
 
@@ -486,14 +488,15 @@ theorem local_loss (cert : lossCertificate) (t h : ℕ) (ht : 2000 ≤ t)
     simpa only [mul_assoc] using this
   have m := sum_le_sum upper
   rw [←mul_sum,←mul_sum] at m
-  unfold lossCertificate at cert
+  change LossBound (range 65536) at cert
   have ht' : (2000:ℝ) ≤ t := by exact_mod_cast ht
   have upperTotal : (∑ a ∈ range 65536, fixedMass t (changes a).card * loss a) ≤
       (12741/50000:ℝ) := by
     generalize (range 65536 : Finset ℕ) = I at m cert ⊢
+    have hcert := cert.bound
     exact loss_margin (b := 1000*(t:ℝ))
       (v := ∑ a ∈ I, iidMass (changes a).card * loss a)
-      (by linarith only [ht']) m cert
+      (by linarith only [ht']) m hcert
   change ∑ p ∈ A, loss (f p) ≤ _ * n
   calc
     _ = ∑ a ∈ range 65536, (((A.filter fun p => f p=a).card):ℝ)*loss a := by
@@ -663,26 +666,30 @@ theorem total (x : ℝ) (n : ℕ) :
     ∑ k ∈ range (2^(n+1)), (mass n k:ℂ)*wave x n k = amp x n false + amp x n true := by
   rw [pow_succ',sum_bits]; rfl
 
-set_option linter.constructorNameAsVariable false in
-theorem loss_of_final (good : (1863/2500:ℝ) < (amp Real.pi 15 false + amp Real.pi 15 true).re) :
-    lossCertificate := by
-  have eqsum (x : ℝ) : ∑ a ∈ range 65536, mass 15 a * Real.cos (x*a/2^15) =
-      (amp x 15 false + amp x 15 true).re := by
-    have h := congrArg Complex.re (total x 15)
-    rw [show (2:ℕ)^(15+1)=65536 by decide] at h
-    simpa only [Complex.re_sum,Complex.re_ofReal_mul,wave,cis,Complex.exp_ofReal_mul_I_re] using h
+theorem eqsum (x : ℝ) : ∑ a ∈ range 65536, mass 15 a * Real.cos (x*a/2^15) =
+    (amp x 15 false + amp x 15 true).re := by
+  have h := congrArg Complex.re (total x 15)
+  rw [show (2:ℕ)^(15+1)=65536 by decide] at h
+  simpa only [Complex.re_sum,Complex.re_ofReal_mul,wave,cis,Complex.exp_ofReal_mul_I_re] using h
+
+theorem total_mass : ∑ a ∈ range 65536, mass 15 a = 1 := by
   have unit := eqsum 0
   simp only [zero_mul,zero_div,Real.cos_zero,mul_one,zero_amp] at unit
   norm_num at unit
+  exact unit
+
+theorem loss_identity : ∑ a ∈ range 65536, iidMass (changes a).card * loss a =
+    1 - (amp Real.pi 15 false + amp Real.pi 15 true).re := by
   have e (a : ℕ) : loss a = 1-Real.cos (Real.pi*a/2^15) := by
     unfold loss
     rw [show (2*Real.pi*(a:ℝ)/65536) = Real.pi*a/2^15 by ring]
-  unfold lossCertificate
   simp_rw [←mass_fifteen,e,mul_sub,mul_one]
-  rw [sum_sub_distrib]
-  have H := congrArg₂ (fun a b : ℝ => a-b) unit (eqsum Real.pi)
-  rw [H]
-  generalize (amp Real.pi 15 false + amp Real.pi 15 true).re = z at good ⊢
+  rw [sum_sub_distrib,total_mass,eqsum]
+
+theorem loss_of_value (v : ℝ) (ev : (amp Real.pi 15 false + amp Real.pi 15 true).re = v)
+    (good : (1863/2500:ℝ) < v) : lossCertificate := by
+  constructor
+  rw [loss_identity,ev]
   linarith only [good]
 
 end DyadicTransfer
@@ -939,14 +946,17 @@ private theorem final_boxes : u15.Holds (amp Real.pi (14+1) false) ∧ v15.Holds
 
 private theorem final_comparison : (1863/2500:ℚ) < u15.x.lo+v15.x.lo := by decide +kernel
 
-attribute [local irreducible] amp
-
-theorem numeric_bound : (1863/2500:ℝ) < (amp Real.pi (14+1) false + amp Real.pi (14+1) true).re :=
-  @from_bounds u15 v15 (amp Real.pi (14+1) false) (amp Real.pi (14+1) true) final_boxes final_comparison
+private theorem value_of_boxes (n : ℕ) {a b : Rect}
+    (h : a.Holds (amp Real.pi n false) ∧ b.Holds (amp Real.pi n true))
+    (q : (1863/2500:ℚ) < a.x.lo+b.x.lo) :
+    ∃ v : ℝ, (amp Real.pi n false + amp Real.pi n true).re = v ∧ (1863/2500:ℝ) < v := by
+  exact ⟨_,rfl,@from_bounds a b _ _ h q⟩
 
 theorem certified_loss : DyadicWords.lossCertificate := by
-  apply loss_of_final
-  simpa only [Nat.reduceAdd] using numeric_bound
+  have h := @value_of_boxes (14+1) u15 v15 final_boxes final_comparison
+  simp only [Nat.reduceAdd] at h
+  obtain ⟨v,ev,bound⟩ := h
+  exact loss_of_value v ev bound
 
 end DyadicTransfer
 
