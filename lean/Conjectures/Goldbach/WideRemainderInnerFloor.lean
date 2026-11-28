@@ -2419,6 +2419,127 @@ lemma csum_eq_moebius (q n : ℕ) (hq : 0 < q) :
       (Nat.div_pos (Nat.le_of_dvd hq (Nat.dvd_of_mem_divisors hd)) (Nat.pos_of_dvd_of_pos
         (Nat.dvd_of_mem_divisors hd) hq))])]
 
+/-- The reciprocal identity function on `ℕ`, as a multiplicative arithmetic function into `ℂ`. -/
+private noncomputable def invId : ArithmeticFunction ℂ := ⟨fun d => ((d : ℕ) : ℂ)⁻¹, by
+  rw [Nat.cast_zero, inv_zero]⟩
+
+private lemma isMultiplicative_invId : invId.IsMultiplicative := by
+  rw [ArithmeticFunction.IsMultiplicative.iff_ne_zero]
+  refine ⟨?_, fun {m n} hm hn _ => ?_⟩
+  · simp only [invId, ArithmeticFunction.coe_mk, Nat.cast_one, inv_one]
+  · simp only [invId, ArithmeticFunction.coe_mk]
+    rw [Nat.cast_mul, mul_inv (m:ℂ) (n:ℂ)]
+
+/-- Möbius inversion of the totient: `∑_{d ∣ g} μ(d) · (g/d) = φ(g)`. -/
+lemma sum_moebius_mul_div_eq_totient (g : ℕ) (hg : 0 < g) (hsq : Squarefree g) :
+    ∑ d ∈ Nat.divisors g, ((ArithmeticFunction.moebius d : ℤ) : ℂ) * (((g/d : ℕ) : ℂ))
+      = ((Nat.totient g : ℕ) : ℂ) := by
+  classical
+  have hrec := ArithmeticFunction.IsMultiplicative.prodPrimeFactors_one_sub
+    (f := invId) isMultiplicative_invId (n := g) hg.ne'
+  simp only [invId, ArithmeticFunction.coe_mk] at hrec
+  have hcast : ∀ d ∈ Nat.divisors g, ((g/d : ℕ) : ℂ) = (g:ℂ)/(d:ℂ) := fun d hd =>
+    Nat.cast_div (Nat.dvd_of_mem_divisors hd)
+      (Nat.cast_ne_zero.mpr (Nat.ne_of_gt (Nat.pos_of_dvd_of_pos (Nat.dvd_of_mem_divisors hd) hg)))
+  have hpt : ∀ d ∈ Nat.divisors g, ((ArithmeticFunction.moebius d : ℤ) : ℂ) * ((g:ℂ)/(d:ℂ))
+      = (g:ℂ) * (((ArithmeticFunction.moebius d : ℤ) : ℂ) * ((d:ℂ)⁻¹)) := fun d hd => by
+    field_simp
+  rw [Finset.sum_congr rfl (fun d hd => by rw [hcast d hd, hpt d hd]), ← Finset.mul_sum]
+  rw [← hrec]
+  have hsq0 : (g:ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hg.ne'
+  have hp1 : ∏ p ∈ g.primeFactors, (1 - (p:ℂ)⁻¹)
+      = (∏ p ∈ g.primeFactors, ((p:ℂ) - 1)) / ∏ p ∈ g.primeFactors, ((p:ℕ):ℂ) := by
+    rw [← Finset.prod_div_distrib]
+    refine Finset.prod_congr rfl fun p hp => ?_
+    have hp0 : (p:ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.ne_of_gt (Nat.pos_of_mem_primeFactors hp))
+    field_simp
+  have hden : ∏ p ∈ g.primeFactors, ((p:ℕ):ℂ) = (g:ℂ) := by
+    rw [← Nat.cast_prod, Nat.prod_primeFactors_of_squarefree hsq]
+  have hphi : (Nat.totient g : ℕ) = ∏ p ∈ g.primeFactors, (p - 1) := by
+    rw [Nat.totient_eq_div_primeFactors_mul, Nat.prod_primeFactors_of_squarefree hsq,
+      Nat.div_self hg, one_mul]
+  rw [hp1, hden, hphi, Nat.cast_prod, mul_comm (g:ℂ), div_mul_cancel₀ _ hsq0]
+  have hfin : ∀ p ∈ g.primeFactors, (((p:ℕ):ℂ) - 1) = ((p - 1 : ℕ) : ℂ) := fun p hp =>
+    (Nat.cast_sub (Nat.succ_le_of_lt (Nat.pos_of_mem_primeFactors hp))).symm
+  exact Finset.prod_congr rfl hfin
+
+/-- Squarefree evaluation of the Ramanujan sum: `c_q(n) = μ(q/(q,n)) · φ((q,n))`. -/
+lemma csum_eq_moebius_totient (q n : ℕ) (hq : 0 < q) (hsq : Squarefree q) :
+    csum q n
+      = ((ArithmeticFunction.moebius (q / Nat.gcd q n) : ℤ) : ℂ)
+          * ((Nat.totient (Nat.gcd q n) : ℕ) : ℂ) := by
+  classical
+  set g := Nat.gcd q n with hgdef
+  have hg : 0 < g := by rw [hgdef, Nat.gcd_comm]; exact Nat.gcd_pos_of_pos_right n hq
+  have hgq : g ∣ q := by rw [hgdef]; exact Nat.gcd_dvd_left q n
+  have hgsq : Squarefree g := by
+    rw [hgdef]; exact Squarefree.squarefree_of_dvd (Nat.gcd_dvd_left q n) hsq
+  have hcqg : Nat.Coprime (q / g) g :=
+    Nat.coprime_of_squarefree_mul (by rw [Nat.mul_comm, Nat.mul_div_cancel' hgq]; exact hsq)
+  rw [csum_eq_moebius q n hq]
+  have hcond : ∀ d ∈ Nat.divisors q, ((q/d : ℕ) ∣ n) ↔ ((q/d : ℕ) ∣ g) := by
+    intro d hd
+    refine ⟨fun h => Nat.dvd_gcd (Nat.div_dvd_of_dvd (Nat.dvd_of_mem_divisors hd)) h,
+      fun h => Nat.dvd_trans h (Nat.gcd_dvd_right q n)⟩
+  have hstep : ∀ d ∈ Nat.divisors q, (ArithmeticFunction.moebius d : ℂ)
+      * (if (q/d:ℕ) ∣ n then ((q/d:ℕ):ℂ) else 0)
+      = (ArithmeticFunction.moebius d : ℂ)
+      * (if (q/d:ℕ) ∣ g then ((q/d:ℕ):ℂ) else 0) := fun d hd => by
+    simp only [hcond d hd]
+  rw [Finset.sum_congr rfl hstep]
+  simp only [mul_ite_zero, ← Finset.sum_filter]
+  have hset : (Nat.divisors q).filter (fun d => (q/d : ℕ) ∣ g)
+      = (Nat.divisors g).image (fun e => q / e) := by
+    ext d
+    rw [Finset.mem_filter, Nat.mem_divisors, Finset.mem_image]
+    constructor
+    · intro ⟨hdq, hdg⟩
+      refine ⟨q / d, Nat.mem_divisors.mpr ⟨hdg, hg.ne'⟩, Nat.div_div_self hdq.1 hq.ne'⟩
+    · rintro ⟨e, he, hde⟩
+      obtain ⟨heg, _⟩ := Nat.mem_divisors.mp he
+      have heq : e ∣ q := Nat.dvd_trans heg hgq
+      refine ⟨?_, ?_⟩
+      · rw [← hde]
+        exact ⟨Nat.div_dvd_of_dvd heq, hq.ne'⟩
+      · rw [← hde, Nat.div_div_self heq hq.ne']
+        exact heg
+  rw [hset, Finset.sum_image (fun e he f hf h => by
+    rw [← Nat.div_div_self (Nat.dvd_trans (Nat.dvd_of_mem_divisors he) hgq) hq.ne', h,
+      Nat.div_div_self (Nat.dvd_trans (Nat.dvd_of_mem_divisors hf) hgq) hq.ne'])]
+  rw [Finset.sum_congr rfl (fun e he => by
+    rw [Nat.div_div_self (Nat.dvd_trans (Nat.dvd_of_mem_divisors he) hgq) hq.ne'])]
+  -- Reindex `e = g/d` and split `μ(q/e) = μ(q/g) · μ(d)`.
+  have hset2 : Nat.divisors g = (Nat.divisors g).image (fun d => g / d) := by
+    ext e
+    rw [Nat.mem_divisors, Finset.mem_image]
+    constructor
+    · intro he
+      refine ⟨g / e, Nat.mem_divisors.mpr ⟨Nat.div_dvd_of_dvd he.1, he.2⟩,
+        Nat.div_div_self he.1 he.2⟩
+    · rintro ⟨d, hd, hde⟩
+      obtain ⟨hdg, hne⟩ := Nat.mem_divisors.mp hd
+      rw [← hde]
+      exact ⟨Nat.div_dvd_of_dvd hdg, hne⟩
+  rw [hset2, Finset.sum_image (fun d hd f hf h => by
+    rw [← Nat.div_div_self (Nat.dvd_of_mem_divisors hd) hg.ne', h,
+      Nat.div_div_self (Nat.dvd_of_mem_divisors hf) hg.ne'])]
+  have hsplit : ∀ d ∈ Nat.divisors g, (ArithmeticFunction.moebius (q / (g / d)) : ℂ)
+      * (((g/d:ℕ):ℂ))
+      = (ArithmeticFunction.moebius (q / g) : ℂ)
+        * ((ArithmeticFunction.moebius d : ℂ) * (((g/d:ℕ):ℂ))) := by
+    intro d hd
+    have hdg : d ∣ g := Nat.dvd_of_mem_divisors hd
+    have hq2 : q = ((q / g) * d) * (g / d) := by
+      rw [Nat.mul_assoc, Nat.mul_div_cancel' hdg, Nat.mul_comm (q / g) g,
+        Nat.mul_div_cancel' hgq]
+    have hqs : q / (g / d) = (q / g) * d :=
+      Nat.div_eq_of_eq_mul_left (Nat.pos_of_dvd_of_pos (Nat.div_dvd_of_dvd hdg) hg) hq2
+    rw [hqs, ArithmeticFunction.IsMultiplicative.map_mul_of_coprime
+      ArithmeticFunction.isMultiplicative_moebius
+      (Nat.coprime_iff_gcd_eq_one.mp (hcqg.coprime_dvd_right hdg)), Int.cast_mul, mul_assoc]
+  rw [Finset.sum_congr rfl hsplit, ← Finset.mul_sum,
+    ← sum_moebius_mul_div_eq_totient g hg hgsq]
+
 end Ramanujan
 
 
