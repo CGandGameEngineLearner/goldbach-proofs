@@ -38,13 +38,13 @@ private theorem lower (z : ℕ) : (6/64 : ℝ) ≤ ∏ p ∈ Ico 5 z, model p :=
   · simp [Finset.Ico_eq_empty_of_le (by omega : z ≤ 5)] <;> norm_num
 
 private theorem compare (p n : ℕ) (hp : 5 ≤ p) :
-    model p ≤ (1 - ([(0 : ℕ), p-2, n%p, (n+2)%p].toFinset.card : ℝ) / p) /
+    model p ≤ (1 - ([(0 : ℕ), p-2, Nat.mod n p, Nat.mod (n+2) p].toFinset.card : ℝ) / p) /
       (1 - 1/(p : ℝ))^4 := by
   have h : (5 : ℝ) ≤ p := by exact_mod_cast hp
   have h0 : (0 : ℝ) < p := by linarith
   have h1 : (0 : ℝ) < (p : ℝ)-1 := by linarith
-  have hc : ([(0 : ℕ), p-2, n%p, (n+2)%p].toFinset.card : ℝ) ≤ 4 := by
-    exact_mod_cast (List.toFinset_card_le [(0 : ℕ), p-2, n%p, (n+2)%p])
+  have hc : ([(0 : ℕ), p-2, Nat.mod n p, Nat.mod (n+2) p].toFinset.card : ℝ) ≤ 4 := by
+    exact_mod_cast (List.toFinset_card_le [(0 : ℕ), p-2, Nat.mod n p, Nat.mod (n+2) p])
   have he : model p = (1 - 4/(p : ℝ)) / (1 - 1/(p : ℝ))^4 := by
     unfold model
     rw [show 1 - 1/(p : ℝ) = ((p : ℝ)-1)/p by field_simp <;> ring]
@@ -62,7 +62,7 @@ theorem Conjectures.Cuts.Task2e34a47e0a2430353f1bc6b5 : (have x1 : ℕ → ℕ �
   have h := FourResidueProduct.lower z
   apply le_trans (show (81/64 : ℝ) ≤ 27/2 * (6/64) by norm_num)
   apply mul_le_mul_of_nonneg_left _ (by norm_num)
-  refine h.trans (Finset.prod_le_prod ?_ ?_)
+  refine h.trans (Finset.prod_le_prod₀ ?_ ?_)
   · intro p hp
     exact (FourResidueProduct.model_bounds p (Finset.mem_Ico.mp hp).1).1
   · intro p hp
