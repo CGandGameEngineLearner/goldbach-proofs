@@ -2263,6 +2263,162 @@ lemma complete_char_sum (m n : ℕ) (hm : 0 < m) :
     rw [if_neg hd, geom_sum_eq hζ1 m, hζm]
     simp
 
+
+/-- `GE` at the negation is the inverse of `GE`. -/
+lemma GE_neg (x : ℝ) : GE (-x) = (GE x)⁻¹ := by
+  have h := GE_add (-x) x
+  rw [neg_add_cancel, GE_zero] at h
+  exact eq_inv_of_mul_eq_one_left h
+
+/-- `e(n/m) = 1` iff `m ∣ n`. -/
+lemma GE_div_eq_one_iff (m n : ℕ) (hm : 0 < m) : GE ((n:ℝ) / m) = 1 ↔ m ∣ n := by
+  have hshape : ((2 * Real.pi * ((n:ℝ) / m) : ℝ) : ℂ) * Complex.I
+      = 2 * Real.pi * Complex.I * (n:ℂ) / (m:ℂ) := by
+    push_cast
+    ring
+  unfold GE
+  rw [hshape, Complex.exp_two_pi_mul_I_mul_div_eq_one_iff hm.ne']
+
+/-- `e(-n/m) = 1` iff `m ∣ n`. -/
+lemma GE_neg_div_eq_one_iff (m n : ℕ) (hm : 0 < m) : GE (-(n:ℝ) / m) = 1 ↔ m ∣ n := by
+  rw [neg_div, GE_neg, inv_eq_one, GE_div_eq_one_iff m n hm]
+
+/-- Complete additive-character sum with negative frequency:
+`∑_{b<m} e(-nb/m) = m` if `m ∣ n`, and `0` otherwise. -/
+lemma complete_char_sum_neg (m n : ℕ) (hm : 0 < m) :
+    ∑ b ∈ Finset.range m, GE (-(n:ℝ) * b / m)
+      = if m ∣ n then ((m:ℕ):ℂ) else 0 := by
+  have hm0 : (m:ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hm.ne'
+  have hterm : ∀ b : ℕ, GE (-(n:ℝ) * b / m) = GE (-(n:ℝ) / m) ^ b := by
+    intro b
+    have h : ((-(n:ℝ)) * b / m : ℝ) = ((-(n:ℝ)) / m) * b := by rw [mul_div_right_comm]
+    rw [h, GE_mul_nat]
+  simp only [hterm]
+  by_cases hd : m ∣ n
+  · rw [GE_neg_div_eq_one_iff m n hm |>.mpr hd, if_pos hd]
+    simp
+  · have hζ1 : GE (-(n:ℝ) / m) ≠ 1 := fun h => hd (GE_neg_div_eq_one_iff m n hm |>.mp h)
+    have hζm : GE (-(n:ℝ) / m) ^ m = 1 := by
+      have h : (((-(n:ℝ)) / m) * m : ℝ) = (-(n:ℝ)) := by field_simp
+      have hn1 : GE (-(n:ℝ)) = 1 := by
+        rw [GE_neg, GE_nat_eq_one, inv_one]
+      rw [← GE_mul_nat, h, hn1]
+    rw [if_neg hd, geom_sum_eq hζ1 m, hζm]
+    simp
+
+/-- The Ramanujan sum `c_q(n) = ∑_{(a,q)=1} e(-na/q)`. -/
+noncomputable def csum (q n : ℕ) : ℂ :=
+  ∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q), GE (-(n:ℝ) * a / q)
+
+/-- Möbius sum over the divisors of `g` is the coprimality indicator. -/
+lemma sum_moebius_divisors_eq_indicator (g : ℕ) (hg : 0 < g) :
+    (∑ d ∈ Nat.divisors g, (ArithmeticFunction.moebius d : ℂ)) = if g = 1 then 1 else 0 := by
+  by_cases h1 : g = 1
+  · subst h1
+    rw [if_pos rfl, Nat.divisors_one, Finset.sum_singleton,
+      ArithmeticFunction.moebius_apply_one, Int.cast_one]
+  · rw [if_neg h1]
+    have hne : Nat.primeFactors g ≠ ∅ := by
+      intro hempty
+      rcases Nat.primeFactors_eq_empty.mp hempty with h0 | h1'
+      · exact hg.ne' h0
+      · exact h1 h1'
+    have h := ArithmeticFunction.IsMultiplicative.prodPrimeFactors_one_sub
+      (f := ((ArithmeticFunction.zeta : ArithmeticFunction ℕ) : ArithmeticFunction ℂ))
+      (ArithmeticFunction.isMultiplicative_zeta.natCast) (n := g) (by positivity)
+    simp only [ArithmeticFunction.natCoe_apply] at h
+    have hz : ∀ d : ℕ, 0 < d → ((ArithmeticFunction.zeta d : ℕ) : ℂ) = 1 := by
+      intro d hd
+      rw [ArithmeticFunction.zeta_apply_ne hd.ne', Nat.cast_one]
+    rw [Finset.sum_congr rfl (fun d hd => by
+      rw [hz d (Nat.pos_of_dvd_of_pos (Nat.dvd_of_mem_divisors hd) hg), mul_one])] at h
+    obtain ⟨p, hp⟩ := Finset.nonempty_iff_ne_empty.mpr hne
+    rw [← h, Finset.prod_eq_zero hp (by rw [hz p (Nat.mem_primeFactors.mp hp).1.pos, sub_self])]
+
+/-- Möbius expansion of the Ramanujan sum into complete character sums. -/
+lemma csum_eq_moebius (q n : ℕ) (hq : 0 < q) :
+    csum q n
+      = ∑ d ∈ Nat.divisors q, (ArithmeticFunction.moebius d : ℂ)
+          * (if (q/d:ℕ) ∣ n then ((q/d:ℕ):ℂ) else 0) := by
+  have hcop : ∀ a : ℕ, (Nat.gcd a q).divisors = (Nat.divisors q).filter (fun d => d ∣ a) := by
+    intro a
+    ext d
+    rw [Nat.mem_divisors, Finset.mem_filter, Nat.mem_divisors]
+    constructor
+    · intro h
+      have h2 := Nat.dvd_gcd_iff.mp h.1
+      exact ⟨⟨h2.2, hq.ne'⟩, h2.1⟩
+    · intro h
+      exact ⟨Nat.dvd_gcd h.2 h.1.1, Nat.gcd_pos_of_pos_right a hq |>.ne'⟩
+  have hind : ∀ a : ℕ, (if Nat.Coprime a q then (1:ℂ) else 0)
+      = ∑ d ∈ (Nat.gcd a q).divisors, (ArithmeticFunction.moebius d : ℂ) := by
+    intro a
+    by_cases hc : Nat.Coprime a q
+    · rw [if_pos hc, sum_moebius_divisors_eq_indicator (Nat.gcd a q)
+        (Nat.gcd_pos_of_pos_right a hq), if_pos (Nat.coprime_iff_gcd_eq_one.mp hc)]
+    · rw [if_neg hc, sum_moebius_divisors_eq_indicator (Nat.gcd a q)
+        (Nat.gcd_pos_of_pos_right a hq),
+        if_neg (fun h1 => hc (Nat.coprime_iff_gcd_eq_one.mpr h1))]
+  have hmul : ∀ a : ℕ, (if Nat.Coprime a q then GE (-(n:ℝ) * a / q) else 0)
+      = (∑ d ∈ (Nat.gcd a q).divisors, (ArithmeticFunction.moebius d : ℂ))
+          * GE (-(n:ℝ) * a / q) := by
+    intro a
+    by_cases hc : Nat.Coprime a q
+    · rw [if_pos hc, sum_moebius_divisors_eq_indicator (Nat.gcd a q)
+        (Nat.gcd_pos_of_pos_right a hq), if_pos (Nat.coprime_iff_gcd_eq_one.mp hc), one_mul]
+    · rw [if_neg hc, sum_moebius_divisors_eq_indicator (Nat.gcd a q)
+        (Nat.gcd_pos_of_pos_right a hq),
+        if_neg (fun h1 => hc (Nat.coprime_iff_gcd_eq_one.mpr h1)), zero_mul]
+  have hreidx : ∀ d : ℕ, d ∣ q →
+      (∑ a ∈ (Finset.range q).filter (fun a => d ∣ a), GE (-(n:ℝ) * a / q))
+        = ∑ b ∈ Finset.range (q/d), GE (-(n:ℝ) * b / ((q/d : ℕ) : ℝ)) := by
+    intro d hd
+    have hd0 : d ≠ 0 := fun h => hq.ne' (by rw [h] at hd; exact Nat.zero_dvd.mp hd)
+    have hd0' : 0 < d := Nat.pos_of_dvd_of_pos hd hq
+    have hinj : Set.InjOn (fun b => d * b) ↑(Finset.range (q/d)) := by
+      intro x _ y _ h
+      have h' : d * x = d * y := h
+      exact Nat.eq_of_mul_eq_mul_left hd0' h'
+    have hsummand : ∀ x : ℕ,
+        GE (-(n:ℝ) * ((d * x : ℕ) : ℝ) / q) = GE (-(n:ℝ) * x / ((q/d : ℕ) : ℝ)) := by
+      intro x
+      have hq0 : (q:ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hq.ne'
+      have hqz : ((q:ℝ) / d) ≠ 0 := div_ne_zero hq0 (Nat.cast_ne_zero.mpr hd0)
+      have hcd : ((q/d : ℕ) : ℝ) = (q:ℝ) / (d:ℝ) := Nat.cast_div hd (Nat.cast_ne_zero.mpr hd0)
+      have halg : (-(n:ℝ) * ((d:ℝ) * (x:ℝ)) / q) = (-(n:ℝ) * (x:ℝ) / ((q/d : ℕ) : ℝ)) := by
+        rw [hcd, div_div_eq_mul_div]
+        ring
+      rw [Nat.cast_mul, halg]
+    have hset : (Finset.range q).filter (fun a => d ∣ a)
+        = (Finset.range (q/d)).image (fun b => d * b) := by
+      ext a
+      rw [Finset.mem_filter, Finset.mem_range, Finset.mem_image]
+      constructor
+      · intro h
+        exact ⟨a / d, by rw [Finset.mem_range, Nat.div_lt_div_right hd0 hd]; exact h.1,
+          Nat.mul_div_cancel' h.2⟩
+      · rintro ⟨b, hb1, hb2⟩
+        have hb2' : d * b = a := hb2
+        have hb1' : b < q / d := by rwa [Finset.mem_range] at hb1
+        refine ⟨?_, ?_⟩
+        · rw [← hb2']
+          have h1 : d * b < d * (q / d) := (Nat.mul_lt_mul_left hd0').mpr hb1'
+          rwa [Nat.mul_div_cancel' hd] at h1
+        · rw [← hb2']
+          exact ⟨b, rfl⟩
+    rw [hset, Finset.sum_image hinj, Finset.sum_congr rfl (fun x _ => hsummand x)]
+  rw [csum, Finset.sum_filter, Finset.sum_congr rfl (fun a _ => hmul a)]
+  simp only [hcop]
+  simp only [Finset.sum_mul]
+  simp only [Finset.sum_filter]
+  rw [Finset.sum_comm]
+  simp only [← Finset.sum_filter]
+  simp only [← Finset.mul_sum]
+  rw [Finset.sum_congr rfl (fun d hd => by
+    rw [hreidx d (Nat.dvd_of_mem_divisors hd), complete_char_sum_neg (q/d) n
+      (Nat.div_pos (Nat.le_of_dvd hq (Nat.dvd_of_mem_divisors hd)) (Nat.pos_of_dvd_of_pos
+        (Nat.dvd_of_mem_divisors hd) hq))])]
+
 end Ramanujan
 
 
