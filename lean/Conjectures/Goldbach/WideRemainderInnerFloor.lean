@@ -2219,6 +2219,53 @@ lemma kernel_sq_phase_sin (n : ℕ) (β : ℝ) (hβ : Real.sin (Real.pi * β) �
 
 end CharExpand
 
+section Ramanujan
+
+/-- `GE` at a natural multiple of `x` is a power of `GE x`. -/
+lemma GE_mul_nat (x : ℝ) (b : ℕ) : GE (x * b) = GE x ^ b := by
+  induction b with
+  | zero => simp [GE]
+  | succ k ih =>
+    have h : x * ((k:ℝ) + 1) = x * (k:ℝ) + x := by ring
+    rw [Nat.cast_add_one, pow_succ, h, ← GE_add, ih]
+
+/-- `GE` at a natural number is `1`. -/
+lemma GE_nat_eq_one (k : ℕ) : GE (k:ℝ) = 1 := by
+  have h : GE (k:ℝ) = GoldbachExplicitModeledMajor.phase (k:ℝ) := rfl
+  rw [h]
+  exact phase_nat k
+
+/-- Complete additive-character sum over one period:
+`∑_{b<m} e(nb/m) = m` if `m ∣ n`, and `0` otherwise. -/
+lemma complete_char_sum (m n : ℕ) (hm : 0 < m) :
+    ∑ b ∈ Finset.range m, GE ((n:ℝ) * b / m)
+      = if m ∣ n then ((m:ℕ):ℂ) else 0 := by
+  have hm0 : (m:ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hm.ne'
+  have hterm : ∀ b : ℕ, GE ((n:ℝ) * b / m) = GE ((n:ℝ) / m) ^ b := by
+    intro b
+    have h : ((n:ℝ) * b / m : ℝ) = ((n:ℝ) / m) * b := by rw [mul_div_right_comm]
+    rw [h, GE_mul_nat]
+  simp only [hterm]
+  have hkey : GE ((n:ℝ) / m) = 1 ↔ m ∣ n := by
+    have hshape : ((2 * Real.pi * ((n:ℝ) / m) : ℝ) : ℂ) * Complex.I
+        = 2 * Real.pi * Complex.I * (n:ℂ) / (m:ℂ) := by
+      push_cast
+      ring
+    unfold GE
+    rw [hshape, Complex.exp_two_pi_mul_I_mul_div_eq_one_iff hm.ne']
+  by_cases hd : m ∣ n
+  · rw [hkey.mpr hd, if_pos hd]
+    simp
+  · have hζ1 : GE ((n:ℝ) / m) ≠ 1 := fun h => hd (hkey.mp h)
+    have hζm : GE ((n:ℝ) / m) ^ m = 1 := by
+      have h : (((n:ℝ) / m) * m : ℝ) = (n:ℝ) := by field_simp
+      rw [← GE_mul_nat, h, GE_nat_eq_one]
+    rw [if_neg hd, geom_sum_eq hζ1 m, hζm]
+    simp
+
+end Ramanujan
+
+
 
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
   sorry
