@@ -12581,37 +12581,16 @@ through the endpoint. -/
 def dirichletPrefix {q : ℕ} (χ : DirichletCharacter ℂ q) (s : ℂ) (N : ℕ) : ℂ :=
   ∑ k ∈ Finset.Icc 1 N, (k:ℂ)^(-s) * χ (k:ZMod q)
 
-/-- A truncation bound to the right of zero for a nonprincipal character.
-Periodicity controls the boundary term and the remaining Abel integral
-uniformly in the level, ordinate, and truncation length. -/
-theorem prefix_error_of_partial_bound {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) (hχ : χ ≠ 1)
-    (M : ℝ) (hpartial : ∀ k, ‖charPartialSum χ k‖ ≤ M)
-    {s : ℂ} (hs : 0 < s.re) (N : ℕ) (hN : 0 < N) :
-    ‖dirichletPrefix χ s N - χ.LFunction s‖ ≤ M*(1+‖s‖/s.re)*(N:ℝ)^(-s.re) := by
+private theorem dirichletPrefix_abel {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q)
+    {s : ℂ} (hs : 0 < s.re) (N : ℕ) :
+    dirichletPrefix χ s N = (N:ℂ)^(-s)*charPartialSum χ N +
+      s*(∫ x in Set.Ioc (1:ℝ) N, (x:ℂ)^(-s-1)*charPartialSum χ ⌊x⌋₊) := by
   classical
   let c (k : ℕ) : ℂ := if k=0 then 0 else χ (k:ZMod q)
   let f (x : ℝ) := (x:ℂ)^(-s)
-  let G (x : ℝ) := (x:ℂ)^(-s-1)*charPartialSum χ ⌊x⌋₊
-  have hmean : charMean χ = 0 := by simp [charMean_eq, hχ]
   have hc (k : ℕ) : (∑ d ∈ Finset.Icc 0 k, c d) = charPartialSum χ k := by
     rw [← Nat.range_succ_eq_Icc_zero, Finset.sum_range_succ']
     simp [c, charPartialSum]
-  have hN1 : 1 ≤ (N:ℝ) := by exact_mod_cast hN
-  have hN0 := zero_lt_one.trans_le hN1
-  have hpow : -s.re-1 < -1 := by linarith
-  have hbound (x : ℝ) (hx : 0 < x) : ‖G x‖ ≤ M*x^(-s.re-1) := by
-    dsimp only [G]
-    rw [norm_mul, norm_cpow_eq_rpow_re_of_pos hx, sub_re, neg_re, one_re]
-    simpa only [mul_comm M] using mul_le_mul_of_nonneg_left
-      (hpartial ⌊x⌋₊) (Real.rpow_nonneg hx.le (-s.re-1))
-  have hG : IntegrableOn G (Set.Ioi 1) := by
-    apply ((integrableOn_Ioi_rpow_of_lt hpow zero_lt_one).const_mul M).mono'
-    · have hK : ContinuousOn (fun x : ℝ => (x:ℂ)^(-s-1)) (Set.Ioi 1) := fun x hx =>
-        (continuousAt_ofReal_cpow_const x _ (Or.inr (zero_lt_one.trans hx).ne')).continuousWithinAt
-      exact (hK.aestronglyMeasurable measurableSet_Ioi).mul
-        ((measurable_of_countable (charPartialSum χ)).comp measurable_id.nat_floor).aestronglyMeasurable
-    · filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
-      exact hbound x (zero_lt_one.trans hx)
   have hg (x : ℝ) (hx : 0 < x) : HasDerivAt f ((-s)*(x:ℂ)^(-s-1)) x :=
     hasDerivAt_ofReal_cpow_const hx.ne' (neg_ne_zero.mpr (fun h => by simp [h] at hs))
   have hd : IntegrableOn (deriv f) (Set.Icc (1:ℝ) N) := by
@@ -12628,11 +12607,122 @@ theorem prefix_error_of_partial_bound {q : ℕ} [NeZero q] (χ : DirichletCharac
       omega
     rw [setEq, sum_insert (by simp), show c 0 = 0 by simp [c], mul_zero, zero_add]
     exact sum_congr rfl (fun k hk => by simp only [f, c, ite_eq_right (Nat.ne_of_gt (mem_Icc.mp hk).1)]; rfl)
+  rw [hshort,hc] at E
   have heq : (∫ x in Set.Ioc (1:ℝ) N, deriv f x * ∑ k ∈ Finset.Icc 0 ⌊x⌋₊, c k) =
-      -s*(∫ x in Set.Ioc (1:ℝ) N, G x) := by
-    rw [← integral_const_mul]
-    exact setIntegral_congr_fun measurableSet_Ioc (fun x hx => by rw [(hg x (zero_lt_one.trans hx.1)).deriv, hc]; simp only [G, mul_assoc])
-  rw [hshort, hc, heq] at E
+      -s*(∫ x in Set.Ioc (1:ℝ) N, (x:ℂ)^(-s-1)*charPartialSum χ ⌊x⌋₊) := by
+    rw [←integral_const_mul]
+    exact setIntegral_congr_fun measurableSet_Ioc (fun x hx => by
+      rw [(hg x (zero_lt_one.trans hx.1)).deriv,hc];ring)
+  rw [E,heq]
+  simp only [f,ofReal_natCast];ring
+
+/-- Abel truncation retaining the pole term, so the same bound also
+applies at a zero of the primitive principal L-function. -/
+theorem prefix_error_with_pole {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q)
+    {s : ℂ} (hs : 0 < s.re) (s1 : s ≠ 1) (N : ℕ) (hN : 0 < N) :
+    ‖dirichletPrefix χ s N-χ.LFunction s-charMean χ*(N:ℂ)^(1-s)/(1-s)‖ ≤
+      3*(q:ℝ)*(1+‖s‖/s.re)*(N:ℝ)^(-s.re) := by
+  classical
+  let A := charMean χ
+  let G (x : ℝ) := (x:ℂ)^(-s-1)*(charPartialSum χ ⌊x⌋₊-(x:ℂ)*A)
+  have hN1 : 1 ≤ (N:ℝ) := by exact_mod_cast hN
+  have hN0 := zero_lt_one.trans_le hN1
+  have hpow : -s.re-1 < -1 := by linarith only [hs]
+  have bb (x : ℝ) (hx : 1 < x) : ‖G x‖ ≤ 3*(q:ℝ)*x^(-s.re-1) := by
+    have h := norm_periodicRemainder_le χ x
+    rw [periodicRemainder,Set.indicator_of_mem (Set.mem_Ioi.mpr hx)] at h
+    dsimp only [G];rw [norm_mul,norm_cpow_eq_rpow_re_of_pos (zero_lt_one.trans hx),sub_re,neg_re,one_re]
+    exact (mul_le_mul_of_nonneg_left h (Real.rpow_nonneg (zero_lt_one.trans hx).le _)).trans_eq (mul_comm ..)
+  have ig : IntegrableOn G (Set.Ioi 1) := by
+    apply ((integrableOn_Ioi_rpow_of_lt hpow zero_lt_one).const_mul (3*(q:ℝ))).mono'
+    · have k : ContinuousOn (fun x : ℝ => (x:ℂ)^(-s-1)) (Set.Ioi 1) := fun x hx =>
+        (continuousAt_ofReal_cpow_const x _ (Or.inr (zero_lt_one.trans hx).ne')).continuousWithinAt
+      exact (k.aestronglyMeasurable measurableSet_Ioi).mul
+        (((measurable_of_countable (charPartialSum χ)).comp measurable_id.nat_floor).sub
+          (continuous_ofReal.measurable.mul_const A)).aestronglyMeasurable
+    · filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
+      exact bb x hx
+  have hL : χ.LFunction s = s*remainderMellin χ s + s*A/(s-1) := by
+    by_cases principal : χ=1
+    · subst χ
+      have h := LFunctionTrivChar₁_eq_remainderMellin (q := q) hs
+      rw [LFunctionTrivChar₁,Function.update_of_ne s1] at h
+      change (s-1)*(1 : DirichletCharacter ℂ q).LFunction s = _ at h
+      field_simp [sub_ne_zero.mpr s1]
+      dsimp only [A]
+      linear_combination h
+    · simp [LFunction_eq_remainderMellin χ principal hs,A,charMean_eq,principal]
+  let J := Set.Ioc (1:ℝ) N
+  have igJ : IntegrableOn G J := ig.mono_set Set.Ioc_subset_Ioi_self
+  have hSplit : remainderMellin χ s = (∫ x in J, G x)+(∫ x in Set.Ioi (N:ℝ), G x) := by
+    rw [remainderMellin_eq_integral]
+    change (∫ x in Set.Ioi (1:ℝ), G x) = _
+    rw [←Set.Ioc_union_Ioi_eq_Ioi hN1,setIntegral_union Set.Ioc_disjoint_Ioi_same measurableSet_Ioi
+      igJ (ig.mono_set (Set.Ioi_subset_Ioi hN1))]
+  have notZero : (0:ℝ) ∉ Set.uIcc (1:ℝ) N := by rw [Set.uIcc_of_le hN1];simp
+  have intPow : IntervalIntegrable (fun x : ℝ => (x:ℂ)^(-s)) volume 1 N :=
+    intervalIntegral.intervalIntegrable_cpow (Or.inr notZero)
+  have raw : (∫ x in J, (x:ℂ)^(-s-1)*charPartialSum χ ⌊x⌋₊) =
+      (∫ x in J, G x)+A*(((N:ℂ)^(1-s)-1)/(1-s)) := by
+    have eqn (x : ℝ) (hx : x ∈ J) :
+        (x:ℂ)^(-s-1)*charPartialSum χ ⌊x⌋₊ = G x+A*(x:ℂ)^(-s) := by
+      have nz := ofReal_ne_zero.mpr (zero_lt_one.trans hx.1).ne'
+      have pow : (x:ℂ)^(-s-1)*(x:ℂ)=(x:ℂ)^(-s) := by simpa only [sub_add_cancel,cpow_one] using (cpow_add (-s-1) 1 nz).symm
+      dsimp only [G]
+      linear_combination A*pow
+    rw [setIntegral_congr_fun measurableSet_Ioc eqn,
+      integral_add igJ ((intPow.1).const_mul A), integral_const_mul]
+    rw [show (∫ x in J, (x:ℂ)^(-s)) = ∫ x in (1:ℝ)..N, (x:ℂ)^(-s) from (intervalIntegral.integral_of_le hN1).symm]
+    rw [integral_cpow (Or.inr ⟨by simpa using s1,notZero⟩),show -s+1 = 1-s by ring,ofReal_natCast,ofReal_one,one_cpow]
+  have tail : ‖∫ x in Set.Ioi (N:ℝ), G x‖ ≤ (3*(q:ℝ))*((N:ℝ)^(-s.re)/s.re) := by
+    apply (norm_integral_le_of_norm_le ((integrableOn_Ioi_rpow_of_lt hpow hN0).const_mul (3*(q:ℝ))) ?_).trans_eq
+    · rw [integral_const_mul,integral_Ioi_rpow_of_lt hpow hN0,show -s.re-1+1 = -s.re by ring]
+      ring
+    · filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
+      exact bb x (hN1.trans_lt hx)
+  have powN : (N:ℂ)^(1-s)=(N:ℂ)^(-s)*(N:ℂ) := by
+    rw [show 1-s = -s+1 by ring,cpow_add _ _ (Nat.cast_ne_zero.mpr hN.ne'),cpow_one]
+  have eqn : dirichletPrefix χ s N-χ.LFunction s-A*(N:ℂ)^(1-s)/(1-s) =
+      (N:ℂ)^(-s)*integerRemainder χ N-s*(∫ x in Set.Ioi (N:ℝ), G x) := by
+    rw [dirichletPrefix_abel χ hs N,hL,hSplit,raw,powN,integerRemainder]
+    change _ = (N:ℂ)^(-s)*(charPartialSum χ N-(N:ℂ)*A)-_
+    field_simp [sub_ne_zero.mpr s1,sub_ne_zero.mpr s1.symm];ring
+  rw [show charMean χ = A by rfl,eqn]
+  apply (norm_sub_le ..).trans
+  rw [norm_mul,norm_mul,norm_natCast_cpow_of_pos hN,neg_re]
+  have ib := (norm_integerRemainder_le χ N).trans (by linarith only [Nat.cast_nonneg (α := ℝ) q] : 2*(q:ℝ) ≤ 3*q)
+  exact (add_le_add (mul_le_mul_of_nonneg_left ib (Real.rpow_nonneg hN0.le _))
+    (mul_le_mul_of_nonneg_left tail (norm_nonneg s))).trans_eq (by ring)
+
+/-- A truncation bound to the right of zero for a nonprincipal character.
+Periodicity controls the boundary term and the remaining Abel integral
+uniformly in the level, ordinate, and truncation length. -/
+theorem prefix_error_of_partial_bound {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) (hχ : χ ≠ 1)
+    (M : ℝ) (hpartial : ∀ k, ‖charPartialSum χ k‖ ≤ M)
+    {s : ℂ} (hs : 0 < s.re) (N : ℕ) (hN : 0 < N) :
+    ‖dirichletPrefix χ s N - χ.LFunction s‖ ≤ M*(1+‖s‖/s.re)*(N:ℝ)^(-s.re) := by
+  classical
+  let f (x : ℝ) := (x:ℂ)^(-s)
+  let G (x : ℝ) := (x:ℂ)^(-s-1)*charPartialSum χ ⌊x⌋₊
+  have hmean : charMean χ = 0 := by simp [charMean_eq, hχ]
+  have hN1 : 1 ≤ (N:ℝ) := by exact_mod_cast hN
+  have hN0 := zero_lt_one.trans_le hN1
+  have hpow : -s.re-1 < -1 := by linarith
+  have hbound (x : ℝ) (hx : 0 < x) : ‖G x‖ ≤ M*x^(-s.re-1) := by
+    dsimp only [G]
+    rw [norm_mul, norm_cpow_eq_rpow_re_of_pos hx, sub_re, neg_re, one_re]
+    simpa only [mul_comm M] using mul_le_mul_of_nonneg_left
+      (hpartial ⌊x⌋₊) (Real.rpow_nonneg hx.le (-s.re-1))
+  have hG : IntegrableOn G (Set.Ioi 1) := by
+    apply ((integrableOn_Ioi_rpow_of_lt hpow zero_lt_one).const_mul M).mono'
+    · have hK : ContinuousOn (fun x : ℝ => (x:ℂ)^(-s-1)) (Set.Ioi 1) := fun x hx =>
+        (continuousAt_ofReal_cpow_const x _ (Or.inr (zero_lt_one.trans hx).ne')).continuousWithinAt
+      exact (hK.aestronglyMeasurable measurableSet_Ioi).mul
+        ((measurable_of_countable (charPartialSum χ)).comp measurable_id.nat_floor).aestronglyMeasurable
+    · filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
+      exact hbound x (zero_lt_one.trans hx)
+  have E : dirichletPrefix χ s N = f N*charPartialSum χ N+s*(∫ x in Set.Ioc (1:ℝ) N, G x) :=
+    dirichletPrefix_abel χ hs N
   have hL : χ.LFunction s = s*((∫ x in Set.Ioc (1:ℝ) N, G x)+(∫ x in Set.Ioi (N:ℝ), G x)) := by
     rw [LFunction_eq_remainderMellin χ hχ hs, remainderMellin_eq_integral]
     simp only [hmean, mul_zero, sub_zero]
@@ -13048,11 +13138,8 @@ theorem detectorCoefficient_le_divisors (U K n : ℕ) (hn : 0 < n) :
     _ = (D.card:ℝ) := by simp
     _ ≤ _ := by exact_mod_cast (card_le_card hsub).trans_eq hcard
 
-/-- The actual zero detector has fourth-logarithmic harmonic energy,
-uniformly in the mollifier lengths. -/
-theorem detector_harmonic_energy (U K N : ℕ) :
-    (∑ n ∈ Finset.Ioc U N, ‖(detectorCoefficient U K n:ℂ)‖^2/(n:ℝ)) ≤
-      (1+Real.log N)^4 := by
+private theorem divisor_square_reciprocal (N : ℕ) :
+    (∑ n ∈ Finset.Ioc 0 N, (n.divisors.card:ℝ)^2/(n:ℝ)) ≤ (1+Real.log N)^4 := by
   let H := (harmonic N:ℝ)
   let f (n : ℕ) := (n.divisors.card:ℝ)^2
   have hH : 0 ≤ H := real_harmonic_nonneg N
@@ -13066,17 +13153,57 @@ theorem detector_harmonic_energy (U K N : ℕ) :
     (inv_le_inv₀ (show (0:ℝ) < (j+1:ℕ) by positivity) (show (0:ℝ) < (i+1:ℕ) by positivity)).mpr (by exact_mod_cast Nat.succ_le_succ hij)
   have hweighted := sum_mul_le_sum_mul_of_sum_range_le hp hg hanti
   calc
-    _ ≤ ∑ n ∈ Finset.Ioc U N, f n/(n:ℝ) := sum_le_sum (fun n hn =>
-      div_le_div_of_nonneg_right (pow_le_pow_left₀ (norm_nonneg _) (detectorCoefficient_le_divisors U K n
-        ((Nat.zero_le U).trans_lt (mem_Ioc.mp hn).1)) 2) (Nat.cast_nonneg _))
-    _ ≤ ∑ n ∈ Finset.Ioc 0 N, f n/(n:ℝ) := sum_le_sum_of_subset_of_nonneg
-      (Ioc_subset_Ioc_left (Nat.zero_le U)) (fun n _ _ => div_nonneg (sq_nonneg _) (Nat.cast_nonneg _))
     _ = ∑ j ∈ range N, f (j+1)*g j := by rw [← positive_reindex]; rfl
     _ ≤ ∑ j ∈ range N, H^3*g j := hweighted
     _ = H^4 := by
       rw [←mul_sum, show (∑ j ∈ range N, g j) = H from
         (positive_reindex N (fun n => (n:ℝ)⁻¹)).trans (real_harmonic_eq_sum N).symm, ←pow_succ]
     _ ≤ _ := pow_le_pow_left₀ hH (harmonic_le_one_add_log N) 4
+
+/-- The reciprocal least common multiples in the sieve contribute at most
+four powers of the endpoint logarithm, even for unequal sieve lengths. -/
+theorem sieve_lcm_harmonic (V W Y : ℕ) (cap : V*W ≤ Y) :
+    (∑ d ∈ Finset.Icc 1 V, ∑ e ∈ Finset.Icc 1 W, 1/(Nat.lcm d e:ℝ)) ≤ (1+Real.log Y)^4 := by
+  classical
+  let D := Finset.Icc 1 V ×ˢ Finset.Icc 1 W
+  let l (p : ℕ×ℕ) := Nat.lcm p.1 p.2
+  have maps (p : ℕ×ℕ) (hp : p ∈ D) : l p ∈ Finset.Ioc 0 Y := by
+    obtain ⟨d,e⟩ := mem_product.mp hp
+    exact mem_Ioc.mpr ⟨Nat.lcm_pos (mem_Icc.mp d).1 (mem_Icc.mp e).1,
+      (Nat.lcm_le_mul (mem_Icc.mp d).1 (mem_Icc.mp e).1).trans ((Nat.mul_le_mul (mem_Icc.mp d).2 (mem_Icc.mp e).2).trans cap)⟩
+  calc
+    _ = ∑ p ∈ D, 1/(l p:ℝ) := (sum_product ..).symm
+    _ = ∑ n ∈ Finset.Ioc 0 Y, ∑ p ∈ D.filter (l · = n), 1/(l p:ℝ) := (sum_fiberwise_of_maps_to maps _).symm
+    _ ≤ ∑ n ∈ Finset.Ioc 0 Y, (n.divisors.card:ℝ)^2/(n:ℝ) := by
+      apply sum_le_sum
+      intro n hn
+      let F := D.filter (l · = n)
+      have inside : F ⊆ n.divisors ×ˢ n.divisors := by
+        intro p hp
+        have eqn := (mem_filter.mp hp).2
+        have nz := (mem_Ioc.mp hn).1.ne'
+        exact mem_product.mpr ⟨Nat.mem_divisors.mpr ⟨eqn ▸ Nat.dvd_lcm_left p.1 p.2,nz⟩,
+          Nat.mem_divisors.mpr ⟨eqn ▸ Nat.dvd_lcm_right p.1 p.2,nz⟩⟩
+      have card : F.card ≤ n.divisors.card^2 := (card_le_card inside).trans_eq (by rw [card_product,sq])
+      calc
+        _ = ∑ _p ∈ F, 1/(n:ℝ) := sum_congr rfl fun p hp => by rw [(mem_filter.mp hp).2]
+        _ = (F.card:ℝ)/(n:ℝ) := by simp [div_eq_mul_inv]
+        _ ≤ _ := div_le_div_of_nonneg_right (by exact_mod_cast card) (Nat.cast_nonneg _)
+    _ ≤ _ := divisor_square_reciprocal Y
+
+/-- The actual zero detector has fourth-logarithmic harmonic energy,
+uniformly in the mollifier lengths. -/
+theorem detector_harmonic_energy (U K N : ℕ) :
+    (∑ n ∈ Finset.Ioc U N, ‖(detectorCoefficient U K n:ℂ)‖^2/(n:ℝ)) ≤
+      (1+Real.log N)^4 := by
+  let f (n : ℕ) := (n.divisors.card:ℝ)^2
+  calc
+    _ ≤ ∑ n ∈ Finset.Ioc U N, f n/(n:ℝ) := sum_le_sum (fun n hn =>
+      div_le_div_of_nonneg_right (pow_le_pow_left₀ (norm_nonneg _) (detectorCoefficient_le_divisors U K n
+        ((Nat.zero_le U).trans_lt (mem_Ioc.mp hn).1)) 2) (Nat.cast_nonneg _))
+    _ ≤ ∑ n ∈ Finset.Ioc 0 N, f n/(n:ℝ) := sum_le_sum_of_subset_of_nonneg
+      (Ioc_subset_Ioc_left (Nat.zero_le U)) (fun n _ _ => div_nonneg (sq_nonneg _) (Nat.cast_nonneg _))
+    _ ≤ _ := divisor_square_reciprocal N
 
 end Conjectures.Goldbach.BinaryShiftZeroDensity
 end
@@ -13913,6 +14040,99 @@ end
 end
 
 section
+open Complex Finset DirichletCharacter GoldbachGrhGrowth
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+
+/-- At any actual zero the centered sieve prefix is small except for the
+explicit pole cost. This cost has only a fourth logarithm and decays at
+least inversely with the distance to one. -/
+theorem sieved_prefix_with_pole (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q)
+    (s : ℂ) (hs : 0 < s.re) (hs1 : s.re ≤ 1) (ne : s ≠ 1) (zero : χ.LFunction s=0)
+    (V W Y : ℕ) (hY : V*W ≤ Y) (a b : ℕ → ℝ) (ha : ∀ d, |a d| ≤ 1) (hb : ∀ e, |b e| ≤ 1) :
+    ‖∑ n ∈ Finset.Icc 1 Y, sieveSample χ s V W a b n‖ ≤
+      (V:ℝ)*W*(6*(q:ℝ)*(1+‖s‖/s.re)*(Y:ℝ)^(-s.re))+
+      ((Y:ℝ)^(1-s.re)/‖1-s‖)*(1+Real.log Y)^4 := by
+  classical
+  let D := Finset.Icc 1 V
+  let E := Finset.Icc 1 W
+  let I := Finset.Icc 1 Y
+  let w (d e : ℕ) : ℂ := ((a d*b e:ℝ):ℂ)*sample χ s (Nat.lcm d e)
+  have dl (d : ℕ) (hd : d ∈ D) (e : ℕ) (he : e ∈ E) :
+      0 < Nat.lcm d e ∧ Nat.lcm d e ≤ Y :=
+    ⟨Nat.lcm_pos (mem_Icc.mp hd).1 (mem_Icc.mp he).1,
+     (Nat.lcm_le_mul (mem_Icc.mp hd).1 (mem_Icc.mp he).1).trans ((Nat.mul_le_mul (mem_Icc.mp hd).2 (mem_Icc.mp he).2).trans hY)⟩
+  have expanded : (∑ n ∈ I, sieveSample χ s V W a b n) =
+      ∑ d ∈ D, ∑ e ∈ E, w d e*dirichletPrefix χ s (Y/Nat.lcm d e) :=
+    sievePrefix_exact χ s V W Y a b
+  let C := 3*(q:ℝ)*(1+‖s‖/s.re)
+  let B := 6*(q:ℝ)*(1+‖s‖/s.re)*(Y:ℝ)^(-s.re)
+  let A := (Y:ℝ)^(1-s.re)/‖1-s‖
+  have hC : 0 ≤ C := by dsimp only [C];positivity
+  have hA : 0 ≤ A := by dsimp only [A];positivity
+  have each (d : ℕ) (hd : d ∈ D) (e : ℕ) (he : e ∈ E) :
+      ‖w d e*dirichletPrefix χ s (Y/Nat.lcm d e)‖ ≤ B+A*(1/(Nat.lcm d e:ℝ)) := by
+    let l := Nat.lcm d e
+    let N := Y/l
+    let pole := charMean χ*(N:ℂ)^(1-s)/(1-s)
+    obtain ⟨hl,hlY⟩ := dl d hd e he
+    have npos : 0 < N := Nat.div_pos hlY hl
+    have lp : 0 < (l:ℝ) := by exact_mod_cast hl
+    have ab : ‖((a d*b e:ℝ):ℂ)‖ ≤ 1 := by
+      rw [Complex.norm_real,Real.norm_eq_abs,abs_mul]
+      simpa only [one_mul] using mul_le_mul (ha d) (hb e) (abs_nonneg _) zero_le_one
+    have wt : ‖w d e‖ ≤ (l:ℝ)^(-s.re) := by
+      dsimp only [w,sample]
+      simp only [norm_mul,norm_natCast_cpow_of_pos hl,neg_re]
+      exact (mul_le_mul ab (mul_le_mul_of_nonneg_left (χ.norm_le_one _) (Real.rpow_nonneg (Nat.cast_nonneg _) _))
+        (mul_nonneg (Real.rpow_nonneg (Nat.cast_nonneg _) _) (norm_nonneg _)) zero_le_one).trans_eq (by ring)
+    have raw := prefix_error_with_pole χ hs ne N npos
+    rw [zero,sub_zero] at raw
+    have rough : ‖w d e*(dirichletPrefix χ s N-pole)‖ ≤ B := by
+      rw [norm_mul]
+      apply (mul_le_mul wt raw (norm_nonneg _) (Real.rpow_nonneg lp.le _)).trans
+      change _*(C*_) ≤ B
+      calc
+        _ = C*((l:ℝ)^(-s.re)*(N:ℝ)^(-s.re)) := by ring
+        _ ≤ C*(2*(Y:ℝ)^(-s.re)) := mul_le_mul_of_nonneg_left (floor_rpow_scale l Y hl hlY _ hs hs1) hC
+        _ = _ := by dsimp only [C,B];ring
+    have sig := sub_nonneg.mpr hs1
+    have floor : (N:ℝ)^(1-s.re) ≤ ((Y:ℝ)/(l:ℝ))^(1-s.re) :=
+      Real.rpow_le_rpow (Nat.cast_nonneg _) Nat.cast_div_le sig
+    have factor : (l:ℝ)^(-s.re)*((Y:ℝ)/(l:ℝ))^(1-s.re) = (Y:ℝ)^(1-s.re)/l := by
+      rw [Real.div_rpow (Nat.cast_nonneg _) lp.le]
+      calc
+        _ = (Y:ℝ)^(1-s.re)*((l:ℝ)^(-s.re)/(l:ℝ)^(1-s.re)) := by ring
+        _ = _ := by rw [←Real.rpow_sub lp,show -s.re-(1-s.re)= -1 by ring,Real.rpow_neg_one,div_eq_mul_inv]
+    have poleSize : ‖pole‖ ≤ (N:ℝ)^(1-s.re)/‖1-s‖ := by
+      dsimp only [pole]
+      rw [norm_div,norm_mul,norm_natCast_cpow_of_pos npos,sub_re,one_re]
+      exact div_le_div_of_nonneg_right (mul_le_of_le_one_left (Real.rpow_nonneg (Nat.cast_nonneg _) _) (norm_charMean_le_one χ)) (norm_nonneg _)
+    have pBound : ‖w d e*pole‖ ≤ A*(1/(l:ℝ)) := by
+      rw [norm_mul]
+      apply (mul_le_mul wt poleSize (norm_nonneg _) (Real.rpow_nonneg lp.le _)).trans
+      calc
+        _ = ((l:ℝ)^(-s.re)*(N:ℝ)^(1-s.re))/‖1-s‖ := by ring
+        _ ≤ ((l:ℝ)^(-s.re)*((Y:ℝ)/(l:ℝ))^(1-s.re))/‖1-s‖ := div_le_div_of_nonneg_right
+          (mul_le_mul_of_nonneg_left floor (Real.rpow_nonneg lp.le _)) (norm_nonneg _)
+        _ = _ := by rw [factor];dsimp only [A];ring
+    have sum := (norm_add_le (w d e*(dirichletPrefix χ s N-pole)) (w d e*pole)).trans (add_le_add rough pBound)
+    rwa [←mul_add,sub_add_cancel] at sum
+  rw [expanded]
+  apply (norm_sum_le ..).trans
+  calc
+    _ ≤ ∑ d ∈ D, ∑ e ∈ E, (B+A*(1/(Nat.lcm d e:ℝ))) := sum_le_sum fun d hd =>
+      (norm_sum_le ..).trans (sum_le_sum (each d hd))
+    _ = (V:ℝ)*W*B+A*(∑ d ∈ Finset.Icc 1 V, ∑ e ∈ Finset.Icc 1 W, 1/(Nat.lcm d e:ℝ)) := by
+      simp only [sum_add_distrib,←mul_sum,sum_const,nsmul_eq_mul]
+      simp [D,E];ring
+    _ ≤ _ := add_le_add le_rfl (mul_le_mul_of_nonneg_left (sieve_lcm_harmonic V W Y hY) hA)
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
 open Complex Finset DirichletCharacter
 noncomputable section
 namespace Conjectures.Goldbach.BinaryShiftZeroDensity
@@ -13960,25 +14180,20 @@ private theorem short_weighted_sum {q : ℕ} (χ : DirichletCharacter ℂ q) (s 
     _ = (U:ℝ)^(1-σ)*∑ n ∈ J, √(e A n)*√(e B n) := (mul_sum ..).symm
     _ ≤ _ := mul_le_mul_of_nonneg_left (Real.sum_sqrt_mul_sqrt_le J (en A) (en B)) (Real.rpow_nonneg (Nat.cast_nonneg _) _)
 
-/-- Two short Selberg weights detect an actual L-zero on a long interval.
-Their short initial leakage is measured by the product of harmonic
-square energies rather than a divisor-function bound. -/
-theorem sieved_zero_detector_of_partial_bound {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) (hχ : χ ≠ 1)
-    (M : ℝ) (hpartial : ∀ k, ‖GoldbachGrhGrowth.charPartialSum χ k‖ ≤ M)
-    (s : ℂ) (hs : 0 < s.re) (hz : χ.LFunction s = 0) (σ : ℝ) (hσ : σ ≤ s.re)
-    (U V W Y : ℕ) (hU : 1 ≤ U) (hV : 1 ≤ V) (hW : 1 ≤ W) (hUY : U ≤ Y) (hY : V*W ≤ Y)
-    (a b : ℕ → ℝ) (ha : ∀ d, |a d| ≤ 1) (hb : ∀ e, |b e| ≤ 1) (ha1 : a 1=1) (hb1 : b 1=1) :
+private theorem sieve_detects_from_prefix {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q)
+    (s : ℂ) (σ : ℝ) (hσ : σ ≤ s.re) (hs1 : s.re ≤ 1) (U V W Y : ℕ)
+    (hU : 1 ≤ U) (hV : 1 ≤ V) (hW : 1 ≤ W) (hUY : U ≤ Y)
+    (a b : ℕ → ℝ) (ha1 : a 1=1) (hb1 : b 1=1) (cost : ℝ)
+    (rough : ‖∑ n ∈ Finset.Icc 1 Y, sieveSample χ s V W a b n‖ ≤ cost) :
     let J := Finset.Ioc 1 U
     let A := sievePolynomial (Finset.Icc 1 V) a
     let B := sievePolynomial (Finset.Icc 1 W) b
-    1-(V:ℝ)*W*(2*M*(1+‖s‖/s.re)*(Y:ℝ)^(-s.re))-
+    1-cost-
       (U:ℝ)^(1-σ)*(√(∑ n ∈ J, (A n)^2/(n:ℝ))*√(∑ n ∈ J, (B n)^2/(n:ℝ))) ≤
       ‖∑ n ∈ Finset.Ioc U Y, sieveSample χ s V W a b n‖ := by
+  classical
   intro J A B
-  have hs1 : s.re < 1 := lt_of_not_ge (fun h => (χ.LFunction_ne_zero_of_one_le_re (Or.inl hχ) h) hz)
-  have rough := weighted_prefix_error_of_partial_bound χ hχ M hpartial s hs hs1.le V W Y hY a b ha hb
-  simp only [sievePrefixMain,hz,mul_zero,sum_const_zero,sub_zero] at rough
-  have sh := short_weighted_sum χ s σ hσ (hσ.trans hs1.le) U V W a b
+  have sh := short_weighted_sum χ s σ hσ (hσ.trans hs1) U V W a b
   let f := sieveSample χ s V W a b
   have cut : Finset.Icc 1 Y = insert 1 (J ∪ Finset.Ioc U Y) := by
     ext n
@@ -14002,6 +14217,27 @@ theorem sieved_zero_detector_of_partial_bound {q : ℕ} [NeZero q] (χ : Dirichl
   change ‖∑ n ∈ Finset.Icc 1 Y, f n‖ ≤ _ at rough
   change ‖∑ n ∈ J, f n‖ ≤ _ at sh
   linarith only [tri,sh,rough]
+
+/-- Two short Selberg weights detect an actual L-zero on a long interval.
+Their short initial leakage is measured by the product of harmonic
+square energies rather than a divisor-function bound. -/
+theorem sieved_zero_detector_of_partial_bound {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) (hχ : χ ≠ 1)
+    (M : ℝ) (hpartial : ∀ k, ‖GoldbachGrhGrowth.charPartialSum χ k‖ ≤ M)
+    (s : ℂ) (hs : 0 < s.re) (hz : χ.LFunction s = 0) (σ : ℝ) (hσ : σ ≤ s.re)
+    (U V W Y : ℕ) (hU : 1 ≤ U) (hV : 1 ≤ V) (hW : 1 ≤ W) (hUY : U ≤ Y) (hY : V*W ≤ Y)
+    (a b : ℕ → ℝ) (ha : ∀ d, |a d| ≤ 1) (hb : ∀ e, |b e| ≤ 1) (ha1 : a 1=1) (hb1 : b 1=1) :
+    let J := Finset.Ioc 1 U
+    let A := sievePolynomial (Finset.Icc 1 V) a
+    let B := sievePolynomial (Finset.Icc 1 W) b
+    1-(V:ℝ)*W*(2*M*(1+‖s‖/s.re)*(Y:ℝ)^(-s.re))-
+      (U:ℝ)^(1-σ)*(√(∑ n ∈ J, (A n)^2/(n:ℝ))*√(∑ n ∈ J, (B n)^2/(n:ℝ))) ≤
+      ‖∑ n ∈ Finset.Ioc U Y, sieveSample χ s V W a b n‖ := by
+  intro J A B
+  have hs1 : s.re < 1 := lt_of_not_ge (fun h => (χ.LFunction_ne_zero_of_one_le_re (Or.inl hχ) h) hz)
+  have rough := weighted_prefix_error_of_partial_bound χ hχ M hpartial s hs hs1.le V W Y hY a b ha hb
+  simp only [sievePrefixMain,hz,mul_zero,sum_const_zero,sub_zero] at rough
+  exact sieve_detects_from_prefix χ s σ hσ hs1.le U V W Y hU hV hW hUY a b ha1 hb1 _ rough
+
 
 theorem sieved_zero_detector {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) (hχ : χ ≠ 1)
     (s : ℂ) (hs : 0 < s.re) (hz : χ.LFunction s = 0) (σ : ℝ) (hσ : σ ≤ s.re)
@@ -14658,15 +14894,76 @@ end
 end
 
 section
-open Complex Finset Filter DirichletCharacter
+open Complex Finset DirichletCharacter Filter Goldbach GoldbachTwistedMellin
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+
+/-- At a primitive principal zero in the logarithmic strip the pole cost
+of the sieve vanishes uniformly, including at unbounded ordinates. -/
+theorem principal_nearOne_pole_small (H ε : ℝ) (hH : 0 ≤ H) (hε : 0 < ε) :
+    ∀ᶠ Q : ℕ in atTop, ∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q) (z : ℂ),
+      χ=1 → χ.IsPrimitive → regularizedL χ z=0 → 1-H/Real.log Q ≤ z.re →
+      ((((Q^208:ℕ):ℝ)^(1-z.re))/‖1-z‖)*(1+Real.log ((Q^208:ℕ):ℝ))^4 ≤ ε := by
+  obtain ⟨c,hc,conductor⟩ := nearOne_zero_conductor_bound
+  let d := c/(H+1)
+  have hd : 0 < d := div_pos hc (by positivity)
+  let A := Real.exp (208*H)
+  have ha : 0 < A := Real.exp_pos _
+  let K := 4*A*209^4
+  have hk : 0 < K := by dsimp only [K];positivity
+  let castQ := tendsto_natCast_atTop_atTop (R := ℝ)
+  have small := ((isLittleO_log_rpow_rpow_atTop (4:ℝ) hd).comp_tendsto castQ).bound (div_pos hε hk)
+  have grows := (tendsto_rpow_atTop hd).comp castQ
+  have logs := Real.tendsto_log_atTop.comp castQ
+  filter_upwards [small,grows.eventually_ge_atTop 8,logs.eventually_ge_atTop 1,
+      eventually_ge_atTop (2:ℕ)] with Q hsmall Qd Qlog Q2
+  intro q _ χ z trivial primitive root strip
+  have qone : 1=q := by simpa only [IsPrimitive,trivial,conductor_one] using primitive
+  have x1 : 1 < (Q:ℝ) := by exact_mod_cast Q2
+  have xp := zero_lt_one.trans x1
+  have lp := Real.log_pos x1
+  have lbd : (Real.log Q)^4 ≤ (ε/K)*(Q:ℝ)^d := by
+    change ‖(Real.log (Q:ℝ))^(4:ℝ)‖ ≤ _*‖(Q:ℝ)^d‖ at hsmall
+    simpa only [Real.norm_of_nonneg (Real.rpow_nonneg lp.le _),Real.norm_of_nonneg (Real.rpow_nonneg xp.le _),Real.rpow_ofNat,Real.norm_of_nonneg (pow_nonneg lp.le 4)] using hsmall
+  have upper : 1-(H+1)/Real.log Q ≤ z.re := (sub_le_sub_left
+    (div_le_div_of_nonneg_right (show H ≤ H+1 by linarith) lp.le) 1).trans strip
+  have sep := conductor q χ primitive Q (H+1) |z.im| z x1 (by positivity) le_rfl upper root
+  rw [←qone,Nat.cast_one,mul_one] at sep
+  change (Q:ℝ)^d < 2*(2+|z.im|) at sep
+  change 8 ≤ (Q:ℝ)^d at Qd
+  have ordinate : |z.im| ≤ ‖1-z‖ := by simpa only [sub_im,one_im,zero_sub,abs_neg] using abs_im_le_norm (1-z)
+  have dist : (Q:ℝ)^d ≤ 4*‖1-z‖ := by linarith only [sep,Qd,ordinate]
+  have distp : 0 < ‖1-z‖ := by linarith only [Qd,dist]
+  have pow : (((Q^208:ℕ):ℝ)^(1-z.re)) ≤ A := by
+    apply (Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast Nat.one_le_pow 208 Q (by omega))
+      (show 1-z.re ≤ H/Real.log Q by linarith only [strip])).trans_eq
+    exact tilt_identity Q2 208 H
+  have poly : (1+Real.log ((Q^208:ℕ):ℝ))^4 ≤ 209^4*(Real.log Q)^4 := by
+    rw [Nat.cast_pow,Real.log_pow,←mul_pow]
+    apply pow_le_pow_left₀ (by positivity)
+    change 1 ≤ Real.log Q at Qlog
+    norm_num
+    linarith only [Qlog]
+  apply le_of_mul_le_mul_right _ distp
+  calc
+    _ = (((Q^208:ℕ):ℝ)^(1-z.re))*(1+Real.log ((Q^208:ℕ):ℝ))^4 := by field_simp
+    _ ≤ A*(209^4*(Real.log Q)^4) := mul_le_mul pow poly (by positivity) ha.le
+    _ ≤ A*(209^4*((ε/K)*(Q:ℝ)^d)) := by gcongr
+    _ = ε*((Q:ℝ)^d)/4 := by dsimp only [K];field_simp
+    _ ≤ ε*‖1-z‖ := by linarith only [mul_le_mul_of_nonneg_left dist hε.le]
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset Filter DirichletCharacter Goldbach GoldbachTwistedMellin
 open scoped Topology
 noncomputable section
 namespace Conjectures.Goldbach.BinaryShiftZeroDensity
 
-/-- A logarithmically separated family of primitive zeros across all conductors
-has cardinality at most an explicit exponential in the normalized strip width.
-The norm cutoff may grow sublinearly with the conductor scale. -/
-theorem primitive_nearOne_quantitative_moving {ι : Type*} (H : ℝ) (height : ℕ → ℝ)
+/-- A sublinear-height density estimate for all primitive regularized L-functions, including the principal character. -/
+theorem primitive_nearOne_quantitative_all {ι : Type*} (H : ℝ) (height : ℕ → ℝ)
     (hH : 0 ≤ H) (nonneg : ∀ Q, 0 ≤ height Q)
     (scale : ∀ B : ℝ, ∀ᶠ Q : ℕ in atTop, B*(1+height Q) ≤ (Q:ℝ)) :
     let A := Real.exp (208*(H+1))
@@ -14676,7 +14973,7 @@ theorem primitive_nearOne_quantitative_moving {ι : Type*} (H : ℝ) (height : �
       (χ : (i : ι) → DirichletCharacter ℂ (q i)) (s : ι → ℂ),
       (∀ i ∈ Z, ∀ j ∈ Z, i ≠ j →
         (⟨q i,χ i⟩ : Σ k : ℕ, DirichletCharacter ℂ k) ≠ ⟨q j,χ j⟩ ∨ D/Real.log Q ≤ |(s i).im-(s j).im|) →
-      (∀ i ∈ Z, q i ≤ Q ∧ (χ i).IsPrimitive ∧ χ i ≠ 1 ∧ (χ i).LFunction (s i) = 0 ∧
+      (∀ i ∈ Z, q i ≤ Q ∧ (χ i).IsPrimitive ∧ Goldbach.regularizedL (χ i) (s i)=0 ∧
         1-H/Real.log Q ≤ (s i).re ∧ ‖s i‖ ≤ height Q) → (Z.card:ℝ) ≤ C := by
   intro A C D
   let t := H+1
@@ -14690,11 +14987,11 @@ theorem primitive_nearOne_quantitative_moving {ι : Type*} (H : ℝ) (height : �
   have vlarge : 1 ≤ (v:ℝ)*t := by change 1 ≤ (96:ℝ)*t;linarith
   have castT := tendsto_natCast_atTop_atTop (R := ℝ)
   have logT := Real.tendsto_log_atTop.comp castT
-  filter_upwards [eventually_ge_atTop (9:ℕ),logT.eventually_ge_atTop (4*H),scale (256*(1+A))] with Q hQ9 hlog budget
+  filter_upwards [eventually_ge_atTop (9:ℕ),logT.eventually_ge_atTop (4*H),scale (256*(1+A)),principal_nearOne_pole_small H (1/8) hH (by norm_num)] with Q hQ9 hlog budget pole
   let T := height Q
   have hT : 0 ≤ T := nonneg Q
   change 256*(1+A)*(1+T) ≤ (Q:ℝ) at budget
-  have hrough : 16*(1+2*T) ≤ (Q:ℝ) := by nlinarith only [budget,hA,hT,mul_nonneg hA.le hT]
+  have hrough : 48*(1+2*T) ≤ (Q:ℝ) := by nlinarith only [budget,hA,hT,mul_nonneg hA.le hT]
   have hcross : 8*(A*(8*(1+2*(2*T+1)))) ≤ (Q:ℝ) := by nlinarith only [budget,hA,hT]
   have hextra : 16*A*(3*(2+2*(2*T+1))) ≤ (Q:ℝ) := by nlinarith only [budget,hA,hT,mul_nonneg hA.le hT]
   have hQ : 2 ≤ Q := by omega
@@ -14767,35 +15064,50 @@ theorem primitive_nearOne_quantitative_moving {ι : Type*} (H : ℝ) (height : �
     linarith only [h]
   intro Z q _ χ s distinct zeros
   have htop (i : ι) (hi : i ∈ Z) : (s i).re < 1 := by
-    obtain ⟨_,_,hn,hz,_⟩ := zeros i hi
-    exact lt_of_not_ge (fun re => ((χ i).LFunction_ne_zero_of_one_le_re (Or.inl hn) re) hz)
+    exact Goldbach.re_lt_one_of_regularizedL_zero _ (zeros i hi).2.2.1
   have large (i : ι) (hi : i ∈ Z) : 1/2 ≤ ‖∑ n ∈ Finset.Ioc U Y, sieveSample (χ i) (s i) V W a b n‖ := by
-    obtain ⟨qle,_,hn,hz,hre,ht⟩ := zeros i hi
+    obtain ⟨qle,pr,hz,hre,ht⟩ := zeros i hi
     have hhalf : 1/2 ≤ (s i).re := by linarith only [hs,hre]
     have hpos : 0 < (s i).re := by linarith only [hhalf]
-    have h := sieved_zero_detector (χ i) hn (s i) hpos hz σ hre U V W Y hU hV.le (by omega) hUY hVW a b ha hb ha1 hb1
-    rw [Uσ] at h
     have short' := (mul_le_mul_of_nonneg_left (mul_le_mul (Real.sqrt_le_sqrt aU) (Real.sqrt_le_sqrt bU)
       (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)) (Real.exp_pos _).le).trans short
     have div : ‖s i‖/(s i).re ≤ 2*T := (div_le_iff₀ hpos).mpr (by nlinarith only [ht,mul_le_mul_of_nonneg_left hhalf hT])
     have Y1 : (1:ℝ) ≤ Y := by exact_mod_cast hU.trans hUY
     have py := (Real.rpow_le_rpow_of_exponent_le Y1 (neg_le_neg hhalf)).trans_eq (half (v+8))
-    have rough : (V:ℝ)*W*(4*(q i:ℝ)*(1+‖s i‖/(s i).re)*(Y:ℝ)^(-(s i).re)) ≤ 1/4 := calc
-      _ ≤ x^v*x*(4*x*(1+2*T)*(x^(v+8))⁻¹) := by
+    have rough : (V:ℝ)*W*(6*(q i:ℝ)*(1+‖s i‖/(s i).re)*(Y:ℝ)^(-(s i).re)) ≤ 1/8 := calc
+      _ ≤ x^v*x*(6*x*(1+2*T)*(x^(v+8))⁻¹) := by
         rw [show (V:ℝ) = x^v from Nat.cast_pow Q v]
-        change x^v*x*(4*(q i:ℝ)*(1+‖s i‖/(s i).re)*(Y:ℝ)^(-(s i).re)) ≤ _
+        change x^v*x*(6*(q i:ℝ)*(1+‖s i‖/(s i).re)*(Y:ℝ)^(-(s i).re)) ≤ _
         gcongr
         exact (Nat.cast_le.mpr qle : (q i:ℝ) ≤ (Q:ℝ))
-      _ = (4*(1+2*T))/x^6 := by rw [pow_add];field_simp
-      _ ≤ _ := (div_le_iff₀ (pow_pos x0 6)).mpr (by have h : 16*(1+2*T) ≤ x^6 := hrough.trans X6; linarith only [h])
-    linarith only [rough,short',h]
+      _ = (6*(1+2*T))/x^6 := by rw [pow_add];field_simp
+      _ ≤ _ := (div_le_iff₀ (pow_pos x0 6)).mpr (by have h : 48*(1+2*T) ≤ x^6 := hrough.trans X6; linarith only [h])
+    have s1 : s i ≠ 1 := fun e => by simpa only [e,Complex.one_re,lt_self_iff_false] using htop i hi
+    have zero := ((ExceptionalZeroCatalogue.regular_zero (χ i) (s i)).mp hz).2
+    have raw : ‖∑ n ∈ Finset.Icc 1 Y, sieveSample (χ i) (s i) V W a b n‖ ≤ 1/4 := by
+      by_cases one : χ i = 1
+      · have fee := pole (q i) (χ i) (s i) one pr hz hre
+        have total := sieved_prefix_with_pole (q i) (χ i) (s i) hpos (htop i hi).le s1 zero
+          V W Y hVW a b ha hb
+        change (Y:ℝ)^(1-(s i).re)/‖1-s i‖*(1+Real.log Y)^4 ≤ 1/8 at fee
+        linarith only [total,rough,fee]
+      · have bound := weighted_prefix_error (χ i) one (s i) hpos (htop i hi).le V W Y hVW a b ha hb
+        simp only [sievePrefixMain,zero,mul_zero,sum_const_zero,sub_zero] at bound
+        apply bound.trans
+        have coeff : 4*(q i:ℝ) ≤ 6*(q i:ℝ) := by linarith only [Nat.cast_nonneg (α := ℝ) (q i)]
+        apply le_trans ?_ (rough.trans (by norm_num : (1/8:ℝ) ≤ 1/4))
+        gcongr
+    have h := sieve_detects_from_prefix (χ i) (s i) σ hre (htop i hi).le U V W Y hU hV.le (by omega)
+      hUY a b ha1 hb1 (1/4) raw
+    rw [Uσ] at h
+    linarith only [short',h]
   let E := 1/(8*A)
   have hE : 0 < E := by dsimp only [E];positivity
   have absorb : A*E ≤ 1/8 := le_of_eq (by dsimp only [E];field_simp)
   have pair (i : ι) (hi : i ∈ Z) (j : ι) (hj : j ∈ Z) (hij : i ≠ j) :
       ‖∑ n ∈ Finset.Ioc U Y, sieveGram (χ i) (χ j) (s i) (s j) (sievePolynomial (Finset.Icc 1 W) b) n‖ ≤ E := by
-    obtain ⟨qi,pi,_,_,si,ti⟩ := zeros i hi
-    obtain ⟨qj,pj,_,_,sj,tj⟩ := zeros j hj
+    obtain ⟨qi,pi,_,si,ti⟩ := zeros i hi
+    obtain ⟨qj,pj,_,sj,tj⟩ := zeros j hj
     rcases distinct i hi j hj hij with hd|hsep
     · apply (sieveGram_cross (χ i) (χ j) pi pj hd (s i) (s j) T (hs.trans si) (hs.trans sj)
         (htop i hi).le (htop j hj).le ti tj U W Y hU hWU hUY b hb).trans
@@ -14807,9 +15119,43 @@ theorem primitive_nearOne_quantitative_moving {ι : Type*} (H : ℝ) (height : �
         (show 13 ≤ y by dsimp only [y]; omega) qi qj hT hA hD hs si sj (htop i hi).le (htop j hj).le
         ti tj hsep hextra (by rfl) bLong
   have result := sieved_density_with_cross Z q χ s U V W Y σ A A E hs1 hA.le hA.le hE.le a b
-    (fun i hi => (zeros i hi).2.2.2.2.1) pair large aLong bLong absorb
+    (fun i hi => (zeros i hi).2.2.2.1) pair large aLong bLong absorb
   rw [Yσ] at result
   exact result
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset Filter DirichletCharacter
+open scoped Topology
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+
+/-- A logarithmically separated family of primitive zeros across all conductors
+has cardinality at most an explicit exponential in the normalized strip width.
+The norm cutoff may grow sublinearly with the conductor scale. -/
+theorem primitive_nearOne_quantitative_moving {ι : Type*} (H : ℝ) (height : ℕ → ℝ)
+    (hH : 0 ≤ H) (nonneg : ∀ Q, 0 ≤ height Q)
+    (scale : ∀ B : ℝ, ∀ᶠ Q : ℕ in atTop, B*(1+height Q) ≤ (Q:ℝ)) :
+    let A := Real.exp (208*(H+1))
+    let C := 8*A*(Real.exp (208*H))^2*A
+    let D := 32*A*Real.exp (208*(2*H))*(A+1)
+    ∀ᶠ Q : ℕ in atTop, ∀ (Z : Finset ι) (q : ι → ℕ) [∀ i, NeZero (q i)]
+      (χ : (i : ι) → DirichletCharacter ℂ (q i)) (s : ι → ℂ),
+      (∀ i ∈ Z, ∀ j ∈ Z, i ≠ j →
+        (⟨q i,χ i⟩ : Σ k : ℕ, DirichletCharacter ℂ k) ≠ ⟨q j,χ j⟩ ∨ D/Real.log Q ≤ |(s i).im-(s j).im|) →
+      (∀ i ∈ Z, q i ≤ Q ∧ (χ i).IsPrimitive ∧ χ i ≠ 1 ∧ (χ i).LFunction (s i) = 0 ∧
+        1-H/Real.log Q ≤ (s i).re ∧ ‖s i‖ ≤ height Q) → (Z.card:ℝ) ≤ C := by
+  intro A C D
+  have all := primitive_nearOne_quantitative_all (ι := ι) H height hH nonneg scale
+  filter_upwards [all] with Q law
+  intro Z q _ χ s sep zeros
+  apply law Z q χ s sep
+  intro i hi
+  obtain ⟨qle,pr,non,root,lo,ht⟩ := zeros i hi
+  exact ⟨qle,pr,by simpa [Goldbach.regularizedL,non] using root,lo,ht⟩
 
 /-- A logarithmically separated family of primitive zeros across all conductors
 has cardinality at most an explicit exponential in the normalized strip width.
@@ -14995,10 +15341,10 @@ private theorem packing_and_cover {ι : Type*} (S : Finset ι) (f : ι → ℝ) 
         · obtain ⟨j,hj,h⟩ := cov _ hi
           exact ⟨j,mem_insert_of_mem hj,h⟩
 
-private theorem nearOneRoots_uniform_moving (H : ℝ) (height : ℕ → ℝ) (hH : 0 ≤ H)
+private theorem nearOneRoots_uniform_all_heights (H : ℝ) (height : ℕ → ℝ) (hH : 0 ≤ H)
     (hT0 : ∀ Q, 0 ≤ height Q) (scale : ∀ B : ℝ, ∀ᶠ Q : ℕ in atTop, B*(1+(1+height Q)) ≤ (Q:ℝ)) :
     ∃ C : ℝ, 0 < C ∧ ∀ᶠ Q : ℕ in atTop, ∀ (m X : ℕ), Q ≤ X →
-      ∀ p ∈ nearOneCharacters m Q (1-H/Real.log X) (height Q), p.2 ≠ 1 →
+      ∀ p ∈ nearOneCharacters m Q (1-H/Real.log X) (height Q),
         (∑ z ∈ nearOneRoots m p.2 (1-H/Real.log X) (height Q), (analyticOrderNatAt (regularizedL p.2) z:ℝ)) ≤ C := by
   classical
   let A₀ := Real.exp (208*(H+1))
@@ -15007,7 +15353,7 @@ private theorem nearOneRoots_uniform_moving (H : ℝ) (height : ℕ → ℝ) (hH
   have hA₀ : 0 < A₀ := Real.exp_pos _
   have hF : 0 < F := by dsimp only [F];positivity
   have hD : 0 < D := by dsimp only [D];positivity
-  have count := primitive_nearOne_quantitative_moving (ι := ℂ) H (fun Q => 1+height Q) hH
+  have count := primitive_nearOne_quantitative_all (ι := ℂ) H (fun Q => 1+height Q) hH
     (fun Q => by linarith [hT0 Q]) scale
   obtain ⟨A,hA,rect⟩ := NearOneZeroMultiplicity.rectangle_mass
   let K := H+D+1
@@ -15019,7 +15365,7 @@ private theorem nearOneRoots_uniform_moving (H : ℝ) (height : ℕ → ℝ) (hH
   refine ⟨F*C,mul_pos hF hC,?_⟩
   have logT := Real.tendsto_log_atTop.comp (tendsto_natCast_atTop_atTop (R := ℝ))
   filter_upwards [count,scale 2,logT.eventually_ge_atTop (max 1 (8*K)),eventually_ge_atTop (4:ℕ)] with Q law hscale hg hQ
-  intro m X hQX p hp pnon
+  intro m X hQX p hp
   let T := height Q
   have hT : 0 ≤ T := hT0 Q
   have smallT : 2*(2+T) ≤ (Q:ℝ) := by simpa only [T,show ∀ x : ℝ, 1+(1+x)=2+x by intro x;ring] using hscale
@@ -15042,19 +15388,19 @@ private theorem nearOneRoots_uniform_moving (H : ℝ) (height : ℕ → ℝ) (hH
   let Z := nearOneRoots m p.2 (1-H/Real.log X) T
   let wt (z : ℂ) := (analyticOrderNatAt (regularizedL p.2) z:ℝ)
   have points (z : ℂ) (hz : z ∈ Z) :
-      p.2.LFunction z=0 ∧ ExceptionalZeroCatalogue.genuine p.2 z ∧
+      regularizedL p.2 z=0 ∧ ExceptionalZeroCatalogue.genuine p.2 z ∧
       1-H/l ≤ z.re ∧ ‖z‖ ≤ 1+T ∧ |z.im| ≤ T := by
     obtain ⟨hz,hre,ht⟩ := Finset.mem_filter.mp hz
     obtain ⟨hr,_,root⟩ := (mem_exceptionalZeros ..).mp hz
     have right := re_lt_one_of_regularizedL_zero p.2 root
-    refine ⟨by simpa [regularizedL,pnon] using root,(ExceptionalZeroCatalogue.regular_zero p.2 z).mp root,by linarith only [HH,hre],?_,ht⟩
+    refine ⟨root,(ExceptionalZeroCatalogue.regular_zero p.2 z).mp root,by linarith only [HH,hre],?_,ht⟩
     apply (norm_le_abs_re_add_abs_im z).trans
     rw [abs_of_nonneg (by linarith only [hr] : 0 ≤ z.re)]
     linarith only [right,ht]
   obtain ⟨P,hP,sep,cov⟩ := packing_and_cover Z Complex.im δ hδ.le
   have card : (P.card:ℝ) ≤ F := law P (fun _ => p.1+1) (fun _ => p.2) id
     (fun i hi j hj e => Or.inr (sep i hi j hj e))
-    (fun i hi => ⟨pq,pprim,pnon,(points i (hP hi)).1,(points i (hP hi)).2.2.1,(points i (hP hi)).2.2.2.1⟩)
+    (fun i hi => ⟨pq,pprim,(points i (hP hi)).1,(points i (hP hi)).2.2.1,(points i (hP hi)).2.2.2.1⟩)
   have each (t : ℂ) (ht : t ∈ P) : (∑ z ∈ Z.filter (fun z => |z.im-t.im| ≤ δ), wt z) ≤ C := by
     have hy := (points t (hP ht)).2.2.2.2
     have boundHeight : logHeight (p.1+1) t.im ≤ 2*l := calc
@@ -15101,13 +15447,8 @@ private theorem nearOneRoots_uniform_mass (H T : ℝ) (hH : 0 ≤ H) (hT : 0 ≤
     ∃ C : ℝ, 0 < C ∧ ∀ᶠ Q : ℕ in atTop, ∀ (m X : ℕ), Q ≤ X →
       ∀ p ∈ nearOneCharacters m Q (1-H/Real.log X) T,
         (∑ z ∈ nearOneRoots m p.2 (1-H/Real.log X) T, (analyticOrderNatAt (regularizedL p.2) z:ℝ)) ≤ C := by
-  obtain ⟨C,hC,all⟩ := nearOneRoots_uniform_moving H (fun _ => T) hH (fun _ => hT)
+  exact nearOneRoots_uniform_all_heights H (fun _ => T) hH (fun _ => hT)
     (fun B => (tendsto_natCast_atTop_atTop (R := ℝ)).eventually_ge_atTop (B*(1+(1+T))))
-  refine ⟨C,hC,?_⟩
-  filter_upwards [all,nearOneCharacters_witnesses H T hH] with Q mass witness
-  intro m X hQX p hp
-  obtain ⟨_,labels⟩ := witness m X hQX
-  exact mass m X hQX p hp (labels p hp).2.2.1
 
 /-- Uniform bounded-height log-free zero density on the actual primitive
 catalogue, counting analytic multiplicities. Both the explicit-formula
@@ -17877,6 +18218,50 @@ open scoped Classical
 noncomputable section
 namespace Conjectures.Goldbach.BinaryShiftZeroDensity
 
+/-- At any sublinear height the near-one catalogue of all primitive characters has bounded total analytic multiplicity. -/
+theorem nearOne_all_multiplicity_moving (H : ℝ) (height : ℕ → ℝ) (hH : 0 ≤ H)
+    (hT : ∀ Q, 0 ≤ height Q)
+    (scale : ∀ B : ℝ, ∀ᶠ Q : ℕ in atTop, B*(1+(1+height Q)) ≤ (Q:ℝ)) :
+    ∃ C : ℝ, 0 < C ∧ ∀ᶠ Q : ℕ in atTop, ∀ m X : ℕ, Q ≤ X →
+      (∑ p ∈ nearOneCharacters m Q (1-H/Real.log X) (height Q),
+        ∑ z ∈ nearOneRoots m p.2 (1-H/Real.log X) (height Q),
+          (analyticOrderNatAt (regularizedL p.2) z:ℝ)) ≤ C := by
+  obtain ⟨A,hA,each⟩ := nearOneRoots_uniform_all_heights H height hH hT scale
+  let a := Real.exp (208*(H+1))
+  let F := 8*a*(Real.exp (208*H))^2*a
+  have ha : 0 < a := Real.exp_pos _
+  have hF : 0 < F := by dsimp only [F];positivity
+  have count := primitive_nearOne_quantitative_all (ι := PositiveLevelCharacter) H
+    (fun Q => 1+height Q) hH (fun Q => by linarith [hT Q]) scale
+  refine ⟨F*A,mul_pos hF hA,?_⟩
+  filter_upwards [count,each,eventually_ge_atTop (2:ℕ)] with Q law mass hQ
+  intro m X hQX
+  let S := nearOneCharacters m Q (1-H/Real.log X) (height Q)
+  let positions (p : PositiveLevelCharacter) := nearOneRoots m p.2 (1-H/Real.log X) (height Q)
+  let s (p : PositiveLevelCharacter) := Classical.epsilon (fun z : ℂ => z ∈ positions p)
+  have card : (S.card:ℝ) ≤ F := by
+    apply law S (fun p => p.1+1) (fun p => p.2) s
+      (fun i _ j _ h => Or.inl (positiveLevel_injective.ne h))
+    intro p hp
+    obtain ⟨hq,hp⟩ := mem_sigma.mp hp
+    obtain ⟨pr,existsZ⟩ := (mem_filter.mp hp).2
+    have hz : s p ∈ positions p := Classical.epsilon_spec existsZ
+    obtain ⟨root,near,ht⟩ := mem_filter.mp hz
+    obtain ⟨left,_,zero⟩ := (mem_exceptionalZeros ..).mp root
+    have right := re_lt_one_of_regularizedL_zero p.2 zero
+    have q1 : 1 < (Q:ℝ) := by exact_mod_cast hQ
+    have logle := Real.log_le_log (zero_lt_one.trans q1) (Nat.cast_le.mpr hQX)
+    refine ⟨mem_range.mp hq,pr,zero,?_,?_⟩
+    · linarith only [near,div_le_div_of_nonneg_left hH (Real.log_pos q1) logle]
+    · apply (norm_le_abs_re_add_abs_im _).trans
+      rw [abs_of_nonneg (by linarith only [left] : 0 ≤ (s p).re)]
+      linarith only [right,ht]
+  change (∑ p ∈ S, ∑ z ∈ positions p, (analyticOrderNatAt (regularizedL p.2) z:ℝ)) ≤ F*A
+  calc
+    _ ≤ ∑ _p ∈ S, A := sum_le_sum fun p hp => mass m X hQX p hp
+    _ = (S.card:ℝ)*A := by simp
+    _ ≤ _ := mul_le_mul_of_nonneg_right card hA.le
+
 /-- A sublinear height cutoff leaves the total analytic multiplicity of
 near-one zeros of all nonprincipal primitive characters uniformly bounded. -/
 theorem nearOne_nonprincipal_multiplicity_moving (H : ℝ) (height : ℕ → ℝ) (hH : 0 ≤ H)
@@ -17886,42 +18271,12 @@ theorem nearOne_nonprincipal_multiplicity_moving (H : ℝ) (height : ℕ → ℝ
       (∑ p ∈ (nearOneCharacters m Q (1-H/Real.log X) (height Q)).filter (fun p => p.2 ≠ 1),
         ∑ z ∈ nearOneRoots m p.2 (1-H/Real.log X) (height Q),
           (analyticOrderNatAt (regularizedL p.2) z:ℝ)) ≤ C := by
-  obtain ⟨A,hA,each⟩ := nearOneRoots_uniform_moving H height hH hT scale
-  let a := Real.exp (208*(H+1))
-  let F := 8*a*(Real.exp (208*H))^2*a
-  have ha : 0 < a := Real.exp_pos _
-  have hF : 0 < F := by dsimp only [F];positivity
-  have count := primitive_nearOne_quantitative_moving (ι := PositiveLevelCharacter) H
-    (fun Q => 1+height Q) hH (fun Q => by linarith [hT Q]) scale
-  refine ⟨F*A,mul_pos hF hA,?_⟩
-  filter_upwards [count,each,eventually_ge_atTop (2:ℕ)] with Q law mass hQ
+  obtain ⟨C,hC,rule⟩ := nearOne_all_multiplicity_moving H height hH hT scale
+  refine ⟨C,hC,?_⟩
+  filter_upwards [rule] with Q law
   intro m X hQX
-  let S := (nearOneCharacters m Q (1-H/Real.log X) (height Q)).filter (fun p => p.2 ≠ 1)
-  let positions (p : PositiveLevelCharacter) := nearOneRoots m p.2 (1-H/Real.log X) (height Q)
-  let s (p : PositiveLevelCharacter) := Classical.epsilon (fun z : ℂ => z ∈ positions p)
-  have card : (S.card:ℝ) ≤ F := by
-    apply law S (fun p => p.1+1) (fun p => p.2) s
-      (fun i _ j _ h => Or.inl (positiveLevel_injective.ne h))
-    intro p hp
-    obtain ⟨hp,non⟩ := mem_filter.mp hp
-    obtain ⟨hq,hp⟩ := mem_sigma.mp hp
-    obtain ⟨pr,existsZ⟩ := (mem_filter.mp hp).2
-    have hz : s p ∈ positions p := Classical.epsilon_spec existsZ
-    obtain ⟨root,near,ht⟩ := mem_filter.mp hz
-    obtain ⟨left,_,zero⟩ := (mem_exceptionalZeros ..).mp root
-    have right := re_lt_one_of_regularizedL_zero p.2 zero
-    have q1 : 1 < (Q:ℝ) := by exact_mod_cast hQ
-    have logle := Real.log_le_log (zero_lt_one.trans q1) (Nat.cast_le.mpr hQX)
-    refine ⟨mem_range.mp hq,pr,non,by simpa [regularizedL,non] using zero,?_,?_⟩
-    · linarith only [near,div_le_div_of_nonneg_left hH (Real.log_pos q1) logle]
-    · apply (norm_le_abs_re_add_abs_im _).trans
-      rw [abs_of_nonneg (by linarith only [left] : 0 ≤ (s p).re)]
-      linarith only [right,ht]
-  change (∑ p ∈ S, ∑ z ∈ positions p, (analyticOrderNatAt (regularizedL p.2) z:ℝ)) ≤ F*A
-  calc
-    _ ≤ ∑ _p ∈ S, A := sum_le_sum fun p hp => mass m X hQX p (mem_filter.mp hp).1 (mem_filter.mp hp).2
-    _ = (S.card:ℝ)*A := by simp
-    _ ≤ _ := mul_le_mul_of_nonneg_right card hA.le
+  exact (sum_le_sum_of_subset_of_nonneg (filter_subset ..) (fun p _ _ =>
+    sum_nonneg fun z _ => Nat.cast_nonneg _)).trans (law m X hQX)
 
 private theorem sublinear_power_height {b : ℝ} (hb : 0 ≤ b) (hb1 : b < 1) (B : ℝ) :
     ∀ᶠ Q : ℕ in atTop, B*(1+(1+(Q:ℝ)^b)) ≤ (Q:ℝ) := by
@@ -17937,6 +18292,16 @@ private theorem sublinear_power_height {b : ℝ} (hb : 0 ≤ b) (hb1 : b < 1) (B
     _ = (3*|B|)*(Q:ℝ)^b := by ring
     _ ≤ (Q:ℝ)^(1-b)*(Q:ℝ)^b := mul_le_mul_of_nonneg_right large (Real.rpow_nonneg x0.le _)
     _ = _ := eqn
+
+/-- The bound applies at every fixed power height strictly below the
+conductor scale, including its square root. -/
+theorem nearOne_all_power_height (H b : ℝ) (hH : 0 ≤ H) (hb : 0 ≤ b) (hb1 : b < 1) :
+    ∃ C : ℝ, 0 < C ∧ ∀ᶠ Q : ℕ in atTop, ∀ m X : ℕ, Q ≤ X →
+      (∑ p ∈ nearOneCharacters m Q (1-H/Real.log X) ((Q:ℝ)^b),
+        ∑ z ∈ nearOneRoots m p.2 (1-H/Real.log X) ((Q:ℝ)^b),
+          (analyticOrderNatAt (regularizedL p.2) z:ℝ)) ≤ C :=
+  nearOne_all_multiplicity_moving H _ hH (fun Q => Real.rpow_nonneg (Nat.cast_nonneg Q) _)
+    (sublinear_power_height hb hb1)
 
 /-- The bound applies at every fixed power height strictly below the
 conductor scale, including its square root. -/
@@ -17966,45 +18331,404 @@ theorem nearOne_zero_multiplicity_power_height (H : ℝ) (hH : 0 ≤ H) :
       (∑ p ∈ nearOneCharacters m Q (1-H/Real.log X) ((Q:ℝ)^b),
         ∑ z ∈ nearOneRoots m p.2 (1-H/Real.log X) ((Q:ℝ)^b),
           (analyticOrderNatAt (regularizedL p.2) z:ℝ)) ≤ C := by
-  obtain ⟨c,hc,level⟩ := nearOne_zero_conductor_bound
-  let b := min (1/2) (c/(2*(H+1)))
-  have bp : 0 < b := lt_min (by norm_num) (div_pos hc (by positivity))
-  have bhalf : b ≤ 1/2 := min_le_left ..
-  have h1 : 0 < H+1 := by linarith
-  have bd : 2*b ≤ c/(H+1) := by
-    apply (le_div_iff₀ h1).mpr
-    have w := (le_div_iff₀ (show 0 < 2*(H+1) by positivity)).mp (show b ≤ c/(2*(H+1)) from min_le_right ..)
-    linarith only [w]
-  obtain ⟨C,hC,mass⟩ := nearOne_nonprincipal_power_height H b hH bp.le (by linarith)
-  refine ⟨b,C,bp,bhalf,hC,?_⟩
-  have growth := (tendsto_rpow_atTop bp).comp (tendsto_natCast_atTop_atTop (R := ℝ))
-  filter_upwards [mass,growth.eventually_ge_atTop 6,eventually_ge_atTop (2:ℕ)] with Q bound large Q2
-  intro m X hQX
-  let T := (Q:ℝ)^b
-  have q1 : 1 < (Q:ℝ) := by exact_mod_cast Q2
-  have x1 : 1 < (X:ℝ) := q1.trans_le (Nat.cast_le.mpr hQX)
-  have compare : 2*(2+T) ≤ (X:ℝ)^(c/(H+1)) := calc
-    _ ≤ T*T := by change 6 ≤ T at large; nlinarith only [large,mul_self_nonneg (T-3)]
-    _ = (Q:ℝ)^(2*b) := by change (Q:ℝ)^b*(Q:ℝ)^b = (Q:ℝ)^(2*b); rw [two_mul,Real.rpow_add (zero_lt_one.trans q1)]
-    _ ≤ (X:ℝ)^(2*b) := Real.rpow_le_rpow (Nat.cast_nonneg _) (Nat.cast_le.mpr hQX) (by positivity)
-    _ ≤ _ := Real.rpow_le_rpow_of_exponent_le x1.le bd
-  have eqn : (nearOneCharacters m Q (1-H/Real.log X) T).filter (fun p => p.2 ≠ 1) =
-      nearOneCharacters m Q (1-H/Real.log X) T := by
-    apply filter_eq_self.mpr
-    intro p hp eq
-    obtain ⟨_,hp⟩ := mem_sigma.mp hp
-    obtain ⟨prim,⟨z,hz⟩⟩ := (mem_filter.mp hp).2
-    obtain ⟨root,near,ht⟩ := mem_filter.mp hz
-    have modOne : 1 = p.1+1 := by simpa only [IsPrimitive,eq,conductor_one] using prim
-    have enlarged := (sub_le_sub_left (div_le_div_of_nonneg_right (show H ≤ H+1 by linarith)
-      (Real.log_pos x1).le) 1).trans near
-    have big := level (p.1+1) p.2 prim X (H+1) T z x1 h1 ht enlarged ((mem_exceptionalZeros ..).mp root).2.2
-    rw [←modOne,Nat.cast_one,mul_one] at big
-    exact (not_lt_of_ge compare) big
-  specialize bound m X hQX
-  change (∑ p ∈ (nearOneCharacters m Q (1-H/Real.log X) T).filter (fun p => p.2 ≠ 1),
-     ∑ z ∈ nearOneRoots m p.2 (1-H/Real.log X) T, (analyticOrderNatAt (regularizedL p.2) z:ℝ)) ≤ C at bound
-  rwa [eqn] at bound
+  obtain ⟨C,hC,law⟩ := nearOne_all_power_height H (1/2) hH (by norm_num) (by norm_num)
+  exact ⟨1/2,C,by norm_num,le_rfl,hC,law⟩
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+
+section
+open Complex Set MeasureTheory GoldbachOscillation
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftCircle
+
+private def betaDensity (s t : ℂ) (x : ℝ) :=
+  (x:ℂ)^(s-1)*(1-(x:ℂ))^(t-1)
+
+private theorem cpow_phase {x : ℝ} (hx : 0 < x) (s : ℂ) :
+    (x:ℂ)^(s-1) = ((x^(s.re-1):ℝ):ℂ)*wave (s.im*Real.log x) := by
+  simpa [GoldbachTwistedMellin.density,GoldbachTwistedMellin.phase,wave] using
+    GoldbachTwistedMellin.density_eq hx 0 s
+
+private theorem beta_amplitude_bounds {h x a : ℝ} (hh : 0 < h) (hx : h ≤ x)
+    (x1 : x ≤ 1) (ha : 0 ≤ a) (a1 : a ≤ 1) :
+    |x^(a-1)| ≤ 1/h ∧ |(a-1)*x^(a-1-1)| ≤ 1/h^2 := by
+  have xp := hh.trans_le hx
+  have d0 (v : ℝ) : 0 ≤ x^v := Real.rpow_nonneg xp.le _
+  have first : x^(a-1) ≤ 1/h := calc
+    _ ≤ x^(-1:ℝ) := Real.rpow_le_rpow_of_exponent_ge xp x1 (by linarith only [ha])
+    _ = 1/x := by rw [Real.rpow_neg_one,one_div]
+    _ ≤ _ := one_div_le_one_div_of_le hh hx
+  have second : x^(a-1-1) ≤ 1/h^2 := calc
+    _ ≤ x^(-(2:ℝ)) := Real.rpow_le_rpow_of_exponent_ge xp x1 (by linarith only [ha])
+    _ = 1/x^2 := by rw [Real.rpow_neg xp.le,Real.rpow_two,one_div]
+    _ ≤ _ := one_div_le_one_div_of_le (sq_pos_of_pos hh) (pow_le_pow_left₀ hh.le hx 2)
+  rw [abs_of_nonneg (d0 _),abs_mul,abs_of_nonpos (sub_nonpos.mpr a1),abs_of_nonneg (d0 _)]
+  exact ⟨first,(mul_le_of_le_one_left (d0 _) (by linarith only [ha])).trans second⟩
+
+/-- The interval away from the two endpoints has a common phase-curvature
+bound when the ordinates have the same sign. -/
+private theorem beta_interior {h : ℝ} (hh : 0 < h) (half : h ≤ 1/2) (s t : ℂ)
+    (s0 : 0 ≤ s.re) (t0 : 0 ≤ t.re) (s1 : s.re ≤ 1) (t1 : t.re ≤ 1)
+    (si : s.im ≤ 0) (ti : t.im ≤ 0) (hi : 0 < max (-s.im) (-t.im)) :
+    ‖∫ x in h..(1-h), betaDensity s t x‖ ≤
+      (2/h^3)*((3+5*Real.pi)/Real.sqrt (max (-s.im) (-t.im))) := by
+  let M := max (-s.im) (-t.im)
+  let C := 2/h^3
+  have cpos : 0 < C := by dsimp only [C];positivity
+  have hab : h ≤ 1-h := by linarith
+  have pos (x : ℝ) (hx : x ∈ Icc h (1-h)) : 0 < x := hh.trans_le hx.1
+  have pos' (x : ℝ) (hx : x ∈ Icc h (1-h)) : 0 < 1-x := by linarith only [hh,hx.2]
+  let u (x : ℝ) := x^(s.re-1)
+  let v (x : ℝ) := (1-x)^(t.re-1)
+  let du (x : ℝ) := (s.re-1)*x^(s.re-1-1)
+  let dv (x : ℝ) := -((t.re-1)*(1-x)^(t.re-1-1))
+  let w (x : ℝ) := u x*v x/C
+  let dw (x : ℝ) := (du x*v x+u x*dv x)/C
+  let f (x : ℝ) := s.im*Real.log x+t.im*Real.log (1-x)
+  let p (x : ℝ) := s.im/x-t.im/(1-x)
+  let dp (x : ℝ) := -s.im/x^2-t.im/(1-x)^2
+  have minus (x : ℝ) : HasDerivAt (fun y : ℝ => 1-y) (-1) x := (hasDerivAt_id x).const_sub 1
+  have hdu (x : ℝ) (hx : x ∈ Icc h (1-h)) : HasDerivAt u (du x) x :=
+    Real.hasDerivAt_rpow_const (Or.inl (pos x hx).ne')
+  have hdv (x : ℝ) (hx : x ∈ Icc h (1-h)) : HasDerivAt v (dv x) x := by
+    have der := (Real.hasDerivAt_rpow_const (p := t.re-1) (Or.inl (pos' x hx).ne')).comp x (minus x)
+    simpa [v,dv,Function.comp_def] using der
+  have bound := regularized hab (by linarith) (Real.sqrt_pos.mpr hi) w dw f p dp
+  have hw (x : ℝ) (hx : x ∈ Icc h (1-h)) : HasDerivAt w (dw x) x := by
+    exact ((hdu x hx).mul (hdv x hx)).div_const C
+  have hf (x : ℝ) (hx : x ∈ Icc h (1-h)) : HasDerivAt f (p x) x := by
+    have d := ((Real.hasDerivAt_log (pos x hx).ne').const_mul s.im).add
+      (((Real.hasDerivAt_log (pos' x hx).ne').comp x (minus x)).const_mul t.im)
+    convert d using 1
+    · rfl
+    dsimp only [p];ring
+  have hp (x : ℝ) (hx : x ∈ Icc h (1-h)) : HasDerivAt p (dp x) x := by
+    have d := ((hasDerivAt_const x s.im).div (hasDerivAt_id x) (pos x hx).ne').sub
+      ((hasDerivAt_const x t.im).div (minus x) (pos' x hx).ne')
+    convert d using 1
+    · rfl
+    dsimp only [dp,id_eq];ring
+  have cx (v : ℝ) : ContinuousOn (fun x : ℝ => x^v) (Icc h (1-h)) :=
+    continuousOn_id.rpow_const fun x hx => Or.inl (pos x hx).ne'
+  have cy (v : ℝ) : ContinuousOn (fun x : ℝ => (1-x)^v) (Icc h (1-h)) :=
+    (continuousOn_const.sub continuousOn_id).rpow_const fun x hx => Or.inl (pos' x hx).ne'
+  have cdw : ContinuousOn dw (Icc h (1-h)) :=
+    ((((continuousOn_const.mul (cx _)).mul (cy _)).add
+      ((cx _).mul (continuousOn_const.mul (cy _)).neg))).div_const C
+  have cdp : ContinuousOn dp (Icc h (1-h)) :=
+    (continuousOn_const.div (continuousOn_id.pow 2) (fun x hx => pow_ne_zero 2 (pos x hx).ne')).sub
+      (continuousOn_const.div ((continuousOn_const.sub continuousOn_id).pow 2)
+        (fun x hx => pow_ne_zero 2 (pos' x hx).ne'))
+  have sizes (x : ℝ) (hx : x ∈ Icc h (1-h)) :
+      (|w x| ≤ 1) ∧ |dw x| ≤ 1 := by
+    have a := beta_amplitude_bounds hh hx.1 (by linarith only [hh,hx.2]) s0 s1
+    have b := beta_amplitude_bounds (x := 1-x) hh (by linarith only [hx.2]) (by linarith only [hh,hx.1]) t0 t1
+    have dvb : |dv x| ≤ 1/h^2 := by simpa only [dv,abs_neg] using b.2
+    have av := mul_le_mul a.1 b.1 (abs_nonneg _) (by positivity)
+    have au := mul_le_mul a.2 b.1 (abs_nonneg _) (by positivity)
+    have bv := mul_le_mul a.1 dvb (abs_nonneg _) (by positivity)
+    have prod : 1/h*(1/h) ≤ C := by dsimp only [C];field_simp;linarith only [half]
+    have diff : 1/h^2*(1/h)+1/h*(1/h^2)=C := by dsimp only [C];field_simp;norm_num
+    refine ⟨?_,?_⟩
+    · rw [show w x=u x*v x/C by rfl,abs_div,abs_of_pos cpos,abs_mul,div_le_one cpos]
+      exact av.trans prod
+    · rw [show dw x=(du x*v x+u x*dv x)/C by rfl,abs_div,abs_of_pos cpos,div_le_one cpos]
+      apply (abs_add_le ..).trans
+      rw [abs_mul (du x) (v x),abs_mul (u x) (dv x)]
+      exact (add_le_add au bv).trans_eq diff
+  have curv (x : ℝ) (hx : x ∈ Icc h (1-h)) : (Real.sqrt M)^2 ≤ 4*dp x := by
+    rw [Real.sq_sqrt hi.le]
+    have x1 : x ≤ 1 := by linarith only [hx.2,hh]
+    have y1 : 1-x ≤ 1 := by linarith only [hx.1,hh]
+    have enhance (y z : ℝ) (yp : 0 < y) (y1 : y ≤ 1) (zp : 0 ≤ z) : z ≤ z/y^2 := by
+      apply (le_div_iff₀ (sq_pos_of_pos yp)).mpr
+      exact mul_le_of_le_one_right zp ((pow_le_pow_left₀ yp.le y1 2).trans_eq (one_pow _))
+    have a := enhance x (-s.im) (pos x hx) x1 (neg_nonneg.mpr si)
+    have b := enhance (1-x) (-t.im) (pos' x hx) y1 (neg_nonneg.mpr ti)
+    dsimp only [dp,M]
+    simp only [neg_div] at a b ⊢
+    exact max_le (by linarith only [a,b,si,ti]) (by linarith only [a,b,si,ti])
+  have small := bound hw hf hp cdw cdp (fun x hx => (sizes x hx).1) (fun x hx => (sizes x hx).2) curv
+  have point (x : ℝ) (hx : x ∈ Icc h (1-h)) : betaDensity s t x = (C:ℂ)*mainTerm w f x := by
+    rw [betaDensity,show 1-(x:ℂ)=((1-x:ℝ):ℂ) by push_cast;rfl,
+      cpow_phase (pos x hx),cpow_phase (pos' x hx)]
+    unfold mainTerm f
+    rw [wave_add]
+    unfold w u v
+    push_cast
+    field_simp [Complex.ofReal_ne_zero.mpr cpos.ne']
+  have eqn : (∫ x in h..(1-h), betaDensity s t x) = (C:ℂ)*(∫ x in h..(1-h), mainTerm w f x) := by
+    rw [←intervalIntegral.integral_const_mul]
+    exact intervalIntegral.integral_congr (fun x hx => point x ((uIcc_of_le hab) ▸ hx))
+  rw [eqn,norm_mul,norm_real,Real.norm_eq_abs,abs_of_pos cpos]
+  exact mul_le_mul_of_nonneg_left small cpos.le
+
+end Conjectures.Goldbach.BinaryShiftCircle
+end
+end
+
+section
+open Complex Set MeasureTheory
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftCircle
+
+private theorem beta_left_endpoint {h : ℝ} (hh : 0 < h) (half : h ≤ 1/2)
+    (s t : ℂ) (hs : 5/8 ≤ s.re) (ht : 5/8 ≤ t.re) :
+    ‖∫ x in 0..h, betaDensity s t x‖ ≤ 4*Real.sqrt h := by
+  let a := -(1/2:ℝ)
+  have a1 : -1 < a := by norm_num [a]
+  have integrable := (intervalIntegral.intervalIntegrable_rpow' (a := 0) (b := h) a1).const_mul 2
+  apply (intervalIntegral.norm_integral_le_of_norm_le hh.le (g := fun x : ℝ => 2*x^a) ?_ integrable).trans_eq
+  · rw [intervalIntegral.integral_const_mul,integral_rpow (Or.inl a1)]
+    have e : a+1=1/2 := by norm_num [a]
+    rw [e,Real.zero_rpow (by norm_num : (1/2:ℝ)≠0),sub_zero,←Real.sqrt_eq_rpow]
+    ring
+  · apply Filter.Eventually.of_forall
+    intro x hx
+    have x1 : x ≤ 1 := by linarith only [hx.2,half]
+    have yp : 0 < 1-x := by linarith only [hx.2,half]
+    have y1 : 1-x ≤ 1 := by linarith only [hx.1]
+    have minor : (1-x)^(t.re-1) ≤ 2 := calc
+      _ ≤ (1-x)^(-1:ℝ) := Real.rpow_le_rpow_of_exponent_ge yp y1 (by linarith only [ht])
+      _ = 1/(1-x) := by rw [Real.rpow_neg_one,one_div]
+      _ ≤ 2 := (div_le_iff₀ yp).mpr (by linarith only [hx.2,half])
+    rw [betaDensity,norm_mul,show 1-(x:ℂ)=((1-x:ℝ):ℂ) by push_cast;rfl,
+      norm_cpow_eq_rpow_re_of_pos hx.1,norm_cpow_eq_rpow_re_of_pos yp,sub_re,sub_re,one_re,mul_comm (2:ℝ)]
+    exact mul_le_mul (Real.rpow_le_rpow_of_exponent_ge hx.1 x1 (by dsimp only [a];linarith only [hs]))
+      minor (Real.rpow_nonneg yp.le _) (Real.rpow_nonneg hx.1.le _)
+
+private theorem beta_right_endpoint {h : ℝ} (hh : 0 < h) (half : h ≤ 1/2)
+    (s t : ℂ) (hs : 5/8 ≤ s.re) (ht : 5/8 ≤ t.re) :
+    ‖∫ x in (1-h)..1, betaDensity s t x‖ ≤ 4*Real.sqrt h := by
+  have eqn : (∫ x in 0..h, betaDensity s t (1-x)) = ∫ x in (1-h)..1, betaDensity s t x := by
+    simpa only [sub_zero] using (intervalIntegral.integral_comp_sub_left (a := 0) (b := h) (betaDensity s t) 1)
+  have flip (x : ℝ) : betaDensity s t (1-x)=betaDensity t s x := by
+    simp only [betaDensity,ofReal_sub,ofReal_one,sub_sub_cancel]
+    exact mul_comm ..
+  rw [←eqn]
+  simpa only [flip] using beta_left_endpoint hh half t s ht hs
+
+/-- On the full zero strip every high ordinate makes the archimedean
+factor small, uniformly over the other ordinate and over both signs.
+Taking U equal to the eighth root of the larger height gives a power
+saving of one sixteenth. -/
+theorem beta_uniform_height (U : ℝ) (hU : 2 ≤ U) (s t : ℂ) (hs : 5/8 ≤ s.re)
+    (ht : 5/8 ≤ t.re) (s1 : s.re ≤ 1) (t1 : t.re ≤ 1)
+    (height : U^8 ≤ max |s.im| |t.im|) :
+    ‖betaIntegral s t‖ ≤ (8+2*(3+5*Real.pi))/Real.sqrt U := by
+  let h := 1/U
+  let M := max |s.im| |t.im|
+  have u1 : 1 ≤ U := by linarith
+  have up : 0 < U := zero_lt_one.trans_le u1
+  have hp : 0 < h := one_div_pos.mpr up
+  have half : h ≤ 1/2 := one_div_le_one_div_of_le (by norm_num) hU
+  have h01 : (0:ℝ) ≤ 1-h := by linarith
+  have mid : h ≤ 1-h := by linarith
+  have Mpos : 0 < M := (pow_pos up 8).trans_le height
+  let v := lowerOrdinate s
+  let w := lowerOrdinate t
+  have vs : 5/8 ≤ v.re := hs
+  have wt : 5/8 ≤ w.re := ht
+  have vi : v.im ≤ 0 := neg_nonpos.mpr (abs_nonneg _)
+  have wi : w.im ≤ 0 := neg_nonpos.mpr (abs_nonneg _)
+  have heq : max (-v.im) (-w.im) = M := by simp [v,w,lowerOrdinate,M]
+  have aligned := beta_dominated_by_aligned s t (by linarith only [hs]) (by linarith only [ht])
+  have lft := beta_left_endpoint hp half v w vs wt
+  have rgt := beta_right_endpoint hp half v w vs wt
+  have int := beta_interior hp half v w (by linarith only [vs]) (by linarith only [wt])
+    s1 t1 vi wi (heq ▸ Mpos)
+  rw [heq] at int
+  have full : IntervalIntegrable (betaDensity v w) volume 0 1 :=
+    betaIntegral_convergent (by linarith only [vs]) (by linarith only [wt])
+  have piece (a b : ℝ) (ab : a ≤ b) (sa : 0 ≤ a) (sb : b ≤ 1) :
+      IntervalIntegrable (betaDensity v w) volume a b := by
+    apply full.mono_set
+    rw [uIcc_of_le ab,uIcc_of_le zero_le_one]
+    exact Icc_subset_Icc sa sb
+  have h1 : h ≤ 1 := by linarith
+  have L := piece 0 h hp.le le_rfl h1
+  have I := piece h (1-h) mid hp.le (by linarith)
+  have R := piece (1-h) 1 (by linarith) h01 le_rfl
+  have LI := piece 0 (1-h) h01 le_rfl (by linarith)
+  have total : betaIntegral v w =
+      ((∫ x in 0..h, betaDensity v w x)+(∫ x in h..(1-h), betaDensity v w x))+
+      ∫ x in (1-h)..1, betaDensity v w x := by
+    rw [intervalIntegral.integral_add_adjacent_intervals L I,intervalIntegral.integral_add_adjacent_intervals LI R]
+    rfl
+  apply aligned.trans
+  change ‖betaIntegral v w‖ ≤ _
+  rw [total]
+  apply (norm_add_le ..).trans
+  apply (add_le_add (norm_add_le ..) le_rfl).trans
+  have sU := Real.sqrt_pos.mpr up
+  have power : U^4 ≤ Real.sqrt M := by
+    calc
+      _ = Real.sqrt ((U^4)^2) := (Real.sqrt_sq (by positivity)).symm
+      _ ≤ _ := Real.sqrt_le_sqrt ((by ring : (U^4)^2=U^8).le.trans height)
+  have ck : 0 ≤ 3+5*Real.pi := by positivity
+  have size : 2/h^3*((3+5*Real.pi)/Real.sqrt M) ≤ 2*(3+5*Real.pi)/U := calc
+    _ ≤ 2/h^3*((3+5*Real.pi)/U^4) := mul_le_mul_of_nonneg_left
+      (div_le_div_of_nonneg_left ck (pow_pos up _) power) (by positivity)
+    _ = _ := by dsimp only [h];field_simp
+  have sqle : Real.sqrt U ≤ U := (Real.sqrt_le_sqrt (le_mul_of_one_le_left up.le u1)).trans_eq (by rw [←sq,Real.sqrt_sq up.le])
+  have ratio := div_le_div_of_nonneg_left (mul_nonneg (by norm_num : (0:ℝ) ≤ 2) ck) sU sqle
+  have sh : Real.sqrt h = 1/Real.sqrt U := by dsimp only [h]; rw [Real.sqrt_div zero_le_one,Real.sqrt_one]
+  rw [sh] at lft rgt
+  exact (add_le_add (add_le_add lft (int.trans (size.trans ratio))) rgt).trans_eq (by ring)
+
+end Conjectures.Goldbach.BinaryShiftCircle
+end
+end
+
+section
+open Complex Finset DirichletCharacter Filter Goldbach GoldbachTwistedMellin
+open scoped Classical
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+open TwistedGoldbachLocalProduct
+
+private theorem catalogue_some_member (m Q X : ℕ) (H T : ℝ) (p : PositiveLevelCharacter) (z : ℂ) :
+    some (⟨p,z⟩ : Σ _ : PositiveLevelCharacter, ℂ) ∈ nearOneCatalogue m Q X H T ↔
+      p.1 < Q ∧ p.2.IsPrimitive ∧ z ∈ nearOneRoots m p.2 (1-H/Real.log X) T := by
+  have reduce : (some (⟨p,z⟩ : Σ _ : PositiveLevelCharacter, ℂ) ∈ nearOneCatalogue m Q X H T) ↔
+      ((⟨p,z⟩ : Σ _ : PositiveLevelCharacter, ℂ) ∈ (nearOneCharacters m Q (1-H/Real.log X) T).sigma
+        (fun p => nearOneRoots m p.2 (1-H/Real.log X) T)) := by simp [nearOneCatalogue]
+  rw [reduce,mem_sigma,nearOneCharacters,mem_sigma,mem_range,mem_filter]
+  exact ⟨fun h => ⟨h.1.1,h.1.2.2.1,h.2⟩,fun h => ⟨⟨h.1,mem_univ _,h.2.1,⟨z,h.2.2⟩⟩,h.2.2⟩⟩
+
+private theorem catalogue_height_filter (m Q X : ℕ) (H T u : ℝ) (hu : 0 ≤ u) (le : u ≤ T) :
+    (nearOneCatalogue m Q X H T).filter (fun v => |((catalogueRoot v).getD 1).im| ≤ u) =
+      nearOneCatalogue m Q X H u := by
+  ext v
+  cases v with
+  | none => rw [mem_filter]; simp [nearOneCatalogue,catalogueRoot,hu]
+  | some v =>
+    obtain ⟨p,z⟩ := v
+    rw [mem_filter,catalogue_some_member,catalogue_some_member]
+    change (_ ∧ _ ∧ z ∈ nearOneRoots m p.2 (1-H/Real.log X) T) ∧ |z.im| ≤ u ↔ _
+    simp only [nearOneRoots,mem_filter]
+    constructor
+    · rintro ⟨⟨hq,pr,root,width,_⟩,low⟩
+      exact ⟨hq,pr,root,width,low⟩
+    · rintro ⟨hq,pr,root,width,low⟩
+      exact ⟨⟨hq,pr,root,width,low.trans le⟩,low⟩
+
+private theorem catalogue_pair_sum_filter (Z : Finset CatalogueEntry) (P : ℝ) (use : CatalogueEntry → Prop)
+    (f : CatalogueEntry → CatalogueEntry → ℂ) :
+    cataloguePairSum (Z.filter use) P f = cataloguePairSum Z P (fun i j => if use i ∧ use j then f i j else 0) := by
+  simp only [cataloguePairSum,sum_filter]
+  apply sum_congr rfl
+  intro i _
+  by_cases hi : use i
+  · simp only [hi,ite_true,true_and]
+    apply sum_congr rfl
+    intro j _
+    by_cases hj : use j <;> simp [hj]
+  · simp [hi]
+
+/-- Removing all pairs involving a high ordinate from the Beta expansion
+costs at most the squared total catalogue mass times the archimedean
+power saving. Both sides use the actual zero catalogue and its signs. -/
+theorem catalogue_beta_height_tail (m Q X n : ℕ) (hn : 0 < n) (P H T U : ℝ)
+    (hU : 2 ≤ U) (rangeH : U^8 ≤ T) :
+    let C := 8+2*(3+5*Real.pi)
+    let Z := nearOneCatalogue m Q X H T
+    let S := (series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n).re
+    ‖cataloguePairSum Z P (catalogueBetaTerm n)-
+      cataloguePairSum (nearOneCatalogue m Q X H (U^8)) P (catalogueBetaTerm n)‖ ≤
+      (∑ v ∈ Z, ‖catalogueWeight v‖)^2*((S*(n:ℝ))*(C/Real.sqrt U)) := by
+  intro C Z S
+  let use (v : CatalogueEntry) := |((catalogueRoot v).getD 1).im| ≤ U^8
+  have u0 : 0 < U := by linarith only [hU]
+  have t0 : 0 ≤ T := (pow_nonneg u0.le 8).trans rangeH
+  have s0 : 0 ≤ S := (norm_nonneg _).trans
+    (TwistedGoldbachSingularSeries.infinite_domination isPrimitive_one_level_one isPrimitive_one_level_one n hn)
+  have cost : 0 ≤ C/Real.sqrt U := by dsimp only [C];positivity
+  have eqn : nearOneCatalogue m Q X H (U^8) = Z.filter use :=
+    (catalogue_height_filter m Q X H T (U^8) (pow_nonneg u0.le _) rangeH).symm
+  rw [eqn,catalogue_pair_sum_filter]
+  apply catalogue_pair_sum_error Z P _ (mul_nonneg (mul_nonneg s0 (Nat.cast_nonneg _)) cost)
+  intro i hi j hj _
+  by_cases keep : use i ∧ use j
+  · simp only [ite_eq_left keep,sub_self,norm_zero]
+    positivity
+  rw [ite_eq_right keep,sub_zero]
+  let s := (catalogueRoot i).getD 1
+  let t := (catalogueRoot j).getD 1
+  have high : U^8 ≤ max |s.im| |t.im| := le_of_not_gt (fun h => keep
+    ⟨(le_max_left ..).trans h.le,(le_max_right ..).trans h.le⟩)
+  obtain ⟨_,pi,hs,s1,_⟩ := catalogue_properties m Q X H T t0 i hi
+  obtain ⟨_,pj,ht,t1,_⟩ := catalogue_properties m Q X H T t0 j hj
+  have beta := BinaryShiftCircle.beta_uniform_height U hU s t hs ht s1 t1 high
+  have dom := TwistedGoldbachSingularSeries.infinite_domination pi.inv pj.inv n hn
+  change ‖series (catalogueCharacter i)⁻¹ (catalogueCharacter j)⁻¹ n‖ ≤ S at dom
+  change ‖betaIntegral s t‖ ≤ C/Real.sqrt U at beta
+  have x1 : (1:ℝ) ≤ n := by exact_mod_cast hn
+  have pw : ‖(n:ℂ)^(s+t-1)‖ ≤ (n:ℝ) := by
+    rw [norm_natCast_cpow_of_pos hn,sub_re,add_re,one_re]
+    simpa only [Real.rpow_one] using Real.rpow_le_rpow_of_exponent_le x1 (show s.re+t.re-1 ≤ 1 by linarith only [s1,t1])
+  change ‖series (catalogueCharacter i)⁻¹ (catalogueCharacter j)⁻¹ n*((n:ℂ)^(s+t-1)*betaIntegral s t)‖ ≤ _
+  rw [norm_mul,norm_mul]
+  exact (mul_le_mul dom (mul_le_mul pw beta (norm_nonneg _) (Nat.cast_nonneg _))
+    (mul_nonneg (norm_nonneg _) (norm_nonneg _)) s0).trans_eq (by ring)
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset DirichletCharacter Filter Goldbach GoldbachTwistedMellin
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+open TwistedGoldbachLocalProduct
+
+/-- For the polynomial-height catalogue, uniformly over the finite
+conductor-pair cutoff and all positive targets, the total signed Beta
+contribution from ordinates above one fixed height is an arbitrarily small
+fraction of the ordinary Goldbach main term. -/
+theorem polynomial_catalogue_beta_truncation (H b ε : ℝ) (hH : 0 ≤ H)
+    (hb : 0 < b) (b1 : b < 1) (hε : 0 < ε) :
+    ∃ T : ℝ, 1 ≤ T ∧ ∀ᶠ Q : ℕ in atTop, ∀ m X : ℕ, Q ≤ X → ∀ n : ℕ, 0 < n → ∀ P : ℝ,
+      let S := (series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n).re
+      ‖cataloguePairSum (nearOneCatalogue m Q X H ((Q:ℝ)^b)) P (catalogueBetaTerm n)-
+        cataloguePairSum (nearOneCatalogue m Q X H T) P (catalogueBetaTerm n)‖ ≤ ε*(S*(n:ℝ)) := by
+  obtain ⟨C,hC,mass⟩ := nearOne_all_power_height H b hH hb.le b1
+  let A := 8+2*(3+5*Real.pi)
+  have hA : 0 < A := by dsimp only [A];positivity
+  let v := 2+(1+C)^2*A/ε
+  have v2 : 2 ≤ v := le_add_of_nonneg_right (div_nonneg (mul_nonneg (sq_nonneg _) hA.le) hε.le)
+  have vp : 0 < v := by linarith only [v2]
+  let U := v^2
+  have u2 : 2 ≤ U := by dsimp only [U];nlinarith only [v2,sq_nonneg (v-1)]
+  have small : (1+C)^2*(A/Real.sqrt U) ≤ ε := by
+    rw [show Real.sqrt U=v by exact Real.sqrt_sq vp.le,←mul_div_assoc]
+    apply (div_le_iff₀ vp).mpr
+    calc
+      _ = ε*((1+C)^2*A/ε) := by field_simp
+      _ ≤ ε*v := mul_le_mul_of_nonneg_left (by dsimp only [v];linarith) hε.le
+  refine ⟨U^8,one_le_pow₀ (by linarith only [u2]),?_⟩
+  have growth := (tendsto_rpow_atTop hb).comp (tendsto_natCast_atTop_atTop (R := ℝ))
+  filter_upwards [mass,growth.eventually_ge_atTop (U^8)] with Q law rangeH
+  intro m X QX n hn P S
+  let Z := nearOneCatalogue m Q X H ((Q:ℝ)^b)
+  have sz : (∑ v ∈ Z, ‖catalogueWeight v‖) ≤ 1+C := by
+    dsimp only [Z]
+    rw [catalogue_mass]
+    exact add_le_add_right (law m X QX) 1
+  have square := pow_le_pow_left₀ (sum_nonneg (fun _ _ => norm_nonneg _)) sz 2
+  have s0 : 0 ≤ S := (norm_nonneg _).trans
+    (TwistedGoldbachSingularSeries.infinite_domination isPrimitive_one_level_one isPrimitive_one_level_one n hn)
+  have ma := mul_nonneg s0 (Nat.cast_nonneg (α := ℝ) n)
+  have a0 : 0 ≤ A/Real.sqrt U := div_nonneg hA.le (Real.sqrt_nonneg _)
+  have total := catalogue_beta_height_tail m Q X n hn P H ((Q:ℝ)^b) U u2 rangeH
+  apply total.trans
+  change (∑ v ∈ Z, ‖catalogueWeight v‖)^2*((S*(n:ℝ))*(A/Real.sqrt U)) ≤ ε*(S*(n:ℝ))
+  calc
+    _ = ((∑ v ∈ Z, ‖catalogueWeight v‖)^2*(A/Real.sqrt U))*(S*(n:ℝ)) := by ring
+    _ ≤ _ := mul_le_mul_of_nonneg_right ((mul_le_mul_of_nonneg_right square a0).trans small) ma
 
 end Conjectures.Goldbach.BinaryShiftZeroDensity
 end

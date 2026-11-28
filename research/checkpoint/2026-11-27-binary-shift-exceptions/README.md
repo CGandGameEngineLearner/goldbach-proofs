@@ -38,9 +38,11 @@ $$
 
 ## 从增长高度的零点计数到原题
 
-`nearOne_nonprincipal_power_height` 将本原非主特征的零点计数推广到 $|\operatorname{Im}\rho|\le Q^b$。对每个固定的 $0\le b<1$ 和条带宽度 $H\ge0$，所有导子不超过 $Q$ 的这类特征在 $\operatorname{Re}\rho\ge 1-H/\log X$ 中的零点总重数有统一上界，对所有 $X\ge Q$ 成立。`nearOne_zero_multiplicity_power_height` 进一步证明，对每个 $H$ 都有某个 $b=b(H)>0$，使同一结论覆盖全部本原特征。此时导子为 1 的主特征由已核验的零点自由区域排除。[Pintz 的密度估计](https://arxiv.org/abs/1804.05552)
+`nearOne_all_power_height` 将实际零点表的计数推广到 $|\operatorname{Im}\rho|\le Q^b$。对每个固定的 $0\le b<1$ 和条带宽度 $H\ge0$，所有导子不超过 $Q$ 的本原特征在 $\operatorname{Re}\rho\ge 1-H/\log X$ 中的零点总重数有统一上界，对所有 $X\ge Q$ 成立。这包括导子为 1 的主特征。证明在 Abel 求和中保留主特征的极点项。两组筛权引入的最小公倍数倒数之和至多为 $(1+\log Y)^4$；零点自由区域迫使主特征的相关零点有足够大的虚部，从而抵消这项损失。[Pintz 的零点密度方法](https://arxiv.org/abs/1804.05552)
 
 `coefficient_sub_retained` 逐个分母写出完整主弧模型减去所选矩形的精确余项。求和保留每个至少有一个零点落在矩形外的配对的符号、解析重数、Gauss 因子与有限弧积分。在两个虚部接近互为相反数时，`beta_opposite_ordinates` 给出 Beta 因子的指数衰减。具体地，若 $|\gamma|\ge16$、$|\gamma+\gamma'|\le |\gamma|/2$ 且两实部在 $[5/8,1]$，则衰减因子至多为 $(3/4)^{\lfloor |\gamma|/8\rfloor}$，乘以常数 $B(5/8,5/8)$。[Pintz 关于高零点的主弧估计](https://arxiv.org/html/1804.05561v1#S10)
+
+对任意符号的虚部，`beta_uniform_height` 给出一致衰减率 $O(\max(|\gamma|,|\gamma'|)^{-1/16})$。这比 Pintz 在公式 (10.25) 中给出的 $-1/2$ 指数弱，但足以做固定高度截断。具体地，对每个 $0<b<1$ 和任意 $\varepsilon>0$，可先选取与 $Q$ 无关的高度 $T$，使 $Q^b$ 与 $T$ 两张表的带符号 Beta 主项之差至多为 $\varepsilon\mathfrak S(n)n$。该界对全部正整数目标和所有分母截断值同时成立。Lean 声明为 `polynomial_catalogue_beta_truncation`。这个估计控制的是完成 Fourier 反演后的 Beta 主项；原题中的有限主弧余项还需要单独控制。[Pintz I，公式 (10.24) 至 (10.27)](https://arxiv.org/html/1804.05561v1#S10)
 
 `binaryShiftExceptionUnion_of_catalogue_estimates` 已按注册表中原题的完整类型核对。若能选定矩形 $H,T$ 和 $0<\eta\le1$，使共同模数上的指数加权分类平方和至多为 $1-\eta$，并使余项实部至少为 $-\eta X/16$，即可推出 $S(X)^5\le X^4$。两项估计分别允许 $O(X^{19/24})$ 个例外。它们仍是待证的解析输入。[Zhao 的零点分类估计](https://arxiv.org/html/2511.05631v1) · [Pintz 的显式公式](https://arxiv.org/abs/1804.05561)
 
