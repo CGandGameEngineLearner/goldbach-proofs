@@ -28,9 +28,10 @@ theorem Conjectures.Cuts.Cut430ae16fb1dea113d8ccee8e
       (∑ p ∈ (Finset.range (n+1)).filter (fun p =>
         Nat.Prime p ∧ Odd p ∧ Nat.Prime (n-p) ∧ Odd (n-p)),
         Real.log (p:ℝ) * Real.log ((n-p:ℕ):ℝ)) / (n:ℝ)
-    let good := fun n : ℕ => ∃ p q : ℕ, Nat.Prime p ∧ Odd p ∧ Nat.Prime q ∧ Odd q ∧ p + q = n
+    let represented := fun n : ℕ => 0 < ((Finset.range (n+1)).filter (fun p =>
+      Nat.Prime p ∧ Odd p ∧ Nat.Prime (n-p) ∧ Odd (n-p))).card
     ∀ W : Finset ℕ, (∑ n ∈ W, R n)^2 ≤
-      ((@Finset.filter ℕ good (Classical.decPred good) W).card : ℝ) *
+      ((W.filter represented).card : ℝ) *
         ∑ n ∈ W, (R n)^2) :
     (let good := fun n : ℕ => ∃ p q : ℕ, Nat.Prime p ∧ Odd p ∧ Nat.Prime q ∧ Odd q ∧ p + q = n
     ∃ c : ℝ, 0 < c ∧ ∀ x : ℝ, 2 ≤ x →
@@ -51,7 +52,24 @@ theorem Conjectures.Cuts.Cut430ae16fb1dea113d8ccee8e
   have hh : 0 < h := sq_pos_of_pos (Real.log_pos (by linarith : 1 < x))
   have low : a*h ≤ ∑ n ∈ W, R n := haW x hx
   have high : (∑ n ∈ W, (R n)^2) ≤ b*h := hbW x hx
-  have cs : (∑ n ∈ W, R n)^2 ≤ (T.card:ℝ) * ∑ n ∈ W, (R n)^2 := h₃ W
+  let represented := fun n : ℕ => 0 < ((Finset.range (n+1)).filter (fun p =>
+      Nat.Prime p ∧ Odd p ∧ Nat.Prime (n-p) ∧ Odd (n-p))).card
+  have eq_support : W.filter represented = T := by
+    ext n
+    simp only [T, Finset.mem_filter]
+    refine and_congr_right fun _ => ⟨?_, ?_⟩
+    · intro hn
+      obtain ⟨p, hp⟩ := Finset.card_pos.mp hn
+      obtain ⟨hr, hprime, hodd, hq, ho⟩ := Finset.mem_filter.mp hp
+      have := Finset.mem_range.mp hr
+      exact ⟨p, n-p, hprime, hodd, hq, ho, by omega⟩
+    · rintro ⟨p, q, hprime, hodd, hq, ho, rfl⟩
+      apply Finset.card_pos.mpr
+      refine ⟨p, Finset.mem_filter.mpr ⟨Finset.mem_range.mpr (by omega), hprime, hodd, ?_⟩⟩
+      simpa using And.intro hq ho
+  have cs : (∑ n ∈ W, R n)^2 ≤ (T.card:ℝ) * ∑ n ∈ W, (R n)^2 := by
+    rw [← eq_support]
+    exact h₃ W
   have est : (a*h)^2 ≤ (T.card:ℝ)*(b*h) :=
     ((pow_le_pow_left₀ (mul_nonneg ha.le hh.le) low 2).trans cs).trans
       (mul_le_mul_of_nonneg_left high (Nat.cast_nonneg ..))
