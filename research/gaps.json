@@ -14065,6 +14065,29 @@
       "route_source": "dyadic-reflection"
     },
     {
+      "id": "L-goldbach-balanced-chen-prime-pairs",
+      "statement": "let bad := fun n : ℕ => n%6=4 ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ (p+2).primeFactorsList.length ≤ 2 ∧ (q+2).primeFactorsList.length ≤ 2 ∧ (p-q)^2 ≤ n ∧ (q-p)^2 ≤ n; ∃ δ : ℝ, 0 < δ ∧ δ < 1 ∧ ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Icc 4 X)).card : ℝ) ≤ (X : ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "在模 6 余 4 的目标中，除 O(X^(1−δ)) 个例外，每个 n 都有一对陈素数之和表示，且两素数之差至多 √n。",
+        "en": "Represent all but O(X^(1−δ)) targets congruent to 4 modulo 6 by two Chen primes with absolute difference at most sqrt(n)."
+      },
+      "brief": {
+        "zh": "对照 Grimmelt–Teräväinen 定理 1.1，把两个筛权局部化到以 n/2 为中心、宽度仅 √n 的同一反射窗口。必须在该窗口内重新证明均值与误差估计。两个自然数截断差同时受限；忽略间距可恢复原定理的幂节省结论。",
+        "en": "Localize both sieve weights in the same reflected window before estimating errors. Both truncated differences are bounded, capturing absolute distance. Forgetting the gap recovers the qualitative power saving of Theorem 1.1."
+      },
+      "source": "https://arxiv.org/html/2508.16400v1#S1",
+      "track": "dyadic-reflection",
+      "program": "correlation",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.BalancedChenPrimePairs",
+      "file": "lean/Conjectures/Goldbach/BalancedChenPrimePairs.lean",
+      "route_source": "dyadic-reflection"
+    },
+    {
       "id": "L-goldbach-character-window-fiber-energy",
       "statement": "∀ (m : ℕ) [NeZero m] (N : ℕ) (w : ℕ → ℂ) (s : Finset (DirichletCharacter ℂ m)),\n  (∑ χ ∈ s, ‖(∑ n ∈ Finset.range (N+1), w n * star (χ (n : ZMod m))) /\n      (Real.sqrt (m.totient : ℝ) : ℂ)‖^2) ≤\n    (1 + (N/m : ℕ) : ℝ) * ∑ n ∈ Finset.range (N+1), ‖w n‖^2",
       "plain_statement": {
@@ -20054,6 +20077,29 @@
       "route_source": "powers"
     },
     {
+      "id": "L-goldbach-chen-pair-admissible-shifts",
+      "statement": "let ok := fun (n : ℕ) (h k : ℤ) => ∀ l : ℕ, Nat.Prime l → ∃ a : ℤ, ¬ (l : ℤ) ∣ a*(a+h)*((n : ℤ)-a)*((n : ℤ)-a+k); let good := fun (n : ℕ) (h k : ℤ) => ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ 1 < (p : ℤ)+h ∧ 1 < (q : ℤ)+k ∧ ((p : ℤ)+h).toNat.primeFactorsList.length ≤ 2 ∧ ((q : ℤ)+k).toNat.primeFactorsList.length ≤ 2; ∀ H : ℕ, ∃ δ : ℝ, 0 < δ ∧ δ < 1 ∧ ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → ∀ h k : ℤ, h ≠ 0 → k ≠ 0 → Even h → Even k → (h.natAbs : ℝ) ≤ (Real.log (X : ℝ))^H → (k.natAbs : ℝ) ≤ (Real.log (X : ℝ))^H → let bad := fun n : ℕ => Even n ∧ ok n h k ∧ ¬good n h k; ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Icc 4 X)).card : ℝ) ≤ (X : ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "对两个独立的正负偶移位 h、k（绝对值至多为对数幂），在所有局部可容许偶数中证明一致的幂节省例外界，使 p+h 与 q+k 同为至多两个素因子的正数。",
+        "en": "For two independent nonzero even shifts up to a log power, prove a uniform power-saving exceptional bound for locally admissible Goldbach targets with both shifted summands positive almost primes of order two."
+      },
+      "brief": {
+        "zh": "先对每个素模剔除四个禁剩余类；在 p 或 q 上分别使用相应的切换筛，再控制两个移动移位的共同误差。h=k=2、n≡4(mod 6) 时，2 和 3 各有允许类，较大素模至多排除四类，因此包含定理 1.1。异常集可随移位变，误差指数和起始点不能变。",
+        "en": "Allow the exceptional set to depend on the shifts, but keep the exponent and onset uniform. For h=k=2 and n=4 mod 6 the local test holds at 2 and 3 and removes at most four classes at larger primes. Mixed shifts introduce different local roots and sieve errors."
+      },
+      "source": "https://arxiv.org/html/2508.16400v1#S1",
+      "track": "progressions",
+      "program": "correlation",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.ChenPairAdmissibleShifts",
+      "file": "lean/Conjectures/Goldbach/ChenPairAdmissibleShifts.lean",
+      "route_source": "progressions"
+    },
+    {
       "id": "L-goldbach-prescribed-residues-square-root-moduli",
       "statement": "let missed := fun q a b n : ℕ => Even n ∧ n % q = (a+b) % q ∧ ¬ ∃ p r : ℕ, Nat.Prime p ∧ Nat.Prime r ∧ p+r=n ∧ p%q=a ∧ r%q=b; ∀ B : ℕ, ∃ A : ℕ, ∀ ε : ℝ, 0 < ε → ∃ N₀ : ℕ, ∀ N R : ℕ, N₀ ≤ N → 3 ≤ R → (R : ℝ)*(Real.log (N : ℝ))^A ≤ Real.sqrt (N : ℝ) → ∃ T : Finset ℕ, T ⊆ Finset.Icc 3 R ∧ (T.card : ℝ)*(Real.log (N : ℝ))^B ≤ (R : ℝ) ∧ ∀ q ∈ Finset.Icc 3 R, q ∉ T → ∀ a b : ℕ, a < q → b < q → Nat.Coprime a q → Nat.Coprime b q → (((@Finset.filter ℕ (missed q a b) (Classical.decPred (missed q a b)) (Finset.Icc 2 N)).card : ℝ)*(q : ℝ)) ≤ ε*(N : ℝ)",
       "plain_statement": {
@@ -20163,6 +20209,29 @@
       "source": "https://arxiv.org/html/2606.29559v1#S1",
       "module": "Conjectures.Goldbach.BalancedThreeFactorGap",
       "file": "lean/Conjectures/Goldbach/BalancedThreeFactorGap.lean",
+      "route_source": "representations"
+    },
+    {
+      "id": "L-goldbach-beatty-common-exceptions",
+      "statement": "let bt := fun (u v : ℝ) (p : ℕ) => ∃ j : ℤ, ⌊u*(j : ℝ)+v⌋ = (p : ℤ); ∀ α : ℝ, 1 < α → α < 2 → Irrational α → (∃ c τ : ℝ, 0 < c ∧ 0 < τ ∧ ∀ q : ℕ, 0 < q → ∀ a : ℤ, c/(q : ℝ)^τ ≤ |α-(a : ℝ)/(q : ℝ)|) → ∃ C : ℝ, 0 < C ∧ ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → let bad := fun n : ℕ => Even n ∧ ∃ β : ℝ, ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ bt α β p ∧ bt α β q; ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Icc 4 X)).card : ℝ) ≤ C*Real.sqrt (X : ℝ)",
+      "plain_statement": {
+        "zh": "固定 1<α<2 的有限型无理斜率，寻找大小仅 Oα(√X) 的共同例外集；对集外每个偶数及每个实平移 β，都有两个同一 Beatty 序列中素数的表示。",
+        "en": "For every finite-type irrational slope between one and two, bound by Oα(sqrt X) a single exceptional set working for every translate of the Beatty sequence."
+      },
+      "brief": {
+        "zh": "与 Banks–Güloğlu–Nevans 对固定序列的几乎处处存在性相比，误差目标是平方根且平移置于选定目标之后。利用 α<2 给出的两段相位交叠余量，用有限网格覆盖平移，真正的困难是得到幂级例外界。不能由两段各自的素数密度推出同时命中。",
+        "en": "Exploit the positive overlap margin for slope below two to discretize translates. The difficult step is a square-root exceptional bound for simultaneous phase hits. Separate marginal densities do not control the joint count."
+      },
+      "source": "https://arxiv.org/abs/math/0701285",
+      "track": "representations",
+      "program": "correlation",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.BeattyCommonExceptions",
+      "file": "lean/Conjectures/Goldbach/BeattyCommonExceptions.lean",
       "route_source": "representations"
     },
     {
@@ -21365,6 +21434,29 @@
       "track": "representations",
       "route_source": "representations",
       "imports": []
+    },
+    {
+      "id": "L-goldbach-mixed-piatetski-shapiro-asymptotic",
+      "statement": "let ps := fun (g : ℝ) (p : ℕ) => ∃ j : ℕ, 0 < j ∧ ⌊(j : ℝ)^(1/g)⌋₊=p; let c₀ : ℝ := ∏' l : ℕ, if Nat.Prime l ∧ 2 < l then 1-1/((l : ℝ)-1)^2 else 1; let sing := fun n : ℕ => 2*c₀*∏ l ∈ n.primeFactors.filter (fun l => 2 < l), ((l : ℝ)-1)/((l : ℝ)-2); ∀ u v : ℝ, 9/10 ≤ u → u ≤ 1 → 9/10 ≤ v → v ≤ 1 → let w := fun (g : ℝ) (p : ℕ) => @ite ℝ (Nat.Prime p ∧ ps g p) (Classical.propDecidable _) ((p : ℝ)^(1-g)*Real.log (p : ℝ)/g) 0; ∀ ε : ℝ, 0 < ε → ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → let bad := fun n : ℕ => Even n ∧ ε*sing n*(n : ℝ) < |(∑ p ∈ Finset.range (n+1), w u p*w v (n-p))-sing n*(n : ℝ)|; ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Icc 4 X)).card : ℝ) ≤ ε*(X : ℝ)",
+      "plain_statement": {
+        "zh": "两套独立 Piatetski–Shapiro 指数 γ₁、γ₂ 都允许降至 9/10，在几乎所有偶数上证明补偿加权的双素数表示渐近式，保留普通哥猜奇异级数主项。",
+        "en": "Extend the compensated two-summand Piatetski–Shapiro Goldbach asymptotic to independent exponents in [9/10,1], with the usual binary singular series for almost all even targets."
+      },
+      "brief": {
+        "zh": "对标李洪泽定理 2 的 γᵢ>27/29。不能用仅保证下界或只约束一侧的结果替代。把素数上的薄序列权分别展开，重点估计双侧非零频率的交叉项。取 γ=1 时该侧恢复普通对数素数权。",
+        "en": "Compare H. Z. Li's Theorem 2. Subtract the ordinary logarithmic prime weight on each side and bound the cross term of the two sparse oscillatory errors. A one-sided estimate or a lower bound for equal exponents alone does not yield the asymptotic."
+      },
+      "source": "https://www.impan.pl/shop/en/publication/transaction/download/product/82175",
+      "track": "representations",
+      "program": "correlation",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.MixedPiatetskiShapiroAsymptotic",
+      "file": "lean/Conjectures/Goldbach/MixedPiatetskiShapiroAsymptotic.lean",
+      "route_source": "representations"
     },
     {
       "id": "L-goldbach-prime-mod-four-partition",
