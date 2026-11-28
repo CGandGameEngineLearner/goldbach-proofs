@@ -14,7 +14,9 @@
     "L-goldbach-gm-smoothing-kernel-mellin",
     "L-goldbach-gm-dirichlet-zero-count"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.GmSmoothingKernelMellin"
+  ],
   "parallel": true,
   "source": "https://doi.org/10.1016/j.jnt.2018.12.005",
   "track": "explicit-sieve-analytic-inputs",
