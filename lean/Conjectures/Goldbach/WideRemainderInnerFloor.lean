@@ -1309,6 +1309,306 @@ theorem JG_le_L2 (n : ℕ) (A : Set ℝ) (hA : MeasurableSet A) :
         · simp [hx, norm_fG]
         · simp [hx]
 
+/-- Conjugation turns the character-twisted sum at `-u` into the inverse-character
+sum at `u`. -/
+theorem SChi_neg_conj (n q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q) (u : ℝ) :
+    conj (SChi n q χ (-u)) = SChi n q χ⁻¹ u := by
+  show conj (∑ k ∈ Finset.range (n+1), χ (k:ZMod q) * (GW k : ℂ) * GE ((k:ℝ)*(-u)))
+      = ∑ k ∈ Finset.range (n+1), χ⁻¹ (k:ZMod q) * (GW k : ℂ) * GE ((k:ℝ)*u)
+  rw [map_sum (starRingEnd ℂ)]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  rw [map_mul, map_mul, conj_char_apply_eq_inv, Complex.conj_ofReal, conj_GE,
+    neg_mul_eq_mul_neg, neg_neg]
+
+/-- The standard additive character lies on the unit circle. -/
+theorem norm_stdAddChar {q : ℕ} [NeZero q] (x : ZMod q) : ‖ZMod.stdAddChar x‖ = 1 := by
+  rw [ZMod.stdAddChar_apply]
+  exact (ZMod.toCircle x).norm_coe
+
+/-- **Gauss-sum aggregate.** The squared Gauss sums of all Dirichlet characters mod `q`
+(in inverse-character form, as they enter the arc bound) sum to `φ(q)²`. -/
+theorem gaussSum_aggregate (q : ℕ) [NeZero q] :
+    ∑ χ : DirichletCharacter ℂ q, ‖gaussSum χ⁻¹ ZMod.stdAddChar‖ ^ 2
+      = ((q.totient : ℕ) : ℝ) ^ 2 := by
+  classical
+  have hψ1 : ∀ x : ZMod q, ZMod.stdAddChar x * conj (ZMod.stdAddChar x) = 1 := by
+    intro x
+    have h1 : ‖ZMod.stdAddChar x‖ = 1 := norm_stdAddChar x
+    have hnz : ZMod.stdAddChar x ≠ 0 := by
+      intro hc
+      rw [hc] at h1
+      simp at h1
+    have hz : ZMod.stdAddChar x * conj (ZMod.stdAddChar x)
+        = ZMod.stdAddChar x * (ZMod.stdAddChar x)⁻¹ := by
+      rw [RCLike.mul_conj, h1]
+      norm_num
+      rw [mul_inv_cancel₀ hnz]
+    rw [hz, mul_inv_cancel₀ hnz]
+  have hcard : (Finset.univ.filter (fun x : ZMod q => IsUnit x)).card = q.totient := by
+    have h1 : Fintype.card {a : ZMod q // IsUnit a}
+        = (Finset.univ.filter (fun x : ZMod q => IsUnit x)).card :=
+      Fintype.card_of_subtype _ (by simp)
+    have h2 : Fintype.card {a : ZMod q // IsUnit a}
+        = Fintype.card {x : ZMod q // x.val.Coprime q} :=
+      Fintype.card_congr (Equiv.subtypeEquivRight (fun a => Iff.trans
+        (by rw [ZMod.natCast_zmod_val a]) (ZMod.isUnit_iff_coprime a.val q)))
+    exact h1.symm.trans (h2.trans
+      ((Fintype.card_congr (ZMod.unitsEquivCoprime)).symm.trans (ZMod.card_units_eq_totient q)))
+  -- dual-side Dirichlet orthogonality
+  have hinner : ∀ x y : ZMod q, (∑ χ : DirichletCharacter ℂ q, χ⁻¹ x * χ y)
+      = if IsUnit x ∧ x = y then ((q.totient : ℕ) : ℂ) else 0 := by
+    intro x y
+    by_cases hx : IsUnit x
+    · have hconv : ∀ χ : DirichletCharacter ℂ q, χ⁻¹ x = χ x⁻¹ := fun χ => by
+        rw [MulChar.inv_apply_eq_inv', ← chi_apply_inv χ hx]
+      rw [Finset.sum_congr rfl (fun χ _ => by rw [hconv χ]),
+        DirichletCharacter.sum_char_inv_mul_char_eq ℂ hx y]
+      by_cases hxy : x = y
+      · rw [if_pos hxy, if_pos (show IsUnit x ∧ x = y from ⟨hx, hxy⟩)]
+      · simp [hxy]
+    · rw [if_neg (fun hc => hx hc.1)]
+      refine Finset.sum_eq_zero fun χ _ => ?_
+      rw [MulChar.inv_apply_eq_inv', MulCharClass.map_nonunit χ hx, inv_zero, zero_mul]
+  -- pointwise expansion of the squared modulus as a double sum
+  have hexpand : ∀ χ : DirichletCharacter ℂ q,
+      gaussSum χ⁻¹ ZMod.stdAddChar * conj (gaussSum χ⁻¹ ZMod.stdAddChar)
+      = ∑ x : ZMod q, ∑ y : ZMod q,
+          ZMod.stdAddChar x * conj (ZMod.stdAddChar y) * (χ⁻¹ x * χ y) := by
+    intro χ
+    have h1 : gaussSum χ⁻¹ ZMod.stdAddChar
+        = ∑ a : ZMod q, χ⁻¹ a * ZMod.stdAddChar a := rfl
+    rw [h1, map_sum (starRingEnd ℂ), Finset.sum_mul_sum]
+    refine Finset.sum_congr rfl fun x _ => Finset.sum_congr rfl fun y _ => ?_
+    rw [map_mul (starRingEnd ℂ), conj_char_apply_eq_inv, inv_inv]
+    ring
+  have hswap : ∑ χ : DirichletCharacter ℂ q, ∑ x : ZMod q, ∑ y : ZMod q,
+      ZMod.stdAddChar x * conj (ZMod.stdAddChar y) * (χ⁻¹ x * χ y)
+    = ∑ x : ZMod q, ∑ y : ZMod q, ∑ χ : DirichletCharacter ℂ q,
+      ZMod.stdAddChar x * conj (ZMod.stdAddChar y) * (χ⁻¹ x * χ y) := by
+    rw [Finset.sum_comm]
+    exact Finset.sum_congr rfl fun x _ => Finset.sum_comm
+  rw [Finset.sum_congr rfl (fun χ _ => norm_sq_eq_re_mul_conj (gaussSum χ⁻¹ ZMod.stdAddChar)),
+    ← Complex.re_sum, Finset.sum_congr rfl (fun χ _ => hexpand χ), hswap]
+  -- evaluate the inner character sum pointwise
+  have hpoint : ∀ x y : ZMod q,
+      ∑ χ : DirichletCharacter ℂ q,
+        ZMod.stdAddChar x * conj (ZMod.stdAddChar y) * (χ⁻¹ x * χ y)
+      = if IsUnit x ∧ x = y then
+          ZMod.stdAddChar x * conj (ZMod.stdAddChar x) * ((q.totient : ℕ) : ℂ) else 0 := by
+    intro x y
+    rw [← Finset.mul_sum, hinner x y]
+    by_cases h : IsUnit x ∧ x = y
+    · rw [if_pos h, if_pos h, h.2]
+    · rw [if_neg h, if_neg h, mul_zero]
+  rw [Finset.sum_congr rfl (fun x _ => Finset.sum_congr rfl (fun y _ => hpoint x y))]
+  -- non-units contribute nothing; each unit pairs only with itself
+  have hzero : ∀ x : ZMod q, ¬IsUnit x → ∑ y : ZMod q,
+      (if IsUnit x ∧ x = y then
+        ZMod.stdAddChar x * conj (ZMod.stdAddChar x) * ((q.totient : ℕ) : ℂ) else 0) = 0 := by
+    intro x hx
+    refine Finset.sum_eq_zero fun y _ => ?_
+    exact if_neg (fun hc => hx hc.1)
+  have hstep : ∑ x : ZMod q, ∑ y : ZMod q,
+      (if IsUnit x ∧ x = y then
+        ZMod.stdAddChar x * conj (ZMod.stdAddChar x) * ((q.totient : ℕ) : ℂ) else 0)
+    = ∑ x ∈ Finset.univ.filter (fun x : ZMod q => IsUnit x),
+        ZMod.stdAddChar x * conj (ZMod.stdAddChar x) * ((q.totient : ℕ) : ℂ) := by
+    refine (Finset.sum_subset (Finset.filter_subset (fun x : ZMod q => IsUnit x) Finset.univ)
+      (fun x _ hx => hzero x (fun hc => hx (Finset.mem_filter.mpr
+        ⟨Finset.mem_univ x, hc⟩)))).symm.trans ?_
+    refine Finset.sum_congr rfl fun x hx => ?_
+    have hu : IsUnit x := (Finset.mem_filter.mp hx).2
+    have hy : ∀ y : ZMod q, (if IsUnit x ∧ x = y then
+        ZMod.stdAddChar x * conj (ZMod.stdAddChar x) * ((q.totient : ℕ) : ℂ) else 0)
+      = (if x = y then
+        ZMod.stdAddChar x * conj (ZMod.stdAddChar x) * ((q.totient : ℕ) : ℂ) else 0) := by
+      intro y
+      by_cases h : x = y
+      · rw [if_pos (show IsUnit x ∧ x = y from ⟨hu, h⟩), if_pos h]
+      · simp [h, hu]
+    rw [Finset.sum_congr rfl (fun y _ => hy y), Finset.sum_ite_eq,
+      if_pos (Finset.mem_univ x)]
+  rw [hstep]
+  have hsum1 : ∑ x ∈ Finset.univ.filter (fun x : ZMod q => IsUnit x),
+      ZMod.stdAddChar x * conj (ZMod.stdAddChar x) * ((q.totient : ℕ) : ℂ)
+    = ∑ x ∈ Finset.univ.filter (fun x : ZMod q => IsUnit x), ((q.totient : ℕ) : ℂ) :=
+    Finset.sum_congr rfl (fun x _ => by rw [hψ1 x, one_mul])
+  rw [hsum1, Finset.sum_const, nsmul_eq_mul, hcard, Complex.mul_re]
+  simp only [Complex.natCast_re, Complex.natCast_im]
+  ring
+
+/-- **Integrated arc mass.** Integrating the arc-sum L² bridge over a symmetric phase
+interval `[-δ, δ]` pulls the constant Gauss-sum factors out of the β-integral:
+`∫_{-δ}^{δ} ∑_a ‖SG n (a/q+β)‖² dβ ≤ (2/φ) ∑_χ ‖τ(χ⁻¹)‖² · ∫_{-δ}^{δ} ‖SChi χ β‖² dβ
++ 4φ(log q)²δ`. -/
+theorem arcMass_integral_bound (n q : ℕ) [NeZero q] (δ : ℝ) (hδ : 0 ≤ δ) :
+    ∫ β in (-δ:ℝ)..δ, ∑ a ∈ Finset.univ.filter (fun a : ZMod q => IsUnit a),
+        ‖SG n ((a.val:ℝ)/(q:ℝ) + β)‖ ^ 2
+      ≤ (2 / (q.totient : ℝ)) * ∑ χ : DirichletCharacter ℂ q,
+          ‖gaussSum χ⁻¹ ZMod.stdAddChar‖ ^ 2 * (∫ β in (-δ:ℝ)..δ, ‖SChi n q χ β‖ ^ 2)
+        + 4 * (q.totient : ℝ) * (Real.log q) ^ 2 * δ := by
+  classical
+  have hSGc : Continuous (SG n) := by
+    show Continuous (fun t : ℝ => ∑ k ∈ Finset.range (n+1), (GW k : ℂ) * GE ((k:ℝ)*t))
+    exact continuous_finsetSum _ (fun k _ => continuous_summand_GE n k)
+  have hSChic : ∀ χ : DirichletCharacter ℂ q, Continuous (fun β : ℝ => SChi n q χ β) := by
+    intro χ
+    show Continuous (fun β : ℝ => ∑ k ∈ Finset.range (n+1),
+      χ (k:ZMod q) * (GW k : ℂ) * GE ((k:ℝ)*β))
+    exact continuous_finsetSum _ (fun k _ => continuous_const.mul
+      (continuous_GE.comp (continuous_const.mul continuous_id)))
+  have hLcont : Continuous (fun β : ℝ => ∑ a ∈ Finset.univ.filter (fun a : ZMod q => IsUnit a),
+      ‖SG n ((a.val:ℝ)/(q:ℝ) + β)‖ ^ 2) :=
+    continuous_finsetSum _ (fun a _ =>
+      (hSGc.norm.pow 2).comp (continuous_const.add continuous_id))
+  have hLint := (hLcont.intervalIntegrable (-δ:ℝ) δ :
+    IntervalIntegrable _ MeasureTheory.volume _ _)
+  have hRcont1 : Continuous (fun β : ℝ => (2 / (q.totient : ℝ)) *
+      ∑ χ : DirichletCharacter ℂ q, ‖gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β‖ ^ 2) :=
+    continuous_const.mul (continuous_finsetSum _ (fun χ _ =>
+      ((show Continuous fun _ : ℝ => gaussSum χ⁻¹ ZMod.stdAddChar from
+        continuous_const).mul (hSChic χ)).norm.pow 2))
+  have hRcont : Continuous (fun β : ℝ => (2 / (q.totient : ℝ)) *
+      ∑ χ : DirichletCharacter ℂ q, ‖gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β‖ ^ 2
+      + 2 * (q.totient : ℝ) * (Real.log q) ^ 2) :=
+    hRcont1.add continuous_const
+  have hRint := (hRcont.intervalIntegrable (-δ:ℝ) δ :
+    IntervalIntegrable _ MeasureTheory.volume _ _)
+  have hRint1 := (hRcont1.intervalIntegrable (-δ:ℝ) δ :
+    IntervalIntegrable _ MeasureTheory.volume _ _)
+  have hRint2 : IntervalIntegrable (fun _ : ℝ => 2 * (q.totient : ℝ) * (Real.log q) ^ 2)
+      MeasureTheory.volume (-δ:ℝ) δ :=
+    (continuous_const (y := 2 * (q.totient : ℝ) * (Real.log q) ^ 2)).intervalIntegrable
+      (-δ:ℝ) δ
+  refine le_trans (intervalIntegral.integral_mono (show (-δ:ℝ) ≤ δ by linarith) hLint hRint
+    (fun β => SG_arc_L2 n q β)) ?_
+  -- evaluate the right-hand integral
+  have hintχ : ∀ χ : DirichletCharacter ℂ q,
+      IntervalIntegrable (fun β : ℝ => ‖gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β‖ ^ 2)
+        MeasureTheory.volume (-δ:ℝ) δ := by
+    intro χ
+    exact (((show Continuous fun _ : ℝ => gaussSum χ⁻¹ ZMod.stdAddChar from
+      continuous_const).mul (hSChic χ)).norm.pow 2).intervalIntegrable _ _
+  have hintχ2 : ∀ χ : DirichletCharacter ℂ q,
+      ∫ β in (-δ:ℝ)..δ, ‖gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β‖ ^ 2
+        = ‖gaussSum χ⁻¹ ZMod.stdAddChar‖ ^ 2 * ∫ β in (-δ:ℝ)..δ, ‖SChi n q χ β‖ ^ 2 := by
+    intro χ
+    have e1 : (-δ:ℝ) ≤ δ := by linarith
+    rw [intervalIntegral.integral_of_le e1,
+      MeasureTheory.integral_congr_ae (MeasureTheory.ae_of_all _ fun β => by
+        rw [norm_mul, mul_pow]),
+      MeasureTheory.integral_const_mul,
+      (intervalIntegral.integral_of_le e1).symm]
+  have hRHS : ∫ β in (-δ:ℝ)..δ, ((2 / (q.totient : ℝ)) * ∑ χ : DirichletCharacter ℂ q,
+      ‖gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β‖ ^ 2
+      + 2 * (q.totient : ℝ) * (Real.log q) ^ 2)
+    = (2 / (q.totient : ℝ)) * ∑ χ : DirichletCharacter ℂ q,
+        ‖gaussSum χ⁻¹ ZMod.stdAddChar‖ ^ 2 * (∫ β in (-δ:ℝ)..δ, ‖SChi n q χ β‖ ^ 2)
+      + 4 * (q.totient : ℝ) * (Real.log q) ^ 2 * δ := by
+    rw [intervalIntegral.integral_add hRint1 hRint2, intervalIntegral.integral_const_mul,
+      intervalIntegral.integral_finsetSum (fun χ _ => hintχ χ),
+      Finset.sum_congr rfl (fun χ _ => hintχ2 χ)]
+    rw [intervalIntegral.integral_const, smul_eq_mul,
+      show (δ:ℝ) - (-δ) = 2 * δ from by ring]
+    ring
+  rw [hRHS]
+
+/-- The unit-restricted diagonal weight sum `∑_{k≤n, (k,q)=1} w(k)²`. -/
+noncomputable def Wsq (n q : ℕ) [NeZero q] : ℝ :=
+  ∑ k ∈ Finset.range (n+1), (if IsUnit ((k:ℕ):ZMod q) then (GW k : ℝ) ^ 2 else 0)
+
+lemma Wsq_nonneg (n q : ℕ) [NeZero q] : 0 ≤ Wsq n q :=
+  Finset.sum_nonneg (fun k _ => by by_cases h : IsUnit ((k:ℕ):ZMod q) <;> simp [h] <;>
+    positivity)
+
+/-- **Short-phase arc mass.** For `δ ≤ 1`, the Goldbach arc mass over the symmetric phase
+interval is bounded by twice the unit diagonal weight plus the non-coprime error:
+`∫_{-δ}^{δ} ∑_a ‖SG n (a/q+β)‖² dβ ≤ 4φ·Wsq(n,q) + 4φ(log q)²δ`. -/
+theorem arcMass_bound (n q : ℕ) [NeZero q] (δ : ℝ) (hδ : 0 ≤ δ) (hδ1 : δ ≤ 1) :
+    ∫ β in (-δ:ℝ)..δ, ∑ a ∈ Finset.univ.filter (fun a : ZMod q => IsUnit a),
+        ‖SG n ((a.val:ℝ)/(q:ℝ) + β)‖ ^ 2
+      ≤ 4 * (q.totient : ℝ) * Wsq n q + 4 * (q.totient : ℝ) * (Real.log q) ^ 2 * δ := by
+  classical
+  have hSChic : ∀ χ : DirichletCharacter ℂ q, Continuous (fun β : ℝ => SChi n q χ β) := by
+    intro χ
+    show Continuous (fun β : ℝ => ∑ k ∈ Finset.range (n+1),
+      χ (k:ZMod q) * (GW k : ℂ) * GE ((k:ℝ)*β))
+    exact continuous_finsetSum _ (fun k _ => continuous_const.mul
+      (continuous_GE.comp (continuous_const.mul continuous_id)))
+  have hcontχ : ∀ χ : DirichletCharacter ℂ q, Continuous (fun β : ℝ => ‖SChi n q χ β‖ ^ 2) :=
+    fun χ => (hSChic χ).norm.pow 2
+  have hpt : ∀ χ : DirichletCharacter ℂ q, ∀ u : ℝ,
+      ‖SChi n q χ (-u)‖ = ‖SChi n q χ⁻¹ u‖ := by
+    intro χ u
+    rw [← Complex.norm_conj, SChi_neg_conj]
+  refine le_trans (arcMass_integral_bound n q δ hδ) ?_
+  -- each symmetric character integral is at most twice the full-line diagonal mass
+  have hpair : ∀ χ : DirichletCharacter ℂ q,
+      ∫ β in (-δ:ℝ)..δ, ‖SChi n q χ β‖ ^ 2 ≤ 2 * Wsq n q := by
+    intro χ
+    have hf1 : IntervalIntegrable (fun β : ℝ => ‖SChi n q χ β‖ ^ 2)
+        MeasureTheory.volume (-δ:ℝ) 0 := (hcontχ χ).intervalIntegrable _ _
+    have hf2 : IntervalIntegrable (fun β : ℝ => ‖SChi n q χ β‖ ^ 2)
+        MeasureTheory.volume (0:ℝ) δ := (hcontχ χ).intervalIntegrable _ _
+    have hnegint : ∫ β in (-δ:ℝ)..0, ‖SChi n q χ β‖ ^ 2
+        = ∫ u in (0:ℝ)..δ, ‖SChi n q χ (-u)‖ ^ 2 :=
+      (intervalIntegral.integral_comp_neg (f := fun u : ℝ => ‖SChi n q χ u‖ ^ 2)
+          (a := (0:ℝ)) (b := δ)).symm
+    have h1 : ∫ β in (-δ:ℝ)..δ, ‖SChi n q χ β‖ ^ 2
+        = (∫ β in (-δ:ℝ)..0, ‖SChi n q χ β‖ ^ 2) + ∫ β in (0:ℝ)..δ, ‖SChi n q χ β‖ ^ 2 := by
+      rw [← intervalIntegral.integral_add_adjacent_intervals hf1 hf2]
+    have hsplit : ∫ β in (-δ:ℝ)..δ, ‖SChi n q χ β‖ ^ 2
+        = (∫ u in (0:ℝ)..δ, ‖SChi n q χ (-u)‖ ^ 2) + ∫ u in (0:ℝ)..δ, ‖SChi n q χ u‖ ^ 2 := by
+      rw [h1, hnegint]
+    rw [hsplit]
+    have hneg : Continuous (fun u : ℝ => ‖SChi n q χ (-u)‖ ^ 2) :=
+      (hcontχ χ).comp continuous_id.neg
+    have h1 : ∫ u in (0:ℝ)..δ, ‖SChi n q χ (-u)‖ ^ 2
+        ≤ ∫ u in (0:ℝ)..1, ‖SChi n q χ⁻¹ u‖ ^ 2 := by
+      refine le_trans (intervalIntegral.integral_mono_interval (le_refl _) hδ hδ1
+        (Filter.Eventually.of_forall (fun u => sq_nonneg (‖SChi n q χ (-u)‖)))
+        (hneg.intervalIntegrable (0:ℝ) 1 :
+          IntervalIntegrable _ MeasureTheory.volume _ _)) ?_
+      rw [intervalIntegral.integral_of_le (show (0:ℝ) ≤ 1 by norm_num),
+        MeasureTheory.integral_congr_ae (MeasureTheory.ae_of_all _ fun u => by
+          rw [hpt χ u]),
+        intervalIntegral.integral_of_le (show (0:ℝ) ≤ 1 by norm_num)]
+    have h2 : ∫ u in (0:ℝ)..δ, ‖SChi n q χ u‖ ^ 2
+        ≤ ∫ u in (0:ℝ)..1, ‖SChi n q χ u‖ ^ 2 :=
+      intervalIntegral.integral_mono_interval (le_refl _) hδ hδ1
+        (Filter.Eventually.of_forall (fun u => sq_nonneg (‖SChi n q χ u‖)))
+        ((hcontχ χ).intervalIntegrable _ _)
+    rw [SChi_L2 n q χ⁻¹] at h1
+    rw [SChi_L2 n q χ] at h2
+    have hwsq : Wsq n q = ∑ k ∈ Finset.range (n + 1), (if IsUnit ((k:ℕ):ZMod q) then (GW k : ℝ) ^ 2 else 0) := rfl
+    rw [hwsq]
+    refine le_trans (add_le_add (le_trans h1 le_rfl) (le_trans h2 le_rfl)) ?_
+    rw [two_mul]
+  have hsum : ∑ χ : DirichletCharacter ℂ q,
+      ‖gaussSum χ⁻¹ ZMod.stdAddChar‖ ^ 2 * (∫ β in (-δ:ℝ)..δ, ‖SChi n q χ β‖ ^ 2)
+    ≤ ((q.totient : ℕ) : ℝ) ^ 2 * (2 * Wsq n q) := by
+    have h1 : ∑ χ : DirichletCharacter ℂ q,
+        ‖gaussSum χ⁻¹ ZMod.stdAddChar‖ ^ 2 * (∫ β in (-δ:ℝ)..δ, ‖SChi n q χ β‖ ^ 2)
+      ≤ ∑ χ : DirichletCharacter ℂ q,
+        ‖gaussSum χ⁻¹ ZMod.stdAddChar‖ ^ 2 * (2 * Wsq n q) :=
+      Finset.sum_le_sum (fun χ _ =>
+        mul_le_mul_of_nonneg_left (hpair χ) (sq_nonneg _))
+    rw [← Finset.sum_mul, gaussSum_aggregate q] at h1
+    exact h1
+  have hφ : (0:ℝ) < (q.totient : ℝ) := Nat.cast_pos.mpr (Nat.totient_pos.mpr (NeZero.pos q))
+  have hφ0 : (q.totient : ℝ) ≠ 0 := ne_of_gt hφ
+  have hkey : (2 / (q.totient : ℝ)) * (((q.totient : ℕ) : ℝ) ^ 2 * (2 * Wsq n q))
+      = 4 * (q.totient : ℝ) * Wsq n q := by
+    field_simp
+    ring
+  have hc : (0:ℝ) ≤ 2 / (q.totient : ℝ) := div_nonneg (by norm_num) (le_of_lt hφ)
+  have hmain : (2 / (q.totient : ℝ)) * ∑ χ : DirichletCharacter ℂ q,
+      ‖gaussSum χ⁻¹ ZMod.stdAddChar‖ ^ 2 * (∫ β in (-δ:ℝ)..δ, ‖SChi n q χ β‖ ^ 2)
+    ≤ 4 * (q.totient : ℝ) * Wsq n q := by
+    refine le_trans (mul_le_mul_of_nonneg_left hsum hc) ?_
+    rw [hkey]
+  exact add_le_add hmain le_rfl
+
 end CharExpand
 
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
