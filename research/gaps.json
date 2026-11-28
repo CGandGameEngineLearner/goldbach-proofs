@@ -14058,8 +14058,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.AsgbFixedFiberMatrixClassification",
       "file": "lean/Conjectures/Goldbach/AsgbFixedFiberMatrixClassification.lean",
+      "module": "Conjectures.Goldbach.AsgbFixedFiberMatrixClassification",
       "track": "dyadic-reflection",
       "route_source": "dyadic-reflection"
     },
@@ -14819,6 +14819,28 @@
       "role": "lemma",
       "module": "Conjectures.Goldbach.BinaryShiftMissedCenter",
       "file": "lean/Conjectures/Goldbach/BinaryShiftMissedCenter.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-binary-shift-peripheral-desert",
+      "statement": "∀ B H K X : ℕ, ∃ n : ℕ, X ≤ n ∧ Even n ∧ K ≤ ((Finset.range (n+1)).filter (fun p => p < n-p ∧ p.Prime ∧ (n-p).Prime)).card ∧ ∀ d ≤ H, ∀ p : ℕ, p.Prime → p ≤ B → ¬ (n-d-p).Prime ∧ ¬ (n+2-d-p).Prime",
+      "plain_statement": {
+        "zh": "排除相邻移位偶数上所有固定上界的小素数加数，同时保留任意多种真正的素数分解",
+        "en": "Exclude every bounded small prime at two shifted targets while the unshifted even number has arbitrarily many distinct prime pairs"
+      },
+      "brief": {
+        "zh": "给定小素数上界 B、移位窗 H、表示数 K 和下界 X。构造某个 n≥X，使 n 至少有 K 种不同的不等素数无序分解。对每个 d≤H，n−d 和 n+2−d 均无法用任何 p≤B 的素数配对。取 M=(B+H+2)!，用模 M 的 −1 类素数和、等差数列素数定理与抽屉原理构造 n；用 M 的小因子逐个排除两边的补数。",
+        "en": "Given bounds B and H, multiplicity K and starting point X, construct an even n≥X with at least K distinct unordered decompositions into unequal primes. For every d≤H neither n−d nor n+2−d has a representation with a prime at most B. Use prime summands congruent to −1 modulo (B+H+2)!, the prime number theorem in arithmetic progressions, and pigeonholing. Each excluded complement has an explicit proper divisor."
+      },
+      "source": "https://www.preprints.org/manuscript/202610.2486/v1",
+      "program": "exceptions",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.BinaryShiftPeripheralDesert",
+      "file": "lean/Conjectures/Goldbach/BinaryShiftPeripheralDesert.lean",
+      "track": "exceptions",
       "route_source": "exceptions"
     },
     {
@@ -15599,8 +15621,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.FareyReturnDigitLine",
       "file": "lean/Conjectures/Goldbach/FareyReturnDigitLine.lean",
+      "module": "Conjectures.Goldbach.FareyReturnDigitLine",
       "track": "farey-inverse-sieve",
       "route_source": "farey-inverse-sieve"
     },
@@ -16291,8 +16313,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.FinitePostBoundaryThrough524288",
       "file": "lean/Conjectures/Goldbach/FinitePostBoundaryThrough524288.lean",
+      "module": "Conjectures.Goldbach.FinitePostBoundaryThrough524288",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16528,8 +16550,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11CmParameterLocalDensity",
       "file": "lean/Conjectures/Goldbach/Rfc11CmParameterLocalDensity.lean",
+      "module": "Conjectures.Goldbach.Rfc11CmParameterLocalDensity",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16550,8 +16572,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11CompatibleTwoFieldClasses",
       "file": "lean/Conjectures/Goldbach/Rfc11CompatibleTwoFieldClasses.lean",
+      "module": "Conjectures.Goldbach.Rfc11CompatibleTwoFieldClasses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16572,8 +16594,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DescendingTail",
       "file": "lean/Conjectures/Goldbach/Rfc11DescendingTail.lean",
+      "module": "Conjectures.Goldbach.Rfc11DescendingTail",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16594,8 +16616,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DyadicCmPrimeAnchors",
       "file": "lean/Conjectures/Goldbach/Rfc11DyadicCmPrimeAnchors.lean",
+      "module": "Conjectures.Goldbach.Rfc11DyadicCmPrimeAnchors",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16616,8 +16638,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DyadicCover",
       "file": "lean/Conjectures/Goldbach/Rfc11DyadicCover.lean",
+      "module": "Conjectures.Goldbach.Rfc11DyadicCover",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16638,8 +16660,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DyadicLeftEndpointWitnesses",
       "file": "lean/Conjectures/Goldbach/Rfc11DyadicLeftEndpointWitnesses.lean",
+      "module": "Conjectures.Goldbach.Rfc11DyadicLeftEndpointWitnesses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16660,8 +16682,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11ExtendedDyadicEdgeWitnesses",
       "file": "lean/Conjectures/Goldbach/Rfc11ExtendedDyadicEdgeWitnesses.lean",
+      "module": "Conjectures.Goldbach.Rfc11ExtendedDyadicEdgeWitnesses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16682,8 +16704,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Primorial757Repairs",
       "file": "lean/Conjectures/Goldbach/Rfc11Primorial757Repairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11Primorial757Repairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16704,8 +16726,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11ResidualDomainGlue",
       "file": "lean/Conjectures/Goldbach/Rfc11ResidualDomainGlue.lean",
+      "module": "Conjectures.Goldbach.Rfc11ResidualDomainGlue",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16726,8 +16748,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Rfc12CutpointWitness",
       "file": "lean/Conjectures/Goldbach/Rfc11Rfc12CutpointWitness.lean",
+      "module": "Conjectures.Goldbach.Rfc11Rfc12CutpointWitness",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16748,8 +16770,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11SeamSixRepairs",
       "file": "lean/Conjectures/Goldbach/Rfc11SeamSixRepairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11SeamSixRepairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16770,8 +16792,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11SecondBlockExceptionRepair",
       "file": "lean/Conjectures/Goldbach/Rfc11SecondBlockExceptionRepair.lean",
+      "module": "Conjectures.Goldbach.Rfc11SecondBlockExceptionRepair",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16792,8 +16814,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11ThirdBlockSeventyOneRepairs",
       "file": "lean/Conjectures/Goldbach/Rfc11ThirdBlockSeventyOneRepairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11ThirdBlockSeventyOneRepairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16814,8 +16836,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11TopFirst4096Witnesses",
       "file": "lean/Conjectures/Goldbach/Rfc11TopFirst4096Witnesses.lean",
+      "module": "Conjectures.Goldbach.Rfc11TopFirst4096Witnesses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16836,8 +16858,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Top316AnchorBank",
       "file": "lean/Conjectures/Goldbach/Rfc11Top316AnchorBank.lean",
+      "module": "Conjectures.Goldbach.Rfc11Top316AnchorBank",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16858,8 +16880,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Top316FirstBankCover",
       "file": "lean/Conjectures/Goldbach/Rfc11Top316FirstBankCover.lean",
+      "module": "Conjectures.Goldbach.Rfc11Top316FirstBankCover",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16880,8 +16902,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Top316SixRepairs",
       "file": "lean/Conjectures/Goldbach/Rfc11Top316SixRepairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11Top316SixRepairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -16902,8 +16924,34 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11WheelConvolutionMain",
       "file": "lean/Conjectures/Goldbach/Rfc11WheelConvolutionMain.lean",
+      "module": "Conjectures.Goldbach.Rfc11WheelConvolutionMain",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
+      "id": "L-goldbach-rfc12-cutpoint-million-double-cover",
+      "statement": "((∀ n : ℕ, 10^316 ≤ n → n < 10^316 + 2097152 → Even n → ∃ q r : ℕ, q < r ∧ r ≤ 2712663 ∧ q.Prime ∧ r.Prime ∧ (n-q).Prime ∧ (n-r).Prime) ∧ (let G := fun m : ℕ => ((Finset.range (m+1)).filter (fun p => Nat.Prime p ∧ Nat.Prime (m-p))).card; ∀ n : ℕ, 10^316 + 1048576 ≤ n → n < 10^316 + 2097152 → Even n → ∀ e : ℕ, 2 ≤ e → e ≤ 20 → (2^e)^2 ≤ n ∧ 2 ≤ G (n-2^e) ∧ 2 ≤ G (n+2-2^e))) ∧ (∀ S : Finset ℕ, (∀ t ∈ S, t ≤ 2712663 ∧ (10^316-t).Prime) → (∀ k : ℕ, k < 1048576 → 2 ≤ ((([25787, 23073, 28121, 30291, 29519, 51747, 29183, 30693, 46539, 27299, 55077, 35117, 58401, 48851, 29673, 44813, 22041, 52193, 40623, 35561, 59667, 54623, 31341, 41939, 42603, 49467, 57963, 12377, 33269, 18117, 18191, 42833, 46341, 38403, 48893, 1821, 8307, 14831, 15039, 60269, 71799, 73059, 66447] : List ℕ).toFinset ∪ S).filter (fun t => (t+2*k).Prime)).card) → 8 ≤ S.card)",
+      "plain_statement": {
+        "zh": "在 10^316 起的连续 1048576 个偶数上建立双重素数覆盖和共同移位界",
+        "en": "Certify two Goldbach decompositions throughout the first million even targets at the RFC1.2 cutoff"
+      },
+      "brief": {
+        "zh": "令 T=10^316。对 [T,T+2097152) 内每个偶数 n，找出不同的小素数 q<r≤2712663，使 n−q 和 n−r 同为素数。对上半段内的每个偶数和 2 至 20 的每个指数 e，同时证明 (2^e)^2≤n 且 n−2^e 与 n+2−2^e 各至少有两种表示。用 V11 的 43 个大素数锚和 57 个新锚，可以逐个偶数重放。 同时证明，在偏移不超过 2712663 的限制下，任何能为整个区间补足双重覆盖的附加素数锚集至少有八项；模 105 的两组障碍分别要求四项。",
+        "en": "Put T=10^316. For every even n in [T,T+2097152), exhibit distinct primes q<r≤2712663 with both complements prime. On the upper half, prove for each exponent from 2 through 20 that its squared shift is at most n and that both shifted targets have at least two representations. A finite replay uses the 43 V11 primes and 57 new prime anchors. Also prove that any set of extra prime anchors with offsets at most 2712663 that repairs the entire original bank to double coverage has at least eight elements. Two groups of residue obstructions modulo 105 each require four."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ffe27af00c8df03bd77f7afd279cd836b6cbb1ee/research/checkpoint/%E5%93%A5%E5%BE%B7%E5%B7%B4%E8%B5%AB%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%864.md#L291-L300",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [
+        "L-goldbach-rfc11-top316-anchor-bank"
+      ],
+      "imports": [
+        "Conjectures.Goldbach.Rfc11Top316AnchorBank"
+      ],
+      "file": "lean/Conjectures/Goldbach/Rfc12CutpointMillionDoubleCover.lean",
+      "module": "Conjectures.Goldbach.Rfc12CutpointMillionDoubleCover",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
