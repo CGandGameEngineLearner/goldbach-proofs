@@ -15007,6 +15007,98 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-chen-prescribed-progressions",
+      "statement": "by\n  classical\n  let chen := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length ≤ 2\n  exact ∀ k : ℕ, ∃ δ : ℝ, 0 < δ ∧ δ < 1 ∧ ∃ T : ℕ, ∀ X : ℕ, T ≤ X → ∀ d a b : ℕ, 1 ≤ d → d.Coprime 6 → (d:ℝ) ≤ (Real.log (X:ℝ))^k → a < d → b < d → Nat.Coprime (a*(a+2)*b*(b+2)) d →\n    let bad := fun n : ℕ => n%6=4 ∧ n%d=(a+b)%d ∧ ¬ ∃ p q : ℕ, chen p ∧ chen q ∧ p+q=n ∧ p%d=a ∧ q%d=b\n    (((Finset.Icc X (2*X)).filter bad).card:ℝ) ≤ ((X:ℝ)/(d:ℝ))^(1-δ)",
+      "plain_statement": {
+        "zh": "在对数幂范围的模数上预先指定两个陈素数的剩余类，给出一致的例外界。",
+        "en": "Uniform exceptional bound with both Chen-prime residue classes prescribed at polylogarithmic moduli."
+      },
+      "brief": {
+        "zh": "d=1 给出定理 1.1 的二倍区间版本。推广要求对每个局部相容的模数和两剩余类同时控制阈值与指数；异常目标可依赖这三个参数。#4272 在固定模数上完成了不同移位形式的归约，可借鉴其处理局部条件的方法。",
+        "en": "At d=1 this is a dyadic version of Theorem 1.1. Keep the onset and exponent uniform in the chosen modulus and residue pair. Compare the fixed-progression reduction #4272; its algebra alone does not give uniform analytic errors."
+      },
+      "source": "https://arxiv.org/html/2508.16400v1#S1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.ChenPrescribedProgressions",
+      "file": "lean/Conjectures/Goldbach/ChenPrescribedProgressions.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-chen-short-target-window",
+      "statement": "by\n  classical\n  let chen := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length ≤ 2\n  let good := fun n : ℕ => ∃ p q : ℕ, chen p ∧ chen q ∧ p+q=n\n  exact ∃ δ : ℝ, 0 < δ ∧ δ < 1 ∧ ∃ T : ℕ, ∀ X : ℕ, T ≤ X → ∀ H : ℕ, X ≤ H^2 → H ≤ X →\n    (((Finset.Icc X (X+H)).filter (fun n => n%6=4 ∧ ¬good n)).card:ℝ) ≤ (H:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "在每个长度至少 √X 的目标短窗内证明双陈素数表示的幂节省例外界。",
+        "en": "Power-saving exceptional sets for two Chen primes in every target interval of length at least √X."
+      },
+      "brief": {
+        "zh": "原论文定理 1.1 给累计例外界，容许例外集中在短窗。本题要求对每个起点 X 成立，且损失以窗口长度 H 计算。加数仍可自由变化；这与现有要求 p、q 彼此接近的任务不同。",
+        "en": "Theorem 1.1 permits clustering of exceptions. Localize the exceptional-set argument in the target and preserve a saving measured in H. The summands remain unrestricted in distance."
+      },
+      "source": "https://arxiv.org/html/2508.16400v1#S1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.ChenShortTargetWindow",
+      "file": "lean/Conjectures/Goldbach/ChenShortTargetWindow.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-chen-square-targets",
+      "statement": "by\n  classical\n  let chen := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length ≤ 2\n  let good := fun n : ℕ => ∃ p q : ℕ, chen p ∧ chen q ∧ p+q=n\n  exact ∃ δ : ℝ, 0 < δ ∧ δ < 1 ∧ ∃ T : ℕ, ∀ X : ℕ, T ≤ X → (((Finset.Icc 1 X).filter (fun t => ¬good (6*t^2+4))).card:ℝ) ≤ (X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "在稀疏目标 6t²+4 上证明双陈素数表示，仅允许对参数 t 有幂节省的例外。",
+        "en": "Power-saving exceptions in the parameter for two Chen primes on quadratic targets 6t²+4."
+      },
+      "brief": {
+        "zh": "该序列落在原论文的局部允许类，但到高度 Y 仅约 √Y 项，原密度结论不能直接限制它。可把论文的异常集对偶和换成二次相位和，检查大弧下界能否覆盖该稀疏采样的次弧误差。",
+        "en": "These targets satisfy the mod-six condition but have square-root density in height. Replace the exceptional-set dual sum by a quadratic-phase sum; preserve the major-arc lower bound while controlling the sparse sampling error."
+      },
+      "source": "https://arxiv.org/html/2508.16400v1#S1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.ChenSquareTargets",
+      "file": "lean/Conjectures/Goldbach/ChenSquareTargets.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-chen-two-factor-windows",
+      "statement": "by\n  classical\n  let chen := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length ≤ 2\n  let split := fun p : ℕ => ∃ a b : ℕ, Nat.Prime a ∧ Nat.Prime b ∧ a*b=p+2 ∧ a^5 ≤ p+2 ∧ p+2 ≤ a^6\n  exact ∃ δ : ℝ, 0 < δ ∧ δ < 1 ∧ ∃ T : ℕ, ∀ X : ℕ, T ≤ X → (((Finset.Icc X (2*X)).filter (fun n => n%6=4 ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ split p ∧ split q)).card:ℝ) ≤ (X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "要求 p+2 和 q+2 各恰有两个素因子，且各有一个落在自身的 1/6 至 1/5 次幂之间。",
+        "en": "Force a prime divisor in the exponent window [1/6,1/5] for each of two shifted semiprimes."
+      },
+      "brief": {
+        "zh": "原定理允许移位数为素数，也允许两个因子的大小不受限。本题要求两个移位数各落在明确的双线性因子区间。固定第一因子后需在余因子为素数的子族中获得下界，直接套用陈筛的上界不足以保证该区间存在表示。",
+        "en": "Theorem 1.1 allows prime shifts and imposes no factor-size window. Here both shifts must be semiprimes of a prescribed bilinear shape. Seek a lower bound inside the factor window, retaining primality of both complementary factors."
+      },
+      "source": "https://arxiv.org/html/2508.16400v1#S1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.ChenTwoFactorWindows",
+      "file": "lean/Conjectures/Goldbach/ChenTwoFactorWindows.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-digit-set-intrinsic-square-root",
       "track": "exceptions",
       "statement": "∀ b : ℕ, 2 ≤ b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2 ≤ D.card → ∃ C : ℝ, 0 < C ∧ ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → let A := (Finset.Icc 1 X).filter (fun n => (b.digits n).all (fun d => decide (d ∈ D))); let bad := fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n; ((@Finset.filter ℕ bad (Classical.decPred bad) A).card : ℝ) ≤ C * Real.sqrt (A.card : ℝ)",
