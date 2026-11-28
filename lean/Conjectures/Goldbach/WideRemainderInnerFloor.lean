@@ -986,6 +986,75 @@ theorem SG_char_expansion (n q : ℕ) [NeZero q] (a : ℕ) (ha : Nat.Coprime a q
     by_cases hk : IsUnit (k:ZMod q) <;> simp [hk]
   rw [SG, sum_range_eq_filter_add_filter_not n (fun (k : ℕ) => IsUnit (k:ZMod q)) _, hun, hnon]
 
+/-- The standard exponential has norm `1` on the real line. -/
+theorem norm_GE (x : ℝ) : ‖GE x‖ = 1 := by
+  rw [GE, Complex.norm_exp]
+  have hre : ((2 * Real.pi * x : ℝ) * Complex.I).re = 0 := by
+    rw [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im]
+    ring
+  rw [hre, Real.exp_zero]
+/-- **Error bound for the character expansion.** The non-coprime part of the Goldbach sum
+is supported on the primes dividing `q` (each contributing at most `log p`), so its total
+mass is at most `log q`: a sub-polynomial error, negligible against `εn`. -/
+theorem abs_nonunit_error_le (n q : ℕ) [NeZero q] (a : ℕ) (β : ℝ) :
+    ‖∑ k ∈ Finset.range (n+1),
+        if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a:ℝ)/(q:ℝ) + β))‖
+      ≤ Real.log q := by
+  classical
+  have hterm : ∀ k ∈ Finset.range (n+1),
+      ‖(if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a:ℝ)/(q:ℝ) + β)))‖
+        ≤ (if IsUnit (k:ZMod q) then 0 else GW k) := by
+    intro k _
+    by_cases hk : IsUnit (k:ZMod q)
+    · rw [if_pos hk, if_pos hk]
+      exact by norm_num
+    · rw [if_neg hk, if_neg hk, Complex.norm_mul, norm_GE, mul_one]
+      norm_cast
+      rw [Real.norm_eq_abs]
+      exact (abs_of_nonneg (GW_nonneg k)).le
+  have htri := norm_sum_le (Finset.range (n+1))
+    (fun k => (if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a:ℝ)/(q:ℝ) + β))))
+  refine htri.trans ?_
+  have hq0 : 0 < q := NeZero.pos q
+  have hsum2 : ∑ k ∈ Finset.range (n+1),
+      ‖(if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a:ℝ)/(q:ℝ) + β)))‖
+      ≤ ∑ k ∈ Finset.range (n+1), (if IsUnit (k:ZMod q) then 0 else GW k) :=
+    Finset.sum_le_sum hterm
+  refine hsum2.trans ?_
+  -- the nonzero contributions are exactly the primes `k ∣ q`, whose weights sum to `log q`
+  set S := (Finset.range (n+1)).filter
+    (fun k => Nat.Prime k ∧ ¬ IsUnit (k:ZMod q)) with hS
+  have hsub : S ⊆ Nat.primeFactors q := by
+    intro k hk
+    have hk2 := Finset.mem_filter.mp hk
+    rw [Nat.mem_primeFactors]
+    have hdvd : k ∣ q := by
+      by_contra hnd
+      exact hk2.2.2 (ZMod.isUnit_prime_of_not_dvd hk2.2.1 hnd)
+    exact ⟨hk2.2.1, hdvd, NeZero.ne q⟩
+  have hstep : ∑ k ∈ Finset.range (n+1), (if IsUnit (k:ZMod q) then 0 else GW k)
+      = ∑ k ∈ S, Real.log k := by
+    rw [hS, Finset.sum_filter]
+    refine Finset.sum_congr rfl fun (k : ℕ) (_ : k ∈ Finset.range (n+1)) => ?_
+    by_cases hu : IsUnit (k:ZMod q) <;> by_cases hp : Nat.Prime k <;> simp [hu, hp, GW]
+  have hlogprod : Real.log (∏ p ∈ Nat.primeFactors q, (p:ℝ))
+      = ∑ p ∈ Nat.primeFactors q, Real.log (p:ℝ) :=
+    Real.log_prod (fun p hp => by exact_mod_cast (Nat.mem_primeFactors.mp hp).1.ne_zero)
+  have hprodle : (∏ p ∈ Nat.primeFactors q, (p:ℝ)) ≤ (q:ℝ) := by
+    have h := Nat.prod_primeFactors_dvd q
+    rw [← Nat.cast_prod]
+    exact Nat.cast_le.mpr (Nat.le_of_dvd hq0 h)
+  have hlogle : Real.log (∏ p ∈ Nat.primeFactors q, (p:ℝ)) ≤ Real.log (q:ℝ) :=
+    Real.log_le_log (Finset.prod_pos (fun p hp => Nat.cast_pos.mpr
+      ((Nat.mem_primeFactors.mp hp).1.pos))) hprodle
+  calc ∑ k ∈ Finset.range (n+1), (if IsUnit (k:ZMod q) then 0 else GW k)
+      = ∑ k ∈ S, Real.log k := hstep
+    _ ≤ ∑ p ∈ Nat.primeFactors q, Real.log p :=
+        Finset.sum_le_sum_of_subset_of_nonneg hsub (fun i hi _ =>
+          Real.log_nonneg (by exact_mod_cast (Nat.mem_primeFactors.mp hi).1.one_le))
+    _ = Real.log (∏ p ∈ Nat.primeFactors q, (p:ℝ)) := hlogprod.symm
+    _ ≤ Real.log (q:ℝ) := hlogle
+
 end CharExpand
 
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
