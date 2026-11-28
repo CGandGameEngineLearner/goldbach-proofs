@@ -14629,6 +14629,29 @@
       "route_source": "exception-density-bridge"
     },
     {
+      "id": "L-goldbach-dyadic-exception-little-o-sqrt",
+      "statement": "let bad := fun n : ℕ => 4 ≤ n ∧ Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n; ∀ ε : ℝ, 0 < ε → ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Ioc X (2*X))).card : ℝ) ≤ ε * Real.sqrt (X : ℝ)",
+      "plain_statement": {
+        "zh": "待证：在每个充分大的倍增区间 (X,2X] 中，强哥猜例外偶数的个数为 o(√X)。",
+        "en": "Show that the number of exceptional even Goldbach targets in (X,2X] is o(√X), uniformly for all sufficiently large X."
+      },
+      "brief": {
+        "zh": "从 #3806 所述均方上界丢失符号的问题出发，只在真实例外集上估计负傅里叶系数。每个漏点有大小约 X 的主弧亏损时，例外支撑上的平方和若为 o(X^(5/2)) 即足够；主弧下界也须证明。以二进区间求和可得全局 o(√X)，推出本路线的 4/7 目标。对标 Li–Liu v1 定理 2 的和问题部分，去掉对数损失并要求任意小常数。",
+        "en": "Exploit the sign on the actual exceptional support. Given a uniform positive major-arc floor of order X, an o(X^(5/2)) squared deficit on those targets suffices. Prove the floor as well. Dyadic summation recovers global o(√X) and hence the four-sevenths target. Compare the sum component of Li–Liu v1, Theorem 2."
+      },
+      "source": "https://arxiv.org/html/2610.26756v1#S1",
+      "program": "correlation",
+      "track": "exceptional-set-four-sevenths",
+      "depends_on": [],
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "module": "Conjectures.Goldbach.DyadicExceptionLittleOSqrt",
+      "file": "lean/Conjectures/Goldbach/DyadicExceptionLittleOSqrt.lean",
+      "route_source": "exceptional-set-four-sevenths"
+    },
+    {
       "id": "L-goldbach-exception-four-sevenths-counting-bridge",
       "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let major := fun n : ℕ => intervalIntegral (fun t => (arcs n).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let minor := fun n : ℕ => (intervalIntegral (fun t => (arcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let bad := fun n : ℕ => 4 ≤ n ∧ Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n; (∃ (c : ℝ) (N : ℕ), 0<c ∧ ∀ n : ℕ, N≤n → Even n → c*(n:ℝ) ≤ (major n).re) → (∀ e : ℝ, 0 < e → ∃ (C : ℝ) (N : ℕ), 0 < C ∧ ∀ X : ℕ, N ≤ X → (Finset.sum ((Finset.Icc X (2*X)).filter Even) (fun n => (max 0 (-minor n))^2)) ≤ C * (X:ℝ) ^ (18/7 + e)) → (∀ e : ℝ, 0 < e → ∃ (C : ℝ) (N : ℕ), 0 < C ∧ ∀ X : ℕ, N ≤ X → ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Icc X (2*X))).card : ℝ) ≤ C * (X:ℝ) ^ (4/7 + e))",
       "plain_statement": {
