@@ -79,7 +79,7 @@ theorem map_ladder {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S)
   induction k generalizing m with
   | zero => simp [ladder,Coords.map]
   | succ k ih =>
-    by_cases h : m%2=1 <;> simp only [ladder,h,ite_true,ite_false,map_mixed,map_dbl,ih]
+    by_cases h : Nat.mod m 2=1 <;> simp only [ladder,h,ite_true,ite_false,map_mixed,map_dbl,ih]
 
 section Geometry
 variable {F : Type*} [Field F] [DecidableEq F]
@@ -143,7 +143,7 @@ private theorem ladder_rep (a b u v : F) (hQ : (curve a b).toJacobian.Nonsingula
   | succ k ih =>
     have hhalf : m/2 < 2^k := by rw [pow_succ] at hm; omega
     have hd := dbl_rep (ih (m/2) hhalf)
-    by_cases hbit : m%2=1
+    by_cases hbit : Nat.mod m 2=1
     · simp only [ladder,hbit,ite_true]
       have ha := mixed_rep hQ hd
       rwa [← add_nsmul, ← succ_nsmul, show m/2+m/2+1=m by omega] at ha
@@ -273,8 +273,9 @@ The ECPP data were produced using PARI/GP 2.17.4 primecert.
 Each step below checks the reduced point from the corresponding certificate. -/
 
 namespace GoldbachCutpointCertificate
-set_option maxRecDepth 200000
-set_option maxHeartbeats 0
+set_option maxRecDepth 200000 in
+set_option maxHeartbeats 0 in
+section
 
 lemma prime_mem_of_dvd_prod {fs : List ℕ} {q : ℕ}
     (hfs : ∀ r ∈ fs, Nat.Prime r) (hq : Nat.Prime q) (hd : q ∣ fs.prod) : q ∈ fs := by
@@ -566,8 +567,9 @@ private theorem chain_0 : Nat.Prime 99999999999999999999999999999999999999999999
     (u := 4890104778155375379268044005869619571513309421385795636894260084425695564473805935716880815678636798083869343750424494700707016621906562426369573435315465897182383914917857963728712681915504608336240621724482203660916132937684188800442972265816529825346392902090175983725371523411178730698925549359082470842445521405) (v := 5480898357851251378413511266288060096927262193002480751518949639833774494365810409814313969140650726838449819177600394676579982919086714159639706961588840419100286448961167600423262116776890350967141370053172853778984339763941829946852106619931383352302207237932824712205892404164931845643102743923873565489684010225)
     chain_1 (by decide +kernel)
 
-theorem _root_.Conjectures.Goldbach.Rfc11Rfc12CutpointWitness :
-    Nat.Prime 2207 ∧ Nat.Prime (10^316-2207) := by
-  exact ⟨by norm_num, chain_0⟩
-
+end
 end GoldbachCutpointCertificate
+
+theorem Conjectures.Goldbach.Rfc11Rfc12CutpointWitness :
+    Nat.Prime 2207 ∧ Nat.Prime (10^316-2207) := by
+  exact ⟨by norm_num, GoldbachCutpointCertificate.chain_0⟩
