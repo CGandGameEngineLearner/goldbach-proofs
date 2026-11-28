@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-fixed-ap-bmor-classical",
+  "statement": "∃ (C c X : ℝ), 0 < C ∧ 0 < c ∧ 0 < X ∧ ∀ (q a n : ℕ), 3 ≤ q → q ≤ 105 → a < q → Nat.Coprime a q → ⌈X⌉₊ ≤ n → |(∑ k ∈ (Finset.range (n + 1)).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k) - (n : ℝ) / (Nat.totient q : ℝ)| ≤ C * (n : ℝ) * Real.exp (-(c * Real.sqrt (Real.log (n : ℝ))))",
+  "plain_statement": {
+    "zh": "BMOR 特化的无条件经典误差形状（对 n/φ(q) 给出 O(n·exp(-c√log n))）",
+    "en": "The unconditional classical-error shape of the BMOR specialization (O(n·exp(-c√log n)) error toward n/φ(q))"
+  },
+  "brief": {
+    "zh": "把冻结题 L-goldbach-fixed-ap-bmor-psi 的误差形状从 n/(840·log n) 放宽到经典 Siegel–Walfisz 形状 C·n·exp(-c√log n)，常数与阈值存在量化。此形式已经是机器核验的定理：由已移植的 Siegel–Walfisz（kimihiro64/bombieri-vinogradov，Apache-2.0，730 个模块、2.87 MiB 源码）经本项目已验证的装配层直接得到，`#print axioms` 仅 propext/Classical.choice/Quot.sound。证明的依赖闭包为 2.87 MiB，是单文件 2 MiB 上限的 1.44 倍，故本任务需要 imports 白名单（参考 lean-eval #1971 的 vendored-closure 先例与 #3815 的 imports 机制）。冻结题本身（1/840、n ≥ 8·10⁹）仍受数值证书约束，见 Discussion #3817。",
+    "en": "Relax the frozen task's error shape from n/(840·log n) to the classical Siegel–Walfisz shape C·n·exp(-c√log n), with existentially quantified constants and threshold. This form is already a machine-checked theorem: it follows from a ported Siegel–Walfisz formalization (kimihiro64/bombieri-vinogradov, Apache-2.0; 730 modules, 2.87 MiB of source) through our verified assembly layer, with `#print axioms` = propext/Classical.choice/Quot.sound. The proof's import closure is 2.87 MiB, 1.44x the single-file 2 MiB limit, so this task needs an imports whitelist (cf. the vendored-closure precedent in lean-eval #1971 and the imports mechanism in #3815). The frozen task itself (1/840, n ≥ 8·10⁹) remains certificate-bound; see Discussion #3817."
+  },
+  "source": "https://personal.math.ubc.ca/~bennett/BeMaObRe-IJM-2018.pdf",
+  "program": "correlation",
+  "parallel": true,
+  "depends_on": [],
+  "file": "lean/PEqualNP/Outside/L_goldbach_fixed_ap_bmor_classical.lean",
+  "module": "PEqualNP.Outside.L_goldbach_fixed_ap_bmor_classical",
+  "imports": [],
+  "track": "representations",
+  "role": "lemma"
+}
