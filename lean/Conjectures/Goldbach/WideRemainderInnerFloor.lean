@@ -28,11 +28,23 @@ So `remainder ∩ inner` is the medium-modulus band split into
 
 ## Where the remaining difficulty sits
 
-The skirt *model term* is harmless: with `ΔJ(q) ≤ min(n, C·Q·n^{7/6}/q)` and
-`1/φ(q)² ≤ d(q)²/q²`, `d(q) ≤ 2√q`, the summed model contribution is
-`O(n/√Q + n^{11/12}/√Q) = o(n)`.
+The skirt *model term* is `Σ_{Q<q≤Q₁} c_q(n)·ΔJ(q)/φ(q)²`, where `ΔJ(q) ≥ 0` is the
+annulus mass of `q`: the identity `K_n(β)²·e(-nβ) = (sin(π(n+1)β)/sin(πβ))² ≥ 0`
+makes each `ΔJ(q)` real and nonnegative. Absolute-value bounds do **not** suffice:
+for squarefree `q` one has `c_q(n) = μ(q/(q,n))·φ((q,n))`, so when `q ∣ n` the term
+is `+ΔJ(q)/φ(q)`, and for `n` with many small prime factors (take
+`n = primorial(⌊log n⌋)`, consistent with `Q = (log₂ n)²` since `primorial(m) ≈ e^m`;
+then every `q ≤ 2Q` with only small prime factors satisfies `q ∣ n`) the summed
+absolute value over `Q < q ≤ 2Q` alone is `Θ(n)`, not `o(n)`. What saves the floor
+is the **sign**: the large contributions have `c_q(n) = +φ(q) > 0`, while a negative
+term needs a prime factor of `q` outside `n`. Controlling the negative part
+`Σ_{μ(q/(q,n)) = -1} φ((q,n))·ΔJ(q)/φ(q)² = o(n)` is a genuine signed-cancellation
+problem (Möbius sums over the `y`-rough part of `q` for `y ≈ log n`) and is open
+here. The per-q mass bounds used in any such analysis are in this file:
+`ΔJ(q) ≤ min(n+1, 2·Q·n^{7/6}/q, qn/(2Q))` — Parseval cap, kernel peak
+(`kernelMass_annulus_le`), and the `1/β²` decay bound (`kernelMass_le_decay`).
 
-The genuine obstruction is the **f–model match** on the medium band. Per-character
+A second obstruction is the **f–model match** on the medium band. Per-character
 pointwise bounds blow up when a real character mod `q` (with `q ∣ n`) carries a
 Siegel zero near `1`. Two known ways past it:
 
