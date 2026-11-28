@@ -15,7 +15,7 @@ theorem Conjectures.Cuts.Taskad0851702797dad16ccbb0f5 : (∃ (x1 : ℕ),   ∀ (
       exact hu.trans (by simpa [pow_two] using Nat.mul_le_mul_right u hu3)
     have hl := Real.log_le_log (by positivity : (0 : ℝ) < n) (show (n : ℝ) ≤ (u : ℝ)^2 by exact_mod_cast hn2)
     rw [Real.log_pow] at hl
-    linarith
+    exact (div_le_iff₀ (by norm_num : (0 : ℝ) < 2)).2 (by simpa [mul_comm] using hl)
   have hleft := hlow p hp
   have hright := hlow (n-p) (by omega)
   have hlog : 0 ≤ Real.log (n : ℝ) / 2 := by
@@ -23,5 +23,5 @@ theorem Conjectures.Cuts.Taskad0851702797dad16ccbb0f5 : (∃ (x1 : ℕ),   ∀ (
     exact div_nonneg (Real.log_nonneg hn1) (by norm_num)
   change Real.log (n : ℝ)^2 / 4 ≤ (if Nat.Prime p then Real.log (p : ℝ) else 0) *
     (if Nat.Prime (n-p) then Real.log ((n-p : ℕ) : ℝ) else 0)
-  rw [if_pos pp, if_pos pq]
+  simp only [if_pos pp, if_pos pq]
   nlinarith only [mul_le_mul hleft hright hlog (hlog.trans hleft)]
