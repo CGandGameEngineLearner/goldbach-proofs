@@ -10836,8 +10836,8 @@ theorem lO:aF 10=(200/87:ℝ):=by
  norm_num
 end
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 96000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem mD:aF 11=(1936/1827:ℝ):=by
  have hf:=bU (n:=2^11-1) [23,89] (by norm_num) (by
   intro p hp
@@ -10848,6 +10848,8 @@ theorem mD:aF 11=(1936/1827:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem og:aF 12=(192/55:ℝ):=by
  have hf:=bU (n:=2^12-1) [3,3,5,7,13] (by norm_num) (by
   intro p hp
@@ -10861,6 +10863,8 @@ theorem og:aF 12=(192/55:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem oO:aF 13=(8190/8189:ℝ):=by
  have hf:=bU (n:=2^13-1) [8191] (by norm_num) (by
   intro p hp
@@ -10870,6 +10874,8 @@ theorem oO:aF 13=(8190/8189:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem pN:aF 14=(10584/5125:ℝ):=by
  have hf:=bU (n:=2^14-1) [3,43,127] (by norm_num) (by
   intro p hp
@@ -10881,6 +10887,8 @@ theorem pN:aF 14=(10584/5125:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem qM:aF 15=(5400/4321:ℝ):=by
  have hf:=bU (n:=2^15-1) [7,31,151] (by norm_num) (by
   intro p hp
@@ -10892,6 +10900,8 @@ theorem qM:aF 15=(5400/4321:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem rD:aF 16=(32768/11475:ℝ):=by
  have hf:=bU (n:=2^16-1) [3,5,17,257] (by norm_num) (by
   intro p hp
@@ -10904,6 +10914,8 @@ theorem rD:aF 16=(32768/11475:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem sO:aF 17=(131070/131069:ℝ):=by
  have hf:=bU (n:=2^17-1) [131071] (by norm_num) (by
   intro p hp
@@ -10913,6 +10925,8 @@ theorem sO:aF 17=(131070/131069:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem sP:aF 18=(15552/6035:ℝ):=by
  have hf:=bU (n:=2^18-1) [3,3,3,7,19,73] (by norm_num) (by
   intro p hp
@@ -10927,6 +10941,8 @@ theorem sP:aF 18=(15552/6035:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem vP:aF 19=(524286/524285:ℝ):=by
  have hf:=bU (n:=2^19-1) [524287] (by norm_num) (by
   intro p hp
@@ -10936,6 +10952,8 @@ theorem vP:aF 19=(524286/524285:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem w7:aF 20=(32000/10179:ℝ):=by
  have hf:=bU (n:=2^20-1) [3,5,5,11,31,41] (by norm_num) (by
   intro p hp
@@ -10950,6 +10968,8 @@ theorem w7:aF 20=(32000/10179:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem w8:aF 21=(254016/209375:ℝ):=by
  have hf:=bU (n:=2^21-1) [7,7,127,337] (by norm_num) (by
   intro p hp
@@ -10962,6 +10982,8 @@ theorem w8:aF 21=(254016/209375:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem w9:aF 22=(2640704/1244187:ℝ):=by
  have hf:=bU (n:=2^22-1) [3,23,89,683] (by norm_num) (by
   intro p hp
@@ -10974,6 +10996,8 @@ theorem w9:aF 22=(2640704/1244187:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem z8:aF 23=(1642016/1606311:ℝ):=by
  have hf:=bU (n:=2^23-1) [47,178481] (by norm_num) (by
   intro p hp
@@ -10984,6 +11008,8 @@ theorem z8:aF 23=(1642016/1606311:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem z9:aF 24=(49152/13145:ℝ):=by
  have hf:=bU (n:=2^24-1) [3,3,5,7,13,17,241] (by norm_num) (by
   intro p hp
@@ -10999,6 +11025,8 @@ theorem z9:aF 24=(49152/13145:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem C7:aF 25=(32400000/31250429:ℝ):=by
  have hf:=bU (n:=2^25-1) [31,601,1801] (by norm_num) (by
   intro p hp
@@ -11010,6 +11038,8 @@ theorem C7:aF 25=(32400000/31250429:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem C8:aF 26=(44717400/22347781:ℝ):=by
  have hf:=bU (n:=2^26-1) [3,2731,8191] (by norm_num) (by
   intro p hp
@@ -11021,6 +11051,8 @@ theorem C8:aF 26=(44717400/22347781:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem C9:aF 27=(113467392/93242525:ℝ):=by
  have hf:=bU (n:=2^27-1) [7,73,262657] (by norm_num) (by
   intro p hp
@@ -11032,6 +11064,8 @@ theorem C9:aF 27=(113467392/93242525:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Dd:aF 28=(4917248/1706625:ℝ):=by
  have hf:=bU (n:=2^28-1) [3,5,29,43,113,127] (by norm_num) (by
   intro p hp
@@ -11046,6 +11080,8 @@ theorem Dd:aF 28=(4917248/1706625:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Fp:aF 29=(59314048/58976533:ℝ):=by
  have hf:=bU (n:=2^29-1) [233,1103,2089] (by norm_num) (by
   intro p hp
@@ -11057,6 +11093,8 @@ theorem Fp:aF 29=(59314048/58976533:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Fv:aF 30=(3960000/1421609:ℝ):=by
  have hf:=bU (n:=2^30-1) [3,3,7,11,31,151,331] (by norm_num) (by
   intro p hp
@@ -11072,6 +11110,8 @@ theorem Fv:aF 30=(3960000/1421609:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Fw:aF 31=(2147483646/2147483645:ℝ):=by
  have hf:=bU (n:=2^31-1) [2147483647] (by norm_num) (by
   intro p hp
@@ -11081,6 +11121,8 @@ theorem Fw:aF 31=(2147483646/2147483645:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Fy:aF 32=(2147483648/752014125:ℝ):=by
  have hf:=bU (n:=2^32-1) [3,5,17,257,65537] (by norm_num) (by
   intro p hp
@@ -11094,6 +11136,8 @@ theorem Fy:aF 32=(2147483648/752014125:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Fz:aF 33=(773726272/608469155:ℝ):=by
  have hf:=bU (n:=2^33-1) [7,23,89,599479] (by norm_num) (by
   intro p hp
@@ -11106,6 +11150,8 @@ theorem Fz:aF 33=(773726272/608469155:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Kd:aF 34=(3817632200/1908757847:ℝ):=by
  have hf:=bU (n:=2^34-1) [3,43691,131071] (by norm_num) (by
   intro p hp
@@ -11119,8 +11165,8 @@ theorem Kd:aF 34=(3817632200/1908757847:ℝ):=by
  norm_num
 end
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 96000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Kh:aF 35=(28910784/27328991:ℝ):=by
  have hf:=bU (n:=2^35-1) [31,71,127,122921] (by norm_num) (by
   intro p hp
@@ -11133,6 +11179,8 @@ theorem Kh:aF 35=(28910784/27328991:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Kk:aF 36=(967458816/248611825:ℝ):=by
  have hf:=bU (n:=2^36-1) [3,3,3,5,7,13,19,37,73,109] (by norm_num) (by
   intro p hp
@@ -11151,6 +11199,8 @@ theorem Kk:aF 36=(967458816/248611825:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Km:aF 37=(136822635072/136206316675:ℝ):=by
  have hf:=bU (n:=2^37-1) [223,616318177] (by norm_num) (by
   intro p hp
@@ -11161,6 +11211,8 @@ theorem Km:aF 37=(136822635072/136206316675:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Kp:aF 38=(183250539864/91624570885:ℝ):=by
  have hf:=bU (n:=2^38-1) [3,174763,524287] (by norm_num) (by
   intro p hp
@@ -11172,6 +11224,8 @@ theorem Kp:aF 38=(183250539864/91624570885:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Kq:aF 39=(13291252416/10932617993:ℝ):=by
  have hf:=bU (n:=2^39-1) [7,79,8191,121369] (by norm_num) (by
   intro p hp
@@ -11184,6 +11238,8 @@ theorem Kq:aF 39=(13291252416/10932617993:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Ol:aF 40=(2105344000/627830541:ℝ):=by
  have hf:=bU (n:=2^40-1) [3,5,5,11,17,31,41,61681] (by norm_num) (by
   intro p hp
@@ -11200,6 +11256,8 @@ theorem Ol:aF 40=(2105344000/627830541:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Om:aF 41=(2198858730832/2198694206115:ℝ):=by
  have hf:=bU (n:=2^41-1) [13367,164511353] (by norm_num) (by
   intro p hp
@@ -11210,6 +11268,8 @@ theorem Om:aF 41=(2198858730832/2198694206115:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Oo:aF 42=(115605729792/46501559375:ℝ):=by
  have hf:=bU (n:=2^42-1) [3,3,7,7,43,127,337,5419] (by norm_num) (by
   intro p hp
@@ -11226,6 +11286,8 @@ theorem Oo:aF 42=(115605729792/46501559375:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Oq:aF 43=(974975259320/972607318397:ℝ):=by
  have hf:=bU (n:=2^43-1) [431,9719,2099863] (by norm_num) (by
   intro p hp
@@ -11237,6 +11299,8 @@ theorem Oq:aF 43=(974975259320/972607318397:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Os:aF 44=(327193788416/115273234335:ℝ):=by
  have hf:=bU (n:=2^44-1) [3,5,23,89,397,683,2113] (by norm_num) (by
   intro p hp
@@ -11252,6 +11316,8 @@ theorem Os:aF 44=(327193788416/115273234335:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Ot:aF 45=(154314720000/121566854123:ℝ):=by
  have hf:=bU (n:=2^45-1) [7,31,73,151,631,23311] (by norm_num) (by
   intro p hp
@@ -11266,6 +11332,8 @@ theorem Ot:aF 45=(154314720000/121566854123:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Ou:aF 46=(9182816846464/4491568424511:ℝ):=by
  have hf:=bU (n:=2^46-1) [3,47,178481,2796203] (by norm_num) (by
   intro p hp
@@ -11278,6 +11346,8 @@ theorem Ou:aF 46=(9182816846464/4491568424511:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Ov:aF 47=(46882147763200/46851808255551:ℝ):=by
  have hf:=bU (n:=2^47-1) [2351,4513,13264529] (by norm_num) (by
   intro p hp
@@ -11289,6 +11359,8 @@ theorem Ov:aF 47=(46882147763200/46851808255551:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Ow:aF 48=(270582939648/71223882125:ℝ):=by
  have hf:=bU (n:=2^48-1) [3,3,5,7,13,17,97,241,257,673] (by norm_num) (by
   intro p hp
@@ -11307,6 +11379,8 @@ theorem Ow:aF 48=(270582939648/71223882125:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Ox:aF 49=(558517276622592/554084599823875:ℝ):=by
  have hf:=bU (n:=2^49-1) [127,4432676798593] (by norm_num) (by
   intro p hp
@@ -11317,6 +11391,8 @@ theorem Ox:aF 49=(558517276622592/554084599823875:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Ww:aF 50=(24300000000000/10502237922743:ℝ):=by
  have hf:=bU (n:=2^50-1) [3,11,31,251,601,1801,4051] (by norm_num) (by
   intro p hp
@@ -11332,6 +11408,8 @@ theorem Ww:aF 50=(24300000000000/10502237922743:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem Wz:aF 51=(382059368435808/315083479439593:ℝ):=by
  have hf:=bU (n:=2^51-1) [7,103,2143,11119,131071] (by norm_num) (by
   intro p hp
@@ -11345,6 +11423,8 @@ theorem Wz:aF 51=(382059368435808/315083479439593:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WA:aF 52=(186299975680/68004297583:ℝ):=by
  have hf:=bU (n:=2^52-1) [3,5,53,157,1613,2731,8191] (by norm_num) (by
   intro p hp
@@ -11360,6 +11440,8 @@ theorem WA:aF 52=(186299975680/68004297583:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WB:aF 53=(3001884367040000/3001368996146463:ℝ):=by
  have hf:=bU (n:=2^53-1) [6361,69431,20394401] (by norm_num) (by
   intro p hp
@@ -11371,6 +11453,8 @@ theorem WB:aF 53=(3001884367040000/3001368996146463:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WC:aF 54=(4191031590912/1626317472545:ℝ):=by
  have hf:=bU (n:=2^54-1) [3,3,3,3,7,19,73,87211,262657] (by norm_num) (by
   intro p hp
@@ -11388,6 +11472,8 @@ theorem WC:aF 54=(4191031590912/1626317472545:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WE:aF 55=(14017879040000/12769095480743:ℝ):=by
  have hf:=bU (n:=2^55-1) [23,31,89,881,3191,201961] (by norm_num) (by
   intro p hp
@@ -11402,6 +11488,8 @@ theorem WE:aF 55=(14017879040000/12769095480743:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WH:aF 56=(27607082467328/8982717721125:ℝ):=by
  have hf:=bU (n:=2^56-1) [3,5,17,29,43,113,127,15790321] (by norm_num) (by
   intro p hp
@@ -11418,6 +11506,8 @@ theorem WH:aF 56=(27607082467328/8982717721125:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WI:aF 57=(17646164476717248/14704642694078125:ℝ):=by
  have hf:=bU (n:=2^57-1) [7,32377,524287,1212847] (by norm_num) (by
   intro p hp
@@ -11430,6 +11520,8 @@ theorem WI:aF 57=(17646164476717248/14704642694078125:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WJ:aF 58=(366131557752832/178885673670011:ℝ):=by
  have hf:=bU (n:=2^58-1) [3,59,233,1103,2089,3033169] (by norm_num) (by
   intro p hp
@@ -11446,8 +11538,8 @@ theorem WJ:aF 58=(366131557752832/178885673670011:ℝ):=by
  norm_num
 end
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 96000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WK:aF 59=(115291509774292640/115290869087900583:ℝ):=by
  have hf:=bU (n:=2^59-1) [179951,3203431780337] (by norm_num) (by
   intro p hp
@@ -11458,6 +11550,8 @@ theorem WK:aF 59=(115291509774292640/115290869087900583:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WL:aF 60=(6082560000000/1438203441857:ℝ):=by
  have hf:=bU (n:=2^60-1) [3,3,5,5,7,11,13,31,41,61,151,331,1321] (by norm_num) (by
   intro p hp
@@ -11479,6 +11573,8 @@ theorem WL:aF 60=(6082560000000/1438203441857:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WM:aF 61=(2305843009213693950/2305843009213693949:ℝ):=by
  have hf:=bU (n:=2^61-1) [2305843009213693951] (by norm_num) (by
   intro p hp
@@ -11488,6 +11584,8 @@ theorem WM:aF 61=(2305843009213693950/2305843009213693949:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WO:aF 62=(3074457339891635544/1537228667082506245:ℝ):=by
  have hf:=bU (n:=2^62-1) [3,715827883,2147483647] (by norm_num) (by
   intro p hp
@@ -11499,6 +11597,8 @@ theorem WO:aF 62=(3074457339891635544/1537228667082506245:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WQ:aF 63=(1101857374313644032/895590822855390625:ℝ):=by
  have hf:=bU (n:=2^63-1) [7,7,73,127,337,92737,649657] (by norm_num) (by
   intro p hp
@@ -11514,6 +11614,8 @@ theorem WQ:aF 63=(1101857374313644032/895590822855390625:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WR:aF 64=(613932108578029568/214653166415215875:ℝ):=by
  have hf:=bU (n:=2^64-1) [3,5,17,257,641,65537,6700417] (by norm_num) (by
   intro p hp
@@ -11529,6 +11631,8 @@ theorem WR:aF 64=(613932108578029568/214653166415215875:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WS:aF 65=(35699016772227627000/34504835987323283429:ℝ):=by
  have hf:=bU (n:=2^65-1) [31,8191,145295143558111] (by norm_num) (by
   intro p hp
@@ -11540,6 +11644,8 @@ theorem WS:aF 65=(35699016772227627000/34504835987323283429:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem WT:aF 66=(484234148545990656/187235405477131375:ℝ):=by
  have hf:=bU (n:=2^66-1) [3,3,7,23,67,89,683,20857,599479] (by norm_num) (by
   intro p hp
@@ -11557,6 +11663,8 @@ theorem WT:aF 66=(484234148545990656/187235405477131375:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajG:aF 67=(29514790365528889584/29514790213122496583:ℝ):=by
  have hf:=bU (n:=2^67-1) [193707721,761838257287] (by norm_num) (by
   intro p hp
@@ -11567,6 +11675,8 @@ theorem ajG:aF 67=(29514790365528889584/29514790213122496583:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajH:aF 68=(231242306624659456/85981938424845399:ℝ):=by
  have hf:=bU (n:=2^68-1) [3,5,137,953,26317,43691,131071] (by norm_num) (by
   intro p hp
@@ -11582,6 +11692,8 @@ theorem ajH:aF 68=(231242306624659456/85981938424845399:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajI:aF 69=(11004439772747603072/8970960420909528615:ℝ):=by
  have hf:=bU (n:=2^69-1) [7,47,178481,10052678938039] (by norm_num) (by
   intro p hp
@@ -11594,6 +11706,8 @@ theorem ajI:aF 69=(11004439772747603072/8970960420909528615:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajJ:aF 70=(65104464323584000/26937836371654281:ℝ):=by
  have hf:=bU (n:=2^70-1) [3,11,31,43,71,127,281,86171,122921] (by norm_num) (by
   intro p hp
@@ -11611,6 +11725,8 @@ theorem ajJ:aF 70=(65104464323584000/26937836371654281:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajK:aF 71=(787057615782731155840/787054151087362548351:ℝ):=by
  have hf:=bU (n:=2^71-1) [228479,48544121,212885833] (by norm_num) (by
   intro p hp
@@ -11622,6 +11738,8 @@ theorem ajK:aF 71=(787057615782731155840/787054151087362548351:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajL:aF 72=(4144488803563732992/991974511072997375:ℝ):=by
  have hf:=bU (n:=2^72-1) [3,3,3,5,7,13,17,19,37,73,109,241,433,38737] (by norm_num) (by
   intro p hp
@@ -11644,6 +11762,8 @@ theorem ajL:aF 72=(4144488803563732992/991974511072997375:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajM:aF 73=(165319555563059962880/164942041880236775493:ℝ):=by
  have hf:=bU (n:=2^73-1) [439,2298041,9361973132609] (by norm_num) (by
   intro p hp
@@ -11655,6 +11775,8 @@ theorem ajM:aF 73=(165319555563059962880/164942041880236775493:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajN:aF 74=(12529451159726437675008/6232994297164940573125:ℝ):=by
  have hf:=bU (n:=2^74-1) [3,223,1777,25781083,616318177] (by norm_num) (by
   intro p hp
@@ -11668,6 +11790,8 @@ theorem ajN:aF 74=(12529451159726437675008/6232994297164940573125:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajO:aF 75=(887441909760000000000/708533390488522863703:ℝ):=by
  have hf:=bU (n:=2^75-1) [7,31,151,601,1801,100801,10567201] (by norm_num) (by
   intro p hp
@@ -11683,6 +11807,8 @@ theorem ajO:aF 75=(887441909760000000000/708533390488522863703:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajP:aF 76=(1906351457418819403776/710178732578291817425:ℝ):=by
  have hf:=bU (n:=2^76-1) [3,5,229,457,174763,524287,525313] (by norm_num) (by
   intro p hp
@@ -11698,6 +11824,8 @@ theorem ajP:aF 76=(1906351457418819403776/710178732578291817425:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajQ:aF 77=(2250730266660565373376/2107153206778034469125:ℝ):=by
  have hf:=bU (n:=2^77-1) [23,89,127,581283643249112959] (by norm_num) (by
   intro p hp
@@ -11710,6 +11838,8 @@ theorem ajQ:aF 77=(2250730266660565373376/2107153206778034469125:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajR:aF 78=(1623170534899948070400/667318694388587377433:ℝ):=by
  have hf:=bU (n:=2^78-1) [3,3,7,79,2731,8191,121369,22366891] (by norm_num) (by
   intro p hp
@@ -11726,6 +11856,8 @@ theorem ajR:aF 78=(1623170534899948070400/667318694388587377433:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajS:aF 79=(201412649510558158553384/201337662419420583437175:ℝ):=by
  have hf:=bU (n:=2^79-1) [2687,202029703,1113491139767] (by norm_num) (by
   intro p hp
@@ -11737,6 +11869,8 @@ theorem ajS:aF 79=(201412649510558158553384/201337662419420583437175:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajT:aF 80=(9042521602654208000/2686019376577119219:ℝ):=by
  have hf:=bU (n:=2^80-1) [3,5,5,11,17,31,41,257,61681,4278255361] (by norm_num) (by
   intro p hp
@@ -11755,6 +11889,8 @@ theorem ajT:aF 80=(9042521602654208000/2686019376577119219:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajU:aF 81=(107538409858288403349504/88335011065974629532025:ℝ):=by
  have hf:=bU (n:=2^81-1) [7,73,2593,71119,262657,97685839] (by norm_num) (by
   intro p hp
@@ -11769,6 +11905,8 @@ theorem ajU:aF 81=(107538409858288403349504/88335011065974629532025:ℝ):=by
  )
  rw [aF,hf]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 96000000 in
 theorem ajV:aF 82=(353858100586059917261312/174758302048249748879325:ℝ):=by
  have hf:=bU (n:=2^82-1) [3,83,13367,164511353,8831418697] (by norm_num) (by
   intro p hp
@@ -16515,14 +16653,16 @@ private theorem aKa:aF 108≤(3895246/1000000:ℝ):=by
  exact h.trans (by norm_num)
 end
 section
-set_option maxRecDepth 65536
-set_option maxHeartbeats 192000000
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKb:aF 109≤(1000978/1000000:ℝ):=by
  have h:=bC 109 649037107316853453566312041152511 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 649037107316853453566312041152511 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKc:aF 110≤(2446331/1000000:ℝ):=by
  have h:=bC 110 9878415594851 [3,11,11,23,31,89,683,881,2971,3191]
   (by norm_num)
@@ -16543,6 +16683,8 @@ private theorem aKc:aF 110≤(2446331/1000000:ℝ):=by
   )
   (by norm_num) (bD 9878415594851 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKd:aF 111≤(1206608/1000000:ℝ):=by
  have h:=bC 111 1663131601068170284602977683927 [7,223]
   (by norm_num)
@@ -16555,6 +16697,8 @@ private theorem aKd:aF 111≤(1206608/1000000:ℝ):=by
   )
   (by norm_num) (bD 1663131601068170284602977683927 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKe:aF 112≤(3089022/1000000:ℝ):=by
  have h:=bC 112 859166727965929937 [3,5,17,29,43,113,127,257,5153]
   (by norm_num)
@@ -16574,6 +16718,8 @@ private theorem aKe:aF 112≤(3089022/1000000:ℝ):=by
   )
   (by norm_num) (bD 859166727965929937 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKf:aF 113≤(1001273/1000000:ℝ):=by
  have h:=bC 113 3062398619011989164571215764801 [3391]
   (by norm_num)
@@ -16585,6 +16731,8 @@ private theorem aKf:aF 113≤(1001273/1000000:ℝ):=by
   )
   (by norm_num) (bD 3062398619011989164571215764801 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKg:aF 114≤(2406568/1000000:ℝ):=by
  have h:=bC 114 577354889337539557838433973171 [3,3,7,571]
   (by norm_num)
@@ -16599,6 +16747,8 @@ private theorem aKg:aF 114≤(2406568/1000000:ℝ):=by
   )
   (by norm_num) (bD 577354889337539557838433973171 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKh:aF 115≤(1058505/1000000:ℝ):=by
  have h:=bC 115 28509522902044352112727502150831 [31,47]
   (by norm_num)
@@ -16611,6 +16761,8 @@ private theorem aKh:aF 115≤(1058505/1000000:ℝ):=by
   )
   (by norm_num) (bD 28509522902044352112727502150831 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKi:aF 116≤(2731646/1000000:ℝ):=by
  have h:=bC 116 174850288360342272373981 [3,5,59,233,1103,2089]
   (by norm_num)
@@ -16627,6 +16779,8 @@ private theorem aKi:aF 116≤(2731646/1000000:ℝ):=by
   )
   (by norm_num) (bD 174850288360342272373981 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKj:aF 117≤(1235720/1000000:ℝ):=by
  have h:=bC 117 81836079672536509009 [7,73,79,937,6553,8191]
   (by norm_num)
@@ -16643,6 +16797,8 @@ private theorem aKj:aF 117≤(1235720/1000000:ℝ):=by
   )
   (by norm_num) (bD 81836079672536509009 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKk:aF 118≤(2002906/1000000:ℝ):=by
  have h:=bC 118 39099540998497348891157990948357 [3,2833]
   (by norm_num)
@@ -16655,6 +16811,8 @@ private theorem aKk:aF 118≤(2002906/1000000:ℝ):=by
   )
   (by norm_num) (bD 39099540998497348891157990948357 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKl:aF 119≤(1013366/1000000:ℝ):=by
  have h:=bC 119 21896155170574834001644105364879 [127,239]
   (by norm_num)
@@ -16667,6 +16825,8 @@ private theorem aKl:aF 119≤(1013366/1000000:ℝ):=by
   )
   (by norm_num) (bD 21896155170574834001644105364879 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKm:aF 120≤(4535084/1000000:ℝ):=by
  have h:=bC 120 281406274007041 [3,3,5,5,7,11,13,17,31,41,61,151,241,331,1321]
   (by norm_num)
@@ -16692,6 +16852,8 @@ private theorem aKm:aF 120≤(4535084/1000000:ℝ):=by
   )
   (by norm_num) (bD 281406274007041 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKn:aF 121≤(1062289/1000000:ℝ):=by
  have h:=bC 121 1786393878363164227858270210279 [23,89,727]
   (by norm_num)
@@ -16705,6 +16867,8 @@ private theorem aKn:aF 121≤(1062289/1000000:ℝ):=by
   )
   (by norm_num) (bD 1786393878363164227858270210279 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKo:aF 122≤(2002199/1000000:ℝ):=by
  have h:=bC 122 1772303994379887830538409413707126101 [3]
   (by norm_num)
@@ -16716,6 +16880,8 @@ private theorem aKo:aF 122≤(2002199/1000000:ℝ):=by
   )
   (by norm_num) (bD 1772303994379887830538409413707126101 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKp:aF 123≤(1201320/1000000:ℝ):=by
  have h:=bC 123 1519117709468475283318636640320393801 [7]
   (by norm_num)
@@ -16727,6 +16893,8 @@ private theorem aKp:aF 123≤(1201320/1000000:ℝ):=by
   )
   (by norm_num) (bD 1519117709468475283318636640320393801 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKq:aF 124≤(2670077/1000000:ℝ):=by
  have h:=bC 124 254048234277711926971999199241301 [3,5,5581]
   (by norm_num)
@@ -16740,6 +16908,8 @@ private theorem aKq:aF 124≤(2670077/1000000:ℝ):=by
   )
   (by norm_num) (bD 254048234277711926971999199241301 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKr:aF 125≤(1037926/1000000:ℝ):=by
  have h:=bC 125 1267650638007162390353805312001 [31,601,1801]
   (by norm_num)
@@ -16753,6 +16923,8 @@ private theorem aKr:aF 125≤(1037926/1000000:ℝ):=by
   )
   (by norm_num) (bD 1267650638007162390353805312001 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKs:aF 126≤(2672310/1000000:ℝ):=by
  have h:=bC 126 4648597239567042740161 [3,3,3,7,7,19,43,73,127,337,5419]
   (by norm_num)
@@ -16774,12 +16946,16 @@ private theorem aKs:aF 126≤(2672310/1000000:ℝ):=by
   )
   (by norm_num) (bD 4648597239567042740161 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKt:aF 127≤(1001100/1000000:ℝ):=by
  have h:=bC 127 170141183460469231731687303715884105727 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 170141183460469231731687303715884105727 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKu:aF 128≤(2863213/1000000:ℝ):=by
  have h:=bC 128 8100430714362380904069067128193 [3,5,17,257,641]
   (by norm_num)
@@ -16795,6 +16971,8 @@ private theorem aKu:aF 128≤(2863213/1000000:ℝ):=by
   )
   (by norm_num) (bD 8100430714362380904069067128193 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKv:aF 129≤(1204120/1000000:ℝ):=by
  have h:=bC 129 225576643633369879657523770256392583 [7,431]
   (by norm_num)
@@ -16807,6 +16985,8 @@ private theorem aKv:aF 129≤(1204120/1000000:ℝ):=by
   )
   (by norm_num) (bD 225576643633369879657523770256392583 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKw:aF 130≤(2320635/1000000:ℝ):=by
  have h:=bC 130 454039755230085062595514751 [3,11,31,131,2731,8191]
   (by norm_num)
@@ -16823,6 +17003,8 @@ private theorem aKw:aF 130≤(2320635/1000000:ℝ):=by
   )
   (by norm_num) (bD 454039755230085062595514751 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKx:aF 131≤(1005058/1000000:ℝ):=by
  have h:=bC 131 10350794431055162386718619237468234569 [263]
   (by norm_num)
@@ -16834,6 +17016,8 @@ private theorem aKx:aF 131≤(1005058/1000000:ℝ):=by
   )
   (by norm_num) (bD 10350794431055162386718619237468234569 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKy:aF 132≤(3777524/1000000:ℝ):=by
  have h:=bC 132 16920070516722030556603 [3,3,5,7,13,23,67,89,397,683,2113]
   (by norm_num)
@@ -16857,8 +17041,8 @@ private theorem aKy:aF 132≤(3777524/1000000:ℝ):=by
  exact h.trans (by norm_num)
 end
 section
-set_option maxRecDepth 65536
-set_option maxHeartbeats 192000000
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKz:aF 133≤(1009232/1000000:ℝ):=by
  have h:=bC 133 85740438909212841187621948329264431233 [127]
   (by norm_num)
@@ -16870,6 +17054,8 @@ private theorem aKz:aF 133≤(1009232/1000000:ℝ):=by
   )
   (by norm_num) (bD 85740438909212841187621948329264431233 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKA:aF 134≤(2002444/1000000:ℝ):=by
  have h:=bC 134 7259357160980020553885324958544388511061 [3]
   (by norm_num)
@@ -16881,6 +17067,8 @@ private theorem aKA:aF 134≤(2002444/1000000:ℝ):=by
   )
   (by norm_num) (bD 7259357160980020553885324958544388511061 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKB:aF 135≤(1275603/1000000:ℝ):=by
  have h:=bC 135 106485683600672766682919732737 [7,31,73,151,271,631]
   (by norm_num)
@@ -16897,6 +17085,8 @@ private theorem aKB:aF 135≤(1275603/1000000:ℝ):=by
   )
   (by norm_num) (bD 106485683600672766682919732737 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKC:aF 136≤(2872032/1000000:ℝ):=by
  have h:=bC 136 153913544840897168646599823901681 [3,5,17,17,137,953]
   (by norm_num)
@@ -16913,12 +17103,16 @@ private theorem aKC:aF 136≤(2872032/1000000:ℝ):=by
   )
   (by norm_num) (bD 153913544840897168646599823901681 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKD:aF 137≤(1001222/1000000:ℝ):=by
  have h:=bC 137 174224571863520493293247799005065324265471 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 174224571863520493293247799005065324265471 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKE:aF 138≤(2474260/1000000:ℝ):=by
  have h:=bC 138 846615458337381126312313305611147917 [3,3,7,47,139]
   (by norm_num)
@@ -16934,12 +17128,16 @@ private theorem aKE:aF 138≤(2474260/1000000:ℝ):=by
   )
   (by norm_num) (bD 846615458337381126312313305611147917 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKF:aF 139≤(1001222/1000000:ℝ):=by
  have h:=bC 139 696898287454081973172991196020261297061887 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 696898287454081973172991196020261297061887 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKG:aF 140≤(3462527/1000000:ℝ):=by
  have h:=bC 140 3722944888446145036185631 [3,5,5,11,29,31,41,43,71,113,127,281]
   (by norm_num)
@@ -16962,6 +17160,8 @@ private theorem aKG:aF 140≤(3462527/1000000:ℝ):=by
   )
   (by norm_num) (bD 3722944888446145036185631 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKH:aF 141≤(1202244/1000000:ℝ):=by
  have h:=bC 141 37533009260256417390762023132204711 [7,2351,4513]
   (by norm_num)
@@ -16975,6 +17175,8 @@ private theorem aKH:aF 141≤(1202244/1000000:ℝ):=by
   )
   (by norm_num) (bD 37533009260256417390762023132204711 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKI:aF 142≤(2002444/1000000:ℝ):=by
  have h:=bC 142 1858395433210885261794643189387363458831701 [3]
   (by norm_num)
@@ -16986,6 +17188,8 @@ private theorem aKI:aF 142≤(2002444/1000000:ℝ):=by
   )
   (by norm_num) (bD 1858395433210885261794643189387363458831701 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKJ:aF 143≤(1061215/1000000:ℝ):=by
  have h:=bC 143 665019854161266611791013916004308991 [23,89,8191]
   (by norm_num)
@@ -16999,6 +17203,8 @@ private theorem aKJ:aF 143≤(1061215/1000000:ℝ):=by
   )
   (by norm_num) (bD 665019854161266611791013916004308991 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKK:aF 144≤(4257859/1000000:ℝ):=by
  have h:=bC 144 18896872656744721 [3,3,3,5,7,13,17,19,37,73,97,109,241,257,433,577,673]
   (by norm_num)
@@ -17026,6 +17232,8 @@ private theorem aKK:aF 144≤(4257859/1000000:ℝ):=by
   )
   (by norm_num) (bD 18896872656744721 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKL:aF 145≤(1041802/1000000:ℝ):=by
  have h:=bC 145 2679895157783862814690027494144991 [31,233,1103,2089]
   (by norm_num)
@@ -17040,6 +17248,8 @@ private theorem aKL:aF 145≤(1041802/1000000:ℝ):=by
   )
   (by norm_num) (bD 2679895157783862814690027494144991 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKM:aF 146≤(2008417/1000000:ℝ):=by
  have h:=bC 146 38637736456181416548155379622824023563 [3,439,1753]
   (by norm_num)
@@ -17053,6 +17263,8 @@ private theorem aKM:aF 146≤(2008417/1000000:ℝ):=by
   )
   (by norm_num) (bD 38637736456181416548155379622824023563 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKN:aF 147≤(1214842/1000000:ℝ):=by
  have h:=bC 147 12152947470724737998788815750591901111 [7,7,7,127,337]
   (by norm_num)
@@ -17068,6 +17280,8 @@ private theorem aKN:aF 147≤(1214842/1000000:ℝ):=by
   )
   (by norm_num) (bD 12152947470724737998788815750591901111 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKO:aF 148≤(2706674/1000000:ℝ):=by
  have h:=bC 148 679383267714489834903027355409491 [3,5,149,223,593,1777]
   (by norm_num)
@@ -17084,12 +17298,16 @@ private theorem aKO:aF 148≤(2706674/1000000:ℝ):=by
   )
   (by norm_num) (bD 679383267714489834903027355409491 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKP:aF 149≤(1001344/1000000:ℝ):=by
  have h:=bC 149 713623846352979940529142984724747568191373311 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 713623846352979940529142984724747568191373311 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKQ:aF 150≤(2807450/1000000:ℝ):=by
  have h:=bC 150 1207745229118713232358401 [3,3,7,11,31,151,251,331,601,1801,4051]
   (by norm_num)
@@ -17111,12 +17329,16 @@ private theorem aKQ:aF 150≤(2807450/1000000:ℝ):=by
   )
   (by norm_num) (bD 1207745229118713232358401 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKR:aF 151≤(1001344/1000000:ℝ):=by
  have h:=bC 151 2854495385411919762116571938898990272765493247 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 2854495385411919762116571938898990272765493247 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKS:aF 152≤(2869462/1000000:ℝ):=by
  have h:=bC 152 175783011238666797106959505674932549 [3,5,17,229,457,1217]
   (by norm_num)
@@ -17133,6 +17355,8 @@ private theorem aKS:aF 152≤(2869462/1000000:ℝ):=by
   )
   (by norm_num) (bD 175783011238666797106959505674932549 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKT:aF 153≤(1232519/1000000:ℝ):=by
  have h:=bC 153 110152289751190950950294010931387231 [7,73,103,919,2143]
   (by norm_num)
@@ -17148,6 +17372,8 @@ private theorem aKT:aF 153≤(1232519/1000000:ℝ):=by
   )
   (by norm_num) (bD 110152289751190950950294010931387231 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKU:aF 154≤(2198107/1000000:ℝ):=by
  have h:=bC 154 1615854271443430915670632568731253 [3,23,43,89,127,617,683]
   (by norm_num)
@@ -17165,6 +17391,8 @@ private theorem aKU:aF 154≤(2198107/1000000:ℝ):=by
   )
   (by norm_num) (bD 1615854271443430915670632568731253 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKV:aF 155≤(1039226/1000000:ℝ):=by
  have h:=bC 155 152814847096542375117910908125525207745977 [31,31,311]
   (by norm_num)
@@ -17178,6 +17406,8 @@ private theorem aKV:aF 155≤(1039226/1000000:ℝ):=by
   )
   (by norm_num) (bD 152814847096542375117910908125525207745977 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKW:aF 156≤(3653995/1000000:ℝ):=by
  have h:=bC 156 59290609359327139 [3,3,5,7,13,13,53,79,157,313,1249,1613,2731,3121,8191]
   (by norm_num)
@@ -17205,14 +17435,16 @@ private theorem aKW:aF 156≤(3653995/1000000:ℝ):=by
  exact h.trans (by norm_num)
 end
 section
-set_option maxRecDepth 65536
-set_option maxHeartbeats 192000000
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKX:aF 157≤(1001467/1000000:ℝ):=by
  have h:=bC 157 182687704666362864775460604089535377456991567871 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 182687704666362864775460604089535377456991567871 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKY:aF 158≤(2003678/1000000:ℝ):=by
  have h:=bC 158 45326313029738956649413374045288519403793963 [3,2687]
   (by norm_num)
@@ -17225,6 +17457,8 @@ private theorem aKY:aF 158≤(2003678/1000000:ℝ):=by
   )
   (by norm_num) (bD 45326313029738956649413374045288519403793963 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aKZ:aF 159≤(1202129/1000000:ℝ):=by
  have h:=bC 159 2457165627688708937296516916422771498039 [7,6361,6679]
   (by norm_num)
@@ -17238,6 +17472,8 @@ private theorem aKZ:aF 159≤(1202129/1000000:ℝ):=by
   )
   (by norm_num) (bD 2457165627688708937296516916422771498039 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK0:aF 160≤(3371395/1000000:ℝ):=by
  have h:=bC 160 319019891082038769299842183059352911857 [3,5,5,11,17,31,41,257]
   (by norm_num)
@@ -17256,6 +17492,8 @@ private theorem aK0:aF 160≤(3371395/1000000:ℝ):=by
   )
   (by norm_num) (bD 319019891082038769299842183059352911857 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK1:aF 161≤(1032713/1000000:ℝ):=by
  have h:=bC 161 379904821752549256808921302269193267791511 [47,127,1289]
   (by norm_num)
@@ -17269,6 +17507,8 @@ private theorem aK1:aF 161≤(1032713/1000000:ℝ):=by
   )
   (by norm_num) (bD 379904821752549256808921302269193267791511 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK2:aF 162≤(2597778/1000000:ℝ):=by
  have h:=bC 162 5862574865171548371343952483092092691 [3,3,3,3,3,7,19,73,163,2593]
   (by norm_num)
@@ -17289,12 +17529,16 @@ private theorem aK2:aF 162≤(2597778/1000000:ℝ):=by
   )
   (by norm_num) (bD 5862574865171548371343952483092092691 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK3:aF 163≤(1001467/1000000:ℝ):=by
  have h:=bC 163 11692013098647223345629478661730264157247460343807 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 11692013098647223345629478661730264157247460343807 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK4:aF 164≤(2703547/1000000:ℝ):=by
  have h:=bC 164 18782350359272647944786311103181147240558169227 [3,5,83]
   (by norm_num)
@@ -17308,6 +17552,8 @@ private theorem aK4:aF 164≤(2703547/1000000:ℝ):=by
   )
   (by norm_num) (bD 18782350359272647944786311103181147240558169227 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK5:aF 165≤(1328136/1000000:ℝ):=by
  have h:=bC 165 248023052470802353782236298044831689 [7,23,31,89,151,881,3191]
   (by norm_num)
@@ -17325,6 +17571,8 @@ private theorem aK5:aF 165≤(1328136/1000000:ℝ):=by
   )
   (by norm_num) (bD 248023052470802353782236298044831689 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK6:aF 166≤(2021626/1000000:ℝ):=by
  have h:=bC 166 121079254863489168622081855675299657907 [3,167,499,1163,2657]
   (by norm_num)
@@ -17340,12 +17588,16 @@ private theorem aK6:aF 166≤(2021626/1000000:ℝ):=by
   )
   (by norm_num) (bD 121079254863489168622081855675299657907 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK7:aF 167≤(1001467/1000000:ℝ):=by
  have h:=bC 167 187072209578355573530071658587684226515959365500927 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 187072209578355573530071658587684226515959365500927 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK8:aF 168≤(4062939/1000000:ℝ):=by
  have h:=bC 168 20296583997085002228049 [3,3,5,7,7,13,17,29,43,113,127,241,337,1429,3361,5419]
   (by norm_num)
@@ -17372,6 +17624,8 @@ private theorem aK8:aF 168≤(4062939/1000000:ℝ):=by
   )
   (by norm_num) (bD 20296583997085002228049 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aK9:aF 169≤(1001958/1000000:ℝ):=by
  have h:=bC 169 22517871350031141032145384333278160948994153 [4057,8191]
   (by norm_num)
@@ -17384,6 +17638,8 @@ private theorem aK9:aF 169≤(1001958/1000000:ℝ):=by
   )
   (by norm_num) (bD 22517871350031141032145384333278160948994153 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLa:aF 170≤(2302502/1000000:ℝ):=by
  have h:=bC 170 1462930280182643781271332618476513990349633356801 [3,11,31]
   (by norm_num)
@@ -17397,6 +17653,8 @@ private theorem aLa:aF 170≤(2302502/1000000:ℝ):=by
   )
   (by norm_num) (bD 1462930280182643781271332618476513990349633356801 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLb:aF 171≤(1218835/1000000:ℝ):=by
  have h:=bC 171 5857446875251837918749797529164281065078962520577 [7,73]
   (by norm_num)
@@ -17409,6 +17667,8 @@ private theorem aLb:aF 171≤(1218835/1000000:ℝ):=by
   )
   (by norm_num) (bD 5857446875251837918749797529164281065078962520577 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLc:aF 172≤(2692784/1000000:ℝ):=by
  have h:=bC 172 5352351440175760411072777896817362721019540251 [3,5,173,431]
   (by norm_num)
@@ -17423,12 +17683,16 @@ private theorem aLc:aF 172≤(2692784/1000000:ℝ):=by
   )
   (by norm_num) (bD 5352351440175760411072777896817362721019540251 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLd:aF 173≤(1001589/1000000:ℝ):=by
  have h:=bC 173 11972621413014756705924586149611790497021399392059391 []
   (by norm_num)
   (by simp)
   (by norm_num) (bD 11972621413014756705924586149611790497021399392059391 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLe:aF 174≤(2460572/1000000:ℝ):=by
  have h:=bC 174 2872713635004430090010909106879833917 [3,3,7,59,233,1103,2089,4177]
   (by norm_num)
@@ -17447,6 +17711,8 @@ private theorem aLe:aF 174≤(2460572/1000000:ℝ):=by
   )
   (by norm_num) (bD 2872713635004430090010909106879833917 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLf:aF 175≤(1061911/1000000:ℝ):=by
  have h:=bC 175 158284100614534436489545515086360365882121 [31,71,127,601,1801]
   (by norm_num)
@@ -17462,6 +17728,8 @@ private theorem aLf:aF 175≤(1061911/1000000:ℝ):=by
   )
   (by norm_num) (bD 158284100614534436489545515086360365882121 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLg:aF 176≤(3053022/1000000:ℝ):=by
  have h:=bC 176 3530227368548383894787843453827217 [3,5,17,23,89,257,353,397,683,2113]
   (by norm_num)
@@ -17482,6 +17750,8 @@ private theorem aLg:aF 176≤(3053022/1000000:ℝ):=by
   )
   (by norm_num) (bD 3530227368548383894787843453827217 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLh:aF 177≤(1201906/1000000:ℝ):=by
  have h:=bC 177 27365991801176586756399054056255521136048912896135753 [7]
   (by norm_num)
@@ -17493,6 +17763,8 @@ private theorem aLh:aF 177≤(1201906/1000000:ℝ):=by
   )
   (by norm_num) (bD 27365991801176586756399054056255521136048912896135753 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLi:aF 178≤(2014494/1000000:ℝ):=by
  have h:=bC 178 713452300216894254356772359008523828500344097850839 [3,179]
   (by norm_num)
@@ -17505,6 +17777,8 @@ private theorem aLi:aF 178≤(2014494/1000000:ℝ):=by
   )
   (by norm_num) (bD 713452300216894254356772359008523828500344097850839 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLj:aF 179≤(1005096/1000000:ℝ):=by
  have h:=bC 179 1489459109360039866456940197095433721664951999121 [359,1433]
   (by norm_num)
@@ -17517,6 +17791,8 @@ private theorem aLj:aF 179≤(1005096/1000000:ℝ):=by
   )
   (by norm_num) (bD 1489459109360039866456940197095433721664951999121 (by decide))
  exact h.trans (by norm_num)
+set_option maxRecDepth 65536 in
+set_option maxHeartbeats 192000000 in
 private theorem aLk:aF 180≤(4755946/1000000:ℝ):=by
  have h:=bC 180 693530568003985111986571 [3,3,3,5,5,7,11,13,19,31,37,41,61,73,109,151,181,331,631,1321]
   (by norm_num)
@@ -21524,7 +21800,7 @@ def reciprocal (f:ArithmeticFunction ℝ):ArithmeticFunction ℝ:=
 @[simp] lemma aPV (f:ArithmeticFunction ℝ) (n:ℕ):
   reciprocal f n=f n/(n:ℝ):=rfl
 section
-set_option maxHeartbeats 1000000
+set_option maxHeartbeats 1000000 in
 lemma aoz (f g:ArithmeticFunction ℝ):
   reciprocal (f*g)=reciprocal f*reciprocal g:=by
  ext n
@@ -21533,13 +21809,16 @@ lemma aoz (f g:ArithmeticFunction ℝ):
  intro a ha
  have hprod:=(Nat.mem_divisorsAntidiagonal.mp ha).1
  rw [div_mul_div_comm,← Nat.cast_mul,hprod]
+set_option maxHeartbeats 1000000 in
 lemma OJ (N:ℕ):
   (harmonic N:ℝ)=∑n∈Ioc 0 N,(1:ℝ)/(n:ℝ):=by
  have hset:Icc 1 N=Ioc 0 N:=by ext n; simp only [mem_Icc,mem_Ioc]; omega
  simp only [harmonic_eq_sum_Icc,Rat.cast_sum,Rat.cast_inv,Rat.cast_natCast,
   one_div,hset]
+set_option maxHeartbeats 1000000 in
 lemma KD (n:ℕ): |(μ n:ℝ)| ≤1:=by
  exact_mod_cast (ArithmeticFunction.abs_moebius_le_one (n:=n))
+set_option maxHeartbeats 1000000 in
 theorem aLK {y:ℝ} (hy:1≤y):
   |(harmonic ⌊y⌋₊:ℝ)-Real.log y-Real.eulerMascheroniConstant| ≤2/y:=by
  let m:=⌊y⌋₊
@@ -21578,11 +21857,12 @@ def m8 (S:Finset ℕ):ArithmeticFunction ℝ:=
 def Bq (S:Finset ℕ):ArithmeticFunction ℝ:=
  (μ:ArithmeticFunction ℝ).pmul (lU S)
 section
-set_option maxHeartbeats 1500000
+set_option maxHeartbeats 1500000 in
 lemma aMl (S:Finset ℕ) {p:ℕ} (hp:p.Prime):
   lU S p=if p∈S then 0 else 1:=by
  by_cases hpS:p∈S <;>
   simp [lU,ArithmeticFunction.prodPrimeFactors_apply hp.ne_zero,hp.primeFactors,hpS]
+set_option maxHeartbeats 1500000 in
 lemma akm (S:Finset ℕ):
   Bq S*ζ=m8 S:=by
  ext n
@@ -21597,10 +21877,12 @@ lemma akm (S:Finset ℕ):
  intro p hp
  rw [aMl S (Nat.prime_of_mem_primeFactors hp)]
  split_ifs <;> norm_num
+set_option maxHeartbeats 1500000 in
 lemma awG (S:Finset ℕ):
   Bq S=m8 S*(μ:ArithmeticFunction ℝ):=by
  rw [← akm,mul_assoc,
   ArithmeticFunction.coe_zeta_mul_coe_moebius,mul_one]
+set_option maxHeartbeats 1500000 in
 lemma aht (S:Finset ℕ) (n:ℕ):
   m8 S n=(Nat.factoredNumbers S).indicator (fun _=>(1:ℝ)) n:=by
  by_cases hn:n=0
@@ -21617,9 +21899,11 @@ lemma aht (S:Finset ℕ) (n:ℕ):
    exact fun hs=>h (Nat.mem_factoredNumbers_of_primeFactors_subset hn hs)
   obtain ⟨p,hp,hpS⟩:=Finset.not_subset.mp hsub
   exact Finset.prod_eq_zero hp (if_neg hpS)
+set_option maxHeartbeats 1500000 in
 lemma JX (S:Finset ℕ) (n:ℕ):0≤ m8 S n:=by
  rw [aht]
  exact Set.indicator_nonneg (fun _ _=>by norm_num) _
+set_option maxHeartbeats 1500000 in
 lemma JG {r n:ℕ} (hr:r≠0) (hn:n≠0):
   lU r.primeFactors n=if n.Coprime r then 1 else 0:=by
  rw [lU,ArithmeticFunction.prodPrimeFactors_apply hn]
@@ -21639,7 +21923,7 @@ def Qn:ℕ →* ℝ where
  map_one':=by simp
  map_mul' n m:=by simp [mul_inv,mul_comm]
 section
-set_option maxHeartbeats 1500000
+set_option maxHeartbeats 1500000 in
 theorem aiy (S:Finset ℕ) (N:ℕ):
   (∑n∈Ioc 0 N,m8 S n/(n:ℝ))≤
    ∏p∈S with p.Prime,(1-(p:ℝ)⁻¹)⁻¹:=by
@@ -21660,6 +21944,7 @@ theorem aiy (S:Finset ℕ) (N:ℕ):
  have hb:=hs.summable.sum_le_tsum (Ioc 0 N)
   (fun n _=>div_nonneg (JX S n) (Nat.cast_nonneg n))
  simpa [hs.tsum_eq,Qn] using hb
+set_option maxHeartbeats 1500000 in
 lemma aiA (f g:ArithmeticFunction ℝ) (w:ℕ→ℝ) (N:ℕ):
   (∑n∈Ioc 0 N,w n*(f*g) n)=
    ∑d∈Ioc 0 N,∑m∈Ioc 0 (N/d),w (d*m)*f d*g m:=by
@@ -21814,7 +22099,7 @@ open scoped BigOperators ArithmeticFunction.zeta
 namespace Binary13.ez
 noncomputable section
 section
-set_option maxHeartbeats 1500000
+set_option maxHeartbeats 1500000 in
 lemma ak6 (N:ℕ):
   (∑m∈Ioc 0 N,reciprocal (ζ:ArithmeticFunction ℝ) m)=harmonic N:=by
  rw [OJ]
@@ -21822,6 +22107,7 @@ lemma ak6 (N:ℕ):
  intro m hm
  have hm0:m≠0:=(mem_Ioc.mp hm).1.ne'
  simp [reciprocal,ArithmeticFunction.natCoe_apply,hm0]
+set_option maxHeartbeats 1500000 in
 lemma ag1 (f:ArithmeticFunction ℝ) (N:ℕ):
   (∑n∈Ioc 0 N,f n/(n:ℝ)*(harmonic (N/n):ℝ))=
    ∑n∈Ioc 0 N,(f*ζ) n/(n:ℝ):=by
@@ -21830,6 +22116,7 @@ lemma ag1 (f:ArithmeticFunction ℝ) (N:ℕ):
  rw [← aoz] at h
  simp_rw [ak6] at h
  exact h.symm
+set_option maxHeartbeats 1500000 in
 theorem au9 (f:ArithmeticFunction ℝ)
   (hf:∀n>0, |f n| ≤1)
   (hg:∀n>0, |(f*ζ) n| ≤1) {N:ℕ} (hN:1≤N):
@@ -21880,6 +22167,7 @@ theorem au9 (f:ArithmeticFunction ℝ)
  change |A| ≤2
  apply (mul_le_mul_iff_right₀ hN0).mp
  nlinarith only [habs]
+set_option maxHeartbeats 1500000 in
 theorem avG (f:ArithmeticFunction ℝ)
   (hf:∀n>0, |f n| ≤1)
   (hg:∀n>0, |(f*ζ) n| ≤1)
@@ -21948,9 +22236,10 @@ noncomputable section
 def f5 (ε:ℝ):ArithmeticFunction ℝ:=
  ⟨fun n=>if n=0 then 0 else (n:ℝ)^(-ε),by simp⟩
 section
-set_option maxHeartbeats 1500000
+set_option maxHeartbeats 1500000 in
 lemma oz {n:ℕ} (hn:n≠0) (ε:ℝ):
   f5 ε n=(n:ℝ)^(-ε):=by simp [f5,hn]
+set_option maxHeartbeats 1500000 in
 lemma ahX (ε:ℝ):(f5 ε).IsMultiplicative:=by
  apply ArithmeticFunction.IsMultiplicative.iff_ne_zero.mpr
  refine ⟨by simp [f5],?_⟩
@@ -21963,7 +22252,7 @@ def zL (ε:ℝ):ArithmeticFunction ℝ:=
 def nW (ε:ℝ):ArithmeticFunction ℝ:=
  ArithmeticFunction.prodPrimeFactors (fun p=>1-(p:ℝ)^(-ε))
 section
-set_option maxHeartbeats 1500000
+set_option maxHeartbeats 1500000 in
 lemma alp (ε:ℝ):zL ε*ζ=nW ε:=by
  ext n
  by_cases hn:n=0
@@ -21976,11 +22265,13 @@ lemma alp (ε:ℝ):zL ε*ζ=nW ε:=by
  apply Finset.prod_congr rfl
  intro p hp
  rw [oz (Nat.prime_of_mem_primeFactors hp).ne_zero]
+set_option maxHeartbeats 1500000 in
 lemma AO (ε:ℝ) (n:ℕ):0≤f5 ε n:=by
  by_cases hn:n=0
  ·simp [hn]
  rw [oz hn]
  positivity
+set_option maxHeartbeats 1500000 in
 lemma XO {ε:ℝ} (hε:0≤ε) (n:ℕ):
   f5 ε n≤1:=by
  by_cases hn:n=0
@@ -21988,6 +22279,7 @@ lemma XO {ε:ℝ} (hε:0≤ε) (n:ℕ):
  rw [oz hn]
  exact Real.rpow_le_one_of_one_le_of_nonpos
   (by exact_mod_cast Nat.one_le_iff_ne_zero.mpr hn) (by linarith)
+set_option maxHeartbeats 1500000 in
 lemma aMp {ε:ℝ} (hε:0≤ε) (n:ℕ):
   |zL ε n| ≤1:=by
  simp only [zL,ArithmeticFunction.pmul_apply,ArithmeticFunction.intCoe_apply,abs_mul]
@@ -21995,6 +22287,7 @@ lemma aMp {ε:ℝ} (hε:0≤ε) (n:ℕ):
  have h:=mul_le_mul (KD n) (XO hε n)
   (AO ε n) (by norm_num:(0:ℝ)≤1)
  simpa only [one_mul] using h
+set_option maxHeartbeats 1500000 in
 lemma Kx {ε:ℝ} (hε:0≤ε) (n:ℕ):
   0≤nW ε n∧nW ε n≤1:=by
  by_cases hn:n=0
@@ -22010,6 +22303,7 @@ lemma Kx {ε:ℝ} (hε:0≤ε) (n:ℕ):
  constructor
  ·exact Finset.prod_nonneg (fun p hp=>(hlocal p hp).1)
  ·exact Finset.prod_le_one₀ (fun p hp=>(hlocal p hp).1) (fun p hp=>(hlocal p hp).2)
+set_option maxHeartbeats 1500000 in
 lemma aD1 (ε:ℝ) {p k:ℕ} (hp:p.Prime) (hk:k≠0):
   nW ε (p^k)=1-(p:ℝ)^(-ε):=by
  simp [nW,ArithmeticFunction.prodPrimeFactors_apply (pow_ne_zero k hp.ne_zero),
@@ -22024,7 +22318,7 @@ noncomputable section
 def localEulerFactor (ε:ℝ) (p:ℕ):ℝ:=
  1+(1-(p:ℝ)^(-ε))/((p:ℝ)-1)
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma ahV {ε:ℝ} (hε:0≤ε) {p:ℕ} (hp:p.Prime):
   Summable (fun k:ℕ=> ‖nW ε (p^k)/((p^k:ℕ):ℝ)‖)∧
    HasSum (fun k:ℕ=>nW ε (p^k)/((p^k:ℕ):ℝ))
@@ -22065,6 +22359,7 @@ lemma ahV {ε:ℝ} (hε:0≤ε) {p:ℕ} (hp:p.Prime):
   exact Real.norm_of_nonneg (div_nonneg (Kx hε _).1 (Nat.cast_nonneg _))
  rw [hnorm]
  exact hs.summable
+set_option maxHeartbeats 2000000 in
 lemma aiR {ε:ℝ} (hε:0≤ε) {p:ℕ} (hp:p.Prime):
   0≤localEulerFactor ε p∧
    localEulerFactor ε p≤Real.exp (ε*Real.log p/((p:ℝ)-1)):=by
@@ -22088,6 +22383,7 @@ lemma aiR {ε:ℝ} (hε:0≤ε) {p:ℕ} (hp:p.Prime):
      (div_le_div_of_nonneg_right hshort (show (0:ℝ)≤(p:ℝ)-1 by linarith)) 1
    _≤_:=by simpa [add_comm] using
     Real.add_one_le_exp (ε*Real.log p/((p:ℝ)-1))
+set_option maxHeartbeats 2000000 in
 theorem avO {ε x:ℝ}
   (hε:0≤ε) (hx:1≤x) (hscale:ε*Real.log x≤1):
   (∑n∈Ioc 0 ⌊x⌋₊,nW ε n/(n:ℝ))≤Real.exp 4:=by
@@ -22159,6 +22455,7 @@ theorem avO {ε x:ℝ}
     (fun p hp=>(aiR hε (hprime p hp)).2)
   _=Real.exp (∑p∈S,ε*Real.log p/((p:ℝ)-1)):=(Real.exp_sum _ _).symm
   _≤_:=Real.exp_le_exp.mpr hexponent
+set_option maxHeartbeats 2000000 in
 theorem aG4 {ε x:ℝ}
   (hε:0≤ε) (hx:1≤x) (hscale:ε*Real.log x≤1):
   |r5 (zL ε) x| ≤Real.exp 4+4:=by
@@ -22180,7 +22477,7 @@ open scoped BigOperators ArithmeticFunction.Moebius ArithmeticFunction.zeta
 namespace Binary13.ez
 noncomputable section
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma aam (ε:ℝ) (m n:ℕ):
   f5 ε (m*n)=f5 ε m*f5 ε n:=by
  by_cases hm:m=0
@@ -22189,6 +22486,7 @@ lemma aam (ε:ℝ) (m n:ℕ):
  ·simp [hn]
  rw [oz (mul_ne_zero hm hn),oz hm,oz hn,
   Nat.cast_mul,Real.mul_rpow (Nat.cast_nonneg _) (Nat.cast_nonneg _)]
+set_option maxHeartbeats 2000000 in
 lemma aPh (f g:ArithmeticFunction ℝ) (ε:ℝ):
   (f*g).pmul (f5 ε)=
    (f.pmul (f5 ε))*(g.pmul (f5 ε)):=by
@@ -22203,12 +22501,13 @@ end
 def Kz (ε:ℝ) (S:Finset ℕ):ArithmeticFunction ℝ:=
  (Bq S).pmul (f5 ε)
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma aIs (ε:ℝ) (S:Finset ℕ):
   Kz ε S=
    ((m8 S).pmul (f5 ε))*(zL ε):=by
  rw [Kz,awG,aPh]
  rfl
+set_option maxHeartbeats 2000000 in
 theorem atY {ε x:ℝ} (S:Finset ℕ)
   (hε:0≤ε) (hx:1≤x) (hscale:ε*Real.log x≤1):
   |r5 (Kz ε S) x| ≤
@@ -22263,15 +22562,17 @@ lemma av0:Lh.IsMultiplicative:=by
 def tO:ArithmeticFunction ℝ:=
  ((μ:ArithmeticFunction ℝ).ppow 2).pdiv Lh
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma Gb (n:ℕ):
   tO n=(μ n:ℝ)^2/(n.totient:ℝ):=by
  rw [tO,ArithmeticFunction.pdiv_apply,
   ArithmeticFunction.ppow_apply (by norm_num:0<(2:ℕ))]
  simp [Lh,ArithmeticFunction.intCoe_apply]
+set_option maxHeartbeats 2000000 in
 lemma aMz (n:ℕ):0≤tO n:=by
  rw [Gb]
  positivity
+set_option maxHeartbeats 2000000 in
 lemma aQy (n:ℕ):tO n≤1/(n.totient:ℝ):=by
  rw [Gb]
  apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)
@@ -22282,7 +22583,7 @@ end
 def lv:ArithmeticFunction ℝ:=
  ArithmeticFunction.prodPrimeFactors (fun p=>(1-(p:ℝ)⁻¹)⁻¹)
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma XS {n:ℕ} (hn:n≠0):
   lv n=(n:ℝ)/(n.totient:ℝ):=by
  have hnR:(n:ℝ)≠0:=by exact_mod_cast hn
@@ -22297,6 +22598,7 @@ lemma XS {n:ℕ} (hn:n≠0):
   apply (eq_div_iff hnR).mpr
   nlinarith only [hφ]
  rw [hprod,inv_div]
+set_option maxHeartbeats 2000000 in
 lemma aIF:tO*ζ=lv:=by
  apply (ArithmeticFunction.IsMultiplicative.eq_iff_eq_on_prime_powers
   (tO*(ζ:ArithmeticFunction ℝ))
@@ -22328,6 +22630,7 @@ lemma aIF:tO*ζ=lv:=by
  push_cast
  field_simp
  <;> nlinarith
+set_option maxHeartbeats 2000000 in
 lemma axC (n:ℕ):
   n≤n.divisors.card*n.totient:=by
  calc
@@ -22339,6 +22642,7 @@ lemma axC (n:ℕ):
     (Nat.pos_of_ne_zero (Nat.mem_divisors.mp hd).2))
     (Nat.totient_dvd_of_dvd (Nat.mem_divisors.mp hd).1)
   _=_:=by simp
+set_option maxHeartbeats 2000000 in
 lemma ayO (n:ℕ):
   tO n/(n:ℝ)≤(n.divisors.card:ℝ)/(n:ℝ)^2:=by
  by_cases hn:n=0
@@ -22364,7 +22668,7 @@ open scoped BigOperators ArithmeticFunction.Moebius ArithmeticFunction.zeta
 namespace Binary13.ez
 noncomputable section
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma SN (N:ℕ):
   (∑n∈Ioc 0 N,((n:ℝ)^2)⁻¹)≤2:=by
  have hset:Ioc 0 N=Ioo 0 (N+1):=by
@@ -22373,6 +22677,7 @@ lemma SN (N:ℕ):
   omega
  rw [hset]
  simpa using (sum_Ioo_inv_sq_le (α:=ℝ) 0 (N+1))
+set_option maxHeartbeats 2000000 in
 lemma aPk {n:ℕ} (hn:n≠0):
   ((ζ:ArithmeticFunction ℝ)*ζ) n=(n.divisors.card:ℝ):=by
  rw [ArithmeticFunction.coe_mul_zeta_apply]
@@ -22383,6 +22688,7 @@ lemma aPk {n:ℕ} (hn:n≠0):
    have hd0:d≠0:=(Nat.pos_of_mem_divisors hd).ne'
    simp [ArithmeticFunction.natCoe_apply,hd0]
   _=_:=by simp
+set_option maxHeartbeats 2000000 in
 lemma at5 (N:ℕ):
   (∑n∈Ioc 0 N,(n.divisors.card:ℝ)/(n:ℝ)^2)≤4:=by
  have heq:(∑n∈Ioc 0 N,(n.divisors.card:ℝ)/(n:ℝ)^2)=
@@ -22418,16 +22724,19 @@ lemma at5 (N:ℕ):
    have hnonneg:0≤∑n∈Ioc 0 N,((n:ℝ)^2)⁻¹:=
     Finset.sum_nonneg (fun _ _=>by positivity)
    nlinarith
+set_option maxHeartbeats 2000000 in
 lemma asQ (N:ℕ):
   (∑n∈Ioc 0 N,tO n/(n:ℝ))≤4:=
  (Finset.sum_le_sum (fun n _=>ayO n)).trans
   (at5 N)
+set_option maxHeartbeats 2000000 in
 lemma aN4 {m n:ℕ} (hmn:m≤n):
   (harmonic m:ℝ)≤harmonic n:=by
  rw [OJ,OJ]
  exact Finset.sum_le_sum_of_subset_of_nonneg
   (fun d hd=>mem_Ioc.mpr ⟨(mem_Ioc.mp hd).1,(mem_Ioc.mp hd).2.trans hmn⟩)
   (fun _ _ _=>by positivity)
+set_option maxHeartbeats 2000000 in
 theorem auy (N:ℕ):
   (∑n∈Ioc 0 N,1/(n.totient:ℝ))≤4*(1+Real.log N):=by
  have hH0:0≤(harmonic N:ℝ):=by
@@ -22463,7 +22772,7 @@ open scoped BigOperators ArithmeticFunction.Moebius ArithmeticFunction.zeta
 namespace Binary13.ez
 noncomputable section
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma aJq (f g h:ArithmeticFunction ℝ)
   (hh:∀m n,h (m*n)=h m*h n):
   (f*g).pmul h=(f.pmul h)*(g.pmul h):=by
@@ -22473,11 +22782,13 @@ lemma aJq (f g h:ArithmeticFunction ℝ)
  intro a ha
  rw [← (Nat.mem_divisorsAntidiagonal.mp ha).1,hh]
  ring
+set_option maxHeartbeats 2000000 in
 lemma akn (S:Finset ℕ) (n:ℕ):0≤lU S n:=by
  by_cases hn:n=0
  ·simp [hn]
  rw [lU,ArithmeticFunction.prodPrimeFactors_apply hn]
  exact Finset.prod_nonneg (fun p hp=>by split_ifs <;> norm_num)
+set_option maxHeartbeats 2000000 in
 lemma aOw {q:ℕ} (hq:q≠0) (m n:ℕ):
   lU q.primeFactors (m*n)=
    lU q.primeFactors m*lU q.primeFactors n:=by
@@ -22497,6 +22808,7 @@ lemma aOw {q:ℕ} (hq:q≠0) (m n:ℕ):
    norm_num
  ·have hmn:¬(m*n).Coprime q:=fun h=>hmq (Nat.coprime_mul_iff_left.mp h).1
   rw [if_neg hmn,if_neg hmq,zero_mul]
+set_option maxHeartbeats 2000000 in
 lemma aIr {q:ℕ} (hq:q≠0):
   Bq q.primeFactors*lU q.primeFactors=1:=by
  have h:=aJq (μ:ArithmeticFunction ℝ) ζ
@@ -22510,6 +22822,7 @@ lemma aIr {q:ℕ} (hq:q≠0):
  ·subst n
   simp [lU]
  ·simp [ArithmeticFunction.one_apply,hn]
+set_option maxHeartbeats 2000000 in
 lemma aQt {q:ℕ} (hq:q≠0):
   m8 q.primeFactors*lU q.primeFactors=ζ:=by
  rw [← akm,mul_right_comm,aIr hq,one_mul]
@@ -22517,9 +22830,10 @@ end
 def qd (q N:ℕ):ℝ:=
  ∑n∈Ioc 0 N,lU q.primeFactors n/(n:ℝ)
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma aHA (q N:ℕ):0≤qd q N:=
  Finset.sum_nonneg (fun n _=>div_nonneg (akn _ _) (Nat.cast_nonneg n))
+set_option maxHeartbeats 2000000 in
 lemma aJ1 (q:ℕ) {M N:ℕ} (hMN:M≤N):
   qd q M≤qd q N:=by
  apply Finset.sum_le_sum_of_subset_of_nonneg
@@ -22527,6 +22841,7 @@ lemma aJ1 (q:ℕ) {M N:ℕ} (hMN:M≤N):
   exact mem_Ioc.mpr ⟨(mem_Ioc.mp hn).1,(mem_Ioc.mp hn).2.trans hMN⟩
  ·intro n hn hnot
   exact div_nonneg (akn _ _) (Nat.cast_nonneg n)
+set_option maxHeartbeats 2000000 in
 theorem aIU {q:ℕ} (hq:0<q) (N:ℕ):
   ((q.totient:ℝ)/(q:ℝ))*(harmonic N:ℝ)≤qd q N:=by
  have hqR:(0:ℝ)<q:=by exact_mod_cast hq
@@ -22558,6 +22873,7 @@ theorem aIU {q:ℕ} (hq:0<q) (N:ℕ):
   field_simp
  rw [heq] at h
  simpa only [mul_comm] using h
+set_option maxHeartbeats 2000000 in
 theorem azP {q:ℕ} (hq:0<q) (N:ℕ):
   ((q.totient:ℝ)/(q:ℝ))*Real.log (N+1:ℕ)≤qd q N:=by
  exact (mul_le_mul_of_nonneg_left (log_add_one_le_harmonic N)
@@ -22574,7 +22890,7 @@ def gJ (q R:ℕ):Finset ℕ:=
 def j7 (q R:ℕ):ℝ:=
  ∑r∈gJ q R,1/(r.totient:ℝ)
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma aNN {q:ℕ} (hq:q≠0) (R:ℕ):
   qd q R=∑n∈(Ioc 0 R).filter (fun n=>n.Coprime q),1/(n:ℝ):=by
  rw [qd,Finset.sum_filter]
@@ -22582,6 +22898,7 @@ lemma aNN {q:ℕ} (hq:q≠0) (R:ℕ):
  intro n hn
  rw [JG hq (mem_Ioc.mp hn).1.ne']
  split_ifs <;> simp
+set_option maxHeartbeats 2000000 in
 theorem awa {q:ℕ} (hq:q≠0) (R:ℕ):
   qd q R≤2*j7 q R:=by
  let A:=gJ q R
@@ -22631,11 +22948,13 @@ theorem awa {q:ℕ} (hq:q≠0) (R:ℕ):
   _≤(∑a∈A,1/(a:ℝ))*2:=
    mul_le_mul_of_nonneg_left (SN R) a7l
   _≤_:=by linarith
+set_option maxHeartbeats 2000000 in
 theorem azr {q:ℕ} (hq:0<q) (R:ℕ):
   ((q.totient:ℝ)/(q:ℝ))*Real.log (R+1:ℕ)/2≤j7 q R:=by
  have h1:=azP hq R
  have h2:=awa hq.ne' R
  linarith
+set_option maxHeartbeats 2000000 in
 theorem N7 (q:ℕ) {R:ℕ} (hR:1≤R):
   1≤j7 q R:=by
  have hmem:1∈gJ q R:=by
@@ -22653,10 +22972,11 @@ noncomputable section
 def jF (y:ℝ) (d:ℕ):ℝ:=
  if (d:ℝ)≤y then (μ d:ℝ)*Real.log (y/d) else 0
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma ait (y:ℝ) {d:ℕ} (hd:¬Squarefree d):
   jF y d=0:=by
  simp [jF,ArithmeticFunction.moebius_eq_zero_of_not_squarefree hd]
+set_option maxHeartbeats 3000000 in
 lemma awn {y:ℝ} (hy:0≤y)
   (N:ℕ) (hyN:⌊y⌋₊≤N) (r:ℕ) (f:ℕ→ℝ):
   (∑d∈(primorial N).divisors,if r∣d then f d*jF y d else 0)=
@@ -22677,6 +22997,7 @@ lemma awn {y:ℝ} (hy:0≤y)
   simp [ait y hnsq]
  ·intro d _ _
   rfl
+set_option maxHeartbeats 3000000 in
 lemma aYY (f:ℕ→ℝ) {r:ℕ} (hr:0<r) (N:ℕ):
   (∑d∈Ioc 0 N,if r∣d then f d else 0)=
    ∑m∈Ioc 0 (N/r),f (r*m):=by
@@ -22699,6 +23020,7 @@ lemma aYY (f:ℕ→ℝ) {r:ℕ} (hr:0<r) (N:ℕ):
   ·exact Nat.mul_div_cancel' hdr
  ·intro m hm
   rfl
+set_option maxHeartbeats 3000000 in
 lemma aHW {r m:ℕ} (hr:r≠0) (hm:m≠0):
   (μ (r*m):ℝ)=(μ r:ℝ)*Bq r.primeFactors m:=by
  simp only [Bq,ArithmeticFunction.pmul_apply,ArithmeticFunction.intCoe_apply]
@@ -22709,11 +23031,13 @@ lemma aHW {r m:ℕ} (hr:r≠0) (hm:m≠0):
  ·rw [if_neg hcop,mul_zero,mul_zero]
   have hnsq:¬Squarefree (r*m):=fun h=>hcop (Nat.coprime_of_squarefree_mul h).symm
   simp [ArithmeticFunction.moebius_eq_zero_of_not_squarefree hnsq]
+set_option maxHeartbeats 3000000 in
 lemma Xy {d:ℕ} (hd:d≠0) (ρ:ℝ):
   f5 (1+ρ) d=f5 ρ d/(d:ℝ):=by
  have hd0:(0:ℝ)<d:=by exact_mod_cast Nat.pos_of_ne_zero hd
  rw [oz hd,oz hd]
  rw [show-(1+ρ)=-ρ-1 by ring,Real.rpow_sub hd0,Real.rpow_one]
+set_option maxHeartbeats 3000000 in
 theorem anl {y:ℝ} (hy:1≤y) (N:ℕ) (hyN:⌊y⌋₊≤N)
   {r:ℕ} (hr:0<r) (ρ:ℝ):
   (∑d∈(primorial N).divisors,
@@ -22769,7 +23093,7 @@ open scoped BigOperators ArithmeticFunction.Moebius ArithmeticFunction.zeta
 namespace Binary13.ez
 noncomputable section
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma ah0 {r:ℕ} (hr:Squarefree r):
   (r.totient:ℝ)=∏p∈r.primeFactors,((p:ℝ)-1):=by
  have h:r.totient=∏p∈r.primeFactors,(p-1):=by
@@ -22779,6 +23103,7 @@ lemma ah0 {r:ℕ} (hr:Squarefree r):
  apply Finset.prod_congr rfl
  intro p hp
  exact Nat.cast_sub (Nat.prime_of_mem_primeFactors hp).one_lt.le
+set_option maxHeartbeats 3000000 in
 lemma aAG {p:ℕ} (hp:p.Prime) {v:ℝ}
   (hv0:0≤v) (hv:v≤(p:ℝ)⁻¹):
   v*(1-v)*((1-(p:ℝ)⁻¹)⁻¹)^2≤((p:ℝ)-1)⁻¹:=by
@@ -22797,6 +23122,7 @@ lemma aAG {p:ℕ} (hp:p.Prime) {v:ℝ}
    have hden:1-(p:ℝ)⁻¹≠0:=by linarith
    field_simp
    <;> ring
+set_option maxHeartbeats 3000000 in
 lemma ayK (s:BoundingSieve)
   (hnu:∀p,p.Prime→p∣s.prodPrimes→s.nu p≤(p:ℝ)⁻¹)
   {r:ℕ} (hr:r∣s.prodPrimes):
@@ -22838,6 +23164,7 @@ lemma ayK (s:BoundingSieve)
     have hpp:=Nat.prime_of_mem_primeFactors hp
     exact aAG hpp (s.nu_pos_of_prime p hpp hpd).le (hnu p hpp hpd)
   _=_:=by rw [Finset.prod_inv_distrib,ah0 RK,one_div]
+set_option maxHeartbeats 3000000 in
 lemma aJH {ρ y:ℝ} (hρ:0≤ρ) (hy:1≤y)
   (hscale:ρ*Real.log y≤1) (N:ℕ) (hyN:⌊y⌋₊≤N) {r:ℕ} (hr:0<r) (hry:(r:ℝ)≤y):
   |∑d∈(primorial N).divisors,
@@ -22872,7 +23199,7 @@ open scoped BigOperators ArithmeticFunction.Moebius ArithmeticFunction.zeta
 namespace Binary13.ez
 noncomputable section
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 theorem ajf {ρ y:ℝ} (hρ:0≤ρ) (hy:1≤y)
   (hscale:ρ*Real.log y≤1) (N:ℕ) (hyN:⌊y⌋₊≤N):
   (AS ρ hρ N).mainSum (BoundingSieve.lambdaSquared (jF y))≤
@@ -22956,6 +23283,7 @@ theorem ajf {ρ y:ℝ} (hρ:0≤ρ) (hy:1≤y)
    have h:=mul_le_mul_of_nonneg_left hlog (show 0≤4*C^2 by positivity)
    dsimp [C] at*
    nlinarith only [h]
+set_option maxHeartbeats 3000000 in
 lemma axx (s:BoundingSieve) (u v:ℕ→ℝ):
   s.mainSum (BoundingSieve.lambdaSquared (fun d=>u d-v d))≤
    2*(s.mainSum (BoundingSieve.lambdaSquared u)+
@@ -22987,7 +23315,7 @@ namespace Binary13.ez
 noncomputable section
 def Ej (ρ:ℝ):ℝ:=∑' n:ℕ,f5 (1+ρ) n
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma akF {ρ:ℝ} (hρ:0<ρ):
   Summable (fun n:ℕ=>f5 (1+ρ) n):=by
  have h:=Real.summable_nat_rpow.mpr (show-(1+ρ)< -1 by linarith)
@@ -22998,6 +23326,7 @@ lemma akF {ρ:ℝ} (hρ:0<ρ):
   simpa only [Nat.cast_zero,ArithmeticFunction.map_zero] using
    (Real.zero_rpow (show-(1+ρ)≠0 by linarith))
  ·exact (oz hn (1+ρ)).symm
+set_option maxHeartbeats 3000000 in
 lemma aYd {ρ:ℝ} (hρ:0<ρ):Ej ρ≤1+1/ρ:=by
  have htail:(∑' n:ℕ,f5 (1+ρ) (n+2))≤1/ρ:=by
   apply Real.tsum_le_of_sum_range_le (fun n=>AO (1+ρ) (n+2))
@@ -23030,6 +23359,7 @@ lemma aYd {ρ:ℝ} (hρ:0<ρ):Ej ρ≤1+1/ρ:=by
  rw [hfirst] at hsum
  dsimp [Ej]
  linarith
+set_option maxHeartbeats 3000000 in
 lemma aHM {ρ:ℝ} (hρ:0<ρ) {d:ℕ} (hd:0<d):
   HasSum (fun n:ℕ=>if d∣n then f5 (1+ρ) n else 0)
    (f5 (1+ρ) d*Ej ρ):=by
@@ -23050,7 +23380,7 @@ def rH (F:Finset ℕ) (w:ℕ→ℝ) (n:ℕ):ℝ:=
 def Lx (F:Finset ℕ) (w:ℕ→ℝ) (ρ:ℝ):ℝ:=
  ∑d∈F,∑e∈F,w d*w e*f5 (1+ρ) (Nat.lcm d e)
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma azS (F:Finset ℕ) (w:ℕ→ℝ) (n:ℕ) (ρ:ℝ):
   f5 (1+ρ) n*(rH F w n)^2=
    ∑d∈F,∑e∈F,(w d*w e)*
@@ -23062,6 +23392,7 @@ lemma azS (F:Finset ℕ) (w:ℕ→ℝ) (n:ℕ) (ρ:ℝ):
  intro e he
  by_cases hdn:d∣n <;> by_cases hen:e∣n <;>
   simp [Nat.lcm_dvd_iff,hdn,hen] <;> ring
+set_option maxHeartbeats 3000000 in
 theorem ajA (F:Finset ℕ) (hF:∀d∈F,0<d)
   (w:ℕ→ℝ) {ρ:ℝ} (hρ:0<ρ):
   HasSum (fun n:ℕ=>f5 (1+ρ) n*(rH F w n)^2)
@@ -23083,6 +23414,7 @@ theorem ajA (F:Finset ℕ) (hF:∀d∈F,0<d)
  apply Finset.sum_congr rfl
  intro e he
  ring
+set_option maxHeartbeats 3000000 in
 theorem aJy (F:Finset ℕ) (hF:∀d∈F,0<d) (w:ℕ→ℝ)
   {ρ X:ℝ} (hρ:0<ρ) (hX:1≤X):
   (∑n∈Finset.Ioc 0 ⌊X⌋₊,(rH F w n)^2/(n:ℝ))≤
@@ -23125,7 +23457,7 @@ def j8 (z₁ z₂:ℝ) (d:ℕ):ℝ:=
 def kA (z₁ z₂:ℝ) (n:ℕ):ℝ:=
  ∑d∈n.divisors,j8 z₁ z₂ d
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma alx {y:ℝ} (hy:0≤y) {d N:ℕ}
   (hyN:⌊y⌋₊≤N) (hd:¬d∣primorial N):jF y d=0:=by
  by_cases hdy:(d:ℝ)≤y
@@ -23133,6 +23465,7 @@ lemma alx {y:ℝ} (hy:0≤y) {d N:ℕ}
    (primorial_dvd_primorial (((Nat.le_floor_iff hy).mpr hdy).trans hyN)))
   exact ait y hnsq
  ·simp [jF,hdy]
+set_option maxHeartbeats 3000000 in
 lemma aDM {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁≤z₂)
   {d:ℕ} (hd:¬d∣primorial ⌊z₂⌋₊):j8 z₁ z₂ d=0:=by
  have h1:0≤z₁:=by linarith
@@ -23140,6 +23473,7 @@ lemma aDM {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁≤z₂)
  rw [j8,alx h2 le_rfl hd,
   alx h1 (Nat.floor_le_floor hzz) hd]
  simp
+set_option maxHeartbeats 3000000 in
 lemma avv (P:ℕ) (hP:P≠0) (w:ℕ→ℝ)
   (hw:∀d,¬d∣P→w d=0) {n:ℕ} (hn:n≠0):
   rH P.divisors w n=∑d∈n.divisors,w d:=by
@@ -23153,6 +23487,7 @@ lemma avv (P:ℕ) (hP:P≠0) (w:ℕ→ℝ)
   exact hw d a5D
  ·intro d _ _
   rfl
+set_option maxHeartbeats 3000000 in
 lemma aDL (z₁ z₂:ℝ) (hz₁:1≤z₁) (hzz:z₁≤z₂)
   {n:ℕ} (hn:n≠0):
   kA z₁ z₂ n=
@@ -23160,6 +23495,7 @@ lemma aDL (z₁ z₂:ℝ) (hz₁:1≤z₁) (hzz:z₁≤z₂)
  symm
  apply avv _ (squarefree_primorial _).ne_zero _
   (fun d hd=>aDM hz₁ hzz hd) hn
+set_option maxHeartbeats 3000000 in
 lemma VO {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂)
   {d:ℕ} (hd:0<d) (hdz:(d:ℝ)≤z₁):
   j8 z₁ z₂ d=(μ d:ℝ):=by
@@ -23172,6 +23508,7 @@ lemma VO {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂)
  apply (div_eq_iff hΔ).mpr
  rw [Real.log_div EH.ne' wX.ne']
  ring
+set_option maxHeartbeats 3000000 in
 lemma axm {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂)
   {n:ℕ} (hn:2≤n) (hnz:(n:ℝ)≤z₁):kA z₁ z₂ n=0:=by
  have heq:kA z₁ z₂ n=∑d∈n.divisors,(μ d:ℝ):=by
@@ -23186,6 +23523,7 @@ lemma axm {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂)
  rw [← ArithmeticFunction.coe_mul_zeta_apply,
   ArithmeticFunction.coe_moebius_mul_coe_zeta,ArithmeticFunction.one_apply]
  simp [show n≠1 by omega]
+set_option maxHeartbeats 3000000 in
 lemma aBR {ρ:ℝ} (hρ:0≤ρ) (N:ℕ) (w:ℕ→ℝ):
   Lx (primorial N).divisors w ρ=
    (AS ρ hρ N).mainSum (BoundingSieve.lambdaSquared w):=by
@@ -23202,12 +23540,14 @@ lemma aBR {ρ:ℝ} (hρ:0≤ρ) (N:ℕ) (w:ℕ→ℝ):
  change w d*w e*s.nu (Nat.lcm d e)=_
  rw [s.nu_mult.map_lcm hg0]
  ring
+set_option maxHeartbeats 3000000 in
 lemma axw (s:BoundingSieve) (w:ℕ→ℝ):
   0≤ s.mainSum (BoundingSieve.lambdaSquared w):=by
  rw [BoundingSieve.mainSum_lambdaSquared_eq_sum_mul_sum_sq]
  exact Finset.sum_nonneg (fun d hd=>mul_nonneg
   (inv_nonneg.mpr (BoundingSieve.selbergTerms_pos (Nat.dvd_of_mem_divisors hd)).le)
   (sq_nonneg _))
+set_option maxHeartbeats 3000000 in
 lemma aAf (s:BoundingSieve) (w:ℕ→ℝ) (c:ℝ):
   s.mainSum (BoundingSieve.lambdaSquared (fun d=>c*w d))=
    c^2*s.mainSum (BoundingSieve.lambdaSquared w):=by
@@ -23223,6 +23563,7 @@ lemma aAf (s:BoundingSieve) (w:ℕ→ℝ) (c:ℝ):
   split_ifs <;> ring
  rw [heq]
  ring
+set_option maxHeartbeats 3000000 in
 theorem aOS {ρ z₁ z₂:ℝ} (hρ:0≤ρ)
   (hz₁:1≤z₁) (hzz:z₁<z₂) (hscale:ρ*Real.log z₂≤1):
   (AS ρ hρ ⌊z₂⌋₊).mainSum
@@ -23250,6 +23591,7 @@ theorem aOS {ρ z₁ z₂:ℝ} (hρ:0≤ρ)
  rw [heq,aAf]
  have h:=mul_le_mul_of_nonneg_left hsum (sq_nonneg (Real.log (z₂/z₁))⁻¹)
  simpa [div_eq_mul_inv,inv_pow,mul_comm] using h
+set_option maxHeartbeats 3000000 in
 theorem aHL {ρ X z₁ z₂:ℝ} (hρ:0<ρ) (hX:1≤X)
   (hz₁:1≤z₁) (hzz:z₁<z₂) (hscale:ρ*Real.log z₂≤1):
   (∑n∈Finset.Ioc 0 ⌊X⌋₊,(kA z₁ z₂ n)^2/(n:ℝ))≤
@@ -23290,7 +23632,7 @@ open scoped BigOperators
 namespace Binary13.ez
 noncomputable section
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 theorem az7 {X z₁ z₂:ℝ} (hX:1<X)
   (hz₁:1≤z₁) (hzz:z₁<z₂) (hzX:z₂≤X):
   (∑n∈Finset.Ioc 0 ⌊X⌋₊,(kA z₁ z₂ n)^2/(n:ℝ))≤
@@ -23309,6 +23651,7 @@ theorem az7 {X z₁ z₂:ℝ} (hX:1<X)
   field_simp
  rw [hpow,one_div_one_div] at h
  convert h using 1 <;> ring
+set_option maxHeartbeats 2000000 in
 theorem axn {ε D:ℝ} (hε:0<ε) (hεsmall:ε≤1/100)
   (hD:Real.exp 1≤D):
   (∑n∈Finset.Ioc 0 ⌊D^(1+12*ε)⌋₊,
@@ -23362,9 +23705,10 @@ noncomputable section
 def lQ (r:ℕ):ℝ:=
  ∏p∈r.primeFactors,((p:ℝ)+1)
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma N6 (r:ℕ):0≤lQ r:=
  Finset.prod_nonneg (fun p hp=>by positivity)
+set_option maxHeartbeats 2000000 in
 lemma azj {r:ℕ} (hr:Squarefree r):
   lQ r≤(r:ℝ)^2:=by
  calc
@@ -23403,17 +23747,19 @@ theorem azq (q R:ℕ):KO q R≤(R:ℝ)^3:=by
   _=_:=by ring
 def gN (D ε:ℝ):ℕ:=⌊D^(ε/3)⌋₊
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma Pq {D ε:ℝ} (hD:1≤D) (hε:0≤ε):
   1≤gN D ε:=by
  apply (Nat.le_floor_iff (Real.rpow_nonneg (by linarith) _)).mpr
  exact Real.one_le_rpow hD (by positivity)
+set_option maxHeartbeats 2000000 in
 lemma aPU {D ε:ℝ} (hD:0<D):
   (ε/3)*Real.log D≤Real.log (gN D ε+1:ℕ):=by
  have hfloor:=Nat.lt_floor_add_one (D^(ε/3))
  have h:=Real.log_le_log (Real.rpow_pos_of_pos hD (ε/3)) hfloor.le
  rw [Real.log_rpow hD] at h
  simpa [gN] using h
+set_option maxHeartbeats 2000000 in
 theorem axP {q:ℕ} (hq:0<q) {D ε:ℝ} (hD:0<D):
   ((q.totient:ℝ)/(q:ℝ))*ε*Real.log D/6≤
    j7 q (gN D ε):=by
@@ -23421,6 +23767,7 @@ theorem axP {q:ℕ} (hq:0<q) {D ε:ℝ} (hD:0<D):
   (show 0≤(q.totient:ℝ)/(q:ℝ) by positivity)
  have hS:=azr hq (gN D ε)
  nlinarith only [hlog,hS]
+set_option maxHeartbeats 2000000 in
 theorem avQ (q:ℕ) {D ε:ℝ} (hD:0<D):
   KO q (gN D ε)≤D^ε:=by
  have hfloor:(gN D ε:ℝ)≤D^(ε/3):=
@@ -23695,10 +24042,11 @@ noncomputable section
 def eo (U:Finset ℕ):ℕ:=∏p∈U,p
 def yD (U:Finset ℕ):ℝ:=∏p∈U,-(p:ℝ)
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma O3 {U:Finset ℕ} (hU:∀p∈U,p.Prime):
   0<eo U:=
  Finset.prod_pos (fun p hp=>(hU p hp).pos)
+set_option maxHeartbeats 2000000 in
 lemma Wh {U:Finset ℕ} (hU:∀p∈U,p.Prime) (n:ℕ):
   eo U∣n↔∀p∈U,p∣n:=by
  by_cases hn:n=0
@@ -23713,9 +24061,11 @@ lemma Wh {U:Finset ℕ} (hU:∀p∈U,p.Prime) (n:ℕ):
   exact Nat.dvd_of_mem_primeFactors (h hp)
  ·intro h p hp
   exact Nat.mem_primeFactors.mpr ⟨hU p hp,h p hp,hn⟩
+set_option maxHeartbeats 2000000 in
 lemma aOz {r:ℕ} {U:Finset ℕ} (hU:U ⊆ r.primeFactors):
   eo U∣r:=
  (Finset.prod_dvd_prod_of_subset U r.primeFactors id hU).trans (Nat.prod_primeFactors_dvd r)
+set_option maxHeartbeats 2000000 in
 theorem atX (S:Finset ℕ)
   (hS:∀p∈S,p.Prime) (n:ℕ):
   m7 S n=∑U∈S.powerset,
@@ -23731,6 +24081,7 @@ theorem atX (S:Finset ℕ)
  rw [anM]
  have hpr:∀p∈U,p.Prime:=fun p hp=>hS p (Finset.mem_powerset.mp hU hp)
  simp only [← Wh hpr,yD]
+set_option maxHeartbeats 2000000 in
 theorem ar3 (S T:Finset ℕ)
   (hST:∀p∈S ∪ T,p.Prime) (n:ℕ):
   m7 S n*m7 T n=
@@ -23740,12 +24091,14 @@ theorem ar3 (S T:Finset ℕ)
  apply Finset.sum_congr rfl
  intro U hU
  simp only [Wh (fun p hp=>hST p (Finset.mem_powerset.mp hU hp))]
+set_option maxHeartbeats 2000000 in
 theorem avS (S T:Finset ℕ):
   vT S T=∑U∈(S ∪ T).powerset,
    tw S T U/(eo U:ℝ):=by
  apply Finset.sum_congr rfl
  intro U hU
  simp only [eo,tw,Nat.cast_prod,Finset.prod_div_distrib]
+set_option maxHeartbeats 2000000 in
 theorem aAH (S:Finset ℕ):
   (∑U∈S.powerset, |yD U|)=∏p∈S,((p:ℝ)+1):=by
  have habs (p:ℕ): |(p:ℝ)|=(p:ℝ):=abs_of_nonneg (Nat.cast_nonneg p)
@@ -23754,6 +24107,7 @@ theorem aAH (S:Finset ℕ):
  apply Finset.prod_congr rfl
  intro p hp
  ring
+set_option maxHeartbeats 2000000 in
 theorem aAy {r s:ℕ} (hr:Squarefree r) (hs:Squarefree s):
   vT r.primeFactors s.primeFactors=
    if r=s then (r.totient:ℝ) else 0:=by
@@ -23778,16 +24132,18 @@ def i9 (q R r:ℕ):ℝ:=(1/(r.totient:ℝ))/j7 q R
 def nS (q R n:ℕ):ℝ:=
  ∑r∈gJ q R,i9 q R r*m7 r.primeFactors n
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma JK (q R r:ℕ):0≤ i9 q R r:=by
  unfold i9 j7
  positivity
+set_option maxHeartbeats 2000000 in
 lemma aL4 (q:ℕ) {R:ℕ} (hR:1≤R):
   (∑r∈gJ q R,i9 q R r)=1:=by
  have hS:j7 q R≠0:=ne_of_gt (lt_of_lt_of_le (by norm_num) (N7 q hR))
  simp only [i9,← Finset.sum_div]
  change j7 q R/j7 q R=1
  exact div_self hS
+set_option maxHeartbeats 2000000 in
 theorem aL3 (q:ℕ) {R:ℕ} (hR:1≤R):
   nS q R 1=1:=by
  unfold nS
@@ -23795,6 +24151,7 @@ theorem aL3 (q:ℕ) {R:ℕ} (hR:1≤R):
   aNn _ (fun p hp=>(Nat.prime_of_mem_primeFactors hp).two_le)
  simp_rw [hψ,mul_one]
  exact aL4 q hR
+set_option maxHeartbeats 2000000 in
 theorem ayr (q:ℕ) {R:ℕ} (hR:1≤R):
   (∑r∈gJ q R,∑s∈gJ q R,
    i9 q R r*i9 q R s*
@@ -23825,6 +24182,7 @@ theorem ayr (q:ℕ) {R:ℕ} (hR:1≤R):
  rw [heq,← Finset.sum_div]
  change j7 q R/(j7 q R)^2=1/j7 q R
  field_simp
+set_option maxHeartbeats 2000000 in
 lemma aze (q:ℕ) {R:ℕ} (hR:1≤R):
   (∑r∈gJ q R,
    i9 q R r*lQ r)≤KO q R:=by
@@ -23840,6 +24198,7 @@ lemma aze (q:ℕ) {R:ℕ} (hR:1≤R):
  rw [heq]
  apply div_le_self _ (N7 q hR)
  exact Finset.sum_nonneg (fun r hr=>div_nonneg (N6 r) (Nat.cast_nonneg _))
+set_option maxHeartbeats 2000000 in
 theorem SM (q:ℕ) {D ε:ℝ}
   (hD:1≤D) (hε:0≤ε):
   (∑r∈gJ q (gN D ε),
@@ -23854,11 +24213,12 @@ open scoped BigOperators ArithmeticFunction.Moebius
 namespace Binary13.ez
 noncomputable section
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma ag0 {z₁ z₂:ℝ} (hzz:z₁≤z₂)
   {d:ℕ} (hd:z₂<d):j8 z₁ z₂ d=0:=by
  have hd₁:¬(d:ℝ)≤z₁:=not_le.mpr (hzz.trans_lt hd)
  simp [j8,jF,hd₁,not_le.mpr hd]
+set_option maxHeartbeats 2000000 in
 lemma ay3 {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂)
   {d:ℕ} (hd:0<d): |j8 z₁ z₂ d| ≤1:=by
  by_cases hdz₁:(d:ℝ)≤z₁
@@ -23881,6 +24241,7 @@ lemma ay3 {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂)
    ((div_le_one hΔ).mpr hhi)
  ·rw [ag0 hzz.le (not_le.mp hdz₂)]
   norm_num
+set_option maxHeartbeats 2000000 in
 theorem awk {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂):
   (∑d∈Ioc 0 ⌊z₂⌋₊, |j8 z₁ z₂ d|)≤z₂:=by
  calc
@@ -23888,6 +24249,7 @@ theorem awk {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂):
    Finset.sum_le_sum (fun d hd=>ay3 hz₁ hzz (mem_Ioc.mp hd).1)
   _=(⌊z₂⌋₊:ℝ):=by simp
   _≤_:=Nat.floor_le (by linarith)
+set_option maxHeartbeats 2000000 in
 theorem awj {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁≤z₂)
   {n:ℕ} (hn:0<n):
   kA z₁ z₂ n=
@@ -23904,10 +24266,12 @@ theorem awj {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁≤z₂)
   exact (hnot (Nat.mem_divisors.mpr ⟨(mem_filter.mp hd).2,hn.ne'⟩)).elim
  ·intro d hd hd'
   rfl
+set_option maxHeartbeats 2000000 in
 theorem aBj {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂):
   kA z₁ z₂ 1=1:=by
  simp only [kA,Nat.divisors_one,Finset.sum_singleton]
  simpa using VO hz₁ hzz (d:=1) (by decide) (by simpa using hz₁)
+set_option maxHeartbeats 2000000 in
 theorem aG3 (a:ℕ→ℝ) {X α:ℝ} (hX:0≤X) (hα:α≤1):
   (∑n∈Ioc 0 ⌊X⌋₊,(a n)^2*(n:ℝ)^(1-2*α))≤
    X^(2-2*α)*(∑n∈Ioc 0 ⌊X⌋₊,(a n)^2/(n:ℝ)):=by
@@ -23932,7 +24296,7 @@ open scoped BigOperators ComplexConjugate
 namespace Binary13.jS
 noncomputable section
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma aON {z:ℂ} (hz: ‖z‖ ≤1/2):
   ‖z‖/2≤ ‖Complex.exp z-1‖ :=by
  have he:=Complex.norm_exp_sub_one_sub_id_le (by linarith: ‖z‖≤1)
@@ -23942,6 +24306,7 @@ lemma aON {z:ℂ} (hz: ‖z‖ ≤1/2):
    _≤_:=norm_sub_le _ _
  have hs: ‖z‖^2≤ ‖z‖/2:=by nlinarith [norm_nonneg z]
  linarith
+set_option maxHeartbeats 2000000 in
 lemma Jv {s:ℂ} (hs:0≤ s.re) {x:ℝ} (hx:0≤x):
   ‖Complex.exp (-s*(x:ℂ))‖ ≤1:=by
  rw [Complex.norm_exp]
@@ -23953,7 +24318,7 @@ end
 def v6 (m:ℕ) (A h:ℝ) (s:ℂ):ℂ:=
  (∑k∈Finset.range m,Complex.exp (-s*((A+(k:ℝ)*h):ℂ)))/(m:ℂ)
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 lemma aHF (m:ℕ) (A h:ℝ) (s:ℂ):
   (∑k∈Finset.range m,Complex.exp (-s*((A+(k:ℝ)*h):ℂ)))=
    Complex.exp (-s*(A:ℂ))*∑k∈Finset.range m,(Complex.exp (-s*(h:ℂ)))^k:=by
@@ -23964,6 +24329,7 @@ lemma aHF (m:ℕ) (A h:ℝ) (s:ℂ):
  congr 1
  push_cast
  ring
+set_option maxHeartbeats 2000000 in
 theorem aip {m:ℕ} (hm:0< m)
   {A h:ℝ} (hA:0≤A) (hh:0<h) {s:ℂ} (hs:0≤ s.re)
   (hs0:s≠0) (hstep: ‖s‖*h≤1/2):
@@ -24007,12 +24373,13 @@ def kd (u v:ℝ) (s:ℂ):ℂ:=
  if s=0 then (v-u:ℝ) else
   (Complex.exp (-s*(v:ℂ))-Complex.exp (-s*(u:ℂ)))/(-s*(1-s))
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma aln {s:ℂ} (hs:s.re≤1/2):(1/2:ℝ)≤‖1-s‖ :=by
  have h:=Complex.abs_re_le_norm (1-s)
  have hre:0≤1-s.re:=by linarith
  simp only [Complex.sub_re,Complex.one_re,abs_of_nonneg hre] at h
  linarith
+set_option maxHeartbeats 3000000 in
 lemma axe {s:ℂ} (hs:0≤ s.re) {u v:ℝ}
   (hu:0≤u) (huv:u≤v) (hsmall: ‖s‖*(v-u)≤1):
   ‖Complex.exp (-s*(v:ℂ))-Complex.exp (-s*(u:ℂ))‖ ≤2*‖s‖*(v-u):=by
@@ -24031,6 +24398,7 @@ lemma axe {s:ℂ} (hs:0≤ s.re) {u v:ℝ}
    simpa only [hz,mul_assoc] using
     (Complex.norm_exp_sub_one_le (x:=-s*((v-u:ℝ):ℂ)) (by simpa only [hz] using hsmall))
   _=_:=one_mul _
+set_option maxHeartbeats 3000000 in
 theorem aJG {s:ℂ} (hs0:0≤ s.re) (hs1:s.re≤1/2)
   {u v B:ℝ} (hu:0≤u) (huv:u≤v) (hvB:v≤B):
   ‖kd u v s‖≤4*B:=by
@@ -24062,7 +24430,7 @@ def rS (m:ℕ) (A h a:ℝ) (s:ℂ):ℂ:=
  (∑k∈Finset.range m,
   kd (a*(A+(k:ℝ)*h)) (A+(k:ℝ)*h) s)/(m:ℂ)
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma aO9 {s:ℂ} (hs:s≠0) (m:ℕ) (A h a:ℝ):
   rS m A h a s=
    (v6 m A h s-v6 m (a*A) (a*h) s)/(-s*(1-s)):=by
@@ -24071,6 +24439,7 @@ lemma aO9 {s:ℂ} (hs:s≠0) (m:ℕ) (A h a:ℝ):
   Finset.sum_sub_distrib,v6]
  push_cast
  ring
+set_option maxHeartbeats 3000000 in
 theorem aIq {m:ℕ} (hm:0< m) {A h a:ℝ}
   (hA:0≤A) (hh:0≤h) (ha0:0≤a) (ha1:a≤1)
   {s:ℂ} (hs0:0≤ s.re) (hs1:s.re≤1/2):
@@ -24089,6 +24458,7 @@ theorem aIq {m:ℕ} (hm:0< m) {A h a:ℝ}
    have hkm:(k:ℝ)≤ m:=by exact_mod_cast (Finset.mem_range.mp hk).le
    exact add_le_add_right (mul_le_mul_of_nonneg_right hkm hh) A
   _=_:=by simp; ring
+set_option maxHeartbeats 3000000 in
 theorem aMk {m:ℕ} (hm:0< m) {A h a:ℝ}
   (hA:0≤A) (hh:0<h) (ha0:(1/3:ℝ)≤a) (ha1:a≤1)
   {s:ℂ} (hs0:0≤ s.re) (hs1:s.re≤1/2) (hs:s≠0)
@@ -24127,8 +24497,8 @@ open scoped BigOperators
 namespace Binary13.jS
 noncomputable section
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 4096
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 4096 in
 lemma aAz (n:ℕ):
   (∑i:Fin n,1/((i.val:ℝ)+1)^2)≤2:=by
  have h:=Binary13.ez.SN n
@@ -24139,6 +24509,8 @@ lemma aAz (n:ℕ):
  rw [hset,Finset.sum_Ico_eq_sum_range] at h
  rw [Fin.sum_univ_eq_sum_range (fun k:ℕ=>1/((k:ℝ)+1)^2) n]
  simpa [one_div,add_comm] using h
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 4096 in
 theorem aO1 {n:ℕ} (x:Fin n→ℝ) (δ:ℝ)
   (hfirst:∀i,δ≤x i)
   (hgap:∀i j,i<j→δ≤x j-x i):
@@ -24155,6 +24527,8 @@ theorem aO1 {n:ℕ} (x:Fin n→ℝ) (δ:ℝ)
    linarith
  intro i
  exact hi i.val i.isLt
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 4096 in
 theorem awx {n:ℕ} (x:Fin n→ℝ) (δ:ℝ)
   (hδ:0<δ) (hfirst:∀i,δ≤x i)
   (hgap:∀i j,i<j→δ≤x j-x i):
@@ -24175,6 +24549,8 @@ theorem awx {n:ℕ} (x:Fin n→ℝ) (δ:ℝ)
   _≤(δ^2)⁻¹*(2):=
    mul_le_mul_of_nonneg_left (aAz n) (by positivity)
   _=_:=by ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 4096 in
 theorem agR (S:Finset ℝ) (δ:ℝ) (hδ:0<δ)
   (hfirst:∀x∈S,δ≤x)
   (hsep:∀x∈S,∀y∈S,x≠y→δ≤ |x-y|):
@@ -24193,6 +24569,8 @@ theorem agR (S:Finset ℝ) (δ:ℝ) (hδ:0<δ)
   rw [Finset.sum_image]
   exact fun i _ j _ hij=>e.injective hij
  rwa [hs]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 4096 in
 theorem avd (S:Finset ℝ) (δ:ℝ) (hδ:0<δ)
   (hfirst:∀x∈S,δ≤ |x|)
   (hsep:∀x∈S,∀y∈S,x≠y→δ≤ |x-y|):
@@ -24361,7 +24739,7 @@ def LR (z₁ z₂:ℝ) (r:ℕ) (f:ℕ→ℂ) (W:ℝ→ℂ) (Y:ℝ):ℂ:=
  ∑n∈Finset.Ioc 0 ⌊Y⌋₊,(kA z₁ z₂ n:ℂ)*
   (m7 r.primeFactors n:ℂ)*f n*W ((n:ℝ)/Y)
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 theorem aIX {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁≤z₂)
   (r:ℕ) (f:ℕ→ℂ) (W:ℝ→ℂ)
   (nI:∀d m,0<d→0< m→f (d*m)=f d*f m)
@@ -24408,6 +24786,7 @@ theorem aIX {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁≤z₂)
   split_ifs <;> simp
  rw [heq,ak8 f W nI hlcm hY]
  ring
+set_option maxHeartbeats 3000000 in
 theorem aMH {z₁ z₂:ℝ} (hz₁:1≤z₁) (hzz:z₁<z₂)
   (r:ℕ) (f:ℕ→ℂ) (W:ℝ→ℂ)
   (nI:∀d m,0<d→0< m→f (d*m)=f d*f m)
@@ -24445,7 +24824,7 @@ noncomputable section
 def Dr (q R:ℕ) (z₁ z₂:ℝ) (f:ℕ→ℂ) (W:ℝ→ℂ) (Y:ℝ):ℂ:=
  ∑r∈gJ q R,(i9 q R r:ℂ)*LR z₁ z₂ r f W Y
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 theorem aMG (q R:ℕ) (z₁ z₂:ℝ) (f:ℕ→ℂ) (W:ℝ→ℂ) (Y:ℝ):
   Dr q R z₁ z₂ f W Y=
    ∑n∈Finset.Ioc 0 ⌊Y⌋₊,(kA z₁ z₂ n:ℂ)*(nS q R n:ℂ)*f n*W ((n:ℝ)/Y):=by
@@ -24457,6 +24836,7 @@ theorem aMG (q R:ℕ) (z₁ z₂:ℝ) (f:ℕ→ℂ) (W:ℝ→ℂ) (Y:ℝ):
  apply sum_congr rfl
  intro r hr
  ring
+set_option maxHeartbeats 3000000 in
 theorem aAZ (q:ℕ) {D ε z₁ z₂ Y E:ℝ}
   (hD:1≤D) (hε:0≤ε) (hz₁:1≤z₁) (hzz:z₁<z₂) (hY:0<Y) (hE:0≤E)
   (f:ℕ→ℂ) (W:ℝ→ℂ)
@@ -24481,6 +24861,7 @@ theorem aAZ (q:ℕ) {D ε z₁ z₂ Y E:ℝ}
    ring
   _≤_:=mul_le_mul_of_nonneg_left (SM q hD hε)
    (mul_nonneg hE (show 0≤z₂ by linarith))
+set_option maxHeartbeats 3000000 in
 lemma aAF {d Y δ β:ℝ} (hd:1≤d) (hY:0<Y) (hδ:0≤δ):
   d^(-β)*(Y/d)^(δ-β)≤Y^(δ-β):=by
  have hdp:0<d:=by linarith
@@ -24493,6 +24874,7 @@ lemma aAF {d Y δ β:ℝ} (hd:1≤d) (hY:0<Y) (hδ:0≤δ):
   _≤Y^(δ-β)*1:=mul_le_mul_of_nonneg_left
    (Real.rpow_le_one_of_one_le_of_nonpos hd (by linarith)) (Real.rpow_nonneg hY.le _)
   _=_:=mul_one _
+set_option maxHeartbeats 3000000 in
 lemma aDz {v w:ℂ} (hv: ‖v‖≤1/4) (hw:3/4≤‖w‖):
   (1/2:ℝ)≤‖v-w‖ :=by
  have h:=norm_sub_norm_le w v
@@ -24523,7 +24905,7 @@ theorem avz {ι:Type*} (F:Finset ι) (s:ι→ℂ)
  apply (div_le_iff₀ hmR).mpr
  nlinarith
 section
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000 in
 theorem aDk {q:ℕ} (hq:0<q) {D ε:ℝ}
   (hD:1<D) (hε:0<ε):
   ((q.totient:ℝ)/(q:ℝ))/j7 q (gN D ε)≤
@@ -24534,6 +24916,7 @@ theorem aDk {q:ℕ} (hq:0<q) {D ε:ℝ}
   lt_of_lt_of_le (by norm_num) (N7 q (Pq hD.le hε.le))
  apply (div_le_div_iff₀ a5k (mul_pos hε hlog)).mpr
  nlinarith only [hS]
+set_option maxHeartbeats 2000000 in
 theorem aww {q:ℕ} (hq:0<q) {D:ℝ} (hD:1<D):
   (((q.totient:ℝ)/(q:ℝ))/j7 q (gN D (1/1000)))*
    (4*((253/250:ℝ)*Real.log D+(253/250000:ℝ)*Real.log D)+
@@ -24591,7 +24974,7 @@ theorem ane (r s:ℕ) (f:ℕ→ℂ) (W:ℝ→ℂ)
 def Bh (r s:ℕ) (f:ℕ→ℂ) (W:ℝ→ℂ) (M N:ℝ):ℂ:=
  Mm r s f W N-Mm r s f W M
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 theorem aBC (r s:ℕ) (f:ℕ→ℂ) (W:ℝ→ℂ)
   (nI:∀d m,0<d→0< m→f (d*m)=f d*f m)
   {M N:ℝ} (hM:0<M) (hN:0<N):
@@ -24603,6 +24986,7 @@ theorem aBC (r s:ℕ) (f:ℕ→ℂ) (W:ℝ→ℂ)
  apply sum_congr rfl
  intro U hU
  ring
+set_option maxHeartbeats 3000000 in
 theorem aL9 (r s:ℕ) (f:ℕ→ℂ) (W:ℝ→ℂ)
   (nI:∀d m,0<d→0< m→f (d*m)=f d*f m)
   {M N E:ℝ} (hM:0<M) (hN:0<N) (hE:0≤E) (K:ℂ)
@@ -24717,17 +25101,20 @@ open Binary13.ez
 noncomputable section
 def lY (X x:ℝ):ℝ:=max (1-x/X) 0
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma aOv (X x:ℝ):0≤lY X x:=le_max_right _ _
+set_option maxHeartbeats 3000000 in
 lemma aOu {X x:ℝ} (hX:0<X) (hx:0≤x):lY X x≤1:=by
  apply max_le
  ·have h:=div_nonneg hx hX.le
   linarith
  ·norm_num
+set_option maxHeartbeats 3000000 in
 lemma anR {X x:ℝ} (hX:0<X) (hXx:X≤x):lY X x=0:=by
  apply max_eq_right
  have hx:=(one_le_div hX).mpr hXx
  linarith
+set_option maxHeartbeats 3000000 in
 lemma anQ {M N x:ℝ} (hM:0<M) (hMN:M≤N) (hx:0≤x):
   lY M x≤lY N x:=by
  apply max_le_max_right
@@ -24736,10 +25123,11 @@ end
 def Ip (M N:ℝ) (n:ℕ):ℝ:=
  (lY N n-lY M n)/(n:ℝ)
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma ak0 {M N:ℝ} (hM:0<M) (hMN:M≤N) (n:ℕ):
   0≤Ip M N n:=
  div_nonneg (sub_nonneg.mpr (anQ hM hMN (Nat.cast_nonneg n))) (Nat.cast_nonneg n)
+set_option maxHeartbeats 3000000 in
 lemma aG0 {M N X x:ℝ} (hM:0<M) (hX:0<X)
   (hMx:M≤x) (hXN:X≤N) (u α:ℝ):
   (u*x^(-α)*lY X x)^2≤
@@ -24771,13 +25159,14 @@ def vY (z₁ z₂ X α:ℝ) (n:ℕ):ℂ:=
 def xT (z₁ z₂ X α:ℝ) (n:ℕ):ℝ:=
  if n≤⌊X⌋₊ then (kA z₁ z₂ n)^2*(n:ℝ)^(1-2*α) else 0
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma aii (z₁ z₂ X α:ℝ) (n:ℕ):
   0≤xT z₁ z₂ X α n:=by
  unfold xT
  split_ifs
  ·exact mul_nonneg (sq_nonneg _) (Real.rpow_nonneg (Nat.cast_nonneg n) _)
  ·rfl
+set_option maxHeartbeats 3000000 in
 theorem azQ {z₁ z₂ X M N α:ℝ}
   (hz₁:1≤z₁) (hzz:z₁<z₂) (hX:0<X)
   (hM:0<M) (hMz:M≤z₁) (hMX:M≤X) (hXN:X≤N)
@@ -24798,6 +25187,7 @@ theorem azQ {z₁ z₂ X M N α:ℝ}
   rw [vY,if_neg hn1,anR hX hlarge.le,
    mul_zero,Complex.ofReal_zero,norm_zero,xT,if_neg hnX]
   norm_num
+set_option maxHeartbeats 3000000 in
 theorem aA3 (F:Finset ℕ)
   (hF:∀n∈F,0<n) {z₁ z₂ X α:ℝ} (hX:0≤X) (hα:α≤1):
   (∑n∈F,xT z₁ z₂ X α n)≤
@@ -24829,15 +25219,18 @@ def n6 (D:ℝ):ℝ:=(253/250000:ℝ)*Real.log D
 def compression:ℝ:=252993/506000
 def qV:ℝ:=96*Real.exp 1*(Real.exp 4+4)^2/(1/1000:ℝ)^2
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma XG:0<qV:=by unfold qV; positivity
+set_option maxHeartbeats 3000000 in
 lemma Qw {D:ℝ} (hD:1<D):
   1≤qB D∧qB D<lD D∧lD D≤jz D:=by
  refine ⟨Real.one_le_rpow hD.le (by norm_num),?_,?_⟩
  ·exact Real.rpow_lt_rpow_of_exponent_lt hD (by norm_num)
  ·exact Real.rpow_le_rpow_of_exponent_le hD.le (by norm_num)
+set_option maxHeartbeats 3000000 in
 lemma ale:(1/3:ℝ)≤compression∧compression≤1:=by
  norm_num [compression]
+set_option maxHeartbeats 3000000 in
 theorem anr {D τ:ℝ} (hD:1<D)
   (hτlo:qH D≤τ) (hτhi:τ≤qH D+n6 D):
   1≤Real.exp (compression*τ)∧zE D≤Real.exp (compression*τ)∧
@@ -24861,6 +25254,7 @@ theorem anr {D τ:ℝ} (hD:1<D)
   exact Real.exp_le_exp.mpr (by nlinarith)
  ·rw [adY,Real.rpow_def_of_pos hd]
   exact Real.exp_le_exp.mpr (by nlinarith)
+set_option maxHeartbeats 3000000 in
 theorem aIY (F:Finset ℕ) (hF:∀n∈F,0<n)
   {D α:ℝ} (hD:Real.exp 1≤D) (hα:α≤1):
   (∑n∈F,xT (qB D) (lD D) (jz D) α n)≤
@@ -24883,6 +25277,7 @@ theorem aIY (F:Finset ℕ) (hF:∀n∈F,0<n)
    rw [jz,← Real.rpow_mul hd.le]
    have he:(253/250:ℝ)*(2-2*α)=(253/125:ℝ)*(1-α):=by ring
    rw [he,mul_comm]
+set_option maxHeartbeats 3000000 in
 theorem aLE {D β:ℝ} (hD:1≤D) (hβ:(999/1000:ℝ)≤β):
   D^(5001/10000:ℝ)*(jz D)^(1/10000-β)*lD D*D^(1/1000:ℝ)≤
    D^(-1/1000:ℝ):=by
@@ -24891,6 +25286,7 @@ theorem aLE {D β:ℝ} (hD:1≤D) (hβ:(999/1000:ℝ)≤β):
   ← Real.rpow_add hd,← Real.rpow_add hd,← Real.rpow_add hd]
  apply Real.rpow_le_rpow_of_exponent_le hD
  nlinarith only [hβ]
+set_option maxHeartbeats 3000000 in
 theorem aPy {D M:ℝ} (hD:1≤D) (hM:zE D≤M):
   D^(5001/10000:ℝ)*M^(-1+1/10000:ℝ)*D^(2/1000:ℝ)≤D^(-3/1000:ℝ):=by
  have hd:0<D:=by linarith
@@ -24903,10 +25299,12 @@ theorem aPy {D M:ℝ} (hD:1≤D) (hM:zE D≤M):
   _≤_:=by
    rw [zE,← Real.rpow_mul hd.le,← Real.rpow_add hd,← Real.rpow_add hd]
    exact Real.rpow_le_rpow_of_exponent_le hD (by norm_num)
+set_option maxHeartbeats 3000000 in
 theorem aNT {D α:ℝ} (hD:1≤D) (hα:(999/1000:ℝ)≤α):
   D^((253/125:ℝ)*(1-α))*D^(-3/1000:ℝ)≤D^(-122/125000:ℝ):=by
  rw [← Real.rpow_add (by linarith:0<D)]
  exact Real.rpow_le_rpow_of_exponent_le hD (by nlinarith only [hα])
+set_option maxHeartbeats 3000000 in
 theorem aku (C:ℝ) {a η:ℝ} (ha:0<a) (hη:0<η):
   ∀ᶠD:ℝ in atTop,C*D^(-a)≤η:=by
  have h:=(tendsto_rpow_neg_atTop ha).const_mul C
@@ -24926,9 +25324,10 @@ def g7 (u:ℝ):ℂ:=(max (1-u) 0:ℝ)
 def wave (χ:ℕ→ℂ) (q R:ℕ) (ρ:ℂ) (α:ℝ) (n:ℕ):ℂ:=
  (nS q R n:ℂ)*twist χ (ρ-(α:ℂ)) n
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma aYb (χ:ℕ→ℂ) (z:ℂ) (n:ℕ):
   twist χ z n=χ n/(n:ℂ)^z:=by rw [twist,Complex.cpow_neg,div_eq_mul_inv]
+set_option maxHeartbeats 3000000 in
 lemma ap4 (χ:ℕ→ℂ)
   (hχ:∀d m,0<d→0< m→χ (d*m)=χ d*χ m) (z:ℂ)
   (d m:ℕ) (hd:0<d) (hm:0< m):
@@ -24936,17 +25335,20 @@ lemma ap4 (χ:ℕ→ℂ)
  rw [twist,hχ d m hd hm,Nat.cast_mul,Complex.natCast_mul_natCast_cpow]
  unfold twist
  ring
+set_option maxHeartbeats 3000000 in
 lemma aoX (χ:ℕ→ℂ) (hχ:∀n,‖χ n‖≤1) (z:ℂ)
   {n:ℕ} (hn:0<n): ‖twist χ z n‖≤(n:ℝ)^(-z.re):=by
  have hnR:(0:ℝ)<n:=by exact_mod_cast hn
  rw [twist,norm_mul,← Complex.ofReal_natCast,Complex.norm_cpow_eq_rpow_re_of_pos hnR,Complex.neg_re]
  exact mul_le_of_le_one_left (Real.rpow_nonneg hnR.le _) (hχ n)
+set_option maxHeartbeats 3000000 in
 lemma aNM (n:ℕ) (z:ℂ):
   conj ((n:ℂ)^z)=(n:ℂ)^(conj z):=by
  have harg:(n:ℂ).arg≠Real.pi:=by
   rw [← Complex.ofReal_natCast,Complex.arg_ofReal_of_nonneg (Nat.cast_nonneg n)]
   exact Real.pi_ne_zero.symm
  simpa only [map_natCast] using (Complex.cpow_conj (n:ℂ) z harg).symm
+set_option maxHeartbeats 3000000 in
 lemma aXm (χ ψ:ℕ→ℂ) (z w:ℂ) {n:ℕ} (hn:0<n):
   twist χ z n*conj (twist ψ w n)=twist (fun k=>χ k*conj (ψ k)) (z+conj w) n:=by
  have hnC:(n:ℂ)≠0:=by exact_mod_cast hn.ne'
@@ -24954,6 +25356,7 @@ lemma aXm (χ ψ:ℕ→ℂ) (z w:ℂ) {n:ℕ} (hn:0<n):
  have he:-(z+conj w)=-z+-conj w:=by ring
  rw [he,Complex.cpow_add _ _ hnC]
  ring
+set_option maxHeartbeats 3000000 in
 lemma aIZ (χ:ℕ→ℂ) (q R:ℕ) (z₁ z₂ X α:ℝ) (ρ:ℂ)
   {n:ℕ} (hn:0<n) (hn1:n≠1):
   vY z₁ z₂ X α n*wave χ q R ρ α n=
@@ -24974,6 +25377,7 @@ lemma aIZ (χ:ℕ→ℂ) (q R:ℕ) (z₁ z₂ X α:ℝ) (ρ:ℂ)
   _=(kA z₁ z₂ n:ℂ)*(nS q R n:ℂ)*χ n*
     ((n:ℂ)^(-(α:ℂ))*(n:ℂ)^(-(ρ-(α:ℂ))))*(max (1-(n:ℝ)/X) 0:ℝ):=by ring
   _=_:=by rw [hp]; ring
+set_option maxHeartbeats 3000000 in
 lemma a26 (χ ψ:ℕ→ℂ) (q q' R:ℕ) (ρ ρ':ℂ) (α:ℝ)
   {n:ℕ} (hn:0<n):
   wave χ q R ρ α n*conj (wave ψ q' R ρ' α n)=
@@ -24989,6 +25393,7 @@ lemma a26 (χ ψ:ℕ→ℂ) (q q' R:ℕ) (ρ ρ':ℂ) (α:ℝ)
   _=(nS q R n:ℂ)*(nS q' R n:ℂ)*
     (twist χ (ρ-(α:ℂ)) n*conj (twist ψ (ρ'-(α:ℂ)) n)):=by ring
   _=_:=by rw [ht]
+set_option maxHeartbeats 3000000 in
 lemma aPB (χ ψ:ℕ→ℂ) (q q' R:ℕ) (ρ ρ':ℂ) (α M N:ℝ)
   {n:ℕ} (hn:0<n):
   (Ip M N n:ℂ)*wave χ q R ρ α n*conj (wave ψ q' R ρ' α n)=
@@ -25021,9 +25426,10 @@ def wZ (q q' R:ℕ) (f:ℕ→ℂ) (W:ℝ→ℂ) (M N:ℝ):ℂ:=
  ∑r∈gJ q R,∑s∈gJ q' R,
   ((i9 q R r*i9 q' R s:ℝ):ℂ)*Bh r s f W M N
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma azd (q:ℕ) {R:ℕ} (hR:1≤R):
   FH q q R=1/j7 q R:=ayr q hR
+set_option maxHeartbeats 3000000 in
 theorem avK (q q':ℕ) {D ε M N E:ℝ}
   (hD:1≤D) (hε:0≤ε) (hM:0<M) (hN:0<N) (hE:0≤E)
   (f:ℕ→ℂ) (W:ℝ→ℂ)
@@ -25089,17 +25495,19 @@ namespace Binary13.DY
 open Binary13.ez Binary13.k9 Binary13.jS
 noncomputable section
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma aMu {u:ℝ} (hu:1≤u):g7 u=0:=by
  unfold g7
  rw [max_eq_right (by linarith:1-u≤0)]
  rfl
+set_option maxHeartbeats 3000000 in
 lemma aMt {X:ℝ} (hX:4≤X):
   (3/4:ℝ)≤‖g7 (1/X)‖ :=by
  have hp:0<X:=by linarith
  have hinv:1/X≤1/4:=div_le_div_of_nonneg_left (by norm_num) (by norm_num) hX
  rw [g7,Complex.norm_real,Real.norm_of_nonneg (le_max_right _ _)]
  exact (by linarith:(3/4:ℝ)≤1-1/X).trans (le_max_left _ _)
+set_option maxHeartbeats 3000000 in
 lemma Xo (g:ℕ→ℂ) {Y B:ℝ} (hY:0<Y) (hYB:Y≤B):
   (∑n∈Finset.Ioc 0 ⌊B⌋₊,g n*g7 ((n:ℝ)/Y))=
    ∑n∈Finset.Ioc 0 ⌊Y⌋₊,g n*g7 ((n:ℝ)/Y):=by
@@ -25112,6 +25520,7 @@ lemma Xo (g:ℕ→ℂ) {Y B:ℝ} (hY:0<Y) (hYB:Y≤B):
    have hnot:¬n≤⌊Y⌋₊:=fun h=>hnY (Finset.mem_Ioc.mpr ⟨hn,h⟩)
    omega)
   rw [aMu ((one_le_div hY).mpr hlarge.le),mul_zero]
+set_option maxHeartbeats 3000000 in
 theorem aOL (χ:ℕ→ℂ) (hχ:χ 1=1) (q:ℕ) {R:ℕ}
   (hR:1≤R) {z₁ z₂ X B α:ℝ} (ρ:ℂ)
   (hz₁:1≤z₁) (hzz:z₁<z₂) (hX:1≤X) (hXB:X≤B):
@@ -25135,6 +25544,7 @@ theorem aOL (χ:ℕ→ℂ) (hχ:χ 1=1) (q:ℕ) {R:ℕ}
  rw [Finset.sum_sub_distrib,Xo g (by linarith) hXB]
  simp only [Finset.sum_ite_eq',h1,if_true]
  rw [aMG]
+set_option maxHeartbeats 3000000 in
 theorem ayq (q q' R:ℕ) (f:ℕ→ℂ)
   {M N B:ℝ} (hM:0<M) (hN:0<N) (hMB:M≤B) (hNB:N≤B):
   wZ q q' R f g7 M N=
@@ -25168,6 +25578,7 @@ theorem ayq (q q' R:ℕ) (f:ℕ→ℂ)
  apply Finset.sum_congr rfl
  intro r hr
  ring
+set_option maxHeartbeats 3000000 in
 theorem aub (χ ψ:ℕ→ℂ) (q q' R:ℕ)
   (ρ ρ':ℂ) (α:ℝ) {M N B:ℝ} (hM:0<M) (hN:0<N)
   (hMB:M≤B) (hNB:N≤B):
@@ -25307,11 +25718,12 @@ namespace Binary13.k9
 open Binary13.ez Binary13.DU
 noncomputable section
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma Jw {q R r:ℕ} (hr:r∈gJ q R):
   0<r∧r≤R∧Squarefree r∧r.Coprime q:=by
  have h:=Finset.mem_filter.mp hr
  exact ⟨(Finset.mem_Ioc.mp h.1).1,(Finset.mem_Ioc.mp h.1).2,h.2.1,h.2.2⟩
+set_option maxHeartbeats 3000000 in
 lemma aiB {r s:ℕ} {U:Finset ℕ}
   (hU:U⊆r.primeFactors∪s.primeFactors):eo U∣r*s:=by
  have hpr:∀p∈U,p.Prime:=by
@@ -25322,12 +25734,15 @@ lemma aiB {r s:ℕ} {U:Finset ℕ}
  rcases Finset.mem_union.mp (hU hp) with hr | hs
  ·exact dvd_mul_of_dvd_left (Nat.dvd_of_mem_primeFactors hr) s
  ·exact dvd_mul_of_dvd_right (Nat.dvd_of_mem_primeFactors hs) r
+set_option maxHeartbeats 3000000 in
 lemma axZ {q r s:ℕ} {U:Finset ℕ}
   (hr:r.Coprime q) (hs:s.Coprime q)
   (hU:U⊆r.primeFactors∪s.primeFactors):(eo U).Coprime q:=
  (hr.mul_left hs).of_dvd_left (aiB hU)
+set_option maxHeartbeats 3000000 in
 lemma adx {D:ℝ} (hD:0≤D) (ε:ℝ):
   (gN D ε:ℝ)≤D^(ε/3):=Nat.floor_le (Real.rpow_nonneg hD _)
+set_option maxHeartbeats 3000000 in
 lemma aNR {D:ℝ} (hD:1≤D) {q r d:ℕ}
   (hr:r∈gJ q (gN D (1/1000)))
   (hd:d∈Finset.Ioc 0 ⌊lD D⌋₊) {U:Finset ℕ}
@@ -25353,6 +25768,7 @@ lemma aNR {D:ℝ} (hD:1≤D) {q r d:ℕ}
   _≤jz D:=by
    rw [lD,← Real.rpow_add (by linarith:0<D)]
    exact Real.rpow_le_rpow_of_exponent_le hD (by norm_num)
+set_option maxHeartbeats 3000000 in
 lemma aOl {D:ℝ} (hD:1≤D) {q q' r s:ℕ}
   (hr:r∈gJ q (gN D (1/1000)))
   (hs:s∈gJ q' (gN D (1/1000))) {U:Finset ℕ}
@@ -25495,7 +25911,7 @@ open scoped BigOperators
 namespace Binary13.jS
 noncomputable section
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 lemma aNs (u v ℓ:ℝ) (s:ℂ):
   kd (u-ℓ) (v-ℓ) s=Complex.exp (s*ℓ)*kd u v s:=by
  by_cases hs:s=0
@@ -25509,6 +25925,7 @@ lemma aNs (u v ℓ:ℝ) (s:ℂ):
    rw [show-s*(x-(ℓ:ℂ))=s*ℓ+-s*x by ring,Complex.exp_add]
   rw [hshift,hshift]
   ring
+set_option maxHeartbeats 3000000 in
 lemma axB {k:ℕ} (hk:0<k) (u v:ℝ) (s:ℂ):
   (k:ℂ)^(-(1+s))*kd (u-Real.log k) (v-Real.log k) s=
    kd u v s/(k:ℂ):=by
@@ -25519,6 +25936,7 @@ lemma axB {k:ℕ} (hk:0<k) (u v:ℝ) (s:ℂ):
  rw [he,← mul_assoc,← Complex.cpow_add _ _ hkC,
   show-(1+s)+s=(-1:ℂ) by ring,Complex.cpow_neg_one]
  ring
+set_option maxHeartbeats 3000000 in
 lemma avE {k M σ δ:ℝ}
   (hk:1≤k) (hM:0<M) (hσ:0≤σ) (hδ:0≤δ):
   k^(-1-σ)*(M/k)^(-1+δ)≤M^(-1+δ):=by
@@ -25544,7 +25962,7 @@ open Binary13.ez Binary13.k9 Binary13.jS
 open Binary13.DU Binary13.DY
 noncomputable section
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 theorem awS (χ:ℕ→ℂ)
   (hχmul:∀d n,0<d→0<n→χ (d*n)=χ d*χ n)
   (hχnorm:∀n,‖χ n‖≤1) (q:ℕ) (ρ:ℂ) {D C:ℝ}
@@ -25577,6 +25995,7 @@ theorem awS (χ:ℕ→ℂ)
   _≤(C*D^(5001/10000:ℝ)*(jz D)^(1/10000-ρ.re))*lD D*D^(1/1000:ℝ):=h
   _=C*(D^(5001/10000:ℝ)*(jz D)^(1/10000-ρ.re)*lD D*D^(1/1000:ℝ)):=by ring
   _≤_:=mul_le_mul_of_nonneg_left (aLE hD.le hβ) hC
+set_option maxHeartbeats 3000000 in
 theorem ays (q q':ℕ) (f:ℕ→ℂ)
   (nI:∀d n,0<d→0<n→f (d*n)=f d*f n) (K:ℂ) {D C M N:ℝ}
   (hD:1≤D) (hC:0≤C) (hM:zE D≤M) (hN:0<N)
@@ -25610,8 +26029,8 @@ open Complex.HadamardThreeLines
 open scoped Topology
 variable {q:ℕ} [NeZero q]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahH (χ:DirichletCharacter ℂ q)
   (s:ℂ) (hs:s.re<1):DifferentiableAt ℂ (i7 χ) s:=by
  have hi:Differentiable ℂ (fun z=>(gammaFactor χ z)⁻¹):=by
@@ -25637,6 +26056,8 @@ theorem ahH (χ:DirichletCharacter ℂ q)
  simp only [div_eq_mul_inv]
  exact (((hp s).mul_const _).mul
   (hg.comp s (show DifferentiableAt ℂ (fun z:ℂ=>1-z) s by fun_prop))).mul (hi s)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem awD:
   ∃C:ℝ,0<C∧∀(q:ℕ) [NeZero q] (χ:DirichletCharacter ℂ q),
    χ.IsPrimitive→∀s:ℂ,-(1/2:ℝ)≤ s.re→s.re≤1/2→
@@ -25667,6 +26088,8 @@ theorem awD:
  calc
   _≤(q:ℝ)*G*(G*Real.exp (Real.pi*|s.im|)):=by gcongr
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem awE (A:ℝ) (hA:1/2≤A):
   ∃C:ℝ,0<C∧∀(q:ℕ) [NeZero q] (χ:DirichletCharacter ℂ q),
    χ.IsPrimitive→∀s:ℂ,-A≤ s.re→s.re≤1/2→
@@ -25730,14 +26153,16 @@ end
 noncomputable def Az (χ:DirichletCharacter ℂ q)
   (t:ℝ) (z:ℂ):ℂ:=i7 χ (z+(t:ℂ)*I)*Complex.exp (z^2)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem NW (χ:DirichletCharacter ℂ q) (t:ℝ) (z:ℂ):
   ‖Az χ t z‖ =
    ‖i7 χ (z+(t:ℂ)*I)‖*Real.exp (z.re^2-z.im^2):=by
  rw [Az,norm_mul,norm_exp]
  congr 2
  simp [pow_two]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axv (χ:DirichletCharacter ℂ q) (t:ℝ):
   DiffContOnCl ℂ (Az χ t) (verticalStrip (-(1/2)) (1/2)):=by
  have hcl:closure (verticalStrip (-(1/2)) (1/2)) ⊆
@@ -25754,6 +26179,8 @@ theorem axv (χ:DirichletCharacter ℂ q) (t:ℝ):
   (show DifferentiableAt ℂ (fun z:ℂ=>z+(t:ℂ)*I) z by fun_prop)
  exact (h.mul (show DifferentiableAt ℂ (fun z:ℂ=>Complex.exp (z^2)) z by
   fun_prop)).differentiableWithinAt
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axu (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (t:ℝ):
   BddAbove ((norm ∘ Az χ t) ''
@@ -25782,6 +26209,8 @@ theorem axu (χ:DirichletCharacter ℂ q)
   _≤_:=by
    gcongr
    nlinarith [sq_nonneg (|z.im|-Real.pi/2),sq_abs z.im,Real.pi_pos]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aAa (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (t:ℝ) (z:ℂ) (hz:z.re=1/2):
   ‖Az χ t z‖ ≤Real.exp 1:=by
@@ -25789,6 +26218,8 @@ theorem aAa (χ:DirichletCharacter ℂ q)
   one_mul]
  apply Real.exp_le_exp.mpr
  nlinarith [sq_nonneg z.im]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aBp (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (t:ℝ) (z:ℂ) (hz:z.re=-(1/2)):
   ‖Az χ t z‖ ≤Real.exp 1*((q:ℝ)*(1+|t|)):=by
@@ -25814,6 +26245,8 @@ theorem aBp (χ:DirichletCharacter ℂ q)
   _=((q:ℝ)*(1+|t|))*((1+|z.im|)*Real.exp (z.re^2-z.im^2)):=by ring
   _≤((q:ℝ)*(1+|t|))*Real.exp 1:=by gcongr
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Nk (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (s:ℂ) (hs0:-(1/2:ℝ)≤ s.re) (hs1:s.re≤1/2):
   ‖i7 χ s‖ ≤
@@ -25854,8 +26287,8 @@ open aZ
 open scoped BigOperators Classical ComplexConjugate
 variable {q:ℕ} [NeZero q]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ay4 (s:ℂ) (J:ℕ)
   (hs:s.re=-(J:ℝ)-1/2) (j:ℕ):
   s+2*(j:ℂ)≠0∧s+2*(j:ℂ)+1≠0:=by
@@ -25870,6 +26303,8 @@ theorem ay4 (s:ℂ) (J:ℕ)
   have he:(4:ℝ)*j+1=2*J:=by nlinarith
   have hn:4*j+1=2*J:=by exact_mod_cast he
   omega
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aHJ (χ:DirichletCharacter ℂ q) (s:ℂ)
   (hn:∀j:ℕ,s+2*(j:ℂ)≠0∧s+2*(j:ℂ)+1≠0) (k:ℕ):
   gammaFactor χ (s+2*(k:ℂ))=gammaFactor χ s*
@@ -25882,6 +26317,8 @@ theorem aHJ (χ:DirichletCharacter ℂ q) (s:ℂ)
    pow_succ]
   have hp:(Real.pi:ℂ)≠0:=Complex.ofReal_ne_zero.mpr Real.pi_ne_zero
   field_simp [hp]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem arN (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (s:ℂ) (J:ℕ) (hs:s.re=-(J:ℝ)-1/2):
   ‖i7 χ s‖ =(q:ℝ)^(J+1)*
@@ -25909,6 +26346,8 @@ theorem arN (χ:DirichletCharacter ℂ q)
   abs_of_pos Real.pi_pos]
  have hgn: ‖gammaFactor χ s‖ ≠0:=norm_ne_zero_iff.mpr hg
  field_simp [hgn]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem M6 (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (s:ℂ) (J:ℕ) (hs:s.re=-(J:ℝ)-1/2):
   ‖i7 χ s‖ ≤
@@ -25958,30 +26397,40 @@ noncomputable def kN (x:ℝ) (w:ℂ):ℂ:=
 noncomputable def jA (x:ℝ):ℂ:=
  (2*(Real.pi:ℂ))⁻¹*∫ t:ℝ,kN x (1+(t:ℂ)*I)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem RW (x:ℝ) (hx:0<x):
   Differentiable ℂ (vF x):=by
  unfold vF
  exact Cj.mul
   ((differentiable_id.neg).const_cpow
    (Or.inl (Complex.ofReal_ne_zero.mpr hx.ne')))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axi (x:ℝ):vF x 0=1:=by
  simp [vF,dY]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ar6 (x:ℝ) (hx:0<x)
   (w:ℂ) (hw:w≠0):DifferentiableAt ℂ (kN x) w:=by
  exact (RW x hx w).div
   (differentiableAt_id) hw
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem atf (x:ℝ) (hx:0<x)
   (w:ℂ) (hw:w≠0):AnalyticAt ℂ (kN x) w:=by
  exact ((RW x hx).analyticAt w).div
   analyticAt_id hw
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahf (x c t:ℝ) (hx:0<x):
   ‖vF x ((c:ℂ)+(t:ℂ)*I)‖ =
    Real.exp (c^2-t^2)*x^(-c):=by
  rw [vF,norm_mul,k5,
   Complex.norm_cpow_eq_rpow_re_of_pos hx]
  simp
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem af7 (x c t:ℝ) (hx:0<x)
   (hc:c≠0):
   ‖kN x ((c:ℂ)+(t:ℂ)*I)‖ ≤
@@ -25994,6 +26443,8 @@ theorem af7 (x c t:ℝ) (hx:0<x)
   _≤(Real.exp (c^2-t^2)*x^(-c))/|c| :=
    div_le_div_of_nonneg_left (by positivity) ha hw
   _=_:=by rw [Real.exp_sub,Real.exp_neg]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Jr (x c:ℝ) (hx:0<x)
   (hc:c≠0):
   Integrable (fun t:ℝ=>kN x ((c:ℂ)+(t:ℂ)*I)):=by
@@ -26012,6 +26463,8 @@ theorem Jr (x c:ℝ) (hx:0<x)
    (f:=fun u:ℝ=>(c:ℂ)+(u:ℂ)*I) (x:=t) (by fun_prop)
  ·filter_upwards with t
   exact af7 x c t hx hc
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem E5 (f:ℂ→ℂ) (a b:ℝ) (r:ℂ)
   (ha:Integrable (fun u:ℝ=>f ((a:ℂ)+u*I)))
   (hb:Integrable (fun u:ℝ=>f ((b:ℂ)+u*I)))
@@ -26034,6 +26487,8 @@ theorem E5 (f:ℂ→ℂ) (a b:ℝ) (r:ℂ)
   _=I*(∫ u:ℝ,f ((b:ℂ)+u*I))-I*∫ u:ℝ,f ((a:ℂ)+u*I):=by ring
   _=_:=he
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ar7 (x a b u t:ℝ) (hx:0<x)
   (hu:u∈uIcc a b) (ht:1≤ |t|):
   ‖kN x ((u:ℂ)+(t:ℂ)*I)‖ ≤
@@ -26071,6 +26526,8 @@ theorem ar7 (x a b u t:ℝ) (hx:0<x)
    apply Real.exp_le_exp.mpr
    linarith
   _=_:=by rw [Real.exp_sub,Real.exp_neg]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem af0 (x a b:ℝ) (hx:0<x):
   Tendsto (fun t:ℝ=>∫ u in a..b,
    kN x ((u:ℂ)+(t:ℂ)*I)) atTop (𝓝 0)∧
@@ -26098,6 +26555,8 @@ theorem af0 (x a b:ℝ) (hx:0<x):
   filter_upwards [eventually_ge_atTop (1:ℝ)] with t ht
   have h:=hline (-t) (by simpa only [abs_neg] using ht.trans (le_abs_self t))
   simpa only [neg_sq,Complex.ofReal_neg] using h
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem asi (x a b:ℝ) (hx:0<x)
   (ha:0<a) (hb:0<b):
   (∫ t:ℝ,kN x ((a:ℂ)+(t:ℂ)*I))=
@@ -26111,6 +26570,8 @@ theorem asi (x a b:ℝ) (hx:0<x)
  intro z hz
  have hz0:0<z.re:=(lt_min ha hb).trans_le hz.1.1
  exact atf x hx z (by intro h; simpa [h] using hz0)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem auQ (x a:ℝ) (hx:0<x) (ha:a<0):
   (∫ t:ℝ,kN x (1+(t:ℂ)*I))-
    (∫ t:ℝ,kN x ((a:ℂ)+(t:ℂ)*I))=2*(Real.pi:ℂ):=by
@@ -26126,12 +26587,16 @@ theorem auQ (x a:ℝ) (hx:0<x) (ha:a<0):
   (fun z _=>(RW x hx).analyticAt z)
  change V9 (fun z=>vF x z/z) a 1 (-T) T=_
  simpa only [axi,sub_zero,mul_one] using hc
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem auP (x c:ℝ) (hx:0<x) (hc:0<c):
   jA x=(2*(Real.pi:ℂ))⁻¹*
    ∫ t:ℝ,kN x ((c:ℂ)+(t:ℂ)*I):=by
  unfold jA
  apply congrArg (fun z:ℂ=>(2*(Real.pi:ℂ))⁻¹*z)
  simpa using asi x 1 c hx zero_lt_one hc
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem asc (x c:ℝ) (hx:0<x) (hc:c<0):
   jA x-1=(2*(Real.pi:ℂ))⁻¹*
    ∫ t:ℝ,kN x ((c:ℂ)+(t:ℂ)*I):=by
@@ -26145,8 +26610,8 @@ end
 noncomputable def e5 (c:ℝ):ℝ:=
  ‖(2*(Real.pi:ℂ))⁻¹‖*Real.exp (c^2)/|c| *Real.sqrt Real.pi
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem vq (c:ℝ) (hc:c≠0):0<e5 c:=by
  have hp:(2*(Real.pi:ℂ))≠0:=
   mul_ne_zero (by norm_num) (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero)
@@ -26155,8 +26620,12 @@ theorem vq (c:ℝ) (hc:c≠0):0<e5 c:=by
  have hs:0<Real.sqrt Real.pi:=Real.sqrt_pos.mpr Real.pi_pos
  unfold e5
  positivity
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aDJ (c:ℝ):e5 (-c)=e5 c:=by
  simp only [e5,neg_sq,abs_neg]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem af4 (x c:ℝ) (hx:0<x) (hc:c≠0):
   ‖(2*(Real.pi:ℂ))⁻¹*∫ t:ℝ,kN x ((c:ℂ)+(t:ℂ)*I)‖ ≤
    e5 c*x^(-c):=by
@@ -26175,6 +26644,8 @@ theorem af4 (x c:ℝ) (hx:0<x) (hc:c≠0):
     ((Real.exp (c^2)*x^(-c)/|c|)*Real.sqrt Real.pi):=
    mul_le_mul_of_nonneg_left ((norm_integral_le_integral_norm _).trans hb) (norm_nonneg _)
   _=_:=by unfold e5; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Tj (c:ℝ) (hc:0<c) (x:ℝ) (hx:0<x):
   ‖jA x‖ ≤e5 c*x^(-c)∧
    ‖jA x-1‖ ≤e5 c*x^c:=by
@@ -26184,6 +26655,8 @@ theorem Tj (c:ℝ) (hc:0<c) (x:ℝ) (hx:0<x):
  ·rw [asc x (-c) hx (by linarith)]
   simpa only [aDJ,neg_neg] using
    af4 x (-c) hx (neg_ne_zero.mpr hc.ne')
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axj (x:ℝ) (hx:0<x):
   ‖jA x‖ ≤1+e5 1:=by
  obtain ⟨hdec,herr⟩:=Tj 1 zero_lt_one x hx
@@ -26210,8 +26683,8 @@ noncomputable def nT (X:ℕ) (w:ℕ→ℂ) (n:ℕ):ℂ:=
 noncomputable def fF (K X:ℕ) (w:ℕ→ℂ) (n:ℕ):ℂ:=
  ∑p∈n.divisorsAntidiagonal,V84 K p.1*nT X w p.2
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aMA (X:ℕ) (w:ℕ→ℂ) (C:ℝ) (hC:0≤C)
   (hw:∀m:ℕ,0< m→m≤X→ ‖w m‖ ≤C) (n:ℕ) (hn:0<n):
   ‖nT X w n‖ ≤C:=by
@@ -26219,6 +26692,8 @@ theorem aMA (X:ℕ) (w:ℕ→ℂ) (C:ℝ) (hC:0≤C)
  split_ifs with hnX
  ·exact hw n hn hnX
  ·simpa using hC
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem UC (K X:ℕ) (w:ℕ→ℂ) (C:ℝ) (hC:0≤C)
   (hw:∀m:ℕ,0< m→m≤X→ ‖w m‖ ≤C) (n:ℕ):
   ‖fF K X w n‖ ≤C*(n.divisors.card:ℝ):=by
@@ -26235,6 +26710,8 @@ theorem UC (K X:ℕ) (w:ℕ→ℂ) (C:ℝ) (hC:0≤C)
     (norm_nonneg _) zero_le_one).trans_eq (one_mul C)
   _=∑d∈n.divisors,C:=Nat.sum_divisorsAntidiagonal (fun _ _=>C)
   _=_:=by simp; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axX (K X:ℕ) (w:ℕ→ℂ) (n:ℕ)
   (hn:K*X<n):fF K X w n=0:=by
  unfold fF
@@ -26248,6 +26725,8 @@ theorem axX (K X:ℕ) (w:ℕ→ℂ) (n:ℕ)
    omega
   simp [nT,hX]
  ·simp [V84,hK]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem avZ (K X:ℕ) (w:ℕ→ℂ) (n:ℕ)
   (hn:n≤K) (hKX:K≤X):
   fF K X w n-Vu K n=
@@ -26263,6 +26742,8 @@ theorem avZ (K X:ℕ) (w:ℕ→ℂ) (n:ℕ)
  have hdiv:n/d≤X:=(Nat.div_le_self n d).trans (hn.trans hKX)
  simp only [V84,if_pos hdK,nT,if_pos hdiv]
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem as5 (K X:ℕ) (w:ℕ→ℂ)
   (E:ℝ) (hE:0≤E) (n:ℕ) (hn:n≤K) (hKX:K≤X)
   (hw:∀m:ℕ,0< m→m≤K→ ‖w m-1‖ ≤E):
@@ -26285,6 +26766,8 @@ theorem as5 (K X:ℕ) (w:ℕ→ℂ)
    exact (mul_le_mul hmu (hw (n/d) hmpos hmK) (norm_nonneg _) zero_le_one).trans_eq
     (one_mul E)
   _=_:=by simp; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ajb {a:ℕ→ℂ} (X:ℕ)
   (ha:∀n:ℕ,X<n→a n=0) (s:ℂ):LSeriesSummable a s:=by
  apply summable_of_ne_finset_zero (s:=range (X+1))
@@ -26292,6 +26775,8 @@ theorem ajb {a:ℕ→ℂ} (X:ℕ)
  have hnX:X<n:=by simp only [mem_range] at hn; omega
  rw [LSeries.term_of_ne_zero (by omega:n≠0)]
  simp only [ha n hnX,zero_div]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem arZ {q:ℕ}
   (χ:DirichletCharacter ℂ q) (K X:ℕ) (w:ℕ→ℂ):
   LSeries.convolution (V6n K χ) (fun n:ℕ=>χ (n:ZMod q)*nT X w n)=
@@ -26309,6 +26794,8 @@ theorem arZ {q:ℕ}
  calc
   _=(χ (p.1:ZMod q)*χ (p.2:ZMod q))*(V84 K p.1*nT X w p.2):=by ring
   _=_:=by rw [hc]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axW {q:ℕ} (χ:DirichletCharacter ℂ q)
   (K X:ℕ) (w:ℕ→ℂ) (s:ℂ):
   V1u K χ s*LSeries (fun n:ℕ=>χ (n:ZMod q)*nT X w n) s=
@@ -26327,8 +26814,8 @@ namespace dK
 open Filter MeasureTheory Set
 open scoped Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aSd (N:ℕ) (hN:0<N) (r:ℝ) (hr:2≤r):
   (∑' n:ℕ,((n+N+1:ℕ):ℝ)^(-r))≤(N:ℝ)^(1-r):=by
  have hNr:(0:ℝ)<N:=Nat.cast_pos.mpr hN
@@ -26345,6 +26832,8 @@ theorem aSd (N:ℕ) (hN:0<N) (r:ℝ) (hr:2≤r):
   simp only [div_neg,neg_div,neg_neg]
  rw [he] at h
  exact h.trans (div_le_self (Real.rpow_nonneg hNr.le _) (by linarith))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aAm (J:ℕ) (v:ℝ):
   (1+|v|)^J*Real.exp (-(v^2))≤
    Real.exp ((J:ℝ)^2/2)*Real.exp (-(v^2)/2):=by
@@ -26360,6 +26849,8 @@ theorem aAm (J:ℕ) (v:ℝ):
    apply Real.exp_le_exp.mpr
    nlinarith [sq_nonneg ((J:ℝ)-|v|),sq_abs v]
   _=_:=by rw [← Real.exp_add] <;> congr 1 <;> ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem EO (J:ℕ):
   Integrable (fun v:ℝ=>(1+|v|)^J*Real.exp (-(v^2))):=by
  have hg:Integrable (fun v:ℝ=>Real.exp (-(v^2)/2)):=by
@@ -26372,6 +26863,8 @@ theorem EO (J:ℕ):
  ·filter_upwards with v
   rw [Real.norm_eq_abs,abs_of_nonneg (by positivity)]
   exact aAm J v
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ah7 (v:ℝ):
   (1+|v|)*Real.exp (-(v^2))≤Real.exp 1*Real.exp (-|v|):=by
  have hl:1+|v| ≤Real.exp |v| :=by linarith [Real.add_one_le_exp |v|]
@@ -26389,8 +26882,8 @@ namespace dK
 open Complex Filter MeasureTheory Set OAI.Ostmann
 open scoped Topology Interval
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Wv (a v:ℝ):
   (1+|v|)*Real.exp (a*|v|-v^2)≤
    Real.exp ((a+1)^2/2)*Real.exp (-(v^2)/2):=by
@@ -26403,11 +26896,15 @@ theorem Wv (a v:ℝ):
    apply Real.exp_le_exp.mpr
    nlinarith [sq_nonneg (|v|-(a+1)),sq_abs v]
   _=_:=by rw [← Real.exp_add] <;> congr 1 <;> ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem CY:Integrable (fun v:ℝ=>Real.exp (-(v^2)/2)):=by
  convert integrable_exp_neg_mul_sq (b:=(1/2:ℝ)) (by norm_num) using 1
  funext v
  congr 1
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Kw:
   Tendsto (fun v:ℝ=>Real.exp (-(v^2)/2)) atTop (𝓝 0):=by
  have hp:Tendsto (fun v:ℝ=>v^2/2) atTop atTop:=
@@ -26415,6 +26912,8 @@ theorem Kw:
  convert Real.tendsto_exp_neg_atTop_nhds_zero.comp hp using 1
  funext v
  simp only [Function.comp_apply,neg_div]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Ju (F:ℂ→ℂ) (c C:ℝ) (hc:c≠0)
   (hF:Continuous (fun v:ℝ=>F ((c:ℂ)+(v:ℂ)*I)))
   (hb:∀v:ℝ, ‖F ((c:ℂ)+(v:ℂ)*I)‖ ≤C*Real.exp (-(v^2)/2)):
@@ -26435,6 +26934,8 @@ theorem Ju (F:ℂ→ℂ) (c C:ℝ) (hc:c≠0)
     div_le_div_of_nonneg_left (norm_nonneg _) (abs_pos.mpr hc) hw
    _≤(C*Real.exp (-(v^2)/2))/|c| :=div_le_div_of_nonneg_right (hb v) (abs_nonneg _)
    _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem agH (F:ℂ→ℂ) (a b C:ℝ)
   (hb:∀u∈uIcc a b,∀v:ℝ,
    ‖F ((u:ℂ)+(v:ℂ)*I)‖ ≤C*Real.exp (-(v^2)/2)):
@@ -26464,6 +26965,8 @@ theorem agH (F:ℂ→ℂ) (a b C:ℝ)
   filter_upwards [eventually_ge_atTop (1:ℝ)] with v hv
   have h:=hline (-v) (by simpa only [abs_neg] using hv.trans (le_abs_self v))
   simpa only [neg_sq,Complex.ofReal_neg] using h
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahg (F:ℂ→ℂ) (a b C:ℝ) (ha:a<0) (hb:0<b)
   (hF:∀z:ℂ,z.re∈uIcc a b→AnalyticAt ℂ F z)
   (hbound:∀u∈uIcc a b,∀v:ℝ,
@@ -26503,8 +27006,8 @@ noncomputable def pZ (χ:DirichletCharacter ℂ q)
  LSeries.term (fun m:ℕ=>χ (m:ZMod q)) (s+(1+(v:ℂ)*I)) n*
   dY (1+(v:ℂ)*I)*(Y:ℂ)^(1+(v:ℂ)*I)/(1+(v:ℂ)*I)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aiJ (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ) (v:ℝ):
   ‖pZ χ s Y n v‖ ≤
@@ -26524,6 +27027,8 @@ theorem aiJ (χ:DirichletCharacter ℂ q)
  rw [show (1:ℂ)+(v:ℂ)*I=((1:ℝ):ℂ)+(v:ℂ)*I by rfl,
   k5,one_pow,Real.exp_sub,Real.exp_neg]
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahb (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ):Integrable (pZ χ s Y n):=by
  have hg:Integrable (fun v:ℝ=>Real.exp (-(v^2))):=by
@@ -26551,6 +27056,8 @@ theorem ahb (χ:DirichletCharacter ℂ q)
    hc.aestronglyMeasurable
  filter_upwards with v
  exact aiJ χ s Y hY n v
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem asG (χ:DirichletCharacter ℂ q)
   (s:ℂ) (hs:0< s.re) (Y:ℝ) (hY:0<Y):
   Summable (fun n:ℕ=>∫ v:ℝ, ‖pZ χ s Y n v‖):=by
@@ -26569,6 +27076,8 @@ theorem asG (χ:DirichletCharacter ℂ q)
   rwa [integral_const_mul] at h
  exact ((hsumm.mul_left (Y*Real.exp 1)).mul_right _).of_nonneg_of_le
   (fun n=>integral_nonneg (fun _=>norm_nonneg _)) hb
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayW (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ):
   (2*(Real.pi:ℂ))⁻¹*(∫ v:ℝ,pZ χ s Y n v)=
@@ -26592,6 +27101,8 @@ theorem ayW (χ:DirichletCharacter ℂ q)
  rw [integral_const_mul]
  unfold jA
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahB (χ:DirichletCharacter ℂ q)
   (s:ℂ) (hs:0< s.re) (Y:ℝ) (hY:0<Y):
   (2*(Real.pi:ℂ))⁻¹*(∫ v:ℝ,LFunction χ (s+(1+(v:ℂ)*I))*
@@ -26619,17 +27130,21 @@ noncomputable def m5 (χ:PrimitiveComplexCharacter)
   (s:ℂ) (Y:ℝ) (w:ℂ):ℂ:=
  χ.L (s+w)*dY w*(Y:ℂ)^w
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem agI (χ:PrimitiveComplexCharacter)
   (s:ℂ) (Y:ℝ) (hY:0<Y):Differentiable ℂ (m5 χ s Y):=by
  have hL:Differentiable ℂ χ.L:=fun z=>(χ.V4s z).differentiableAt
  unfold m5
  exact ((hL.comp (by fun_prop)).mul Cj).mul
   (differentiable_id.const_cpow (Or.inl (Complex.ofReal_ne_zero.mpr hY.ne')))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ajC (χ:PrimitiveComplexCharacter) (s:ℂ) (Y:ℝ):
   m5 χ s Y 0=χ.L s:=by
  simp [m5,dY]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Ue (χ:PrimitiveComplexCharacter)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:1≤Y):
   ∃B:ℝ,0<B∧∀x∈uIcc (-s.re-1/2) 1,∀v:ℝ,
@@ -26679,6 +27194,8 @@ theorem Ue (χ:PrimitiveComplexCharacter)
   _≤(A*Y*Real.exp (9/4))*(Real.exp ((Real.pi+1)^2/2)*Real.exp (-(v^2)/2)):=
    mul_le_mul_of_nonneg_left (Wv Real.pi v) (by positivity)
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Tu (χ:PrimitiveComplexCharacter)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:1≤Y):
   (∫ v:ℝ,m5 χ s Y (1+(v:ℂ)*I)/(1+(v:ℂ)*I))-
@@ -26689,6 +27206,8 @@ theorem Tu (χ:PrimitiveComplexCharacter)
   (by linarith) zero_lt_one
   (fun z _=>(agI χ s Y (by linarith)).analyticAt z) hbound
  simpa only [Complex.ofReal_one,ajC] using h
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Sj (χ:PrimitiveComplexCharacter)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:1≤Y):
   (∑' n:ℕ,LSeries.term (fun m:ℕ=>χ.character (m:ZMod χ.modulus)) s n*
@@ -26715,13 +27234,15 @@ open aZ
 open scoped Topology Interval
 variable {q:ℕ} [NeZero q]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aJF (χ:DirichletCharacter ℂ q) (s:ℂ) (hs:s.re<1):
   AnalyticAt ℂ (i7 χ) s:=by
  have hd:DifferentiableOn ℂ (i7 χ) {z:ℂ | z.re<1}:=
   fun z hz=>(ahH χ z hz).differentiableWithinAt
  exact hd.analyticAt ((isOpen_lt continuous_re continuous_const).mem_nhds hs)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aPo (a b x:ℝ) (hx:x∈uIcc a b): |x| ≤ |a|+|b| :=by
  have hx':min a b≤x∧x≤ max a b:=hx
  rw [abs_le]
@@ -26734,6 +27255,8 @@ theorem aPo (a b x:ℝ) (hx:x∈uIcc a b): |x| ≤ |a|+|b| :=by
   linarith [le_abs_self b,abs_nonneg a]
  ·rw [max_eq_left hba] at hx'
   linarith [le_abs_self a,abs_nonneg b]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem az5 (F:ℂ→ℂ) (a b C:ℝ)
   (ha:a<0) (hb:b<0)
   (hF:∀z:ℂ,z.re∈uIcc a b→AnalyticAt ℂ F z)
@@ -26762,8 +27285,8 @@ noncomputable def gG (χ:DirichletCharacter ℂ q)
   (s:ℂ) (X:ℝ) (w:ℂ):ℂ:=
  i7 χ (s+w)*dY w*(X:ℂ)^w
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Nj (χ:DirichletCharacter ℂ q)
   (s:ℂ) (X:ℝ) (hX:0<X) (w:ℂ) (hw:(s+w).re<1):
   AnalyticAt ℂ (gG χ s X) w:=by
@@ -26771,6 +27294,8 @@ theorem Nj (χ:DirichletCharacter ℂ q)
  have hp:Differentiable ℂ (fun w:ℂ=>(X:ℂ)^w):=
   differentiable_id.const_cpow (Or.inl (Complex.ofReal_ne_zero.mpr hX.ne'))
  exact (hr.mul (Cj.analyticAt w)).mul (hp.analyticAt w)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahc (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (s:ℂ) (X a b:ℝ) (hX:0<X)
   (hab:s.re+max a b≤1/2):
@@ -26838,6 +27363,8 @@ theorem ahc (χ:DirichletCharacter ℂ q)
   _≤(G*(q:ℝ)^(A+1/2)*Real.exp (Real.pi*|s.im|)*Real.exp (B^2+B*|Real.log X|))*
     (Real.exp (Real.pi^2/2)*Real.exp (-(v^2)/2)):=by gcongr
   _=_:=by dsimp [C]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem T9 (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (s:ℂ) (X a b:ℝ) (hX:0<X)
   (ha:a<0) (hb:b<0) (hab:s.re+max a b≤1/2):
@@ -26863,8 +27390,8 @@ noncomputable def pC (χ:DirichletCharacter ℂ q) (s:ℂ) (X:ℝ):ℂ:=
   gG χ s X (((-s.re-1/2:ℝ):ℂ)+(v:ℂ)*I)/
    (((-s.re-1/2:ℝ):ℂ)+(v:ℂ)*I)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aiK (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (s:ℂ) (hs:0≤ s.re) (X:ℝ) (hX:0<X) (J:ℕ):
   pC χ s X=(2*(Real.pi:ℂ))⁻¹*∫ v:ℝ,
@@ -26876,6 +27403,8 @@ theorem aiK (χ:DirichletCharacter ℂ q)
   (by linarith) (by nlinarith [(Nat.cast_nonneg J:(0:ℝ)≤J)])
  rw [max_eq_left (by nlinarith [(Nat.cast_nonneg J:(0:ℝ)≤J)])]
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem EI (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (s:ℂ) (X c:ℝ) (hX:0<X) (hc:c<0)
   (hs:s.re+c≤1/2):
@@ -26894,8 +27423,8 @@ noncomputable def jo (J:ℕ):ℝ:=
  ‖(2*(Real.pi:ℂ))⁻¹‖*(3*(J:ℝ)+4)^(J+1)*Real.exp (((J:ℝ)+3/2)^2)*
   ((∫ v:ℝ,(1+|v|)^(J+1)*Real.exp (-(v^2)))+1)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Oz (J:ℕ):0<jo J:=by
  have hp:(2*(Real.pi:ℂ))≠0:=
   mul_ne_zero (by norm_num) (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero)
@@ -26904,6 +27433,8 @@ theorem Oz (J:ℕ):0<jo J:=by
   integral_nonneg (fun v=>by positivity)
  unfold jo
  positivity
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Wn (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1)
   (X:ℝ) (hX:0<X) (J:ℕ):
@@ -26975,13 +27506,15 @@ open scoped Topology
 variable {q:ℕ} [NeZero q]
 noncomputable def fG (θ:ℝ) (s:ℂ):ℝ:=θ+1/2-2*s.re
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem xG (θ:ℝ) (s:ℂ) (hθ:3/4≤θ)
   (hθs:θ≤ s.re) (hs:s.re≤1):
   -(3/4:ℝ)≤fG θ s∧fG θ s≤-(1/4:ℝ):=by
  unfold fG
  constructor <;> linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem VN (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (θ:ℝ) (s:ℂ) (hθ:3/4≤θ)
   (hθs:θ≤ s.re) (hs:s.re≤1) (X:ℝ) (hX:0<X):
@@ -26996,6 +27529,8 @@ theorem VN (χ:DirichletCharacter ℂ q)
  rw [max_eq_right (by dsimp [fG]; linarith)]
  dsimp [fG]
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Wq (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (θ:ℝ) (s:ℂ) (hθ:3/4≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:1≤Y) (hP:(q:ℝ)*(1+|s.im|)≤Y^2) (v:ℝ):
@@ -27093,8 +27628,8 @@ noncomputable def dM {q:ℕ} (χ:DirichletCharacter ℂ q)
   (B:Finset ℕ) (a:ℕ→ℂ) (s:ℂ):ℂ:=
  ∑n∈B,χ (n:ZMod q)*a n*(n:ℂ)^(-s)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ag9 {q:ℕ} (χ:DirichletCharacter ℂ q)
   (X:ℕ) (a:ℕ→ℂ) (s:ℂ):
   dM χ (Icc 1 X) a s=
@@ -27112,12 +27647,16 @@ theorem ag9 {q:ℕ} (χ:DirichletCharacter ℂ q)
   ·have hnX:X<n:=by simp only [mem_Icc,not_and_or] at hn; omega
    rw [LSeries.term_of_ne_zero hn0]
    simp [nT,not_le.mpr hnX]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aD2 (x:ℝ) (hx:0<x) (w:ℂ):
   conj ((x:ℂ)^w)=(x:ℂ)^(conj w):=by
  have ha:(x:ℂ).arg≠Real.pi:=by
   rw [Complex.arg_ofReal_of_nonneg hx.le]
   exact Real.pi_pos.ne
  simpa only [Complex.conj_ofReal] using (Complex.cpow_conj (x:ℂ) w ha).symm
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aNG {q:ℕ} (χ:DirichletCharacter ℂ q) (n:ZMod q):
   conj (χ⁻¹ n)=χ n:=by
  rw [← MulChar.star_eq_inv,MulChar.star_apply,RCLike.star_def,conj_conj]
@@ -27125,17 +27664,21 @@ end
 noncomputable def f9 (θ Z v:ℝ) (n:ℕ):ℂ:=
  (((n:ℝ)/Z:ℝ):ℂ)^(((θ-1/2:ℝ):ℂ)-(v:ℂ)*I)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem akS (θ Z v:ℝ) (hZ:0<Z) (n:ℕ) (hn:0<n):
   ‖f9 θ Z v n‖ =((n:ℝ)/Z)^(θ-1/2):=by
  unfold f9
  rw [Complex.norm_cpow_eq_rpow_re_of_pos (div_pos (Nat.cast_pos.mpr hn) hZ)]
  simp
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahO (θ Z v:ℝ) (hθ:1/2≤θ) (hZ:0<Z)
   (n:ℕ) (hn:0<n) (hnZ:(n:ℝ)≤Z): ‖f9 θ Z v n‖ ≤1:=by
  rw [akS θ Z v hZ n hn]
  exact Real.rpow_le_one (by positivity) ((div_le_one hZ).mpr hnZ) (by linarith)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aDB (θ Z v:ℝ) (hθ:1/2≤θ) (hZ:0<Z)
   (K n:ℕ) (hn:0<n) (hnK:n≤K):
   ‖f9 θ Z v n‖ ≤((K:ℝ)/Z)^(θ-1/2):=by
@@ -27143,6 +27686,8 @@ theorem aDB (θ Z v:ℝ) (hθ:1/2≤θ) (hZ:0<Z)
  apply Real.rpow_le_rpow (by positivity)
   (div_le_div_of_nonneg_right (by exact_mod_cast hnK) hZ.le)
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aA7 {q:ℕ} (χ:DirichletCharacter ℂ q)
   (B:Finset ℕ) (hB:∀n∈B,0<n) (θ Z v:ℝ) (hZ:0<Z) (s:ℂ):
   conj (dM χ⁻¹ B (fun _=>1)
@@ -27173,6 +27718,8 @@ theorem aA7 {q:ℕ} (χ:DirichletCharacter ℂ q)
  change χ (n:ZMod q)*((n:ℂ)^(-s)*(n:ℂ)^β)=
   (Z:ℂ)^β*(χ (n:ZMod q)*((n:ℂ)^β/(Z:ℂ)^β)*(n:ℂ)^(-s))
  field_simp [hZn]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aij {q:ℕ} (χ:DirichletCharacter ℂ q)
   (B:Finset ℕ) (hB:∀n∈B,0<n) (θ Z v:ℝ) (hZ:0<Z) (s:ℂ):
   ‖dM χ⁻¹ B (fun _=>1)
@@ -27197,8 +27744,8 @@ noncomputable def kH (χ:DirichletCharacter ℂ q)
 noncomputable def rF (q:ℕ) (s:ℂ) (Y:ℝ):ℝ:=
  4*((q:ℝ)*(1+|s.im|))*Real.exp (9/4)*Y^(-s.re-1/2)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem J6 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1)
   (Y:ℝ) (hY:0<Y) (n:ℕ) (v:ℝ):
@@ -27252,6 +27799,8 @@ theorem J6 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   _≤ ‖LSeries.term (fun m:ℕ=>χ⁻¹ (m:ZMod q)) (3/2) n‖*
     ((4*((q:ℝ)*(1+|s.im|))*(1+|v|))*(Real.exp (9/4)*Real.exp (-(v^2)))*Y^c):=by gcongr
   _=_:=by dsimp [c,rF]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Jx (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1)
   (Y:ℝ) (hY:0<Y) (n:ℕ):Integrable (kH χ s Y n):=by
@@ -27292,6 +27841,8 @@ theorem Jx (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   ‖LSeries.term (fun m:ℕ=>χ⁻¹ (m:ZMod q)) (3/2) n‖)).mono' hc.aestronglyMeasurable
  filter_upwards with v
  exact J6 χ hχ s hs hs' Y hY n v
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem R5 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:0<Y):
   Summable (fun n:ℕ=>∫ v:ℝ, ‖kH χ s Y n v‖):=by
@@ -27310,6 +27861,8 @@ theorem R5 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   rwa [integral_const_mul] at h
  exact ((hsum.mul_left (rF q s Y)).mul_right _).of_nonneg_of_le
   (fun n=>integral_nonneg (fun _=>norm_nonneg _)) hb
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aik (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ):
   (2*(Real.pi:ℂ))⁻¹*(∫ v:ℝ,kH χ s Y n v)=
@@ -27342,6 +27895,8 @@ theorem aik (χ:DirichletCharacter ℂ q)
  rw [integral_const_mul]
  unfold pC
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem U4 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:0<Y):
   (2*(Real.pi:ℂ))⁻¹*(∫ v:ℝ,
@@ -27373,6 +27928,8 @@ theorem U4 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
  apply tsum_congr
  intro n
  exact aik χ s Y hY n
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem VY (χ:PrimitiveComplexCharacter)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:1≤Y):
   letI:NeZero χ.modulus:=⟨χ.positive.ne'⟩
@@ -27390,8 +27947,8 @@ namespace dK
 open Complex DirichletCharacter Finset Filter MeasureTheory
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Ur (f:ℕ→ℂ) (X:ℕ) (hX:0<X)
   (A r:ℝ) (hA:0≤A) (hr:2≤r)
   (hf:∀n:ℕ,X<n→ ‖f n‖ ≤A*(n:ℝ)^(-r)):
@@ -27410,6 +27967,8 @@ theorem Ur (f:ℕ→ℂ) (X:ℕ) (hX:0<X)
     Summable.tsum_le_tsum (fun n=>hf (n+X+1) (by omega)) hn (hp.mul_left A)
    _=A*∑' n:ℕ,((n+X+1:ℕ):ℝ)^(-r):=tsum_mul_left
    _≤_:=mul_le_mul_of_nonneg_left (aSd X hX r hr) hA
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem N5 (f:ℕ→ℂ) (X:ℕ) (hf:Summable f) (h0:f 0=0):
   (∑n∈Icc 1 X,f n)+(∑' n:ℕ,f (n+X+1))=∑' n:ℕ,f n:=by
  have hr:insert 0 (Icc 1 X)=range (X+1):=by
@@ -27419,6 +27978,8 @@ theorem N5 (f:ℕ→ℂ) (X:ℕ) (hf:Summable f) (h0:f 0=0):
  have h:=hf.sum_add_tsum_nat_add (X+1)
  rw [← hr,sum_insert (by simp),h0,zero_add] at h
  simpa only [Nat.add_assoc] using h
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem TZ {q:ℕ} (χ:DirichletCharacter ℂ q)
   (s:ℂ) (n:ℕ) (hn:0<n):
   ‖LSeries.term (fun m:ℕ=>χ (m:ZMod q)) s n‖ ≤(n:ℝ)^(-s.re):=by
@@ -27434,8 +27995,8 @@ noncomputable def l4 {q:ℕ} (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y:ℝ) (n:ℕ):ℂ:=
  LSeries.term (fun m:ℕ=>χ (m:ZMod q)) s n*jA ((n:ℝ)/Y)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aHB {q:ℕ} (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y:ℝ) (hY:0<Y) (J n:ℕ) (hJ:0<J) (hn:0<n):
   ‖l4 χ s Y n‖ ≤e5 J*Y^(J:ℝ)*(n:ℝ)^(-(s.re+(J:ℝ))):=by
@@ -27453,6 +28014,8 @@ theorem aHB {q:ℕ} (χ:DirichletCharacter ℂ q)
     (Real.rpow_nonneg hnr.le _)
   _=(e5 J*Y^(J:ℝ))*((n:ℝ)^(-s.re)*(n:ℝ)^(-(J:ℝ))):=by ring
   _=_:=by rw [← Real.rpow_add hnr]; congr 2; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem alw {q:ℕ} (χ:DirichletCharacter ℂ q)
   (s:ℂ) (hs:0≤ s.re) (Y:ℝ) (hY:0<Y)
   (X J:ℕ) (hX:0<X) (hJ:2≤J):
@@ -27471,8 +28034,8 @@ variable {q:ℕ} [NeZero q]
 noncomputable def iJ (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (n:ℕ):ℂ:=
  LSeries.term (fun m:ℕ=>χ⁻¹ (m:ZMod q)) (1-s) n*pC χ s ((n:ℝ)*Y)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Xd (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:0<Y)
   (J n:ℕ) (hn:0<n):
@@ -27495,6 +28058,8 @@ theorem Xd (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   _=(jo J*((q:ℝ)*(1+|s.im|))^(J+1)*Y^(-(J:ℝ)-s.re-1/2))*
     ((n:ℝ)^(s.re-1)*(n:ℝ)^(-(J:ℝ)-s.re-1/2)):=by ring
   _=_:=by rw [← Real.rpow_add hnr]; congr 2; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aak (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:3/4≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:0<Y)
   (X J:ℕ) (hX:0<X) (hJ:1≤J):
@@ -27515,8 +28080,8 @@ open Complex DirichletCharacter Finset OAI.Ostmann
 open scoped BigOperators Classical
 variable {q:ℕ}
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem agD (χ:DirichletCharacter ℂ q)
   (N:ℕ) (a:ℕ→ℂ) (s:ℂ) (hs:0≤ s.re) (C:ℝ) (hC:0≤C)
   (ha:∀n∈Icc 1 N, ‖a n‖ ≤C*(n.divisors.card:ℝ)):
@@ -27544,6 +28109,8 @@ theorem agD (χ:DirichletCharacter ℂ q)
       hp (norm_nonneg _) (by positivity)
     _≤C*N:=by nlinarith
   _=_:=by simp; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem as6 (K X:ℕ) (w:ℕ→ℂ)
   (hKX:K≤X) (n:ℕ) (hn:n≤K):
   fF K X w n=fF K K w n:=by
@@ -27552,12 +28119,16 @@ theorem as6 (K X:ℕ) (w:ℕ→ℂ)
  intro p hp
  have hpK:p.2≤K:=(Nat.divisor_le (Nat.snd_mem_divisors_of_mem_antidiagonal hp)).trans hn
  simp only [nT,if_pos hpK,if_pos (hpK.trans hKX)]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem awK (K X:ℕ) (w:ℕ→ℂ)
   (hKX:K≤X) (E:ℝ) (hE:0≤E)
   (hw:∀m:ℕ,0< m→m≤K→ ‖w m‖ ≤E) (n:ℕ) (hn:n≤K):
   ‖fF K X w n‖ ≤E*(n.divisors.card:ℝ):=by
  rw [as6 K X w hKX n hn]
  exact UC K K w E hE hw n
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Ny (χ:DirichletCharacter ℂ q)
   (K X:ℕ) (w:ℕ→ℂ) (s:ℂ):
   V1u K χ s*dM χ (Icc 1 X) w s=
@@ -27568,6 +28139,8 @@ theorem Ny (χ:DirichletCharacter ℂ q)
  by_cases hn:n≤K*X
  ·simp only [nT,if_pos hn]
  ·simp only [nT,if_neg hn,axX K X w n (by omega),mul_zero]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ax3 (χ:DirichletCharacter ℂ q)
   (K:ℕ) (hK:1≤K) (s:ℂ):
   dM χ (Icc 1 K) (fun n=>if n=1 then 1 else 0) s=1:=by
@@ -27575,6 +28148,8 @@ theorem ax3 (χ:DirichletCharacter ℂ q)
  simp only [mul_ite,mul_one,mul_zero,ite_mul,zero_mul]
  rw [sum_ite_eq']
  simp [mem_Icc,hK]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem awL (χ:DirichletCharacter ℂ q)
   (K X:ℕ) (hK:1≤K) (hKX:K≤X) (w:ℕ→ℂ)
   (s:ℂ) (hs:0≤ s.re) (E:ℝ) (hE:0≤E)
@@ -27598,6 +28173,8 @@ theorem awL (χ:DirichletCharacter ℂ q)
  apply agD χ K _ s hs E hE
  intro n hn
  exact as5 K X w E hE n (mem_Icc.mp hn).2 hKX hw
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahh (χ:DirichletCharacter ℂ q)
   (K X J:ℕ) (hK:1≤K) (hKX:K≤X) (hJ:0<J)
   (s:ℂ) (hs:0≤ s.re) (Y:ℝ) (hY:0<Y):
@@ -27611,6 +28188,8 @@ theorem ahh (χ:DirichletCharacter ℂ q)
  have hf:=(Tj J hJr ((m:ℝ)/Y) (by positivity)).2
  apply hf.trans
  gcongr
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ail (χ:DirichletCharacter ℂ q)
   (K X:ℕ) (hKX:K≤X) (hX:0<X) (θ v:ℝ) (hθ:1/2≤θ)
   (s:ℂ) (hs:0≤ s.re):
@@ -27681,8 +28260,8 @@ noncomputable def m4 (χ:DirichletCharacter ℂ q)
   dM χ⁻¹ (Finset.Icc 1 X) (fun _=>1)
    (1-s-((fG θ s:ℂ)+(v:ℂ)*I))
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Yo (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (θ:ℝ) (s:ℂ) (hθ:3/4≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:0<Y) (X:ℕ):
@@ -27722,6 +28301,8 @@ theorem Yo (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   _=(2*(Real.pi:ℂ))⁻¹*∫ v:ℝ,∑n∈Finset.Icc 1 X,F n v:=by
    rw [← mul_sum,integral_finsetSum _ hi]
   _=_:=by simp_rw [hp]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem sI:Integrable (fun v:ℝ=>Real.exp (-|v|)):=by
  have hi:IntegrableOn (fun v:ℝ=>Real.exp (-|v|)) (Iic 0):=by
   apply (integrableOn_exp_Iic 0).congr_fun _ measurableSet_Iic
@@ -27735,6 +28316,8 @@ theorem sI:Integrable (fun v:ℝ=>Real.exp (-|v|)):=by
   rw [abs_of_pos (show 0<v from hv)]
  have h:=hi.union hj
  simpa only [Iic_union_Ioi,integrableOn_univ] using h
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem OD:(∫ v:ℝ,Real.exp (-|v|))=2:=by
  have h:=integral_add_compl (s:=Iic (0:ℝ)) measurableSet_Iic sI
  rw [compl_Iic] at h
@@ -27747,6 +28330,8 @@ theorem OD:(∫ v:ℝ,Real.exp (-|v|))=2:=by
  rw [hi,hj] at h
  norm_num at h
  exact h.symm
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem SO (χ:DirichletCharacter ℂ q)
   (B:Finset ℕ) (hB:∀n∈B,0<n) (a:ℕ→ℂ) (s:ℂ) (hs:0≤ s.re)
   (C:ℝ) (hC:0≤C) (ha:∀n∈B, ‖a n‖ ≤C):
@@ -27768,6 +28353,8 @@ theorem SO (χ:DirichletCharacter ℂ q)
    exact (mul_le_mul (mul_le_mul (χ.norm_le_one _) (ha n hn)
     (norm_nonneg _) zero_le_one) hp (norm_nonneg _) (by simpa using hC)).trans_eq (by ring)
   _=_:=by simp; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem auK (χ:DirichletCharacter ℂ q)
   (B:Finset ℕ) (hB:∀n∈B,0<n) (θ Z:ℝ) (hZ:0<Z) (s:ℂ):
   Continuous (fun v:ℝ=>dM χ B (f9 θ Z v) s):=by
@@ -27778,6 +28365,8 @@ theorem auK (χ:DirichletCharacter ℂ q)
  have hbase:(((n:ℝ)/Z:ℝ):ℂ)≠0:=Complex.ofReal_ne_zero.mpr (div_pos hnp hZ).ne'
  unfold f9
  fun_prop (disch:=exact Or.inl hbase)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem M7 (χ:DirichletCharacter ℂ q)
   (X:ℕ) (hX:0<X) (θ:ℝ) (hθ:1/2≤θ) (s:ℂ) (hs:0≤ s.re):
   Integrable (fun v:ℝ=>
@@ -27803,8 +28392,8 @@ open aZ
 open scoped BigOperators Classical Topology
 variable {q:ℕ} [NeZero q]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ajy (χ:DirichletCharacter ℂ q) (θ:ℝ)
   (s:ℂ) (Y:ℝ) (hY:0<Y) (X:ℕ) (v:ℝ):
   m4 χ θ s Y X v=
@@ -27819,6 +28408,8 @@ theorem ajy (χ:DirichletCharacter ℂ q) (θ:ℝ)
  rw [← mul_div_assoc,Xf χ s _ Y hY n]
  simp only [LSeries.term_of_ne_zero hn0,mul_one,div_eq_mul_inv,← Complex.cpow_neg]
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem SY (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (θ:ℝ) (s:ℂ) (hθ:3/4≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:0<Y) (X:ℕ):Integrable (m4 χ θ s Y X):=by
@@ -27835,14 +28426,16 @@ theorem SY (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
 end
 noncomputable def fO:ℝ:= ‖(2*(Real.pi:ℂ))⁻¹‖*(4*Real.exp 3)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem yI:0<fO:=by
  have hp:(2*(Real.pi:ℂ))≠0:=
   mul_ne_zero (by norm_num) (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero)
  have hn:0< ‖(2*(Real.pi:ℂ))⁻¹‖ :=norm_pos_iff.mpr (inv_ne_zero hp)
  unfold fO
  positivity
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Uj (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (θ:ℝ) (s:ℂ) (hθ:3/4≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:1≤Y) (hP:(q:ℝ)*(1+|s.im|)≤Y^2)
@@ -27895,8 +28488,8 @@ open Complex DirichletCharacter Finset Filter MeasureTheory OAI.Ostmann
 open scoped BigOperators Classical Topology
 variable {q:ℕ} [NeZero q]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ai7 (K X:ℕ) (Y:ℝ) (hY:0<Y) (n:ℕ):
   ‖fF K X (fun m=>jA ((m:ℝ)/Y)) n‖ ≤
    (1+e5 1)*(n.divisors.card:ℝ):=by
@@ -27904,12 +28497,16 @@ theorem ai7 (K X:ℕ) (Y:ℝ) (hY:0<Y) (n:ℕ):
  apply UC K X _ _ (by positivity) _ n
  intro m hm hmX
  exact axj ((m:ℝ)/Y) (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Xc (K X:ℕ) (hX:0<X) (θ v:ℝ) (hθ:1/2≤θ) (n:ℕ):
   ‖fF K X (f9 θ X v) n‖ ≤n.divisors.card:=by
  have hXr:(0:ℝ)<X:=Nat.cast_pos.mpr hX
  have h:=UC K X (f9 θ X v) 1 zero_le_one
   (fun m hm hmX=>ahO θ X v hθ hXr m hm (by exact_mod_cast hmX)) n
  simpa only [one_mul] using h
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem TQ (K X:ℕ) (hX:0<X) (θ:ℝ) (n:ℕ):
   Continuous (fun v:ℝ=>fF K X (f9 θ X v) n):=by
  have hXr:(0:ℝ)<X:=Nat.cast_pos.mpr hX
@@ -27926,6 +28523,8 @@ theorem TQ (K X:ℕ) (hX:0<X) (θ:ℝ) (n:ℕ):
   exact (he.const_cpow (Or.inl hb)).const_mul (V84 K p.1)
  ·simp only [mul_zero]
   exact continuous_const
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem asR (χ:DirichletCharacter ℂ q)
   (B:Finset ℕ) (hB:∀n∈B,0<n) (a:ℝ→ℕ→ℂ)
   (hc:∀n∈B,Continuous (fun v:ℝ=>a v n))
@@ -27945,6 +28544,8 @@ theorem asR (χ:DirichletCharacter ℂ q)
  rw [Real.norm_eq_abs,abs_of_nonneg (mul_nonneg (norm_nonneg _) (Real.exp_nonneg _))]
  exact mul_le_mul_of_nonneg_right (SO χ B hB (a v) s hs C hC (ha v))
   (Real.exp_nonneg _)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahs (χ:DirichletCharacter ℂ q)
   (K X:ℕ) (hX:0<X) (θ:ℝ) (hθ:1/2≤θ) (s:ℂ) (hs:0≤ s.re):
   Integrable (fun v:ℝ=>
@@ -28021,8 +28622,8 @@ namespace dK
 open Complex DirichletCharacter Finset Filter MeasureTheory OAI.Ostmann
 open scoped BigOperators Classical Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem alm (low short head Jg LZ:ℂ)
   (h:low+short=head+Jg-LZ):
   (1:ℝ)≤ ‖short‖+‖head‖+‖Jg‖+‖LZ‖+‖low-1‖ :=by
@@ -28036,6 +28637,8 @@ theorem alm (low short head Jg LZ:ℂ)
  have h4:=norm_add_le head Jg
  rw [← hlow] at h2
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ajt {q:ℕ} (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y:ℝ) (X:ℕ):
   (∑n∈Icc 1 X,l4 χ s Y n)=
@@ -28047,6 +28650,8 @@ theorem ajt {q:ℕ} (χ:DirichletCharacter ℂ q)
  unfold l4
  simp only [LSeries.term_of_ne_zero hn0,div_eq_mul_inv,← Complex.cpow_neg]
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Se (χ:PrimitiveComplexCharacter)
   (θ:ℝ) (s:ℂ) (hz:χ.L s=0) (hθ:3/4≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:1≤Y) (hP:(χ.modulus:ℝ)*(1+|s.im|)≤Y^2)
@@ -28118,8 +28723,8 @@ namespace dK
 open Filter
 open scoped Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayY (t κ:ℝ) (hκ:0<κ)
   (ht:0<t) (aq3:κ/4≤t) (aq2:t≤3/5):
   ∃k:ℕ,1≤k∧k≤Nat.ceil (4/κ)+2∧
@@ -28139,6 +28744,8 @@ theorem ayY (t κ:ℝ) (hκ:0<κ)
   have hkc:k≤Nat.ceil (4/κ):=Nat.ceil_mono hd
   exact ⟨k,hkpos,by omega,hlo,hhi⟩
  ·refine ⟨2,by norm_num,by omega,?_,?_⟩ <;> norm_num <;> linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aio (D M κ:ℝ) (hD:1<D) (hM:1<M) (hκ:0<κ)
   (hlo:D^(κ/4)≤M) (hhi:M≤D^(3/5:ℝ)):
   ∃k:ℕ,1≤k∧k≤Nat.ceil (4/κ)+2∧
@@ -28170,6 +28777,8 @@ theorem aio (D M κ:ℝ) (hD:1<D) (hM:1<M) (hκ:0<κ)
   exact Real.rpow_le_rpow_of_exponent_le hD.le hkl
  ·rw [he]
   exact Real.rpow_le_rpow_of_exponent_le hD.le hku
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aDN (D N σ:ℝ) (hD:1≤D)
   (hσ:3/4≤σ) (hσ':σ≤1)
   (hNlo:D^(4/5:ℝ)≤N) (hNhi:N≤D^(6/5:ℝ)):
@@ -28197,23 +28806,29 @@ namespace dK
 open Filter
 open scoped Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem apb (P C a b:ℝ) (hP:0<P) (hC:0≤C):
   (C*P^a)^b=C^b*P^(a*b):=by
  rw [Real.mul_rpow hC (Real.rpow_nonneg hP.le _),← Real.rpow_mul hP.le]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem GZ (P C a b r:ℝ) (hP:0<P) (hC:0≤C):
   (C*P^a/P^b)^r=C^r*P^((a-b)*r):=by
  have he:C*P^a/P^b=C*P^(a-b):=by
   rw [Real.rpow_sub hP]
   ring
  rw [he,apb P C (a-b) r hP hC]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem O2 (P a:ℝ) (hP:0<P):
   (2*P^a)^2=4*P^(2*a):=by
  calc
   _=(2*P^a)^(2:ℝ):=by simp
   _=(2:ℝ)^(2:ℝ)*P^(a*2):=apb P 2 a 2 hP (by norm_num)
   _=_:=by norm_num; rw [mul_comm a 2]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem TK (P K κ:ℝ) (J:ℕ)
   (hP:1≤P) (hK:0≤K) (hKu:K≤2*P^κ) (hκ:κ≤1/100) (hJ:2≤J):
   (e5 J*(K/P^(1/2:ℝ))^(J:ℝ))*K^2≤
@@ -28236,6 +28851,8 @@ theorem TK (P K κ:ℝ) (J:ℕ)
     Real.rpow_add hPpos]
    ring
   _≤_:=mul_le_mul_of_nonneg_left (Real.rpow_le_rpow_of_exponent_le hP he) (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem S9 (P K X κ δ σ:ℝ) (J:ℕ)
   (hP:1≤P) (hK:0≤K) (hKu:K≤2*P^κ)
   (hX:P^(1/2+δ)≤X) (hκ:κ≤1/100) (hδ:0≤δ) (hδ':δ≤1/100)
@@ -28268,6 +28885,8 @@ theorem S9 (P K X κ δ σ:ℝ) (J:ℕ)
    rw [Real.rpow_add hPpos,Real.rpow_add hPpos]
    ring
   _≤_:=mul_le_mul_of_nonneg_left (Real.rpow_le_rpow_of_exponent_le hP he) (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Ud (P K X T κ δ σ:ℝ) (J:ℕ)
   (hP:1≤P) (hK:0≤K) (hKu:K≤2*P^κ)
   (hX:P^(1/2+δ)≤X) (hT:0≤T) (hTP:T≤P)
@@ -28309,12 +28928,14 @@ namespace dK
 open Filter
 open scoped Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ank (K X Y r:ℝ) (hK:0≤K) (hX:0<X) (hY:0<Y):
   Y^(-r)*X^r*(K/X)^r=(K/Y)^r:=by
  rw [Real.div_rpow hK hX.le,Real.div_rpow hK hY.le,Real.rpow_neg hY.le]
  field_simp [ne_of_gt (Real.rpow_pos_of_pos hX r)]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem U5 (P K X κ θ:ℝ)
   (hP:1≤P) (hK:0<K) (hX:0<X) (hKu:K≤2*P^κ)
   (hKY:K≤P^(1/2:ℝ)) (hκ:κ≤1/100) (hθ:3/4≤θ):
@@ -28347,6 +28968,8 @@ theorem U5 (P K X κ θ:ℝ)
     Real.rpow_add hPpos]
    ring
   _≤_:=mul_le_mul_of_nonneg_left (Real.rpow_le_rpow_of_exponent_le hP hex) (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Xj (P X δ θ:ℝ) (hP:1≤P)
   (hX:P^(1/2:ℝ)≤X) (hXu:X≤2*P^(1/2+δ)) (hδ:0≤δ)
   (hθ:1/2≤θ) (hθ':θ≤1):
@@ -28383,8 +29006,8 @@ namespace dK
 open Filter MeasureTheory OAI.Ostmann
 open scoped Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem qP (P κ:ℝ) (hP:1≤P) (hκ:0≤κ):
   1≤Nat.ceil (P^κ)∧P^κ≤(Nat.ceil (P^κ):ℝ)∧
    (Nat.ceil (P^κ):ℝ)≤2*P^κ:=by
@@ -28393,10 +29016,14 @@ theorem qP (P κ:ℝ) (hP:1≤P) (hκ:0≤κ):
  have h1:=Real.one_le_rpow hP hκ
  have hc:=Nat.ceil_lt_add_one hp.le
  exact ⟨Nat.ceil_pos.mpr hp,Nat.le_ceil _,by linarith⟩
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem an2 (P:ℝ) (hP:0≤P):
   (P^(1/2:ℝ))^2=P:=by
  rw [← Real.rpow_mul_natCast hP]
  norm_num
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem agq (κ:ℝ) (hκ:0≤κ) (hκ':κ≤1/100):
   ∀ᶠ P:ℝ in atTop,(Nat.ceil (P^κ):ℝ)≤P^(1/2:ℝ):=by
  have hp:0<(1/2:ℝ)-κ:=by linarith
@@ -28407,6 +29034,8 @@ theorem agq (κ:ℝ) (hκ:0≤κ) (hκ':κ≤1/100):
   _≤2*P^κ:=(qP P κ hP hκ).2.2
   _≤P^(1/2-κ)*P^κ:=mul_le_mul_of_nonneg_right hlarge (by positivity)
   _=_:=by rw [← Real.rpow_add hPpos]; congr 1; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem SZ (κ δ:ℝ)
   (hκ:0<κ) (hκ':κ≤1/100) (hδ:0<δ) (hδ':δ≤1/100):
   ∀ᶠ P:ℝ in atTop,
@@ -28489,8 +29118,8 @@ noncomputable def mJ (M:ℕ) (a:ℕ→ℂ):ℕ→ℕ→ℂ
  | k+1=>xO (jK M k) (Ioc M (2*M))
    (mJ M a k) a
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aIb (M k:ℕ) (hM:1≤M)
   (n m:ℕ) (hn:n∈jK M k) (hm:m∈Ioc M (2*M)):
   n*m∈jK M (k+1):=by
@@ -28505,6 +29134,8 @@ theorem aIb (M k:ℕ) (hM:1≤M)
  ·change n*m≤(2*M)^(k+1+1)
   rw [pow_succ]
   exact Nat.mul_le_mul hn'.2 hm'.2
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ah5 {q:ℕ} (χ:DirichletCharacter ℂ q)
   (M:ℕ) (hM:1≤M) (a:ℕ→ℂ) (s:ℂ) (k:ℕ):
   (aP χ (Ioc M (2*M)) a s)^(k+1)=
@@ -28516,9 +29147,13 @@ theorem ah5 {q:ℕ} (χ:DirichletCharacter ℂ q)
   exact VJ χ (jK M k) (Ioc M (2*M))
    (jK M (k+1)) (mJ M a k) a s
    (fun n hn m hm=>aIb M k hM n m hn hm)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ai8 (d n:ℕ) (hn:n≠0) (hd:d∣n):
   (d.divisors.card:ℝ)≤n.divisors.card:=by
  exact_mod_cast card_le_card (Nat.divisors_subset_of_dvd hn hd)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem atL (M:ℕ) (hM:1≤M)
   (a:ℕ→ℂ) (B:ℝ) (hB:1≤B)
   (ha:∀n∈Ioc M (2*M), ‖a n‖ ≤B*(n.divisors.card:ℝ)):
@@ -28561,6 +29196,8 @@ theorem atL (M:ℕ) (hM:1≤M)
    _=(F.card:ℝ)*(B^(k+2)*(n.divisors.card:ℝ)^(2*k+2)):=by simp
    _≤(n.divisors.card:ℝ)*(B^(k+2)*(n.divisors.card:ℝ)^(2*k+2)):=by gcongr
    _=_:=by rw [show 2*(k+1)+1=(2*k+2)+1 by omega,pow_succ]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahj (J:ℕ) (B ε:ℝ) (hB:1≤B) (hε:0<ε):
   ∃C:ℝ,1≤C∧∀M:ℕ,1≤M→∀a:ℕ→ℂ,
    (∀n∈Ioc M (2*M), ‖a n‖ ≤B*(n.divisors.card:ℝ))→
@@ -28601,12 +29238,14 @@ namespace gW
 open Complex Finset OAI.Ostmann aZ
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aOf (x y:ℂ):
   ‖x+y‖^2≤2*‖x‖^2+2*‖y‖^2:=by
  have h:=pow_le_pow_left₀ (norm_nonneg _) (norm_add_le x y) 2
  nlinarith [sq_nonneg (‖x‖-‖y‖)]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aIw (N D R ε:ℝ) (hN:0≤N) (hD:0≤D)
   (hR:0≤R) (hε:0≤ε) (hε':ε≤1/2):
   ((2*N)*D)^(2*ε)*((2*N)+((2*N)*D)^(1/3:ℝ)*R^(2/3:ℝ))≤
@@ -28623,6 +29262,8 @@ theorem aIw (N D R ε:ℝ) (hN:0≤N) (hD:0≤D)
  calc
   _≤(2*(N*D)^(2*ε))*(2*N+(2*(N*D)^(1/3:ℝ))*R^(2/3:ℝ)):=by gcongr
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem asC (ε D C:ℝ)
   (hε:0<ε) (hε1:ε≤1/2) (hD:0≤D) (hC:0<C)
   {ι:Type} (R:Finset ι) (c:ι→PrimitiveComplexCharacter) (t β:ι→ℝ) (θ:ℝ)
@@ -28808,8 +29449,8 @@ namespace gW
 open Finset OAI.Ostmann dK aZ
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aIH (a:ℕ→ℂ) (n:ℕ) (hn:0<n)
   (C η θ:ℝ) (hC:0≤C) (ha: ‖a n‖ ≤C*(n:ℝ)^η):
   ‖V6 a θ n‖^2≤C^2*(n:ℝ)^(2*η-2*θ):=by
@@ -28823,6 +29464,8 @@ theorem aIH (a:ℕ→ℂ) (n:ℕ) (hn:0<n)
    push_cast
    rw [show η*2=2*η by ring,show θ*2=2*θ by ring,Real.rpow_sub hnpos]
    ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aiD (N W:ℕ) (hN:1≤N) (A:Finset ℕ)
   (hA:A ⊆ Ioc N (W*N)) (a:ℕ→ℂ) (C η θ:ℝ)
   (hC:0≤C) (hηθ:η≤θ)
@@ -28847,6 +29490,8 @@ theorem aiD (N W:ℕ) (hN:1≤N) (A:Finset ℕ)
   _=_:=by
    rw [show 1+2*η-2*θ=1+(2*η-2*θ) by ring,Real.rpow_add hNpos,Real.rpow_one]
    ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem U7 (J:ℕ) (B ε:ℝ) (hB:1≤B)
   (hε:0<ε) (hε':ε≤1/4):
   ∃C:ℝ,1≤C∧∀M:ℕ,1≤M→∀a:ℕ→ℂ,
@@ -28940,8 +29585,8 @@ end gW
 namespace gW
 open dK
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aA6 (R A B:ℝ) (hR:0≤R) (hA:0≤A) (hB:0≤B)
   (h:R≤A+B*R^(2/3:ℝ)):R≤2*A+8*B^3:=by
  by_cases hs:R≤2*A
@@ -28957,6 +29602,8 @@ theorem aA6 (R A B:ℝ) (hR:0≤R) (hA:0≤A) (hB:0≤B)
    apply (mul_le_mul_iff_right₀ (sq_pos_of_pos hRpos)).mp
    nlinarith only [hp]
   exact hcancel.trans (le_add_of_nonneg_left (by positivity))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aIL (N D θ:ℝ) (hN:0<N) (hD:0≤D):
   ((N*D)^(1/3:ℝ)*N^(1-2*θ))^3=D*N^(4-6*θ):=by
  rw [mul_pow,← Real.rpow_mul_natCast (mul_nonneg hN.le hD),
@@ -28967,6 +29614,8 @@ theorem aIL (N D θ:ℝ) (hN:0<N) (hD:0≤D):
  calc
   _=D*(N^((1:ℝ))*N^(3-6*θ)):=by rw [Real.rpow_one]; ring
   _=_:=by rw [← Real.rpow_add hN]; congr 2; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aMS (R D N S θ:ℝ) (hR:0≤R) (hD:1≤D)
   (hS:1≤S) (hθ:3/4≤θ) (hθ1:θ≤1)
   (hNlo:D^(4/5:ℝ)≤N) (hNhi:N≤D^(6/5:ℝ))
@@ -29014,8 +29663,8 @@ theorem aJM {E:Type*} [AddCommMonoid E]
    omega
   rw [he,← Ioc_union_Ioc_eq_Ioc hK hstep,sum_union hd,ih,sum_range_succ]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem RV {q:ℕ} (χ:DirichletCharacter ℂ q)
   (A:Finset ℕ) (a:ℕ→ℂ) (s:ℂ):
   dM χ A a s=aP χ A a s:=by
@@ -29023,6 +29672,8 @@ theorem RV {q:ℕ} (χ:DirichletCharacter ℂ q)
  apply sum_congr rfl
  intro n hn
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem atH {q:ℕ} (χ:DirichletCharacter ℂ q)
   (K U V:ℕ) (hUV:U≤V) (a:ℕ→ℂ) (s:ℂ):
   aP χ (Ioc K U) a s=
@@ -29039,6 +29690,8 @@ theorem atH {q:ℕ} (χ:DirichletCharacter ℂ q)
     have hn':=mem_Ioc.mp hn
     have hU:¬ n≤U:=by intro hh; exact hnu (mem_Ioc.mpr ⟨hn'.1,hh⟩)
     simp [j6,hU])
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ag8 {q:ℕ} (χ:DirichletCharacter ℂ q)
   (K X H:ℕ) (hXH:X≤2^H) (a:ℕ→ℂ) (s:ℂ):
   jt χ K X a s=
@@ -29048,6 +29701,8 @@ theorem ag8 {q:ℕ} (χ:DirichletCharacter ℂ q)
  rw [RV,
   atH χ K (K*X) (2^H*K) (by nlinarith) a s]
  exact aJM K H (fun n=>j6 (K*X) a n*χ (n:ZMod q)*(n:ℂ)^(-s))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem JQ (U:ℕ) (a:ℕ→ℂ) (B:ℝ) (hB:0≤B)
   (ha:∀n, ‖a n‖ ≤B*(n.divisors.card:ℝ)) (n:ℕ):
   ‖j6 U a n‖ ≤B*(n.divisors.card:ℝ):=by
@@ -29056,6 +29711,8 @@ theorem JQ (U:ℕ) (a:ℕ→ℂ) (B:ℝ) (hB:0≤B)
  ·exact ha n
  ·simp only [norm_zero]
   positivity
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem agE {q:ℕ} (χ:DirichletCharacter ℂ q)
   (M U:ℕ) (hUM:U≤M) (a:ℕ→ℂ) (s:ℂ):
   aP χ (Ioc M (2*M)) (j6 U a) s=0:=by
@@ -29098,8 +29755,8 @@ namespace gW
 open Filter dK
 open scoped Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aiN (a δ:ℝ) (ha:0≤a) (hδ:0<δ):
   ∀ᶠ D:ℝ in atTop,Nat.ceil (D^a)≤2^(Nat.ceil (D^δ)):=by
  have hlog2:0<Real.log 2:=Real.log_pos (by norm_num)
@@ -29123,6 +29780,8 @@ theorem aiN (a δ:ℝ) (ha:0≤a) (hδ:0<δ):
   (Real.log_le_log_iff (by positivity) (by positivity)).mp hlog
  have hc:=(qP D a hD ha).2.2
  exact_mod_cast hc.trans he
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahe (δ:ℝ) (hδ:0<δ):
   ∀ᶠ D:ℝ in atTop,
    (2+3*D^δ)*(Nat.ceil (D^δ):ℝ)*D^(-4*δ)<1/2:=by
@@ -29140,6 +29799,8 @@ theorem ahe (δ:ℝ) (hδ:0<δ):
    simp only [Real.rpow_add hDpos]
    ring
   _<_:=hsmall
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem agX (κ δ:ℝ) (hκ:0<κ) (hκ':κ≤1/100)
   (hδ:0<δ) (hδ':δ≤1/100):
   ∀ᶠ D:ℝ in atTop,
@@ -29162,8 +29823,8 @@ namespace gW
 open Complex Finset MeasureTheory OAI.Ostmann dK aZ
 open scoped BigOperators Classical Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Nb (χ:PrimitiveComplexCharacter)
   (A:Finset ℕ) (U:ℕ) (hA:A ⊆ Icc 1 U)
   (a:ℝ→ℕ→ℂ) (hc:∀n,Continuous (fun v=>a v n))
@@ -29186,6 +29847,8 @@ theorem Nb (χ:PrimitiveComplexCharacter)
   have hh:=(Nat.card_divisors_le_self n).trans (mem_Icc.mp (hA hn)).2
   exact_mod_cast hh
  exact (ha v n).trans (mul_le_mul_of_nonneg_left hd hB)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem SX (U:ℕ) (a:ℝ→ℕ→ℂ)
   (ha:∀n,Continuous (fun v=>a v n)) (n:ℕ):
   Continuous (fun v=>j6 U (a v) n):=by
@@ -29193,6 +29856,8 @@ theorem SX (U:ℕ) (a:ℝ→ℕ→ℂ)
  split_ifs
  ·exact ha n
  ·exact continuous_const
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem awI (χ:PrimitiveComplexCharacter)
   (K X H:ℕ) (hXH:X≤2^H) (a:ℝ→ℕ→ℂ)
   (hc:∀n,Continuous (fun v=>a v n))
@@ -29283,8 +29948,8 @@ noncomputable def Bz (C D N ε δ:ℝ) (J l:ℕ):ℝ:=
  (2*C*(N*D)^(2*ε)*(2+(Real.log ((2:ℝ)^(J+2)*N+1))^2)*N^(2*ε))/
   (D^(-4*δ))^(2*l)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aBA (R C D N ε δ θ:ℝ) (J l:ℕ)
   (hD:0<D) (hN:0<N)
   (h:R*(D^(-4*δ))^(2*l)≤
@@ -29307,6 +29972,8 @@ theorem aBA (R C D N ε δ θ:ℝ) (J l:ℕ)
  rw [he1,he2]
  unfold Bz
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ak3 (C D N ε δ η:ℝ) (J l:ℕ)
   (hC:0≤C) (hD:1≤D) (hN:1≤N) (hND:N≤D^2)
   (hε:0≤ε) (hεη:ε≤η/120) (hδ:0≤δ)
@@ -29686,9 +30353,11 @@ open Complex Finset Filter OAI.Ostmann aZ
 open scoped BigOperators Classical Topology
 noncomputable def d6:ℝ:=2*Real.pi+1
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem kO:1≤d6:=by dsimp [d6]; linarith [Real.pi_pos]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem OL (q Q:ℕ) (T t A:ℝ) (hq:q≤Q)
   (hT:0≤T) (ht: |t|≤T) (hA:(Q:ℝ)≤A):
   (q:ℝ)*(1+|2*Real.pi*t|)≤d6*(A*(T+1)):=by
@@ -29707,12 +30376,16 @@ theorem OL (q Q:ℕ) (T t A:ℝ) (hq:q≤Q)
    nlinarith
   _≤A*(d6*(T+1)):=mul_le_mul_of_nonneg_right hA (by positivity)
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aja (N:ℕ) (D E C L R ε:ℝ)
   (hD:0≤D) (hDE:D≤E) (hC:0≤C) (hL:0≤L) (hR:0≤R) (hε:0≤ε):
   C*((N:ℝ)*D)^(2*ε)*L*((N:ℝ)+((N:ℝ)*D)^(1/3:ℝ)*R^(2/3:ℝ))≤
    C*((N:ℝ)*E)^(2*ε)*L*((N:ℝ)+((N:ℝ)*E)^(1/3:ℝ)*R^(2/3:ℝ)):=by
  have hE:0≤E:=hD.trans hDE
  gcongr <;> positivity
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem avC (η:ℝ) (hη:0<η):
   ∃D₀:ℝ,1≤D₀∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    D₀≤d6*((Q:ℝ)^2*(T+1))→
@@ -29745,6 +30418,8 @@ theorem avC (η:ℝ) (hη:0<η):
    (aja N D (d6*D) C (2+(Real.log (2*N+1:ℕ))^2)
     (R.card:ℝ) ε hD hscale hC.le (by positivity) (Nat.cast_nonneg _) hε.le)
    (sum_nonneg fun _ _=>sq_nonneg _)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem adz (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    ∀{ι:Type} (R:Finset ι) (c:ι→PrimitiveComplexCharacter) (β t:ι→ℝ),
@@ -29800,8 +30475,8 @@ namespace gW
 open Complex Finset Filter OAI.Ostmann aZ
 open scoped BigOperators Classical Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem asv (η:ℝ) (hη:0<η):
   ∃D₀:ℝ,1≤D₀∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    D₀≤d6*((Q:ℝ)*(T+1))→
@@ -29832,6 +30507,8 @@ theorem asv (η:ℝ) (hη:0<η):
    (aja N D (d6*D) C (2+(Real.log (2*N+1:ℕ))^2)
     (R.card:ℝ) ε hD hscale hC.le (by positivity) (Nat.cast_nonneg _) hε.le)
    (sum_nonneg fun _ _=>sq_nonneg _)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Ws (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    ∀{ι:Type} (R:Finset ι) (c:ι→PrimitiveComplexCharacter) (β t:ι→ℝ),
@@ -29886,12 +30563,14 @@ open Complex.HadamardThreeLines
 open scoped Topology
 noncomputable def nP (δ:ℝ):ℝ:=1+∑' n:ℕ,(n:ℝ)^(-1-δ)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Fk (δ:ℝ):0<nP δ:=by
  have hh:0≤∑' n:ℕ,(n:ℝ)^(-1-δ):=tsum_nonneg (fun _=>Real.rpow_nonneg (by positivity) _)
  dsimp [nP]
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem J4 {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
   (δ:ℝ) (hδ:0<δ) (s:ℂ) (hs:s.re=1+δ):
   ‖DirichletCharacter.LFunction χ s‖ ≤nP δ:=by
@@ -29912,6 +30591,8 @@ theorem J4 {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
     _=_:=by rw [one_div,← Real.rpow_neg hnr.le]; congr 1; ring
  have hh:=hsum.norm.tsum_le_tsum hterm hp
  exact hh.trans (by dsimp [nP]; linarith)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aH4 (χ:PrimitiveComplexCharacter) (δ:ℝ)
   (hδ:0<δ) (hδ1:δ≤1/4) (s:ℂ) (hs:s.re=-δ):
   ‖χ.L s‖ ≤(Real.exp 1*nP δ)*
@@ -29930,11 +30611,13 @@ end
 noncomputable def Bw (χ:PrimitiveComplexCharacter) (t:ℝ) (z:ℂ):ℂ:=
  χ.L (z+(t:ℂ)*I)*Complex.exp (z^2)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Pz (χ:PrimitiveComplexCharacter) (t:ℝ) (z:ℂ):
   ‖Bw χ t z‖=‖χ.L (z+(t:ℂ)*I)‖*Real.exp (z.re^2-z.im^2):=by
  simp [Bw,norm_mul,Complex.norm_exp,pow_two]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aMY (χ:PrimitiveComplexCharacter) (t δ:ℝ):
   DiffContOnCl ℂ (Bw χ t) (verticalStrip (-δ) (1+δ)):=by
  apply DifferentiableOn.diffContOnCl
@@ -29942,6 +30625,8 @@ theorem aMY (χ:PrimitiveComplexCharacter) (t δ:ℝ):
  have hl:=((χ.V4s (z+(t:ℂ)*I)).differentiableAt).comp z
   (show DifferentiableAt ℂ (fun z:ℂ=>z+(t:ℂ)*I) z by fun_prop)
  exact (hl.mul (show DifferentiableAt ℂ (fun z:ℂ=>Complex.exp (z^2)) z by fun_prop)).differentiableWithinAt
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aMX (χ:PrimitiveComplexCharacter) (t δ:ℝ)
   (hδ:0<δ) (hδ1:δ≤1/4):
   BddAbove ((norm ∘ Bw χ t) '' verticalClosedStrip (-δ) (1+δ)):=by
@@ -29985,10 +30670,12 @@ theorem aMX (χ:PrimitiveComplexCharacter) (t δ:ℝ)
 end
 noncomputable def mO (δ:ℝ):ℝ:=Real.exp 4*nP δ
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Oe (δ:ℝ):0< mO δ:=
  mul_pos (Real.exp_pos _) (Fk δ)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aPE (χ:PrimitiveComplexCharacter) (δ t:ℝ)
   (hδ:0<δ) (hδ1:δ≤1/4) (z:ℂ) (hz:z.re=1+δ):
   ‖Bw χ t z‖≤ mO δ:=by
@@ -30001,6 +30688,8 @@ theorem aPE (χ:PrimitiveComplexCharacter) (δ t:ℝ)
  rw [Pz]
  apply (mul_le_mul hl he (Real.exp_nonneg _) (Fk δ).le).trans_eq
  exact mul_comm _ _
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aRK (χ:PrimitiveComplexCharacter) (δ t:ℝ)
   (hδ:0<δ) (hδ1:δ≤1/4) (z:ℂ) (hz:z.re=-δ):
   ‖Bw χ t z‖≤ mO δ*((χ.modulus:ℝ)*(1+|t|))^(1/2+δ):=by
@@ -30039,6 +30728,8 @@ theorem aRK (χ:PrimitiveComplexCharacter) (δ t:ℝ)
    unfold mO
    rw [show (4:ℝ)=1+3 by norm_num,Real.exp_add]
    ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayz (χ:PrimitiveComplexCharacter) (δ:ℝ)
   (hδ:0<δ) (hδ1:δ≤1/4) (s:ℂ) (hs0:0≤ s.re) (hs1:s.re≤1/2):
   ‖χ.L s‖≤ mO δ*((χ.modulus:ℝ)*(1+|s.im|))^((1+δ-s.re)/2):=by
@@ -30071,6 +30762,8 @@ theorem ayz (χ:PrimitiveComplexCharacter) (δ:ℝ)
   (mO δ*B^(1/2+δ))^(1-w)*(mO δ)^w at hh
  rw [hpower] at hh
  exact (le_mul_of_one_le_right (norm_nonneg _) (Real.one_le_exp_iff.mpr (sq_nonneg s.re))).trans hh
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aJt (ε:ℝ) (hε:0<ε):
   ∃C:ℝ,0<C∧∀χ:PrimitiveComplexCharacter,∀s:ℂ,0≤ s.re→s.re≤1/2→
    ‖χ.L s‖≤C*((χ.modulus:ℝ)*(1+|s.im|))^((1-s.re)/2+ε):=by
@@ -30085,6 +30778,8 @@ theorem aJt (ε:ℝ) (hε:0<ε):
  apply (ayz χ δ hδ hδ1 s hs0 hs1).trans
  exact mul_le_mul_of_nonneg_left (Real.rpow_le_rpow_of_exponent_le hB (by linarith))
   (Oe δ).le
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem atq (ε:ℝ) (hε:0<ε):
   ∃C:ℝ,0<C∧∀(q:ℕ)[NeZero q](χ:DirichletCharacter ℂ q),χ.IsPrimitive→χ≠1→
    ∀s:ℂ,0≤ s.re→s.re≤1/2→
@@ -30104,11 +30799,13 @@ open Complex MeasureTheory Set
 noncomputable def weight (u:ℝ):ℂ:=(max (1-u) 0:ℝ)
 noncomputable def kernel (s:ℂ):ℂ:=1/(s*(s+1))
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aPi:Continuous weight:=by
  unfold weight
  fun_prop
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aag (s:ℂ) (hs:0< s.re):
   HasMellin weight s (kernel s):=by
  let f:ℝ→ℂ:=indicator (Ioc 0 1) (fun _=>1)
@@ -30144,6 +30841,8 @@ theorem aag (s:ℂ) (hs:0< s.re):
  dsimp [kernel]
  field_simp
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Yj (σ t:ℝ) (hσ:1≤σ):
   ‖kernel ((σ:ℂ)+(t:ℂ)*I)‖ ≤
    4*(1+ |t|)^(-(2:ℝ)):=by
@@ -30173,8 +30872,8 @@ end kB
 namespace kB
 open Complex MeasureTheory
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem az9 (σ:ℝ) (hσ:1≤σ):
   Complex.VerticalIntegrable kernel σ:=by
  have hmajor:Integrable (fun t:ℝ=>4*(1+ ‖t‖)^(-(2:ℝ))):=
@@ -30196,6 +30895,8 @@ theorem az9 (σ:ℝ) (hσ:1≤σ):
  apply hmajor.mono' hc.aestronglyMeasurable
  filter_upwards with t
  simpa only [Real.norm_eq_abs] using Yj σ t hσ
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aHi (σ x:ℝ) (hσ:1≤σ) (hx:0<x):
   mellinInv σ kernel x=weight x:=by
  have hσp:0<σ:=by linarith
@@ -30234,13 +30935,15 @@ open Complex.HadamardThreeLines
 open scoped Topology
 noncomputable def oY (s:ℂ):ℂ:=LFunctionTrivChar₁ 1 s/(s+1)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem O0 (s:ℂ) (hs:s≠1):
   oY s=((s-1)/(s+1))*riemannZeta s:=by
  simp only [oY,LFunctionTrivChar₁,Function.update_of_ne hs,
   LFunctionTrivChar,LFunction_modOne_eq]
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ajo (s:ℂ) (hs:-1< s.re):
   DifferentiableAt ℂ oY s:=by
  apply (differentiable_LFunctionTrivChar₁ 1 s).div (by fun_prop)
@@ -30248,6 +30951,8 @@ theorem ajo (s:ℂ) (hs:-1< s.re):
  have hh:=congrArg Complex.re h
  simp only [add_re,one_re,zero_re] at hh
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Yr (s:ℂ) (hs:-(1/4:ℝ)≤ s.re):
   ‖(s-1)/(s+1)‖ ≤4:=by
  have hr:(3/4:ℝ)≤ ‖s+1‖ :=by
@@ -30261,6 +30966,8 @@ theorem Yr (s:ℂ) (hs:-(1/4:ℝ)≤ s.re):
    _=_:=by norm_num
  rw [norm_div]
  exact (div_le_iff₀ (by linarith)).mpr (by linarith)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aND (s:ℂ) (hs0:0≤ s.re) (hs:s.re≤1/2):
   ‖riemannZeta s‖ ≤5*‖oY s‖ :=by
  have hs1:s≠1:=by intro h; norm_num [h] at hs
@@ -30286,6 +30993,8 @@ theorem aND (s:ℂ) (hs0:0≤ s.re) (hs:s.re≤1/2):
   apply (le_div_iff₀ hdn).mpr
   nlinarith
  nlinarith [norm_nonneg (riemannZeta s)]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem azw:
   ∃C:ℝ,0<C∧∀s:ℂ,-(1/4:ℝ)≤ s.re→s.re≤5/4→
    ‖oY s‖ ≤C*(|s.im| +3)^2*Real.exp (Real.pi*|s.im|):=by
@@ -30330,11 +31039,13 @@ end
 noncomputable def DQ (t:ℝ) (z:ℂ):ℂ:=
  oY (z+(t:ℂ)*I)*Complex.exp (z^2)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem OV (t:ℝ) (z:ℂ):
   ‖DQ t z‖=‖oY (z+(t:ℂ)*I)‖*Real.exp (z.re^2-z.im^2):=by
  simp [DQ,norm_mul,Complex.norm_exp,pow_two]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aHR (t δ:ℝ) (hδ:δ≤1/4):
   DiffContOnCl ℂ (DQ t) (verticalStrip (-δ) (1+δ)):=by
  apply DifferentiableOn.diffContOnCl
@@ -30346,6 +31057,8 @@ theorem aHR (t δ:ℝ) (hδ:δ≤1/4):
  have hl:=(ajo (z+(t:ℂ)*I) (by simp; linarith)).comp z
   (show DifferentiableAt ℂ (fun z:ℂ=>z+(t:ℂ)*I) z by fun_prop)
  exact (hl.mul (show DifferentiableAt ℂ (fun z:ℂ=>Complex.exp (z^2)) z by fun_prop)).differentiableWithinAt
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aHQ (t δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/4):
   BddAbove ((norm ∘ DQ t) '' verticalClosedStrip (-δ) (1+δ)):=by
  obtain ⟨C,hC,hbound⟩:=azw
@@ -30387,6 +31100,8 @@ theorem aHQ (t δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/4):
   _≤_:=by
    apply mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) hA.le
    nlinarith [sq_nonneg (|z.im|-(Real.pi+2)),sq_abs z.im,Real.pi_pos]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aS4 (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/4) (s:ℂ) (hs:s.re=-δ):
   ‖riemannZeta s‖ ≤(Real.exp 1*nP δ)*(1+|s.im|)^(1/2+δ):=by
  let χ:DirichletCharacter ℂ 1:=1
@@ -30405,10 +31120,12 @@ theorem aS4 (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/4) (s:ℂ) (hs:s.re=-δ):
 end
 noncomputable def nL (δ:ℝ):ℝ:=4*mO δ
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem UO (δ:ℝ):0<nL δ:=by
  exact mul_pos (by norm_num) (Oe δ)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aMZ (δ t:ℝ) (hδ:0<δ) (hδ1:δ≤1/4) (z:ℂ) (hz:z.re=1+δ):
   ‖DQ t z‖ ≤nL δ:=by
  let s:ℂ:=z+(t:ℂ)*I
@@ -30427,6 +31144,8 @@ theorem aMZ (δ t:ℝ) (hδ:0<δ) (hδ1:δ≤1/4) (z:ℂ) (hz:z.re=1+δ):
   (Real.exp_nonneg _) (by positivity)).trans_eq
  unfold nL mO
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aOb (δ t:ℝ) (hδ:0<δ) (hδ1:δ≤1/4) (z:ℂ) (hz:z.re=-δ):
   ‖DQ t z‖ ≤nL δ*(1+|t|)^(1/2+δ):=by
  let s:ℂ:=z+(t:ℂ)*I
@@ -30466,6 +31185,8 @@ theorem aOb (δ t:ℝ) (hδ:0<δ) (hδ1:δ≤1/4) (z:ℂ) (hz:z.re=-δ):
    unfold nL mO
    rw [show (4:ℝ)=1+3 by norm_num,Real.exp_add]
    ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem avb (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/4)
   (s:ℂ) (hs0:0≤ s.re) (hs1:s.re≤1/2):
   ‖oY s‖ ≤nL δ*(1+|s.im|)^((1+δ-s.re)/2):=by
@@ -30498,6 +31219,8 @@ theorem avb (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/4)
   (nL δ*B^(1/2+δ))^(1-w)*(nL δ)^w at hh
  rw [hp] at hh
  exact (le_mul_of_one_le_right (norm_nonneg _) (Real.one_le_exp_iff.mpr (sq_nonneg s.re))).trans hh
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aVs (ε:ℝ) (hε:0<ε):
   ∃C:ℝ,0<C∧∀s:ℂ,0≤ s.re→s.re≤1/2→
    ‖riemannZeta s‖ ≤C*(1+|s.im|)^((1-s.re)/2+ε):=by
@@ -30522,8 +31245,8 @@ namespace kB
 open Complex DirichletCharacter Finset aZ O5
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aye {r q:ℕ} (χ:DirichletCharacter ℂ r)
   (hq:0<q) (s:ℂ) (hs:0≤ s.re):
   ‖∏p∈q.primeFactors,(1-χ (p:ZMod r)*(p:ℂ)^(-s))‖ ≤(q.divisors.card:ℝ):=by
@@ -30546,6 +31269,8 @@ theorem aye {r q:ℕ} (χ:DirichletCharacter ℂ r)
   exact_mod_cast (show 2≤q.factorization p+1 by omega)
  rw [norm_prod]
  exact (prod_le_prod₀ (fun _ _=>norm_nonneg _) heach).trans (by simpa only [prod_const] using hcount)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aBO (ε:ℝ) (hε:0<ε):
   ∃C:ℝ,0<C∧∀(q:ℕ)[NeZero q](χ:DirichletCharacter ℂ q),χ.IsPrimitive→
    ∀s:ℂ,0≤ s.re→s.re≤1/2→
@@ -30572,6 +31297,8 @@ theorem aBO (ε:ℝ) (hε:0<ε):
    _≤(A+B)*((q:ℝ)*(1+|s.im|))^(1/2+ε):=by
     apply mul_le_mul (by linarith) _ (by positivity) (by linarith)
     exact Real.rpow_le_rpow_of_exponent_le hbase (by linarith)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aAU (ε:ℝ) (hε:0<ε):
   ∃C:ℝ,0<C∧∀(q:ℕ)[NeZero q](χ:DirichletCharacter ℂ q),
    ∀s:ℂ,0≤ s.re→s.re≤1/2→
@@ -30619,8 +31346,8 @@ noncomputable def qZ (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (n:ℕ) (v:�
  LSeries.term (fun m:ℕ=>χ (m:ZMod q)) (s+(1+(v:ℂ)*I)) n*
   kernel (1+(v:ℂ)*I)*(Y:ℂ)^(1+(v:ℂ)*I)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem anx (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ) (v:ℝ):
   ‖qZ χ s Y n v‖ ≤
    (4*Y*‖LSeries.term (fun m:ℕ=>χ (m:ZMod q)) ((s.re+1:ℝ):ℂ) n‖)*Aw v:=by
@@ -30636,6 +31363,8 @@ theorem anx (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ) (v:�
  calc
   _≤(‖LSeries.term (fun m:ℕ=>χ (m:ZMod q)) ((s.re+1:ℝ):ℂ) n‖*(4*Aw v))*Y:=by gcongr
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ajF (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ):
   Integrable (qZ χ s Y n):=by
  have hc:Continuous (qZ χ s Y n):=by
@@ -30664,6 +31393,8 @@ theorem ajF (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ):
   (4*Y*‖LSeries.term (fun m:ℕ=>χ (m:ZMod q)) ((s.re+1:ℝ):ℂ) n‖)).mono' hc.aestronglyMeasurable
  filter_upwards with v
  exact anx χ s Y hY n v
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem awp (χ:DirichletCharacter ℂ q) (s:ℂ) (hs:0< s.re) (Y:ℝ) (hY:0<Y):
   Summable (fun n:ℕ=>∫v:ℝ,‖qZ χ s Y n v‖):=by
  have hsumm:Summable (fun n:ℕ=>‖LSeries.term (fun m:ℕ=>χ (m:ZMod q)) ((s.re+1:ℝ):ℂ) n‖):=
@@ -30677,6 +31408,8 @@ theorem awp (χ:DirichletCharacter ℂ q) (s:ℂ) (hs:0< s.re) (Y:ℝ) (hY:0<Y):
   rwa [integral_const_mul] at hh
  exact ((hsumm.mul_left (4*Y)).mul_right _).of_nonneg_of_le
   (fun n=>integral_nonneg (fun _=>norm_nonneg _)) hb
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aM2 (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ):
   (2*(Real.pi:ℂ))⁻¹*(∫v:ℝ,qZ χ s Y n v)=
    LSeries.term (fun m:ℕ=>χ (m:ZMod q)) s n*weight ((n:ℝ)/Y):=by
@@ -30709,6 +31442,8 @@ theorem aM2 (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (hY:0<Y) (n:ℕ):
    rw [integral_const_mul]
    ring
   _=_:=by rw [hinv']
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aQu (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (hY:0<Y):
   smoothed χ s Y=∑'n:ℕ,LSeries.term (fun m:ℕ=>χ (m:ZMod q)) s n*weight ((n:ℝ)/Y):=by
  rw [tsum_eq_sum (s:=Finset.Icc 1 ⌊Y⌋₊)]
@@ -30723,6 +31458,8 @@ theorem aQu (χ:DirichletCharacter ℂ q) (s:ℂ) (Y:ℝ) (hY:0<Y):
   ·have hnot:¬n≤⌊Y⌋₊:=by intro hh; exact hn (mem_Icc.mpr ⟨Nat.pos_of_ne_zero hn0,hh⟩)
    have hYn:Y<(n:ℝ):=(Nat.floor_lt hY.le).mp (lt_of_not_ge hnot)
    rw [aJR ((le_div_iff₀ hY).mpr (by linarith)),mul_zero]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Uz (χ:DirichletCharacter ℂ q) (s:ℂ) (hs:0< s.re) (Y:ℝ) (hY:0<Y):
   smoothed χ s Y=(2*(Real.pi:ℂ))⁻¹*
    (∫v:ℝ,χ.LFunction (s+(1+(v:ℂ)*I))*kernel (1+(v:ℂ)*I)*(Y:ℂ)^(1+(v:ℂ)*I)):=by
@@ -30746,8 +31483,8 @@ noncomputable def line (c t:ℝ):ℂ:=(c:ℂ)+(t:ℂ)*I
 @[simp] theorem Rg (c t:ℝ):(line c t).re=c:=by simp [line]
 @[simp] theorem ae0 (c t:ℝ):(line c t).im=t:=by simp [line]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aHP (c d t:ℝ) (hd:0<d) (hd1:d≤1)
   (hc:d≤ |c|) (hc1:d≤ |c+1|):
   ‖kernel (line c t)‖ ≤(4/d^2)*(1+|t|)^(-(2:ℝ)):=by
@@ -30763,6 +31500,8 @@ theorem aHP (c d t:ℝ) (hd:0<d) (hd1:d≤1)
  rw [←one_div ((1+|t|)^2),div_mul_div_comm,mul_one]
  apply (div_le_div_iff₀ (mul_pos (hd.trans_le h1) (hd.trans_le h2)) (by positivity)).mpr
  nlinarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aHr {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
   (d:ℝ) (hd:0<d) (s:ℂ) (hs:d≤ s.re) (ht:1≤ |s.im|):
   ‖χ.LFunction s‖ ≤(3*(q:ℝ)/d+2)*(1+‖s‖):=by
@@ -30811,8 +31550,8 @@ end
 noncomputable def g6 {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y:ℝ) (w:ℂ):ℂ:=χ.LFunction (s+w)*kernel w*(Y:ℂ)^w
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem agJ {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y c:ℝ) (hY:0<Y) (hc:c≠0) (hc1:c+1≠0) (hp:s.re+c≠1):
   Continuous (fun t:ℝ=>g6 χ s Y (line c t)):=by
@@ -30832,6 +31571,8 @@ theorem agJ {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
  have hk:ContinuousAt (fun u:ℝ=>(1:ℂ)/(line c u*(line c u+1))) t:=
   continuousAt_const.div (hline.mul (hline.add_const 1)) (mul_ne_zero hw hw1)
  exact (hl.mul hk).mul (hline.const_cpow (Or.inl (Complex.ofReal_ne_zero.mpr hY.ne')))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aDT {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y a d:ℝ) (hY:1≤Y) (ha:a≤1) (hd:0<d) (hs:d≤ s.re+a):
   ∃C:ℝ,0<C∧∀u∈Icc a 1,∀v:ℝ,|s.im| +1≤ |v|→
@@ -30879,6 +31620,8 @@ theorem aDT {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
    have hv0:0< |v| :=by linarith
    field_simp
    nlinarith [mul_nonneg (show 0≤(3*(q:ℝ)/d+2)*A*Y by positivity) (show 0≤ |v|-1 by linarith)]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Uh {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y a d:ℝ) (hY:1≤Y) (ha:a≤1) (hd:0<d) (hs:d≤ s.re+a):
   Tendsto (fun v:ℝ=>∫u in a..1,g6 χ s Y (line u v)) atTop (𝓝 0)∧
@@ -30920,8 +31663,8 @@ theorem akz (ε:ℝ) (hε:ε<1/2):Integrable (L7 ε):=by
 noncomputable def tM {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
   (s:ℂ) (Y a:ℝ):ℂ:=(2*(Real.pi:ℂ))⁻¹*∫v:ℝ,g6 χ s Y (line a v)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem OO (ε d:ℝ) (hε:0<ε) (hε1:ε<1/2) (hd:0<d) (hd1:d≤1):
   ∃C:ℝ,0<C∧∀(q:ℕ)[NeZero q](χ:DirichletCharacter ℂ q)(s:ℂ)(Y a:ℝ),
    0<Y→d≤ |a|→d≤ |a+1|→0≤ s.re+a→s.re+a≤1/2→
@@ -30984,6 +31727,8 @@ theorem OO (ε d:ℝ) (hε:0<ε) (hε1:ε<1/2) (hd:0<d) (hd1:d≤1):
   _≤(2*Real.pi)⁻¹*(B*J):=mul_le_mul_of_nonneg_left hn (by positivity)
   _≤(2*Real.pi)⁻¹*(B*(J+1)):=by gcongr; linarith
   _=_:=by dsimp [B,C,D]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem VT {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q)
   (s:ℂ) (hs:0< s.re) (Y:ℝ) (hY:0<Y):
   Integrable (fun v:ℝ=>g6 χ s Y (line 1 v)):=by
@@ -31058,8 +31803,8 @@ noncomputable def Dw (N M:ℝ) (w:ℂ):ℂ:=(N:ℂ)^w-(M:ℂ)^w
 noncomputable def qC (N M:ℝ) (s:ℂ):ℂ:=dslope (Dw N M) 0 (-s)/(1-s)
 noncomputable def lW (q:ℕ):ℂ:=∏p∈q.primeFactors,(1-(p:ℂ)⁻¹)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aiM (q:ℕ) (hq:0<q):
   lW q=(q.totient:ℂ)/(q:ℂ):=by
  have hh:(q.totient:ℂ)=(q:ℂ)*lW q:=by
@@ -31069,16 +31814,24 @@ theorem aiM (q:ℕ) (hq:0<q):
   exact h
  apply (eq_div_iff (by exact_mod_cast hq.ne':(q:ℂ)≠0)).mpr
  linear_combination-hh
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aMa (N M:ℝ) (hN:0<N) (hM:0<M):
   Differentiable ℂ (Dw N M):=by
  exact (differentiable_id.const_cpow (Or.inl (Complex.ofReal_ne_zero.mpr hN.ne'))).sub
   (differentiable_id.const_cpow (Or.inl (Complex.ofReal_ne_zero.mpr hM.ne')))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem akE (N M:ℝ):Dw N M 0=0:=by simp [Dw]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aOm (N M:ℝ) (s:ℂ) (hs:s≠0):
   qC N M s=((N:ℂ)^(-s)-(M:ℂ)^(-s))/((-s)*(1-s)):=by
  rw [qC,dslope_of_ne _ (neg_ne_zero.mpr hs),slope_def_field,akE]
  simp only [sub_zero,Dw]
  rw [div_div]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aRW (N M:ℝ) (hN:0<N) (hM:0<M):
   qC N M 0=(Real.log N-Real.log M:ℝ):=by
  have hN':HasDerivAt (fun w:ℂ=>(N:ℂ)^w) (Complex.log (N:ℂ)) 0:=by
@@ -31095,13 +31848,15 @@ noncomputable def EU (q:ℕ) [NeZero q]
   (s:ℂ) (N M:ℝ) (w:ℂ):ℂ:=
  LFunctionTrivChar₁ q (1+s+w)*dslope (Dw N M) 0 w/(w+1)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem asx (s:ℂ) (N M:ℝ) (hN:0<N) (hM:0<M)
   (w:ℂ) (hw:w+1≠0):AnalyticAt ℂ (EU q s N M) w:=by
  have hl:AnalyticAt ℂ (fun w:ℂ=>LFunctionTrivChar₁ q (1+s+w)) w:=
   ((differentiable_LFunctionTrivChar₁ q).comp (by fun_prop)).analyticAt w
  exact (hl.mul (((aMa N M hN hM).analyticAt w).dslope 0)).div (by fun_prop) hw
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aum (s:ℂ) (N M:ℝ) (w:ℂ) (hw:w≠0) (hsw:w≠-s):
   EU q s N M w/(w-(-s))=
    g6 (1:DirichletCharacter ℂ q) (1+s) N w-
@@ -31113,6 +31868,8 @@ theorem aum (s:ℂ) (N M:ℝ) (w:ℂ) (hw:w≠0) (hsw:w≠-s):
  have a8i:s+w≠0:=by intro h; apply hsw; linear_combination h
  field_simp
  ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem awB (s:ℂ) (N M a T:ℝ) (hN:0<N) (hM:0<M)
   (ha1:-1<a) (ha:a<0) (hsa:a< -s.re) (hsb:-s.re<1) (hT:|s.im|<T):
   V9 (fun w=>g6 (1:DirichletCharacter ℂ q) (1+s) N w-
@@ -31247,8 +32004,8 @@ namespace kB
 open Complex DirichletCharacter MeasureTheory Set Filter dK
 open scoped Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayM (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/4):
   ∃C:ℝ,0<C∧∀(q:ℕ)[NeZero q](χ:DirichletCharacter ℂ q),χ≠1→
    ∀(s:ℂ)(Y:ℝ),3/4≤ s.re→s.re≤1→1≤Y→
@@ -31265,6 +32022,8 @@ theorem ayM (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/4):
   (by rw [abs_of_neg ha]; linarith)
   (by rw [abs_of_pos (by linarith:0<δ-s.re+1)]; linarith)
   (by linarith) (by linarith)).2
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aNy (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/4):
   ∃C:ℝ,0<C∧∀(q:ℕ)[NeZero q](χ:DirichletCharacter ℂ q)(s:ℂ)(N M:ℝ),
    0≤ s.re→s.re≤1/500→1≤M→M≤N→
@@ -35471,8 +36230,8 @@ noncomputable def tA (χ:PrimitiveComplexCharacter) (δ B:ℝ):Finset ℂ:=
 noncomputable def tq (χ:PrimitiveComplexCharacter) (ρ:ℂ):ℕ:=
  analyticOrderNatAt χ.L ρ
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem XD (χ:PrimitiveComplexCharacter) (δ B:ℝ) (ρ:ℂ)
   (hρ:ρ∈tA χ δ B):
   1/2+δ≤ρ.re∧ρ.re≤1∧ |ρ.im| ≤B+1∧χ.L ρ=0:=by
@@ -35481,6 +36240,8 @@ theorem XD (χ:PrimitiveComplexCharacter) (δ B:ℝ) (ρ:ℂ)
  have hb:=mem_reProdIm.mp hh.1
  refine ⟨hb.1.1,hb.1.2,abs_le.mpr ⟨by linarith [hb.2.1],hb.2.2⟩,?_⟩
  simpa only [ajm] using hh.2
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aNw (χ:PrimitiveComplexCharacter) (δ B σ T:ℝ)
   (hσ:1/2+δ≤σ) (hT:T≤B+1):
   letI:NeZero χ.modulus:=⟨χ.positive.ne'⟩
@@ -35494,6 +36255,8 @@ theorem aNw (χ:PrimitiveComplexCharacter) (δ B σ T:ℝ)
   exact regularizedL_ne_zero_right χ.character (lt_of_not_ge hn) hh.2
  apply (mem_boxZeros χ.character _ _ _ _ ρ).mpr
  refine ⟨mem_reProdIm.mpr ⟨⟨hσ.trans hb.1.1,hr⟩,?_,?_⟩,hh.2⟩ <;> linarith [hb.2.1,hb.2.2]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aAR (χ:PrimitiveComplexCharacter)
   (δ B σ T a b β:ℝ) (hσ:1/2+δ≤σ) (hT:T≤B+1):
   letI:NeZero χ.modulus:=⟨χ.positive.ne'⟩
@@ -35512,6 +36275,8 @@ theorem aAR (χ:PrimitiveComplexCharacter)
    rfl
   _≤_:=sum_le_sum_of_subset_of_nonneg (aNw χ δ B σ T hσ hT)
    (fun _ _ _=>by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aJo {X a b:ℝ} (hX:0<X) (ha:X≤a) (hab:a+1≤b)
   (hb:b+1≤2*X) (s:ℂ) (hs:s.re≤1):
   ‖transform a b 0 s‖ ≤(b-a)*X^(s.re-1):=by
@@ -35531,6 +36296,8 @@ theorem aJo {X a b:ℝ} (hX:0<X) (ha:X≤a) (hab:a+1≤b)
    rw [abs_of_nonneg hab'] at hinner
    exact hinner.trans_eq (by ring))
  simpa using h
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahT {X a b:ℝ} (hX:0<X) (ha:X≤a) (hab:a+1≤b)
   (hb:b+1≤2*X) (s:ℂ) (hs0:0≤ s.re) (hs1:s.re≤1):
   ‖transform a b 0 s‖ ≤40*(b-a)*X^(s.re-1)*min 1 (X/((b-a)*(1+|s.im|))):=by
@@ -35569,8 +36336,8 @@ noncomputable def l8 (χ:PrimitiveComplexCharacter) (δ B X H:ℝ):ℝ:=
  ∑ρ∈tA χ δ B,(tq χ ρ:ℝ)*X^(ρ.re-1)*
   min 1 (X/(H*(1+|ρ.im|)))
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aJv (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/8):
   ∃C:ℝ,0<C∧∀χ:PrimitiveComplexCharacter,∀B:ℝ,∀M a b:ℕ,∀X:ℝ,
    2≤B→B+1≤(M:ℝ)→1≤X→X≤(a:ℝ)→(a:ℝ)+1≤b→(b:ℝ)+1≤2*X→
@@ -35612,6 +36379,8 @@ theorem aJv (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/8):
     ∑ρ∈tA χ δ B,(tq χ ρ:ℝ)*‖transform a b 0 ρ‖ :=by
    rw [norm_neg]
    exact add_le_add (hh.trans (mul_le_mul_of_nonneg_left he hC.le)) hz
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayD (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/8):
   ∃C:ℝ,0<C∧∀χ:PrimitiveComplexCharacter,∀B:ℝ,∀M a b:ℕ,∀X:ℝ,
    2≤B→B+1≤(M:ℝ)→1≤X→X≤(a:ℝ)→(a:ℝ)+1≤b→(b:ℝ)+1≤2*X→
@@ -35641,8 +36410,8 @@ end
 noncomputable def primeLog (n:ℕ):ℂ:=
  if n.Prime then (Real.log n:ℂ) else 0
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 private theorem nonprime_mass (n:ℕ):
   (∑k∈range (n+1),if k.Prime then 0 else ArithmeticFunction.vonMangoldt k)=
    Chebyshev.psi n-Chebyshev.theta n:=by
@@ -35651,6 +36420,8 @@ private theorem nonprime_mass (n:ℕ):
  apply sum_congr rfl
  intro k _
  by_cases hk:k.Prime <;> simp [hk,ArithmeticFunction.vonMangoldt_apply_prime]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem prime_removal {q:ℕ} (χ:DirichletCharacter ℂ q) (a b n:ℕ)
   (hb:b≤n) (hn:1≤n) (β:ℝ):
   ‖(∑k∈Finset.Ioc a b,(primeLog k*phase β k)*χ (k:ZMod q))-
@@ -35673,6 +36444,8 @@ theorem prime_removal {q:ℕ} (χ:DirichletCharacter ℂ q) (a b n:ℕ)
    ·intro k hk; have:=(mem_Ioc.mp hk).2; apply Finset.mem_range.mpr; omega
    ·intro k _ _; split_ifs <;> positivity
   _≤_:=by rw [nonprime_mass]; exact Chebyshev.psi_sub_theta_le (by exact_mod_cast hn)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axJ (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/8):
   ∃C:ℝ,0<C∧∀χ:PrimitiveComplexCharacter,∀B:ℝ,∀M a b n:ℕ,∀X:ℝ,
    2≤B→B+1≤(M:ℝ)→1≤X→X≤(a:ℝ)→(a:ℝ)+1≤b→(b:ℝ)+1≤2*X→
@@ -35702,8 +36475,8 @@ namespace an4
 open Complex Metric Set Finset OAI.Ostmann Goldbach GoldbachTwistedMellin
 open scoped BigOperators Classical Topology ComplexOrder
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aBP:
   ∃C:ℝ,0<C∧∀χ:PrimitiveComplexCharacter,∀s:ℂ,1< s.re→s.re≤2→
    ‖logDeriv χ.L s‖ ≤1/(s.re-1)+C:=by
@@ -35735,6 +36508,8 @@ theorem aBP:
   _=(LSeries f (s.re:ℂ)).re:=by simp_rw [hr]; exact (Complex.re_tsum hsum).symm
   _≤ ‖LSeries f (s.re:ℂ)‖ :=Complex.re_le_norm _
   _≤_:=hbound s.re hs hs2
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem auk:
   ∃C:ℝ,0<C∧∀χ:PrimitiveComplexCharacter,∀t:ℝ,∃Z:Finset ℂ,
    (∀ρ:ℂ,ρ∈Z↔ρ∈closedBall (⟨2,t⟩:ℂ) (33/20:ℝ)∧χ.L ρ=0)∧
@@ -35826,11 +36601,15 @@ theorem auk:
   apply (hApprox s hs' hsz).trans
   change A*Real.log B≤13*A*L
   nlinarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 private theorem aG1 (s ρ:ℂ) (hs:1< s.re) (hρ:ρ.re≤1) (m:ℕ):
   0≤((m:ℂ)/(s-ρ)).re:=by
  rw [Complex.div_re]
  simp only [Complex.natCast_re,Complex.natCast_im,zero_mul,zero_div,add_zero,sub_re]
  exact div_nonneg (mul_nonneg (Nat.cast_nonneg _) (by linarith)) (Complex.normSq_nonneg _)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 private theorem aM8 (δ t:ℝ) (hδ:0<δ) (ρ:ℂ)
   (hρ0:1-δ≤ρ.re) (hρ1:ρ.re≤1) (hρt:|ρ.im-t| ≤δ) (m:ℕ):
   (m:ℝ)/(5*δ)≤((m:ℂ)/((⟨1+δ,t⟩:ℂ)-ρ)).re:=by
@@ -35852,6 +36631,8 @@ private theorem aM8 (δ t:ℝ) (hδ:0<δ) (ρ:ℂ)
   Complex.normSq_apply,sub_re,sub_im]
  dsimp [a,b] at hh
  simpa only [pow_two,← mul_div_assoc,mul_one] using hh
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem azm:
   ∃C:ℝ,0<C∧∀χ:PrimitiveComplexCharacter,∀δ t:ℝ,0<δ→δ≤1/8→∀S:Finset ℂ,
    (∀ρ∈S,1-δ≤ρ.re∧ρ.re≤1∧ |ρ.im-t| ≤δ∧χ.L ρ=0)→
@@ -36047,8 +36828,8 @@ theorem aPD:
 noncomputable def multiplicity (x:PrimitiveComplexCharacter × ℂ):ℝ:=
  analyticOrderNatAt x.1.L x.2
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 private theorem XQ (χ:PrimitiveComplexCharacter)
   (F:Finset (PrimitiveComplexCharacter × ℂ)) (hF:∀i∈F,i.1=χ):
   (∑i∈F,multiplicity i)=∑ρ∈F.image Prod.snd,(analyticOrderNatAt χ.L ρ:ℝ):=by
@@ -36058,6 +36839,8 @@ private theorem XQ (χ:PrimitiveComplexCharacter)
   simp only [multiplicity,hF i hi]
  ·intro i hi j hj hij
   exact Prod.ext ((hF i hi).trans (hF j hj).symm) hij
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aOG:
   ∃A:ℝ,0<A∧∀Q:ℕ,∀T:ℝ,1≤T→∀R:Finset (PrimitiveComplexCharacter × ℂ),
    (∀i∈R,i.1.modulus≤Q)→(∀i∈R,|i.2.im| ≤T)→
@@ -36079,6 +36862,8 @@ theorem aOG:
  rw [← sub_div,abs_div,abs_of_pos (by positivity:0<2*Real.pi)] at hh
  have hp:=(div_lt_one (by positivity:0<2*Real.pi)).mp hh
  exact hp.le.trans (by linarith [Real.pi_lt_four])
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Nr (ν:ℝ) (hν:0<ν):
   ∃B:ℝ,0<B∧∀Q:ℕ,1≤Q→∀T D:ℝ,1≤T→(Q:ℝ)*(T+1)≤D→
    ∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -36119,12 +36904,16 @@ theorem Nr (ν:ℝ) (hν:0<ν):
    rw [Real.rpow_add hDpos]
    dsimp [B]
    ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem O8 (T:ℝ) (hT:0≤T) (ρ:ℂ) (hρ:|ρ.im| ≤T):
   |ρ.im/(2*Real.pi)| ≤T:=by
  rw [abs_div,abs_of_pos (by positivity:0<2*Real.pi)]
  apply (div_le_iff₀ (by positivity)).mpr
  have hp:1≤2*Real.pi:=by linarith [Real.pi_gt_three]
  nlinarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem alB (ρ:ℂ):
   (ρ.re:ℂ)+(2*Real.pi*(ρ.im/(2*Real.pi)):ℝ)*I=ρ:=by
  have he:2*Real.pi*(ρ.im/(2*Real.pi))=ρ.im:=by
@@ -36139,8 +36928,8 @@ open Complex DirichletCharacter Finset Set Filter MeasureTheory OAI.Ostmann aZ d
 open scoped BigOperators Classical Topology
 variable {q:ℕ} [NeZero q]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Ue (χ:PrimitiveComplexCharacter)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:1≤Y):
   ∃B:ℝ,0<B∧∀x∈uIcc (-s.re-1/2) 1,∀v:ℝ,
@@ -36190,6 +36979,8 @@ theorem Ue (χ:PrimitiveComplexCharacter)
   _≤(A*Y*Real.exp (9/4))*(Real.exp ((Real.pi+1)^2/2)*Real.exp (-(v^2)/2)):=
    mul_le_mul_of_nonneg_left (Wv Real.pi v) (by positivity)
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Tu (χ:PrimitiveComplexCharacter)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:1≤Y):
   (∫ v:ℝ,m5 χ s Y (1+(v:ℂ)*I)/(1+(v:ℂ)*I))-
@@ -36200,6 +36991,8 @@ theorem Tu (χ:PrimitiveComplexCharacter)
   (by linarith) zero_lt_one
   (fun z _=>(agI χ s Y (by linarith)).analyticAt z) hbound
  simpa only [Complex.ofReal_one,ajC] using h
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Sj (χ:PrimitiveComplexCharacter)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:1≤Y):
   (∑' n:ℕ,LSeries.term (fun m:ℕ=>χ.character (m:ZMod χ.modulus)) s n*
@@ -36218,6 +37011,8 @@ theorem Sj (χ:PrimitiveComplexCharacter)
  have he:=eq_add_of_sub_eq hc
  rw [he,mul_add]
  simp only [← mul_assoc,inv_mul_cancel₀ hp,one_mul]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Wn (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1)
   (X:ℝ) (hX:0<X) (J:ℕ):
@@ -36280,11 +37075,15 @@ theorem Wn (χ:DirichletCharacter ℂ q)
    gcongr
    linarith
   _=_:=by dsimp [jo,A,c]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem xG (θ:ℝ) (s:ℂ) (hθ:7/12≤θ)
   (hθs:θ≤ s.re) (hs:s.re≤1):
   -(11/12:ℝ)≤fG θ s∧fG θ s≤-(1/12:ℝ):=by
  unfold fG
  constructor <;> linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem VN (χ:DirichletCharacter ℂ q)
   (hχ:χ.IsPrimitive) (θ:ℝ) (s:ℂ) (hθ:7/12≤θ)
   (hθs:θ≤ s.re) (hs:s.re≤1) (X:ℝ) (hX:0<X):
@@ -36299,6 +37098,8 @@ theorem VN (χ:DirichletCharacter ℂ q)
  rw [max_eq_right (by dsimp [fG]; linarith)]
  dsimp [fG]
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Wq (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (θ:ℝ) (s:ℂ) (hθ:7/12≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:1≤Y) (hP:(q:ℝ)*(1+|s.im|)≤Y^2) (v:ℝ):
@@ -36387,6 +37188,8 @@ theorem Wq (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
    calc
     _=12*((Real.exp 1)^2*Real.exp 1)*Y^(1/2-θ)*Real.exp (-|v|):=by ring
     _=_:=by rw [he]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem J6 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1)
   (Y:ℝ) (hY:0<Y) (n:ℕ) (v:ℝ):
@@ -36440,6 +37243,8 @@ theorem J6 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   _≤ ‖LSeries.term (fun m:ℕ=>χ⁻¹ (m:ZMod q)) (3/2) n‖*
     ((4*((q:ℝ)*(1+|s.im|))*(1+|v|))*(Real.exp (9/4)*Real.exp (-(v^2)))*Y^c):=by gcongr
   _=_:=by dsimp [c,rF]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Jx (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1)
   (Y:ℝ) (hY:0<Y) (n:ℕ):Integrable (kH χ s Y n):=by
@@ -36480,6 +37285,8 @@ theorem Jx (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   ‖LSeries.term (fun m:ℕ=>χ⁻¹ (m:ZMod q)) (3/2) n‖)).mono' hc.aestronglyMeasurable
  filter_upwards with v
  exact J6 χ hχ s hs hs' Y hY n v
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem R5 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:0<Y):
   Summable (fun n:ℕ=>∫ v:ℝ, ‖kH χ s Y n v‖):=by
@@ -36498,6 +37305,8 @@ theorem R5 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   rwa [integral_const_mul] at h
  exact ((hsum.mul_left (rF q s Y)).mul_right _).of_nonneg_of_le
   (fun n=>integral_nonneg (fun _=>norm_nonneg _)) hb
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem U4 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:0<Y):
   (2*(Real.pi:ℂ))⁻¹*(∫ v:ℝ,
@@ -36529,6 +37338,8 @@ theorem U4 (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
  apply tsum_congr
  intro n
  exact aik χ s Y hY n
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem VY (χ:PrimitiveComplexCharacter)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:1≤Y):
   letI:NeZero χ.modulus:=⟨χ.positive.ne'⟩
@@ -36540,6 +37351,8 @@ theorem VY (χ:PrimitiveComplexCharacter)
  rw [Sj χ s hs hs' Y hY]
  congr 1
  exact U4 χ.character χ.primitive s hs hs' Y (by linarith)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Xd (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:0<Y)
   (J n:ℕ) (hn:0<n):
@@ -36562,6 +37375,8 @@ theorem Xd (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   _=(jo J*((q:ℝ)*(1+|s.im|))^(J+1)*Y^(-(J:ℝ)-s.re-1/2))*
     ((n:ℝ)^(s.re-1)*(n:ℝ)^(-(J:ℝ)-s.re-1/2)):=by ring
   _=_:=by rw [← Real.rpow_add hnr]; congr 2; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aak (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (s:ℂ) (hs:7/12≤ s.re) (hs':s.re≤1) (Y:ℝ) (hY:0<Y)
   (X J:ℕ) (hX:0<X) (hJ:1≤J):
@@ -36575,6 +37390,8 @@ theorem aak (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (by have hp:=(Oz J).le; positivity) (by linarith)
   (fun n hn=>Xd χ hχ s hs hs' Y hY J n (by omega))
  convert h using 2 <;> congr 2 <;> ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Yo (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (θ:ℝ) (s:ℂ) (hθ:7/12≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:0<Y) (X:ℕ):
@@ -36614,6 +37431,8 @@ theorem Yo (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   _=(2*(Real.pi:ℂ))⁻¹*∫ v:ℝ,∑n∈Finset.Icc 1 X,F n v:=by
    rw [← mul_sum,integral_finsetSum _ hi]
   _=_:=by simp_rw [hp]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem SY (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (θ:ℝ) (s:ℂ) (hθ:7/12≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:0<Y) (X:ℕ):Integrable (m4 χ θ s Y X):=by
@@ -36630,14 +37449,16 @@ theorem SY (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
 end
 noncomputable def fO:ℝ:= ‖(2*(Real.pi:ℂ))⁻¹‖*(12*Real.exp 3)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem yI:0<fO:=by
  have hp:(2*(Real.pi:ℂ))≠0:=
   mul_ne_zero (by norm_num) (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero)
  have hn:0< ‖(2*(Real.pi:ℂ))⁻¹‖ :=norm_pos_iff.mpr (inv_ne_zero hp)
  unfold fO
  positivity
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Uj (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (θ:ℝ) (s:ℂ) (hθ:7/12≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:1≤Y) (hP:(q:ℝ)*(1+|s.im|)≤Y^2)
@@ -36683,6 +37504,8 @@ theorem Uj (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
     ‖M*dM χ (Icc 1 X) (f9 θ X v) s‖*Real.exp (-|v|)):=
    mul_le_mul_of_nonneg_left ((norm_integral_le_integral_norm _).trans hb) (norm_nonneg _)
   _=_:=by dsimp [B,fO]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem TU (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   (θ:ℝ) (s:ℂ) (hθ:7/12≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:1≤Y) (hP:(q:ℝ)*(1+|s.im|)≤Y^2)
@@ -36733,6 +37556,8 @@ theorem TU (χ:DirichletCharacter ℂ q) (hχ:χ.IsPrimitive)
   have hh:=yI.le
   positivity
  convert mul_le_mul_of_nonneg_left hb hC using 1 <;> dsimp [E] <;> ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Se (χ:PrimitiveComplexCharacter)
   (θ:ℝ) (s:ℂ) (hz:χ.L s=0) (hθ:7/12≤θ) (hθs:θ≤ s.re) (hs:s.re≤1)
   (Y:ℝ) (hY:1≤Y) (hP:(χ.modulus:ℝ)*(1+|s.im|)≤Y^2)
@@ -36798,6 +37623,8 @@ theorem Se (χ:PrimitiveComplexCharacter)
  change ‖M*head‖ ≤_ at hhead
  dsimp [short,a] at hbase
  nlinarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem TK (P K κ:ℝ) (J:ℕ)
   (hP:1≤P) (hK:0≤K) (hKu:K≤2*P^κ) (hκ:κ≤1/100) (hJ:2≤J):
   (e5 J*(K/P^(1/2:ℝ))^(J:ℝ))*K^2≤
@@ -36820,6 +37647,8 @@ theorem TK (P K κ:ℝ) (J:ℕ)
     Real.rpow_add hPpos]
    ring
   _≤_:=mul_le_mul_of_nonneg_left (Real.rpow_le_rpow_of_exponent_le hP he) (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem S9 (P K X κ δ σ:ℝ) (J:ℕ)
   (hP:1≤P) (hK:0≤K) (hKu:K≤2*P^κ)
   (hX:P^(1/2+δ)≤X) (hκ:κ≤1/100) (hδ:0≤δ) (hδ':δ≤1/100)
@@ -36852,6 +37681,8 @@ theorem S9 (P K X κ δ σ:ℝ) (J:ℕ)
    rw [Real.rpow_add hPpos,Real.rpow_add hPpos]
    ring
   _≤_:=mul_le_mul_of_nonneg_left (Real.rpow_le_rpow_of_exponent_le hP he) (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Ud (P K X T κ δ σ:ℝ) (J:ℕ)
   (hP:1≤P) (hK:0≤K) (hKu:K≤2*P^κ)
   (hX:P^(1/2+δ)≤X) (hT:0≤T) (hTP:T≤P)
@@ -36887,6 +37718,8 @@ theorem Ud (P K X T κ δ σ:ℝ) (J:ℕ)
    simp only [Real.rpow_add hPpos]
    ring
   _≤_:=mul_le_mul_of_nonneg_left (Real.rpow_le_rpow_of_exponent_le hP he) (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem U5 (P K X κ θ:ℝ)
   (hP:1≤P) (hK:0<K) (hX:0<X) (hKu:K≤2*P^κ)
   (hKY:K≤P^(1/2:ℝ)) (hκ:κ≤1/100) (hθ:7/12≤θ):
@@ -36919,6 +37752,8 @@ theorem U5 (P K X κ θ:ℝ)
     Real.rpow_add hPpos]
    ring
   _≤_:=mul_le_mul_of_nonneg_left (Real.rpow_le_rpow_of_exponent_le hP hex) (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Xj (P X δ θ:ℝ) (hP:1≤P)
   (hX:P^(1/2:ℝ)≤X) (hXu:X≤2*P^(1/2+δ)) (hδ:0≤δ)
   (hθ:1/2≤θ) (hθ':θ≤1):
@@ -37094,8 +37929,8 @@ namespace pU
 open Complex Finset OAI.Ostmann aZ dK gW
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aAl (D N θ:ℝ) (hD:1≤D)
   (hθ:1/2≤θ) (hθ1:θ≤3/4)
   (hNlo:D^(4/5:ℝ)≤N) (hNhi:N≤D^(6/5:ℝ)):
@@ -37113,6 +37948,8 @@ theorem aAl (D N θ:ℝ) (hD:1≤D)
    _=D^(1+(4/5:ℝ)*(1-2*θ)):=by
     rw [← Real.rpow_mul hDpos.le,Real.rpow_add hDpos,Real.rpow_one]
    _≤_:=Real.rpow_le_rpow_of_exponent_le hD (by nlinarith)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem U7 (J:ℕ) (B ε:ℝ) (hB:1≤B)
   (hε:0<ε) (hε1:ε≤1/4):
   ∃C:ℝ,1≤C∧∀M:ℕ,1≤M→∀a:ℕ→ℂ,
@@ -37135,6 +37972,8 @@ theorem U7 (J:ℕ) (B ε:ℝ) (hB:1≤B)
  exact mul_le_mul_of_nonneg_right
   (mul_le_mul_of_nonneg_right (pow_le_pow_right₀ (by norm_num:(1:ℝ)≤2) (by omega)) (sq_nonneg C))
   (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aD5 (J:ℕ) (B ε:ℝ) (hB:1≤B) (hε:0<ε) (hε1:ε≤1/4):
   ∃A₀:ℝ,0<A₀∧∀D C:ℝ,1≤D→0<C→
    ∀{ι:Type}(R:Finset ι)(c:ι→PrimitiveComplexCharacter)(t β:ι→ℝ)(θ:ℝ),1/2≤θ→
@@ -37207,6 +38046,8 @@ theorem aD5 (J:ℕ) (B ε:ℝ) (hB:1≤B) (hε:0<ε) (hε1:ε≤1/4):
   _≤C*(W*((N:ℝ)+D))*(W*((N:ℝ)*D)^(2*ε))*(2+(Real.log (2^(J+2)*N+1:ℕ))^2)*
     (W*C₁^2*(N:ℝ)^(1+2*ε-2*θ)):=by gcongr
   _=_:=by dsimp [A₀]; ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aAj (R C D N ε δ θ:ℝ) (J l:ℕ)
   (hD:0<D) (hN:0<N)
   (h:R*(D^(-4*δ))^(2*l)≤
@@ -37384,8 +38225,8 @@ namespace pU
 open Complex Finset Filter OAI.Ostmann aZ gW
 open scoped BigOperators Classical Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem atJ (η:ℝ) (hη:0<η):
   ∃D₀:ℝ,1≤D₀∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    D₀≤d6*((Q:ℝ)*(T+1))→
@@ -37413,6 +38254,8 @@ theorem atJ (η:ℝ) (hη:0<η):
   have hh:=hmean N Q hN hQ T hT A hA a R c t β hc ht hsep θ (by linarith) (by linarith) hβ
   apply hh.trans
   gcongr
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aOQ (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    ∀{ι:Type} (R:Finset ι) (c:ι→PrimitiveComplexCharacter) (β t:ι→ℝ),
@@ -37465,8 +38308,8 @@ namespace pU
 open Complex Finset Filter OAI.Ostmann aZ gW
 open scoped BigOperators Classical Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem atd (η:ℝ) (hη:0<η):
   ∃D₀:ℝ,1≤D₀∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    D₀≤d6*((Q:ℝ)^2*(T+1))→
@@ -37496,6 +38339,8 @@ theorem atd (η:ℝ) (hη:0<η):
   have hh:=hmean N Q hN hQ T hT A hA a R c t β hc ht hsep θ (by linarith) (by linarith) hβ
   apply hh.trans
   gcongr
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aNZ (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    ∀{ι:Type} (R:Finset ι) (c:ι→PrimitiveComplexCharacter) (β t:ι→ℝ),
@@ -37548,8 +38393,8 @@ namespace vW
 open Complex Finset OAI.Ostmann gW pU d7
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem adz (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    ∀{ι:Type}(R:Finset ι)(c:ι→PrimitiveComplexCharacter)(β t:ι→ℝ),
@@ -37587,6 +38432,8 @@ theorem adz (η:ℝ) (hη:0<η):
     _≤2*D:=by simpa [D,mul_assoc] using hc0
     _≤2*D^e:=mul_le_mul_of_nonneg_left hp (by norm_num)
     _≤_:=mul_le_mul_of_nonneg_right (by dsimp [C]; linarith) hpow
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Ws (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    ∀{ι:Type}(R:Finset ι)(c:ι→PrimitiveComplexCharacter)(β t:ι→ℝ),
@@ -37624,6 +38471,8 @@ theorem Ws (η:ℝ) (hη:0<η):
     _≤2*D:=by simpa [D,mul_assoc] using hc0
     _≤2*D^e:=mul_le_mul_of_nonneg_left hp (by norm_num)
     _≤_:=mul_le_mul_of_nonneg_right (by dsimp [C]; linarith) hpow
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayg (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→∀R:Finset (PrimitiveComplexCharacter × ℂ),
    (∀i∈R,i.1.modulus≤Q)→(∀i∈R,|i.2.im| ≤T)→
@@ -37650,6 +38499,8 @@ theorem ayg (η:ℝ) (hη:0<η):
    simpa only [f6,alB] using hz i (hPR hi))
  have he:((12/5:ℝ)*(1-θ)+η/2)+η/2=(12/5:ℝ)*(1-θ)+η:=by ring
  simpa only [he] using hh
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ate (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→∀R:Finset (PrimitiveComplexCharacter × ℂ),
    (∀i∈R,i.1.modulus=Q)→(∀i∈R,|i.2.im| ≤T)→
@@ -37680,8 +38531,8 @@ open Complex Finset OAI.Vg
 open scoped BigOperators Classical Topology
 variable {q:ℕ} [NeZero q]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 lemma PN (χ:DirichletCharacter ℂ q)
   {r t:ℝ} (hr:0<r) (hχ:χ≠1):
   ∀z∈Metric.closedBall (0:ℂ) 1,AnalyticAt ℂ (V1w χ r t) z:=by
@@ -37693,6 +38544,8 @@ lemma PN (χ:DirichletCharacter ℂ q)
   unfold V1a
   fun_prop
  exact (ha.comp hp).div_const
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 lemma aXP (χ:DirichletCharacter ℂ q)
   {r t:ℝ} (hr:0<r) (hχ:χ≠1)
   {z:ℂ} (hz: ‖z‖ ≤1):
@@ -37705,6 +38558,8 @@ lemma aXP (χ:DirichletCharacter ℂ q)
    (((1+2*r:ℝ):ℂ)+Complex.I*(t:ℂ))
  exact (((χ.differentiableAt_LFunction _ (Or.inr hχ)).hasDerivAt.comp z hp).div_const
   (DirichletCharacter.LFunction χ (V1a r t 0))).deriv
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 lemma an9 (χ:DirichletCharacter ℂ q)
   {r t:ℝ} (hr:0<r) (hχ:χ≠1)
   {z:ℂ} (hz: ‖z‖ ≤1)
@@ -37716,6 +38571,8 @@ lemma an9 (χ:DirichletCharacter ℂ q)
  rw [aXP χ hr hχ hz]
  unfold V1w
  field_simp [hn,V6c χ hr t]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 lemma aU2 (χ:DirichletCharacter ℂ q)
   {r t:ℝ} (hr:0<r) (hχ:χ≠1) {ρ:ℂ}
   (hρ:ρ∈Vi4 (V1w χ r t)):ρ.re< -(2/3:ℝ):=by
@@ -37726,6 +38583,8 @@ lemma aU2 (χ:DirichletCharacter ℂ q)
    Complex.I_re,Complex.I_im,Complex.ofReal_im,zero_mul,mul_zero,sub_zero]
   nlinarith
  exact χ.LFunction_ne_zero_of_one_le_re (Or.inl hχ) hσ hzero
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 lemma aiT (χ:DirichletCharacter ℂ q)
   {r t σ:ℝ} (hr:0<r) (hχ:χ≠1) (hσ:1<σ)
   {ρ:ℂ} (hρ:ρ∈Vi4 (V1w χ r t)):
@@ -37741,6 +38600,8 @@ lemma aiT (χ:DirichletCharacter ℂ q)
  rw [Complex.div_re]
  simp only [Complex.natCast_re,Complex.natCast_im,zero_mul,zero_div,add_zero]
  exact div_nonneg (mul_nonneg (Nat.cast_nonneg _) hd) (Complex.normSq_nonneg _)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aM6 (χ:DirichletCharacter ℂ q)
   {r t B σ:ℝ} (hr:0<r) (hχ:χ≠1) (hB:0<B)
   (hg:∀z∈Metric.closedBall (0:ℂ) (15/16),
@@ -37774,6 +38635,8 @@ theorem aM6 (χ:DirichletCharacter ℂ q)
  simp only [neg_div,Complex.neg_re]
  apply (le_div_iff₀ (by positivity:0<3*r)).mpr
  nlinarith only [hlow,hs]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 lemma aBy (χ:DirichletCharacter ℂ q)
   {r t σ β:ℝ} (hr:0<r) (hχ:χ≠1) (hσ:1<σ)
   (hβ:1-r/4≤β) (hβ1:β≤1)
@@ -37808,6 +38671,8 @@ lemma aBy (χ:DirichletCharacter ℂ q)
   (fun ρ hρ=>aiT χ hr hχ hσ
    ((V3k f hf h0).mem_toFinset.mp hρ))
   ((V3k f hf h0).mem_toFinset.mpr hw))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayo (χ:DirichletCharacter ℂ q)
   {r t B σ β:ℝ} (hr:0<r) (hχ:χ≠1) (hB:0<B)
   (hg:∀z∈Metric.closedBall (0:ℂ) (15/16),
@@ -37844,6 +38709,8 @@ theorem ayo (χ:DirichletCharacter ℂ q)
  rw [heq]
  apply (le_div_iff₀ h3).mpr
  nlinarith only [hlow,hs]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem awr:∃c r₀:ℝ,0<c∧0<r₀∧
   ∀(q:ℕ) [NeZero q],∀(χ:DirichletCharacter ℂ q),χ≠1→χ^2≠1→
   ∀(r t B β:ℝ),0<r→ r≤r₀→1≤B→
@@ -37924,13 +38791,15 @@ open scoped BigOperators Classical Topology
 noncomputable def o7 (s:ℂ) (L:ℝ):ℝ:=
  Real.exp ((10^9:ℝ)*(max (1-s.re) 0)^(3/2:ℝ)*L)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem akW (s:ℂ) (L:ℝ) (hL:0≤L):
   1≤o7 s L:=by
  apply Real.one_le_exp_iff.mpr
  exact mul_nonneg (mul_nonneg (by norm_num)
   (Real.rpow_nonneg (le_max_right _ _) _)) hL
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aBl:∃C:ℝ,1≤C∧∀K:ℕ,∀L:ℝ,
   1≤L→(K:ℝ)*Real.log 2≤(100/49:ℝ)*L→∀a:ℝ,
   a∈Set.Icc (0:ℝ) 1→∀s:ℂ,2/3≤ s.re→ |s.im|=Real.exp L→
@@ -38071,8 +38940,8 @@ open Complex Finset Filter HurwitzZeta OAI.V2
 open scoped BigOperators Classical Topology
 variable {q:ℕ} [NeZero q]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aNu:
   (∑j:ZMod q,(j.val:ℝ)⁻¹)≤1+Real.log q:=by
  let F:Finset ℕ:=univ.image (ZMod.val:ZMod q→ℕ)
@@ -38092,6 +38961,8 @@ theorem aNu:
    simp only [Nat.cast_zero,inv_zero,add_zero,harmonic,Rat.cast_sum,
     Rat.cast_inv,Rat.cast_natCast]
   _≤_:=harmonic_le_one_add_log q
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aIv (s:ℂ) (r:ℝ) (hr:0≤r)
   (hσ:1-r≤ s.re) (j:ZMod q):
   (q:ℝ)^(-s.re)*‖V29 ((j.val:ℝ)/(q:ℝ)) s‖ ≤(q:ℝ)^r*(j.val:ℝ)⁻¹:=by
@@ -38116,6 +38987,8 @@ theorem aIv (s:ℂ) (r:ℝ) (hr:0≤r)
    congr 1
    ring
   _≤_:=mul_le_mul_of_nonneg_right hb (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aHq (χ:DirichletCharacter ℂ q) (s:ℂ)
   (r A:ℝ) (hr:0≤r) (hσ:1-r≤ s.re) (hA:0≤A)
   (hH:∀a∈Set.Icc (0:ℝ) 1,‖hurwitzZeta (a:UnitAddCircle) s-V29 a s‖ ≤A):
@@ -38158,6 +39031,8 @@ theorem aHq (χ:DirichletCharacter ℂ q) (s:ℂ)
    (add_le_add) (mul_le_mul_of_nonneg_right hmain hA)
     (mul_le_mul_of_nonneg_left aNu (by positivity))
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aHC:∃A:ℝ,1≤A∧∀L:ℝ,100≤L→
   ∀(q:ℕ) [NeZero q] (χ:DirichletCharacter ℂ q) (s:ℂ) (r:ℝ),
    0≤r→ r≤1/3→1-r≤ s.re→s.re≤2→ |s.im| =Real.exp L→
@@ -38181,8 +39056,8 @@ namespace AG
 open Complex Finset Filter HurwitzZeta OAI.V2
 open scoped BigOperators Classical Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axc (C a:ℝ) (hC:0≤C) (ha:0<a):
   ∀ᶠ L:ℝ in atTop,C*(L+1)^7≤Real.exp (a*L):=by
  filter_upwards [eventually_ge_atTop (max 1 (128*C*40320/a^8))] with L hL
@@ -38202,6 +39077,8 @@ theorem axc (C a:ℝ) (hC:0≤C) (ha:0<a):
  apply le_trans ?_ he
  apply (le_div_iff₀ (by norm_num:(0:ℝ)<40320)).mpr
  convert mul_le_mul_of_nonneg_right hbudget (pow_nonneg hL0 7) using 1 <;> ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aI5 (ε:ℝ) (hε:0<ε):
   ∃B:ℕ,0<B∧∃r₁:ℝ,0<r₁∧∀r:ℝ,0<r→ r≤r₁→
    ∃T₀:ℝ,0<T₀∧∀(q:ℕ) [NeZero q] (χ:DirichletCharacter ℂ q) (s:ℂ),
@@ -38297,8 +39174,8 @@ namespace JM
 open Complex Finset OAI.Ostmann Goldbach d7
 open scoped BigOperators Classical Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 private theorem XQ (χ:PrimitiveComplexCharacter)
   (F:Finset (PrimitiveComplexCharacter × ℂ)) (hF:∀i∈F,i.1=χ):
   (∑i∈F,multiplicity i)=
@@ -38310,6 +39187,8 @@ private theorem XQ (χ:PrimitiveComplexCharacter)
   rw [hF i hi]
  ·intro i hi j hj hij
   exact Prod.ext ((hF i hi).trans (hF j hj).symm) hij
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem av3:
   ∃C:ℝ,0<C∧∀D T α:ℝ,0<D→8≤Real.log D→1≤T→
    7/8≤α→α≤1→∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -38376,6 +39255,8 @@ theorem av3:
   have haL:0≤(1-α)*L:=mul_nonneg (by linarith) hLp.le
   nlinarith
  exact hh.trans ((mul_le_mul_of_nonneg_left hinside hC.le).trans_eq (by ring))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem avq (ν:ℝ) (hν:0<ν):
   ∃B:ℝ,0<B∧∀D T α:ℝ,0<D→8≤Real.log D→1≤T→
    7/8≤α→α≤1→∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -38423,6 +39304,8 @@ theorem avq (ν:ℝ) (hν:0<ν):
    rw [show Real.log D*((κ+ν)*(1-α))=
     Real.log D*(κ*(1-α))+ν*((1-α)*Real.log D) by ring,Real.exp_add]
    ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axr:
   ∃B:ℝ,0<B∧∀D T α:ℝ,0<D→8≤Real.log D→1≤T→
    999/1000≤α→α≤1→∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -38446,8 +39329,8 @@ namespace OQ
 open Complex Filter OAI.Vg
 open scoped Topology Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aJP (ε:ℝ) (hε:0<ε) (F:ℕ):
   ∃r₀:ℝ,0<r₀∧r₀≤1/2∧∀r:ℝ,0<r→ r≤r₀→
    ∀ᶠ N:ℕ in atTop,
@@ -38461,6 +39344,8 @@ theorem aJP (ε:ℝ) (hε:0<ε) (F:ℕ):
  intro r hr hrr
  obtain ⟨T₀,_,hT⟩:=hhigh r hr hrr
  exact ⟨T₀,hT⟩
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 private theorem aM7 (N:ℕ) (hN:1≤N) (r t:ℝ)
   (hr:0<r) (hrsmall:r≤1/8) (ht: |t| ≤2*(N:ℝ))
   (z:ℂ) (hz:z∈Metric.closedBall (0:ℂ) (15/16)):
@@ -38492,6 +39377,8 @@ private theorem aM7 (N:ℕ) (hN:1≤N) (r t:ℝ)
   rw [abs_mul,abs_of_pos (by positivity:0<3*r)] at hh
   have hb: |t+3*r*z.im| ≤4*(N:ℝ):=by nlinarith
   simpa only [Nat.cast_mul,Nat.cast_ofNat] using hb
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aBB (ε:ℝ) (hε:0<ε) (F:ℕ):
   ∃r₀:ℝ,0<r₀∧∀r:ℝ,0<r→ r≤r₀→
    ∀ᶠ N:ℕ in atTop,
@@ -38533,6 +39420,8 @@ theorem aBB (ε:ℝ) (hε:0<ε) (F:ℕ):
  unfold V1w
  rw [div_eq_mul_inv,norm_mul]
  exact (mul_le_mul hL hi (norm_nonneg _) (by positivity)).trans hbudget
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem awt (A:ℝ) (hA:0<A) (F:ℕ):
   ∀ᶠ N:ℕ in atTop,
    ∀k d:ℕ,d≤F→Odd d→∀[NeZero (2^k*d)],
@@ -38579,8 +39468,8 @@ namespace OQ
 open Complex Filter Finset Goldbach GoldbachTwistedMellin
 open scoped Topology Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 private theorem awg {q:ℕ} [NeZero q]
   (χ:DirichletCharacter ℂ q) (hχ:χ≠1) (A T:ℝ):
   ∀ᶠ N:ℕ in atTop,∀s:ℂ, |s.im| ≤T→
@@ -38614,6 +39503,8 @@ private theorem awg {q:ℕ} [NeZero q]
   rwa [hreg]
  have hh:=hN s hS
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem av6 (Q:ℕ) (A T:ℝ):
   ∀ᶠ N:ℕ in atTop,
    ∀(q:ℕ) [NeZero q],q≤Q→
@@ -38643,6 +39534,8 @@ theorem av6 (Q:ℕ) (A T:ℝ):
  filter_upwards [(eventually_all_finset (Icc 1 Q)).mpr hq] with N hN
  intro q _ hqQ χ hχ s ht hs
  exact hN q (mem_Icc.mpr ⟨NeZero.pos q,hqQ⟩) χ hχ s ht hs
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem azJ (A:ℝ) (hA:0<A) (Q:ℕ):
   ∀ᶠ N:ℕ in atTop,
    ∀(q:ℕ) [NeZero q],q≤Q→
@@ -38685,6 +39578,8 @@ theorem azJ (A:ℝ) (hA:0<A) (Q:ℕ):
   have hs:=(div_le_iff₀ (by norm_num:(0:ℝ)<42)).mp hloglog
   nlinarith
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem azn (A:ℝ) (hA:0<A) (F:ℕ):
   ∀ᶠ N:ℕ in atTop,
    ∀k d:ℕ,d≤F→Odd d→∀[NeZero (2^k*d)],
@@ -38706,8 +39601,8 @@ namespace vW
 open Complex Finset OAI.Ostmann gW d7
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahP (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    ∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -38726,6 +39621,8 @@ theorem ahP (η:ℝ) (hη:0<η):
   (by linarith) (fun i hi=>hc i (hPR hi))
   (fun i hi=>O8 T (by linarith) i.2 (ht i (hPR hi))) hsep
  simpa only [Real.rpow_one,mul_assoc] using hh
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem atK (η:ℝ) (hη:0<η):
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    ∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -38839,17 +39736,21 @@ theorem aNQ {ι:Type*} (S:Finset ι) (β w:ι→ℝ)
  funext σ
  simp only [Finset.sum_apply]
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aNv {X δ:ℝ} (hX:0<X) (x:ℝ):
   HasDerivAt (fun u:ℝ=>X^(δ*(u-1)))
    ((δ*Real.log X)*X^(δ*(x-1))) x:=by
  simp_rw [Real.rpow_def_of_pos hX]
  convert ((((hasDerivAt_id x).sub_const 1).const_mul δ).mul_const (Real.log X)).exp using 1 <;> simp only [id_eq] <;> ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem N4 {X δ:ℝ} (hX:0<X):
   Continuous (fun u:ℝ=>X^(δ*(u-1))):=by
  simp_rw [Real.rpow_def_of_pos hX]
  fun_prop
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ajp {X δ a b:ℝ} (hX:0<X):
   (δ*Real.log X)*(∫ σ in a..b,X^(δ*(σ-1)))=
    X^(δ*(b-1))-X^(δ*(a-1)):=by
@@ -39004,10 +39905,12 @@ open Complex Finset Real Vx
 open scoped BigOperators Classical
 noncomputable def jT (P t:ℝ):ℝ:=min 1 (P/(1+|t|))
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem akX {P:ℝ} (hP:0≤P) (t:ℝ):
   0≤jT P t:=by unfold jT; positivity
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aRQ {u a:ℝ} (hu:0<u) (ha:0≤a) (ha1:a≤1):
   min 1 u≤u^a:=by
  by_cases h:1≤u
@@ -39015,6 +39918,8 @@ theorem aRQ {u a:ℝ} (hu:0<u) (ha:0≤a) (ha1:a≤1):
  ·have hu1:u≤1:=(lt_of_not_ge h).le
   have hh:=Real.rpow_le_rpow_of_exponent_ge hu hu1 ha1
   exact (min_le_right _ _).trans (by simpa only [Real.rpow_one] using hh)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aPG {P T a:ℝ} (hP:0<P) (hT:0<T)
   (ha:0≤a) (ha1:a≤1):min 1 (2*P/T)*T^a≤2*P^a:=by
  have ht:T^a≠0:=(Real.rpow_pos_of_pos hT a).ne'
@@ -39079,8 +39984,8 @@ theorem akt {ι:Type*} (S:Finset ι) (t:ι→ℝ)
  simp only [sum_const,card_range,nsmul_eq_mul] at hh
  exact hh.trans_eq (by ring)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aBQ:
   ∃C:ℝ,0<C∧∀K:ℕ,∀P σ:ℝ,1≤P→2/3≤σ→σ≤1→
    ∀S:Finset Vx.V1o,(∀c∈S,σ≤c.val.1.re)→
@@ -39110,6 +40015,8 @@ theorem aBQ:
  exact hh.trans (mul_le_mul_of_nonneg_left
   (pow_le_pow_left₀ (Real.log_nonneg (by linarith))
    (Real.log_le_log (by positivity) hTU) 13) (by positivity))
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aAw:
   ∃C:ℝ,0<C∧∀K:ℕ,∀P:ℝ,1≤P→
    ∀S:Finset Vx.V1o,(∀c∈S,1/2≤c.val.1.re)→
@@ -39148,8 +40055,8 @@ open Complex Finset Real Vx
 open scoped BigOperators Classical
 noncomputable def o9 (N:ℝ):ℕ:=⌈7*Real.log N/Real.log 2⌉₊
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem alh {N:ℝ} (hN:2≤N):
   N^6+1≤(2:ℝ)^(o9 N+1)∧
   ((o9 N+1:ℕ):ℝ)≤(9/Real.log 2)*Real.log N∧
@@ -39179,6 +40086,8 @@ theorem alh {N:ℝ} (hN:2≤N):
  ·have hh:=(le_div_iff₀ hL2).mpr hK
   convert hh using 1 <;> ring
  ·simpa only [Real.log_pow] using hK
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem azp:
   ∃C:ℝ,0<C∧∀N P σ:ℝ,2≤N→1≤P→2/3≤σ→σ≤1→
    ∀S:Finset Vx.V1o,(∀c∈S,σ≤c.val.1.re)→
@@ -39200,6 +40109,8 @@ theorem azp:
   _≤C*((9/Real.log 2)*Real.log N)*(9*Real.log N)^13*P^(3*(1-σ)):=by
    gcongr
   _=_:=by ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayG:
   ∃C:ℝ,0<C∧∀N P:ℝ,2≤N→1≤P→
    ∀S:Finset Vx.V1o,(∀c∈S,1/2≤c.val.1.re)→
@@ -39225,8 +40136,8 @@ namespace v7
 open Complex Finset Real Vx aY.Iz
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aEd:
   ∃C:ℝ,0<C∧∀N P g:ℝ,2≤N→1≤P→
    P≤N^(2773/10000:ℝ)→0≤g→ g≤1/3→
@@ -39264,6 +40175,8 @@ theorem aEd:
   hCp (by norm_num) (by norm_num)
   (fun c _=>akX (by linarith) _) hr hd
  exact hh.trans_eq (by congr 1 <;> ring)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aH7:
   ∃C:ℝ,0<C∧∀N P:ℝ,2≤N→1≤P→
    P≤N^(2773/10000:ℝ)→
@@ -39295,6 +40208,8 @@ theorem aH7:
    mul_le_mul_of_nonneg_right hh (by positivity)
   _=(C*(Real.log N)^2)*(P*N^(-(1/3:ℝ))):=by ring
   _≤_:=mul_le_mul_of_nonneg_left hp (by positivity)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem axO:
   ∃C:ℝ,0<C∧∀N P g:ℝ,2≤N→1≤P→
    P≤N^(2773/10000:ℝ)→0≤g→ g≤1/3→
@@ -39333,8 +40248,8 @@ open Complex Finset Real Vx Filter
 open scoped BigOperators Classical Topology
 def BT (A:ℕ):ℕ:=28*(A+14)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aOs (A:ℕ) {N:ℝ} (hN:2≤N) (hL:1≤Real.log N):
   N^(-V1l.V2j (BT A) (N^4)/7)≤((Real.log N)^(A+14))⁻¹:=by
  have hNp:0<N:=by linarith
@@ -39359,6 +40274,8 @@ theorem aOs (A:ℕ) {N:ℝ} (hN:2≤N) (hL:1≤Real.log N):
  apply Real.exp_le_exp.mpr
  have hh:=mul_le_mul hc a6Q hLL (by positivity)
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aAe (A:ℕ):
   ∀ᶠ N:ℝ in atTop,(Real.log N)^2*N^(-(1/20:ℝ))≤((Real.log N)^A)⁻¹:=by
  let k:ℕ:=A+2
@@ -39391,6 +40308,8 @@ theorem aAe (A:ℕ):
   rw [Real.rpow_neg hNp.le,pow_add]
   ring
  exact he.trans_le hratio
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayH (A:ℕ):
   ∃C:ℝ,0<C∧∀ᶠ N:ℝ in atTop,∀P:ℝ,
    1≤P→P≤N^(2773/10000:ℝ)→
@@ -39533,10 +40452,12 @@ theorem JL (f:ℕ→ℂ) (w:ℕ→ℝ) (n:ℕ) (B:ℝ)
   _=w 0*B:=by rw [htel]; ring
 def jE (n:ℕ):ℝ:=1/Real.log (max 2 n:ℕ)
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem OE (n:ℕ):0≤jE n:=by
  exact one_div_nonneg.mpr (Real.log_natCast_nonneg _)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Oc:Antitone jE:=by
  intro m n hmn
  apply one_div_le_one_div_of_le
@@ -39544,10 +40465,14 @@ theorem Oc:Antitone jE:=by
  ·apply Real.log_le_log
   ·exact_mod_cast (show 0< max 2 m by omega)
   ·exact_mod_cast max_le_max_left 2 hmn
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Sl {p:ℕ} (hp:p.Prime):
   jE p*Real.log p=1:=by
  have hlog:Real.log (p:ℝ)≠0:=ne_of_gt (Real.log_pos (by exact_mod_cast hp.one_lt))
  simp [jE,max_eq_right hp.two_le,hlog]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem akL (f:ℕ→ℂ) (w:ℕ→ℝ) (a b:ℕ) (B:ℝ)
   (hw:∀k,0≤w k) (hanti:Antitone w)
   (hf:∀k≤b, ‖∑j∈Ioc a k,f j‖ ≤B):
@@ -39580,8 +40505,8 @@ theorem akL (f:ℕ→ℂ) (w:ℕ→ℝ) (a b:ℕ) (B:ℝ)
 end
 abbrev primeLog:=jP.primeLog
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ahF (n:ℕ) (z:ℂ):
   jE n • (primeLog n*z)=if n.Prime then z else 0:=by
  by_cases hn:n.Prime
@@ -39590,6 +40515,8 @@ theorem ahF (n:ℕ) (z:ℂ):
   rw [←mul_assoc,←Complex.ofReal_mul,Sl hn]
   simp
  ·simp [primeLog,jP.primeLog,hn]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem av2 {q:ℕ} (χ:DirichletCharacter ℂ q)
   (a b:ℕ) (ha:1≤a) (B:ℝ)
   (hf:∀k≤b, ‖∑j∈Ioc a k,primeLog j*χ (j:ZMod q)‖ ≤B):
@@ -39607,8 +40534,8 @@ namespace lP
 open Finset
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aXs (a b J k:ℕ) (hJ:0<J):
   (Ioc a b).filter (fun n=>(n-1)/J=k)=
    Ioc (max a (k*J)) (min b ((k+1)*J)):=by
@@ -39616,6 +40543,8 @@ theorem aXs (a b J k:ℕ) (hJ:0<J):
  simp only [mem_filter,mem_Ioc,Nat.div_eq_iff hJ,lt_min_iff,max_lt_iff,
   le_min_iff,Nat.mul_comm J k,Nat.mul_comm J (k+1),Nat.add_mul,Nat.one_mul]
  omega
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem alk (f:ℕ→ℂ) (a b N J:ℕ) (hJ:0<J)
   (ha:2*J≤a) (hb:b≤N) (E:ℝ) (hE:0≤E)
   (hlocal:∀k u v:ℕ,2≤k→k*J≤u→u<v→v≤(k+1)*J→
@@ -39644,6 +40573,8 @@ theorem alk (f:ℕ→ℂ) (a b N J:ℕ) (hJ:0<J)
    ·rw [Ioc_eq_empty_of_le (le_of_not_gt huv),sum_empty,norm_zero]
     exact hE
   _=_:=by simp
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem anu (N Y K:ℕ) (hY:4≤Y) (hNY:N≤K*Y):
   0<Y/2∧Y≤3*(Y/2)∧N/(Y/2)+1≤3*K+1:=by
  have hJ:0<Y/2:=by omega
@@ -39658,26 +40589,32 @@ namespace lP
 open Complex Finset Real OAI.Ostmann jP Goldbach
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aOE (χ:PrimitiveComplexCharacter) (δ B:ℝ)
   (M:ℕ) {X:ℝ} (hX:0≤X) (hB:0≤B):
   0≤nZ χ δ B M X:=by
  have hlog:0≤Real.log (M+1:ℝ):=Real.log_nonneg (by have hm:(0:ℝ)≤M:=Nat.cast_nonneg M; linarith)
  unfold nZ
  positivity
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aQB (χ:PrimitiveComplexCharacter) (δ B:ℝ)
   (M:ℕ) {X N:ℝ} (hδ:0≤δ) (hB:0≤B) (hX:0≤X) (hXN:X≤N):
   nZ χ δ B M X≤nZ χ δ B M N:=by
  have hlog:0≤Real.log (M+1:ℝ):=Real.log_nonneg (by have hm:(0:ℝ)≤M:=Nat.cast_nonneg M; linarith)
  unfold nZ
  gcongr
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Qb (χ:PrimitiveComplexCharacter) (δ B X H:ℝ)
   (hX:0≤X) (hH:0≤H):0≤l8 χ δ B X H:=by
  apply sum_nonneg
  intro ρ hρ
  unfold tq
  positivity
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ak7 {X N C β:ℝ} (hX:0<X) (hN:0<N)
   (hXN:X≤N) (zV:N≤C*X) (hβ:0≤β):
   X^(β-1)≤C*N^(β-1):=by
@@ -39691,6 +40628,8 @@ theorem ak7 {X N C β:ℝ} (hX:0<X) (hN:0<N)
    calc
     _≤(C*X)*N^β:=mul_le_mul_of_nonneg_right zV (Real.rpow_nonneg hN.le β)
     _=_:=by field_simp <;> ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem akA {X N l H t:ℝ} (hX:0≤X) (hXN:X≤N)
   (hl:0<l) (hH:0<H) (hlH:l≤3*H):
   l*min 1 (X/(l*(1+|t|)))≤3*H*min 1 (N/(H*(1+|t|))):=by
@@ -39704,6 +40643,8 @@ theorem akA {X N l H t:ℝ} (hX:0≤X) (hXN:X≤N)
    _≤N/(1+|t|):=div_le_div_of_nonneg_right hXN hu.le
    _≤3*N/(1+|t|):=by gcongr; linarith
    _=_:=by field_simp <;> ring
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aN7 (χ:PrimitiveComplexCharacter) (δ B:ℝ)
   {X N C l H:ℝ} (hδ:0≤δ) (hX:0<X) (hN:0<N)
   (hXN:X≤N) (hC:0≤C) (zV:N≤C*X)
@@ -39794,8 +40735,8 @@ namespace lP
 open Complex Finset Real OAI.Ostmann jP Goldbach
 open scoped BigOperators Classical
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem Yd (χ:PrimitiveComplexCharacter) (N:ℕ)
   (hN:2≤N) (hq:χ.modulus≤N):
   0≤logHeight χ.modulus (((N^6+1:ℕ):ℝ)+2)∧
@@ -39836,6 +40777,8 @@ theorem Yd (χ:PrimitiveComplexCharacter) (N:ℕ)
   simpa only [Real.log_pow,Nat.cast_ofNat] using hh
  ·have hh:=Real.log_le_log (by positivity:0<(N:ℝ)^6+2) hn8
   simpa only [Nat.cast_add,Nat.cast_pow,Nat.cast_ofNat,Real.log_pow] using hh
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aJU (χ:PrimitiveComplexCharacter) (N:ℕ)
   (hN:2≤N) (hq:χ.modulus≤N) (hL:1≤Real.log N):
   nZ χ (1/10000) ((N:ℝ)^6) (N^6+1) N≤
@@ -39891,6 +40834,8 @@ theorem aJU (χ:PrimitiveComplexCharacter) (N:ℕ)
  norm_num only [show (1/2:ℝ)+2*(1/10000)=2501/5000 by norm_num]
  push_cast at hmain Mw ⊢
  nlinarith only [hmain,Mw,mul_nonneg (Real.rpow_nonneg hNp.le (2501/5000:ℝ)) (pow_nonneg hLp 3)]
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem akG (N:ℕ) (hN:2≤N) (hL:1≤Real.log N):
   2*Real.sqrt N*Real.log N≤2*(N:ℝ)^(2501/5000:ℝ)*(Real.log N)^3:=by
  have hN1:(1:ℝ)≤N:=by exact_mod_cast (show 1≤N by omega)
@@ -39906,8 +40851,8 @@ namespace lP
 open Complex Finset Real OAI.Ostmann jP Goldbach Filter
 open scoped BigOperators Classical Topology
 section
-set_option maxRecDepth 8192
-set_option maxHeartbeats 2000000
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem atU (K:ℕ):
   ∃C:ℝ,0<C∧∀(χ:PrimitiveComplexCharacter) (N Y a b:ℕ) (H:ℝ),
    2≤N→1≤Real.log N→χ.modulus≤N→4≤Y→Y≤N→N≤K*Y→
@@ -39951,6 +40896,8 @@ theorem atU (K:ℕ):
   hB hM hY hYN hNK ha hjN hH hjlen
  have htotal:=mul_le_mul_of_nonneg_left hcoef (by positivity:(0:ℝ)≤((3*K+1:ℕ):ℝ))
  exact hh.trans (by convert htotal using 1 <;> dsimp [D]; ring)
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem aly (N Y K a:ℕ) (hY:1≤Y) (hK:1≤K)
   (hNY:N≤K*Y) (hKN:K^2≤N) (hYa:Y≤a):
   Real.log N≤2*Real.log (a+1:ℕ):=by
@@ -39964,6 +40911,8 @@ theorem aly (N Y K a:ℕ) (hY:1≤Y) (hK:1≤K)
  have h3:=Real.log_le_log hYp (show (Y:ℝ)≤(a+1:ℕ) by exact_mod_cast (show Y≤a+1 by omega))
  norm_num at h2
  linarith
+set_option maxRecDepth 8192 in
+set_option maxHeartbeats 2000000 in
 theorem ayC (K:ℕ) (hK:1≤K):
   ∃C:ℝ,0<C∧∀(χ:PrimitiveComplexCharacter) (N Y a b:ℕ) (H:ℝ),
    2≤N→1≤Real.log N→χ.modulus≤N→4≤Y→Y≤N→N≤K*Y→
@@ -39999,15 +40948,21 @@ open Binary13.DU Binary13.DY kB
 noncomputable section
 def jG {q:ℕ} (χ:DirichletCharacter ℂ q) (n:ℕ):ℂ:=χ (n:ZMod q)
 section
-set_option maxHeartbeats 5000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 lemma aPq {q:ℕ} (χ:DirichletCharacter ℂ q):jG χ 1=1:=by
  simp [jG]
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 lemma ant {q:ℕ} (χ:DirichletCharacter ℂ q) (d n:ℕ):
   jG χ (d*n)=jG χ d*jG χ n:=by
  simp [jG]
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 lemma alu {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q) (n:ℕ):
   ‖jG χ n‖ ≤1:=χ.norm_le_one _
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 lemma W3 {q:ℕ} (χ:DirichletCharacter ℂ q) (z:ℂ) (Y:ℝ):
   kW (twist (jG χ) z) g7 Y=smoothed χ z Y:=by
  have hset:Finset.Ioc 0 ⌊Y⌋₊=Finset.Icc 1 ⌊Y⌋₊:=by
@@ -40015,6 +40970,8 @@ lemma W3 {q:ℕ} (χ:DirichletCharacter ℂ q) (z:ℂ) (Y:ℝ):
   simp only [Finset.mem_Ioc,Finset.mem_Icc]
   omega
  simp only [kW,smoothed,hset,aYb,jG,g7,weight]
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 lemma ayv {N M:ℝ} (hN:0<N) (hM:0<M) (s:ℂ):
   qC N M s=kd (Real.log M) (Real.log N) s:=by
  by_cases hs:s=0
@@ -40025,12 +40982,16 @@ lemma ayv {N M:ℝ} (hN:0<N) (hM:0<M) (s:ℂ):
    rw [Complex.cpow_def_of_ne_zero (Complex.ofReal_ne_zero.mpr hx.ne'),
     ← Complex.ofReal_log hx.le,mul_comm]
   rw [hp N hN,hp M hM]
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 lemma aMK {q:ℕ} (hq:0<q):
   lW (q*q)=((q.totient:ℝ)/(q:ℝ):ℝ):=by
  have hqC:(q:ℂ)≠0:=by exact_mod_cast hq.ne'
  rw [aiM (q*q) (Nat.mul_pos hq hq),Nat.totient_mul_of_dvd (dvd_refl q)]
  push_cast
  field_simp [hqC]
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 theorem aIJ:
   ∃Cd:ℝ,0<Cd∧∀q:ℕ,∀[NeZero q],∀χ:DirichletCharacter ℂ q,
    χ≠1→∀D:ℝ,1<D→∀ρ:ℂ,(999/1000:ℝ)≤ρ.re→ρ.re≤1→
@@ -40050,6 +41011,8 @@ theorem aIJ:
   Real.rpow_le_rpow (by positivity) hheight (by norm_num)
  norm_num only [show (1/2:ℝ)+1/10000=5001/10000 by norm_num] at h
  exact h.trans (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hp hC.le) (by positivity))
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 theorem aAX:
   ∃Cg:ℝ,0<Cg∧∀q₀:ℕ,∀[NeZero q₀],∀θ:DirichletCharacter ℂ q₀,
    ∀D:ℝ,1≤D→∀s:ℂ,0≤ s.re→s.re≤1/500→
@@ -40110,6 +41073,8 @@ theorem aAX:
   _=(2*C)*D^(5001/10000:ℝ)*
     ((k:ℝ)^(-1-s.re)*(M/(k:ℝ))^(-1+1/10000:ℝ)):=by ring
   _≤_:=mul_le_mul_of_nonneg_left (avE hk1 hM hs (by norm_num)) (by positivity)
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 theorem awQ:
   ∃Cg:ℝ,0<Cg∧∀q₀:ℕ,∀[NeZero q₀],∀θ:DirichletCharacter ℂ q₀,
    ∀q q':ℕ,
@@ -40168,8 +41133,8 @@ def aah (c d:PrimitiveComplexCharacter) (T D:ℝ):Prop:=
   (θ=1→q₀∣c.modulus*c.modulus∧lW q₀=((c.modulus.totient:ℝ)/(c.modulus:ℝ):ℝ))∧
   (q₀:ℝ)*(T+1)≤D
 section
-set_option maxHeartbeats 5000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 theorem agz:
   ∃D₀:ℝ,1≤D₀∧∀D:ℝ,D₀≤D→∀T:ℝ,1≤T→∀α:ℝ,
    (999/1000:ℝ)≤α→α≤1→∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -40225,6 +41190,8 @@ theorem agz:
   rw [hfun] at hp
   simp only [Real.log_exp] at hp
   simpa only [hprincipal] using hp
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 theorem aAx (c d:PrimitiveComplexCharacter) {Q:ℕ} {T:ℝ}
   (hc:c.modulus≤Q) (hd:d.modulus≤Q) (hT:0≤T+1):
   aah c d T ((Q:ℝ)^2*(T+1)):=by
@@ -40242,6 +41209,8 @@ theorem aAx (c d:PrimitiveComplexCharacter) {Q:ℕ} {T:ℝ}
    simpa only [pow_two] using mul_le_mul (Nat.cast_le.mpr hc) (Nat.cast_le.mpr hd)
     (Nat.cast_nonneg _) (Nat.cast_nonneg _)
   simpa only [Nat.cast_mul] using mul_le_mul_of_nonneg_right hp hT
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 theorem awH (c d:PrimitiveComplexCharacter)
   (hmod:c.modulus=d.modulus) (T:ℝ):aah c d T ((c.modulus:ℝ)*(T+1)):=by
  rcases c with ⟨q,hq,χ,hχ,hnχ⟩
@@ -40263,6 +41232,8 @@ theorem awH (c d:PrimitiveComplexCharacter)
  ·intro h
   refine ⟨dvd_mul_right q q,?_⟩
   simpa only [Complex.ofReal_div,Complex.ofReal_natCast] using aiM q hq
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 theorem azU:
   ∃D₀:ℝ,1≤D₀∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→
    D₀≤(Q:ℝ)^2*(T+1)→∀α:ℝ,(999/1000:ℝ)≤α→α≤1→
@@ -40284,6 +41255,8 @@ theorem azU:
   exact mul_le_mul_of_nonneg_right hqi (by linarith)
  ·intro i hi j hj
   exact aAx i.1 j.1 (hq i hi) (hq j hj) (by linarith)
+set_option maxHeartbeats 5000000 in
+set_option maxRecDepth 8192 in
 theorem aBg:
   ∃D₀:ℝ,1≤D₀∧∀q:ℕ,1≤q→∀T:ℝ,1≤T→
    D₀≤(q:ℝ)*(T+1)→∀α:ℝ,(999/1000:ℝ)≤α→α≤1→
@@ -40310,7 +41283,7 @@ open scoped BigOperators Classical
 namespace Binary13.rV
 noncomputable section
 section
-set_option maxHeartbeats 3000000
+set_option maxHeartbeats 3000000 in
 theorem aiO:
   ∃C:ℝ,0<C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→∀α:ℝ,
    (999/1000:ℝ)≤α→α≤1→∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -40335,6 +41308,7 @@ theorem aiO:
   exact L6 Q hQ T hT hlarge α hα hα1 P
    (fun i hi=>hq i (hP hi)) (fun i hi=>ht i (hP hi))
    (fun i hi=>hβ i (hP hi)) (fun i hi=>hz i (hP hi)) hsep
+set_option maxHeartbeats 3000000 in
 theorem aHI:
   ∃C:ℝ,0<C∧∀q:ℕ,1≤q→∀T:ℝ,1≤T→∀α:ℝ,
    (999/1000:ℝ)≤α→α≤1→∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -40370,11 +41344,13 @@ noncomputable section
 namespace BombieriVinogradov.qA
 def dS (x:ℝ):ℂ:=circleMap 0 1 (2*Real.pi*x)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Gd (x y:ℝ):dS (x+y)=dS x*dS y:=by
  dsimp [dS]
  rw [circleMap_zero_mul,one_mul,mul_add]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aOg (x:ℝ): ‖dS x‖ =1:=by
  simp [dS,norm_circleMap_zero]
 end
@@ -40433,8 +41409,8 @@ theorem K4 {R:Type*} [AddCommMonoid R] (d f:ℕ) (F:ℕ→R):
  | zero=>simp
  | succ f ih=>rw [Nat.mul_succ,sum_range_add,ih,sum_range_succ]
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Wb {q:ℕ} [NeZero q] (k:ℕ):
   ZMod.stdAddChar (k:ZMod q)=dS ((k:ℝ)/q):=by
  rw [← Int.cast_natCast k,ZMod.stdAddChar_coe]
@@ -40443,6 +41419,8 @@ theorem Wb {q:ℕ} [NeZero q] (k:ℕ):
  push_cast
  congr 1
  ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Tz {q:ℕ} [NeZero q] (k a:ℕ):
   ZMod.stdAddChar ((k:ZMod q)*(a:ZMod q))=dS ((k:ℝ)*a/q):=by
  rw [← Nat.cast_mul,Wb,Nat.cast_mul]
@@ -40508,11 +41486,13 @@ namespace zY
 noncomputable section
 def rP (m:ℕ):ℂ:=(μ m:ℂ)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ahR (m:ℕ): ‖rP m‖ ≤1:=by
  rw [rP,Complex.norm_intCast]
  exact_mod_cast (abs_moebius_le_one (n:=m))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aAg {M:ℕ} (apr:0<M) (u:ℕ):
   (∑e∈M.divisors.filter (fun e=>e∣u),rP e)=
    if u.Coprime M then (1:ℂ) else 0:=by
@@ -40535,6 +41515,8 @@ theorem aAg {M:ℕ} (apr:0<M) (u:ℕ):
  by_cases one:g=1
  ·simp [one,one_apply]
  ·simp [one,one_apply]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ah4 {d M:ℕ} (pH:d∣M) (χ:DirichletCharacter ℂ d)
   (u:ℕ):DirichletCharacter.changeLevel pH χ (u:ZMod M)=
    (if u.Coprime M then (1:ℂ) else 0)*χ (u:ZMod d):=by
@@ -40608,14 +41590,16 @@ open zY
 namespace Sz
 noncomputable section
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem awv {d:ℕ} [NeZero d] {χ:DirichletCharacter ℂ d}
   (primitive:χ.IsPrimitive) (x:ZMod d):
   ‖gaussSum χ (ZMod.stdAddChar.mulShift x)‖ ≤Real.sqrt d:=by
  rw [gaussSum_mulShift_of_isPrimitive ZMod.stdAddChar primitive,norm_mul,
   DirichletCharacter.norm_gaussSum_stdAddChar primitive]
  exact mul_le_of_le_one_left (Real.sqrt_nonneg _) (DirichletCharacter.norm_le_one _ _)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem KG {M d e:ℕ} [NeZero d] [NeZero M] (pH:d∣M)
   (uY:e∈M.divisors) (coprime:e.Coprime d):
   0<M/e/d∧d*(M/e/d)=M/e∧e*(d*(M/e/d))=M:=by
@@ -40627,6 +41611,8 @@ theorem KG {M d e:ℕ} [NeZero d] [NeZero M] (pH:d∣M)
  have quotient:=Nat.mul_div_cancel' an6
  exact ⟨Nat.div_pos (Nat.le_of_dvd Yv an6) (NeZero.pos d),quotient,
   by rw [quotient,Nat.mul_div_cancel' wT]⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aiU {M d e:ℕ} [NeZero M] [NeZero d] (pH:d∣M)
   (uY:e∈M.divisors) (k:ℕ) {χ:DirichletCharacter ℂ d} (primitive:χ.IsPrimitive):
   ‖rP e*χ (e:ZMod d)*
@@ -40657,6 +41643,8 @@ theorem aiU {M d e:ℕ} [NeZero M] [NeZero d] (pH:d∣M)
  ·have a4d:χ (e:ZMod d)=0:=MulChar.map_nonunit _
    (fun h=>coprime ((ZMod.isUnit_iff_coprime e d).mp h))
   simp [coprime,a4d]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aJl {M d:ℕ} [NeZero M] [NeZero d] (pH:d∣M)
   {χ:DirichletCharacter ℂ d} (primitive:χ.IsPrimitive) (k:ℕ) (aem:0<k):
   ‖gaussSum (DirichletCharacter.changeLevel pH χ) (ZMod.stdAddChar.mulShift (k:ZMod M))‖ ≤
@@ -40699,8 +41687,8 @@ end Sz
 open Sz
 namespace Cn
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ahk {r q:ℕ} [NeZero r] [NeZero q] (aeS:r∣q)
   (χ:DirichletCharacter ℂ r) (k:ℕ) (aem:0<k):
   ‖gaussSum (DirichletCharacter.changeLevel aeS χ) (ZMod.stdAddChar.mulShift (k:ZMod q))‖ ≤
@@ -40713,6 +41701,8 @@ theorem ahk {r q:ℕ} [NeZero r] [NeZero q] (aeS:r∣q)
  rw [DirichletCharacter.changeLevel_trans χ.primitiveCharacter χ.conductor_dvd_level aeS,
   DirichletCharacter.changeLevel_primitiveCharacter] at aou
  exact aou
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ag4 {r:ℕ} [NeZero r] (χ:DirichletCharacter ℂ r):
   ‖gaussSum χ ZMod.stdAddChar‖ ≤Real.sqrt χ.conductor:=by
  have induced:=ahk (dvd_refl r) χ 1 (by decide)
@@ -40725,6 +41715,8 @@ theorem ag4 {r:ℕ} [NeZero r] (χ:DirichletCharacter ℂ r):
    exact ⟨rfl,by simpa only [mul_one] using χ.conductor_dvd_level⟩
  rw [onlyOne] at induced
  simpa [DirichletCharacter.changeLevel_self,AddChar.mulShift_one] using induced
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem VZ {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q) (x:ZMod q):
   ‖gaussSum χ (ZMod.stdAddChar.mulShift (-x))‖ ≤ ‖gaussSum χ (ZMod.stdAddChar.mulShift x)‖ :=by
  have equality:ZMod.stdAddChar.mulShift (-x)=
@@ -40745,8 +41737,8 @@ open scoped BigOperators Classical
 noncomputable def r6 {p:ℕ} [Fact p.Prime] (χ ψ:DirichletCharacter ℂ p)
   (m:ZMod p):ℂ:=∑a:ZMod p,χ a*ψ (m-a)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aYy {p:ℕ} [hp:Fact p.Prime] {χ ψ:DirichletCharacter ℂ p}
   (hχ:χ≠1) (hψ:ψ≠1) (hχψ:χ*ψ≠1):
   ‖jacobiSum χ ψ‖ =Real.sqrt p:=by
@@ -40758,6 +41750,8 @@ private theorem aYy {p:ℕ} [hp:Fact p.Prime] {χ ψ:DirichletCharacter ℂ p}
  have h:=congrArg (fun z:ℂ=> ‖z‖) (jacobiSum_mul_jacobiSum_inv hchar hχ hψ hχψ)
  simp only [← hc,norm_mul,norm_star,ZMod.card,Complex.norm_natCast] at h
  nlinarith [Real.sq_sqrt (Nat.cast_nonneg p),Real.sqrt_nonneg (p:ℝ),norm_nonneg (jacobiSum χ ψ)]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aPC {p:ℕ} [Fact p.Prime] (χ ψ:DirichletCharacter ℂ p)
   {m:ZMod p} (hm:m≠0):r6 χ ψ m=(χ m*ψ m)*jacobiSum χ ψ:=by
  have h:=Equiv.sum_comp (Equiv.mulLeft₀ m hm) (fun a:ZMod p=>χ a*ψ (m-a))
@@ -40769,6 +41763,8 @@ private theorem aPC {p:ℕ} [Fact p.Prime] (χ ψ:DirichletCharacter ℂ p)
    rw [← mul_one_sub,map_mul,map_mul]
    ring
   _=_:=(mul_sum ..).symm
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aVy {p:ℕ} [hp:Fact p.Prime] (χ ψ:DirichletCharacter ℂ p):
   r6 χ ψ 0=ψ (-1)*(if χ*ψ=1 then ((p-1:ℕ):ℂ) else 0):=by
  classical
@@ -40784,6 +41780,8 @@ private theorem aVy {p:ℕ} [hp:Fact p.Prime] (χ ψ:DirichletCharacter ℂ p):
  ·simp only [hprod,ite_true,MulChar.sum_one_eq_card_units,ZMod.card_units_eq_totient,
    Nat.totient_prime hp.out]
  ·rw [ite_eq_right hprod,MulChar.sum_eq_zero_of_ne_one hprod]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem DZ {p:ℕ} [hp:Fact p.Prime] (χ ψ:DirichletCharacter ℂ p) (m:ZMod p):
   ‖r6 χ ψ m‖ =
    if m=0 then (if χ*ψ=1 then (p:ℝ)-1 else 0)
@@ -40864,8 +41862,8 @@ private theorem transform {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q):
  simp only [density,mul_neg,mul_comm]
 open u9
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem anw {d f:ℕ} [NeZero d] [NeZero f]
   (support:∀a:ℕ,a.Coprime d→a.Coprime f) (θ:DirichletCharacter ℂ d) (a:ℕ):
   changeLevel (dvd_mul_right d f) θ (a:ZMod (d*f))=θ (a:ZMod d):=by
@@ -40874,12 +41872,16 @@ private theorem anw {d f:ℕ} [NeZero d] [NeZero f]
  ·rw [ite_eq_left (Nat.coprime_mul_iff_right.mpr ⟨h,support a h⟩),one_mul]
  ·have hz:θ (a:ZMod d)=0:=θ.map_nonunit (fun hu=>h ((ZMod.isUnit_iff_coprime a d).mp hu))
   simp only [hz,mul_zero]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aXD {d f:ℕ} [NeZero d] [NeZero f] [NeZero (d*f)]
   (support:∀a:ℕ,a.Coprime d→a.Coprime f) (θ:DirichletCharacter ℂ d)
   (z:ZMod (d*f)):changeLevel (dvd_mul_right d f) θ z=
    θ (ZMod.castHom (dvd_mul_right d f) (ZMod d) z):=by
  have h:=anw support θ z.val
  simpa only [← map_natCast (ZMod.castHom (dvd_mul_right d f) (ZMod d)),ZMod.natCast_zmod_val] using h
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ao7 {d f:ℕ} [NeZero d] [NeZero f] [NeZero (d*f)]
   (support:∀a:ℕ,a.Coprime d→a.Coprime f) (χ ψ:DirichletCharacter ℂ d)
   (m:ZMod (d*f)):
@@ -40920,8 +41922,8 @@ private theorem aVx {G H:Type*} [Group G] [Group H] [Fintype G] [Fintype H]
   _=∑_x:G,∑y:H,F y:=sum_congr rfl (fun x _=>right x)
   _=_:=by simp
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aRD {q d:ℕ} [NeZero q] [NeZero d] (h:d∣q)
   (θ:DirichletCharacter ℂ d) (F:ZMod d→ℂ):
   (d.totient:ℂ)*(∑x:ZMod q,changeLevel h θ x*F (ZMod.castHom h (ZMod d) x))=
@@ -40934,6 +41936,8 @@ theorem aRD {q d:ℕ} [NeZero q] [NeZero d] (h:d∣q)
  simpa only [ZMod.card_units_eq_totient,ZMod.unitsMap_val] using
   aVx (ZMod.unitsMap h) (ZMod.unitsMap_surjective h)
    (fun u:(ZMod d)ˣ=>θ (u:ZMod d)*F u)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aS5 {q d:ℕ} [NeZero q] (h:d∣q) (χ:DirichletCharacter ℂ q)
   (hn:¬χ.FactorsThrough d) (F:ZMod d→ℂ):
   (∑x:ZMod q,χ x*F (ZMod.castHom h (ZMod d) x))=0:=by
@@ -40956,6 +41960,8 @@ theorem aS5 {q d:ℕ} [NeZero q] (h:d∣q) (χ:DirichletCharacter ℂ q)
    intro x _
    simp only [G,map_mul,hu',one_mul,mul_assoc]
   _=_:=u.mulLeft_bijective.sum_comp G
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aoS {q d:ℕ} [NeZero q] [NeZero d] (h:d∣q)
   (k:ℕ) (x:ZMod q):
   ZMod.stdAddChar (((q/d*k:ℕ):ZMod q)*x)=
@@ -40972,8 +41978,8 @@ end
 noncomputable def l5 {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q) (k:ℕ):ℂ:=
  gaussSum χ (ZMod.stdAddChar.mulShift (k:ZMod q))/(q.totient:ℂ)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem W9 {q d:ℕ} [NeZero q] [NeZero d] (h:d∣q)
   (χ:DirichletCharacter ℂ q) (k:ℕ):
   l5 χ (q/d*k)=if H:χ.FactorsThrough d then l5 H.χ₀ k else 0:=by
@@ -40990,6 +41996,8 @@ theorem W9 {q d:ℕ} [NeZero q] [NeZero d] (h:d∣q)
      ring
    _=_:=(aRD h H.χ₀ (fun y=>ZMod.stdAddChar ((k:ZMod d)*y))).trans (mul_comm ..)
  ·rw [aS5 h χ H (fun y=>ZMod.stdAddChar ((k:ZMod d)*y)),zero_div]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aMj (q:ℕ) [NeZero q] (F:ℕ→ℂ):
   ∑k∈range q,F k=
    ∑d∈q.divisors,∑a∈(range d).filter (fun a=>d.Coprime a),F (q/d*a):=by
@@ -41042,8 +42050,8 @@ noncomputable def qU {q:ℕ} (χ ψ:DirichletCharacter ℂ q) (m d:ℕ):ℂ:=by
   else 0
  else 0
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem synthesis {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q) (m:ZMod q):
   (∑t:ZMod q,ZMod.stdAddChar (t*(-m))*(gaussSum χ (ZMod.stdAddChar.mulShift t)*
    gaussSum ψ (ZMod.stdAddChar.mulShift t)))=(q:ℂ)*∑x:ZMod q,χ x*ψ (m-x):=by
@@ -41062,6 +42070,8 @@ private theorem synthesis {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q) (m
    intro t _
    rw [h,smul_eq_mul,mul_neg]
   _=_:=by rw [ZMod.dft_comp_neg,ZMod.dft_dft]; simp only [J,neg_neg,smul_eq_mul]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Pd {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q) (m:ℕ):
   normalized χ ψ m=∑d∈q.divisors,qU χ ψ m d:=by
  let F (k:ℕ):=ZMod.stdAddChar ((k:ZMod q)*(-(m:ZMod q)))*l5 χ k*l5 ψ k
@@ -41083,6 +42093,8 @@ theorem Pd {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q) (m:ℕ):
  by_cases Hχ:χ.FactorsThrough d <;> by_cases Hψ:ψ.FactorsThrough d <;>
   simp only [F,W9 divides,aoS divides,map_neg,map_natCast,Hχ,Hψ,
    dite_true,dite_false,mul_zero,zero_mul,sum_const_zero]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aof {q:ℕ} [NeZero q] (m:ZMod q):
   (∑x:ZMod q,(1:DirichletCharacter ℂ q) x*(1:DirichletCharacter ℂ q) (m-x))=
    (((univ:Finset (ZMod q)).filter (fun x=>IsUnit x∧IsUnit (m-x))).card:ℂ):=by
@@ -41093,6 +42105,8 @@ private theorem aof {q:ℕ} [NeZero q] (m:ZMod q):
    by_cases hu:IsUnit x <;> by_cases hv:IsUnit (m-x) <;>
     simp [hu,hv,MulChar.one_apply,MulChar.map_nonunit]
   _=_:=by simp
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aot {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q)
   (m:ZMod q): ‖∑x:ZMod q,χ x*ψ (m-x)‖ ≤
    ‖∑x:ZMod q,(1:DirichletCharacter ℂ q) x*(1:DirichletCharacter ℂ q) (m-x)‖ :=by
@@ -41110,6 +42124,8 @@ theorem aot {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q)
     ·simp [hv,ψ.map_nonunit hv]
    ·simp [hu,χ.map_nonunit hu]
   _=_:=by simp
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem domination {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q) (m:ℕ):
   ‖∑d∈q.divisors,qU χ ψ m d‖ ≤
    ‖∑d∈q.divisors,qU (1:DirichletCharacter ℂ q) 1 m d‖ :=by
@@ -41154,8 +42170,8 @@ noncomputable def coefficient {r s:ℕ} (α:DirichletCharacter ℂ r) (β:Dirich
   if h:r∣d∧s∣d then Gv (changeLevel h.1 α) (changeLevel h.2 β) m else 0
  else 0
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem OT {r q d:ℕ} [NeZero q] {α:DirichletCharacter ℂ r}
   (hα:α.IsPrimitive) (hr:r∣q) (hd:d∣q):
   (changeLevel hr α).FactorsThrough d↔r∣d:=by
@@ -41165,10 +42181,14 @@ private theorem OT {r q d:ℕ} [NeZero q] {α:DirichletCharacter ℂ r}
    conductor_dvd_of_mem_conductorSet (changeLevel hr α) H
  ·intro h
   exact ⟨hd,changeLevel h α,changeLevel_trans α h hd⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem akR {r q d:ℕ} [NeZero q] (α:DirichletCharacter ℂ r)
   (hr:r∣q) (hd:d∣q) (h:r∣d) (H:(changeLevel hr α).FactorsThrough d):
   H.χ₀=changeLevel h α:=
  changeLevel_injective hd (H.eq_changeLevel.symm.trans (changeLevel_trans α h hd))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem alq {r s q:ℕ} [NeZero q] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive)
   (hr:r∣q) (hs:s∣q) (m d:ℕ) (hd:d∣q):
@@ -41186,6 +42206,8 @@ theorem alq {r s q:ℕ} [NeZero q] {α:DirichletCharacter ℂ r}
    simp only [dite_eq_left H',dite_eq_right K',dite_eq_right (not_and_of_not_right _ K)]
  ·have H':=mt (OT hα hr hd).mp H
   simp only [dite_eq_right H',dite_eq_right (not_and_of_not_left _ H)]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aLG {r s d:ℕ} [NeZero r] [NeZero s] [NeZero d]
   (α:DirichletCharacter ℂ r) (β:DirichletCharacter ℂ s) (hr:r∣d) (hs:s∣d)
   (m:ℕ) (hm:0< m):
@@ -41224,6 +42246,8 @@ private theorem aLG {r s d:ℕ} [NeZero r] [NeZero s] [NeZero d]
  exact div_le_div_of_nonneg_right (mul_le_mul
   (mul_le_mul hA hB (norm_nonneg _) (Real.sqrt_nonneg _)) hZ (norm_nonneg _)
   (mul_nonneg (Real.sqrt_nonneg _) (Real.sqrt_nonneg _))) (sq_nonneg _)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aVq {d:ℕ} (hd:0<d):
   1/(d.totient:ℝ)^2≤576*(d:ℝ)^(-(3/2):ℝ):=by
  have h:=DeepThreeQuarters.totient_ratio_le_rpow (show (0:ℝ)<1/4 by norm_num) d hd
@@ -41241,6 +42265,8 @@ private theorem aVq {d:ℕ} (hd:0<d):
  rw [div_pow,one_pow,mul_pow,← Real.rpow_mul_natCast dp.le] at square
  norm_num at square ⊢
  exact square
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Dj {r s:ℕ} [NeZero r] [NeZero s]
   (α:DirichletCharacter ℂ r) (β:DirichletCharacter ℂ s) (m:ℕ) (hm:0< m):
   Summable (fun d:ℕ=> ‖coefficient α β m d‖):=by
@@ -41264,6 +42290,8 @@ theorem Dj {r s:ℕ} [NeZero r] [NeZero s]
    _≤C*(576*(d:ℝ)^(-(3/2):ℝ)):=mul_le_mul_of_nonneg_left (aVq (Nat.pos_of_ne_zero hd)) hC
    _=_:=by ring
  ·simpa only [coefficient,dite_eq_left hd,dite_eq_right h,norm_zero] using a4e
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem wD {r s q:ℕ} [NeZero q] {α:DirichletCharacter ℂ r} {β:DirichletCharacter ℂ s}
   (hα:α.IsPrimitive) (hβ:β.IsPrimitive) (hr:r∣q) (hs:s∣q) (m:ℕ):
   normalized (changeLevel hr α) (changeLevel hs β) m=
@@ -41273,8 +42301,8 @@ theorem wD {r s q:ℕ} [NeZero q] {α:DirichletCharacter ℂ r} {β:DirichletCha
 end
 open Filter Topology
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aPt (L:ℕ) (hL:L≠0):
   Tendsto (fun n:ℕ=>insert 0 (L*n.factorial).divisors) atTop atTop:=by
  apply tendsto_atTop.2
@@ -41287,6 +42315,8 @@ private theorem aPt (L:ℕ) (hL:L≠0):
  have hdn:d≤n:=(S.le_sup (f:=id) hd).trans hn
  exact Nat.mem_divisors.mpr ⟨(Nat.dvd_factorial (Nat.pos_of_ne_zero h) hdn).trans
   (dvd_mul_left n.factorial L),mul_ne_zero hL n.factorial_ne_zero⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Bn {r s:ℕ} [NeZero r] [NeZero s]
   (α:DirichletCharacter ℂ r) (β:DirichletCharacter ℂ s) (m:ℕ) (hm:0< m)
   (L:ℕ) (hL:L≠0):
@@ -41297,6 +42327,8 @@ theorem Bn {r s:ℕ} [NeZero r] [NeZero s]
  apply hl.congr'
  filter_upwards with n
  simp [coefficient]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aVj (q:ℕ) [NeZero q] (m:ℕ):
   ‖normalized (1:DirichletCharacter ℂ q) 1 m‖ =(normalized (1:DirichletCharacter ℂ q) 1 m).re:=by
  let N:=((univ:Finset (ZMod q)).filter (fun x=>IsUnit x∧IsUnit ((m:ZMod q)-x))).card
@@ -41308,6 +42340,8 @@ private theorem aVj (q:ℕ) [NeZero q] (m:ℕ):
   push_cast
   rfl
  rw [e,Complex.norm_real,Real.norm_eq_abs,abs_of_nonneg hv,Complex.ofReal_re]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem akY {r s:ℕ} [NeZero r] [NeZero s]
   {α:DirichletCharacter ℂ r} {β:DirichletCharacter ℂ s}
   (hα:α.IsPrimitive) (hβ:β.IsPrimitive) (m:ℕ) (hm:0< m):
@@ -41341,8 +42375,8 @@ def admissible {n:ℕ} (m x:ZMod n):Prop:=IsUnit x∧IsUnit (m-x)
 noncomputable def fiber {q L:ℕ} [NeZero q] (h:L∣q) (m:ZMod q) (u:ZMod L):
   Finset (ZMod q):=univ.filter (fun x=>admissible m x∧ZMod.castHom h (ZMod L) x=u)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem Qm {q:ℕ} [NeZero q] (x:ZMod q):
   IsUnit x↔∀(p:ℕ),p.Prime→∀h:p∣q,ZMod.castHom h (ZMod p) x≠0:=by
  constructor
@@ -41355,10 +42389,14 @@ private theorem Qm {q:ℕ} [NeZero q] (x:ZMod q):
   apply Nat.coprime_of_dvd
   intro p hp hn hq
   exact H p hp hq (by rw [map_natCast,ZMod.natCast_eq_zero_iff]; exact hn)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aX7 {p q L:ℕ} [NeZero q] (h:L∣q) (g:p∣L) (x:ZMod q):
   ZMod.castHom g (ZMod p) (ZMod.castHom h (ZMod L) x)=ZMod.castHom (g.trans h) (ZMod p) x:=by
  obtain ⟨n,rfl⟩:∃n:ℕ,(n:ZMod q)=x:=⟨x.val,ZMod.natCast_zmod_val x⟩
  simp only [map_natCast]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aPL {q L:ℕ} [NeZero q] [NeZero L] (h:L∣q) (b:ZMod L):
   ∃c:ZMod q,ZMod.castHom h (ZMod L) c=b∧
    ∀p:ℕ,p.Prime→∀hp:p∣q,¬p∣L→ZMod.castHom hp (ZMod p) c=0:=by
@@ -41376,6 +42414,8 @@ private theorem aPL {q L:ℕ} [NeZero q] [NeZero L] (h:L∣q) (b:ZMod L):
   have hpS:p∈S:=mem_filter.mpr ⟨Nat.mem_primeFactors.mpr ⟨hp,hq,NeZero.ne q⟩,hL⟩
   rw [map_natCast,ZMod.natCast_eq_zero_iff]
   exact (dvd_prod_of_mem (fun z:ℕ=>z) hpS).trans (dvd_mul_right D n)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem apg {q L:ℕ} [NeZero q] (h:L∣q) (x c:ZMod q) (hx:IsUnit x)
   (hl:IsUnit (ZMod.castHom h (ZMod L) (x+c)))
   (away:∀p:ℕ,p.Prime→∀hp:p∣q,¬p∣L→ZMod.castHom hp (ZMod p) c=0):
@@ -41388,6 +42428,8 @@ private theorem apg {q L:ℕ} [NeZero q] (h:L∣q) (x c:ZMod q) (hx:IsUnit x)
   exact (hl.map (ZMod.castHom hL (ZMod p))).ne_zero
  ·rw [map_add,away p hprime hp hL,add_zero]
   exact (Qm x).mp hx p hprime hp
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aoN {q L:ℕ} [NeZero q] [NeZero L] (h:L∣q)
   (m:ZMod q) (u v:ZMod L) (hv:admissible (ZMod.castHom h (ZMod L) m) v):
   (fiber h m u).card≤(fiber h m v).card:=by
@@ -41409,6 +42451,8 @@ private theorem aoN {q L:ℕ} [NeZero q] [NeZero L] (h:L∣q)
     rw [map_neg,away p hprime hp hL,neg_zero]
  ·intro x _ y _ e
   exact add_right_cancel e
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aoH {q L:ℕ} [NeZero q] [NeZero L] (h:L∣q) (m:ZMod q):
   ∃K:ℕ,∀u:ZMod L,(fiber h m u).card=
    if admissible (ZMod.castHom h (ZMod L) m) u then K else 0:=by
@@ -41430,9 +42474,13 @@ theorem aoH {q L:ℕ} [NeZero q] [NeZero L] (h:L∣q) (m:ZMod q):
  ·refine ⟨0,fun u=>?_⟩
   have hu:¬admissible (π m) u:=fun h=>H ⟨u,h⟩
   rw [ite_eq_right hu,empty u hu,card_empty]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aO8 {q L:ℕ} (h:L∣q) {m x:ZMod q} (hx:admissible m x):
   admissible (ZMod.castHom h (ZMod L) m) (ZMod.castHom h (ZMod L) x):=
  ⟨hx.1.map _,by simpa only [map_sub] using hx.2.map (ZMod.castHom h (ZMod L))⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aXv {q L:ℕ} [NeZero q] [NeZero L] (h:L∣q) (m:ZMod q):
   ∃K:ℕ,∀F:ZMod L→ℂ,
    (∑x∈univ.filter (admissible m),F (ZMod.castHom h (ZMod L) x))=
@@ -41457,8 +42505,8 @@ end
 noncomputable def J {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q) (m:ZMod q):ℂ:=
  ∑x:ZMod q,χ x*ψ (m-x)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem adR {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q) (m:ZMod q):
   (∑x∈univ.filter (admissible m),χ x*ψ (m-x))=J χ ψ m:=by
  apply sum_subset (filter_subset ..)
@@ -41467,6 +42515,8 @@ private theorem adR {q:ℕ} [NeZero q] (χ ψ:DirichletCharacter ℂ q) (m:ZMod 
  ·have hv:¬IsUnit (m-x):=fun hv=>hx (mem_filter.mpr ⟨mem_univ _,hu,hv⟩)
   simp [ψ.map_nonunit hv]
  ·simp [χ.map_nonunit hu]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aYv {q L:ℕ} [NeZero q] [NeZero L] (h:L∣q) (m:ZMod q):
   ∃K:ℕ,∀χ ψ:DirichletCharacter ℂ L,
    J (changeLevel h χ) (changeLevel h ψ) m=(K:ℂ)*J χ ψ (ZMod.castHom h (ZMod L) m):=by
@@ -41502,8 +42552,8 @@ private theorem aXx {q L:ℕ} [NeZero q] [NeZero L] (h:L∣q)
  ring
 open Filter Topology
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem AH {r s L:ℕ} [NeZero r] [NeZero s] [NeZero L]
   {α:DirichletCharacter ℂ r} {β:DirichletCharacter ℂ s}
   (hα:α.IsPrimitive) (hβ:β.IsPrimitive) (hr:r∣L) (hs:s∣L) (m:ℕ) (hm:0< m):
@@ -41527,6 +42577,8 @@ theorem AH {r s L:ℕ} [NeZero r] [NeZero s] [NeZero L]
  rw [← wD hα hβ (hr.trans h) (hs.trans h) m,← ordinary,
   changeLevel_trans α hr h,changeLevel_trans β hs h]
  exact aXx h (changeLevel hr α) (changeLevel hs β) m
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Qg {L:ℕ} [NeZero L] (m:ZMod L):
   J (1:DirichletCharacter ℂ L) 1 m=((univ.filter (admissible m)).card:ℂ):=by
  rw [← adR]
@@ -41610,8 +42662,8 @@ noncomputable def gI (m p:ℕ):ℝ:=
 noncomputable def jN (q m:ℕ) [NeZero q]:ℝ:=
  (q:ℝ)* ‖J (1:DirichletCharacter ℂ q) 1 (m:ZMod q)‖ /(q.totient:ℝ)^2
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aOC {p:ℕ} [hp:Fact p.Prime] (a m:ℕ) (ha:0<a):
   jN (p^a) m=gI m p:=by
  obtain ⟨j,rfl⟩:=Nat.exists_eq_succ_of_ne_zero ha.ne'
@@ -41625,6 +42677,8 @@ private theorem aOC {p:ℕ} [hp:Fact p.Prime] (a m:ℕ) (ha:0<a):
   unfold gI
   split_ifs <;> field_simp [fpos.ne',ppos.ne']
  exact form _ (pow_succ' p j)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem AY (q m:ℕ) [NeZero q]:
   jN q m=∏p∈q.primeFactors,gI m p:=by
  let F (p:q.primeFactors):=(p:ℕ)^(q.factorization p)
@@ -41649,6 +42703,8 @@ theorem AY (q m:ℕ) [NeZero q]:
  apply prod_congr rfl
  intro p _
  exact aOC _ m (aqP p)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aVz {p:ℕ} (hp:2≤p) (m:ℕ):
   1-1/((p:ℝ)-1)^2≤gI m p:=by
  have hpos:(0:ℝ)<(p:ℝ)-1:=sub_pos.mpr (by exact_mod_cast (by omega:1<p))
@@ -41659,6 +42715,8 @@ private theorem aVz {p:ℕ} (hp:2≤p) (m:ℕ):
  ·apply le_of_eq
   field_simp [hpos.ne']
   ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aSX (S:Finset ℕ) (hp:∀p∈S,p.Prime) (m:ℕ) (he:Even m):
   ∀P:ℕ,2≤P→
    (if 2∈S then (2:ℝ) else 1)*P/(2*((P:ℝ)-1))≤
@@ -41695,6 +42753,8 @@ private theorem aSX (S:Finset ℕ) (hp:∀p∈S,p.Prime) (m:ℕ) (he:Even m):
   dsimp [b]
   field_simp [show (k:ℝ)-1≠0 by linarith,show (k:ℝ)≠0 by linarith]
   ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem H7 (q m:ℕ) [NeZero q] (he:Even m):
   (if 2∣q then (1:ℝ) else 1/2)≤jN q m:=by
  let P:=max 2 q
@@ -41710,6 +42770,8 @@ theorem H7 (q m:ℕ) [NeZero q] (he:Even m):
   ⟨Nat.dvd_of_mem_primeFactors,fun h=>Nat.mem_primeFactors.mpr ⟨Nat.prime_two,h,NeZero.ne q⟩⟩
  by_cases ht:2∣q <;> simp only [two,ht,ite_true,ite_false,one_mul]
  all_goals apply (le_div_iff₀ (by linarith:(0:ℝ)<2*((P:ℝ)-1))).mpr; linarith
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem WX (m:ℕ) (hm:0< m) (he:Even m):
   1≤(series (1:DirichletCharacter ℂ 1) (1:DirichletCharacter ℂ 1) m).re:=by
  let O:DirichletCharacter ℂ 1:=1
@@ -41741,8 +42803,8 @@ open scoped BigOperators Classical
 noncomputable def atom (L t:ℕ) (g:ℕ→ℝ):ℝ:=
  if Squarefree t∧t.Coprime L then∏p∈t.primeFactors,g p else 0
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aeI (L n:ℕ) (hL:L≠0) (hn:n≠0) (g:ℕ→ℝ):
   ∑t∈n.divisors,atom L t g=∏p∈n.primeFactors \ L.primeFactors,(1+g p):=by
  rw [prod_one_add]
@@ -41776,6 +42838,8 @@ theorem aeI (L n:ℕ) (hL:L≠0) (hn:n≠0) (g:ℕ→ℝ):
   exact ⟨d,mem_filter.mpr ⟨Nat.mem_divisors.mpr ⟨divides,hn⟩,square,cop⟩,factors⟩
  ·intro _ _
   rfl
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aNU (f g:ℕ→ℂ)
   (h:∀n:ℕ,n≠0→∑d∈n.divisors,f d=∑d∈n.divisors,g d):
   ∀n:ℕ,n≠0→f n=g n:=by
@@ -41817,13 +42881,15 @@ private theorem multiples {M:Type*} [AddCommMonoid M] {L n:ℕ} (hL:L≠0) (hn:n
   _=_:=sum_subset (filter_subset _ _) (fun d hd hnot=>
    outside d (fun h=>hnot (mem_filter.mpr ⟨hd,h⟩)))
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem Yn (q m:ℕ) [NeZero q]:
   normalized (1:DirichletCharacter ℂ q) 1 m=(jN q m:ℂ):=by
  change (q:ℂ)*J (1:DirichletCharacter ℂ q) 1 (m:ZMod q)/(q.totient:ℂ)^2=_
  simp only [jN,Qg,Complex.norm_natCast,Complex.ofReal_div,Complex.ofReal_mul,
   Complex.ofReal_natCast,Complex.ofReal_pow]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem ao1 {r s q:ℕ} [NeZero r] [NeZero s] [NeZero q]
   {α:DirichletCharacter ℂ r} {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive)
   (hr:r∣q) (hs:s∣q) (m:ℕ) (hm:0< m) (he:Even m):
@@ -41848,12 +42914,16 @@ private theorem ao1 {r s q:ℕ} [NeZero r] [NeZero s] [NeZero q]
   exact id.symm
  rw [eqn]
  ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem D9 {r s:ℕ} (α:DirichletCharacter ℂ r) (β:DirichletCharacter ℂ s)
   (m d:ℕ) (h:¬Nat.lcm r s∣d):coefficient α β m d=0:=by
  unfold coefficient
  split_ifs with hd hdiv
  ·exact False.elim (h (Nat.lcm_dvd hdiv.1 hdiv.2))
  all_goals rfl
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aYx {L t:ℕ} [NeZero L] [NeZero t] (m:ℕ):
   jN (L*t) m=jN L m*
    ∏p∈t.primeFactors \ L.primeFactors,gI m p:=by
@@ -41870,8 +42940,8 @@ variable {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r} {β:Diric
  (hα:α.IsPrimitive) (hβ:β.IsPrimitive) (m:ℕ) (hm:0< m) (he:Even m)
 include hα hβ hm he
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem anf (t:ℕ) (ht:t≠0):
   let L:=Nat.lcm r s
   ∑d∈(L*t).divisors,coefficient α β m d=
@@ -41889,6 +42959,8 @@ theorem anf (t:ℕ) (ht:t≠0):
   apply D9
   intro h
   exact ne (Nat.dvd_antisymm (Nat.dvd_of_mem_divisors hd) h)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Wk (t:ℕ) (ht:t≠0):
   let L:=Nat.lcm r s
   coefficient α β m (L*t)=
@@ -41906,6 +42978,8 @@ theorem Wk (t:ℕ) (ht:t≠0):
  have eqn:(fun p=>1+g p)=gI m:=funext (fun p=>by dsimp [g]; ring)
  simp only [eqn]
  rfl
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aPp (t:ℕ) (ht:t≠0):
   let L:=Nat.lcm r s
   ∑d∈(L*t).divisors, ‖coefficient α β m d‖ =
@@ -41931,14 +43005,16 @@ open Filter Topology
 noncomputable def correction (K p:ℕ):ℝ:=
  if p.Prime∧2<p∧¬p∣K then 1+2/((p:ℝ)*((p:ℝ)-2)) else 1
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem O6 (K p:ℕ):1≤correction K p:=by
  unfold correction
  split_ifs with h
  ·have hp:(2:ℝ)<p:=by exact_mod_cast h.2.1
   exact le_add_of_nonneg_right (by positivity)
  ·rfl
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aXu {L p m:ℕ} (hp:p.Prime) (he:Even m) (hL:¬p∣L):
   1+|gI m p-1| = |gI m p| *correction (L*m) p:=by
  have hp1:(1:ℝ)<p:=by exact_mod_cast hp.one_lt
@@ -41963,6 +43039,8 @@ private theorem aXu {L p m:ℕ} (hp:p.Prime) (he:Even m) (hL:¬p∣L):
   rw [abs_of_nonpos (sub_nonpos.mpr hw),abs_of_nonneg (div_nonneg (mul_nonneg h0.le h2.le) (sq_nonneg _))]
   field_simp [h0.ne',h1.ne',h2.ne']
   ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aoZ {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive)
   (m:ℕ) (hm:0< m) (he:Even m) (t:ℕ) (ht:t≠0):
@@ -41988,6 +43066,8 @@ theorem aoZ {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
  intro p hp
  have prime:=Nat.prime_of_mem_primeFactors (mem_sdiff.mp hp).1
  exact aXu prime he (fun hd=>(mem_sdiff.mp hp).2 (Nat.mem_primeFactors.mpr ⟨prime,hd,hL⟩))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem JI (K:ℕ):Multipliable (correction K):=by
  let g (p:ℕ):=correction K p-1
  have base:=(Real.summable_one_div_nat_pow.mpr (by decide:1<2)).mul_left (6:ℝ)
@@ -42004,6 +43084,8 @@ private theorem JI (K:ℕ):Multipliable (correction K):=by
   ·rw [sub_self]
    positivity)
  exact (Real.multipliable_one_add_of_summable hs).congr (fun p=>by dsimp [g]; ring)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aIV {p:ℕ} (hp:2<p) (K:ℕ):
   correction K p≤(((p:ℝ)-1)^2/((p:ℝ)*((p:ℝ)-2)))^2:=by
  have h:(2:ℝ)<p:=by exact_mod_cast hp
@@ -42015,6 +43097,8 @@ private theorem aIV {p:ℕ} (hp:2<p) (K:ℕ):
  have hinv:0≤1/((p:ℝ)*((p:ℝ)-2)):=by positivity
  unfold correction
  split_ifs <;> nlinarith [sq_nonneg (1/((p:ℝ)*((p:ℝ)-2))),show 2/((p:ℝ)*((p:ℝ)-2))=2*(1/((p:ℝ)*((p:ℝ)-2))) by ring]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aRE (K:ℕ):∀n:ℕ,2≤n→
   ∏p∈range (n+1),correction K p≤(2*((n:ℝ)-1)/(n:ℝ))^2:=by
  intro n hn
@@ -42031,6 +43115,8 @@ private theorem aRE (K:ℕ):∀n:ℕ,2≤n→
   push_cast
   field_simp [hk0,hk1,hks,show (k:ℝ)+1-2≠0 by linarith]
   ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Nv (K:ℕ):∏' p:ℕ,correction K p≤4:=by
  apply le_of_tendsto ((JI K).hasProd.tendsto_prod_nat.comp (tendsto_add_atTop_nat 1))
  filter_upwards [eventually_ge_atTop 2] with n hn
@@ -42040,6 +43126,8 @@ theorem Nv (K:ℕ):∏' p:ℕ,correction K p≤4:=by
  have ht:2*((n:ℝ)-1)/(n:ℝ)≤2:=(div_le_iff₀ hn0).mpr (by linarith)
  have hb:0≤2*((n:ℝ)-1)/(n:ℝ):=div_nonneg (by linarith) hn0.le
  nlinarith [mul_nonneg (sub_nonneg.mpr ht) (show 0≤2+2*((n:ℝ)-1)/(n:ℝ) by linarith)]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem a1F {r s:ℕ} [NeZero r] [NeZero s] (α:DirichletCharacter ℂ r)
   (β:DirichletCharacter ℂ s) (m:ℕ) (hm:0< m) (L:ℕ) (hL:L≠0):
   Tendsto (fun n:ℕ=>∑d∈(L*n.factorial).divisors, ‖coefficient α β m d‖)
@@ -42057,6 +43145,8 @@ private theorem a1F {r s:ℕ} [NeZero r] [NeZero s] (α:DirichletCharacter ℂ r
  apply ((Dj α β m hm).hasSum.comp hf).congr'
  filter_upwards with n
  simp [coefficient]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem JN {r s:ℕ} [NeZero r] [NeZero s]
   {α:DirichletCharacter ℂ r} {β:DirichletCharacter ℂ s}
   (hα:α.IsPrimitive) (hβ:β.IsPrimitive) (m:ℕ) (hm:0< m) (he:Even m):
@@ -42117,8 +43207,8 @@ theorem anv {r q:ℕ} [NeZero r] [NeZero q] (hr:r∣q)
   exact norm_le_zero_iff.mp zero
 def admissible (r q:ℕ):Prop:=Squarefree (q/r)∧(q/r).Coprime r
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Wt {r q:ℕ} [NeZero r] [NeZero q] (hr:r∣q)
   (χ:DirichletCharacter ℂ r) (hχ:χ.IsPrimitive):
   ‖gaussSum (changeLevel hr χ) ZMod.stdAddChar‖ =
@@ -42136,6 +43226,8 @@ theorem Wt {r q:ℕ} [NeZero r] [NeZero q] (hr:r∣q)
   ·rw [χ.map_nonunit (fun h=>hc ((ZMod.isUnit_iff_coprime _ _).mp h)),norm_zero,zero_mul]
    simp [admissible,hc]
  ·simp [ArithmeticFunction.moebius_eq_zero_of_not_squarefree hs,admissible,hs]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aS6 {q j:ℕ} [NeZero q] [NeZero j] (hj:j∣q)
   (χ:DirichletCharacter ℂ q) (k:ℕ) (hk:k.Coprime j):
   ‖l5 χ (q/j*k)‖ =if χ.conductor∣j∧admissible χ.conductor j then
@@ -42164,6 +43256,8 @@ theorem aS6 {q j:ℕ} [NeZero q] [NeZero j] (hj:j∣q)
   by_cases good:admissible d j <;> simp [good,hd]
  ·have H:¬χ.FactorsThrough j:=fun h=>hd (χ.conductor_dvd_of_mem_conductorSet h)
   rw [dite_eq_right H,norm_zero,ite_eq_right (not_and_of_not_left _ hd)]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ao5 {q:ℕ} [NeZero q] (χ:DirichletCharacter ℂ q) (m:ℕ):
   let j:=q/(m.gcd q)
   ‖gaussSum χ (ZMod.stdAddChar.mulShift (m:ZMod q))‖ =
@@ -42191,8 +43285,8 @@ noncomputable def wI {r s:ℕ} (α:DirichletCharacter ℂ r) (β:DirichletCharac
 def supported (r s L d j:ℕ):Prop:=
  admissible r L∧admissible s L∧d∣j∧admissible d j
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aee {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive) (m:ℕ):
   let L:=Nat.lcm r s
@@ -42223,6 +43317,8 @@ theorem aee {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
  by_cases h1:admissible r L <;> by_cases h2:admissible s L <;> by_cases h3:d∣j∧admissible d j <;>
   simp only [h1,h2,h3,and_true,and_false,ite_true,ite_false,mul_zero,zero_mul,zero_div]
  field_simp [hφ]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aeh {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive) (m:ℕ) (hm:0< m):
   let L:=Nat.lcm r s
@@ -42246,6 +43342,8 @@ theorem aeh {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   linear_combination ((L:ℝ)/(L.totient:ℝ)^2)*J
  ·intro d hd ne
   exact D9 α β m d (fun h=>ne (Nat.dvd_antisymm (Nat.dvd_of_mem_divisors hd) h))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem adW {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive)
   (m:ℕ) (hm:0< m) (he:Even m):
@@ -42294,8 +43392,8 @@ open scoped BigOperators Classical
 noncomputable def c8 (q:ℕ):ℝ:=(q:ℝ)/q.totient
 noncomputable def n5 (p:ℕ):ℝ:=(p:ℝ)/((p:ℝ)-1)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem adU (q:ℕ) (hq:0<q):
   c8 q=∏p∈q.primeFactors,n5 p:=by
  have pos:0<∏p∈q.primeFactors,((p:ℝ)-1):=prod_pos (fun p hp=>
@@ -42308,9 +43406,13 @@ theorem adU (q:ℕ) (hq:0<q):
  unfold c8 n5
  rw [prod_div_distrib,div_eq_div_iff (by exact_mod_cast (Nat.totient_pos.mpr hq).ne') pos.ne']
  linarith
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem Gk {p:ℕ} (hp:p.Prime):1≤n5 p:=by
  have h:(1:ℝ)<p:=by exact_mod_cast hp.one_lt
  exact (le_div_iff₀ (by linarith:0<(p:ℝ)-1)).mpr (by linarith)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aJW (L m:ℕ) [NeZero L] (he:Even m):
   c8 L≤2*jN L m*c8 (L/(m.gcd L)):=by
  let g:=m.gcd L
@@ -42356,6 +43458,8 @@ theorem aJW (L m:ℕ) [NeZero L] (he:Even m):
   nlinarith [mul_nonneg a0 (sub_nonneg.mpr half)]
  rw [← splitφ]
  exact mul_le_mul aqp more b0 (a0.trans aqp)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aNL {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive):
   let d:=(wI α β).conductor
@@ -42378,6 +43482,8 @@ theorem aNL {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
  rw [az,conductor_inv,a,b] at ar
  rw [bz,conductor_inv,b,a] at br
  exact ⟨ar,br⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aPv {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive)
   (m:ℕ) (hm:0< m) (he:Even m):
@@ -42436,6 +43542,8 @@ theorem aPv {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
  ·have zero:=not_ne_iff.mp (mt (adW hα hβ m hm he).mp good)
   rw [zero,norm_zero,zero_mul]
   positivity
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aOJ {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive) {m:ℕ}
   (good:supported r s (Nat.lcm r s) (wI α β).conductor (Nat.lcm r s/(m.gcd (Nat.lcm r s)))):
@@ -42450,6 +43558,8 @@ theorem aOJ {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
  obtain ⟨A,B⟩:=aNL hα hβ
  exact ⟨good.1.2.dvd_of_dvd_mul_right (ar.trans (B.trans (Nat.lcm_dvd_mul d r))),
   good.2.1.2.dvd_of_dvd_mul_right (bs.trans (A.trans (Nat.lcm_dvd_mul d s)))⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aIR (r s:ℕ) (hr:0<r) (hs:0< s):
   (Nat.lcm r s/r).Coprime (Nat.lcm r s/s):=by
  have ha:Nat.lcm r s/r=s/Nat.gcd r s:=by
@@ -42460,6 +43570,8 @@ theorem aIR (r s:ℕ) (hr:0<r) (hs:0< s):
    Nat.mul_div_cancel_left _ hs,Nat.gcd_comm]
  rw [ha,hb]
  exact (Nat.coprime_div_gcd_div_gcd (Nat.gcd_pos_of_pos_left s hr)).symm
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aA5 {r s:ℕ} [NeZero r] [NeZero s]
   {α:DirichletCharacter ℂ r} {β:DirichletCharacter ℂ s}
   (hα:α.IsPrimitive) (hβ:β.IsPrimitive) {m:ℕ}
@@ -42472,6 +43584,8 @@ theorem aA5 {r s:ℕ} [NeZero r] [NeZero s]
  exact Nat.le_of_dvd (Nat.div_pos
   (Nat.le_of_dvd (Nat.lcm_pos (NeZero.pos r) (NeZero.pos s)) (Nat.gcd_dvd_right ..))
   (Nat.gcd_pos_of_pos_right _ (Nat.lcm_pos (NeZero.pos r) (NeZero.pos s)))) hd
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aG2 {A B x K O ε:ℝ} (hA:1≤A) (hB:1≤B)
   (hAB:A≤B) (hK:0≤K) (hO:0≤O) (hε:ε≤1/6)
   (h:x*sqrt (A*B)≤K*O*B^ε):
@@ -42500,6 +43614,8 @@ theorem aG2 {A B x K O ε:ℝ} (hA:1≤A) (hB:1≤B)
    _=B^(ε-1/2):=one_mul _
    _≤_:=rpow_le_rpow_of_exponent_le hB (by linarith)
  exact hraw.trans (mul_le_mul_of_nonneg_left (le_min hfirst hsecond) (mul_nonneg hK hO))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aIy {ε:ℝ} (hε:0<ε) (hε1:ε≤1/6)
   {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive)
@@ -42542,6 +43658,8 @@ theorem aIy {ε:ℝ} (hε:0<ε) (hε1:ε≤1/6)
  ·have hz:=not_ne_iff.mp (mt (adW hα hβ m hm he).mp good)
   rw [hz,norm_zero]
   positivity
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ayt (q m:ℕ) [NeZero q] (hm:0< m):
   jN q m≤c8 m:=by
  have a1V (p:ℕ) (hp:p.Prime):0≤gI m p:=by
@@ -42572,6 +43690,8 @@ theorem ayt (q m:ℕ) [NeZero q] (hm:0< m):
   _≤_:=prod_le_prod_of_subset_of_one_le₀ sub
    (fun p hp=>zero_le_one.trans (Gk (Nat.prime_of_mem_primeFactors (mem_filter.mp hp).1)))
    (fun p hp _=>Gk (Nat.prime_of_mem_primeFactors hp))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Tv (m:ℕ) (hm:0< m):
   ‖series (1:DirichletCharacter ℂ 1) (1:DirichletCharacter ℂ 1) m‖ ≤c8 m:=by
  let O:DirichletCharacter ℂ 1:=1
@@ -42588,6 +43708,8 @@ theorem Tv (m:ℕ) (hm:0< m):
  simp only [one_mul]
  rw [← ha]
  simpa only [normalized,norm_div,norm_mul,norm_pow,Complex.norm_natCast,jN,J] using h
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aIQ {ε:ℝ} (hε:0<ε) (hε1:ε≤1/6)
   {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive)
@@ -42616,6 +43738,8 @@ theorem aIQ {ε:ℝ} (hε:0<ε) (hε1:ε≤1/6)
    exact mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left
     (Tv m hm) (by positivity)) hW
   _=_:=by ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aPd {ε:ℝ} (hε:0<ε) (hε1:ε≤1/6)
   {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r}
   {β:DirichletCharacter ℂ s} (hα:α.IsPrimitive) (hβ:β.IsPrimitive)
@@ -42640,10 +43764,12 @@ namespace aY.iw
 open Real
 noncomputable def jI (P R T:ℝ):ℝ:=min 1 (P/(R*T))
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem F7 {P R T:ℝ} (hP:0≤P) (hR:0≤R) (hT:0≤T):
   0≤jI P R T:=le_min zero_le_one (div_nonneg hP (mul_nonneg hR hT))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aNO {P R T a c:ℝ} (hR:0<R) (hT:0<T)
   (hRP:R≤P) (hc:0≤c) (hc1:c≤1) (hca:c≤a):
   jI P R T*R^a*T^c≤P^a:=by
@@ -42690,12 +43816,14 @@ noncomputable def K3 {Q:ℕ} [NeZero Q]
   (F:Finset ℕ) (v:ℕ→ℂ) (k:ℕ):ℂ:=
  ∑n∈F,v n*ZMod.stdAddChar ((k:ZMod Q)*(n:ZMod Q))
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aRF {Q:ℕ} (χ:DirichletCharacter ℂ Q)
   (x:(ZMod Q)ˣ):χ⁻¹ (x:ZMod Q)=χ ((x:ZMod Q)⁻¹):=by
  rw [MulChar.inv_apply_eq_inv']
  simp
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem awR {Q:ℕ} [NeZero Q]
   (k:ℕ) (n:ℕ) (hn:n.Coprime Q):
   ZMod.stdAddChar ((k:ZMod Q)*(n:ZMod Q))=
@@ -42736,6 +43864,8 @@ theorem awR {Q:ℕ} [NeZero Q]
    intro x _
    rw [← mul_sum,orth]
   _=_:=by simp [mul_ite,hφ,eq_comm]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem azy {Q:ℕ} [NeZero Q]
   (F:Finset ℕ) (v:ℕ→ℂ) (k:ℕ) (hF:∀n∈F,n.Coprime Q):
   K3 (Q:=Q) F v k=
@@ -42749,6 +43879,8 @@ theorem azy {Q:ℕ} [NeZero Q]
  apply sum_congr rfl
  intro χ _
  ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aIW {Q q:ℕ} [NeZero Q] [NeZero q] (hq:q∣Q)
   (χ ψ:DirichletCharacter ℂ Q) (m:ℕ):
   (∑a∈(range q).filter (fun a=>q.Coprime a),
@@ -42786,8 +43918,8 @@ theorem aNo {ι α:Type*} [Fintype ι] (A:Finset α)
  intro j _
  rw [sum_mul]
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aJE {Q q:ℕ} [NeZero Q] [NeZero q]
   (hq:q∣Q) (F:Finset ℕ) (v:ℕ→ℂ) (hF:∀n∈F,n.Coprime Q) (m:ℕ):
   (∑a∈(range q).filter (fun a=>q.Coprime a),
@@ -42798,12 +43930,16 @@ theorem aJE {Q q:ℕ} [NeZero Q] [NeZero q]
  simp_rw [azy F v _ hF]
  rw [aNo]
  simp_rw [aIW hq]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aJu {Q:ℕ} [NeZero Q]
   (χ ψ:DirichletCharacter ℂ Q) (m q:ℕ) (hq:q∣Q):
   qU χ ψ m q=coefficient χ.primitiveCharacter ψ.primitiveCharacter m q:=by
  simpa only [changeLevel_primitiveCharacter] using
   alq χ.primitiveCharacter_isPrimitive ψ.primitiveCharacter_isPrimitive
    χ.conductor_dvd_level ψ.conductor_dvd_level m q hq
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aD8 {p P:ℕ} (hp:p.Prime) (hP:P<p):
   p.Coprime P.factorial:=by
  exact hp.coprime_factorial_of_lt hP
@@ -42980,15 +44116,19 @@ noncomputable def aP {q:ℕ} (F:Finset ℕ)
   (χ:DirichletCharacter ℂ q) (t:ℝ):ℂ:=
  s7 F (fun p=>dS ((p:ℝ)*t)) χ
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Nw (F:Finset ℕ):Continuous (jc F):=by
  unfold jc dS
  fun_prop
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Cu {q:ℕ} (F:Finset ℕ)
   (χ:DirichletCharacter ℂ q):Continuous (aP F χ):=by
  unfold aP s7 dS
  fun_prop
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aVl {Q q:ℕ} [NeZero Q] [NeZero q] (hq:q∣Q)
   (F:Finset ℕ) (a:ℕ) (t:ℝ):
   jc F ((a:ℝ)/q+t)=
@@ -43005,6 +44145,8 @@ theorem aVl {Q q:ℕ} [NeZero Q] [NeZero q] (hq:q∣Q)
   field_simp
   nlinarith [congrArg (fun x:ℝ=>x*(a:ℝ)*(p:ℝ)) hmul]
  rw [ha,Gd]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ag7 {q:ℕ} (F:Finset ℕ)
   (hF:∀p∈F,p.Coprime q) (t:ℝ):
   aP F (1:DirichletCharacter ℂ q) t=jc F t:=by
@@ -43016,9 +44158,11 @@ end
 noncomputable def g5 (f:ℝ→ℂ) (h:ℝ):ℝ:=
  sqrt (∫ t in Icc (-h) h, ‖f t‖^2)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem oX (f:ℝ→ℂ) (h:ℝ):0≤g5 f h:=sqrt_nonneg _
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem DB {f:ℝ→ℂ} (hf:Continuous f) {h H:ℝ} (hh:h≤H):
   g5 f h≤g5 f H:=by
  apply sqrt_le_sqrt
@@ -43026,6 +44170,8 @@ theorem DB {f:ℝ→ℂ} (hf:Continuous f) {h H:ℝ} (hh:h≤H):
   (ae_of_all _ fun t=>sq_nonneg _) (ae_of_all _ ?_)
  intro t ht
  exact ⟨(neg_le_neg hh).trans ht.1,ht.2.trans hh⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ajq (f g w:ℝ→ℂ)
   (hf:Continuous f) (hg:Continuous g) (hw:Continuous w)
   (hwn:∀t, ‖w t‖≤1) (h:ℝ):
@@ -43117,12 +44263,16 @@ open zW jZ oM
 open scoped BigOperators Classical
 private noncomputable def majorant (u:ℝ) (p:ℕ):=1+4*(p:ℝ)^(u-2)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem Gz (u:ℝ) (p:ℕ):1≤ majorant u p:=
  le_add_of_nonneg_right (mul_nonneg (by norm_num) (Real.rpow_nonneg (Nat.cast_nonneg p) _))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem alj {u:ℝ} (hu:u<1):Multipliable (majorant u):=
  Real.multipliable_one_add_of_summable ((Real.summable_nat_rpow.mpr (by linarith:u-2< -1)).mul_left 4)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aXn (L t m:ℕ) (u:ℝ):
   (t:ℝ)^u* |atom L t (fun p=>gI m p-1)| =
    atom L t (fun p=>(p:ℝ)^u*|gI m p-1|):=by
@@ -43132,6 +44282,8 @@ private theorem aXn (L t m:ℕ) (u:ℝ):
    rw [← Nat.cast_prod,Nat.prod_primeFactors_of_squarefree h.1]
   rw [Finset.abs_prod,prod_mul_distrib,Real.finsetProd_rpow _ _ (fun p _=>Nat.cast_nonneg p) u,square]
  ·simp
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aX5 {p m:ℕ} (hp:p.Prime) (hm:0< m) {u:ℝ} (hu:u≤1):
   1+(p:ℝ)^u*|gI m p-1| ≤
    majorant u p*(if p∈m.primeFactors then 3 else 1):=by
@@ -43168,6 +44320,8 @@ private theorem aX5 {p m:ℕ} (hp:p.Prime) (hm:0< m) {u:ℝ} (hu:u≤1):
   calc
    _≤(p:ℝ)^u*(4/(p:ℝ)^2):=mul_le_mul_of_nonneg_left denom nonneg
    _=_:=by ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aXj (S:Finset ℕ) (hS:∀p∈S,p.Prime) {m:ℕ} (hm:0< m)
   {u:ℝ} (hu:u<1):
   ∏p∈S,(1+(p:ℝ)^u*|gI m p-1|)≤
@@ -43183,6 +44337,8 @@ private theorem aXj (S:Finset ℕ) (hS:∀p∈S,p.Prime) {m:ℕ} (hm:0< m)
     (fun p _=>Gz u p))
    (pow_le_pow_right₀ (by norm_num) (card_le_card inter_subset_right))
    (by positivity) (tprod_nonneg (fun p=>zero_le_one.trans (Gz u p)))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aXl {ε:ℝ} (hε:0<ε):
   ∃C:ℝ,0<C∧∀m:ℕ,0< m→(3:ℝ)^m.primeFactors.card≤C*(m:ℝ)^ε:=by
  have limit:=(tendsto_rpow_atTop hε).comp (tendsto_natCast_atTop_atTop (R:=ℝ))
@@ -43218,8 +44374,8 @@ variable {r s:ℕ} [NeZero r] [NeZero s] {α:DirichletCharacter ℂ r} {β:Diric
  (hα:α.IsPrimitive) (hβ:β.IsPrimitive) (m:ℕ) (hm:0< m) (he:Even m)
 include hα hβ hm he
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aPj (n:ℕ) (hn:n≠0) {u:ℝ} (hu:u<1):
   let L:=Nat.lcm r s
   ∑t∈n.divisors,(t:ℝ)^u* ‖coefficient α β m (L*t)‖ ≤
@@ -43233,6 +44389,8 @@ private theorem aPj (n:ℕ) (hn:n≠0) {u:ℝ} (hu:u<1):
    norm_mul,Complex.norm_real,Real.norm_eq_abs,mul_left_comm,aXn]
  rw [sum_congr rfl eqn,← mul_sum,aeI L n hL hn]
  exact mul_le_mul_of_nonneg_left (aXj _ (fun _ hp=>Nat.prime_of_mem_primeFactors (mem_sdiff.mp hp).1) hm hu) (norm_nonneg _)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aS1 {u:ℝ} (hu:u<1) (S:Finset ℕ):
   let L:=Nat.lcm r s
   ∑t∈S,(t:ℝ)^u* ‖coefficient α β m (L*t)‖ ≤
@@ -43247,6 +44405,8 @@ private theorem aS1 {u:ℝ} (hu:u<1) (S:Finset ℕ):
   ·exact mem_insert_of_mem (Nat.mem_divisors.mpr ⟨Nat.dvd_factorial (Nat.pos_of_ne_zero hz) (S.le_sup (f:=id) hd),hN⟩)
  apply (sum_le_sum_of_subset_of_nonneg cover (fun p _ _=>mul_nonneg (Real.rpow_nonneg (Nat.cast_nonneg p) _) (norm_nonneg _))).trans
  simpa [L,N,coefficient] using aPj hα hβ m hm he N hN hu
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aS3 {u:ℝ} (hu:u<1):
   let L:=Nat.lcm r s
   let f:=fun t:ℕ=>(t:ℝ)^u*‖coefficient α β m (L*t)‖
@@ -43314,8 +44474,8 @@ noncomputable def Ly (N:ℕ):ℝ:=
 noncomputable def Dz (m:ℕ):ℝ:=
  ∏p∈m.primeFactors.filter (fun p=>2<p),((p:ℝ)-1)/((p:ℝ)-2)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aLH (N:ℕ):N.factorial.primeFactors.erase 2=
   (range (N+1)).filter (fun p=>p.Prime∧2<p):=by
  ext p
@@ -43325,6 +44485,8 @@ theorem aLH (N:ℕ):N.factorial.primeFactors.erase 2=
   exact ⟨hp.dvd_factorial.mp hd,hp,by have hh:=hp.two_le;omega⟩
  ·rintro ⟨hN,hp,hp2⟩
   exact ⟨by omega,hp,hp.dvd_factorial.mpr hN,N.factorial_ne_zero⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aOi (m N:ℕ) (hm:0< m) (he:Even m)
   (hmN:m≤N) (hN:2≤N):
   @jN N.factorial m ⟨N.factorial_ne_zero⟩=
@@ -43362,11 +44524,15 @@ theorem aOi (m N:ℕ) (hm:0< m) (he:Even m)
  rw [hprod]
  change Ly N*Dz m*2=_
  ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Yn (q m:ℕ) [NeZero q]:
   normalized (1:DirichletCharacter ℂ q) 1 m=(jN q m:ℂ):=by
  change (q:ℂ)*J (1:DirichletCharacter ℂ q) 1 (m:ZMod q)/(q.totient:ℂ)^2=_
  simp only [jN,Qg,Complex.norm_natCast,Complex.ofReal_div,
   Complex.ofReal_mul,Complex.ofReal_natCast,Complex.ofReal_pow]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aH9 {C:ℝ}
   (hC:Tendsto Ly atTop (𝓝 C)) (m:ℕ) (hm:0< m) (he:Even m):
   series (1:DirichletCharacter ℂ 1) (1:DirichletCharacter ℂ 1) m=
@@ -43402,8 +44568,8 @@ open aY.zW
 open BombieriVinogradov.qA
 open scoped BigOperators Classical
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem av7 {Q:ℕ} [NeZero Q]
   (F:Finset ℕ) (hF:∀p∈F,p.Coprime Q) (χ:DirichletCharacter ℂ Q) (t:ℝ):
   aP F χ t=aP F χ.primitiveCharacter t:=by
@@ -43414,6 +44580,8 @@ theorem av7 {Q:ℕ} [NeZero Q]
   (Nat.isCoprime_iff_coprime.mpr (hF p hp))
  simp only [Int.cast_natCast] at he
  rw [MulChar.inv_apply_eq_inv',MulChar.inv_apply_eq_inv',he]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aH0 {Q:ℕ} [NeZero Q] (F:Finset ℕ)
   (hF:∀p∈F,p.Coprime Q) (χ ψ:DirichletCharacter ℂ Q) (m:ℕ) (h:ℝ):
   o8 F χ ψ m h=o8 F χ.primitiveCharacter ψ.primitiveCharacter m h:=by
@@ -43462,8 +44630,8 @@ noncomputable def tB (F:Finset ℕ) (N P m:ℕ):ℂ:=
      jc F ((a:ℝ)/q+t)^2)*dS (-(m:ℝ)*t)
  else 0
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aBS (F:Finset ℕ) (N P m:ℕ)
   (hF:∀p∈F,p.Prime∧P<p):
   tB F N P m=
@@ -43494,6 +44662,8 @@ theorem aBS (F:Finset ℕ) (N P m:ℕ)
  apply sum_congr rfl
  intro χ hχ
  rw [sum_comm]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aiH {r s:ℕ} (F:Finset ℕ) (N P m:ℕ)
   (α:DirichletCharacter ℂ r) (β:DirichletCharacter ℂ s) (h:P<r∨P< s):
   gT F N P m α β=0:=by
@@ -43507,6 +44677,8 @@ theorem aiH {r s:ℕ} (F:Finset ℕ) (N P m:ℕ)
   have hs:=Nat.le_of_dvd hq0 ((Nat.dvd_lcm_right r s).trans hd)
   rcases h with h|h <;> omega
  rw [D9 α β m q hn,zero_mul]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ahA {ε:ℝ} (hε:0<ε) (hε1:ε≤1/6)
   {r s:ℕ} [NeZero r] [NeZero s] (F:Finset ℕ) (N P m:ℕ)
   (hN:0<N) (hm:0< m) (he:Even m)
@@ -43562,13 +44734,15 @@ def sK (P:ℕ):Finset PrimitiveComplexCharacter:=by
  exact (Dk P).attach.image
   (fun χ=>QI χ.val (CZ.mp χ.property).1)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem awb {P:ℕ} {χ:PrimitiveComplexCharacter}
   (hχ:χ∈sK P):χ.modulus≤P:=by
  letI:NeZero P.factorial:=⟨P.factorial_ne_zero⟩
  obtain ⟨ψ,hψ,rfl⟩:=mem_image.mp hχ
  exact (CZ.mp ψ.property).2
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aAL (P:ℕ) (f:PrimitiveComplexCharacter→ℂ):
   (∑χ∈sK P,f χ)=
    ∑ψ:Dk P,
@@ -43580,6 +44754,8 @@ theorem aAL (P:ℕ) (f:PrimitiveComplexCharacter→ℂ):
  ·intro χ hχ ψ hψ he
   exact Subtype.ext (aJs χ.val ψ.val
    (CZ.mp χ.property).1 (CZ.mp ψ.property).1 he)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem akq (P:ℕ)
   (f:(r:ℕ)→DirichletCharacter ℂ r→ℂ)
   (hz:∀r (χ:DirichletCharacter ℂ r),P<r→f r χ=0):
@@ -43615,6 +44791,8 @@ theorem akq (P:ℕ)
  change (∑χ,g χ)=_
  rw [← add_sum_erase (univ:Finset (DirichletCharacter ℂ P.factorial)) g
   (mem_univ (1:DirichletCharacter ℂ P.factorial)),hp,ht,hf]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aHz {r:ℕ} (A:Finset ℕ) (N P m:ℕ)
   (α:DirichletCharacter ℂ r):
   (∑ψ:DirichletCharacter ℂ P.factorial,
@@ -43625,6 +44803,8 @@ theorem aHz {r:ℕ} (A:Finset ℕ) (N P m:ℕ)
  exact akq P
   (fun _ ψ=>gT A N P m α ψ)
   (fun s ψ hs=>aiH A N P m α ψ (Or.inr hs))
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem azs (A:Finset ℕ) (N P m:ℕ)
   (hA:∀p∈A,p.Prime∧P<p):
   tB A N P m=
@@ -43659,14 +44839,16 @@ open p9 Fd
 open u9 BombieriVinogradov.qA
 open scoped BigOperators Classical Interval
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem a28 (N:ℕ):cap N 0 0=∅:=by
  ext t
  simp only [mem_cap,Set.mem_empty_iff_false,iff_false,not_exists]
  intro i hi
  have hh:=qX.mp hi.1
  omega
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aJX {q:ℕ} (hq:2≤q):
   (range (q+1)).filter (fun a=>a.Coprime q)=
    (range q).filter (fun a=>a.Coprime q):=by
@@ -43682,9 +44864,13 @@ theorem aJX {q:ℕ} (hq:2≤q):
   omega
  ·rintro ⟨ha,hcop⟩
   exact ⟨by omega,hcop⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem UK (F:ℝ→ℂ) {h:ℝ} (hh:0≤h):
   (∫ t in (-h)..h,F t)=∫ t in Set.Icc (-h) h,F t:=by
  rw [intervalIntegral.integral_of_le (by linarith),integral_Icc_eq_integral_Ioc]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ato {N P:ℕ}
   (hPN:P≤N) (hbudget:2*P*P<N) (F:ℝ→ℂ)
   (hF:Continuous F) (hperiod:Function.Periodic F 1):
@@ -43729,10 +44915,14 @@ theorem ato {N P:ℕ}
    simp only [G,sub_add_cancel]
   rw [he,UK G hr] at hh
   convert hh using 1 <;> simp only [G,center,radius,Prod.fst,Prod.snd,add_comm]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem als (z:ℤ):dS (z:ℝ)=1:=by
  rw [dS,circleMap_zero]
  simp only [Complex.ofReal_one,one_mul]
  convert Complex.exp_int_mul_two_pi_mul_I z using 2 <;> push_cast <;> ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aBI (F:Finset ℕ):Function.Periodic (jc F) 1:=by
  intro t
  unfold jc
@@ -43741,6 +44931,8 @@ theorem aBI (F:Finset ℕ):Function.Periodic (jc F) 1:=by
  rw [mul_add,mul_one,Gd]
  have hh:dS (p:ℝ)=1:=by simpa only [Int.cast_natCast] using als (p:ℤ)
  rw [hh,mul_one]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem avh (F:Finset ℕ) (m:ℕ):
   Function.Periodic (fun t=>jc F t^2*dS (-(m:ℝ)*t)) 1:=by
  intro t
@@ -43748,6 +44940,8 @@ theorem avh (F:Finset ℕ) (m:ℕ):
  rw [aBI F t,mul_add,mul_one,Gd]
  have hh:dS (-(m:ℝ))=1:=by simpa using als (-(m:ℤ))
  rw [hh,mul_one]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aDW {q:ℕ} [NeZero q] (a m:ℕ):
   dS (-(m:ℝ)*((a:ℝ)/q))=
    ZMod.stdAddChar ((a:ZMod q)*(-(m:ZMod q))):=by
@@ -43766,6 +44960,8 @@ theorem aDW {q:ℕ} [NeZero q] (a m:ℕ):
    congr 1
    push_cast
    ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem auc (F:Finset ℕ) (N P m:ℕ)
   (hPN:P≤N) (hbudget:2*P*P<N):
   (∫ t in (0:ℝ)..1,(cap N P P).indicator
@@ -43800,8 +44996,8 @@ end aY.jR
 namespace aY.iw
 open Real
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem avu {P R T N H a c:ℝ}
   (hR:0<R) (hT:0<T) (hRP:R≤P) (hN:1≤N)
   (hTN:T≤N^H) (hc:0≤c) (hca:c≤a):
@@ -43832,6 +45028,8 @@ theorem avu {P R T N H a c:ℝ}
   _≤P^a*N^(H*(c-b)):=mul_le_mul hcore ht
    (rpow_nonneg hT.le _) (rpow_nonneg (hR.trans_le hRP).le _)
   _=_:=by rw [he]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aIN {d:ℝ} (hd:0≤d) (hd1:d≤5/12):
   let e:ℝ:=(12/5+1/1000000)*d
   let c:ℝ:=(1+4/1000000)*e
@@ -43847,6 +45045,8 @@ theorem aIN {d:ℝ} (hd:0≤d) (hd1:d≤5/12):
     ((53/5)*(1/1000000)+4*(1/1000000)^2)*d:=by
   exact max_le hx (by positivity)
  nlinarith
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aNJ {d:ℝ} (hd:5/12≤d):
   let e:ℝ:=1+1/1000000
   let c:ℝ:=(1+4/1000000)*e
@@ -43978,19 +45178,23 @@ open scoped BigOperators Classical
 noncomputable def exponent (σ:ℝ):ℝ:=
  if σ≤7/12 then 1+1/1000000 else (12/5+1/1000000)*(1-σ)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem K8 {σ:ℝ} (hσ:σ≤1):0≤exponent σ:=by
  unfold exponent
  split_ifs
  ·norm_num
  ·exact mul_nonneg (by norm_num) (sub_nonneg.mpr hσ)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aYn {σ:ℝ}:exponent σ≤1+1/1000000:=by
  unfold exponent
  split_ifs with h
  ·exact le_rfl
  ·have hs:7/12<σ:=lt_of_not_ge h
   nlinarith
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aRB:
   ∃C:ℝ,1≤C∧∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→∀σ:ℝ,
    1/2≤σ→σ≤1→∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -44024,6 +45228,8 @@ theorem aRB:
      have hs:σ≤999/1000:=le_of_lt (lt_of_not_ge hhi)
      nlinarith:(12/5)*(1-σ)+1/1000000000≤(12/5+1/1000000)*(1-σ)))
     (rpow_nonneg (by positivity) _) (by linarith)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aTl:
   ∃C:ℝ,1≤C∧∀q:ℕ,1≤q→∀T:ℝ,1≤T→∀σ:ℝ,
    1/2≤σ→σ≤1→∀R:Finset (PrimitiveComplexCharacter × ℂ),
@@ -44057,6 +45263,8 @@ theorem aTl:
      have hs:σ≤999/1000:=le_of_lt (lt_of_not_ge hhi)
      nlinarith:(12/5)*(1-σ)+1/1000000000≤(12/5+1/1000000)*(1-σ)))
     (rpow_nonneg (by positivity) _) (by linarith)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aTm:
   ∃C:ℝ,1≤C∧
    (∀Q:ℕ,1≤Q→∀T:ℝ,1≤T→∀σ:ℝ,1/2≤σ→σ≤1→
@@ -44084,8 +45292,8 @@ namespace aY.gO
 open Finset Real OAI.Ostmann d7
 open scoped BigOperators Classical
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem akQ {K R T e:ℝ} (hK:1≤K) (hR:0<R) (hT:0<T)
   (he:e≤2) (j:ℕ):
   (K*R^j*T)^e≤K^2*R^((j:ℝ)*e)*T^e:=by
@@ -44097,6 +45305,8 @@ theorem akQ {K R T e:ℝ} (hK:1≤K) (hR:0<R) (hT:0<T)
  rw [Real.mul_rpow (by positivity) hT.le,Real.mul_rpow hK0.le (by positivity),hj]
  exact mul_le_mul_of_nonneg_right
   (mul_le_mul_of_nonneg_right hp (rpow_nonneg hR.le _)) (rpow_nonneg hT.le _)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem apf:
   ∃C:ℝ,1≤C∧∀R T σ:ℝ,1≤R→1≤T→1/2≤σ→σ≤1→
    ∀S:Finset (PrimitiveComplexCharacter × ℂ),
@@ -44172,10 +45382,12 @@ theorem s8 (r s:ℕ):0≤bY r s:=by
 noncomputable def eD (σ:ℝ):ℝ:=
  (1+4/1000000)*gO.exponent σ
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aNx {σ:ℝ} (hσ:σ≤1):0≤eD σ:=
  mul_nonneg (by norm_num) (gO.K8 hσ)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ahD {C R T U V e f:ℝ}
   (hC:1≤C) (hR:0<R) (hT:0<T) (hU:0<U) (hV:0<V):
   ((C*R^e*T^e)*(C*R^(2*e)*T^e)*(C*U^f*V^f)*(C*U^(2*f)*V^f))^
@@ -44220,6 +45432,8 @@ theorem ahD {C R T U V e f:ℝ}
     (mul_le_mul_of_nonneg_right hc (rpow_nonneg hR.le _))
     (rpow_nonneg hT.le _)) (rpow_nonneg hU.le _)) (rpow_nonneg hV.le _) using 1 <;>
   congr 1 <;> ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aII:
   ∃C:ℝ,1≤C∧∀R T U V σ τ:ℝ,
    1≤R→1≤T→1≤U→1≤V→
@@ -44309,17 +45523,21 @@ open scoped BigOperators Classical
 noncomputable def iF (P:ℝ) (i:PrimitiveComplexCharacter × ℂ):ℝ:=
  jI P i.1.modulus (1+|i.2.im|)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem yF {P:ℝ} (hP:0≤P)
   (i:PrimitiveComplexCharacter × ℂ):0≤ iF P i:=
  F7 hP (Nat.cast_nonneg _) (by positivity)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Wm {P R T U V:ℝ} (hP:0≤P)
   (hR:0<R) (hT:0<T) (hRU:R≤U) (hTV:T≤V):
   jI P U V≤jI P R T:=by
  apply min_le_min_left
  apply div_le_div_of_nonneg_left hP (mul_pos hR hT)
  exact mul_le_mul hRU hTV hT.le (hR.le.trans hRU)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aMq {σ:ℝ} (hσ:1/2≤σ) (hσ1:σ≤1):
   (2773/10000)*(3*eD σ/2)+10*max (eD σ-1) 0+
    (5/2)*(1/1000000)*eD σ≤(999/1000)*(1-σ):=by
@@ -44328,6 +45546,8 @@ theorem aMq {σ:ℝ} (hσ:1/2≤σ) (hσ1:σ≤1):
    aNJ (d:=1-σ) (by linarith)
  ·simpa only [eD,gO.exponent,if_neg hlo] using
    aIN (d:=1-σ) (by linarith) (by linarith)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aal {N P R T σ:ℝ} (hN:1≤N)
   (hP:P≤N^(2773/10000:ℝ)) (hR:1≤R) (hT:1≤T)
   (hRP:R≤P) (hTN:T≤N^(10:ℝ))
@@ -44372,6 +45592,8 @@ theorem aal {N P R T σ:ℝ} (hN:1≤N)
     (5/2)*(1/1000000)*eD σ):=by
    rw [←rpow_add hN0,←rpow_add hN0]
   _≤_:=rpow_le_rpow_of_exponent_le hN (aMq hσ hσ1)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ai6:
   ∃C:ℝ,1≤C∧∀N P R T U V σ τ:ℝ,
    1≤N→P≤N^(2773/10000:ℝ)→
@@ -44462,14 +45684,18 @@ open scoped BigOperators
 noncomputable section
 def point (N:ℝ) (j:ℕ):ℝ:=N^((j:ℝ)/1000000)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem wC {N:ℝ} (hN:1≤N) (j:ℕ):1≤point N j:=by
  exact Real.one_le_rpow hN (by positivity)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem wN {N:ℝ} (hN:0<N) (j:ℕ):
   point N (j+1)=point N j*N^(1/1000000:ℝ):=by
  unfold point
  rw [Nat.cast_add,Nat.cast_one,add_div,Real.rpow_add hN]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem covers {N u:ℝ} (hN:1<N) (hu:1≤u)
   (huN:u≤N^(10:ℝ)):
   ∃j∈range 10000001,point N j≤u∧u≤point N (j+1):=by
@@ -44543,8 +45769,8 @@ def lJ (N:ℝ) (j:ℕ × ℕ) (i:PrimitiveComplexCharacter × ℂ):Prop:=
  (gd.point N j.2≤1+|i.2.im| ∧
   1+|i.2.im| ≤gd.point N (j.2+1))
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Ie {N P:ℝ} (hN:1<N) (hP:P≤N^(2773/10000:ℝ))
   (i:PrimitiveComplexCharacter × ℂ) (hq:(i.1.modulus:ℝ)≤P)
   (ht:1+|i.2.im| ≤N^(10:ℝ)):∃j∈iG,lJ N j i:=by
@@ -44559,6 +45785,8 @@ theorem Ie {N P:ℝ} (hN:1<N) (hP:P≤N^(2773/10000:ℝ))
  obtain ⟨b,hb,hbc⟩:=hcb
  exact ⟨(a,b),Finset.mk_mem_product (s:=F) (t:=F) (a:=a) (b:=b) ha hb,
   ⟨hac,hbc⟩⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ahL:
   ∃C:ℝ,1≤C∧∀N P σ τ:ℝ,
    1<N→1≤P→P≤N^(2773/10000:ℝ)→
@@ -44674,12 +45902,14 @@ open scoped BigOperators Classical
 noncomputable def g8 (N P:ℝ) (i:PrimitiveComplexCharacter × ℂ):ℝ:=
  multiplicity i*iF P i*N^(i.2.re-1)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Gp {N P:ℝ} (hN:0≤N) (hP:0≤P)
   (i:PrimitiveComplexCharacter × ℂ):0≤g8 N P i:=by
  exact mul_nonneg (mul_nonneg (by unfold d7.multiplicity; positivity)
   (yF hP i)) (rpow_nonneg hN _)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ahM:
   ∃C:ℝ,1≤C∧∀N P b c:ℝ,
    1<N→1≤P→P≤N^(2773/10000:ℝ)→
@@ -44746,6 +45976,8 @@ theorem ahM:
  intro j hj
  unfold g8
  ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ala {N η:ℝ} (hN:1<N):
   N^((1/1000)*((1-η/Real.log N)-1))=Real.exp (-η/1000):=by
  have hN0:0<N:=zero_lt_one.trans hN
@@ -44754,6 +45986,8 @@ theorem ala {N η:ℝ} (hN:1<N):
  congr 1
  field_simp
  ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aHv:
   ∃C:ℝ,1≤C∧∀N P η:ℝ,
    1<N→1≤P→P≤N^(2773/10000:ℝ)→0≤η→
@@ -44779,6 +46013,8 @@ theorem aHv:
  ·rw [not_nonempty_iff_eq_empty.mp hS]
   simp only [sum_empty]
   positivity
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ayI {r s:ℕ} (hr:0<r) (hs:0< s):
   (r:ℝ)^(1/1000000-1:ℝ)*(s:ℝ)^(1/1000000-1:ℝ)≤bY r s:=by
  have hp:=PW (r,s) ⟨hr,hs⟩
@@ -44789,6 +46025,8 @@ theorem ayI {r s:ℕ} (hr:0<r) (hs:0< s):
   (show (((fq (r,s)).1*(fq (r,s)).2:ℕ):ℝ)≤(r*s:ℕ) by exact_mod_cast hn)
   (by norm_num:(1/1000000-1:ℝ)≤0)
  simpa only [bY,Nat.cast_mul,mul_rpow (Nat.cast_nonneg r) (Nat.cast_nonneg s)] using hh
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aI7 (S:Finset (PrimitiveComplexCharacter × ℂ))
   {N P:ℝ} (hN:0≤N) (hP:0≤P):
   (∑i∈S,(i.1.modulus:ℝ)^(1/1000000-1:ℝ)*g8 N P i)^2≤
@@ -44820,10 +46058,12 @@ open scoped BigOperators Classical
 noncomputable def tQ (P:ℝ) (q:ℕ):ℝ:=
  ∑r∈Icc 1 ⌊P⌋₊,bY r q
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem XH (P:ℝ) (q:ℕ):0≤tQ P q:=
  sum_nonneg (fun r _=>s8 _ _)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 private theorem aaf (Q r:ℕ):
   (nC (Icc 1 Q) id (fun _=>1) r:ℝ)≤1:=by
  have hn:nC (Icc 1 Q) id (fun _=>1) r≤1:=by
@@ -44831,6 +46071,8 @@ private theorem aaf (Q r:ℕ):
   simp only [sum_ite_eq']
   split_ifs <;> omega
  exact_mod_cast hn
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aHu:
   ∃C:ℝ,1≤C∧∀P R T σ:ℝ,1≤P→1≤R→1≤T→
    1/2≤σ→σ≤1→∀S:Finset (PrimitiveComplexCharacter × ℂ),
@@ -44905,6 +46147,8 @@ theorem aHu:
     (A^4*R^(3*eD σ/2)*T^(eD σ)):=
    mul_le_mul_of_nonneg_left hn (by positivity)
   _=_:=by ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aBa:∃C:ℝ,0<C∧∀P:ℝ,1≤P→
   (∑r∈Icc 1 ⌊P⌋₊,∑s∈Icc 1 ⌊P⌋₊,bY r s)≤C*P^(1+4/1000000:ℝ):=by
  let J:ℝ:=(mL (1/1000000))^2+1
@@ -44931,6 +46175,8 @@ theorem aBa:∃C:ℝ,0<C∧∀P:ℝ,1≤P→
    rw [←pow_two,←rpow_natCast,←rpow_mul (by linarith:0≤P)]
    congr 2
    norm_num
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem azF:
   ∃C:ℝ,1≤C∧∀N P σ:ℝ,1<N→1≤P→P≤N^(2773/10000:ℝ)→
    1/2≤σ→σ≤1→∀S:Finset (PrimitiveComplexCharacter × ℂ),
@@ -45011,6 +46257,8 @@ theorem azF:
    change K*(C*P^(1/2+2/1000000:ℝ)*N^((999/1000)*(1-σ)))=
     K*C*P^(1/2+2/1000000:ℝ)*N^((999/1000)*(1-σ))
    ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aDq:
   ∃C:ℝ,1≤C∧∀N P:ℝ,1<N→1≤P→P≤N^(2773/10000:ℝ)→
    ∀S:Finset (PrimitiveComplexCharacter × ℂ),
@@ -45051,8 +46299,8 @@ namespace aY.Ja
 open Finset Real Filter OAI.Ostmann d7
 open scoped BigOperators Classical Topology
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem an5 (η:ℝ) (hη:0≤η):
   ∃C:ℝ,1≤C∧∀N:ℝ,2≤N→1000*η≤log N→
    ∀S:Finset (PrimitiveComplexCharacter × ℂ),
@@ -45111,6 +46359,8 @@ theorem an5 (η:ℝ) (hη:0≤η):
   _≤C*(N^(15:ℝ))^((203/100:ℝ)*(1-(1-η/log N))):=
    mul_le_mul_of_nonneg_left (rpow_le_rpow (by positivity) hD he) hC.le
   _≤1+C*exp ((609/20)*η):=by rw [hp]; linarith
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem awA (A:ℝ) (hA:0<A) (F:ℕ):
   ∀ᶠ M:ℕ in atTop,∀χ:PrimitiveComplexCharacter,∀s:ℂ,
    χ.modulus≤M→ |s.im| ≤M→1-A/log M≤ s.re→
@@ -45121,6 +46371,8 @@ theorem awA (A:ℝ) (hA:0<A) (F:ℕ):
  subst q
  letI:NeZero (2^k*d):=⟨hq.ne'⟩
  exact hM k d hd hodd χ hp hχ s hqM ht hβ
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem alb (η:ℝ) (hη:0≤η) (F:ℕ):
   ∀ᶠ N:ℝ in atTop,∀χ:PrimitiveComplexCharacter,∀s:ℂ,
    (χ.modulus:ℝ)≤N→ |s.im| ≤N^(10:ℝ)→
@@ -45174,8 +46426,8 @@ namespace Binary13.kP
 open scoped BigOperators
 noncomputable section
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ah3:Summable nF:=by
  have he:nF=fun k:ℕ=>
    Goldbach.eW.aD (k+1)/((k:ℝ)+1):=by
@@ -45184,6 +46436,8 @@ theorem ah3:Summable nF:=by
   rfl
  rw [he]
  exact Binary13.kD.ax6.summable
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Sd (A:ℕ):
   ∃C:ℝ,0<C∧∀L n:ℕ,1≤L→13*2^L<n→n≤2^(L+A)→
    (∑e:Fin 13→Fin L,
@@ -45263,14 +46517,16 @@ open Finset Real Filter OAI.Ostmann d7
 open Binary13.kP
 open scoped BigOperators Classical Topology
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aHZ (q:ℕ) (hq:0<q):
   Odd ((q/2^(q.factorization 2)))∧q=2^(q.factorization 2)*(q/2^(q.factorization 2)):=by
  refine ⟨?_,(Nat.ordProj_mul_ordCompl_eq_self q 2).symm⟩
  apply Nat.not_even_iff_odd.mp
  rw [even_iff_two_dvd]
  exact Nat.not_dvd_ordCompl Nat.prime_two hq.ne'
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aDp (η:ℝ) (hη:0≤η) (A:ℕ)
   (ε:ℝ) (hε:0<ε):
   ∃N₀ L₀:ℕ,∀n L:ℕ,N₀≤n→L₀≤L→1≤L→
@@ -45347,12 +46603,14 @@ open Filter
 open scoped Topology
 noncomputable section
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ajE (k:ℕ) {a:ℝ} (ha:0<a):
   Tendsto (fun N:ℝ=>(Real.log N)^k/N^a) atTop (𝓝 0):=by
  simpa only [Real.rpow_natCast] using
   (isLittleO_log_rpow_rpow_atTop (k:ℝ) ha).tendsto_div_nhds_zero
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem SH (C ε:ℝ) (hε:0<ε):
   ∀ᶠ N:ℝ in atTop,∀P:ℝ,1≤P→P≤N^(2773/10000:ℝ)→
    C*(P^(3+4/1000000:ℝ)*N^(-(2499/2500:ℝ))*(Real.log N)^6+
@@ -45413,8 +46671,8 @@ namespace aY.iw
 open Finset Real Filter OAI.Ostmann d7
 open scoped BigOperators Classical Topology
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ah1 {N P:ℝ} (hN:1≤N) (hP:0≤P)
   (i:PrimitiveComplexCharacter × ℂ) (hβ:i.2.re≤1):
   g8 N P i≤d7.multiplicity i:=by
@@ -45426,6 +46684,8 @@ theorem ah1 {N P:ℝ} (hN:1≤N) (hP:0≤P)
    (mul_le_mul_of_nonneg_left hcut hμ) hpow
    (rpow_nonneg (by linarith) _) (by simpa using hμ)
   _=_:=by ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aAW:
   ∃C:ℝ,0<C∧∀N P η:ℝ,1<N→1≤P→P≤N^(2773/10000:ℝ)→0≤η→
    ∀S:Finset (PrimitiveComplexCharacter × ℂ),
@@ -45453,6 +46713,8 @@ theorem aAW:
  ·rw [not_nonempty_iff_eq_empty.mp hS]
   simp only [sum_empty]
   positivity
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aAi (ε:ℝ) (hε:0<ε):
   ∀ᶠ N:ℝ in atTop,∀P:ℝ,1≤P→P≤N^(2773/10000:ℝ)→
    ∀S:Finset (PrimitiveComplexCharacter × ℂ),
@@ -45546,8 +46808,8 @@ noncomputable def rG (F:Finset PrimitiveComplexCharacter) (N:ℝ):
   Finset (PrimitiveComplexCharacter × ℂ):=
  F.biUnion (fun χ=>(tA χ (1/10000) (N^6)).image (fun ρ=>(χ,ρ)))
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aDU (F:Finset PrimitiveComplexCharacter) (N:ℝ)
   (i:PrimitiveComplexCharacter × ℂ):
   i∈rG F N↔i.1∈F∧i.2∈tA i.1 (1/10000) (N^6):=by
@@ -45561,6 +46823,8 @@ theorem aDU (F:Finset PrimitiveComplexCharacter) (N:ℝ)
   apply mem_biUnion.mpr
   refine ⟨i.1,hχ,?_⟩
   exact mem_image.mpr ⟨i.2,hρ,Prod.mk.eta⟩
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem N9 (F:Finset PrimitiveComplexCharacter) (N:ℝ)
   (f:PrimitiveComplexCharacter × ℂ→ℝ):
   (∑i∈rG F N,f i)=
@@ -45579,11 +46843,13 @@ end
 noncomputable def f7 (N P:ℝ) (χ:PrimitiveComplexCharacter):ℝ:=
  ∑ρ∈tA χ (1/10000) (N^6),g8 N P (χ,ρ)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Nt {N P:ℝ} (hN:0≤N) (hP:0≤P)
   (χ:PrimitiveComplexCharacter):0≤f7 N P χ:=
  sum_nonneg (fun ρ _=>Gp hN hP _)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem auE {N P:ℝ} (hN:0<N) (hP:0<P)
   (χ:PrimitiveComplexCharacter):
   f7 N P χ=l8 χ (1/10000) (N^6) N ((χ.modulus:ℝ)*N/P):=by
@@ -45596,6 +46862,8 @@ theorem auE {N P:ℝ} (hN:0<N) (hP:0<P)
  dsimp [g8,d7.multiplicity,tq,iF,jI]
  rw [hc]
  ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aHN {N:ℝ} (hN:2≤N):N^6+2≤N^(10:ℝ):=by
  have hN1:1≤N:=by linarith
  have h6:1≤N^6:=one_le_pow₀ hN1
@@ -45604,6 +46872,8 @@ theorem aHN {N:ℝ} (hN:2≤N):N^6+2≤N^(10:ℝ):=by
  have he:N^10=N^6*N^4:=by ring
  rw [he]
  nlinarith
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem oN {F:Finset PrimitiveComplexCharacter} {N P:ℝ}
   (hN:2≤N) (hF:∀χ∈F,(χ.modulus:ℝ)≤P)
   {i:PrimitiveComplexCharacter × ℂ} (hi:i∈rG F N):
@@ -45613,9 +46883,13 @@ theorem oN {F:Finset PrimitiveComplexCharacter} {N P:ℝ}
  have hs:=XD i.1 (1/10000) (N^6) i.2 hm.2
  refine ⟨hF i.1 hm.1,?_,by linarith [hs.1],hs.2.1,hs.2.2.2⟩
  exact (by linarith [hs.2.2.1]:1+|i.2.im| ≤N^6+2).trans (aHN hN)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aoa (r s:ℕ):bY r s=bY s r:=by
  unfold bY fq
  rw [Nat.gcd_comm r s,Nat.mul_comm]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aul (F:Finset PrimitiveComplexCharacter)
   {P:ℝ} (hP:1≤P) (hF:∀χ∈F,(χ.modulus:ℝ)≤P) (s:ℕ):
   (∑χ∈F,bY χ.modulus s/(χ.modulus:ℝ))≤tQ P s:=by
@@ -45637,6 +46911,8 @@ theorem aul (F:Finset PrimitiveComplexCharacter)
   _≤(r:ℝ)*(bY r s/(r:ℝ)):=
    mul_le_mul_of_nonneg_right hc (div_nonneg (s8 _ _) hrR.le)
   _=bY r s:=by field_simp
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem avs:
   ∃C:ℝ,1≤C∧∀N P:ℝ,2≤N→1≤P→P≤N^(2773/10000:ℝ)→
    ∀F:Finset PrimitiveComplexCharacter,(∀χ∈F,(χ.modulus:ℝ)≤P)→
@@ -45788,8 +47064,8 @@ namespace aY.iw
 open Finset Real OAI.Ostmann
 open scoped BigOperators Classical
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem UZ (P:ℝ) (hP:1≤P)
   (F:Finset PrimitiveComplexCharacter)
   (hq:∀χ∈F,(χ.modulus:ℝ)≤P)
@@ -45816,6 +47092,8 @@ theorem UZ (P:ℝ) (hP:1≤P)
   _≤(q:ℝ)*(f q/(q:ℝ)):=
    mul_le_mul_of_nonneg_right hcard (div_nonneg (hf q hq') hqr.le)
   _=f q:=by field_simp
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ayU:
   ∃C:ℝ,1≤C∧∀P:ℝ,1≤P→
    ∀F:Finset PrimitiveComplexCharacter,
@@ -45852,6 +47130,8 @@ theorem ayU:
   _≤C*P^(1+4/1000000:ℝ):=hbound P hP
   _≤ max C 1*P^(1+4/1000000:ℝ):=
    mul_le_mul_of_nonneg_right (le_max_left _ _) (rpow_nonneg (by linarith) _)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aw9 (P:ℝ) (hP:1≤P)
   (F:Finset PrimitiveComplexCharacter)
   (hq:∀χ∈F,(χ.modulus:ℝ)≤P):
@@ -45890,12 +47170,16 @@ noncomputable def DJ (m r s:ℕ):ℝ:=
  ((Nat.lcm r s/Nat.gcd (Nat.lcm r s) m:ℕ):ℝ)^(-(1/3:ℝ))
 noncomputable def oF (m r s:ℕ):ℝ:=min (bY r s) (DJ m r s)
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem akl (m r s:ℕ):0≤DJ m r s:=
  rpow_nonneg (Nat.cast_nonneg _) _
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aOd (m r s:ℕ):0≤oF m r s:=
  le_min (s8 _ _) (akl _ _ _)
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem axa (r s:ℕ) (hr:0<r) (hs:0< s):
   (Nat.lcm r s/r)*(Nat.lcm r s/s)=(fq (r,s)).1*(fq (r,s)).2:=by
  have ha:Nat.lcm r s/r=s/Nat.gcd r s:=by
@@ -45906,6 +47190,8 @@ theorem axa (r s:ℕ) (hr:0<r) (hs:0< s):
    Nat.mul_div_cancel_left _ hs,Nat.gcd_comm]
  rw [ha,hb]
  exact Nat.mul_comm _ _
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aPr (C ε:ℝ) (hC:0<C) (hε:0<ε):
   ∃η:ℝ,0≤η∧C*exp (-η/1000)≤ε:=by
  let η:ℝ:=1000*(max 0 (log (C/ε))+1)
@@ -45918,6 +47204,8 @@ theorem aPr (C ε:ℝ) (hC:0<C) (hε:0<ε):
   linarith
  have he:C*(C/ε)⁻¹=ε:=by field_simp
  exact (mul_le_mul_of_nonneg_left hh hC.le).trans_eq he
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem azG (A:ℕ) (ε:ℝ) (hε:0<ε):
   ∃N₀ L₀:ℕ,∀n L:ℕ,N₀≤n→L₀≤L→1≤L→
    13*2^L<n→n≤2^(L+A)→∀P:ℝ,1≤P→P≤(n:ℝ)^(2773/10000:ℝ)→
@@ -46017,13 +47305,15 @@ open scoped BigOperators Classical Topology
 noncomputable def primeError (N P:ℝ) (χ:PrimitiveComplexCharacter):ℝ:=
  (P/(χ.modulus:ℝ))*N^(-2499/5000:ℝ)*(log N)^3
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem Yk {N P:ℝ} (hN:1≤N) (hP:0≤P)
   (χ:PrimitiveComplexCharacter):0≤primeError N P χ:=by
  have hl:0≤log N:=log_nonneg hN
  unfold primeError
  positivity
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aHc (F:Finset PrimitiveComplexCharacter)
   (N P:ℝ) (f:PrimitiveComplexCharacter→PrimitiveComplexCharacter→ℝ):
   (∑χ∈F,∑ψ∈F,f χ ψ*f7 N P χ*f7 N P ψ)=
@@ -46038,6 +47328,8 @@ theorem aHc (F:Finset PrimitiveComplexCharacter)
  apply sum_congr rfl
  intro ρ hρ
  rw [sum_comm]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aHp (A:ℕ) (ε:ℝ) (hε:0<ε):
   ∃N₀ L₀:ℕ,∀n L:ℕ,N₀≤n→L₀≤L→1≤L→
    13*2^L<n→n≤2^(L+A)→∀P:ℝ,1≤P→P≤(n:ℝ)^(2773/10000:ℝ)→
@@ -46235,10 +47527,12 @@ open u9 BombieriVinogradov.qA
 open jP aY.iw
 open scoped BigOperators Classical
 section
-set_option maxHeartbeats 4000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem OH (t:ℝ):dS t=Vv t:=by
  simp [dS,Vv,circleMap_zero]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem ax9 {q:ℕ} (F:Finset ℕ)
   (χ:DirichletCharacter ℂ q) (t:ℝ):
   ‖aP F χ t‖=
@@ -46257,6 +47551,8 @@ theorem ax9 {q:ℕ} (F:Finset ℕ)
   rw [hv]
   <;> ring
  rw [he,norm_star]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aya:
   ∃C:ℝ,0<C∧∀q:ℕ,∀F:Finset ℕ,∀χ:DirichletCharacter ℂ q,
    ∀N H B:ℝ,0<N→0<H→H≤N→0≤B→
@@ -46280,6 +47576,8 @@ theorem aya:
   _≤ sqrt (C*N*B^2):=sqrt_le_sqrt hh
   _=sqrt C*sqrt N*B:=by
    rw [sqrt_mul (mul_nonneg hC.le hN.le),sqrt_mul hC.le,sqrt_sq_eq_abs,abs_of_nonneg hB]
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem aD9 (K:ℕ) (hK:1≤K):
   ∃C:ℝ,0<C∧∀χ:PrimitiveComplexCharacter,∀N Y:ℕ,∀H:ℝ,
    2≤N→1≤log (N:ℝ)→χ.modulus≤N→4≤Y→Y≤N→
@@ -46319,6 +47617,8 @@ theorem aD9 (K:ℕ) (hK:1≤K):
  calc
   _≤B*sqrt N*M:=hh
   _=_:=by dsimp [M,Z]; ring
+set_option maxHeartbeats 4000000 in
+set_option maxRecDepth 8192 in
 theorem akH (K:ℕ) (hK:1≤K):
   ∃C:ℝ,0<C∧∀χ:PrimitiveComplexCharacter,∀N Y:ℕ,∀P:ℝ,
    2≤N→1≤log (N:ℝ)→4≤Y→Y≤N→N≤K*Y→K^2≤N→
@@ -46364,8 +47664,8 @@ noncomputable def modelError (q:ℕ) (δ B:ℝ) (M:ℕ) (X:ℝ):ℝ:=
  X^(1/2+2*δ)*(logHeight q ((M:ℝ)+2))^2*(1+20*(1+Real.log (M+1:ℝ)))+
   X^4*(B⁻¹+(logHeight q ((M:ℝ)+2))^2/B^2)
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem Yd (q:ℕ) (hq0:0<q) (N:ℕ)
   (hN:2≤N) (hq:q≤N):
   0≤logHeight q (((N^6+1:ℕ):ℝ)+2)∧
@@ -46406,6 +47706,8 @@ theorem Yd (q:ℕ) (hq0:0<q) (N:ℕ)
   simpa only [Real.log_pow,Nat.cast_ofNat] using hh
  ·have hh:=Real.log_le_log (by positivity:0<(N:ℝ)^6+2) hn8
   simpa only [Nat.cast_add,Nat.cast_pow,Nat.cast_ofNat,Real.log_pow] using hh
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aL0 (q:ℕ) (hq0:0<q) (N:ℕ)
   (hN:2≤N) (hq:q≤N) (hL:1≤Real.log N):
   modelError q (1/10000) ((N:ℝ)^6) (N^6+1) N≤
@@ -46472,12 +47774,14 @@ noncomputable def ko (δ B X H:ℝ):ℝ:=
  ∑ρ∈I8 δ B,(analyticOrderNatAt riemannZeta ρ:ℝ)*X^(ρ.re-1)*
   min 1 (X/(H*(1+|ρ.im|)))
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ak5 (ρ:ℂ) (hρ:ρ≠1):
   regularizedL (1:DirichletCharacter ℂ 1) ρ=(ρ-1)*riemannZeta ρ:=by
  simp only [regularizedL,ite_true,DirichletCharacter.LFunctionTrivChar₁,
   Function.update_of_ne hρ,DirichletCharacter.LFunction_modOne_eq]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aNm (ρ:ℂ) (hρ:ρ≠1):
   analyticOrderNatAt (regularizedL (1:DirichletCharacter ℂ 1)) ρ=
    analyticOrderNatAt riemannZeta ρ:=by
@@ -46491,6 +47795,8 @@ theorem aNm (ρ:ℂ) (hρ:ρ≠1):
    (show AnalyticAt ℂ (fun z:ℂ=>z-1) ρ by fun_prop)
    (analyticOn_riemannZeta ρ hρ),analyticOrderAt_id_sub_const_of_ne hρ,zero_add]
  exact congrArg ENat.toNat ho
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem Ih (δ B:ℝ) (ρ:ℂ) (hρ:ρ∈I8 δ B):
   1/2+δ≤ρ.re∧ρ.re≤1∧ |ρ.im| ≤B+1∧riemannZeta ρ=0∧ρ≠1:=by
  have hh:=(mem_boxZeros (1:DirichletCharacter ℂ 1) _ _ _ _ ρ).mp hρ
@@ -46503,6 +47809,8 @@ theorem Ih (δ B:ℝ) (ρ:ℂ) (hρ:ρ∈I8 δ B):
  rw [ak5 ρ hne] at hz
  exact ⟨hb.1.1,hb.1.2,abs_le.mpr ⟨by linarith [hb.2.1],hb.2.2⟩,
   (mul_eq_zero.mp hz).resolve_left (sub_ne_zero.mpr hne),hne⟩
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem akJ (δ B σ T:ℝ) (hσ:1/2+δ≤σ) (hT:T≤B+1):
   boxZeros (1:DirichletCharacter ℂ 1) σ 2 (-T) T ⊆ I8 δ B:=by
  intro ρ hρ
@@ -46514,6 +47822,8 @@ theorem akJ (δ B σ T:ℝ) (hσ:1/2+δ≤σ) (hT:T≤B+1):
  apply (mem_boxZeros (1:DirichletCharacter ℂ 1) _ _ _ _ ρ).mpr
  refine ⟨mem_reProdIm.mpr ⟨⟨hσ.trans hb.1.1,hr⟩,?_,?_⟩,hh.2⟩ <;>
   linarith [hb.2.1,hb.2.2]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aNB (δ B σ T a b:ℝ) (hσ:1/2+δ≤σ) (hT:T≤B+1):
   ‖zeroContribution (1:DirichletCharacter ℂ 1) a b 0 σ T‖ ≤
    ∑ρ∈I8 δ B,(analyticOrderNatAt riemannZeta ρ:ℝ)*‖transform a b 0 ρ‖ :=by
@@ -46530,6 +47840,8 @@ theorem aNB (δ B σ T a b:ℝ) (hσ:1/2+δ≤σ) (hT:T≤B+1):
    rw [norm_mul,Complex.norm_natCast,aNm ρ hne]
   _≤_:=sum_le_sum_of_subset_of_nonneg (akJ δ B σ T hσ hT)
    (fun _ _ _=>by positivity)
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aVr {a b:ℝ} (ha:0<a) (hab:a+1≤b):
   transform a b 0 1=(b-a:ℂ):=by
  rw [transform_eq_average ha hab]
@@ -46541,6 +47853,8 @@ theorem aVr {a b:ℝ} (ha:0<a) (hab:a+1≤b):
  rw [intervalIntegral.integral_const]
  simp [Complex.real_smul]
  <;> ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aJx (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/8):
   ∃C:ℝ,0<C∧∀B:ℝ,∀M a b:ℕ,∀X:ℝ,
    2≤B→B+1≤(M:ℝ)→1≤X→X≤(a:ℝ)→(a:ℝ)+1≤b→
@@ -46594,16 +47908,20 @@ namespace oc
 open Complex Finset Real OAI.Ostmann jP Goldbach GoldbachSmoothing
 open scoped BigOperators Classical
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aEb (n:ℕ):
   (1:DirichletCharacter ℂ 1) (n:ZMod 1)=1:=by
  rw [Subsingleton.elim (n:ZMod 1) 1,map_one]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aJN (a b:ℕ) (hab:a≤b):
   (∑n∈Ioc a b,(primeLog n-1))=(∑n∈Ioc a b,primeLog n)-(b-a:ℂ):=by
  rw [sum_sub_distrib]
  simp only [sum_const,Nat.card_Ioc,nsmul_eq_mul,mul_one]
  rw [Nat.cast_sub hab]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aH8 (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/8):
   ∃C:ℝ,0<C∧∀B:ℝ,∀M a b n:ℕ,∀X:ℝ,
    2≤B→B+1≤(M:ℝ)→1≤X→X≤(a:ℝ)→(a:ℝ)+1≤b→
@@ -46627,22 +47945,30 @@ theorem aH8 (δ:ℝ) (hδ:0<δ) (hδ1:δ≤1/8):
   _≤ ‖(∑k∈Ioc a b,twistedCoefficient (1:DirichletCharacter ℂ 1) k)-(b-a:ℂ)‖+
     ‖(∑k∈Ioc a b,primeLog k)-(∑k∈Ioc a b,twistedCoefficient (1:DirichletCharacter ℂ 1) k)‖ :=norm_add_le _ _
   _≤_:=add_le_add hw hp
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aOZ (q:ℕ) (δ B:ℝ) (M:ℕ)
   {X:ℝ} (hX:0≤X) (hB:0≤B):0≤ modelError q δ B M X:=by
  have hm:0≤Real.log (M+1:ℝ):=Real.log_nonneg (by have h:(0:ℝ)≤M:=Nat.cast_nonneg M; linarith)
  unfold modelError
  positivity
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aRS (q:ℕ) (δ B:ℝ) (M:ℕ)
   {X N:ℝ} (hδ:0≤δ) (hB:0≤B) (hX:0≤X) (hXN:X≤N):
   modelError q δ B M X≤ modelError q δ B M N:=by
  have hm:0≤Real.log (M+1:ℝ):=Real.log_nonneg (by have h:(0:ℝ)≤M:=Nat.cast_nonneg M; linarith)
  unfold modelError
  gcongr
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem Qc (δ B X H:ℝ) (hX:0≤X) (hH:0≤H):
   0≤ko δ B X H:=by
  apply sum_nonneg
  intro ρ hρ
  positivity
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aN8 (δ B:ℝ) {X N C l H:ℝ}
   (hδ:0≤δ) (hX:0<X) (hN:0<N) (hXN:X≤N)
   (hC:0≤C) (zV:N≤C*X) (hl:0<l) (hH:0<H) (hlH:l≤3*H):
@@ -46787,8 +48113,8 @@ open scoped BigOperators Classical
 noncomputable def oA (N n:ℕ):ℂ:=
  (if n.Prime then 1 else 0)-((Real.log (N:ℝ))⁻¹:ℂ)
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aEh (N K n:ℕ) (hK:1≤K) (hn:2≤n)
   (hnN:n≤N) (a6V:N≤K*n) (hKN:K^2≤N):
   ‖(jE n:ℂ)-((Real.log (N:ℝ))⁻¹:ℂ)‖ ≤
@@ -46820,6 +48146,8 @@ theorem aEh (N K n:ℕ) (hK:1≤K) (hn:2≤n)
    div_le_div_of_nonneg_left hlogK (by positivity)
     (mul_le_mul_of_nonneg_right hhalf hL.le)
   _=_:=by field_simp <;> ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aDw (N n:ℕ):
   oA N n=jE n • (jP.primeLog n-1)+
    ((jE n:ℂ)-((Real.log (N:ℝ))⁻¹:ℂ)):=by
@@ -46828,6 +48156,8 @@ theorem aDw (N n:ℕ):
  rw [smul_sub,hh,Complex.real_smul]
  unfold oA
  ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem axN (K:ℕ) (hK:1≤K):
   ∃C:ℝ,0<C∧∀N Y a b:ℕ,∀H:ℝ,
    2≤N→1≤Real.log N→4≤Y→Y≤N→N≤K*Y→K^2≤N→
@@ -46918,8 +48248,8 @@ open scoped BigOperators Classical
 noncomputable def wP (Y:ℕ) (u:ℝ):ℕ:=max Y (⌈u⌉₊-1)
 noncomputable def zG (N:ℕ) (v:ℝ):ℕ:=min N ⌊v⌋₊
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aOI (N Y:ℕ) (u v:ℝ):
   (Ioc Y N).filter (fun n:ℕ=>u≤(n:ℝ)∧(n:ℝ)≤v)=
    Ioc (wP Y u) (zG N v):=by
@@ -46930,6 +48260,8 @@ theorem aOI (N Y:ℕ) (u v:ℝ):
  ·simp only [mem_filter,mem_Ioc,wP,zG,max_lt_iff,le_min_iff]
   rw [←Nat.ceil_le,←Nat.le_floor_iff' hn]
   omega
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aIO (N Y:ℕ) (u v H:ℝ) (hH:1≤H) (hlen:v-u≤2*H):
   ((zG N v:ℕ):ℝ)-wP Y u≤3*H:=by
  have hleft:⌈u⌉₊≤wP Y u+1:=by
@@ -46944,10 +48276,12 @@ theorem aIO (N Y:ℕ) (u v H:ℝ) (hH:1≤H) (hlen:v-u≤2*H):
     (Nat.floor_le hv)
   linarith
  ·have hr:zG N v=0:=by
-   simp only [zG,Nat.floor_of_nonpos (le_of_not_ge hv),_root_.min_zero]
+   simp only [zG,Nat.floor_of_nonpos (le_of_not_ge hv),Nat.min_zero]
   rw [hr,Nat.cast_zero]
   have hl:(0:ℝ)≤wP Y u:=Nat.cast_nonneg _
   linarith
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aEc (K:ℕ) (hK:1≤K):
   ∃C:ℝ,0<C∧∀N Y:ℕ,∀u v H:ℝ,
    2≤N→1≤Real.log N→4≤Y→Y≤N→N≤K*Y→K^2≤N→
@@ -46970,11 +48304,13 @@ open scoped BigOperators Classical Topology
 noncomputable def pV (N Y:ℕ) (t:ℝ):ℂ:=
  ∑n∈Ioc Y N,oA N n*Vv ((n:ℝ)*t)
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem agU (N Y:ℕ):Continuous (pV N Y):=by
  unfold pV Vv
  fun_prop
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ax8 (N Y:ℕ) (t:ℝ):
   pV N Y t=
    jc ((Ioc Y N).filter Nat.Prime) t-
@@ -46986,6 +48322,8 @@ theorem ax8 (N Y:ℕ) (t:ℝ):
  apply sum_congr rfl
  intro n hn
  split_ifs <;> simp
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ayS (N Y:ℕ) (t:ℝ):
   ‖pV N Y t‖=
    ‖∑n:(Ioc Y N),oA N n.val*Vv (-((n.val:ℝ)*t))‖ :=by
@@ -47004,6 +48342,8 @@ theorem ayS (N Y:ℕ) (t:ℝ):
   rw [V21x,neg_neg]
   ring
  rw [he,norm_star]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aEf (K:ℕ) (hK:1≤K):
   ∃C:ℝ,0<C∧∀N Y:ℕ,∀H:ℝ,
    2≤N→1≤log (N:ℝ)→4≤Y→Y≤N→N≤K*Y→K^2≤N→
@@ -47040,6 +48380,8 @@ theorem aEf (K:ℕ) (hK:1≤K):
   _=sqrt B*sqrt N*M:=by
    rw [sqrt_mul (mul_nonneg hB.le hN0.le),sqrt_mul hB.le,sqrt_sq_eq_abs,abs_of_nonneg hM]
   _=_:=by dsimp [M,Z]; ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ahp (K:ℕ) (hK:1≤K) (ε:ℝ) (hε:0<ε):
   ∀ᶠ N:ℕ in atTop,∀Y:ℕ,∀P:ℝ,
    4≤Y→Y≤N→N≤K*Y→K^2≤N→
@@ -47122,38 +48464,52 @@ noncomputable def oD (N Y m:ℕ) (t:ℝ):ℂ:=
 noncomputable def l6 (N Y m:ℕ):ℕ:=
  (((Ioc Y N) ×ˢ (Ioc Y N)).filter (fun p=>p.1+p.2=m)).card
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem phase_int (m:ℤ):Vv (m:ℝ)=1:=by
  unfold Vv
  have he:(((2*Real.pi*(m:ℝ):ℝ):ℂ)*Complex.I)=
    (m:ℂ)*(2*(Real.pi:ℂ)*Complex.I):=by push_cast; ring
  rw [he,Complex.exp_int_mul_two_pi_mul_I]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aoQ (m:ℤ):Function.Periodic (fun t:ℝ=>Vv ((m:ℝ)*t)) 1:=by
  intro t
  dsimp only
  rw [mul_add,mul_one,V1t4,phase_int,mul_one]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ajd (N Y:ℕ):Function.Periodic (jW N Y) 1:=by
  intro t
  unfold jW
  apply sum_congr rfl
  intro n hn
  exact aoQ (n:ℤ) t
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aJJ (N Y m:ℕ):Function.Periodic (oD N Y m) 1:=by
  intro t
  unfold oD
  rw [ajd N Y t]
  have hh:=aoQ (-(m:ℤ)) t
  simpa only [Int.cast_neg,Int.cast_natCast] using congrArg (fun z:ℂ=>jW N Y t^2*z) hh
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem NV (N Y:ℕ):Continuous (jW N Y):=by
  unfold jW Vv
  fun_prop
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aG5 (N Y m:ℕ):Continuous (oD N Y m):=by
  unfold oD
  exact ((NV N Y).pow 2).mul (by unfold Vv; fun_prop)
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem alA (N Y m:ℕ) (t:ℝ):
   ‖oD N Y m t‖=‖jW N Y t‖^2:=by
  simp only [oD,norm_mul,norm_pow,V1r1,mul_one]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aMU (N Y:ℕ) (hYN:Y<N) (t:ℝ):
   jW N Y t=Vv (((Y+1:ℕ):ℝ)*t)*oR.kernel (N-Y-1) t:=by
  unfold jW
@@ -47168,9 +48524,13 @@ theorem aMU (N Y:ℕ) (hYN:Y<N) (t:ℝ):
  congr 1
  push_cast
  ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ajB (N Y:ℕ) (hYN:Y<N) (t:ℝ):
   ‖jW N Y t‖=‖oR.kernel (N-Y-1) t‖ :=by
  rw [aMU N Y hYN,norm_mul,V1r1,one_mul]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem apv (N Y:ℕ):
   (∫ t in (-(1/2:ℝ))..(1/2),‖jW N Y t‖^2)=((N-Y:ℕ):ℝ):=by
  by_cases hYN:Y<N
@@ -47187,10 +48547,14 @@ theorem apv (N Y:ℕ):
   exact_mod_cast hlen
  ·have he:Ioc Y N=∅:=Ioc_eq_empty_of_le (le_of_not_gt hYN)
   simp [jW,he,Nat.sub_eq_zero_of_le (le_of_not_gt hYN)]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aXy (N Y:ℕ):
   (∫ t in (-(1/2:ℝ))..(1/2),‖jW N Y t‖^2)≤N:=by
  rw [apv]
  exact_mod_cast Nat.sub_le N Y
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem QP (N Y:ℕ) {h:ℝ} (hh:0<h) (hh1:h≤1/2):
   0≤((N-Y:ℕ):ℝ)-(∫ t in (-h)..h,‖jW N Y t‖^2)∧
   ((N-Y:ℕ):ℝ)-(∫ t in (-h)..h,‖jW N Y t‖^2)≤1/(2*h):=by
@@ -47207,6 +48571,8 @@ theorem QP (N Y:ℕ) {h:ℝ} (hh:0<h) (hh1:h≤1/2):
   simp only [jW,he,sum_empty,norm_zero,zero_pow (by decide:2≠0),
    intervalIntegral.integral_zero,Nat.sub_eq_zero_of_le (le_of_not_gt hYN),Nat.cast_zero,sub_zero]
   exact ⟨le_rfl,by positivity⟩
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem fourier_mode (m:ℤ):
   (∫ t in (0:ℝ)..1,Vv ((m:ℝ)*t))=if m=0 then 1 else 0:=by
  by_cases hm:m=0
@@ -47225,6 +48591,8 @@ theorem fourier_mode (m:ℤ):
  simp_rw [he]
  rw [integral_exp_mul_complex hc]
  simp [hm,c,Complex.exp_int_mul_two_pi_mul_I]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aIB (N Y m:ℕ) (t:ℝ):
   oD N Y m t=∑p∈(Ioc Y N) ×ˢ (Ioc Y N),
    Vv (((((p.1+p.2:ℕ):ℤ)-(m:ℤ)):ℝ)*t):=by
@@ -47237,6 +48605,8 @@ theorem aIB (N Y m:ℕ) (t:ℝ):
  congr 1
  push_cast
  ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem full_coefficient (N Y m:ℕ):
   (∫ t in (-(1/2:ℝ))..(1/2),oD N Y m t)=(l6 N Y m:ℂ):=by
  have hshift:=(aJJ N Y m).intervalIntegral_add_eq (-(1/2:ℝ)) 0
@@ -47253,6 +48623,8 @@ theorem full_coefficient (N Y m:ℕ):
   simpa only [hm p,Int.cast_sub] using fourier_mode (((p.1+p.2:ℕ):ℤ)-(m:ℤ))
  ·rw [←sum_filter]
   simp only [sum_const,nsmul_eq_mul,mul_one,l6]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem alo (N Y m:ℕ) (hm:m≤N):
   l6 N Y m=m-(2*Y+1):=by
  unfold l6
@@ -47278,6 +48650,8 @@ theorem alo (N Y m:ℕ) (hm:m≤N):
     mem_Ioc.mpr ⟨by omega,by omega⟩⟩,by omega⟩
  rw [hc,Nat.card_Ioc]
  omega
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ayP (N Y m:ℕ) {h:ℝ} (hh:0<h) (hh1:h≤1/2):
   ‖(∫ t in (-h)..h,oD N Y m t)-(l6 N Y m:ℂ)‖ ≤1/(2*h):=by
  let F:=oD N Y m
@@ -47317,16 +48691,20 @@ open Finset Real MeasureTheory OAI.Ostmann
 open CX
 open scoped BigOperators Classical Interval
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aXq (f:ℝ→ℂ) (h:ℝ):
   (g5 f h)^2=∫t in Set.Icc (-h) h,‖f t‖^2:=by
  exact sq_sqrt (integral_nonneg (fun t=>sq_nonneg _))
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aMF (z:ℂ) (f:ℝ→ℂ) (h:ℝ):
   g5 (fun t=>z*f t) h=‖z‖*g5 f h:=by
  unfold g5
  simp only [norm_mul,mul_pow]
  rw [integral_const_mul,sqrt_mul (sq_nonneg _),sqrt_sq_eq_abs,abs_norm]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem anq (f g:ℝ→ℂ) (hf:Continuous f) (hg:Continuous g) (h:ℝ):
   g5 (fun t=>f t+g t) h≤2*(g5 f h+g5 g h):=by
  have hi:(g5 (fun t=>f t+g t) h)^2≤
@@ -47356,11 +48734,13 @@ end
 noncomputable def pL (N Y:ℕ) (t:ℝ):ℂ:=
  (((Real.log (N:ℝ))⁻¹:ℝ):ℂ)*jW N Y t
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem agk (N Y:ℕ):
   Continuous (pL N Y):=
  continuous_const.mul (NV N Y)
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem agS (N Y:ℕ):
   jc ((Ioc Y N).filter Nat.Prime)=
    fun t=>pV N Y t+pL N Y t:=by
@@ -47371,6 +48751,8 @@ theorem agS (N Y:ℕ):
  rw [he]
  unfold pL
  ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem agQ {N Y:ℕ} {h:ℝ}
   (hlog:0<log (N:ℝ)) (hh:h≤1/2):
   g5 (pL N Y) h≤ sqrt N/log N:=by
@@ -47383,6 +48765,8 @@ theorem agQ {N Y:ℕ} {h:ℝ}
  change g5 (fun t=>(((log (N:ℝ))⁻¹:ℝ):ℂ)*jW N Y t) h≤_
  rw [aMF,Complex.norm_real,Real.norm_eq_abs,abs_of_nonneg (inv_nonneg.mpr hlog.le)]
  simpa only [div_eq_mul_inv,mul_comm] using mul_le_mul_of_nonneg_left hh' (inv_nonneg.mpr hlog.le)
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ajn (K:ℕ) (hK:1≤K):
   ∀ᶠ N:ℕ in Filter.atTop,∀Y:ℕ,∀P:ℝ,
    4≤Y→Y≤N→N≤K*Y→K^2≤N→
@@ -47402,6 +48786,8 @@ theorem ajn (K:ℕ) (hK:1≤K):
   _≤2*(g5 (pV N Y) (P/N)+g5 (pL N Y) (P/N)):=hh
   _≤2*(sqrt N/log N+sqrt N/log N):=mul_le_mul_of_nonneg_left (add_le_add hE hM) (by norm_num)
   _=_:=by ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aIa (N Y m:ℕ) (h H:ℝ) (hh:h≤H):
   ‖(∫t in Set.Icc (-h) h,jc ((Ioc Y N).filter Nat.Prime) t^2*
     Vv (-(m:ℝ)*t))-
@@ -47448,10 +48834,12 @@ noncomputable def DN (N Y P m:ℕ):ℂ:=
  ∑q∈Icc 1 P,xB m q*
   (∫ t in (-((P:ℝ)/((q:ℝ)*N)))..((P:ℝ)/((q:ℝ)*N)),oD N Y m t)
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aAu (m:ℕ):xB m 0=0:=by
  simp [xB,coefficient]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aPz {c:ℕ→ℂ} (hc0:c 0=0)
   (hs:Summable (fun q:ℕ=> ‖c q‖))
   (hw:Summable (fun q:ℕ=>(q:ℝ)^(1/2:ℝ)*‖c q‖))
@@ -47487,6 +48875,8 @@ theorem aPz {c:ℕ→ℂ} (hc0:c 0=0)
   _≤(∑'q:{q:ℕ // q∉S},‖c q.val‖)*(P:ℝ)^(1/2:ℝ):=
    mul_le_mul_of_nonneg_right hnorm hroot.le
   _≤_:=by simpa only [mul_comm] using ap9.trans hsub
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aMT {ε:ℝ} (hε:0<ε):
   ∃C:ℝ,0<C∧∀N Y P m:ℕ,0<P→2*P≤N→
    0< m→Even m→m≤N→
@@ -47581,8 +48971,8 @@ noncomputable def Cv (N Y P m:ℕ):ℂ:=
   (∫t in Set.Icc (-((P:ℝ)/((q:ℝ)*N))) ((P:ℝ)/((q:ℝ)*N)),
    pL N Y t^2*Vv (-(m:ℝ)*t))
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem avJ (N Y P m:ℕ):
   Cv N Y P m=
    (((1/(log (N:ℝ))^2):ℝ):ℂ)*DN N Y P m:=by
@@ -47600,6 +48990,8 @@ theorem avJ (N Y P m:ℕ):
   ring
  rw [hp,integral_const_mul]
  ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem axL (m:ℕ) (hm:0< m) (he:Even m) (Q:Finset ℕ):
   (∑q∈Q,‖xB m q‖)≤4*d5.c8 m:=by
  let O:DirichletCharacter ℂ 1:=1
@@ -47613,6 +49005,8 @@ theorem axL (m:ℕ) (hm:0< m) (he:Even m) (Q:Finset ℕ):
    have hh:=mul_le_mul_of_nonneg_right (d5.Tv m hm)
     (by norm_num:(0:ℝ)≤4)
    simpa only [O,mul_comm] using hh
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem atV (K:ℕ) (hK:1≤K) (ε:ℝ) (hε:0<ε):
   ∀ᶠ N:ℕ in atTop,∀Y P m:ℕ,
    4≤Y→Y≤N→N≤K*Y→K^2≤N→
@@ -47689,12 +49083,14 @@ open adw CX
 open qL
 open scoped BigOperators Classical Topology
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aDs (m:ℕ) (hm:0< m) (he:Even m):
   series (1:DirichletCharacter ℂ 1) (1:DirichletCharacter ℂ 1) m=
    ((2*Binary13.Products.dO*kG.singular m:ℝ):ℂ):=by
  exact aos.aH9 Binary13.Products.ano m hm he
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem avL (ε:ℝ) (hε:0<ε):
   ∀ᶠ N:ℕ in atTop,∀Y P m:ℕ,
    0<P→2*P≤N→(N:ℝ)^(1/4:ℝ)≤P→
@@ -47746,6 +49142,8 @@ theorem avL (ε:ℝ) (hε:0<ε):
    have hh:=mul_le_mul_of_nonneg_right hr
     (by unfold d5.c8; positivity:(0:ℝ)≤d5.c8 m*N/(log N)^2)
    convert hh using 1 <;> ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem att (K:ℕ) (hK:1≤K)
   (ε:ℝ) (hε:0<ε):
   ∀ᶠ N:ℕ in atTop,∀Y P m:ℕ,
@@ -47779,18 +49177,24 @@ open u9 BombieriVinogradov.qA
 open scoped BigOperators Topology Classical
 noncomputable section
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem Yp (x:ℝ):gY.phase x=dS x:=by
  unfold gY.phase dS
  rw [circleMap_zero]
  simp only [Complex.ofReal_one,one_mul]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aPS (F:Finset ℕ) (t:ℝ):
   gY.primeSum F t=jc F t:=by
  unfold gY.primeSum jc
  simpa only [Yp] using
   (F.sum_coe_sort (fun p:ℕ=>gY.phase ((p:ℝ)*t)))
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aYj (n P:ℕ):arcs n P=p9.cap n P P:=rfl
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem az8 (n Y L:ℕ) (hYn:Y≤n)
   (hshift:∀e:Fin 13→Fin L,e4 e≤n) (t:ℝ):
   jL n Y L 13 t=
@@ -47808,6 +49212,8 @@ theorem az8 (n Y L:ℕ) (hYn:Y≤n)
  congr 2
  rw [Nat.cast_sub (hshift e)]
  ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem avH (n Y L P:ℕ) (hYn:Y≤n)
   (hPN:P≤n) (hbudget:2*P*P<n)
   (hshift:∀e:Fin 13→Fin L,e4 e≤n):
@@ -47836,6 +49242,8 @@ theorem avH (n Y L P:ℕ) (hYn:Y≤n)
  rw [aYj]
  exact auc (iE n Y) n P
   (n-e4 e) hPN hbudget
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aym:
   ∀ᶠ n:ℕ in atTop,2*e6 n*e6 n<n:=by
  have hlim:Tendsto (fun n:ℕ=>(n:ℝ)^(2227/5000:ℝ)) atTop atTop:=
@@ -47855,12 +49263,16 @@ theorem aym:
  have hreal:(2:ℝ)*(e6 n:ℝ)*(e6 n:ℝ)<n:=by
   nlinarith only [hsq,hmul]
  exact_mod_cast hreal
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ajj (n:ℕ):1000000*f8 n≤n:=by
  have hfloor:=Nat.floor_le (show (0:ℝ)≤(n:ℝ)/1000000 by positivity)
  have hh:(1000000:ℝ)*(f8 n:ℝ)≤n:=by
   unfold f8
   linarith only [hfloor]
  exact_mod_cast hh
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aBx (C:ℝ) (hC:0≤C):
   ∀ᶠ n:ℕ in atTop,(5979/2000:ℝ)*mK C n≤
    w5 C n (f8 n) (cW n):=by
@@ -47869,6 +49281,8 @@ theorem aBx (C:ℝ) (hC:0≤C):
   agK (Eventually.of_forall ajj)
   ((eventually_ge_atTop (1048576:ℕ)).mono fun n hn=>Sb hn)
  simpa only [mK] using hh
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aNz {n:ℕ} (hn:1048576≤n):
   (n:ℝ)*(cW n:ℝ)^13/(Real.log n)^2≤
    (n:ℝ)*(cW n:ℝ)^11/(Real.log 2)^2:=by
@@ -47883,6 +49297,8 @@ theorem aNz {n:ℕ} (hn:1048576≤n):
  have hh:=mul_le_mul_of_nonneg_left hs
   (show 0≤(n:ℝ)*(cW n:ℝ)^11 by positivity)
  convert hh using 1 <;> ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem asJ (C:ℝ) (hC:0<C)
   (happrox:∀ε:ℝ,0<ε→∀ᶠ n:ℕ in atTop,Even n→
    (∑e:Fin 13→Fin (cW n),
@@ -47950,8 +49366,8 @@ open Finset Filter Binary13 Binary13.q5
 open scoped BigOperators Topology Classical
 noncomputable section
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem auX:
   ∀ᶠ n:ℕ in atTop,e6 n≤f8 n:=by
  have hlim:Tendsto (fun n:ℕ=>(n:ℝ)^(7227/10000:ℝ)) atTop atTop:=
@@ -47967,6 +49383,8 @@ theorem auX:
  have hle:(n:ℝ)^(2773/10000:ℝ)≤(n:ℝ)/1000000:=by
   linarith only [hm]
  exact Nat.floor_mono hle
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aH2 {n:ℕ} (hn:2000000≤n):
   n≤2000000*f8 n:=by
  have hf:=Nat.lt_floor_add_one ((n:ℝ)/1000000)
@@ -47975,6 +49393,8 @@ theorem aH2 {n:ℕ} (hn:2000000≤n):
  have hh:(n:ℝ)≤2000000*(f8 n:ℝ):=by
   linarith only [hf,hnR]
  exact_mod_cast hh
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ayX (L₀:ℕ):
   ∀ᶠ n:ℕ in atTop,
    2≤n∧1≤Real.log (n:ℝ)∧1≤e6 n∧
@@ -48004,14 +49424,20 @@ theorem ayX (L₀:ℕ):
   Ky n,a60,hn,hL,?_,by omega,?_⟩
  ·exact akp (by omega)
  ·exact gd.aNS n
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aIM {L:ℕ} (e:Fin 13→Fin L):
   Even (e4 e):=by
  refine ⟨∑j,2^((e j).val),?_⟩
  simp only [e4,pow_succ,mul_two,sum_add_distrib]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aiC {n L:ℕ} (hL:13*2^L<n)
   (e:Fin 13→Fin L):0<n-e4 e∧n-e4 e≤n:=by
  have hs:=OI e
  exact ⟨Nat.sub_pos_of_lt (hs.trans_lt hL),Nat.sub_le n _⟩
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem akK {n L:ℕ} (hn:Even n) (e:Fin 13→Fin L):
   Even (n-e4 e):=by
  exact even_iff_two_dvd.mpr (Nat.dvd_sub hn.two_dvd (aIM e).two_dvd)
@@ -48024,9 +49450,11 @@ open aY.iw Binary13.kP
 open scoped BigOperators Classical Topology
 noncomputable def rJ:ℝ:=8*(8+8/(1/1000000:ℝ))^2
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem Wl:0<rJ:=by unfold rJ; positivity
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem axI (K:ℕ) (hK:1≤K):
   ∃C:ℝ,0<C∧∀N Y P m:ℕ,
    2≤N→1≤log (N:ℝ)→4≤Y→Y≤N→N≤K*Y→K^2≤N→
@@ -48092,6 +49520,8 @@ theorem axI (K:ℕ) (hK:1≤K):
     (f7 N P χ+primeError N P χ)*
     (f7 N P ψ+primeError N P ψ):=by ring
   _=_:=by rw [sq_sqrt hNr.le]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem asK (K A:ℕ) (hK:1≤K)
   (ε:ℝ) (hε:0<ε):
   ∃N₀ L₀:ℕ,∀n L Y P:ℕ,N₀≤n→L₀≤L→1≤L→
@@ -48199,8 +49629,8 @@ open Finset Real Filter OAI.Ostmann DirichletCharacter
 open aY.iw jZ
 open scoped BigOperators Classical Topology
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aPs {r s:ℕ} (α:DirichletCharacter ℂ r) (β:DirichletCharacter ℂ s)
   (m q:ℕ):coefficient α β m q=coefficient β α m q:=by
  by_cases hq:q=0
@@ -48213,6 +49643,8 @@ theorem aPs {r s:ℕ} (α:DirichletCharacter ℂ r) (β:DirichletCharacter ℂ s
   rw [mul_comm (changeLevel hr α) (changeLevel hs β)]
   ring
  all_goals simp [coefficient,hq,hr,hs]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem ayT {r s:ℕ} (F:Finset ℕ) (N P m:ℕ)
   (α:DirichletCharacter ℂ r) (β:DirichletCharacter ℂ s):
   gT F N P m α β=gT F N P m β α:=by
@@ -48225,6 +49657,8 @@ theorem ayT {r s:ℕ} (F:Finset ℕ) (N P m:ℕ)
  apply MeasureTheory.setIntegral_congr_fun measurableSet_Icc
  intro t ht
  ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem atu (K:ℕ) (hK:1≤K)
   (ε:ℝ) (hε:0<ε):
   ∀ᶠ N:ℕ in atTop,∀Y P m:ℕ,
@@ -48304,8 +49738,8 @@ open Binary13 Binary13.q5 aY.jR
 open Binary13.kP aY.iw
 open scoped BigOperators Topology Classical
 section
-set_option maxHeartbeats 2000000
-set_option maxRecDepth 8192
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 private theorem aPx (a b c d m:ℂ):
   ‖a+b+c+d-m‖ ≤ ‖a-m‖+‖b‖+‖c‖+‖d‖ :=by
  have h₁:=norm_add_le (a-m) b
@@ -48314,6 +49748,8 @@ private theorem aPx (a b c d m:ℂ):
  calc
   _= ‖((a-m)+b+c)+d‖ :=by congr 1; ring
   _≤_:=by linarith only [h₁,h₂,h₃]
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem azu (ε:ℝ) (hε:0<ε):
   ∀ᶠ n:ℕ in atTop,Even n→
    (∑e:Fin 13→Fin (cW n),
@@ -48421,6 +49857,8 @@ theorem azu (ε:ℝ) (hε:0<ε):
   _≤(3*δ*n/(Real.log n)^2)*(D*(L:ℝ)^13)+(ε/4)*n*(L:ℝ)^13/(Real.log n)^2:=
    (add_le_add) (mul_le_mul_of_nonneg_left htot (by positivity)) a4K
   _=_:=by dsimp [δ]; field_simp; ring
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 8192 in
 theorem aAY:
   ∀ᶠ n:ℕ in atTop,Even n→
    (299/100-1/1000:ℝ)*mK Binary13.Products.dO n≤
