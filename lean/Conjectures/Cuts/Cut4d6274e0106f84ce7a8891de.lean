@@ -23,5 +23,6 @@ theorem Conjectures.Cuts.Cut4d6274e0106f84ce7a8891de
         (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ∧
       (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ≤
         Real.log (Real.log x) + M0 + 2 / (Real.sqrt x * Real.log x)) := by
+  dsimp only at h₁ h₂ ⊢
   intro x hx hupper
   exact ⟨h₁ x hx hupper, h₂ x hx hupper⟩
