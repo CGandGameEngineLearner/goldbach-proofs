@@ -2540,6 +2540,25 @@ lemma csum_eq_moebius_totient (q n : ℕ) (hq : 0 < q) (hsq : Squarefree q) :
   rw [Finset.sum_congr rfl hsplit, ← Finset.mul_sum,
     ← sum_moebius_mul_div_eq_totient g hg hgsq]
 
+/-- Coprime evaluation of the Ramanujan sum: `c_q(a) = μ(q)` when `(a,q) = 1`. -/
+lemma csum_of_coprime (q a : ℕ) (hq : 0 < q) (hsq : Squarefree q) (hcop : Nat.Coprime a q) :
+    csum q a = ((ArithmeticFunction.moebius q : ℤ) : ℂ) := by
+  rw [csum_eq_moebius_totient q a hq hsq, Nat.gcd_comm, Nat.coprime_iff_gcd_eq_one.mp hcop,
+    Nat.div_one, Nat.totient_one, Nat.cast_one, mul_one]
+
+/-- The reduced-residue identity `∑_{(a,q)=1} c_q(a)²·e(-na/q) = c_q(n)` for squarefree `q`,
+combining the singular-series weights with the Ramanujan sum. -/
+lemma csum_reduced_sq_sum (q n : ℕ) (hq : 0 < q) (hsq : Squarefree q) :
+    ∑ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q),
+      (csum q a) ^ 2 * GE (-(n:ℝ) * a / q) = csum q n := by
+  have hconst : ∀ a ∈ (Finset.range q).filter (fun a => Nat.Coprime a q),
+      (csum q a) ^ 2 * GE (-(n:ℝ) * a / q) = GE (-(n:ℝ) * a / q) := by
+    intro a ha
+    have hcop := (Finset.mem_filter.mp ha).2
+    rw [csum_of_coprime q a hq hsq hcop, ← Int.cast_pow,
+      ArithmeticFunction.moebius_sq_eq_one_of_squarefree hsq, Int.cast_one, one_mul]
+  rw [Finset.sum_congr rfl hconst, csum]
+
 end Ramanujan
 
 
