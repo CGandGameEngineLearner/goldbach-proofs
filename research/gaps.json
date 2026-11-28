@@ -15153,6 +15153,29 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-reflected-major-sharp-floor",
+      "statement": "by\n  classical\n  let e := fun t : ℝ => Complex.exp (((2*Real.pi*t : ℝ) : ℂ)*Complex.I)\n  let S := fun (N : ℕ) (t : ℝ) => ∑ p ∈ (Finset.range (N+1)).filter Nat.Prime, (Real.log (p : ℝ) : ℂ) * e ((p : ℝ)*t)\n  let arcs := fun N : ℕ => let k := Nat.log 2 (N+2); {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ k ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a : ℝ)/(q : ℝ)| ≤ ((k^3 : ℕ) : ℝ)/((q : ℝ)*(N : ℝ))}\n  let A := fun N m : ℕ => (intervalIntegral ((arcs N).indicator (fun t : ℝ => (S N t)^2 * e (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume).re\n  let C₂ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1/((p : ℝ)-1)^2 else 1\n  let band := fun N m : ℕ => 4*N ≤ 3*m ∧ 2*m ≤ 3*N ∧ Even m\n  exact ∀ ε : ℝ, 0 < ε →\n    (∃ T : ℕ, ∀ N m : ℕ, T ≤ N → band N m → (2*C₂-ε)*(2*(N : ℝ)-(m : ℝ)) ≤ A N m) ∧\n    (∀ T : ℕ, ∃ N m : ℕ, T ≤ N ∧ 1 ≤ N ∧ band N m ∧ A N m ≤ (2*C₂+ε)*(2*(N : ℝ)-(m : ℝ)))",
+      "plain_statement": {
+        "zh": "在 #4198 的同一组大弧上，求证归一化系数 A(N,m)/(2N−m) 在 4N/3≤m≤3N/2 的偶数带上的渐近最优下界恰为 2C₂，其中 C₂ 为孪生素数常数。",
+        "en": "Identify 2C₂ as the optimal asymptotic lower bound of the normalized major-arc coefficient A(N,m)/(2N−m) on even targets in the reflected band, for the arcs of PR #4198."
+      },
+      "brief": {
+        "zh": "沿用 #4198 已核验的素数权、半开周期的端点拼接、截断与一致模型误差。将 Ramanujan 和依照整除 m 的平方自由部分分组，分别控制剩余交错尾部；不可直接假定对所有 m 的截断奇异级数相对误差都趋零。对最优性可沿 m 为 2 的幂选取带内整数 N。下界若成立，因 2N−m≥N/2，将把 7N/64 提高到 (C₂−o(1))N，同时给出任何进一步提高归一化常数的障碍。次弧项另行控制。",
+        "en": "Keep the weights, endpoints and two cutoffs from #4198. Group the Ramanujan sum by the squarefree divisor supported on m, controlling the remaining alternating tails without assuming uniform relative convergence to the full series. Test powers of two for sharpness. The lower half improves 7N/64 to (C₂−o(1))N; the upper subsequence certifies optimality. Minor arcs remain separate."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4198",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.ReflectedMajorSharpFloor",
+      "file": "lean/Conjectures/Goldbach/ReflectedMajorSharpFloor.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-sharp-singular-series-ratios",
       "statement": "by\n  classical\n  let S := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    ∑' q : ℕ, if hq : q ≠ 0 then\n      let _ : NeZero q := ⟨hq⟩\n      if h : r ∣ q ∧ s ∣ q then\n        let A := DirichletCharacter.changeLevel h.1 α\n        let B := DirichletCharacter.changeLevel h.2 β\n        gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar *\n          gaussSum (A*B)⁻¹ (ZMod.stdAddChar.mulShift (-(m:ZMod q))) / (q.totient:ℂ)^2\n      else 0\n    else 0\n  let O := S (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1)\n  let X := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    r/(m.gcd r) ∣ 36 ∧ s/(m.gcd s) ∣ 36 ∧ r/(r.gcd s) ∣ 3 ∧ s/(r.gcd s) ∣ 3 ∧\n      ((DirichletCharacter.changeLevel (Nat.dvd_lcm_left r s) α)*\n       (DirichletCharacter.changeLevel (Nat.dvd_lcm_right r s) β)).conductor ∣ 36\n  let P : DirichletCharacter ℂ 1 := 1\n  let K := fun (m : ℕ) (z w : ℂ) =>\n    (Complex.Gamma z*Complex.Gamma w/Complex.Gamma (z+w))*(m:ℂ)^(z+w-1)\n  let F := fun {r : ℕ} (χ : DirichletCharacter ℂ r) (z : ℂ) (m : ℕ) =>\n    (m:ℂ)*S P P m - 2*(S χ P m*K m z 1) + S χ χ m*K m z z\n  exact\n    (∀ K : ℝ, (∀ (r s : ℕ) [NeZero r] [NeZero s] (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s),\n      α.IsPrimitive → β.IsPrimitive → ∀ m : ℕ, 0 < m → Even m → ¬X α β m →\n      ‖S α β m‖ ≤ K*‖O m‖) ↔ Real.sqrt 5/3 ≤ K) ∧\n    (∃ χ : DirichletCharacter ℂ 5, χ.IsPrimitive ∧ χ^4=1 ∧ χ*χ ≠ 1 ∧\n      ∀ m : ℕ, 0 < m → Even m → ¬5 ∣ m → ¬X χ χ m ∧ 3*‖S χ χ m‖=Real.sqrt 5*‖O m‖) ∧\n    (∀ (r : ℕ) [NeZero r] (χ ψ : DirichletCharacter ℂ r), χ.IsPrimitive → ψ.IsPrimitive →\n      χ*ψ=1 → ∀ m : ℕ, 0 < m → Even m → ¬r ∣ 6*m → 3*‖S χ ψ m‖ ≤ ‖O m‖) ∧\n    (∀ p : ℕ, p.Prime → 3 ≤ p → ∃ χ : DirichletCharacter ℂ p, χ.IsPrimitive ∧ χ.IsQuadratic ∧\n      ∀ m : ℕ, 0 < m → Even m → ¬p ∣ m →\n      ((p:ℝ)-2)*‖S χ P m‖=‖O m‖ ∧ ((p:ℝ)-2)*‖S χ χ m‖=‖O m‖) ∧\n    (∀ (r : ℕ) [NeZero r] (χ : DirichletCharacter ℂ r), χ.IsPrimitive → χ.IsQuadratic → ¬r ∣ 30 →\n      (∀ m : ℕ, 0 < m → Even m → ¬r ∣ 6*m →\n        2*‖S χ P m‖+‖S χ χ m‖ ≤ (3/5:ℝ)*‖O m‖) ∧\n      ∀ z : ℂ, 1-1/128 ≤ z.re → z.re ≤ 1 →\n        (∀ m : ℕ, 0 < m → Even m → ¬r ∣ 6*m → ∀ err : ℂ,\n          (29/80:ℝ)*‖O m‖*m-‖err‖ ≤ (F χ z m+err).re) ∧\n        (∀ (N : ℕ) (err : ℕ → ℂ), (∀ m ∈ Finset.Ioc 0 N, Even m → ‖err m‖ ≤ (9/80:ℝ)*m) →\n          ((Finset.Ioc 0 N).filter (fun m : ℕ => Even m ∧ (F χ z m+err m).re < (m:ℝ)/4)).card ≤\n            N/(r/(r.gcd 6))))",
       "plain_statement": {
