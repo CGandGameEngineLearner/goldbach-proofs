@@ -244,7 +244,7 @@ def wall(path, lang, prefix):
     grid = f'<div class="sponsor-grid">{"".join(cards)}</div>' if cards else ""
     return (f'<section class="shell sponsor-wall" id="supporting-orgs"><div class="sponsor-heading"><h2>{"参与单位" if zh else "Supporting organizations"}</h2>'
             f'<a class="text-link" href="{ORIGIN}{DESK}?lang={lang}">'
-            + ("登记参与单位" if zh else "Submit an organization logo") + f' ↗</a></div>{grid}</section>')
+            + ("登记挂上参与单位logo" if zh else "Submit an organization logo") + f' ↗</a></div>{grid}</section>')
 
 
 def public_logo(path, ident):

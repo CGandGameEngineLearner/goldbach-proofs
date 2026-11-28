@@ -200,7 +200,7 @@ class ZhihuLinkTests(unittest.TestCase):
         rendered = sponsors.wall(self.app.db,"zh","")
         self.assertLess(rendered.index("Second Lab"),rendered.index("Example &lt;Org&gt;"))
         self.assertIn("<h2>参与单位</h2>", rendered)
-        self.assertIn("登记参与单位", rendered)
+        self.assertIn("登记挂上参与单位logo", rendered)
         colophon_without_logo = sponsors.author_colophon(self.app.db, "zh", "")
         self.assertIn("发起人", colophon_without_logo)
         self.assertIn("@lifesize", colophon_without_logo)
