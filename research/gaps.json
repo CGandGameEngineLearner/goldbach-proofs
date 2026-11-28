@@ -15030,6 +15030,29 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-local-density-half-endpoint",
+      "statement": "by\n  classical\n  let primes := fun N q a : ℕ => (Finset.Icc 1 N).filter (fun n => Nat.Prime n ∧ n%q=a)\n  exact ∀ A : Set ℕ, (∀ n ∈ A, Nat.Prime n) →\n    (∀ q a : ℕ, 0 < q → a < q → Nat.Coprime a q → ∀ ε : ℝ, 0 < ε → ∃ T : ℕ, ∀ N ≥ T, (1/2-ε)*( (primes N q a).card : ℝ) ≤ (((primes N q a).filter (fun p => p ∈ A)).card : ℝ)) →\n    ∀ η : ℝ, 0 < η → ∃ T : ℕ, ∀ N ≥ T, (((Finset.Icc 1 N).filter (fun n => Even n ∧ ¬ ∃ p ∈ A, ∃ q ∈ A, p+q=n)).card : ℝ) ≤ η*(N : ℝ)",
+      "plain_statement": {
+        "zh": "若素数子集 A 在每个固定既约剩余类中的相对下密度都至少为 1/2，证明几乎所有偶数都能表示为 A 中两素数之和，或构造临界反例。",
+        "en": "Test the half-density endpoint: if A has relative lower density at least one half in every fixed reduced residue class, must A+A contain almost all even integers?"
+      },
+      "brief": {
+        "zh": "Alsetri–Shao 定理 1.2 要求所有类的下密度统一严格超过 1/2。此题包含原定理，并允许各类恰好等于 1/2。备注 1.3 的空档构造只覆盖严格低于一半；令其参数趋近端点不自动给出正比例漏点。可研究接近临界的结构或直接提交严格反例。阈值依赖固定模数、剩余类和精度，不要求对增长模数一致。",
+        "en": "Theorem 1.2 assumes a uniform positive margin above one half. This includes that theorem and reaches equality. Remark 1.3 treats strictly subcritical densities. Track whether a fixed positive proportion of even targets is actually missed before claiming an endpoint counterexample. Thresholds depend on the fixed modulus and residue."
+      },
+      "source": "https://arxiv.org/html/2405.18576v1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.LocalDensityHalfEndpoint",
+      "file": "lean/Conjectures/Goldbach/LocalDensityHalfEndpoint.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-near-extremal-partner-count",
       "statement": "by\n  classical\n  let S := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    ∑' q : ℕ, if hq : q ≠ 0 then\n      let _ : NeZero q := ⟨hq⟩\n      if h : r ∣ q ∧ s ∣ q then\n        let A := DirichletCharacter.changeLevel h.1 α\n        let B := DirichletCharacter.changeLevel h.2 β\n        gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar *\n          gaussSum (A*B)⁻¹ (ZMod.stdAddChar.mulShift (-(m:ZMod q))) / (q.totient:ℂ)^2\n      else 0\n    else 0\n  let O := S (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1)\n  exact ∀ (r : ℕ) [NeZero r] (α : DirichletCharacter ℂ r), α.IsPrimitive →\n    ∀ m : ℕ, 0 < m → Even m →\n    ∀ F : Finset (Σ s : ℕ, DirichletCharacter ℂ s),\n    (∀ b ∈ F, b.1 ≠ 0 ∧ b.2.IsPrimitive ∧ ‖O m‖ < Real.sqrt 2 * ‖S α b.2 m‖) →\n    F.card ≤ 24",
       "plain_statement": {
@@ -15102,6 +15125,29 @@
       "depends_on": [],
       "module": "Conjectures.Goldbach.PolynomialEighthMomentSupport",
       "file": "lean/Conjectures/Goldbach/PolynomialEighthMomentSupport.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-polynomial-fourier-transference",
+      "statement": "by\n  classical\n  exact ∀ p M : ℝ, 2 < p → p < 4 → 1 ≤ M → ∃ c K : ℝ, 0 < c ∧ 0 < K ∧ ∀ δ η : ℝ, 0 < δ → δ ≤ 1 → 0 < η → η ≤ 1 →\n    ∀ (N : ℕ) [NeZero N], ∀ f g u v : ZMod N → ℝ,\n    let avg := fun h : ZMod N → ℝ => (∑ x, h x)/(N : ℝ)\n    let ft := fun (h : ZMod N → ℝ) (r : ZMod N) => (∑ x : ZMod N, (h x : ℂ) * Complex.exp (-2*(Real.pi : ℂ)*Complex.I*((r*x).val : ℂ)/(N : ℂ)))/(N : ℂ)\n    (∀ x, 0 ≤ f x ∧ f x ≤ u x ∧ 0 ≤ g x ∧ g x ≤ v x) → 1+δ ≤ avg f + avg g →\n    (∑ r : ZMod N, ‖ft f r‖^p) ≤ M^p → (∑ r : ZMod N, ‖ft g r‖^p) ≤ M^p →\n    (∀ r, ‖ft (fun x => u x-1) r‖ ≤ c*(δ*η)^K ∧ ‖ft (fun x => v x-1) r‖ ≤ c*(δ*η)^K) →\n    ((Finset.univ.filter (fun n : ZMod N => avg (fun x => f x*g (n-x)) < δ^3/1000)).card : ℝ) ≤ η*(N : ℝ)",
+      "plain_statement": {
+        "zh": "给二元哥猜的 Fourier 转移原理一个定量版本：证明伪随机主化函数的 Fourier 误差只须小于 c(δη)^K，就可保留原有卷积下界及例外比例。",
+        "en": "Seek a polynomial Fourier-uniformity threshold c(δη)^K in the binary transference theorem, keeping its convolution floor and exceptional fraction."
+      },
+      "brief": {
+        "zh": "对标 Alsetri–Shao 命题 3.1。固定其 p 与 M，原命题允许依赖 δ、η 的足够小常数；此题要求统一的幂次与系数。若成立，取此阈值即可恢复原命题。第 3 节通过 Bohr 集拟合稠密模型，体积可能随大谱规模指数变小。试用卷积层面的直接逼近，或构造具有许多独立大谱方向的障碍。本题仅改善转移损耗，素数主化函数的误差还须独立验证。",
+        "en": "Compare Proposition 3.1. For fixed p and M the proposed polynomial modulus gives an admissible explicit form of its unspecified threshold. Section 3 smooths on a Bohr set whose volume can decay exponentially in the large-spectrum size. Seek a direct convolution estimate or an obstruction from independent frequencies. Prime majorants require separate verification."
+      },
+      "source": "https://arxiv.org/html/2405.18576v1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.PolynomialFourierTransference",
+      "file": "lean/Conjectures/Goldbach/PolynomialFourierTransference.lean",
       "route_source": "exceptions"
     },
     {
