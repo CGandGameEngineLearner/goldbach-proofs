@@ -15477,6 +15477,29 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-prime-local-compatible-colors",
+      "statement": "by\n  classical\n  let primes := fun N q a : ℕ => (Finset.Icc 1 N).filter (fun p => Nat.Prime p ∧ p%q=a)\n  let dense := fun (A : Set ℕ) (d a : ℕ) (t : ℝ) => ∀ ε : ℝ, 0 < ε → ∃ T : ℕ, ∀ N ≥ T, (t-ε)*((primes N d a).card:ℝ) ≤ (((primes N d a).filter (fun p => p ∈ A)).card:ℝ)\n  exact ∀ A B : Set ℕ, (∀ p ∈ A, Nat.Prime p) → (∀ p ∈ B, Nat.Prime p) →\n    ∀ W b : ℕ, 0 < W → b < W → (∃ δ : ℝ, 0 < δ ∧ ∀ d : ℕ, 0 < d → 2*W ∣ d → ∀ r : ℕ, r < d → Even r → r%W=b →\n      ∃ a c : ℕ, a < d ∧ c < d ∧ a.Coprime d ∧ c.Coprime d ∧ (a+c)%d=r ∧ ∃ u v : ℝ, 0 ≤ u ∧ u ≤ 1 ∧ 0 ≤ v ∧ v ≤ 1 ∧ 1+δ ≤ u+v ∧ dense A d a u ∧ dense B d c v) →\n    ∀ η : ℝ, 0 < η → ∃ T : ℕ, ∀ X ≥ T, (((Finset.Icc 1 X).filter (fun n => Even n ∧ n%W=b ∧ ¬∃ p ∈ A, ∃ q ∈ B, p+q=n)).card:ℝ) ≤ η*(X:ℝ)/(W:ℝ)",
+      "plain_statement": {
+        "zh": "允许两套不同的素数子集，仅要求每个目标细分类有一对密度和超过 1 的相容加数类。",
+        "en": "Almost-all binary Goldbach for two prime subsets with target-dependent compatible local densities."
+      },
+      "brief": {
+        "zh": "Alsetri–Shao 定理 1.2 对同一集合在每个既约类都要求超过半密度。本题可在部分加数类完全缺失时使用，只要每个目标细分类仍有一对有固定盈余的类。取 W=1、A=B 且所有类统一超过一半就恢复原定理。可用 #4281 的双输入转移定理逐类组装。",
+        "en": "Theorem 1.2 uses one set uniformly above half in all reduced classes. Here entire summand classes may be absent if each target refinement has a compatible pair with uniform surplus. Set W=1 and A=B to recover the original hypothesis as a sufficient condition. Apply the two-input transfer of #4281 on each compatible pair."
+      },
+      "source": "https://arxiv.org/html/2405.18576v1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.PrimeLocalCompatibleColors",
+      "file": "lean/Conjectures/Goldbach/PrimeLocalCompatibleColors.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-primitive-partner-cubic-mass",
       "statement": "by\n  classical\n  let S := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    ∑' q : ℕ, if hq : q ≠ 0 then\n      let _ : NeZero q := ⟨hq⟩\n      if h : r ∣ q ∧ s ∣ q then\n        let A := DirichletCharacter.changeLevel h.1 α\n        let B := DirichletCharacter.changeLevel h.2 β\n        gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar *\n          gaussSum (A*B)⁻¹ (ZMod.stdAddChar.mulShift (-(m:ZMod q))) / (q.totient:ℂ)^2\n      else 0\n    else 0\n  let O := S (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1)\n  exact ∀ (r : ℕ) [NeZero r] (α : DirichletCharacter ℂ r), α.IsPrimitive →\n    ∀ m : ℕ, 0 < m → Even m →\n    ∀ F : Finset (Σ s : ℕ, DirichletCharacter ℂ s),\n    (∀ b ∈ F, b.1 ≠ 0 ∧ b.2.IsPrimitive) →\n    (∑ b ∈ F, ‖S α b.2 m‖^3) ≤ 3 * ‖O m‖^3",
       "plain_statement": {
@@ -15769,6 +15792,98 @@
       "imports": [],
       "module": "Conjectures.Goldbach.ThinPrimeReservoir",
       "file": "lean/Conjectures/Goldbach/ThinPrimeReservoir.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-transference-fourth-obstruction",
+      "statement": "by\n  classical\n  exact ∃ M : ℝ, 0 < M ∧ ∀ ε : ℝ, 0 < ε → ∀ T : ℕ, ∃ N : ℕ, ∃ hN : Nat.Prime N, T ≤ N ∧ (letI : NeZero N := ⟨hN.ne_zero⟩; ∃ f : ZMod N → ℝ,\n    let ft := fun (h : ZMod N → ℝ) (r : ZMod N) => (∑ x : ZMod N, (h x : ℂ) * Complex.exp (-2*(Real.pi : ℂ)*Complex.I*((r*x).val : ℂ)/(N : ℂ)))/(N : ℂ)\n    (∀ x, 0 ≤ f x) ∧ (∑ x, f x)/(N:ℝ)=1 ∧ (∑ r : ZMod N, ‖ft f r‖^4) ≤ M ∧ (∀ r, ‖ft (fun x => f x-1) r‖ ≤ ε) ∧ (N:ℝ)/2 ≤ ((Finset.univ.filter (fun n : ZMod N => (∑ x, f x*f (n-x))=0)).card:ℝ))",
+      "plain_statement": {
+        "zh": "构造素数阶循环群上的临界反例：均值一、Fourier 误差任意小、四次矩有界，仍有半数目标卷积为零。",
+        "en": "Construct a Fourier-uniform fourth-moment endpoint obstruction missing half of all sums."
+      },
+      "brief": {
+        "zh": "尝试用约 √N/2 个点的稀疏集，按均值一归一化。小支撑直接限制和集；还须在同一个样本中同时证明加法能量为 O(N)、全部非零频率偏差趋零，并处理精确归一化。若成立，可排除把 #4281 的指数范围无条件闭合到 4。",
+        "en": "Try sparse sets of size about √N/2. The sumset is small by counting pairs; obtain additive energy O(N) and simultaneous uniformity at all nonzero frequencies for the same set. Normalize by its actual cardinality. This tests sharpness of the restriction assumption."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4281",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.TransferenceFourthObstruction",
+      "file": "lean/Conjectures/Goldbach/TransferenceFourthObstruction.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-transference-linear-floor",
+      "statement": "by\n  classical\n  exact ∀ p M : ℝ, 2 < p → p < 4 → 1 ≤ M → ∃ c K : ℝ, 0 < c ∧ 0 < K ∧ ∀ δ η : ℝ, 0 < δ → δ ≤ 1 → 0 < η → η ≤ 1 →\n    ∀ (N : ℕ) [NeZero N], ∀ f g u v : ZMod N → ℝ,\n    let avg := fun h : ZMod N → ℝ => (∑ x, h x)/(N : ℝ)\n    let ft := fun (h : ZMod N → ℝ) (r : ZMod N) => (∑ x : ZMod N, (h x : ℂ) * Complex.exp (-2*(Real.pi : ℂ)*Complex.I*((r*x).val : ℂ)/(N : ℂ)))/(N : ℂ)\n    (∀ x, 0 ≤ f x ∧ f x ≤ u x ∧ 0 ≤ g x ∧ g x ≤ v x) → 1+δ ≤ avg f + avg g →\n    (∑ r : ZMod N, ‖ft f r‖^p) ≤ M^p → (∑ r : ZMod N, ‖ft g r‖^p) ≤ M^p →\n    (∀ r, ‖ft (fun x => u x-1) r‖ ≤ c*(δ*η)^K ∧ ‖ft (fun x => v x-1) r‖ ≤ c*(δ*η)^K) →\n    ((Finset.univ.filter (fun n : ZMod N => avg (fun x => f x*g (n-x)) < δ/2)).card : ℝ) ≤ η*(N : ℝ)",
+      "plain_statement": {
+        "zh": "保持多项式 Fourier 误差阈值，把几乎处处的卷积下界由 δ³/1000 提高到 δ/2。",
+        "en": "Raise the almost-everywhere convolution floor from cubic to linear while retaining polynomial uniformity."
+      },
+      "brief": {
+        "zh": "#4281 证明了多项式误差阈值。对 [0,1] 内的函数，fg≥f+g−1 给出线性尺度；真正的难点是把这一尺度转移给可能无界的素数权，同时维持误差阈值的多项式依赖。",
+        "en": "Bounded dense models have a linear floor by pointwise inclusion-exclusion. Transfer it to possibly unbounded inputs with a polynomial majorant-uniformity threshold, retaining #4281’s cyclic convolution normalization."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4281",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.TransferenceLinearFloor",
+      "file": "lean/Conjectures/Goldbach/TransferenceLinearFloor.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-transference-log-endpoint",
+      "statement": "by\n  classical\n  exact ∀ M δ η : ℝ, 1 ≤ M → 0 < δ → δ ≤ 1 → 0 < η → η ≤ 1 → ∃ κ : ℝ, 0 < κ ∧ ∀ (N : ℕ) [NeZero N], ∀ f g u v : ZMod N → ℝ,\n    let avg := fun h : ZMod N → ℝ => (∑ x, h x)/(N : ℝ)\n    let ft := fun (h : ZMod N → ℝ) (r : ZMod N) => (∑ x : ZMod N, (h x : ℂ) * Complex.exp (-2*(Real.pi : ℂ)*Complex.I*((r*x).val : ℂ)/(N : ℂ)))/(N : ℂ)\n    let bump := fun x : ℝ => x^4 * (1+Real.log (1+x⁻¹))\n    (∀ x, 0 ≤ f x ∧ f x ≤ u x ∧ 0 ≤ g x ∧ g x ≤ v x) → 1+δ ≤ avg f + avg g →\n    (∑ r : ZMod N, bump ‖ft f r‖) ≤ M → (∑ r : ZMod N, bump ‖ft g r‖) ≤ M →\n    (∀ r, ‖ft (fun x => u x-1) r‖ ≤ κ ∧ ‖ft (fun x => v x-1) r‖ ≤ κ) →\n    ((Finset.univ.filter (fun n : ZMod N => avg (fun x => f x*g (n-x)) < δ^3/1000)).card : ℝ) ≤ η*(N : ℝ)",
+      "plain_statement": {
+        "zh": "在临界指数 4 上，以一个对数加权四次矩控制二元卷积的低值例外。",
+        "en": "Endpoint binary transference with logarithmically strengthened fourth moments."
+      },
+      "brief": {
+        "zh": "在小 Fourier 系数处额外的对数权使四次质量的尾部一致可控。尝试先选谱截断，再选主化误差；允许 κ 比多项式小。任意固定 p<4 的限制条件可控制该对数四次矩（大系数另用有界性），但反向推理一般不成立。",
+        "en": "The logarithmic bump forces uniformly small fourth-moment tails at small coefficients. Choose the spectral truncation before the uniformity parameter. This endpoint task asks for a qualitative modulus; the polynomial modulus of #4281 need not survive."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4281",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.TransferenceLogEndpoint",
+      "file": "lean/Conjectures/Goldbach/TransferenceLogEndpoint.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-transference-mixed-restriction",
+      "statement": "by\n  classical\n  exact ∀ p q M : ℝ, 2 < p → 2 < q → 1/2 < 1/p+1/q → 1 ≤ M → ∃ c K : ℝ, 0 < c ∧ 0 < K ∧ ∀ δ η : ℝ, 0 < δ → δ ≤ 1 → 0 < η → η ≤ 1 →\n    ∀ (N : ℕ) [NeZero N], ∀ f g u v : ZMod N → ℝ,\n    let avg := fun h : ZMod N → ℝ => (∑ x, h x)/(N : ℝ)\n    let ft := fun (h : ZMod N → ℝ) (r : ZMod N) => (∑ x : ZMod N, (h x : ℂ) * Complex.exp (-2*(Real.pi : ℂ)*Complex.I*((r*x).val : ℂ)/(N : ℂ)))/(N : ℂ)\n    (∀ x, 0 ≤ f x ∧ f x ≤ u x ∧ 0 ≤ g x ∧ g x ≤ v x) → 1+δ ≤ avg f + avg g →\n    (∑ r : ZMod N, ‖ft f r‖^p) ≤ M^p → (∑ r : ZMod N, ‖ft g r‖^q) ≤ M^q →\n    (∀ r, ‖ft (fun x => u x-1) r‖ ≤ c*(δ*η)^K ∧ ‖ft (fun x => v x-1) r‖ ≤ c*(δ*η)^K) →\n    ((Finset.univ.filter (fun n : ZMod N => avg (fun x => f x*g (n-x)) < δ^3/1000)).card : ℝ) ≤ η*(N : ℝ)",
+      "plain_statement": {
+        "zh": "允许两端分别满足不同 Fourier 限制指数，包括一端超过 4 的情形。",
+        "en": "Asymmetric restriction exponents for polynomial binary transference."
+      },
+      "brief": {
+        "zh": "取 p=q 恢复 #4281。新区域允许一侧指数越过 4，只要两倒数之和仍严格大于 1/2。用混合 Hölder 控制系数乘积的小谱尾部；直接把两边换为较大的指数会损失这个区域。",
+        "en": "The diagonal p=q recovers #4281. One input may cross four. Seek a mixed Hölder estimate for the product spectrum and retain polynomial dependence on the density surplus and exceptional fraction."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4281",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.TransferenceMixedRestriction",
+      "file": "lean/Conjectures/Goldbach/TransferenceMixedRestriction.lean",
       "route_source": "exceptions"
     },
     {
