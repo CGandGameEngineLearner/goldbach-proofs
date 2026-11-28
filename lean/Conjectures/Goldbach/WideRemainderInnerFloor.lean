@@ -2670,6 +2670,88 @@ lemma model_sum_floor_of_neg_bound (s : Finset ℕ) (n : ℕ) (ε : ℝ) (w : �
     linarith [hpos, h1, h2]
   exact ge_trans hfinal (neg_le_neg hbound)
 
+/-! ### The skirt annulus kernel mass ΔJ(q)
+
+For a reduced denominator `q`, the skirt is the annulus between the core arcs
+(radius `Q/(qn)`) and the inner region (radius `Q·n^(1/6)/(qn)`).  Its model
+contribution is governed by the kernel mass on that annulus; since
+`K_n(β)^2 · e(-nβ) = (sin π(n+1)β / sin πβ)^2 ≥ 0` (`kernel_sq_phase_sin`),
+the quantity below is real and nonnegative. -/
+
+/-- The kernel mass on the skirt annulus at denominator `q`: between the core
+radius `Q/(qn)` and the inner radius `Q·n^(1/6)/(qn)`. -/
+noncomputable def deltaJ (n q : ℕ) : ℝ :=
+  GoldbachExplicitModeledMajor.kernelMass n
+    ((Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)))
+    - GoldbachExplicitModeledMajor.kernelMass n
+      ((Qf n:ℝ)/((q:ℝ)*(n:ℝ)))
+
+/-- The inner skirt radius dominates the core radius. -/
+lemma deltaJ_radii_mono (n q : ℕ) (hn : 0 < n) (hq : 0 < q) :
+    (Qf n:ℝ)/((q:ℝ)*(n:ℝ)) ≤ (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) := by
+  have hq0 : 0 < (q:ℝ)*(n:ℝ) := mul_pos (by exact_mod_cast hq) (by exact_mod_cast hn)
+  have hone : 1 ≤ (n:ℝ) := by exact_mod_cast hn
+  have hpow : 1 ≤ (n:ℝ)^(1/6:ℝ) := Real.one_le_rpow hone (by norm_num)
+  have hkey : (Qf n:ℝ)/((q:ℝ)*(n:ℝ)) * (n:ℝ)^(1/6:ℝ)
+      = (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) := div_mul_eq_mul_div _ _ _
+  rw [← hkey]
+  exact le_mul_of_one_le_right (div_nonneg (by positivity) hq0.le) hpow
+
+/-- The skirt annulus mass is nonnegative. -/
+lemma deltaJ_nonneg (n q : ℕ) : 0 ≤ deltaJ n q := by
+  by_cases hn : 0 < n
+  · by_cases hq : 0 < q
+    · exact sub_nonneg.mpr (GoldbachExplicitModeledMajor.kernelMass_mono
+        (div_nonneg (by positivity) (mul_pos (by exact_mod_cast hq) (by exact_mod_cast hn)).le)
+        (deltaJ_radii_mono n q hn hq) n)
+    · have hq0 : q = 0 := by omega
+      subst hq0
+      simp only [deltaJ, Nat.cast_zero, zero_mul, div_zero, sub_self, le_refl]
+  · have hn0 : n = 0 := by omega
+    subst hn0
+    simp only [deltaJ, Nat.cast_zero, Real.zero_rpow (by norm_num : (1/6:ℝ) ≠ 0), mul_zero,
+      div_zero, sub_self, le_refl]
+
+/-- The skirt annulus mass is at most a full period's mass. -/
+lemma deltaJ_le_card (n q : ℕ) (hn : 0 < n) (hq : 0 < q)
+    (h : (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) ≤ 1/2) :
+    deltaJ n q ≤ (n + 1 : ℝ) := by
+  have hh : 0 ≤ (Qf n:ℝ)/((q:ℝ)*(n:ℝ)) :=
+    div_nonneg (by positivity) (mul_pos (by exact_mod_cast hq) (by exact_mod_cast hn)).le
+  exact kernelMass_annulus_le_card n _ _ hh (deltaJ_radii_mono n q hn hq) h
+
+/-- The skirt annulus mass is at most its length times the peak. -/
+lemma deltaJ_le_length (n q : ℕ) (hn : 0 < n) (hq : 0 < q) :
+    deltaJ n q ≤ 2 * ((Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ))) * ((n+1:ℝ)^2) := by
+  have hh : 0 ≤ (Qf n:ℝ)/((q:ℝ)*(n:ℝ)) :=
+    div_nonneg (by positivity) (mul_pos (by exact_mod_cast hq) (by exact_mod_cast hn)).le
+  exact kernelMass_annulus_le_length n _ _ hh (deltaJ_radii_mono n q hn hq)
+
+/-- The skirt annulus mass decays like the core radius: ΔJ(q) ≤ qn/(2Q). -/
+lemma deltaJ_le_decay (n q : ℕ) (hn : 0 < n) (hq : 0 < q)
+    (h : (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) ≤ 1/2) :
+    deltaJ n q ≤ (q:ℝ)*(n:ℝ)/(2*(Qf n:ℝ)) := by
+  have hq0 : 0 < (q:ℝ)*(n:ℝ) := mul_pos (by exact_mod_cast hq) (by exact_mod_cast hn)
+  have hl : 0 < Nat.log 2 (n+2) := Nat.log_pos (by norm_num) (by omega)
+  have hQ0 : 0 < Qf n := by
+    unfold Qf
+    rw [pow_two]
+    exact Nat.mul_pos hl hl
+  have hr1 : 0 < (Qf n:ℝ)/((q:ℝ)*(n:ℝ)) := div_pos (by exact_mod_cast hQ0) hq0
+  have hconv : 1/(2*((Qf n:ℝ)/((q:ℝ)*(n:ℝ)))) = (q:ℝ)*(n:ℝ)/(2*(Qf n:ℝ)) := by
+    rw [← mul_div_assoc, div_div_eq_mul_div, one_mul]
+  have hkd := kernelMass_le_decay n _ _ hr1 (deltaJ_radii_mono n q hn hq) h
+  rwa [hconv] at hkd
+
+/-- The three upper bounds together. -/
+theorem deltaJ_le (n q : ℕ) (hn : 0 < n) (hq : 0 < q)
+    (h : (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) ≤ 1/2) :
+    deltaJ n q ≤ min ((n+1:ℝ))
+      (min (2*((Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)))*((n+1:ℝ)^2))
+        ((q:ℝ)*(n:ℝ)/(2*(Qf n:ℝ)))) :=
+  le_min (deltaJ_le_card n q hn hq h)
+    (le_min (deltaJ_le_length n q hn hq) (deltaJ_le_decay n q hn hq h))
+
 end Ramanujan
 
 
