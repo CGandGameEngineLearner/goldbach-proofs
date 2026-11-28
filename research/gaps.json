@@ -16826,8 +16826,8 @@
       "source": "https://doi.org/10.1360/ya1973-16-2-157",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.ChenG3SwitchedUpper",
       "file": "lean/Conjectures/Goldbach/ChenG3SwitchedUpper.lean",
+      "module": "Conjectures.Goldbach.ChenG3SwitchedUpper",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -16874,8 +16874,8 @@
       "source": "https://doi.org/10.1090/S0025-5718-2014-02898-6",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.GmDirichletZeroCount",
       "file": "lean/Conjectures/Goldbach/GmDirichletZeroCount.lean",
+      "module": "Conjectures.Goldbach.GmDirichletZeroCount",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -16920,13 +16920,15 @@
         "L-goldbach-gm-smoothing-kernel-mellin",
         "L-goldbach-gm-dirichlet-zero-count"
       ],
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.GmSmoothingKernelMellin"
+      ],
       "parallel": true,
       "source": "https://doi.org/10.1016/j.jnt.2018.12.005",
       "track": "explicit-sieve-analytic-inputs",
       "role": "conditional",
-      "module": "Conjectures.Goldbach.GmSmoothedExplicitFormula",
       "file": "lean/Conjectures/Goldbach/GmSmoothedExplicitFormula.lean",
+      "module": "Conjectures.Goldbach.GmSmoothedExplicitFormula",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -16966,13 +16968,15 @@
         "L-goldbach-gm-primitive-euler-loss",
         "L-goldbach-gm-smoothed-explicit-formula"
       ],
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.GmPrimitiveEulerLoss"
+      ],
       "parallel": true,
       "source": "https://doi.org/10.1016/j.jnt.2018.12.005",
       "track": "explicit-sieve-analytic-inputs",
       "role": "conditional",
-      "module": "Conjectures.Goldbach.GmUnsmoothPsiAp",
       "file": "lean/Conjectures/Goldbach/GmUnsmoothPsiAp.lean",
+      "module": "Conjectures.Goldbach.GmUnsmoothPsiAp",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -16992,13 +16996,15 @@
         "L-goldbach-abel-theta-to-pi-li",
         "L-goldbach-gm-unsmooth-psi-ap"
       ],
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.ExplicitPsiSubTheta"
+      ],
       "parallel": true,
       "source": "https://arxiv.org/abs/2208.01229",
       "track": "explicit-sieve-analytic-inputs",
       "role": "conditional",
-      "module": "Conjectures.Goldbach.JsLemma51Assembly",
       "file": "lean/Conjectures/Goldbach/JsLemma51Assembly.lean",
+      "module": "Conjectures.Goldbach.JsLemma51Assembly",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17037,13 +17043,15 @@
       "depends_on": [
         "L-goldbach-mertens-abel-bridge"
       ],
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.MertensAbelBridge"
+      ],
       "parallel": true,
       "source": "https://arxiv.org/abs/2207.09452",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.MertensMidRangeBjv16",
       "file": "lean/Conjectures/Goldbach/MertensMidRangeBjv16.lean",
+      "module": "Conjectures.Goldbach.MertensMidRangeBjv16",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17068,8 +17076,8 @@
       "source": "https://arxiv.org/abs/2208.01229",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.MertensPremiseAssembly",
       "file": "lean/Conjectures/Goldbach/MertensPremiseAssembly.lean",
+      "module": "Conjectures.Goldbach.MertensPremiseAssembly",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17090,8 +17098,8 @@
       "source": "https://arxiv.org/abs/2208.01229",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.MertensSmallRangeCert",
       "file": "lean/Conjectures/Goldbach/MertensSmallRangeCert.lean",
+      "module": "Conjectures.Goldbach.MertensSmallRangeCert",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17109,13 +17117,15 @@
       "depends_on": [
         "L-goldbach-mertens-abel-bridge"
       ],
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.MertensAbelBridge"
+      ],
       "parallel": true,
       "source": "https://arxiv.org/abs/2208.01229",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.MertensTailJs32",
       "file": "lean/Conjectures/Goldbach/MertensTailJs32.lean",
+      "module": "Conjectures.Goldbach.MertensTailJs32",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17162,8 +17172,8 @@
       "source": "https://doi.org/10.1007/BF02006964",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.PandingEndpointBound",
       "file": "lean/Conjectures/Goldbach/PandingEndpointBound.lean",
+      "module": "Conjectures.Goldbach.PandingEndpointBound",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17183,13 +17193,15 @@
         "L-goldbach-abel-theta-to-pi-li",
         "L-goldbach-rh-schoenfeld-psi"
       ],
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.ExplicitPsiSubTheta"
+      ],
       "parallel": true,
       "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
       "track": "explicit-sieve-analytic-inputs",
       "role": "conditional",
-      "module": "Conjectures.Goldbach.RhSchoenfeldPiAssembly",
       "file": "lean/Conjectures/Goldbach/RhSchoenfeldPiAssembly.lean",
+      "module": "Conjectures.Goldbach.RhSchoenfeldPiAssembly",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17213,8 +17225,8 @@
       "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
       "track": "explicit-sieve-analytic-inputs",
       "role": "conditional",
-      "module": "Conjectures.Goldbach.RhSchoenfeldPsi",
       "file": "lean/Conjectures/Goldbach/RhSchoenfeldPsi.lean",
+      "module": "Conjectures.Goldbach.RhSchoenfeldPsi",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17235,8 +17247,8 @@
       "source": "https://doi.org/10.1112/S0025579300004708",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.SharpMultiplicativeLargeSieve",
       "file": "lean/Conjectures/Goldbach/SharpMultiplicativeLargeSieve.lean",
+      "module": "Conjectures.Goldbach.SharpMultiplicativeLargeSieve",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17259,8 +17271,8 @@
       "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.ZetaTruncatedExplicitPsi",
       "file": "lean/Conjectures/Goldbach/ZetaTruncatedExplicitPsi.lean",
+      "module": "Conjectures.Goldbach.ZetaTruncatedExplicitPsi",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -17281,8 +17293,8 @@
       "source": "https://doi.org/10.2307/2371491",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.ZetaZeroCountExplicit",
       "file": "lean/Conjectures/Goldbach/ZetaZeroCountExplicit.lean",
+      "module": "Conjectures.Goldbach.ZetaZeroCountExplicit",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
