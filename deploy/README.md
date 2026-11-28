@@ -84,3 +84,22 @@ PR 作者在登记提交后用 `/goldbach-check <gap>` 触发 Jenkins 正式裁�
 ## 一次完整的线上核验
 
 2026-11-26，PR #2738 由 Jenkins 完成正式 Lean 核验。生产任务台记录了 `ACCEPTED`，GitHub App 在同一提交上回写了 `success`。可分别核对任务台裁决与 GitHub Check。[PR #2738](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/2738) · [正式裁决 Check](https://github.com/CGandGameEngineLearner/goldbach-proofs/runs/139975214046)
+### Releasing an orphaned unsubmitted lease
+
+A `claim` response can be lost, for example when the client times out while reading
+the response. The desk keeps that lease until year 9999, but only the SHA-256 of the
+token is stored, so the client cannot call `/api/desk/release` any more. The handle
+is then blocked with `409 handle_already_active` on every later claim.
+
+A host administrator can inspect and release only the orphaned rows with:
+
+```bash
+cd /opt/goldbach-web
+sudo python3 release_lease.py YuHengjie --gap L-goldbach-cut-fffb7eb7e6eec207cada90da
+sudo python3 release_lease.py YuHengjie --gap L-goldbach-cut-fffb7eb7e6eec207cada90da --yes
+```
+
+The command is a dry run by default. It refuses to touch a lease that has a
+registered PR/run (`submitted_at` or `run_id` set) or that already has a verdict,
+so an in-flight verification is never disturbed. Back up the state directory first
+if desired; `release_lease.py --help` lists the filters and the audit reason.
