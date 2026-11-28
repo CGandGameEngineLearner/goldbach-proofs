@@ -15059,6 +15059,31 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-primitive-partner-cubic-mass",
+      "statement": "by\n  classical\n  let S := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    ∑' q : ℕ, if hq : q ≠ 0 then\n      let _ : NeZero q := ⟨hq⟩\n      if h : r ∣ q ∧ s ∣ q then\n        let A := DirichletCharacter.changeLevel h.1 α\n        let B := DirichletCharacter.changeLevel h.2 β\n        gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar *\n          gaussSum (A*B)⁻¹ (ZMod.stdAddChar.mulShift (-(m:ZMod q))) / (q.totient:ℂ)^2\n      else 0\n    else 0\n  let O := S (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1)\n  exact ∀ (r : ℕ) [NeZero r] (α : DirichletCharacter ℂ r), α.IsPrimitive →\n    ∀ m : ℕ, 0 < m → Even m →\n    ∀ F : Finset (Σ s : ℕ, DirichletCharacter ℂ s),\n    (∀ b ∈ F, b.1 ≠ 0 ∧ b.2.IsPrimitive) →\n    (∑ b ∈ F, ‖S α b.2 m‖^3) ≤ 3 * ‖O m‖^3",
+      "plain_statement": {
+        "zh": "固定原始特征 α 与正偶数 m。让另一原始特征 β 跨越所有正导子，对任意有限搭档集合 F，证明扭曲奇异级数绝对值的三次方之和至多为普通奇异级数绝对值三次方的 3 倍。",
+        "en": "Fix a primitive character and a positive even target. Over any finite collection of primitive partners of arbitrary positive conductors, bound the sum of cubes of twisted singular-series magnitudes by three times the cube of the ordinary magnitude."
+      },
+      "brief": {
+        "zh": "Qmhou 在 #4164 证明超过普通值 1/√2 的搭档至多 24 个。新界若成立，在相同阈值下严格大于阈值的项每个贡献超过普通值三次方的 1/(2√2)，故至多 8 个；同一估计还能控制任意正阈值。可先把有限搭档升至共同模数并检验本原来源的单射。在 p 不整除 m 的奇素数幂上研究归一化 Jacobi 和一行的三次矩是否至多 1+1/(p−2)²；对 p 整除 m 时用正交性及逐项上界。数值样本不能代替素数幂统一证明。最后还须证明局部乘积确实控制全局级数。",
+        "en": "PR #4164 bounds the number above 1/√2 by 24. The cubic bound implies at most 8 at that threshold, and gives a tail bound at every threshold. Lift a finite family to one level, preserving injectivity. For odd p not dividing m try the local factor 1+1/(p−2)²; for p dividing m try orthogonality and pointwise contraction. Prove the prime-power estimates uniformly and justify passage to the global series."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4164",
+      "program": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-near-extremal-partner-count"
+      ],
+      "module": "Conjectures.Goldbach.PrimitivePartnerCubicMass",
+      "file": "lean/Conjectures/Goldbach/PrimitivePartnerCubicMass.lean",
+      "track": "exceptions",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-sharp-singular-series-ratios",
       "statement": "by\n  classical\n  let S := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    ∑' q : ℕ, if hq : q ≠ 0 then\n      let _ : NeZero q := ⟨hq⟩\n      if h : r ∣ q ∧ s ∣ q then\n        let A := DirichletCharacter.changeLevel h.1 α\n        let B := DirichletCharacter.changeLevel h.2 β\n        gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar *\n          gaussSum (A*B)⁻¹ (ZMod.stdAddChar.mulShift (-(m:ZMod q))) / (q.totient:ℂ)^2\n      else 0\n    else 0\n  let O := S (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1)\n  let X := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    r/(m.gcd r) ∣ 36 ∧ s/(m.gcd s) ∣ 36 ∧ r/(r.gcd s) ∣ 3 ∧ s/(r.gcd s) ∣ 3 ∧\n      ((DirichletCharacter.changeLevel (Nat.dvd_lcm_left r s) α)*\n       (DirichletCharacter.changeLevel (Nat.dvd_lcm_right r s) β)).conductor ∣ 36\n  let P : DirichletCharacter ℂ 1 := 1\n  let K := fun (m : ℕ) (z w : ℂ) =>\n    (Complex.Gamma z*Complex.Gamma w/Complex.Gamma (z+w))*(m:ℂ)^(z+w-1)\n  let F := fun {r : ℕ} (χ : DirichletCharacter ℂ r) (z : ℂ) (m : ℕ) =>\n    (m:ℂ)*S P P m - 2*(S χ P m*K m z 1) + S χ χ m*K m z z\n  exact\n    (∀ K : ℝ, (∀ (r s : ℕ) [NeZero r] [NeZero s] (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s),\n      α.IsPrimitive → β.IsPrimitive → ∀ m : ℕ, 0 < m → Even m → ¬X α β m →\n      ‖S α β m‖ ≤ K*‖O m‖) ↔ Real.sqrt 5/3 ≤ K) ∧\n    (∃ χ : DirichletCharacter ℂ 5, χ.IsPrimitive ∧ χ^4=1 ∧ χ*χ ≠ 1 ∧\n      ∀ m : ℕ, 0 < m → Even m → ¬5 ∣ m → ¬X χ χ m ∧ 3*‖S χ χ m‖=Real.sqrt 5*‖O m‖) ∧\n    (∀ (r : ℕ) [NeZero r] (χ ψ : DirichletCharacter ℂ r), χ.IsPrimitive → ψ.IsPrimitive →\n      χ*ψ=1 → ∀ m : ℕ, 0 < m → Even m → ¬r ∣ 6*m → 3*‖S χ ψ m‖ ≤ ‖O m‖) ∧\n    (∀ p : ℕ, p.Prime → 3 ≤ p → ∃ χ : DirichletCharacter ℂ p, χ.IsPrimitive ∧ χ.IsQuadratic ∧\n      ∀ m : ℕ, 0 < m → Even m → ¬p ∣ m →\n      ((p:ℝ)-2)*‖S χ P m‖=‖O m‖ ∧ ((p:ℝ)-2)*‖S χ χ m‖=‖O m‖) ∧\n    (∀ (r : ℕ) [NeZero r] (χ : DirichletCharacter ℂ r), χ.IsPrimitive → χ.IsQuadratic → ¬r ∣ 30 →\n      (∀ m : ℕ, 0 < m → Even m → ¬r ∣ 6*m →\n        2*‖S χ P m‖+‖S χ χ m‖ ≤ (3/5:ℝ)*‖O m‖) ∧\n      ∀ z : ℂ, 1-1/128 ≤ z.re → z.re ≤ 1 →\n        (∀ m : ℕ, 0 < m → Even m → ¬r ∣ 6*m → ∀ err : ℂ,\n          (29/80:ℝ)*‖O m‖*m-‖err‖ ≤ (F χ z m+err).re) ∧\n        (∀ (N : ℕ) (err : ℕ → ℂ), (∀ m ∈ Finset.Ioc 0 N, Even m → ‖err m‖ ≤ (9/80:ℝ)*m) →\n          ((Finset.Ioc 0 N).filter (fun m : ℕ => Even m ∧ (F χ z m+err m).re < (m:ℝ)/4)).card ≤\n            N/(r/(r.gcd 6))))",
       "plain_statement": {
