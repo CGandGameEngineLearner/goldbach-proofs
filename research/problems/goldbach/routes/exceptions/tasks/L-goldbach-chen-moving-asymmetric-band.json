@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-chen-moving-asymmetric-band",
+  "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=4 ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=n ∧ p^3≤n^2 ∧ n≤p^2))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+  "plain_statement": {
+    "zh": "把一端陈素数限定在 n^(1/2) 到 n^(2/3) 之间，另一端贴近目标。",
+    "en": "Confine one Chen prime to a sublinear, asymmetric band."
+  },
+  "brief": {
+    "zh": "这里两个筛和长度相差幂次。对短端作分段，再控制长端在反射短窗内的陈筛下界。",
+    "en": "Treat the short Chen variable dyadically and localize the reflected long-variable minorant."
+  },
+  "source": "https://arxiv.org/html/2508.16400v2",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

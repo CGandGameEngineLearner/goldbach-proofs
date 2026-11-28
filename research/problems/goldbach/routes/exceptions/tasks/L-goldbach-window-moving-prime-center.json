@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-window-moving-prime-center",
+  "statement": "by\n  classical\n  exact ∀ ε : ℝ, 0<ε → ∀ A : ℕ, ∃ C : ℝ, 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((7:ℝ)/120+ε) ≤ (H:ℝ) → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ (Nat.dist p q)^4≤n^3)).card:ℝ) ≤ C*(H:ℝ)/(1+Real.log (X:ℝ))^A",
+  "plain_statement": {
+    "zh": "在每个短目标区间内，对几乎所有偶数同时要求两素数相距不超过 n^(3/4)。",
+    "en": "Localize both the target interval and the distance between prime summands."
+  },
+  "brief": {
+    "zh": "文献约束目标所在区间。这里叠加随 n 移动的素数窗口，需要把截断误差与区间起点同时控制。",
+    "en": "Handle a moving summand cutoff as well as the short target interval."
+  },
+  "source": "https://arxiv.org/html/1910.05187v2",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

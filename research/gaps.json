@@ -15007,6 +15007,72 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-chen-common-prime-two-targets",
+      "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=4 ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=n ∧ ch (q+6)))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "为 n、n+6 找到共享一端陈素数的两个双陈表示。",
+        "en": "Find two Chen representations at adjacent admissible targets sharing a Chen prime."
+      },
+      "brief": {
+        "zh": "各目标独立存在表示不能保证共同素数。首先研究相关权 ch(q)ch(q+6)，检查 q、q+2、q+6、q+8 的局部相容性。",
+        "en": "Estimate the shifted Chen correlation before convolving against the remaining Chen weight."
+      },
+      "source": "https://arxiv.org/html/2508.16400v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.ChenCommonPrimeTwoTargets",
+      "file": "lean/Conjectures/Goldbach/ChenCommonPrimeTwoTargets.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-chen-coprime-shift-products",
+      "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=4 ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=n ∧ (p+2).Coprime (q+2)))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "要求两个陈素数的移位数 p+2 与 q+2 互素，仍有幂节省例外界。",
+        "en": "Remove shared prime factors between the two Chen shifts."
+      },
+      "brief": {
+        "zh": "公共因子必整除 n+4。估计这些素因子对应的坏表示上界，再与双陈筛下界比较；需控制整除 n+4 的大因子。",
+        "en": "A shared divisor divides n+4. Subtract representations carrying its prime divisors from a two-sided lower bound."
+      },
+      "source": "https://arxiv.org/html/2508.16400v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.ChenCoprimeShiftProducts",
+      "file": "lean/Conjectures/Goldbach/ChenCoprimeShiftProducts.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-chen-cubic-residue-summands",
+      "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=4 ∧ (∃ a b : ℕ, a<91 ∧ b<91 ∧ (a*(a+2)*b*(b+2)).Coprime 91 ∧ (a+b)%91=n%91 ∧ (∃ u : ℕ, u^3%7=a%7) ∧ (∃ v : ℕ, v^3%13=b%13)) ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=n ∧ (∃ u : ℕ, u^3%7=p%7) ∧ (∃ v : ℕ, v^3%13=q%13)))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "对通过模 91 局部相容检验的 4 mod 6 目标，要求 p、q 分别为模 7、13 的立方剩余，并保留双陈例外幂节省。",
+        "en": "Retain a two-Chen power saving for locally compatible targets with cubic residues prescribed modulo seven and thirteen."
+      },
+      "brief": {
+        "zh": "先逐模检查 p、p+2、q、q+2 均能避开 7、13；若存在局部障碍，目标须限制到可行剩余类。利用立方特征展开比较扭曲筛和。",
+        "en": "Expand the cubic-residue indicators in characters and retain only locally admissible target classes."
+      },
+      "source": "https://arxiv.org/html/2508.16400v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": []
+    },
+    {
       "id": "L-goldbach-chen-forced-three",
       "statement": "by\n  classical\n  let ok := fun p : ℕ => 3 < p ∧ Nat.Prime p ∧ ¬ 9 ∣ p+2 ∧ ((p+2)/(if 3 ∣ p+2 then 3 else 1)).primeFactorsList.length ≤ 2\n  exact ∃ C : ℝ, 0 < C ∧ ∀ X : ℕ, 2 ≤ X → (((Finset.Icc 4 X).filter (fun m => Even m ∧ ¬ ∃ p q : ℕ, ok p ∧ ok q ∧ p+q=m)).card : ℝ) ≤ C*(X : ℝ)^(1-(1/10000 : ℝ))",
       "plain_statement": {
@@ -15027,6 +15093,52 @@
       "depends_on": [],
       "module": "Conjectures.Goldbach.ChenForcedThree",
       "file": "lean/Conjectures/Goldbach/ChenForcedThree.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-chen-moving-asymmetric-band",
+      "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=4 ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=n ∧ p^3≤n^2 ∧ n≤p^2))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "把一端陈素数限定在 n^(1/2) 到 n^(2/3) 之间，另一端贴近目标。",
+        "en": "Confine one Chen prime to a sublinear, asymmetric band."
+      },
+      "brief": {
+        "zh": "这里两个筛和长度相差幂次。对短端作分段，再控制长端在反射短窗内的陈筛下界。",
+        "en": "Treat the short Chen variable dyadically and localize the reflected long-variable minorant."
+      },
+      "source": "https://arxiv.org/html/2508.16400v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.ChenMovingAsymmetricBand",
+      "file": "lean/Conjectures/Goldbach/ChenMovingAsymmetricBand.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-chen-opposite-shifts",
+      "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=0 ∧ ¬ (∃ p q : ℕ, ch p ∧ Nat.Prime q ∧ 5≤q ∧ (q-2).primeFactorsList.length≤2 ∧ p+q=n))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "为 6 的倍数建立反向双陈表示，两端分别控制 p+2 和 q−2。",
+        "en": "Reverse the second Chen shift and treat the compatible class of multiples of six."
+      },
+      "brief": {
+        "zh": "改变移位符号使自然相容类变成 0 mod 6。重新计算反射卷积的局部因子，并分别处理两套筛权。",
+        "en": "Reverse one sieve, recompute local factors, and track its interaction with reflection."
+      },
+      "source": "https://arxiv.org/html/2508.16400v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.ChenOppositeShifts",
+      "file": "lean/Conjectures/Goldbach/ChenOppositeShifts.lean",
       "route_source": "exceptions"
     },
     {
@@ -15076,6 +15188,29 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-chen-sparse-cubic-targets",
+      "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => 1≤n ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=6*n^3+4))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "在三次稀疏目标 6n³+4 上，对指标本身证明双陈例外幂节省。",
+        "en": "Obtain a power saving in the index for two-Chen representations of 6n³+4."
+      },
+      "brief": {
+        "zh": "全体目标的幂节省无法直接限制到立方序列。尝试结合仓库的多项式 Fourier 矩恒等式与双陈 minorant。",
+        "en": "Combine polynomial moment control with two Chen minorants; normalize by index size."
+      },
+      "source": "https://arxiv.org/html/2508.16400v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.ChenSparseCubicTargets",
+      "file": "lean/Conjectures/Goldbach/ChenSparseCubicTargets.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-chen-square-targets",
       "statement": "by\n  classical\n  let chen := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length ≤ 2\n  let good := fun n : ℕ => ∃ p q : ℕ, chen p ∧ chen q ∧ p+q=n\n  exact ∃ δ : ℝ, 0 < δ ∧ δ < 1 ∧ ∃ T : ℕ, ∀ X : ℕ, T ≤ X → (((Finset.Icc 1 X).filter (fun t => ¬good (6*t^2+4))).card:ℝ) ≤ (X:ℝ)^(1-δ)",
       "plain_statement": {
@@ -15096,6 +15231,29 @@
       "depends_on": [],
       "module": "Conjectures.Goldbach.ChenSquareTargets",
       "file": "lean/Conjectures/Goldbach/ChenSquareTargets.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-chen-twin-on-one-side",
+      "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=4 ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=n ∧ Nat.Prime (p+2)))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "在两端为陈素数的基础上，要求其中一端产生真正孪生素数。",
+        "en": "Force a genuine twin-prime pair on one side of a two-Chen representation."
+      },
+      "brief": {
+        "zh": "定理 1.1 的 p+2 可以有两个因子。去掉一端的半素数贡献触及奇偶障碍；应先攻加权下界。",
+        "en": "Separating prime from semiprime shifts requires a lower bound beyond the usual parity barrier."
+      },
+      "source": "https://arxiv.org/html/2508.16400v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.ChenTwinOnOneSide",
+      "file": "lean/Conjectures/Goldbach/ChenTwinOnOneSide.lean",
       "route_source": "exceptions"
     },
     {
@@ -15211,6 +15369,144 @@
       "challenge_only": true,
       "module": "Conjectures.Goldbach.DigitSetIntrinsicSquareRoot",
       "file": "lean/Conjectures/Goldbach/DigitSetIntrinsicSquareRoot.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-digital-central-representations",
+      "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2≤D.card → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, let S := (Finset.range (b^k)).filter (fun n : ℕ => ∀ i < k, (n/b^(i))%b ∈ D); (((S).filter (fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ (Nat.dist p q)^3≤n^2)).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+      "plain_statement": {
+        "zh": "数字受限的偶数，用距中心至多 O(n^(2/3)) 的素数给出表示，保留族内幂节省。",
+        "en": "Localize prime pairs near the center on a digit-restricted target family."
+      },
+      "brief": {
+        "zh": "文献的素数对没有间距条件。控制移动短素数和与数字 Fourier 乘积的相关，界按数字集合大小计。",
+        "en": "Estimate moving prime sums against the sparse digital measure; dropping the distance condition recovers unrestricted pairs."
+      },
+      "source": "https://arxiv.org/abs/2402.07921",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.DigitalCentralRepresentations",
+      "file": "lean/Conjectures/Goldbach/DigitalCentralRepresentations.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-digital-forbidden-neighbors",
+      "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2≤D.card → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, let S := (Finset.range (b^k)).filter (fun n : ℕ => (∀ i < k, (n/b^(i))%b ∈ D) ∧ ∀ i, i+1<k → (n/b^(i))%b≠(n/b^(i+1))%b); (((S).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+      "plain_statement": {
+        "zh": "在相邻位必须不同的数字族内部控制哥猜例外。",
+        "en": "Establish an intrinsic saving for digit strings forbidding equal adjacent digits."
+      },
+      "brief": {
+        "zh": "邻位依赖破坏独立乘积。用带频率的转移矩阵替代标量因子，按允许词的实际个数归一化。",
+        "en": "Use frequency-dependent transition matrices in place of independent digit factors."
+      },
+      "source": "https://arxiv.org/abs/2402.07921",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.DigitalForbiddenNeighbors",
+      "file": "lean/Conjectures/Goldbach/DigitalForbiddenNeighbors.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-digital-mirror-exceptions",
+      "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2≤D.card → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, let S := (Finset.range (b^k)).filter (fun n : ℕ => ∀ i < k, (n/b^(i))%b ∈ D ∧ (n/b^(i))%b=(n/b^(k-1-i))%b); (((S).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+      "plain_statement": {
+        "zh": "对固定宽度回文数字盒，按回文族本身的大小证明幂节省。",
+        "en": "Obtain a power saving relative to a palindromic digit box."
+      },
+      "brief": {
+        "zh": "镜像约束把远端两位绑定。全字母表定理在平方根规模的回文子族上可能给不出界；从镜像权重 bⁱ+bᵏ⁻¹⁻ⁱ 的乘积入手。",
+        "en": "Pair distant digit positions in the Fourier transform. Normalize by the mirror population itself, with leading zeroes allowed."
+      },
+      "source": "https://arxiv.org/abs/2402.07921",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.DigitalMirrorExceptions",
+      "file": "lean/Conjectures/Goldbach/DigitalMirrorExceptions.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-digital-moving-alphabets",
+      "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, ∀ D : ℕ → Finset ℕ, (∀ i < k, D i ⊆ Finset.range b ∧ 2≤(D i).card) → let S := (Finset.range (b^k)).filter (fun n : ℕ => ∀ i < k, (n/b^(i))%b ∈ D i); (((S).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+      "plain_statement": {
+        "zh": "逐位更换允许数字，例外数按整个数字盒的大小获得一致幂节省。",
+        "en": "Prove an intrinsic power saving uniformly over position-dependent digit alphabets."
+      },
+      "brief": {
+        "zh": "Cumberbatch 固定同一字母表。把 Fourier 乘积的单一因子迭代换成不同因子，常数只能依赖进制；各位含前导零在内恰取 k 位。",
+        "en": "Replace the stationary Fourier product by nonidentical factors and retain constants uniform in the digit box."
+      },
+      "source": "https://arxiv.org/abs/2402.07921",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.DigitalMovingAlphabets",
+      "file": "lean/Conjectures/Goldbach/DigitalMovingAlphabets.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-digital-sparse-weight-slices",
+      "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k j : ℕ, k≤4*j → 4*j≤3*k → let S := (Finset.range (b^k)).filter (fun n : ℕ => (∀ i < k, (n/b^(i))%b ≤ 1) ∧ ((Finset.range k).filter (fun i => (n/b^(i))%b=1)).card=j); (((S).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+      "plain_statement": {
+        "zh": "在只许 0、1 的数字中固定恰有 j 个 1，按每一重量层单独取得幂节省。",
+        "en": "Prove a relative power saving on each binary-digit weight slice between quarter and three-quarter filling."
+      },
+      "brief": {
+        "zh": "母集估计在尾部稀薄的重量层可失效。引入数字计数的第二个 Fourier 变量，并对 j 一致控制系数提取。",
+        "en": "Introduce a second frequency marking the number of ones and extract each coefficient uniformly."
+      },
+      "source": "https://arxiv.org/abs/2402.07921",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.DigitalSparseWeightSlices",
+      "file": "lean/Conjectures/Goldbach/DigitalSparseWeightSlices.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-digital-unbalanced-prime",
+      "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2≤D.card → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, let S := (Finset.range (b^k)).filter (fun n : ℕ => ∀ i < k, (n/b^(i))%b ∈ D); (((S).filter (fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ p^2≤n)).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+      "plain_statement": {
+        "zh": "数字受限的目标要求有一个素数不超过目标平方根，保留内在幂节省。",
+        "en": "Force a prime summand below the square root on sparse digit sets."
+      },
+      "brief": {
+        "zh": "小素数只占卷积很短的一端，与要求双素数接近中心的方向独立。尝试针对大小不同的素数和做混合估计。",
+        "en": "Estimate a long and a short prime sum on unequal scales against the digital Fourier product."
+      },
+      "source": "https://arxiv.org/abs/2402.07921",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.DigitalUnbalancedPrime",
+      "file": "lean/Conjectures/Goldbach/DigitalUnbalancedPrime.lean",
       "route_source": "exceptions"
     },
     {
@@ -16306,6 +16602,144 @@
       "role": "conditional",
       "module": "Conjectures.Goldbach.WheelTwoShiftFloor",
       "file": "lean/Conjectures/Goldbach/WheelTwoShiftFloor.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-window-admissible-prime-classes",
+      "statement": "by\n  classical\n  exact ∀ k : ℕ, ∀ ε : ℝ, 0<ε → ∀ A : ℕ, ∃ C : ℝ, 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((7:ℝ)/120+ε) ≤ (H:ℝ) → ∀ a b d : ℕ, 1≤d → (d:ℝ)≤(1+Real.log (X:ℝ))^k → a<d → b<d → a.Coprime d → b.Coprime d → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ n%d=(a+b)%d ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ p%d=a ∧ q%d=b)).card:ℝ) ≤ C*(H:ℝ)/(1+Real.log (X:ℝ))^A",
+      "plain_statement": {
+        "zh": "在每个短目标区间中同时指定两个素数的剩余类，对对数幂模数一致。",
+        "en": "Prescribe both prime residues uniformly inside every short target interval."
+      },
+      "brief": {
+        "zh": "d=1 给定理 1.1。先限制目标同余相容，再把短区间 minorant 的近似换成各剩余类上的局部 Fourier 近似。",
+        "en": "Pass from an unrestricted minorant to local approximations in prescribed reduced classes."
+      },
+      "source": "https://arxiv.org/html/1910.05187v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.WindowAdmissiblePrimeClasses",
+      "file": "lean/Conjectures/Goldbach/WindowAdmissiblePrimeClasses.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-window-moving-prime-center",
+      "statement": "by\n  classical\n  exact ∀ ε : ℝ, 0<ε → ∀ A : ℕ, ∃ C : ℝ, 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((7:ℝ)/120+ε) ≤ (H:ℝ) → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ (Nat.dist p q)^4≤n^3)).card:ℝ) ≤ C*(H:ℝ)/(1+Real.log (X:ℝ))^A",
+      "plain_statement": {
+        "zh": "在每个短目标区间内，对几乎所有偶数同时要求两素数相距不超过 n^(3/4)。",
+        "en": "Localize both the target interval and the distance between prime summands."
+      },
+      "brief": {
+        "zh": "文献约束目标所在区间。这里叠加随 n 移动的素数窗口，需要把截断误差与区间起点同时控制。",
+        "en": "Handle a moving summand cutoff as well as the short target interval."
+      },
+      "source": "https://arxiv.org/html/1910.05187v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.WindowMovingPrimeCenter",
+      "file": "lean/Conjectures/Goldbach/WindowMovingPrimeCenter.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-window-one-eighteenth",
+      "statement": "by\n  classical\n  exact ∀ ε : ℝ, 0<ε → ∀ A : ℕ, ∃ C : ℝ, 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((1:ℝ)/18+ε) ≤ (H:ℝ) → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(H:ℝ)/(1+Real.log (X:ℝ))^A",
+      "plain_statement": {
+        "zh": "把每个短区间的例外估计门槛从 7/120+ε 降至 1/18+ε，保留任意对数幂节省。",
+        "en": "Lower the every-interval exponent in Grimmelt’s theorem to 1/18."
+      },
+      "brief": {
+        "zh": "直接比较定理 1.1 的指数。针对 H 较小时增长的局部 Fourier 误差，先找出 Dirichlet 多项式估计中的主损失。",
+        "en": "Track the worst local Fourier term when H drops below the exponent in Theorem 1.1."
+      },
+      "source": "https://arxiv.org/html/1910.05187v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.WindowOneEighteenth",
+      "file": "lean/Conjectures/Goldbach/WindowOneEighteenth.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-window-power-exception",
+      "statement": "by\n  classical\n  exact ∀ ε : ℝ, 0<ε → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((7:ℝ)/120+ε) ≤ (H:ℝ) → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(H:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "在 7/120+ε 的短区间门槛，把对数节省加强到区间长度的固定幂节省。",
+        "en": "Replace the logarithmic saving by a power of the interval length at the original threshold."
+      },
+      "brief": {
+        "zh": "固定 ε 后 δ 对所有起点一致。用高矩或大值估计控制坏频率，仅改良对数常数无济于事。",
+        "en": "Bound the large-frequency tail by a fixed power, uniformly in each interval endpoint."
+      },
+      "source": "https://arxiv.org/html/1910.05187v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.WindowPowerException",
+      "file": "lean/Conjectures/Goldbach/WindowPowerException.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-window-shared-prime-offset",
+      "statement": "by\n  classical\n  exact ∀ ε : ℝ, 0<ε → ∀ A : ℕ, ∃ C : ℝ, 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((7:ℝ)/120+ε) ≤ (H:ℝ) → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ Nat.Prime (q+6) ∧ p+q=n)).card:ℝ) ≤ C*(H:ℝ)/(1+Real.log (X:ℝ))^A",
+      "plain_statement": {
+        "zh": "让 n 和 n+6 的两个表示共享一个素数，在每个短区间控制失败数。",
+        "en": "Find a shared prime summand for n and n+6 throughout almost all of each short interval."
+      },
+      "brief": {
+        "zh": "两次独立应用短区间定理得不到同一素数。需要素数对 q、q+6 的下界，属于高度探索性的固定差难题。",
+        "en": "Separate representations need not intersect. A lower bound for prime pairs at gap six is a substantial additional obstacle."
+      },
+      "source": "https://arxiv.org/html/1910.05187v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.WindowSharedPrimeOffset",
+      "file": "lean/Conjectures/Goldbach/WindowSharedPrimeOffset.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-window-thin-basis",
+      "statement": "by\n  classical\n  exact ∃ B : Set ℕ, (∀ p ∈ B, Nat.Prime p) ∧ (∃ C : ℝ, 0<C ∧ ∀ X : ℕ, 2≤X → (((Finset.Icc 1 X).filter (fun n : ℕ => n ∈ B)).card:ℝ)≤C*Real.sqrt (X:ℝ)) ∧ ∀ ε : ℝ, 0<ε → ∀ A : ℕ, ∃ C : ℝ, 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((7:ℝ)/120+ε) ≤ (H:ℝ) → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, p ∈ B ∧ Nat.Prime q ∧ p+q=n)).card:ℝ) ≤ C*(H:ℝ)/(1+Real.log (X:ℝ))^A",
+      "plain_statement": {
+        "zh": "构造单个平方根规模的稀疏素数集，作为每个短区间几乎所有目标的一端。",
+        "en": "Construct one sparse prime reservoir covering almost all targets in every short interval."
+      },
+      "brief": {
+        "zh": "同一集合须服务所有规模和区间。先对有许多表示的目标作概率抽稀，再控制各尺度上的失败总量。",
+        "en": "Thin the summand set probabilistically, keeping one global reservoir across scales and interval endpoints."
+      },
+      "source": "https://arxiv.org/html/1910.05187v2",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.WindowThinBasis",
+      "file": "lean/Conjectures/Goldbach/WindowThinBasis.lean",
       "route_source": "exceptions"
     },
     {

@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-digital-mirror-exceptions",
+  "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2≤D.card → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, let S := (Finset.range (b^k)).filter (fun n : ℕ => ∀ i < k, (n/b^(i))%b ∈ D ∧ (n/b^(i))%b=(n/b^(k-1-i))%b); (((S).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+  "plain_statement": {
+    "zh": "对固定宽度回文数字盒，按回文族本身的大小证明幂节省。",
+    "en": "Obtain a power saving relative to a palindromic digit box."
+  },
+  "brief": {
+    "zh": "镜像约束把远端两位绑定。全字母表定理在平方根规模的回文子族上可能给不出界；从镜像权重 bⁱ+bᵏ⁻¹⁻ⁱ 的乘积入手。",
+    "en": "Pair distant digit positions in the Fourier transform. Normalize by the mirror population itself, with leading zeroes allowed."
+  },
+  "source": "https://arxiv.org/abs/2402.07921",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

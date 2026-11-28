@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-digital-forbidden-neighbors",
+  "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2≤D.card → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, let S := (Finset.range (b^k)).filter (fun n : ℕ => (∀ i < k, (n/b^(i))%b ∈ D) ∧ ∀ i, i+1<k → (n/b^(i))%b≠(n/b^(i+1))%b); (((S).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+  "plain_statement": {
+    "zh": "在相邻位必须不同的数字族内部控制哥猜例外。",
+    "en": "Establish an intrinsic saving for digit strings forbidding equal adjacent digits."
+  },
+  "brief": {
+    "zh": "邻位依赖破坏独立乘积。用带频率的转移矩阵替代标量因子，按允许词的实际个数归一化。",
+    "en": "Use frequency-dependent transition matrices in place of independent digit factors."
+  },
+  "source": "https://arxiv.org/abs/2402.07921",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

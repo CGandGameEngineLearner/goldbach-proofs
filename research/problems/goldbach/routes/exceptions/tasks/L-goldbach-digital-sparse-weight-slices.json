@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-digital-sparse-weight-slices",
+  "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k j : ℕ, k≤4*j → 4*j≤3*k → let S := (Finset.range (b^k)).filter (fun n : ℕ => (∀ i < k, (n/b^(i))%b ≤ 1) ∧ ((Finset.range k).filter (fun i => (n/b^(i))%b=1)).card=j); (((S).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+  "plain_statement": {
+    "zh": "在只许 0、1 的数字中固定恰有 j 个 1，按每一重量层单独取得幂节省。",
+    "en": "Prove a relative power saving on each binary-digit weight slice between quarter and three-quarter filling."
+  },
+  "brief": {
+    "zh": "母集估计在尾部稀薄的重量层可失效。引入数字计数的第二个 Fourier 变量，并对 j 一致控制系数提取。",
+    "en": "Introduce a second frequency marking the number of ones and extract each coefficient uniformly."
+  },
+  "source": "https://arxiv.org/abs/2402.07921",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

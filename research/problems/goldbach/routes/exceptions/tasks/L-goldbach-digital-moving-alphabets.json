@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-digital-moving-alphabets",
+  "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, ∀ D : ℕ → Finset ℕ, (∀ i < k, D i ⊆ Finset.range b ∧ 2≤(D i).card) → let S := (Finset.range (b^k)).filter (fun n : ℕ => ∀ i < k, (n/b^(i))%b ∈ D i); (((S).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+  "plain_statement": {
+    "zh": "逐位更换允许数字，例外数按整个数字盒的大小获得一致幂节省。",
+    "en": "Prove an intrinsic power saving uniformly over position-dependent digit alphabets."
+  },
+  "brief": {
+    "zh": "Cumberbatch 固定同一字母表。把 Fourier 乘积的单一因子迭代换成不同因子，常数只能依赖进制；各位含前导零在内恰取 k 位。",
+    "en": "Replace the stationary Fourier product by nonidentical factors and retain constants uniform in the digit box."
+  },
+  "source": "https://arxiv.org/abs/2402.07921",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

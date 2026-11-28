@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-window-power-exception",
+  "statement": "by\n  classical\n  exact ∀ ε : ℝ, 0<ε → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((7:ℝ)/120+ε) ≤ (H:ℝ) → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ ¬ (∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n))).card:ℝ) ≤ C*(H:ℝ)^(1-δ)",
+  "plain_statement": {
+    "zh": "在 7/120+ε 的短区间门槛，把对数节省加强到区间长度的固定幂节省。",
+    "en": "Replace the logarithmic saving by a power of the interval length at the original threshold."
+  },
+  "brief": {
+    "zh": "固定 ε 后 δ 对所有起点一致。用高矩或大值估计控制坏频率，仅改良对数常数无济于事。",
+    "en": "Bound the large-frequency tail by a fixed power, uniformly in each interval endpoint."
+  },
+  "source": "https://arxiv.org/html/1910.05187v2",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

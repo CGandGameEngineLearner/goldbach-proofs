@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-chen-sparse-cubic-targets",
+  "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => 1≤n ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=6*n^3+4))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+  "plain_statement": {
+    "zh": "在三次稀疏目标 6n³+4 上，对指标本身证明双陈例外幂节省。",
+    "en": "Obtain a power saving in the index for two-Chen representations of 6n³+4."
+  },
+  "brief": {
+    "zh": "全体目标的幂节省无法直接限制到立方序列。尝试结合仓库的多项式 Fourier 矩恒等式与双陈 minorant。",
+    "en": "Combine polynomial moment control with two Chen minorants; normalize by index size."
+  },
+  "source": "https://arxiv.org/html/2508.16400v2",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

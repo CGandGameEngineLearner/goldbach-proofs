@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-chen-coprime-shift-products",
+  "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=4 ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=n ∧ (p+2).Coprime (q+2)))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+  "plain_statement": {
+    "zh": "要求两个陈素数的移位数 p+2 与 q+2 互素，仍有幂节省例外界。",
+    "en": "Remove shared prime factors between the two Chen shifts."
+  },
+  "brief": {
+    "zh": "公共因子必整除 n+4。估计这些素因子对应的坏表示上界，再与双陈筛下界比较；需控制整除 n+4 的大因子。",
+    "en": "A shared divisor divides n+4. Subtract representations carrying its prime divisors from a two-sided lower bound."
+  },
+  "source": "https://arxiv.org/html/2508.16400v2",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

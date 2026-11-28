@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-digital-unbalanced-prime",
+  "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2≤D.card → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, let S := (Finset.range (b^k)).filter (fun n : ℕ => ∀ i < k, (n/b^(i))%b ∈ D); (((S).filter (fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ p^2≤n)).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+  "plain_statement": {
+    "zh": "数字受限的目标要求有一个素数不超过目标平方根，保留内在幂节省。",
+    "en": "Force a prime summand below the square root on sparse digit sets."
+  },
+  "brief": {
+    "zh": "小素数只占卷积很短的一端，与要求双素数接近中心的方向独立。尝试针对大小不同的素数和做混合估计。",
+    "en": "Estimate a long and a short prime sum on unequal scales against the digital Fourier product."
+  },
+  "source": "https://arxiv.org/abs/2402.07921",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-window-admissible-prime-classes",
+  "statement": "by\n  classical\n  exact ∀ k : ℕ, ∀ ε : ℝ, 0<ε → ∀ A : ℕ, ∃ C : ℝ, 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((7:ℝ)/120+ε) ≤ (H:ℝ) → ∀ a b d : ℕ, 1≤d → (d:ℝ)≤(1+Real.log (X:ℝ))^k → a<d → b<d → a.Coprime d → b.Coprime d → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ n%d=(a+b)%d ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ p%d=a ∧ q%d=b)).card:ℝ) ≤ C*(H:ℝ)/(1+Real.log (X:ℝ))^A",
+  "plain_statement": {
+    "zh": "在每个短目标区间中同时指定两个素数的剩余类，对对数幂模数一致。",
+    "en": "Prescribe both prime residues uniformly inside every short target interval."
+  },
+  "brief": {
+    "zh": "d=1 给定理 1.1。先限制目标同余相容，再把短区间 minorant 的近似换成各剩余类上的局部 Fourier 近似。",
+    "en": "Pass from an unrestricted minorant to local approximations in prescribed reduced classes."
+  },
+  "source": "https://arxiv.org/html/1910.05187v2",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

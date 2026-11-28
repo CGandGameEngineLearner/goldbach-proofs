@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-digital-central-representations",
+  "statement": "by\n  classical\n  exact ∀ b : ℕ, 2≤b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2≤D.card → ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∀ k : ℕ, let S := (Finset.range (b^k)).filter (fun n : ℕ => ∀ i < k, (n/b^(i))%b ∈ D); (((S).filter (fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ (Nat.dist p q)^3≤n^2)).card:ℝ) ≤ C*(1+(S.card:ℝ))^(1-δ)",
+  "plain_statement": {
+    "zh": "数字受限的偶数，用距中心至多 O(n^(2/3)) 的素数给出表示，保留族内幂节省。",
+    "en": "Localize prime pairs near the center on a digit-restricted target family."
+  },
+  "brief": {
+    "zh": "文献的素数对没有间距条件。控制移动短素数和与数字 Fourier 乘积的相关，界按数字集合大小计。",
+    "en": "Estimate moving prime sums against the sparse digital measure; dropping the distance condition recovers unrestricted pairs."
+  },
+  "source": "https://arxiv.org/abs/2402.07921",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

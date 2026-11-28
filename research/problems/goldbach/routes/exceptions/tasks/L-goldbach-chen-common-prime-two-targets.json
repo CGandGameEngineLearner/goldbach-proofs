@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-chen-common-prime-two-targets",
+  "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=4 ∧ ¬ (∃ p q : ℕ, ch p ∧ ch q ∧ p+q=n ∧ ch (q+6)))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+  "plain_statement": {
+    "zh": "为 n、n+6 找到共享一端陈素数的两个双陈表示。",
+    "en": "Find two Chen representations at adjacent admissible targets sharing a Chen prime."
+  },
+  "brief": {
+    "zh": "各目标独立存在表示不能保证共同素数。首先研究相关权 ch(q)ch(q+6)，检查 q、q+2、q+6、q+8 的局部相容性。",
+    "en": "Estimate the shifted Chen correlation before convolving against the remaining Chen weight."
+  },
+  "source": "https://arxiv.org/html/2508.16400v2",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

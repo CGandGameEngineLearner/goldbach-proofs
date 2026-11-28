@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-chen-opposite-shifts",
+  "statement": "by\n  classical\n  exact let ch := fun p : ℕ => Nat.Prime p ∧ (p+2).primeFactorsList.length≤2; ∃ δ C : ℝ, 0<δ ∧ δ<1 ∧ 0<C ∧ ∃ T : ℕ, ∀ X : ℕ, T≤X → (((Finset.Icc X (2*X)).filter (fun n : ℕ => n%6=0 ∧ ¬ (∃ p q : ℕ, ch p ∧ Nat.Prime q ∧ 5≤q ∧ (q-2).primeFactorsList.length≤2 ∧ p+q=n))).card:ℝ)≤C*(X:ℝ)^(1-δ)",
+  "plain_statement": {
+    "zh": "为 6 的倍数建立反向双陈表示，两端分别控制 p+2 和 q−2。",
+    "en": "Reverse the second Chen shift and treat the compatible class of multiples of six."
+  },
+  "brief": {
+    "zh": "改变移位符号使自然相容类变成 0 mod 6。重新计算反射卷积的局部因子，并分别处理两套筛权。",
+    "en": "Reverse one sieve, recompute local factors, and track its interaction with reflection."
+  },
+  "source": "https://arxiv.org/html/2508.16400v2",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}

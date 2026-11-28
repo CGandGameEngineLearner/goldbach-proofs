@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-window-thin-basis",
+  "statement": "by\n  classical\n  exact ∃ B : Set ℕ, (∀ p ∈ B, Nat.Prime p) ∧ (∃ C : ℝ, 0<C ∧ ∀ X : ℕ, 2≤X → (((Finset.Icc 1 X).filter (fun n : ℕ => n ∈ B)).card:ℝ)≤C*Real.sqrt (X:ℝ)) ∧ ∀ ε : ℝ, 0<ε → ∀ A : ℕ, ∃ C : ℝ, 0<C ∧ ∃ T : ℕ, ∀ X H : ℕ, T≤X → H≤X → (X:ℝ)^((7:ℝ)/120+ε) ≤ (H:ℝ) → (((Finset.Icc (X-H) X).filter (fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, p ∈ B ∧ Nat.Prime q ∧ p+q=n)).card:ℝ) ≤ C*(H:ℝ)/(1+Real.log (X:ℝ))^A",
+  "plain_statement": {
+    "zh": "构造单个平方根规模的稀疏素数集，作为每个短区间几乎所有目标的一端。",
+    "en": "Construct one sparse prime reservoir covering almost all targets in every short interval."
+  },
+  "brief": {
+    "zh": "同一集合须服务所有规模和区间。先对有许多表示的目标作概率抽稀，再控制各尺度上的失败总量。",
+    "en": "Thin the summand set probabilistically, keeping one global reservoir across scales and interval endpoints."
+  },
+  "source": "https://arxiv.org/html/1910.05187v2",
+  "track": "exceptions",
+  "program": "exceptions",
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "depends_on": [],
+  "imports": []
+}
