@@ -14,6 +14,21 @@ F01–F03 对应 FR-9001、FR-9002。对 \(C-4095\le p<C+32768\) 的大素数锚
 python3 -B research/problems/goldbach/routes/finite-rfc-third/replay.py
 ~~~
 
+### Reference certificate through offset 262,144
+
+FR-9002 ends at $C+32{,}768$. For every integer $j$ from 16,385 through 131,072, the reference proof gives primes $p,q$ with $p+q=C+2j$. This covers the next 114,688 consecutive even numbers, from 4,000,000,000,000,032,770 through 4,000,000,000,000,262,144 inclusive. It uses Lucas certificates for 57 large primes and a bit sieve to verify a complementary prime for every target. [Lean source](../../../../reference-proofs/FinitePostBoundaryThrough262144.lean)
+
+这份参考证明从 FR-9002 之后的首个偶数 $C+32{,}770$ 开始，覆盖到 $C+262{,}144$，共 114,688 个连续偶数。57 个大素数由 Lucas 证书验证，位筛为每个目标验证互补素数。
+
+Contributed by Anders Hafreager with assistance from OpenAI Codex. [Contributor profile](https://github.com/andeplane)
+
+Run these commands from the repository root with the pinned Lean toolchain. The script compiles the reference proof in a temporary directory and asks the repository verifier to check it against the interval stated above. A successful replay prints `ACCEPTED (check)`. [Replay script](check-post-boundary.sh)
+
+~~~sh
+(cd lean && lake exe cache get)
+bash research/problems/goldbach/routes/finite-rfc-third/check-post-boundary.sh
+~~~
+
 ## Rough remainder wheel
 
 F04–F07 对应 FR-9003 至 FR-9006。模 \(W=30030\) 的十二个基类由 FR-8002 覆盖。对每类保留十六个同余的素数。它们分别在从 17 到 73 的十五个素模上有互不相同的余数。最大发现值为 \(B=19\,495\,926\,503\)。对于给定偶数 \(n\ge B+2\)，先取满足 \((n-b,W)=1\) 的基类。每个额外素数至多消去该类的一个候选，剩下的候选给出 \(2\le n-p\) 且每个素因子至少为 79。通过投影纤维大小合并该表，所需枚举范围为模 \(W\) 的 15,015 个偶余类。候选表的 SHA-256 为 d57127f950d88c642bba0788c71d8c462343550505ce7330899c74cc8b328355。[候选表](wheel.csv) · [FR-8002](https://www.movan.tech/goldbach/?lemma=L-goldbach-finite-wheel-unit-base)
