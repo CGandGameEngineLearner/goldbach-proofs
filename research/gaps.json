@@ -20077,7 +20077,7 @@
       "route_source": "progressions"
     },
     {
-      "id": "L-goldbach-quadratic-diagnostic-semialmost-primes",
+      "id": "L-goldbach-seven-factor-product-shift",
       "statement": "let bad := fun n : ℕ => 6 ∣ n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n ∧ (2*p*q+1).primeFactorsList.length ≤ 7; ∀ A : ℕ, ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → (((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Ioc (X/2) X)).card : ℝ)*(Real.log (X : ℝ))^A) ≤ (X : ℝ)",
       "plain_statement": {
         "zh": "对几乎所有 6 的倍数，寻找素数对 p+q=n，使二次式 2pq+1 至多有七个素因子（计重），保留任意对数幂的例外节省。",
@@ -20095,8 +20095,8 @@
       "parallel": true,
       "challenge_only": true,
       "source": "https://arxiv.org/html/2606.29559v1#S4.SS2",
-      "module": "Conjectures.Goldbach.QuadraticDiagnosticSemialmostPrimes",
-      "file": "lean/Conjectures/Goldbach/QuadraticDiagnosticSemialmostPrimes.lean",
+      "module": "Conjectures.Goldbach.SevenFactorProductShift",
+      "file": "lean/Conjectures/Goldbach/SevenFactorProductShift.lean",
       "route_source": "progressions"
     },
     {
