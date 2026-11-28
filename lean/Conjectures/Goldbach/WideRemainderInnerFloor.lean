@@ -1282,6 +1282,33 @@ theorem SChi_L2 (n q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q) :
   refine Finset.sum_congr rfl fun k _ => ?_
   by_cases hu : IsUnit ((k:ℕ):ZMod q) <;> simp [hu, Complex.ofReal_re, ← Complex.ofReal_pow]
 
+/-- The norm of the Goldbach integrand is the squared modulus of the Goldbach sum
+(`‖E‖ = 1`). -/
+theorem norm_fG (n : ℕ) (t : ℝ) : ‖fG n t‖ = ‖SG n t‖ ^ 2 := by
+  show ‖(∑ k ∈ Finset.range (n+1), (GW k : ℂ) * GE ((k:ℝ)*t)) ^ 2 * GE (-(n:ℝ)*t)‖
+      = ‖∑ k ∈ Finset.range (n+1), (GW k : ℂ) * GE ((k:ℝ)*t)‖ ^ 2
+  rw [Complex.norm_mul, norm_GE, mul_one, Complex.norm_pow]
+
+/-- **JG is dominated by the local L² mass.** For measurable `A`, the signed integral
+`JG n A` is bounded above by the L² mass of the Goldbach sum over `A`:
+`JG n A ≤ ∫_{A∩[0,1]} ‖S n t‖² dt`. This converts the route bounds of
+`JG_target_floor` into L² statements about the Goldbach sum. -/
+theorem JG_le_L2 (n : ℕ) (A : Set ℝ) (hA : MeasurableSet A) :
+    JG n A
+      ≤ ∫ x in Set.uIoc (0:ℝ) 1, (A.indicator (fun t => ‖SG n t‖ ^ 2)) x ∂MeasureTheory.volume := by
+  show (intervalIntegral (fun t => A.indicator (fG n) t) (0:ℝ) 1 MeasureTheory.volume).re
+      ≤ ∫ x in Set.uIoc (0:ℝ) 1, (A.indicator (fun t => ‖SG n t‖ ^ 2)) x ∂MeasureTheory.volume
+  calc (intervalIntegral (fun t => A.indicator (fG n) t) (0:ℝ) 1 MeasureTheory.volume).re
+      ≤ ‖(intervalIntegral (fun t => A.indicator (fG n) t) (0:ℝ) 1 MeasureTheory.volume : ℂ)‖ :=
+        Complex.re_le_norm _
+    _ ≤ ∫ x in Set.uIoc (0:ℝ) 1, ‖(A.indicator (fG n) x : ℂ)‖ ∂MeasureTheory.volume :=
+        intervalIntegral.norm_integral_le_integral_norm_uIoc
+    _ = ∫ x in Set.uIoc (0:ℝ) 1, (A.indicator (fun t => ‖SG n t‖ ^ 2)) x ∂MeasureTheory.volume := by
+        refine MeasureTheory.integral_congr_ae (MeasureTheory.ae_of_all _ fun x => ?_)
+        by_cases hx : x ∈ A
+        · simp [hx, norm_fG]
+        · simp [hx]
+
 end CharExpand
 
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
