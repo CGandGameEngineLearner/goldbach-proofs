@@ -276,7 +276,26 @@ class CutFlow(DeskServerTestCase):
         self.assertEqual(by_id[a]["cuts"][1]["reason"], "cyclic_cut")
         for child in by_id[a]["cuts"][0]["children"]:
             self.assertEqual(by_id[child]["depth"], 2)
-            self.assertEqual(by_id[child]["cut_reason"], "cut_depth_limit")
+            self.assertTrue(by_id[child]["takes_cuts"])
+
+        cursor = by_id[a]["cuts"][0]["children"][0]
+        for depth in range(3, 9):
+            self.submit_task(cursor, "cut", f"depth-maker-{depth}", [f"input-{depth}-left", f"input-{depth}-right"])
+            parent_detail = self.request(f"/api/task?lemma={cursor}")
+            cursor = parent_detail["cuts"][0]["children"][0]
+            detail = self.request(f"/api/task?lemma={cursor}")
+            self.assertEqual(detail["depth"], depth)
+            self.assertEqual(detail["takes_cuts"], depth < 8)
+        self.assertEqual(self.request(DESK + "claim", {"gap": cursor, "handle": "deeper", "kind": "cut"},
+                                      expected=409)["error"], "cut_depth_limit")
+
+        # Reusing an existing shallow task must not extend its downstream chain past the cap.
+        self.submit_task(OTHER, "cut", "other-root", ["secondary-root-left", "secondary-root-right"])
+        other = self.request(f"/api/task?lemma={OTHER}")["cuts"][0]["children"][0]
+        self.submit_task(other, "cut", "too-deep-via-reuse", [by_id[a]["statement"], "another-input"])
+        rejected = self.request(f"/api/task?lemma={other}")["cuts"][0]
+        self.assertEqual((rejected["status"], rejected["reason"], rejected["children"]),
+                         ("surplus", "cut_depth_limit", []))
 
         self.submit_task(PARENT, "prove", "first-proof", P)
         scores = {r["handle"]: r for r in self.request("/fixture-status")["desk"]["rankings"]["all_time"]}

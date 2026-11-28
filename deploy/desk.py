@@ -1150,6 +1150,7 @@ class Desk:
             live = dict(conn.execute("SELECT parent,count(*) FROM reductions WHERE state='live' GROUP BY parent"))
 
             inactive = reductions.inactive_tasks(conn)
+            cut_depths = reductions.live_depths(conn)[0] if kind == "cut" else {}
 
             def unavailable(gap_id):
                 if gap_id in inactive:
@@ -1161,7 +1162,7 @@ class Desk:
                 if gap.get("claims_closed"):
                     return "claims_closed"
                 if kind == "cut":
-                    return reductions.cut_reason(gap, live.get(gap_id, 0))
+                    return reductions.cut_reason(gap, live.get(gap_id, 0), cut_depths.get(gap_id, 0))
                 if kind == "refute" and gap.get("reductions") is not True:
                     return "refutations_disabled"
                 return None
@@ -1395,11 +1396,13 @@ class Desk:
         cuts = reductions.public_records(conn, gap_id)
         assemblies = dict(conn.execute(query, params))
         inactive = reductions.inactive_tasks(conn)
+        cut_depths, _ = reductions.live_depths(conn)
         for key, gap in gaps.items():
             entries = cuts.get(key, [])
             live = sum(c["status"] == "live" for c in entries)
-            reason = reductions.cut_reason(gap, live)
-            gap = {**gap, "depth": gap.get("depth", 0), "reductions": gap.get("reductions", False),
+            depth = max(gap.get("depth", 0), cut_depths.get(key, 0))
+            reason = reductions.cut_reason(gap, live, depth)
+            gap = {**gap, "depth": depth, "reductions": gap.get("reductions", False),
                    "reductions_live": live, "cuts": entries}
             if key in inactive:
                 gap["claims_closed"] = True

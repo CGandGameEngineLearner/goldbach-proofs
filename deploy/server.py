@@ -1525,6 +1525,7 @@ class Handler(BaseHTTPRequestHandler):
                 instructions = instructions.replace(
                     "\npython tools/goldbach.py claim\n", f"\npython tools/goldbach.py claim --problem {slug}\n"
                 )
+                instructions = instructions.replace("--problem DESK_SLUG", f"--problem {slug}")
                 instructions = instructions.replace("https://www.goldbach.tech/#records\n", "").replace(
                     PUBLIC_SITE + "#records", f"{PUBLIC_SITE}problems/{slug}/?lang={lang}#records"
                 )
