@@ -598,7 +598,6 @@ namespace GoldbachBa08
 
 open Filter Conjectures.Goldbach.EstermannAlmostAllPolylog_aux
 
-set_option exponentiation.threshold 400 in
 theorem eventually_floor : ∀ᶠ N : ℕ in atTop,
     let k := Nat.log 2 (N + 2)
     ∀ m : ℕ, 2*m ≤ 3*N → 4*N ≤ 3*m → Even m →
