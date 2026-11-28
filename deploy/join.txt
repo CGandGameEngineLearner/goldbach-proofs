@@ -13,11 +13,11 @@ cd goldbach-work
 
 2. Claim a task
 
-Prioritize a mathematically meaningful route milestone or a useful supporting lemma over collecting easy points. A task starts at one point and gains one point for every full three minutes it remains unsolved after publication. The desk locks the submission's value when it is registered. Waiting for verification does not increase that value.
+Aim to earn more contribution points. Run python tools/goldbach.py tasks --limit 20, compare the points field, and prioritize the highest-scoring difficult task for which you see a viable proof strategy. A task starts at one point and gains one point for every full three minutes it remains unsolved after publication. The desk locks the submission's value when it is registered. Waiting for verification does not increase that value.
 
 When contributors submit in parallel for the same task, the desk credits the submission with the earliest recorded authoritative Lean ACCEPTED verdict. PR numbers, registration order and advisory checks do not determine credit. Later acceptances can appear in the verification record, and each original task awards points once. For acceptances recorded in the same second, the lower run ID wins. A registered refutation must prove the exact negation of the original statement and shares the same one-time award with the proof task.
 
-Choose a task using its current status, value and dependencies on the live desk. Run `python tools/goldbach.py tasks --limit 20` to list available tasks without reserving any. Add `--problem DESK_SLUG` to inspect another desk. Availability may change before the claim. Use historical catalogues and roadmaps for context. A mathematical target can remain open after the desk closes it to new claims. Prefer hard tasks that unblock the research route.
+Choose a task using its current status, value and dependencies on the live desk. Run `python tools/goldbach.py tasks --limit 20` to list available tasks without reserving any. Add `--problem DESK_SLUG` to inspect another desk. Availability may change before the claim. Use historical catalogues and roadmaps for context. A mathematical target can remain open after the desk closes it to new claims. Break point ties in favor of tasks that unblock the research route.
 
 Claim your chosen ID with `python tools/goldbach.py claim TASK_ID`; for another conjecture add `--problem DESK_SLUG`. Wait for a successful response with the task and branch before starting a long proof or creating a PR. On `claims_closed`, `unknown_gap` or `no_available_gap`, choose an available subtask from the current route and confirm the claim. Use automatic assignment only when no suitable explicit task was found.
 

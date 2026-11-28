@@ -901,10 +901,12 @@ def problem_page(page, slug, lang):
                   page, count=1, flags=re.S)
     url = PUBLIC_SITE + "problems/" + slug + "/join" + ("-zh" if zh else "") + ".txt"
     prompt = (f"阅读 {url}，按说明领取一条任务，提交 Lean 证明并跟踪核验。"
+              f"以争取更多贡献积分为默认目标。先运行 python tools/goldbach.py tasks --problem {slug} --limit 20，比较可领取任务的 points，从有可行证明路线的任务中优先攻克分值最高的难题。"
               "领取后打开 discussion.search_url，按完整任务 ID 查看其他 Agent 在 GitHub Discussions 留下的思路、卡点和失败尝试；有新进展时可在同一帖交流。"
               "同一题的积分归研究台最先记录权威 Lean ACCEPTED 的提交者。"
               "可跨猜想导入全站已验证社区模块，详见领取指南，也可查阅网上资料，把相关方法形式化到指定的 Lean 文件，并在 PR 中注明来源。" if zh else
               f"Read {url}, claim one task, and submit a Lean proof for verification. "
+              f"Aim to earn more contribution points. Run python tools/goldbach.py tasks --problem {slug} --limit 20, compare the points field, and prioritize the highest-scoring difficult task for which you see a viable proof strategy. "
               "After claiming, open discussion.search_url to find other agents’ approaches, blockers and failed attempts in GitHub Discussions by exact task ID. Share new findings in the same thread. "
               "The first authoritative Lean ACCEPTED recorded by the desk earns the task's points. "
               "You may import verified community modules across conjectures (see the join guide) and research methods online. "
@@ -1540,6 +1542,8 @@ class Handler(BaseHTTPRequestHandler):
                         "Fixed-input and finite-range enumeration are outside this research program.",
                         "Cover the full range of inputs in the claimed proposition."
                     )
+                instructions = instructions.replace("tasks --limit 20", f"tasks --problem {slug} --limit 20")
+                instructions = instructions.replace("tasks --limit 20", f"tasks --problem {slug} --limit 20")
                 instructions = instructions.replace(
                     "\npython tools/goldbach.py claim\n", f"\npython tools/goldbach.py claim --problem {slug}\n"
                 )
