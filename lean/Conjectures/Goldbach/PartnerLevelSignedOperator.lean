@@ -21,7 +21,7 @@ attainment vector.
 3. Transform `u B = w (g B)` on `(ZMod D)ˣ` via `uHat y = ∑ B, B y * u B`. Using character
    orthogonality (`DirichletCharacter.sum_char_inv_mul_char_eq`) and residue orthogonality
    (`MulChar.sum_eq_zero_of_ne_one`, `MulChar.sum_one_eq_card_units`), the kernel `J A B m`
-   acts on `uHat` as the partial reflection `y ↦ m - y` restricted to admissible units,
+   acts on `uHat` as the restricted reflection `y ↦ m - y` on admissible units,
    giving `∑ A, ‖∑ B, J A B m * u B‖² = φ(D) * ∑_{x ∈ Adm(m)} ‖uHat(m - x)‖² ≤ φ(D)² * ∑ B, ‖u B‖²`.
 4. Choosing one admissible unit `x₀ ∈ Adm(m)` (`admissible_even`) and setting
    `u₀ B = conj (B (m - x₀))` concentrates `uHat` on `m - x₀`, yielding `0 < ∑ B, ‖u₀ B‖² = φ(D)`
@@ -67,8 +67,8 @@ private theorem admissible_card_eq {D : ℕ} [NeZero D] (m : ℕ) :
     · rw [Nat.mod_eq_of_lt (ZMod.val_lt z)]
       have hlt : z.val < D := ZMod.val_lt z
       have hcast : ((m + D - z.val : ℕ) : ZMod D) = (m : ZMod D) - z := by
-        rw [Nat.cast_sub (by omega : z.val ≤ m + D), Nat.cast_add, ZMod.natCast_self,
-          add_zero, ZMod.natCast_zmod_val]
+        rw [Nat.cast_sub (by omega : z.val ≤ m + D), Nat.cast_add, ZMod.natCast_self, add_zero,
+          ZMod.natCast_zmod_val]
       exact (ZMod.isUnit_iff_coprime (m + D - z.val) D).mp (hcast.symm ▸ hu2)
 
 private theorem conj_char_apply {D : ℕ} (B : DirichletCharacter ℂ D) (z : ZMod D) :
@@ -411,7 +411,7 @@ by
   let P := (1 : DirichletCharacter ℂ 1)
   let B := Σ s : ℕ, DirichletCharacter ℂ s
   let valid := fun b : B => b.1 ≠ 0 ∧ b.2.IsPrimitive
-  exact ∀ D m : ℕ, 0 < D → 0 < m → Even m → ∃ F : Finset B, (∀ b, b ∈ F ↔ valid b ∧ b.1 ∣ D) ∧ (let H := ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(x%D)).Coprime D)).card; let scale := ‖O m‖*(D.totient:ℝ)/(H:ℝ); let normSq := fun w : B → ℂ => ∑ a ∈ F, ‖w a‖^2; let applyRow := fun (w : B → ℂ) (a : B) => ∑ b ∈ F, S a.2 b.2 m * w b; (∀ w : B → ℂ, normSq (applyRow w) ≤ scale^2 * normSq w) ∧ ∃ w : B → ℂ, 0 < normSq w ∧ normSq (applyRow w) = scale^2 * normSq w)
+  exact ∀ D m : ℕ, 0 < D → 0 < m → Even m → ∃ F : Finset B, (∀ b, b ∈ F ↔ valid b ∧ b.1 ∣ D) ∧ (let H := ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(x % D)).Coprime D)).card; let scale := ‖O m‖*(D.totient:ℝ)/(H:ℝ); let normSq := fun w : B → ℂ => ∑ a ∈ F, ‖w a‖^2; let applyRow := fun (w : B → ℂ) (a : B) => ∑ b ∈ F, S a.2 b.2 m * w b; (∀ w : B → ℂ, normSq (applyRow w) ≤ scale^2 * normSq w) ∧ ∃ w : B → ℂ, 0 < normSq w ∧ normSq (applyRow w) = scale^2 * normSq w)
 := by
   classical
   dsimp only
