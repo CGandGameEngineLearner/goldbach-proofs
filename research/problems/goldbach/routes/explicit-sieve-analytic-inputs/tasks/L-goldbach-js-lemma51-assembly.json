@@ -15,7 +15,9 @@
     "L-goldbach-abel-theta-to-pi-li",
     "L-goldbach-gm-unsmooth-psi-ap"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.ExplicitPsiSubTheta"
+  ],
   "parallel": true,
   "source": "https://arxiv.org/abs/2208.01229",
   "track": "explicit-sieve-analytic-inputs",
