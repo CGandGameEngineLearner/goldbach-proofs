@@ -36,7 +36,13 @@ $$
 
 `nearOne_most_targets` 证明，对任意固定矩形 $H,T$ 和任意相对误差 $\varepsilon>0$，除 $O_{H,T,\varepsilon}(X^{1-a})$ 个目标外，矩形内实际零点与极点的主弧贡献和普通主项的差至多为普通主项的 $\varepsilon$ 倍，其中 $a>0$。`nearOne_class_energy_floor_at` 可将共同模数截在 $X^\theta$，按此筛掉的目标数至多为 $O(X^{1-\theta})$。取 $\theta=5/24$，得到 $19/24<4/5$。此时 `nearOne_energy_exponential_weight` 将分类权重控制在解析重数乘 $e^{-(24/5)(1-\beta)\log q}$ 的任意小相对损失内。Zhao 的定理给出了这类权重的平方和上界。[Zhao，定理 1.2](https://arxiv.org/html/2511.05631v1)
 
-要在 Lean 中完成冻结声明，还须估计近 1 矩形以外的贡献，并为实际零点的分类权重证明上述严格小于 1 的界。`binaryShiftExceptionUnion_of_zeroCorrections` 给出了足以推出原题的条件。通过普通例外集计数的另一条路线，则需要在项目允许导入的依赖中建立 Pintz 的无条件幂次界。[Pintz 的普通例外集定理](https://arxiv.org/abs/1804.09084)
+## 从增长高度的零点计数到原题
+
+`nearOne_nonprincipal_power_height` 将本原非主特征的零点计数推广到 $|\operatorname{Im}\rho|\le Q^b$。对每个固定的 $0\le b<1$ 和条带宽度 $H\ge0$，所有导子不超过 $Q$ 的这类特征在 $\operatorname{Re}\rho\ge 1-H/\log X$ 中的零点总重数有统一上界，对所有 $X\ge Q$ 成立。`nearOne_zero_multiplicity_power_height` 进一步证明，对每个 $H$ 都有某个 $b=b(H)>0$，使同一结论覆盖全部本原特征。此时导子为 1 的主特征由已核验的零点自由区域排除。[Pintz 的密度估计](https://arxiv.org/abs/1804.05552)
+
+`coefficient_sub_retained` 逐个分母写出完整主弧模型减去所选矩形的精确余项。求和保留每个至少有一个零点落在矩形外的配对的符号、解析重数、Gauss 因子与有限弧积分。在两个虚部接近互为相反数时，`beta_opposite_ordinates` 给出 Beta 因子的指数衰减。具体地，若 $|\gamma|\ge16$、$|\gamma+\gamma'|\le |\gamma|/2$ 且两实部在 $[5/8,1]$，则衰减因子至多为 $(3/4)^{\lfloor |\gamma|/8\rfloor}$，乘以常数 $B(5/8,5/8)$。[Pintz 关于高零点的主弧估计](https://arxiv.org/html/1804.05561v1#S10)
+
+`binaryShiftExceptionUnion_of_catalogue_estimates` 已按注册表中原题的完整类型核对。若能选定矩形 $H,T$ 和 $0<\eta\le1$，使共同模数上的指数加权分类平方和至多为 $1-\eta$，并使余项实部至少为 $-\eta X/16$，即可推出 $S(X)^5\le X^4$。两项估计分别允许 $O(X^{19/24})$ 个例外。它们仍是待证的解析输入。[Zhao 的零点分类估计](https://arxiv.org/html/2511.05631v1) · [Pintz 的显式公式](https://arxiv.org/abs/1804.05561)
 
 ## 复现
 
