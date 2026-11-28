@@ -14962,6 +14962,29 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-binary-shift-simultaneous-richness",
+      "statement": "by\n  classical\n  exact let G := fun m : ℕ => ((Finset.Icc 2 m).filter (fun p => Nat.Prime p ∧ Nat.Prime (m-p))).card; ∃ c C : ℝ, 0 < c ∧ 0 < C ∧ ∃ T : ℕ, ∀ X ≥ T, let L := Nat.log 2 X / 2; let E := (Finset.Ico X (2*X)).filter (fun n => Even n ∧ ∃ e ∈ Finset.Icc 1 L, (G (n-2^e):ℝ) < c*(X:ℝ)/(Real.log (X:ℝ))^2); (E.card:ℝ) ≤ C*(X:ℝ)^((3:ℝ)/4)",
+      "plain_statement": {
+        "zh": "要求每个小二幂移位同时拥有 ≫X/log²X 个二素数表示，且例外数至多 O(X^(3/4))。",
+        "en": "Require many Goldbach representations at every small binary shift with at most O(X^(3/4)) exceptions."
+      },
+      "brief": {
+        "zh": "#4220 的合入证明只需所有移位都有一个见证，允许 X^(4/5) 个坏中心。新题既增加重数又缩小坏集；须检验近 1 零点会不会使归一化主项变小。对单一移位证明异常估计时要为随后 O(log X) 个平移的并集留余量。",
+        "en": "PR #4220 proves positivity at every small shift outside X^(4/5) centers. Improve both the representation floor and the exceptional exponent. Quantify the near-one-zero contribution and reserve enough saving to sum the individual exceptional sets."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4220",
+      "program": "exceptions",
+      "track": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.BinaryShiftSimultaneousRichness",
+      "file": "lean/Conjectures/Goldbach/BinaryShiftSimultaneousRichness.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-binary-shift-thirteen",
       "statement": "∃ N : ℕ, ∀ n ≥ N, Even n → ∃ (p q : ℕ) (e : Fin 13 → ℕ), Nat.Prime p ∧ Nat.Prime q ∧ n = p+q+∑ j, 2^(e j+1)",
       "plain_statement": {
@@ -15175,6 +15198,29 @@
       "depends_on": [],
       "module": "Conjectures.Goldbach.FixedShiftSexticGoldbach",
       "file": "lean/Conjectures/Goldbach/FixedShiftSexticGoldbach.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-linnik-asymmetric-support-surplus",
+      "statement": "by\n  classical\n  exact let W := fun (k n : ℕ) => ∃ (p : ℕ) (e : Fin k → ℕ), Nat.Prime p ∧ n = p + ∑ i, 2^(e i+1); ∃ c : ℝ, 0 < c ∧ ∃ T : ℕ, ∀ N ≥ T, Even N → let U := (Finset.Ioo 0 N).filter Odd; (1+c)*(U.card:ℝ) ≤ ((U.filter (W 2)).card:ℝ)+((U.filter (W 3)).card:ℝ)",
+      "plain_statement": {
+        "zh": "无条件证明一个素数加两个或三个二幂的两类奇目标，其支撑大小之和超过奇目标总数一个固定比例。",
+        "en": "Uniform support surplus for the two-power and three-power one-prime sets."
+      },
+      "brief": {
+        "zh": "讨论 #4314 的困难在解析正性。这里提出可以直接推出五幂结论的较强中间猜想：反射 m↦N−m 保持奇目标集不变，固定盈余给出至少 c|U| 个不同的相遇点。Li–Liu 第 7 节用加权混合矩处理 GRH 情形；这里需要无条件的支撑估计。",
+        "en": "Reflection yields at least c|U| distinct intersections and hence a five-power two-prime representation for each large even target. Li–Liu Section 7 uses weighted mixed moments under GRH. This asks for unconditional support surplus, providing an analytic objective beyond witness extraction."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://arxiv.org/html/2610.15784v1#S2",
+      "program": "exceptions",
+      "track": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.LinnikAsymmetricSupportSurplus",
+      "file": "lean/Conjectures/Goldbach/LinnikAsymmetricSupportSurplus.lean",
       "route_source": "exceptions"
     },
     {
@@ -15718,6 +15764,98 @@
       ],
       "module": "Conjectures.Goldbach.ReflectedUpperEnvelope",
       "file": "lean/Conjectures/Goldbach/ReflectedUpperEnvelope.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-romanov-critical-two-shift-scale",
+      "statement": "by\n  classical\n  exact ∃ c C : ℝ, 0 < c ∧ 0 < C ∧ ∃ T : ℕ, ∀ X ≥ T, let L := ⌊C*Real.sqrt (Real.log (X:ℝ))⌋₊; let good := fun m : ℕ => Odd m ∧ ∃ a b : ℕ, 1 ≤ a ∧ a < b ∧ b ≤ L ∧ Nat.Prime (m-(2^a+2^b)); c*(X:ℝ) ≤ (((Finset.Ico X (2*X)).filter good).card:ℝ)",
+      "plain_statement": {
+        "zh": "只用 O(√log X) 个允许指数，在每个二倍区间覆盖正比例的奇目标，每个表示使用两个不同二幂与一个素数。",
+        "en": "Cover a positive fraction with a prime and two distinct dyadic shifts at the critical exponent budget."
+      },
+      "brief": {
+        "zh": "素数数目与指数对的朴素计数表明 L=o(√log X) 时总表示数为 o(X)。在临界尺度可尝试控制两枚二幂之和的差所加权的素数对相关；必须扣除对角碰撞。该题研究用多少不同指数就能支撑反射法。",
+        "en": "The prime count and the number of exponent pairs force density zero when L=o(√log X). Seek a second-moment bound at the counting threshold, separating equal shifts and different representations. This quantifies the exponent budget of a reflection method."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/discussions/4314",
+      "program": "exceptions",
+      "track": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.RomanovCriticalTwoShiftScale",
+      "file": "lean/Conjectures/Goldbach/RomanovCriticalTwoShiftScale.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-romanov-local-unique",
+      "statement": "by\n  classical\n  exact let R := fun n : ℕ => ((Finset.Icc 1 (Nat.log 2 n)).filter (fun e => Nat.Prime (n-2^e))).card; ∃ c : ℝ, 0 < c ∧ ∃ T : ℕ, ∀ X H : ℕ, T ≤ X → X ≤ H^2 → H ≤ X → c*(H:ℝ) ≤ (((Finset.Ico X (X+H)).filter (fun n => Odd n ∧ R n=1)).card:ℝ)",
+      "plain_statement": {
+        "zh": "在每个平方根长度以上的窗口，唯一表示为素数加一个正指数二幂的奇数都有正比例。",
+        "en": "Positive density of uniquely represented odd integers in every square-root-length window."
+      },
+      "brief": {
+        "zh": "Elsholtz–Schlage-Puchta 的唯一表示结果给出全局正下密度。局部结论可检测反射侧的质量是否集中在高重数点。需要在同一动窗内隔离恰一次的贡献，并把其他所有允许指数也纳入排除。",
+        "en": "Elsholtz and Schlage-Puchta prove positive lower density of unique representations globally. Isolate multiplicity exactly one in each moving window and exclude all other exponents. This distinguishes support size from a first-moment bound."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://tugraz.elsevierpure.com/en/publications/on-romanovs-constant/",
+      "program": "exceptions",
+      "track": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.RomanovLocalUnique",
+      "file": "lean/Conjectures/Goldbach/RomanovLocalUnique.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-romanov-separated-band-support",
+      "statement": "by\n  classical\n  exact let J := fun a b m : ℕ => ((Finset.Icc a b).filter (fun e => Nat.Prime (m-2^e))).card; ∃ c : ℝ, 0 < c ∧ ∃ T : ℕ, ∀ X ≥ T, let L := Nat.log 2 X / 2; c*(X:ℝ) ≤ (((Finset.Ico X (2*X)).filter (fun m => Odd m ∧ 0<J 1 (L/2) m ∧ 0<J (L/2+1) L m)).card:ℝ)",
+      "plain_statement": {
+        "zh": "低指数带和高指数带各有一个表示的不同奇目标占正比例。",
+        "en": "A positive proportion of distinct odd targets meet both separated exponent bands."
+      },
+      "brief": {
+        "zh": "保留既有 cross-band-overlap 题的两个指数范围，把加权混合质量提升为不同目标数。该计数下界推出旧的质量下界；反过来必须排除少数高重数点支配均值。可先控制乘积的截断尾部，再用二阶矩。",
+        "en": "Keep the bands of the existing cross-band overlap task, counting each target only once. This implies its weighted lower bound. Control concentration of the product on high-multiplicity targets to go in the stronger direction."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/discussions/4314",
+      "program": "exceptions",
+      "track": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.RomanovSeparatedBandSupport",
+      "file": "lean/Conjectures/Goldbach/RomanovSeparatedBandSupport.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-romanov-short-window-density",
+      "statement": "by\n  classical\n  exact let R := fun n : ℕ => ((Finset.Icc 1 (Nat.log 2 n)).filter (fun e => Nat.Prime (n-2^e))).card; ∃ T : ℕ, ∀ X H : ℕ, T ≤ X → X ≤ H^2 → H ≤ X → 13*H ≤ 100*((Finset.Ico X (X+H)).filter (fun n => Odd n ∧ 0 < R n)).card",
+      "plain_statement": {
+        "zh": "每个长度至少 √X 的窗口中，至少 13% 的全部整数是奇素数加一个正指数二幂。",
+        "en": "Represent at least 13% of all integers in every window of length at least √X as an odd prime and a positive power of two."
+      },
+      "brief": {
+        "zh": "Johnston–Trudgian v2 第 1.2 节记录的全区间下密度为 0.10788。此题同时提高该基线并要求短窗一致；分母是全部整数。局部化表示数的一、二阶矩，特别检验筛法误差对窗口起点的依赖。单个奇数的表示只给出反射法的一侧。",
+        "en": "Section 1.2 of Johnston–Trudgian v2 records a full-range lower density of 0.10788 among all integers. Strengthen that numerical baseline and localize the first and second moments to each moving window. This is one side of a reflection argument."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://arxiv.org/html/2605.17825v2#S4",
+      "program": "exceptions",
+      "track": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.RomanovShortWindowDensity",
+      "file": "lean/Conjectures/Goldbach/RomanovShortWindowDensity.lean",
       "route_source": "exceptions"
     },
     {
