@@ -2980,7 +2980,260 @@ lemma t1_divisor_swap (s : Finset ℕ) (n : ℕ) (hn : 0 < n) (hs : ∀ q ∈ s,
   refine Finset.sum_congr rfl fun d _ => ?_
   rw [Finset.mul_sum]
 
-end Ramanujan
+/-- `16^{ω(k)} ≤ 2^24 · k` for `k > 0`: only six primes lie below 16, and each prime
+`p ≥ 16` contributes `16 ≤ p`. -/
+lemma sixteen_pow_primeFactors_card_le (k : ℕ) (hk : 0 < k) :
+    (16 : ℝ) ^ k.primeFactors.card ≤ 2 ^ 24 * (k : ℝ) := by
+  have h6 : (Finset.range 16).filter Nat.Prime = {2, 3, 5, 7, 11, 13} := by decide
+  have hcard : ((k.primeFactors).filter (fun p => p < 16)).card ≤ 6 := by
+    have hsub : ((k.primeFactors).filter (fun p => p < 16))
+        ⊆ (Finset.range 16).filter Nat.Prime := by
+      intro p hp
+      rw [Finset.mem_filter, Nat.mem_primeFactors] at hp
+      exact Finset.mem_filter.mpr ⟨Finset.mem_range.mpr hp.2, hp.1.1⟩
+    calc ((k.primeFactors).filter (fun p => p < 16)).card
+        ≤ ((Finset.range 16).filter Nat.Prime).card := Finset.card_le_card hsub
+      _ = 6 := by rw [h6]; decide
+  have hsplit := Finset.prod_filter_mul_prod_filter_not k.primeFactors (fun p => p < 16)
+    (fun _ => (16 : ℝ))
+  have hsmall : (∏ p ∈ (k.primeFactors).filter (fun p => p < 16), (16 : ℝ)) ≤ 2 ^ 24 := by
+    rw [Finset.prod_const]
+    calc (16 : ℝ) ^ ((k.primeFactors).filter (fun p => p < 16)).card
+        ≤ (16 : ℝ) ^ 6 := pow_le_pow_right₀ (by norm_num) hcard
+      _ ≤ (2 : ℝ) ^ 24 := by norm_num
+  have hlarge : (∏ p ∈ (k.primeFactors).filter (fun p => ¬(p < 16)), (16 : ℝ)) ≤ (k : ℝ) := by
+    have h1 : ((k.primeFactors).filter (fun p => ¬(p < 16))).prod (fun _ => 16)
+        ≤ ((k.primeFactors).filter (fun p => ¬(p < 16))).prod (fun p => p) :=
+      Finset.prod_le_prod (fun p hp => by
+        rw [Finset.mem_filter] at hp
+        exact Nat.not_lt.mp hp.2)
+    have h2 : ((k.primeFactors).filter (fun p => ¬(p < 16))).prod (fun p => p)
+        ≤ k.primeFactors.prod (fun p => p) :=
+      Finset.prod_le_prod_of_subset_of_one_le (Finset.filter_subset _ _)
+        (fun p hp _ => Nat.succ_le_of_lt (Nat.pos_of_mem_primeFactors hp))
+    have h3 : k.primeFactors.prod (fun p => p) ≤ k :=
+      Nat.le_of_dvd hk (Nat.prod_primeFactors_dvd k)
+    exact_mod_cast h1.trans (h2.trans h3)
+  have hprod : ∏ p ∈ k.primeFactors, (16 : ℝ) = (16 : ℝ) ^ k.primeFactors.card :=
+    Finset.prod_const 16
+  calc (16 : ℝ) ^ k.primeFactors.card = ∏ p ∈ k.primeFactors, (16 : ℝ) := hprod.symm
+    _ = (∏ p ∈ (k.primeFactors).filter (fun p => p < 16), (16 : ℝ))
+        * ∏ p ∈ (k.primeFactors).filter (fun p => ¬(p < 16)), (16 : ℝ) := hsplit.symm
+    _ ≤ 2 ^ 24 * (k : ℝ) := mul_le_mul hsmall hlarge (by positivity) (by positivity)
+
+/-- `1/φ(k)² ≤ 4096/(√k·k)` for `k > 0`: elementary polynomial tail bound. -/
+lemma inv_totient_sq_le (k : ℕ) (hk : 0 < k) :
+    1 / ((Nat.totient k : ℕ) : ℝ) ^ 2 ≤ 4096 / (Real.sqrt k * (k : ℝ)) := by
+  have hphi : (k : ℝ) / 2 ^ k.primeFactors.card ≤ (Nat.totient k : ℝ) := by
+    have hq := Nat.totient_eq_mul_prod_factors k
+    simp only [inv_eq_one_div] at hq
+    have hfac : ∀ p ∈ k.primeFactors, (1:ℚ)/2 ≤ 1 - 1/(p:ℚ) := by
+      intro p hp
+      rw [Nat.mem_primeFactors] at hp
+      have hp2 : (2:ℚ) ≤ (p:ℚ) := by exact_mod_cast hp.1.two_le
+      have hinv : 1/(p:ℚ) ≤ 1/2 := one_div_le_one_div_of_le (by norm_num) hp2
+      linarith
+    have hprod : (1:ℚ)/2^k.primeFactors.card ≤ ∏ p ∈ k.primeFactors, (1 - 1/(p:ℚ)) := by
+      have heq : ((1:ℚ)/2)^k.primeFactors.card = (1:ℚ)/2^k.primeFactors.card := by
+        rw [div_pow, one_pow]
+      rw [← heq, ← Finset.prod_const]
+      exact Finset.prod_le_prod₀ (fun p _ => by norm_num) fun p hp => hfac p hp
+    have hstep : (k:ℚ) * ((1:ℚ)/2^k.primeFactors.card) ≤ (Nat.totient k : ℚ) := by
+      calc (k:ℚ) * ((1:ℚ)/2^k.primeFactors.card)
+          ≤ (k:ℚ) * ∏ p ∈ k.primeFactors, (1 - 1/(p:ℚ)) :=
+            mul_le_mul_of_nonneg_left hprod (by positivity)
+        _ = ((Nat.totient k : ℕ) : ℚ) := hq.symm
+    have h2 := mul_le_mul_of_nonneg_right hstep
+      (by positivity : 0 ≤ (2:ℚ) ^ k.primeFactors.card)
+    have h3 : (k:ℚ) * ((1:ℚ)/((2:ℚ)^k.primeFactors.card) * ((2:ℚ)^k.primeFactors.card)) = k := by
+      field_simp
+    have hcast : (k:ℚ) ≤ ((Nat.totient k : ℕ) : ℚ) * ((2:ℚ)^k.primeFactors.card) := by
+      rwa [mul_assoc, h3] at h2
+    have hRat : ((k:ℚ) : ℝ)
+        ≤ ((Nat.totient k : ℕ) : ℚ) * (((2:ℚ)^k.primeFactors.card) : ℝ) := by
+      have h0 : (((Nat.totient k : ℕ) : ℚ) * ((2:ℚ)^k.primeFactors.card) : ℝ)
+          = ((Nat.totient k : ℕ) : ℝ) * ((2:ℝ)^k.primeFactors.card) := by
+        push_cast; ring
+      rw [h0]
+      exact_mod_cast hcast
+    rw [div_le_iff₀ (by positivity : 0 < (2:ℝ) ^ k.primeFactors.card)]
+    exact hRat
+  have hpow : (4 : ℝ) ^ k.primeFactors.card ≤ 4096 * Real.sqrt k := by
+    have hsq : ((4 : ℝ) ^ k.primeFactors.card) ^ 2 ≤ (4096 * Real.sqrt k) ^ 2 := by
+      have h1 : ((4 : ℝ) ^ k.primeFactors.card) ^ 2 = (16 : ℝ) ^ k.primeFactors.card := by
+        rw [← pow_mul, mul_comm, pow_mul]
+        norm_num
+      have h2 : (4096 * Real.sqrt k) ^ 2 = 2 ^ 24 * (k : ℝ) := by
+        have h4096 : (4096 : ℝ) ^ 2 = 2 ^ 24 := by norm_num
+        rw [mul_pow, h4096, Real.sq_sqrt (by positivity : 0 ≤ (k:ℝ))]
+      rw [h1, h2]
+      exact sixteen_pow_primeFactors_card_le k hk
+    exact (sq_le_sq₀ (pow_nonneg (by norm_num) _) (by positivity)).mp hsq
+  have hpos : 0 < (Nat.totient k : ℕ) := Nat.totient_pos.mpr hk
+  have hφpos : 0 < (Nat.totient k : ℝ) := by exact_mod_cast hpos
+  have hstep : 1 / ((Nat.totient k : ℕ) : ℝ) ^ 2
+      ≤ ((4 : ℝ) ^ k.primeFactors.card) / ((k : ℝ) ^ 2) := by
+    have h2 : 1 / (Nat.totient k : ℝ) ≤ (2:ℝ)^k.primeFactors.card / (k:ℝ) := by
+      have hkle : (k:ℝ) ≤ 2 ^ k.primeFactors.card * (Nat.totient k : ℝ) := by
+        have h := hphi
+        rwa [div_le_iff₀ (by positivity : 0 < (2:ℝ) ^ k.primeFactors.card), mul_comm] at h
+      rw [le_div_iff₀ (by positivity : 0 < (k:ℝ)), mul_comm, mul_one_div, div_le_iff₀ hφpos]
+      exact hkle
+    have h3 : (1 / (Nat.totient k : ℝ)) ^ 2
+        ≤ ((2:ℝ)^k.primeFactors.card / (k:ℝ)) ^ 2 :=
+      (sq_le_sq₀ (by positivity : 0 ≤ 1 / (Nat.totient k : ℝ))
+        (by positivity : 0 ≤ (2:ℝ)^k.primeFactors.card / (k:ℝ))).mpr h2
+    have h4 : ((2:ℝ)^k.primeFactors.card / (k:ℝ)) ^ 2
+        = ((4 : ℝ) ^ k.primeFactors.card) / ((k : ℝ) ^ 2) := by
+      rw [div_pow, ← pow_mul, mul_comm, pow_mul]
+      norm_num
+    calc 1 / (Nat.totient k : ℝ) ^ 2 = (1 / (Nat.totient k : ℝ)) ^ 2 := by
+          rw [div_pow, one_pow]
+      _ ≤ ((2:ℝ)^k.primeFactors.card / (k:ℝ)) ^ 2 := h3
+      _ = ((4 : ℝ) ^ k.primeFactors.card) / ((k : ℝ) ^ 2) := h4
+  have hfinal : ((4 : ℝ) ^ k.primeFactors.card) / ((k : ℝ) ^ 2)
+      ≤ 4096 / (Real.sqrt k * (k : ℝ)) := by
+    rw [div_le_div_iff₀ (by positivity) (by positivity)]
+    have hsqrt : Real.sqrt k * Real.sqrt k = (k : ℝ) := Real.mul_self_sqrt (by positivity : 0 ≤ (k:ℝ))
+    calc (4 : ℝ) ^ k.primeFactors.card * (Real.sqrt k * (k:ℝ))
+        ≤ 4096 * Real.sqrt k * (Real.sqrt k * (k:ℝ)) :=
+          mul_le_mul_of_nonneg_right hpow (mul_nonneg (Real.sqrt_nonneg k) (by positivity : 0 ≤ (k:ℝ)))
+      _ = 4096 * ((Real.sqrt k * Real.sqrt k) * (k:ℝ)) := by ring
+      _ = 4096 * ((k : ℝ) * (k : ℝ)) := by rw [hsqrt]
+      _ = 4096 * (k : ℝ) ^ 2 := by ring
+  exact hstep.trans hfinal
+
+/-- Uniform tail: `∑_{M < k ≤ N} 1/φ(k)² ≤ 24576/√M` for `M > 0`.  Elementary
+(polynomial decay), no PNT needed. -/
+lemma sum_inv_totient_sq_tail (M N : ℕ) (hM : 0 < M) :
+    (∑ k ∈ Finset.Ioc M N, 1 / ((Nat.totient k : ℕ) : ℝ) ^ 2) ≤ 24576 / Real.sqrt M := by
+  have hterm : ∀ k : ℕ, 0 < k → 1 / ((Nat.totient k : ℕ) : ℝ) ^ 2
+      ≤ 16384 * (1 / Real.sqrt k - 1 / Real.sqrt (k + 1)) := by
+    intro k hk
+    have hkpos : 0 < (k:ℝ) := by positivity
+    have hsk : 0 < Real.sqrt k := Real.sqrt_pos.mpr hkpos
+    have hsk1 : 0 < Real.sqrt (k + 1) := Real.sqrt_pos.mpr (by positivity : 0 < (k:ℝ) + 1)
+    have hk1 : 1 ≤ (k:ℝ) := Nat.one_le_cast.mpr (Nat.succ_le_of_lt hk)
+    have hk2 : (k:ℝ) ≤ (k:ℝ) ^ 2 := by
+      simpa [pow_two] using mul_le_mul_of_nonneg_right hk1 (by positivity : 0 ≤ (k:ℝ))
+    have hdiff : (Real.sqrt (k + 1) - Real.sqrt k) * (Real.sqrt (k + 1) + Real.sqrt k) = 1 := by
+      rw [sub_mul, mul_add, mul_add,
+        Real.mul_self_sqrt (by positivity : 0 ≤ (k:ℝ) + 1),
+        Real.mul_self_sqrt (by positivity : 0 ≤ (k:ℝ))]
+      ring
+    have hsplit : Real.sqrt ((k:ℝ) * ((k:ℝ) + 1)) = Real.sqrt k * Real.sqrt (k + 1) :=
+      Real.sqrt_mul (by positivity : 0 ≤ (k:ℝ)) ((k:ℝ) + 1)
+    have hkey : Real.sqrt ((k:ℝ) * ((k:ℝ) + 1)) ≤ 3 * (k:ℝ) - 1 := by
+      have hb : 0 ≤ 3 * (k:ℝ) - 1 := by linarith
+      have hsq : (Real.sqrt ((k:ℝ) * ((k:ℝ) + 1))) ^ 2 ≤ (3 * (k:ℝ) - 1) ^ 2 := by
+        rw [Real.sq_sqrt (by positivity : 0 ≤ (k:ℝ) * ((k:ℝ) + 1))]
+        nlinarith
+      exact (sq_le_sq₀ (Real.sqrt_nonneg _) hb).mp hsq
+    have hA : Real.sqrt (k + 1) * (Real.sqrt (k + 1) + Real.sqrt k) ≤ 4 * (k:ℝ) := by
+      have ht2 : Real.sqrt (k + 1) * Real.sqrt (k + 1) = (k:ℝ) + 1 :=
+        Real.mul_self_sqrt (by positivity : 0 ≤ (k:ℝ) + 1)
+      have h2 := hkey
+      rw [hsplit] at h2
+      linarith
+    have hts : Real.sqrt (k + 1) - Real.sqrt k = 1 / (Real.sqrt (k + 1) + Real.sqrt k) := by
+      rw [eq_div_iff_mul_eq (ne_of_gt (add_pos hsk1 hsk))]
+      exact hdiff
+    have hB : Real.sqrt (k + 1) ≤ 4 * (k:ℝ) * (Real.sqrt (k + 1) - Real.sqrt k) := by
+      have h2 : Real.sqrt (k + 1) ≤ 4 * (k:ℝ) / (Real.sqrt (k + 1) + Real.sqrt k) := by
+        rw [le_div_iff₀ (add_pos hsk1 hsk)]
+        exact hA
+      have h3 : 4 * (k:ℝ) * (Real.sqrt (k + 1) - Real.sqrt k)
+          = 4 * (k:ℝ) / (Real.sqrt (k + 1) + Real.sqrt k) := by
+        rw [hts, mul_one_div]
+      rw [h3]
+      exact h2
+    have hfrac : 1 / Real.sqrt k - 1 / Real.sqrt (k + 1)
+        = (Real.sqrt (k + 1) - Real.sqrt k) / (Real.sqrt k * Real.sqrt (k + 1)) := by
+      rw [div_sub_div (1:ℝ) (1:ℝ) (ne_of_gt hsk) (ne_of_gt hsk1)]
+      simp only [one_mul, mul_one]
+    have hsecond : 1 / (Real.sqrt k * (k:ℝ))
+        ≤ 4 * (1 / Real.sqrt k - 1 / Real.sqrt (k + 1)) := by
+      rw [hfrac, ← mul_div_assoc, div_le_div_iff₀ (mul_pos hsk hkpos) (mul_pos hsk hsk1)]
+      have hmul : Real.sqrt k * Real.sqrt (k + 1)
+          ≤ 4 * (Real.sqrt (k + 1) - Real.sqrt k) * (Real.sqrt k * (k:ℝ)) := by
+        have h := hB
+        nlinarith [hsk]
+      simpa using hmul
+    calc 1 / ((Nat.totient k : ℕ) : ℝ) ^ 2
+        ≤ 4096 / (Real.sqrt k * (k:ℝ)) := inv_totient_sq_le k hk
+      _ ≤ 16384 * (1 / Real.sqrt k - 1 / Real.sqrt (k + 1)) := by
+          have h5 : 4096 / (Real.sqrt k * (k:ℝ))
+              = 4096 * (1 / (Real.sqrt k * (k:ℝ))) := (mul_one_div _ _).symm
+          rw [h5]
+          calc 4096 * (1 / (Real.sqrt k * (k:ℝ)))
+              ≤ 4096 * (4 * (1 / Real.sqrt k - 1 / Real.sqrt (k + 1))) :=
+                mul_le_mul_of_nonneg_left hsecond (by norm_num)
+            _ = 16384 * (1 / Real.sqrt k - 1 / Real.sqrt (k + 1)) := by
+                rw [← mul_assoc]
+                norm_num
+  have hsum : (∑ k ∈ Finset.Ioc M N, 1 / ((Nat.totient k : ℕ) : ℝ) ^ 2)
+      ≤ ∑ k ∈ Finset.Ioc M N, (16384 * (1 / Real.sqrt k - 1 / Real.sqrt (k + 1))) :=
+    Finset.sum_le_sum fun k hk => hterm k (lt_trans hM (Finset.mem_Ioc.mp hk).1)
+  have htele : ∀ j : ℕ, (∑ k ∈ Finset.Ioc M (M + j),
+        (1 / Real.sqrt k - 1 / Real.sqrt (k + 1)))
+      = 1 / Real.sqrt (M + 1) - 1 / Real.sqrt (M + j + 1) := by
+    intro j
+    induction j with
+    | zero =>
+      rw [Nat.add_zero, Finset.Ioc_eq_empty_of_le (Nat.le_refl M), Finset.sum_empty,
+        Nat.cast_zero, add_zero]
+      linarith
+    | succ j ih =>
+      have hMN : M ≤ M + j := Nat.le_add_right M j
+      have hC : Real.sqrt ((Nat.cast M + Nat.cast (j + 1)) + 1)
+          = Real.sqrt (Nat.cast (M + j + 1) + 1) :=
+        congrArg Real.sqrt (by push_cast; ring)
+      have hMj : (Nat.cast (M + j + 1) : ℝ) = Nat.cast M + Nat.cast j + 1 := by
+        push_cast; ring
+      rw [show M + (j + 1) = M + j + 1 from by ring, Finset.sum_Ioc_succ_top hMN, ih, hC, hMj]
+      linarith
+  have hsM : 0 < Real.sqrt M := Real.sqrt_pos.mpr (by positivity : 0 < (M:ℝ))
+  rcases Nat.lt_or_ge N (M + 1) with hN | hN
+  · have hempty : Finset.Ioc M N = ∅ := Finset.Ioc_eq_empty_of_le (Nat.lt_succ_iff.mp hN)
+    rw [hempty, Finset.sum_empty]
+    exact div_nonneg (by norm_num) hsM.le
+  · have hleM : M ≤ N := Nat.le_trans (Nat.le_succ M) hN
+    have htel := htele (N - M)
+    rw [Nat.add_sub_cancel' hleM] at htel
+    have hNcast : (Nat.cast M + Nat.cast (N - M) : ℝ) = Nat.cast N := by
+      rw [← Nat.cast_add, Nat.add_sub_cancel' hleM]
+    have hstep1 : (∑ k ∈ Finset.Ioc M N, 1 / ((Nat.totient k : ℕ) : ℝ) ^ 2)
+        ≤ 16384 * (1 / Real.sqrt (M + 1) - 1 / Real.sqrt (N + 1)) := by
+      calc (∑ k ∈ Finset.Ioc M N, 1 / ((Nat.totient k : ℕ) : ℝ) ^ 2)
+          ≤ ∑ k ∈ Finset.Ioc M N, (16384 * (1 / Real.sqrt k - 1 / Real.sqrt (k + 1))) := hsum
+        _ = 16384 * ∑ k ∈ Finset.Ioc M N, (1 / Real.sqrt k - 1 / Real.sqrt (k + 1)) :=
+            (Finset.mul_sum _ _ _).symm
+        _ = 16384 * (1 / Real.sqrt (M + 1) - 1 / Real.sqrt (N + 1)) := by rw [htel, hNcast]
+    have hbound : 1 / Real.sqrt (M + 1) - 1 / Real.sqrt (N + 1) ≤ 1 / Real.sqrt (M + 1) := by
+      have hposN : 0 ≤ 1 / Real.sqrt (N + 1) :=
+        div_nonneg zero_le_one (Real.sqrt_nonneg (N + 1))
+      linarith
+    have hstep2 : 16384 * (1 / Real.sqrt (M + 1) - 1 / Real.sqrt (N + 1))
+        ≤ 16384 / Real.sqrt M := by
+      have h1 : 16384 * (1 / Real.sqrt (M + 1) - 1 / Real.sqrt (N + 1))
+          ≤ 16384 * (1 / Real.sqrt (M + 1)) := mul_le_mul_of_nonneg_left hbound (by norm_num)
+      have h2 : 16384 * (1 / Real.sqrt (M + 1)) = 16384 / Real.sqrt (M + 1) :=
+        mul_one_div _ _
+      have h3 : 16384 / Real.sqrt (M + 1) ≤ 16384 / Real.sqrt M := by
+        have hsM1 : 0 < Real.sqrt (M + 1) :=
+          Real.sqrt_pos.mpr (by positivity : 0 < (M:ℝ) + 1)
+        rw [div_le_div_iff₀ hsM1 hsM]
+        exact mul_le_mul_of_nonneg_left
+          (Real.sqrt_le_sqrt (by exact_mod_cast Nat.le_succ M)) (by norm_num)
+      exact (h1.trans h2.le).trans h3
+    calc (∑ k ∈ Finset.Ioc M N, 1 / ((Nat.totient k : ℕ) : ℝ) ^ 2)
+        ≤ 16384 * (1 / Real.sqrt (M + 1) - 1 / Real.sqrt (N + 1)) := hstep1
+      _ ≤ 16384 / Real.sqrt M := hstep2
+      _ ≤ 24576 / Real.sqrt M := by
+          rw [div_le_div_iff₀ hsM hsM]
+          exact mul_le_mul_of_nonneg_right (by norm_num : (16384:ℝ) ≤ 24576)
+            (Real.sqrt_nonneg M)
+
 
 
 
