@@ -15122,6 +15122,75 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-cubic-balanced-goldbach-values",
+      "statement": "by\n  classical\n  exact ∀ P : Polynomial ℤ, P.natDegree=3 → 0<P.leadingCoeff → ∀ ε : ℝ, 0<ε → ∃ C : ℝ, 0<C ∧ ∀ N : ℕ, 2≤N → let bad := fun n : ℕ => let m := 2*P.eval (n:ℤ); ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ (p:ℤ)+(q:ℤ)=m ∧ |(p:ℤ)-(q:ℤ)|^3 ≤ m^2; (((Finset.Icc 1 N).filter bad).card:ℝ) ≤ C*(N:ℝ)^((5:ℝ)/8+ε)",
+      "plain_statement": {
+        "zh": "对两倍三次多项式值，在保持 5/8 例外指数的同时将素数对限制到 |p−q|≤m^(2/3)。",
+        "en": "Keep the cubic 5/8 exceptional exponent with both primes confined near half the target."
+      },
+      "brief": {
+        "zh": "文献定理 1 的三次结论允许素数任意分布。此题规定中心窗口，忽略间距可恢复旧界。需要重新分析随目标移动的短素数和，整段的加权主弧下界不会自动给出该窗内贡献。非正目标也计作坏指标。",
+        "en": "Theorem 1 permits unrestricted summands. Recover its cubic conclusion by dropping the central-window condition. The moving short prime sum needs a new lower estimate; a full-interval major-arc floor does not localize itself."
+      },
+      "source": "https://arxiv.org/html/2611.09386v1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.CubicBalancedGoldbachValues",
+      "file": "lean/Conjectures/Goldbach/CubicBalancedGoldbachValues.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-cubic-fixed-linear-defect",
+      "statement": "by\n  classical\n  exact ∀ P : Polynomial ℤ, P.natDegree=3 → ∀ ε : ℝ, 0<ε → ∃ C : ℝ, 0<C ∧ ∀ M : ℕ, 2≤M → ∀ A : Finset ℕ, A ⊆ Finset.Icc 1 M → ∀ h : ℤ, let wt := fun (x : Fin 3 → (↥A)) => ∑ i, P.eval ((x i : ℕ):ℤ); let lin := fun (x : Fin 3 → (↥A)) => ∑ i, ((x i : ℕ):ℤ); let triples := (Finset.univ : Finset ((Fin 3 → (↥A)) × (Fin 3 → (↥A)))); ((triples.filter (fun z => wt z.1=wt z.2 ∧ lin z.1-lin z.2=h)).card:ℝ) ≤ C*(M:ℝ)^ε*(A.card:ℝ)^3",
+      "plain_statement": {
+        "zh": "固定三元组指标和之差 h，证明三次多项式的碰撞数在每个切片都至多 M^ε|A|³，常数对 h 一致。",
+        "en": "Bound cubic triple collisions at every prescribed linear defect uniformly in that defect."
+      },
+      "brief": {
+        "zh": "#4325 已证精确六阶矩恒等式。固定左边三元组后，右边的一次和与多项式和均已知。平移和缩放变量去掉二次项，利用 S³−Σxᵢ³=3(x₁+x₂)(x₂+x₃)(x₃+x₁) 控制非零乘积的约数；零乘积需单独处理。各 h 的界相加仍有损失。",
+        "en": "With the first triple fixed, the other triple has prescribed linear and cubic data. Depress the cubic, factor the difference between the cube of the sum and the sum of cubes, and isolate degeneracy before using divisor bounds. Summing the slices is a separate challenge."
+      },
+      "source": "https://arxiv.org/html/2611.09386v1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.CubicFixedLinearDefect",
+      "file": "lean/Conjectures/Goldbach/CubicFixedLinearDefect.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-cubic-short-interval-rigidity",
+      "statement": "by\n  classical\n  exact ∀ P : Polynomial ℤ, P.natDegree=3 → ∃ C : ℕ, 0<C ∧ ∀ X H : ℕ, 1≤H → C*(H+1)^3 ≤ X → ∀ a b : Fin 3 → ℕ, (∀ i, a i ∈ Finset.Icc X (X+H) ∧ b i ∈ Finset.Icc X (X+H)) → (∑ i, P.eval ((a i):ℤ)) = (∑ i, P.eval ((b i):ℤ)) → ∃ σ : Equiv.Perm (Fin 3), ∀ i, a i=b (σ i)",
+      "plain_statement": {
+        "zh": "在足够远的立方根长度指标窗口中证明三项三次多项式和完全刚性，仅有重排碰撞。",
+        "en": "Prove exact rigidity of triple sums of cubic values on distant cube-root-length index windows."
+      },
+      "brief": {
+        "zh": "把变量写成 X+u；比较 X²、X 和常数三层，利用整数间距逐层强迫前三个幂和相等，再恢复带重数的三元组。若成功，#4325 的恒等式会给该窗口的精确对角矩，难点转为跨窗口耦合。",
+        "en": "Translate all variables by X. Separate the integer first, second and third power sums by coefficient size, then recover the multiset with multiplicity. In these windows #4325 turns rigidity into an exact diagonal moment."
+      },
+      "source": "https://arxiv.org/html/2611.09386v1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.CubicShortIntervalRigidity",
+      "file": "lean/Conjectures/Goldbach/CubicShortIntervalRigidity.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-digit-set-intrinsic-square-root",
       "track": "exceptions",
       "statement": "∀ b : ℕ, 2 ≤ b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2 ≤ D.card → ∃ C : ℝ, 0 < C ∧ ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → let A := (Finset.Icc 1 X).filter (fun n => (b.digits n).all (fun d => decide (d ∈ D))); let bad := fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n; ((@Finset.filter ℕ bad (Classical.decPred bad) A).card : ℝ) ≤ C * Real.sqrt (A.card : ℝ)",
@@ -15716,6 +15785,52 @@
       "depends_on": [],
       "module": "Conjectures.Goldbach.QuadraticValuesManyPrimePairs",
       "file": "lean/Conjectures/Goldbach/QuadraticValuesManyPrimePairs.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-quartic-progression-goldbach-values",
+      "statement": "by\n  classical\n  exact ∀ P : Polynomial ℤ, P.natDegree=4 → 0<P.leadingCoeff → ∀ k : ℕ, ∀ ε : ℝ, 0<ε → ∃ C : ℝ, 0<C ∧ ∀ N : ℕ, 2≤N → ∀ d a b : ℕ, 1≤d → (d:ℝ) ≤ (1+Real.log (N:ℝ))^k → a<d → b<d → a.Coprime d → b.Coprime d → let bad := fun n : ℕ => let m := 2*P.eval (n:ℤ); ((d:ℤ) ∣ m-(a:ℤ)-(b:ℤ)) ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ (p:ℤ)+(q:ℤ)=m ∧ p%d=a ∧ q%d=b; (((Finset.Icc 1 N).filter bad).card:ℝ) ≤ C*(N:ℝ)^((3:ℝ)/4+ε)",
+      "plain_statement": {
+        "zh": "对四次多项式目标同时指定两个素数的既约剩余类，保留 3/4 例外指数，对对数幂大小的模数一致。",
+        "en": "Retain the quartic 3/4 exceptional exponent with both prime residues prescribed at polylogarithmic moduli."
+      },
+      "brief": {
+        "zh": "d=1 恢复文献定理 1 的四次结论。一般 d 先筛选目标同余相容的指标，再对子进程素数和与任意异常指标集的四次 Weyl 和作混合估计。指数与阈值需对 d,a,b 一致。",
+        "en": "At d=1 recover the quartic case of Theorem 1. Restrict to compatible indices before estimating the prime sums in two progressions against the polynomial sum on an arbitrary exceptional set. Control errors uniformly in the modulus and both residues."
+      },
+      "source": "https://arxiv.org/html/2611.09386v1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.QuarticProgressionGoldbachValues",
+      "file": "lean/Conjectures/Goldbach/QuarticProgressionGoldbachValues.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-quartic-square-slice",
+      "statement": "by\n  classical\n  exact ∀ ε : ℝ, 0<ε → ∃ C : ℝ, 0<C ∧ ∀ M : ℕ, 2≤M → ∀ A : Finset ℕ, A ⊆ Finset.Icc 1 M → ∀ h : ℤ, let w := fun (k : ℕ) (x : Fin 3 → (↥A)) => ∑ i, ((x i : ℕ):ℤ)^k; let triples := (Finset.univ : Finset ((Fin 3 → (↥A)) × (Fin 3 → (↥A)))); ((triples.filter (fun z => w 4 z.1=w 4 z.2 ∧ w 2 z.1-w 2 z.2=h)).card:ℝ) ≤ C*(M:ℝ)^ε*(A.card:ℝ)^3",
+      "plain_statement": {
+        "zh": "对四次幂三项和碰撞，按两组三元组的平方和之差切片，并证明每片都有对角规模上界。",
+        "en": "A diagonal-scale fourth-power triple-collision bound on slices of fixed square-sum defect."
+      },
+      "brief": {
+        "zh": "固定第一组三元组后，另一组平方数的和与平方和已知。消元得到二元正定二次型（Eisenstein 范数）；非退化表示数需一致的约数估计，零范数另算。这给 #4322 的四次模型提供独立的算术切片。",
+        "en": "Write the second triple as three squares with fixed sum and sum of squares. Elimination leads to a positive definite binary quadratic form. Bound its representations uniformly and handle zero norm separately."
+      },
+      "source": "https://arxiv.org/html/2611.09386v1",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.QuarticSquareSlice",
+      "file": "lean/Conjectures/Goldbach/QuarticSquareSlice.lean",
       "route_source": "exceptions"
     },
     {
