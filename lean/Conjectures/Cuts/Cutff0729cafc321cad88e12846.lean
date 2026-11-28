@@ -28,81 +28,84 @@ import Conjectures.Goldbach.WideSignedRemainderBridge
 --   因此不需要调用 WideSignedRemainderBridge（它在内部恰好也是这三步，并把预算三等分
 --   成 -e/3 n），这里只保留对它的导入以便与父题的记号/接口保持一致。
 
-private lemma cutMeas (X : ℕ) (ρ n : ℝ) :
-    MeasurableSet {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤X ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ ρ/((q:ℝ)*n)} := by
-  have h : {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤X ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ ρ/((q:ℝ)*n)}
-      = ⋃ q : ℕ, ⋃ a : ℕ, ({t : ℝ | 1≤q ∧ q≤X ∧ a≤q ∧ Nat.Coprime a q} ∩ {t : ℝ | |t-(a:ℝ)/(q:ℝ)| ≤ ρ/((q:ℝ)*n)}) := by
-    ext t
-    simp only [Set.mem_ofPred_eq, Set.mem_iUnion, Set.mem_inter_iff]
-    constructor
-    · rintro ⟨q, a, h1, h2, h3, h4, h5⟩
-      exact ⟨q, a, ⟨h1, h2, h3, h4⟩, h5⟩
-    · rintro ⟨q, a, ⟨h1, h2, h3, h4⟩, h5⟩
-      exact ⟨q, a, h1, h2, h3, h4, h5⟩
-  rw [h]
-  refine MeasurableSet.iUnion fun q => MeasurableSet.iUnion fun a => ?_
-  refine (MeasurableSet.const _).inter ?_
-  exact measurableSet_le (by fun_prop) (by fun_prop)
-
-private lemma cutAdd (g : ℝ → ℂ) (hg : Continuous g) (B C : Set ℝ)
-    (hB : MeasurableSet B) (hC : MeasurableSet C) (hd : Disjoint B C) :
-    (intervalIntegral (fun t => (B ∪ C).indicator g t) (0:ℝ) 1 MeasureTheory.volume).re =
-      (intervalIntegral (fun t => B.indicator g t) (0:ℝ) 1 MeasureTheory.volume).re +
-      (intervalIntegral (fun t => C.indicator g t) (0:ℝ) 1 MeasureTheory.volume).re := by
-  have hi : ∀ D : Set ℝ, MeasurableSet D →
-      IntervalIntegrable (fun t => D.indicator g t) MeasureTheory.volume 0 1 := by
-    intro D hD
-    have := (hg.intervalIntegrable (μ := MeasureTheory.volume) 0 1)
-    rw [intervalIntegrable_iff_integrableOn_Ioc_of_le zero_le_one] at this ⊢
-    exact this.indicator hD
-  have : (fun t => (B ∪ C).indicator g t) = fun t => B.indicator g t + C.indicator g t := by
-    funext t
-    rw [Set.indicator_union_of_disjoint hd]
-  rw [this, intervalIntegral.integral_add (hi B hB) (hi C hC), Complex.add_re]
-
-private lemma cutPow (L : ℕ) (hL : 40 ≤ L) : L ^ 6 + 2 ≤ 2 ^ L := by
-  induction L, hL using Nat.le_induction with
-  | base => norm_num
-  | succ L hL ih =>
-    have h1 : 10 * (L + 1) ≤ 11 * L := by omega
-    have h2 : (10 * (L + 1)) ^ 6 ≤ (11 * L) ^ 6 := Nat.pow_le_pow_left h1 6
-    have h3 : 10 ^ 6 * (L + 1) ^ 6 ≤ 2 * 10 ^ 6 * L ^ 6 := by
-      calc 10 ^ 6 * (L + 1) ^ 6 = (10 * (L + 1)) ^ 6 := by ring
-        _ ≤ (11 * L) ^ 6 := h2
-        _ = 11 ^ 6 * L ^ 6 := by ring
-        _ ≤ 2 * 10 ^ 6 * L ^ 6 := by
-          apply Nat.mul_le_mul_right; norm_num
-    have h4 : (L + 1) ^ 6 ≤ 2 * L ^ 6 := by
-      have : 10 ^ 6 * (L + 1) ^ 6 ≤ 10 ^ 6 * (2 * L ^ 6) := by nlinarith
-      exact Nat.le_of_mul_le_mul_left this (by norm_num)
-    have h5 : 2 ^ (L + 1) = 2 * 2 ^ L := by ring
-    omega
-
-private lemma cutEv : ∃ N : ℕ, ∀ n : ℕ, N ≤ n →
-    (Nat.log 2 (n+2))^2 ≤ ⌊(n:ℝ)^(1/3:ℝ)⌋₊ := by
-  refine ⟨2 ^ 40, fun n hn => ?_⟩
-  have hl : 40 ≤ Nat.log 2 (n+2) := by
-    apply Nat.le_log_of_pow_le (by norm_num)
-    omega
-  have hp := cutPow _ hl
-  have hq : 2 ^ Nat.log 2 (n+2) ≤ n + 2 := Nat.pow_log_le_self 2 (by omega)
-  have h6 : (Nat.log 2 (n+2)) ^ 6 ≤ n := by omega
-  apply Nat.le_floor
-  have h6' : (((Nat.log 2 (n+2))^2 : ℕ) : ℝ) ^ 3 ≤ (n:ℝ) := by
-    have : (((Nat.log 2 (n+2))^2 : ℕ) : ℝ) ^ 3 = (((Nat.log 2 (n+2))^6 : ℕ) : ℝ) := by
-      push_cast; ring
-    rw [this]; exact_mod_cast h6
-  have h0 : (0:ℝ) ≤ (((Nat.log 2 (n+2))^2 : ℕ) : ℝ) := Nat.cast_nonneg _
-  calc (((Nat.log 2 (n+2))^2 : ℕ) : ℝ)
-      = ((((Nat.log 2 (n+2))^2 : ℕ) : ℝ) ^ 3) ^ (1/3:ℝ) := by
-        rw [← Real.rpow_natCast, ← Real.rpow_mul h0]; norm_num
-    _ ≤ (n:ℝ) ^ (1/3:ℝ) := Real.rpow_le_rpow (by positivity) h6' (by norm_num)
-
 theorem Conjectures.Cuts.Cutff0729cafc321cad88e12846
     (h₁ : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e/2 * (n:ℝ)) ≤ J n (A n); floor (fun n => lowWideArcs n \ arcs n))
     (h₂ : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e/3 * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n))
     (h₃ : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e/4 * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n \ inner n)) :
     (let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => wideArcs n \ arcs n)) := by
+  have cutMeas : ∀ (X : ℕ) (ρ n : ℝ),
+      MeasurableSet {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤X ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ ρ/((q:ℝ)*n)} := by
+    intro X ρ n
+    have h : {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤X ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ ρ/((q:ℝ)*n)}
+        = ⋃ q : ℕ, ⋃ a : ℕ, ({t : ℝ | 1≤q ∧ q≤X ∧ a≤q ∧ Nat.Coprime a q} ∩ {t : ℝ | |t-(a:ℝ)/(q:ℝ)| ≤ ρ/((q:ℝ)*n)}) := by
+      ext t
+      simp only [Set.mem_ofPred_eq, Set.mem_iUnion, Set.mem_inter_iff]
+      constructor
+      · rintro ⟨q, a, h1, h2, h3, h4, h5⟩
+        exact ⟨q, a, ⟨h1, h2, h3, h4⟩, h5⟩
+      · rintro ⟨q, a, ⟨h1, h2, h3, h4⟩, h5⟩
+        exact ⟨q, a, h1, h2, h3, h4, h5⟩
+    rw [h]
+    refine MeasurableSet.iUnion fun q => MeasurableSet.iUnion fun a => ?_
+    refine (MeasurableSet.const _).inter ?_
+    exact measurableSet_le (by fun_prop) (by fun_prop)
+
+  have cutAdd : ∀ (g : ℝ → ℂ), Continuous g → ∀ (B C : Set ℝ),
+      MeasurableSet B → MeasurableSet C → Disjoint B C →
+      (intervalIntegral (fun t => (B ∪ C).indicator g t) (0:ℝ) 1 MeasureTheory.volume).re =
+        (intervalIntegral (fun t => B.indicator g t) (0:ℝ) 1 MeasureTheory.volume).re +
+        (intervalIntegral (fun t => C.indicator g t) (0:ℝ) 1 MeasureTheory.volume).re := by
+    intro g hg B C hB hC hd
+    have hi : ∀ D : Set ℝ, MeasurableSet D →
+        IntervalIntegrable (fun t => D.indicator g t) MeasureTheory.volume 0 1 := by
+      intro D hD
+      have := (hg.intervalIntegrable (μ := MeasureTheory.volume) 0 1)
+      rw [intervalIntegrable_iff_integrableOn_Ioc_of_le zero_le_one] at this ⊢
+      exact this.indicator hD
+    have : (fun t => (B ∪ C).indicator g t) = fun t => B.indicator g t + C.indicator g t := by
+      funext t
+      rw [Set.indicator_union_of_disjoint hd]
+    rw [this, intervalIntegral.integral_add (hi B hB) (hi C hC), Complex.add_re]
+
+  have cutPow : ∀ (L : ℕ), 40 ≤ L → L ^ 6 + 2 ≤ 2 ^ L := by
+    intro L hL
+    induction L, hL using Nat.le_induction with
+    | base => norm_num
+    | succ L hL ih =>
+      have h1 : 10 * (L + 1) ≤ 11 * L := by omega
+      have h2 : (10 * (L + 1)) ^ 6 ≤ (11 * L) ^ 6 := Nat.pow_le_pow_left h1 6
+      have h3 : 10 ^ 6 * (L + 1) ^ 6 ≤ 2 * 10 ^ 6 * L ^ 6 := by
+        calc 10 ^ 6 * (L + 1) ^ 6 = (10 * (L + 1)) ^ 6 := by ring
+          _ ≤ (11 * L) ^ 6 := h2
+          _ = 11 ^ 6 * L ^ 6 := by ring
+          _ ≤ 2 * 10 ^ 6 * L ^ 6 := by
+            apply Nat.mul_le_mul_right; norm_num
+      have h4 : (L + 1) ^ 6 ≤ 2 * L ^ 6 := by
+        have : 10 ^ 6 * (L + 1) ^ 6 ≤ 10 ^ 6 * (2 * L ^ 6) := by nlinarith
+        exact Nat.le_of_mul_le_mul_left this (by norm_num)
+      have h5 : 2 ^ (L + 1) = 2 * 2 ^ L := by ring
+      omega
+
+  have cutEv : ∃ N : ℕ, ∀ n : ℕ, N ≤ n →
+      (Nat.log 2 (n+2))^2 ≤ ⌊(n:ℝ)^(1/3:ℝ)⌋₊ := by
+    refine ⟨2 ^ 40, fun n hn => ?_⟩
+    have hl : 40 ≤ Nat.log 2 (n+2) := by
+      apply Nat.le_log_of_pow_le (by norm_num)
+      omega
+    have hp := cutPow _ hl
+    have hq : 2 ^ Nat.log 2 (n+2) ≤ n + 2 := Nat.pow_log_le_self 2 (by omega)
+    have h6 : (Nat.log 2 (n+2)) ^ 6 ≤ n := by omega
+    apply Nat.le_floor
+    have h6' : (((Nat.log 2 (n+2))^2 : ℕ) : ℝ) ^ 3 ≤ (n:ℝ) := by
+      have : (((Nat.log 2 (n+2))^2 : ℕ) : ℝ) ^ 3 = (((Nat.log 2 (n+2))^6 : ℕ) : ℝ) := by
+        push_cast; ring
+      rw [this]; exact_mod_cast h6
+    have h0 : (0:ℝ) ≤ (((Nat.log 2 (n+2))^2 : ℕ) : ℝ) := Nat.cast_nonneg _
+    calc (((Nat.log 2 (n+2))^2 : ℕ) : ℝ)
+        = ((((Nat.log 2 (n+2))^2 : ℕ) : ℝ) ^ 3) ^ (1/3:ℝ) := by
+          rw [← Real.rpow_natCast, ← Real.rpow_mul h0]; norm_num
+      _ ≤ (n:ℝ) ^ (1/3:ℝ) := Real.rpow_le_rpow (by positivity) h6' (by norm_num)
+
   intro w E S Q arcs f Q₁ H wideArcs lowWideArcs lowPart remainder inner J floor e he
   obtain ⟨N₀, hN₀⟩ := cutEv
   -- 三个前提都在 e' = e/2 处实例化，得到更小的预算 e/4, e/6, e/8。
