@@ -14,13 +14,13 @@ theorem Conjectures.Cuts.Cut9f58be7bbc77bbb576522564
     (hFloor :
       let series := fun P n : ℕ =>
         (27 / 2 : ℝ) * ∏ ℓ ∈ (Finset.Ico 5 P).filter Nat.Prime,
-          (1 - (({0, ℓ - 2, n % ℓ, (n + 2) % ℓ} : Finset ℕ).card : ℝ) / (ℓ : ℝ)) /
+          (1 - ([0, ℓ - 2, n % ℓ, (n + 2) % ℓ].toFinset.card : ℝ) / (ℓ : ℝ)) /
             (1 - 1 / (ℓ : ℝ)) ^ 4
       ∀ P n : ℕ, n % 6 = 4 → (81 / 64 : ℝ) ≤ series P n)
     (hMoment :
       let series := fun P n : ℕ =>
         (27 / 2 : ℝ) * ∏ ℓ ∈ (Finset.Ico 5 P).filter Nat.Prime,
-          (1 - (({0, ℓ - 2, n % ℓ, (n + 2) % ℓ} : Finset ℕ).card : ℝ) / (ℓ : ℝ)) /
+          (1 - ([0, ℓ - 2, n % ℓ, (n + 2) % ℓ].toFinset.card : ℝ) / (ℓ : ℝ)) /
             (1 - 1 / (ℓ : ℝ)) ^ 4
       let ch := fun p : ℕ => Nat.Prime p ∧ (p + 2).primeFactorsList.length ≤ 2
       let band := fun X : ℕ => (Finset.Icc 1 X).filter (fun p => 2 * X ≤ p ^ 2 ∧ p ^ 3 ≤ X ^ 2)
@@ -36,7 +36,7 @@ theorem Conjectures.Cuts.Cut9f58be7bbc77bbb576522564
   classical
   let series := fun P n : ℕ =>
     (27 / 2 : ℝ) * ∏ ℓ ∈ (Finset.Ico 5 P).filter Nat.Prime,
-      (1 - (({0, ℓ - 2, n % ℓ, (n + 2) % ℓ} : Finset ℕ).card : ℝ) / (ℓ : ℝ)) /
+      (1 - ([0, ℓ - 2, n % ℓ, (n + 2) % ℓ].toFinset.card : ℝ) / (ℓ : ℝ)) /
         (1 - 1 / (ℓ : ℝ)) ^ 4
   let ch := fun p : ℕ => Nat.Prime p ∧ (p + 2).primeFactorsList.length ≤ 2
   let band := fun X : ℕ => (Finset.Icc 1 X).filter (fun p => 2 * X ≤ p ^ 2 ∧ p ^ 3 ≤ X ^ 2)
