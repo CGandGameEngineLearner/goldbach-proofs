@@ -14,7 +14,9 @@
     "L-goldbach-gm-primitive-euler-loss",
     "L-goldbach-gm-smoothed-explicit-formula"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.GmPrimitiveEulerLoss"
+  ],
   "parallel": true,
   "source": "https://doi.org/10.1016/j.jnt.2018.12.005",
   "track": "explicit-sieve-analytic-inputs",
