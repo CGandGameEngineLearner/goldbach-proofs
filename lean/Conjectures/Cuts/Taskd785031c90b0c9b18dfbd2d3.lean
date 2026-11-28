@@ -502,8 +502,8 @@ private lemma final_bound :
       rw [coef_eq_Q k]
       unfold yL yH
       push_cast
-    simp only [coefQ]
-    ring
+      simp only [coefQ]
+      ring
     rw [← hcast, hq]
   have hsum : (∑ k ∈ Finset.range 8,
         (if k % 2 = 0 then coef k * yL ^ (2 * k) else coef k * yH ^ (2 * k)) * (MM k : ℝ))
