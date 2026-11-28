@@ -481,7 +481,8 @@ private lemma final_bound :
         show ((MM 5 : ℕ) : ℚ) = (5854845365403969522235084787634683688780462192001413201756130724339691586322432 : ℚ) from by rw [mm5]; norm_num,
         show ((MM 6 : ℕ) : ℚ) = (6144411029942511749160273957705038724268824073611313403658766613474190330471286537453568 : ℚ) from by rw [mm6]; norm_num,
         show ((MM 7 : ℕ) : ℚ) = (6472721346408609947965370229680190376572919820400885042283754558484355619916232065839304783429632 : ℚ) from by rw [mm7]; norm_num]
-    ring_nf
+    simp only [coefQ]
+    ring
   have heq : (∑ k ∈ Finset.range 8,
         (if k % 2 = 0 then coef k * yL ^ (2 * k) else coef k * yH ^ (2 * k)) * (MM k : ℝ))
       = ((65536000000000000000000000000000000 : ℚ)
@@ -501,8 +502,10 @@ private lemma final_bound :
       rw [coef_eq_Q k]
       unfold yL yH
       push_cast
-      ring
-    rw [← hcast, hq]  have hsum : (∑ k ∈ Finset.range 8,
+    simp only [coefQ]
+    ring
+    rw [← hcast, hq]
+  have hsum : (∑ k ∈ Finset.range 8,
         (if k % 2 = 0 then coef k * yL ^ (2 * k) else coef k * yH ^ (2 * k)) * (MM k : ℝ))
       ≤ ∑ k ∈ Finset.range 8, coef k * y ^ (2 * k) * (MM k : ℝ) := by
     conv_lhs => rw [sum8]
