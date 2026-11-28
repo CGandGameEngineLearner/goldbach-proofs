@@ -2,7 +2,7 @@ import Mathlib
 
 -- child 1 zh: 经典 Bombieri–Vinogradov 层：A 固定时，模数只到 X^(1/2)，最坏互素余类误差 B(q) 的 q 和在 X/(log X)^A 量级。这是 1965 年已证的分布水平 1/2，不含新内容。
 -- child 1 en: Classical Bombieri–Vinogradov level: for fixed A, over moduli q ≤ X^(1/2) the sum of the worst coprime-class errors B(q) is O(X/(log X)^A). This is the known level 1/2 distribution, with no new content.
--- child 2 zh: 新前沿层：同一误差和在圆环 X^(1/2) < q ≤ X^(3/5) 上仍为 O(X/(log X)^A)。这才是"越过 1/2 障壁"的全部内容。
+-- child 2 zh: 新前沿层：同一误差和在圆环 X^(1/2) < q ≤ X^(3/5) 上仍为 O(X/(log X)^A)。这才是越过 1/2 障壁的全部内容。
 -- child 2 en: The new frontier: the same error sum over the annulus X^(1/2) < q ≤ X^(3/5) is still O(X/(log X)^A). This is where breaking the 1/2 barrier actually lives.
 
 theorem Conjectures.Cuts.Cutd487338044110a7a7b98c777
