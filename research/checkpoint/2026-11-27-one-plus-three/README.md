@@ -6,16 +6,22 @@
 
 ---
 
-## 1. 上游仓库与固定版本信息
+## 1. 上游仓库与固定版本信息（已同步至本仓库 `v4.36.0` 工具链）
 
 - **上游仓库**：[`https://github.com/Visio-Vanitas/buchstab-switching`](https://github.com/Visio-Vanitas/buchstab-switching)（子目录 `k3/` 及共享目录 `shared/`）
-- **固定提交 SHA**：`cca80480105d17764982ca80fcbb9c41e76e1eed`
-- **Lean 工具链与依赖锁**：
-  - [`k3/lean-toolchain`](https://github.com/Visio-Vanitas/buchstab-switching/blob/cca80480105d17764982ca80fcbb9c41e76e1eed/k3/lean-toolchain)：`leanprover/lean4:v4.37.0-rc1`
-  - [`k3/lake-manifest.json`](https://github.com/Visio-Vanitas/buchstab-switching/blob/cca80480105d17764982ca80fcbb9c41e76e1eed/k3/lake-manifest.json)：Mathlib `31ce06eaadf4a200c0e1407c5f10953cf606b8f8`
-- **GRH 声明对齐目标**：[`k3/BuchstabSwitching/External/CharacterSums/DirichletGRH.lean`](https://github.com/Visio-Vanitas/buchstab-switching/blob/cca80480105d17764982ca80fcbb9c41e76e1eed/k3/BuchstabSwitching/External/CharacterSums/DirichletGRH.lean) 中的 `DirichletLNonvanishingRightOfHalf` 与 [`lsernau/grh-lean@72fead102f663d5c7a407964a13dc0cf9d977207`](https://github.com/lsernau/grh-lean/blob/72fead102f663d5c7a407964a13dc0cf9d977207/grh-compact/src/Statements.lean) 逐字对应。
+- **Lean 工具链与依赖锁**（与本仓库 `lean/lean-toolchain`、`lean/lake-manifest.json` 完全一致）：
+  - [`k3/lean-toolchain`](https://github.com/Visio-Vanitas/buchstab-switching/blob/4b30430bd556fdaa8cfae00b7bcc285eae469d60/k3/lean-toolchain)：`leanprover/lean4:v4.36.0`
+  - [`k3/lake-manifest.json`](https://github.com/Visio-Vanitas/buchstab-switching/blob/4b30430bd556fdaa8cfae00b7bcc285eae469d60/k3/lake-manifest.json)：Mathlib `fc4f59e577feb1a4956671bc04ac18aaaf8cd842`
+- **双轨固定提交 SHA**：
 
-### 关键存档文件 SHA-256（以 `git clone -c core.autocrlf=false` 检出为准）
+| 复核轨 | 分支名 | 固定提交 SHA | 核验方式与公理边界 |
+|---|---|---|---|
+| **方式 A（标准主入口）** | `lean-v4.36.0` | `4b30430bd556fdaa8cfae00b7bcc285eae469d60` | 纯内核 `by decide`，零 `native_decide`，严格仅依赖 `[propext, Classical.choice, Quot.sound]`，支持 `comparator`（`leanchecker-paranoid` + `nanoda_bin`）独立导出核验 |
+| **方式 B（快速构建伴随版）** | `lean-v4.36.0-native` | `12ec5b4f6f1f240231ae8e64962860ba3968a38c` | 父提交为 `4b30430`，仅将 33 个有限证书模块的 `decide` 替换为 `native_decide` 以大幅缩短构建时间；`#print axioms` 额外包含 `Lean.ofReduceBool` / `Lean.trustCompiler`（仍为零 `sorryAx`、零自定义 `axiom`），不适用于三公理 `comparator` 导出检查 |
+
+- **GRH 声明对齐目标**：[`k3/BuchstabSwitching/External/CharacterSums/DirichletGRH.lean`](https://github.com/Visio-Vanitas/buchstab-switching/blob/4b30430bd556fdaa8cfae00b7bcc285eae469d60/k3/BuchstabSwitching/External/CharacterSums/DirichletGRH.lean) 中的 `DirichletLNonvanishingRightOfHalf` 与本仓库 `lean/PEqualNP/GRH.lean` 及 [`lsernau/grh-lean@72fead102f663d5c7a407964a13dc0cf9d977207`](https://github.com/lsernau/grh-lean/blob/72fead102f663d5c7a407964a13dc0cf9d977207/grh-compact/src/Statements.lean) 逐字对应。
+
+### 关键存档文件 SHA-256（`4b30430` 与 `12ec5b4` 逐字节一致，以 `git clone -c core.autocrlf=false` 检出为准）
 
 | 相对路径 | SHA-256 | 说明 |
 |---|---|---|
@@ -31,13 +37,15 @@
 
 ## 2. 供维护者独立执行的复核命令（POSIX shell）
 
+### 方式 A：标准三公理纯内核与 `comparator` 复核（`lean-v4.36.0` @ `4b30430`）
+
 ```sh
 git clone -c core.autocrlf=false https://github.com/Visio-Vanitas/buchstab-switching.git
 cd buchstab-switching
-git fetch origin cca80480105d17764982ca80fcbb9c41e76e1eed
+git fetch origin 4b30430bd556fdaa8cfae00b7bcc285eae469d60
 git checkout --detach FETCH_HEAD
 
-# 1. 快速检查（AST 零浮点扫描、Decimal Inexact/Rounded 陷阱、闭区间 (H*)、127 段与 Data.lean 一致性）
+# 1. 快速检查（AST 零浮点扫描、Decimal Inexact/Rounded 陷阱、闭区间 (H*)、127 段与 Data.lean 一致性、零 native_decide）
 cd k3
 python3 -I scripts/quick_verify.py
 
@@ -47,7 +55,7 @@ python3 -I scripts/generate_lean_data.py
 python3 -I -m scripts.sieve_cert.slab_witness_export
 git diff --exit-code
 
-# 3. Lean 4 独立编译与标准公理白名单检查（已做二进 Dyadic 分片，单进程峰值内存 < 500 MB）
+# 3. Lean 4.36.0 独立编译与标准三公理白名单检查（已做二进 Dyadic 分片，单进程峰值内存 < 500 MB）
 lake exe cache get
 lake build BuchstabSwitching
 lake env lean AxiomsCheckK3.lean
@@ -55,6 +63,23 @@ lake env lean BuchstabSwitching/Sieve/AxiomsAudit.lean
 
 # 4. Comparator 独立内核导出核验（需环境已安装 comparator / leanchecker / nanoda_bin）
 bash comparator/run_comparator.sh
+```
+
+### 方式 B：`native_decide` 快速构建伴随复核（`lean-v4.36.0-native` @ `12ec5b4`）
+
+若需快速检查完整定理结构与构建流程（可接受有限证书判定引入 `Lean.ofReduceBool` / `Lean.trustCompiler`），可在同一仓库中检出伴随提交并对照其与 `4b30430` 的唯一差异：
+
+```sh
+git fetch origin 12ec5b4f6f1f240231ae8e64962860ba3968a38c
+git diff --stat 4b30430bd556fdaa8cfae00b7bcc285eae469d60..12ec5b4f6f1f240231ae8e64962860ba3968a38c
+git checkout --detach 12ec5b4f6f1f240231ae8e64962860ba3968a38c
+
+cd k3
+python3 -I scripts/quick_verify.py
+lake exe cache get
+lake build BuchstabSwitching
+lake env lean AxiomsCheckK3.lean
+lake env lean BuchstabSwitching/Sieve/AxiomsAudit.lean
 ```
 
 ---
