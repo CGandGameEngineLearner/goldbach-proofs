@@ -12,29 +12,26 @@ theorem Conjectures.Cuts.Cut9ba42c66bd0a29c663900e63
     ∃ C : ℝ, 0 < C ∧ ∀ M : ℕ, 2 ≤ M → ∀ A : Finset ℕ, A ⊆ Finset.Icc 1 M →
       let T := Fintype.piFinset (fun _ : Fin 4 => A)
       let w := fun u : Fin 4 → ℕ => ∑ j : Fin 4, P.eval (u j : ℤ)
-      (((T.product T).filter (fun z => w z.1 = w z.2 ∧
-        (∀ i j : Fin 4, z.1 i ≠ z.2 j) ∧
-        (∃ i₁ i₂ j₁ j₂ : Fin 4, i₁ ≠ i₂ ∧ j₁ ≠ j₂ ∧
-          z.1 i₁ + z.1 i₂ = z.2 j₁ + z.2 j₂))).card : ℝ) ≤
+      let D := (T.product T).filter (fun z => w z.1 = w z.2 ∧ ∀ q : Fin 4 × Fin 4, z.1 q.1 ≠ z.2 q.2)
+      ((D.filter (fun z => ∃ p₁ p₂ : Fin 4 × Fin 4, p₁.1 ≠ p₁.2 ∧ p₂.1 ≠ p₂.2 ∧
+        z.1 p₁.1 + z.1 p₁.2 = z.2 p₂.1 + z.2 p₂.2)).card : ℝ) ≤
         C * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4)
   (hPairSq : ∀ P : Polynomial ℤ, 3 ≤ P.natDegree → ∀ ε : ℝ, 0 < ε →
     ∃ C : ℝ, 0 < C ∧ ∀ M : ℕ, 2 ≤ M → ∀ A : Finset ℕ, A ⊆ Finset.Icc 1 M →
       let T := Fintype.piFinset (fun _ : Fin 4 => A)
       let w := fun u : Fin 4 → ℕ => ∑ j : Fin 4, P.eval (u j : ℤ)
-      (((T.product T).filter (fun z => w z.1 = w z.2 ∧
-        (∀ i j : Fin 4, z.1 i ≠ z.2 j) ∧
-        (∃ i₁ i₂ j₁ j₂ : Fin 4, i₁ ≠ i₂ ∧ j₁ ≠ j₂ ∧
-          (z.1 i₁)^2 + (z.1 i₂)^2 = (z.2 j₁)^2 + (z.2 j₂)^2))).card : ℝ) ≤
+      let D := (T.product T).filter (fun z => w z.1 = w z.2 ∧ ∀ q : Fin 4 × Fin 4, z.1 q.1 ≠ z.2 q.2)
+      ((D.filter (fun z => ∃ p₁ p₂ : Fin 4 × Fin 4, p₁.1 ≠ p₁.2 ∧ p₂.1 ≠ p₂.2 ∧
+        (z.1 p₁.1)^2 + (z.1 p₁.2)^2 = (z.2 p₂.1)^2 + (z.2 p₂.2)^2)).card : ℝ) ≤
         C * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4)
   (hResidual : ∀ P : Polynomial ℤ, 3 ≤ P.natDegree → ∀ ε : ℝ, 0 < ε →
     ∃ C : ℝ, 0 < C ∧ ∀ M : ℕ, 2 ≤ M → ∀ A : Finset ℕ, A ⊆ Finset.Icc 1 M →
       let T := Fintype.piFinset (fun _ : Fin 4 => A)
       let w := fun u : Fin 4 → ℕ => ∑ j : Fin 4, P.eval (u j : ℤ)
-      (((T.product T).filter (fun z => w z.1 = w z.2 ∧
-        (∀ i j : Fin 4, z.1 i ≠ z.2 j) ∧
-        (∀ i₁ i₂ j₁ j₂ : Fin 4, i₁ ≠ i₂ → j₁ ≠ j₂ →
-          z.1 i₁ + z.1 i₂ ≠ z.2 j₁ + z.2 j₂ ∧
-          (z.1 i₁)^2 + (z.1 i₂)^2 ≠ (z.2 j₁)^2 + (z.2 j₂)^2))).card : ℝ) ≤
+      let D := (T.product T).filter (fun z => w z.1 = w z.2 ∧ ∀ q : Fin 4 × Fin 4, z.1 q.1 ≠ z.2 q.2)
+      ((D.filter (fun z => ∀ p₁ p₂ : Fin 4 × Fin 4, p₁.1 ≠ p₁.2 → p₂.1 ≠ p₂.2 →
+        z.1 p₁.1 + z.1 p₁.2 ≠ z.2 p₂.1 + z.2 p₂.2 ∧
+        (z.1 p₁.1)^2 + (z.1 p₁.2)^2 ≠ (z.2 p₂.1)^2 + (z.2 p₂.2)^2)).card : ℝ) ≤
         C * (M : ℝ) ^ ε * (A.card : ℝ) ^ (if P.natDegree = 3 then (5 : ℕ) else 4)) : (∀ (x1 : Polynomial ℤ),   (3 : ℕ) ≤ x1.natDegree →     ∀ (x3 : ℝ),       (0 : ℝ) < x3 →         ∃ (x5 : ℝ),           (0 : ℝ) < x5 ∧             ∀ (x6 : ℕ),               (2 : ℕ) ≤ x6 →                 ∀ x8 ⊆ Finset.Icc (1 : ℕ) x6,                   have x10 : Finset (Fin (4 : ℕ) → ℕ) := Fintype.piFinset fun (x10 : Fin (4 : ℕ)) => x8;                   let x11 : (Fin (4 : ℕ) → ℕ) → ℤ := fun (x11 : Fin (4 : ℕ) → ℕ) => ∑ x12 : Fin (4 : ℕ), Polynomial.eval (↑(x11 x12) : ℤ) x1;                   have x12 : Finset ((Fin (4 : ℕ) → ℕ) × (Fin (4 : ℕ) → ℕ)) := {x12 ∈ x10.product x10 | x11 x12.1 = x11 x12.2 ∧ ∀ (x13 : Equiv.Perm (Fin (4 : ℕ))), x12.2 ≠ x12.1 ∘ (⇑x13 : Fin (4 : ℕ) → Fin (4 : ℕ))};                   (↑{x13 ∈ x12 | ∀ (x14 x15 : Fin (4 : ℕ)), x13.1 x14 ≠ x13.2 x15}.card : ℝ) ≤ x5 * (↑x6 : ℝ) ^ x3 * (↑x8.card : ℝ) ^ if x1.natDegree = (3 : ℕ) then (5 : ℕ) else (4 : ℕ)) := by
   intro P hP ε hε
   obtain ⟨Csum, hCsum, bSum⟩ := hPairSum P hP ε hε
@@ -49,18 +46,14 @@ theorem Conjectures.Cuts.Cut9ba42c66bd0a29c663900e63
   dsimp only at h1 h2 h3
   let T : Finset (Fin 4 → ℕ) := Fintype.piFinset (fun _ : Fin 4 => A)
   let w : (Fin 4 → ℕ) → ℤ := fun u => ∑ j : Fin 4, P.eval (u j : ℤ)
-  let S1 := (T.product T).filter (fun z => w z.1 = w z.2 ∧
-    (∀ i j : Fin 4, z.1 i ≠ z.2 j) ∧
-    (∃ i₁ i₂ j₁ j₂ : Fin 4, i₁ ≠ i₂ ∧ j₁ ≠ j₂ ∧ z.1 i₁ + z.1 i₂ = z.2 j₁ + z.2 j₂))
-  let S2 := (T.product T).filter (fun z => w z.1 = w z.2 ∧
-    (∀ i j : Fin 4, z.1 i ≠ z.2 j) ∧
-    (∃ i₁ i₂ j₁ j₂ : Fin 4, i₁ ≠ i₂ ∧ j₁ ≠ j₂ ∧
-      (z.1 i₁)^2 + (z.1 i₂)^2 = (z.2 j₁)^2 + (z.2 j₂)^2))
-  let S3 := (T.product T).filter (fun z => w z.1 = w z.2 ∧
-    (∀ i j : Fin 4, z.1 i ≠ z.2 j) ∧
-    (∀ i₁ i₂ j₁ j₂ : Fin 4, i₁ ≠ i₂ → j₁ ≠ j₂ →
-      z.1 i₁ + z.1 i₂ ≠ z.2 j₁ + z.2 j₂ ∧
-      (z.1 i₁)^2 + (z.1 i₂)^2 ≠ (z.2 j₁)^2 + (z.2 j₂)^2))
+  let D := (T.product T).filter (fun z => w z.1 = w z.2 ∧ ∀ q : Fin 4 × Fin 4, z.1 q.1 ≠ z.2 q.2)
+  let S1 := D.filter (fun z => ∃ p₁ p₂ : Fin 4 × Fin 4, p₁.1 ≠ p₁.2 ∧ p₂.1 ≠ p₂.2 ∧
+    z.1 p₁.1 + z.1 p₁.2 = z.2 p₂.1 + z.2 p₂.2)
+  let S2 := D.filter (fun z => ∃ p₁ p₂ : Fin 4 × Fin 4, p₁.1 ≠ p₁.2 ∧ p₂.1 ≠ p₂.2 ∧
+    (z.1 p₁.1)^2 + (z.1 p₁.2)^2 = (z.2 p₂.1)^2 + (z.2 p₂.2)^2)
+  let S3 := D.filter (fun z => ∀ p₁ p₂ : Fin 4 × Fin 4, p₁.1 ≠ p₁.2 → p₂.1 ≠ p₂.2 →
+    z.1 p₁.1 + z.1 p₁.2 ≠ z.2 p₂.1 + z.2 p₂.2 ∧
+    (z.1 p₁.1)^2 + (z.1 p₁.2)^2 ≠ (z.2 p₂.1)^2 + (z.2 p₂.2)^2)
   have hle_of_eq {s₁ s₂ : Finset ((Fin 4 → ℕ) × (Fin 4 → ℕ))} {R : ℝ}
       (hs : ∀ z, z ∈ s₁ ↔ z ∈ s₂) (hR : (s₂.card : ℝ) ≤ R) :
       (s₁.card : ℝ) ≤ R := by
@@ -69,37 +62,35 @@ theorem Conjectures.Cuts.Cut9ba42c66bd0a29c663900e63
     exact hR
   have hS1 : (S1.card : ℝ) ≤ Csum * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by
     refine hle_of_eq (fun z => ?_) h1
-    dsimp only [S1, T, w]
-    rw [Finset.mem_filter, Finset.mem_filter]
+    simp only [S1, D, T, w, Finset.mem_filter]
   have hS2 : (S2.card : ℝ) ≤ Csq * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by
     refine hle_of_eq (fun z => ?_) h2
-    dsimp only [S2, T, w]
-    rw [Finset.mem_filter, Finset.mem_filter]
+    simp only [S2, D, T, w, Finset.mem_filter]
   let k : ℕ := if P.natDegree = 3 then (5 : ℕ) else 4
   have hS3 : (S3.card : ℝ) ≤ Cres * (M : ℝ) ^ ε * (A.card : ℝ) ^ k := by
     refine hle_of_eq (fun z => ?_) h3
-    dsimp only [S3, T, w]
-    rw [Finset.mem_filter, Finset.mem_filter]
+    simp only [S3, D, T, w, Finset.mem_filter]
   have hcover_sum (G : Finset ((Fin 4 → ℕ) × (Fin 4 → ℕ)))
-      (hG : ∀ z ∈ G, z ∈ T.product T ∧ w z.1 = w z.2 ∧ ∀ i j : Fin 4, z.1 i ≠ z.2 j) :
+      (hG : ∀ z ∈ G, z ∈ T.product T ∧ w z.1 = w z.2 ∧ ∀ q : Fin 4 × Fin 4, z.1 q.1 ≠ z.2 q.2) :
       (G.card : ℝ) ≤ (S1.card : ℝ) + (S2.card : ℝ) + (S3.card : ℝ) := by
     have hsub : G ⊆ S1 ∪ S2 ∪ S3 := by
       intro z hz
       obtain ⟨hprod, heq, hdisj⟩ := hG z hz
-      by_cases hs : ∃ i₁ i₂ j₁ j₂ : Fin 4, i₁ ≠ i₂ ∧ j₁ ≠ j₂ ∧
-          z.1 i₁ + z.1 i₂ = z.2 j₁ + z.2 j₂
+      have hzD : z ∈ D := Finset.mem_filter.mpr ⟨hprod, heq, hdisj⟩
+      by_cases hs : ∃ p₁ p₂ : Fin 4 × Fin 4, p₁.1 ≠ p₁.2 ∧ p₂.1 ≠ p₂.2 ∧
+          z.1 p₁.1 + z.1 p₁.2 = z.2 p₂.1 + z.2 p₂.2
       · exact Finset.mem_union_left _ (Finset.mem_union_left _
-          (Finset.mem_filter.mpr ⟨hprod, heq, hdisj, hs⟩))
-      · by_cases hq : ∃ i₁ i₂ j₁ j₂ : Fin 4, i₁ ≠ i₂ ∧ j₁ ≠ j₂ ∧
-            (z.1 i₁)^2 + (z.1 i₂)^2 = (z.2 j₁)^2 + (z.2 j₂)^2
+          (Finset.mem_filter.mpr ⟨hzD, hs⟩))
+      · by_cases hq : ∃ p₁ p₂ : Fin 4 × Fin 4, p₁.1 ≠ p₁.2 ∧ p₂.1 ≠ p₂.2 ∧
+            (z.1 p₁.1)^2 + (z.1 p₁.2)^2 = (z.2 p₂.1)^2 + (z.2 p₂.2)^2
         · exact Finset.mem_union_left _ (Finset.mem_union_right _
-            (Finset.mem_filter.mpr ⟨hprod, heq, hdisj, hq⟩))
+            (Finset.mem_filter.mpr ⟨hzD, hq⟩))
         · refine Finset.mem_union_right _
-            (Finset.mem_filter.mpr ⟨hprod, heq, hdisj, fun i₁ i₂ j₁ j₂ hi hj => ⟨?_, ?_⟩⟩)
+            (Finset.mem_filter.mpr ⟨hzD, fun p₁ p₂ h12 h34 => ⟨?_, ?_⟩⟩)
           · intro heq1
-            exact hs ⟨i₁, i₂, j₁, j₂, hi, hj, heq1⟩
+            exact hs ⟨p₁, p₂, h12, h34, heq1⟩
           · intro heq2
-            exact hq ⟨i₁, i₂, j₁, j₂, hi, hj, heq2⟩
+            exact hq ⟨p₁, p₂, h12, h34, heq2⟩
     have hnat : G.card ≤ S1.card + S2.card + S3.card :=
       (Finset.card_le_card hsub).trans ((Finset.card_union_le _ _).trans
         (Nat.add_le_add_right (Finset.card_union_le _ _) _))
@@ -113,7 +104,7 @@ theorem Conjectures.Cuts.Cut9ba42c66bd0a29c663900e63
     obtain ⟨hz12, hdisj⟩ := hz
     rw [Finset.mem_filter] at hz12
     obtain ⟨hprod, heq, _⟩ := hz12
-    exact ⟨hprod, heq, hdisj⟩
+    exact ⟨hprod, heq, fun q => hdisj q.1 q.2⟩
   · have hpow4 : (A.card : ℝ) ^ 4 ≤ (A.card : ℝ) ^ k := by
       by_cases hz : A.card = 0
       · by_cases hdeg : P.natDegree = 3 <;> simp [k, hz, hdeg]
