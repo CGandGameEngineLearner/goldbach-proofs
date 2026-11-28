@@ -17,5 +17,8 @@
     "L-twin-primes-square-neighbour-mod-three",
     "L-twin-primes-prime-square-minus-two-upper-sieve"
   ],
-  "imports": []
+  "imports": [
+    "Conjectures.TwinPrimes.SquareNeighbourModThree",
+    "Conjectures.TwinPrimes.PrimeSquareMinusTwoUpperSieve"
+  ]
 }
