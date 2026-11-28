@@ -17,5 +17,6 @@
   "track": "minor-truncation",
   "role": "target",
   "module": "Conjectures.Goldbach.PacketLongWheelExcess",
-  "file": "lean/Conjectures/Goldbach/PacketLongWheelExcess.lean"
+  "file": "lean/Conjectures/Goldbach/PacketLongWheelExcess.lean",
+  "reductions": true
 }

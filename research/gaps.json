@@ -11831,7 +11831,8 @@
       "imports": [],
       "track": "frontier-type2-dyadic-matrix",
       "role": "target",
-      "challenge_only": true
+      "challenge_only": true,
+      "reductions": true
     },
     {
       "id": "L-goldbach-frontier-type2-b1-b2",
@@ -18794,7 +18795,8 @@
       "role": "target",
       "module": "Conjectures.Goldbach.PacketLongWheelExcess",
       "file": "lean/Conjectures/Goldbach/PacketLongWheelExcess.lean",
-      "route_source": "minor-truncation"
+      "route_source": "minor-truncation",
+      "reductions": true
     },
     {
       "id": "L-goldbach-packet-mangoldt-masked-error",
