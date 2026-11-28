@@ -817,5 +817,176 @@ theorem char_L2_dilution (q : ℕ) [NeZero q] (c : DirichletCharacter ℂ q → 
 
 end Route2
 
+/-!
+### Route 2: character expansion of the Goldbach sum
+
+The exact finite identity expressing the single Goldbach sum `SG n t` on a major arc
+`t = a/q + β` as a Dirichlet-character series plus an explicit "primes dividing `q`"
+error term: `SG n (a/q + β) = φ(q)⁻¹ · ∑_χ χ(a) τ(χ⁻¹) SChi n q χ β + (non-coprime part)`.
+This bridges the frozen integrand to the character mean-square route: with
+`char_L2_dilution` it converts arc sums of `‖SG‖²` into character sums
+`∑_χ |τ(χ⁻¹)|² · ‖SChi χ‖²`, the point where the zero-free-strip / large-sieve
+input enters.
+-/
+
+section CharExpand
+open scoped ComplexConjugate Classical
+open Finset
+
+/-- The single Goldbach sum `∑_{k ≤ n} w(k) · E(k·t)`. -/
+noncomputable def SG (n : ℕ) (t : ℝ) : ℂ :=
+  ∑ k ∈ Finset.range (n + 1), (GW k : ℂ) * GE ((k:ℝ) * t)
+
+/-- The character-twisted partial sum `∑_{k ≤ n} χ(k) · w(k) · E(k·β)`. -/
+noncomputable def SChi (n q : ℕ) (χ : DirichletCharacter ℂ q) (β : ℝ) : ℂ :=
+  ∑ k ∈ Finset.range (n + 1), χ (k:ZMod q) * (GW k : ℂ) * GE ((k:ℝ) * β)
+
+/-- A Dirichlet character inverts on units: `χ (j⁻¹) = (χ j)⁻¹`. -/
+theorem chi_apply_inv {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) {j : ZMod q}
+    (hj : IsUnit j) : χ (j⁻¹) = (χ j)⁻¹ := by
+  have hcop : (j.val).Coprime q :=
+    (ZMod.isUnit_iff_coprime j.val q).mp (by rwa [ZMod.natCast_zmod_val])
+  have hnz : (χ j : ℂ) ≠ 0 := by
+    intro hc
+    have h1 : ‖χ j‖ = 1 := by rw [← hj.unit_spec]; exact χ.unit_norm_eq_one hj.unit
+    rw [hc] at h1
+    simp at h1
+  have h1 : χ j * χ (j⁻¹) = 1 := by
+    have hj2 : j = ((j.val : ℕ) : ZMod q) := (ZMod.natCast_zmod_val j).symm
+    rw [hj2, ← map_mul, ZMod.coe_mul_inv_eq_one j.val hcop, map_one]
+  exact mul_left_cancel₀ hnz (h1.trans (mul_inv_cancel₀ hnz).symm)
+
+/-- `E(k·a/q)` is the standard additive character at `k·a` modulo `q`. -/
+theorem eq_stdAddChar (q : ℕ) [NeZero q] (k a : ℕ) :
+    GE ((k:ℝ) * (a:ℝ) / (q:ℝ)) = ZMod.stdAddChar (((k * a : ℕ) : ZMod q)) := by
+  have hcast : ZMod.stdAddChar (((k * a : ℕ) : ZMod q))
+      = ZMod.stdAddChar (((k * a : ℕ) : ℤ) : ZMod q) := by
+    rw [Int.cast_natCast]
+  rw [GE, hcast, ZMod.stdAddChar_coe ((k * a : ℕ) : ℤ)]
+  congr 1
+  push_cast
+  ring
+
+/-- **Pointwise character expansion on units.** For units `a, k` mod `q`, the additive
+character `E(k·a/q)` expands into the Dirichlet character series
+`φ(q)⁻¹ · ∑_χ χ(a) · τ(χ⁻¹) · χ(k)`, where `τ` is the Gauss sum against the standard
+additive character. -/
+theorem stdAddChar_unit_expand {q : ℕ} [NeZero q] {a k : ZMod q} (ha : IsUnit a)
+    (hk : IsUnit k) :
+    ZMod.stdAddChar (k * a) = ((q.totient : ℂ))⁻¹ *
+      ∑ χ : DirichletCharacter ℂ q, χ a * gaussSum χ⁻¹ ZMod.stdAddChar * χ k := by
+  classical
+  have hφ : ((q.totient : ℕ) : ℂ) ≠ 0 := by
+    have hp : 0 < q.totient := Nat.totient_pos.mpr (NeZero.pos q)
+    exact Nat.cast_ne_zero.mpr (by omega)
+  have hkey : ∀ j : ZMod q, ∑ χ : DirichletCharacter ℂ q, χ a * χ k * χ⁻¹ j
+      = if j = k * a then ((q.totient : ℂ)) else 0 := by
+    intro j
+    by_cases hj : IsUnit j
+    · have h1 : ∀ χ : DirichletCharacter ℂ q, χ a * χ k * χ⁻¹ j = χ (j⁻¹) * χ (k * a) := by
+        intro χ
+        rw [MulChar.inv_apply_eq_inv', ← chi_apply_inv χ hj, ← map_mul, ← map_mul, ← map_mul]
+        exact congrArg χ (by ring)
+      rw [Finset.sum_congr rfl (fun χ _ => h1 χ),
+        DirichletCharacter.sum_char_inv_mul_char_eq ℂ hj (k * a)]
+    · have h1 : ∀ χ : DirichletCharacter ℂ q, χ a * χ k * χ⁻¹ j = 0 := by
+        intro χ
+        rw [MulChar.inv_apply_eq_inv', MulCharClass.map_nonunit χ hj, inv_zero, mul_zero]
+      rw [Finset.sum_congr rfl (fun χ _ => h1 χ), Finset.sum_const_zero, if_neg]
+      intro hc
+      exact hj (by rw [hc]; exact IsUnit.mul hk ha)
+  have hsum : ∑ χ : DirichletCharacter ℂ q, χ a * gaussSum χ⁻¹ ZMod.stdAddChar * χ k
+      = ∑ j : ZMod q, ZMod.stdAddChar j *
+          ∑ χ : DirichletCharacter ℂ q, χ a * χ k * χ⁻¹ j := by
+    calc ∑ χ : DirichletCharacter ℂ q, χ a * gaussSum χ⁻¹ ZMod.stdAddChar * χ k
+        = ∑ χ : DirichletCharacter ℂ q, ∑ j : ZMod q,
+            χ a * χ k * χ⁻¹ j * ZMod.stdAddChar j := by
+          refine Finset.sum_congr rfl fun χ _ => ?_
+          rw [gaussSum, mul_assoc, Finset.sum_mul, Finset.mul_sum]
+          exact Finset.sum_congr rfl fun j _ => by ring
+      _ = ∑ j : ZMod q, ∑ χ : DirichletCharacter ℂ q,
+            χ a * χ k * χ⁻¹ j * ZMod.stdAddChar j := Finset.sum_comm
+      _ = ∑ j : ZMod q, ZMod.stdAddChar j *
+            ∑ χ : DirichletCharacter ℂ q, χ a * χ k * χ⁻¹ j := by
+          refine Finset.sum_congr rfl fun j _ => ?_
+          rw [← Finset.sum_mul,
+            mul_comm (∑ χ : DirichletCharacter ℂ q, χ a * χ k * χ⁻¹ j) (ZMod.stdAddChar j)]
+  have hfin : ∑ j : ZMod q, ZMod.stdAddChar j *
+        (∑ χ : DirichletCharacter ℂ q, χ a * χ k * χ⁻¹ j)
+      = ZMod.stdAddChar (k * a) * ((q.totient : ℂ)) := by
+    rw [Finset.sum_congr rfl (fun j _ => by rw [hkey j]), Finset.sum_eq_single (k * a)
+      (fun j _ hj => by rw [if_neg hj, mul_zero])
+      (fun hc => absurd (Finset.mem_univ (k * a)) hc), if_pos rfl]
+  rw [hsum, hfin, mul_comm (ZMod.stdAddChar (k * a)) ((q.totient : ℂ)), ← mul_assoc,
+    inv_mul_cancel₀ hφ, one_mul]
+
+/-- Splitting a finite sum by a decidable predicate. -/
+lemma sum_range_eq_filter_add_filter_not (n : ℕ) (p : ℕ → Prop) [DecidablePred p]
+    (g : ℕ → ℂ) :
+    ∑ k ∈ Finset.range (n + 1), g k
+      = ∑ k ∈ (Finset.range (n + 1)).filter p, g k
+        + ∑ k ∈ (Finset.range (n + 1)).filter (fun k => ¬ p k), g k := by
+  rw [Finset.sum_filter, Finset.sum_filter, ← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  by_cases hk : p k <;> simp [hk]
+
+/-- Unit-arc summand: the character series contribution. -/
+theorem GW_mul_GE_eq (q : ℕ) [NeZero q] (a k : ℕ) (ha : Nat.Coprime a q)
+    (hk : IsUnit ((k:ℕ):ZMod q)) (β : ℝ) :
+    (GW k : ℂ) * GE ((k:ℝ) * ((a:ℝ)/(q:ℝ) + β))
+      = ((q.totient : ℂ))⁻¹ * ∑ χ : DirichletCharacter ℂ q,
+          χ ((a:ℕ):ZMod q) * gaussSum χ⁻¹ ZMod.stdAddChar *
+            (χ ((k:ℕ):ZMod q) * (GW k : ℂ) * GE ((k:ℝ) * β)) := by
+  have hphase : (k:ℝ) * ((a:ℝ)/(q:ℝ) + β) = (k:ℝ)*(a:ℝ)/(q:ℝ) + (k:ℝ)*β := by ring
+  have hau : IsUnit ((a:ℕ):ZMod q) := (ZMod.isUnit_iff_coprime a q).mpr ha
+  rw [hphase, ← GE_add, eq_stdAddChar q, Nat.cast_mul, stdAddChar_unit_expand hau hk]
+  rw [show (GW k : ℂ) * ((((q.totient : ℂ))⁻¹ * ∑ χ : DirichletCharacter ℂ q,
+        χ ((a:ℕ):ZMod q) * gaussSum χ⁻¹ ZMod.stdAddChar * χ ((k:ℕ):ZMod q))
+      * GE ((k:ℝ) * β))
+      = (((q.totient : ℂ))⁻¹ * ∑ χ : DirichletCharacter ℂ q,
+          χ ((a:ℕ):ZMod q) * gaussSum χ⁻¹ ZMod.stdAddChar * χ ((k:ℕ):ZMod q))
+        * ((GW k : ℂ) * GE ((k:ℝ) * β)) from by ring, mul_assoc, Finset.sum_mul,
+    Finset.mul_sum, Finset.mul_sum]
+  exact Finset.sum_congr rfl fun χ _ => by ring
+
+/-- **Character expansion of the Goldbach sum on a major arc.** For `(a,q)=1`,
+`t = a/q + β`:
+`SG n t = φ(q)⁻¹ · ∑_χ χ(a) τ(χ⁻¹) SChi n q χ β + (sum over k not coprime to q)`.
+The last sum is supported on primes dividing `q`, hence bounded by `log q`. -/
+theorem SG_char_expansion (n q : ℕ) [NeZero q] (a : ℕ) (ha : Nat.Coprime a q) (β : ℝ) :
+    SG n ((a:ℝ)/(q:ℝ) + β)
+      = ((q.totient : ℂ))⁻¹ * ∑ χ : DirichletCharacter ℂ q,
+          χ ((a:ℕ):ZMod q) * gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β
+        + ∑ k ∈ Finset.range (n+1),
+            if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a:ℝ)/(q:ℝ) + β)) := by
+  classical
+  have hun : ∑ k ∈ (Finset.range (n+1)).filter (fun (k : ℕ) => IsUnit (k:ZMod q)),
+      (GW k : ℂ) * GE ((k:ℝ) * ((a:ℝ)/(q:ℝ) + β))
+      = ((q.totient : ℂ))⁻¹ * ∑ χ : DirichletCharacter ℂ q,
+          χ ((a:ℕ):ZMod q) * gaussSum χ⁻¹ ZMod.stdAddChar * SChi n q χ β := by
+    rw [Finset.sum_congr rfl fun (k : ℕ) (hk : k ∈ (Finset.range (n+1)).filter
+        (fun (k : ℕ) => IsUnit (k:ZMod q))) =>
+      GW_mul_GE_eq q a k ha ((Finset.mem_filter.mp hk).2) β,
+      ← Finset.mul_sum, Finset.sum_comm, Finset.mul_sum, Finset.mul_sum]
+    refine Finset.sum_congr rfl fun χ _ => ?_
+    rw [← Finset.mul_sum, SChi, sum_range_eq_filter_add_filter_not n
+      (fun (k : ℕ) => IsUnit (k:ZMod q)) _]
+    have hz : ∑ k ∈ (Finset.range (n+1)).filter (fun (k : ℕ) => ¬ IsUnit (k:ZMod q)),
+        χ (k:ZMod q) * (GW k : ℂ) * GE ((k:ℝ) * β) = 0 :=
+      Finset.sum_eq_zero fun (k : ℕ) (hk : k ∈ (Finset.range (n+1)).filter
+          (fun (k : ℕ) => ¬ IsUnit (k:ZMod q))) => by
+        rw [MulCharClass.map_nonunit χ (Finset.mem_filter.mp hk).2, zero_mul, zero_mul]
+    rw [hz, add_zero]
+  have hnon : ∑ k ∈ (Finset.range (n+1)).filter (fun (k : ℕ) => ¬ IsUnit (k:ZMod q)),
+      (GW k : ℂ) * GE ((k:ℝ) * ((a:ℝ)/(q:ℝ) + β))
+      = ∑ k ∈ Finset.range (n+1),
+          if IsUnit (k:ZMod q) then 0 else (GW k : ℂ) * GE ((k:ℝ) * ((a:ℝ)/(q:ℝ) + β)) := by
+    rw [Finset.sum_filter]
+    refine Finset.sum_congr rfl fun (k : ℕ) (_ : k ∈ Finset.range (n+1)) => ?_
+    by_cases hk : IsUnit (k:ZMod q) <;> simp [hk]
+  rw [SG, sum_range_eq_filter_add_filter_not n (fun (k : ℕ) => IsUnit (k:ZMod q)) _, hun, hnon]
+
+end CharExpand
+
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
   sorry
