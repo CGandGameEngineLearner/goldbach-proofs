@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 MARK = "route_source"
-CUT_DESKS = {"twin-primes", "quadratic-primes", "no-three-in-line", "square-packing", "log-rank", "joshi-abc"}
+CUT_DESKS = {"goldbach", "twin-primes", "quadratic-primes", "no-three-in-line", "square-packing", "log-rank", "joshi-abc"}
 COMMUNITY_PROOF = re.compile(
     r"(?:Conjectures\.[A-Z][A-Za-z0-9]*\.[A-Z][A-Za-z0-9]*|PEqualNP\.Outside\.L_[a-z0-9_]+)"
 )
