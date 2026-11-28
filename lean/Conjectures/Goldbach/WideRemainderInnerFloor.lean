@@ -2196,6 +2196,27 @@ lemma kernel_eq_phase_sin (n : ℕ) (β : ℝ) (hβ : Real.sin (Real.pi * β) �
     rw [Complex.ofReal_div]
   rw [(eq_div_iff hs2c).mpr hstep, mul_div_assoc, hdiv]
 
+/-- The annulus integrand is real and nonnegative:
+`K_n(β)²·phase(-nβ) = (sin(π(n+1)β)/sin(πβ))²`. -/
+lemma kernel_sq_phase_sin (n : ℕ) (β : ℝ) (hβ : Real.sin (Real.pi * β) ≠ 0) :
+    GoldbachExplicitModeledMajor.kernel n β ^ 2
+        * GoldbachExplicitModeledMajor.phase (-(n:ℝ) * β)
+      = ((Real.sin (Real.pi * ((n:ℝ) + 1) * β)
+          / Real.sin (Real.pi * β) : ℝ) : ℂ) ^ 2 := by
+  have h1 := kernel_eq_phase_sin n β hβ
+  have hpow : GoldbachExplicitModeledMajor.phase ((n:ℝ) / 2 * β) ^ 2
+      = GoldbachExplicitModeledMajor.phase ((n:ℝ) * β) := by
+    rw [pow_two, phase_add]
+    congr 1
+    ring
+  have hzero : GoldbachExplicitModeledMajor.phase (0:ℝ) = 1 := by
+    unfold GoldbachExplicitModeledMajor.phase
+    simp
+  have hunit : GoldbachExplicitModeledMajor.phase ((n:ℝ) * β)
+      * GoldbachExplicitModeledMajor.phase (-(n:ℝ) * β) = 1 := by
+    rw [phase_add, show (((n:ℝ) * β + -(n:ℝ) * β):ℝ) = 0 from by ring, hzero]
+  rw [h1, mul_pow, hpow, mul_right_comm, hunit, one_mul]
+
 end CharExpand
 
 
