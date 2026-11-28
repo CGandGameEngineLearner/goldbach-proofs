@@ -76,5 +76,4 @@ theorem Conjectures.Cuts.Cute236ab7431bb348ac536e00e
           p+q = n) ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q = n ∧
           (2*p*q+1).primeFactorsList.length ≤ 7)).card : ℝ) := by exact_mod_cast hsum
   have hmul := mul_le_mul_of_nonneg_left hreal (pow_nonneg hlog A)
-  push_cast at hmul
   linarith
