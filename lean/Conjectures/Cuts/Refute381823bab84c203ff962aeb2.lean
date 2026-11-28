@@ -78,7 +78,7 @@ open Finset
 
 theorem bilateral_pair_average (X : ℕ) (S : Finset ℕ) (A : ℕ → Finset ℕ)
     (hS : ∀ u ∈ S, Odd u ∧ X ≤ u ∧ u ≤ 2*X)
-    (admit : ∀ u ∈ S, ∀ v ∈ S, u ∈ A (u+v)) :
+    (hPairMem : ∀ u ∈ S, ∀ v ∈ S, u ∈ A (u+v)) :
     S.card^2 ≤ ∑ n ∈ (Icc (2*X) (4*X)).filter Even,
       ((A n).filter (fun u => n-u ∈ A n)).card := by
   classical
@@ -101,7 +101,7 @@ theorem bilateral_pair_average (X : ℕ) (S : Finset ℕ) (A : ℕ → Finset �
         obtain ⟨hu,hv⟩ := mem_product.mp h
         change u+v=n at hs
         subst n
-        exact mem_filter.mpr ⟨admit _ hu _ hv,by simpa [Nat.add_sub_cancel_left, Nat.add_comm u v] using admit _ hv _ hu⟩
+        exact mem_filter.mpr ⟨hPairMem _ hu _ hv,by simpa [Nat.add_sub_cancel_left, Nat.add_comm u v] using hPairMem _ hv _ hu⟩
       · rintro ⟨u,v⟩ h ⟨a,b⟩ g eq
         obtain ⟨_,hh⟩ := mem_filter.mp h
         obtain ⟨_,gg⟩ := mem_filter.mp g
