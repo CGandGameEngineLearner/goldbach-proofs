@@ -2926,6 +2926,60 @@ lemma kernel_norm_sq_eq_sin (n : ℕ) (β : ℝ) (hβ : Real.sin (Real.pi * β) 
   rw [h2, h1, norm_pow, Complex.norm_real, Real.norm_eq_abs, ← abs_pow (Real.sin
     (Real.pi * ((n:ℝ) + 1) * β) / Real.sin (Real.pi * β)) 2, abs_eq_self.mpr (sq_nonneg _)]
 
+/-- Real divisor form: `Re c_q(n) = ∑_{d | (q,n)} d · μ(q/d)` as a real sum. -/
+lemma csum_re_divisor_real (q n : ℕ) (hq : 0 < q) :
+    (csum q n).re
+      = ∑ d ∈ Nat.divisors (Nat.gcd q n),
+          ((ArithmeticFunction.moebius (q / d) : ℤ) : ℝ) * ((d : ℕ) : ℝ) := by
+  rw [csum_eq_intCast q n hq, Complex.intCast_re]
+  push_cast
+  rfl
+
+/-- Divisor swap for the signed `T₁` sum: for any finite family of moduli `s`,
+`∑_{q∈s} Re c_q(n)/φ(q)²` rearranges into `∑_{d∣n} d · ∑_{q∈s, d∣q} μ(q/d)/φ(q)²`.
+This is the basis for uniform signed bounds: the inner Möbius sums cancel. -/
+lemma t1_divisor_swap (s : Finset ℕ) (n : ℕ) (hn : 0 < n) (hs : ∀ q ∈ s, 0 < q) :
+    ∑ q ∈ s, (csum q n).re / ((Nat.totient q : ℕ) : ℝ) ^ 2
+      = ∑ d ∈ Nat.divisors n, ((d : ℕ) : ℝ) * ∑ q ∈ s.filter (fun q => d ∣ q),
+          ((ArithmeticFunction.moebius (q / d) : ℤ) : ℝ) / ((Nat.totient q : ℕ) : ℝ) ^ 2 := by
+  classical
+  have key : ∀ q ∈ s, (csum q n).re / ((Nat.totient q : ℕ) : ℝ) ^ 2
+      = ∑ d ∈ (Nat.divisors n).filter (fun d => d ∣ q),
+          ((d : ℕ) : ℝ) * (((ArithmeticFunction.moebius (q / d) : ℤ) : ℝ)
+            / ((Nat.totient q : ℕ) : ℝ) ^ 2) := by
+    intro q hq
+    have hq0 : 0 < q := hs q hq
+    have hg0 : Nat.gcd q n ≠ 0 := Nat.ne_of_gt (by
+      rw [Nat.gcd_comm]; exact Nat.gcd_pos_of_pos_right n hq0)
+    have hdiv : Nat.divisors (Nat.gcd q n) = (Nat.divisors n).filter (fun d => d ∣ q) := by
+      ext d
+      rw [Nat.mem_divisors, Finset.mem_filter, Nat.mem_divisors]
+      constructor
+      · intro h
+        exact ⟨⟨Nat.dvd_trans h.1 (Nat.gcd_dvd_right q n), Nat.ne_of_gt hn⟩,
+          Nat.dvd_trans h.1 (Nat.gcd_dvd_left q n)⟩
+      · intro h
+        exact ⟨Nat.dvd_gcd h.2 h.1.1, hg0⟩
+    rw [csum_re_divisor_real q n hq0, hdiv, Finset.sum_div]
+    refine Finset.sum_congr rfl fun d _ => ?_
+    ring
+  have hswap : ∑ q ∈ s, ∑ d ∈ (Nat.divisors n).filter (fun d => d ∣ q),
+      ((d : ℕ) : ℝ) * (((ArithmeticFunction.moebius (q / d) : ℤ) : ℝ)
+        / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+    = ∑ d ∈ Nat.divisors n, ∑ q ∈ s.filter (fun q => d ∣ q),
+        ((d : ℕ) : ℝ) * (((ArithmeticFunction.moebius (q / d) : ℤ) : ℝ)
+          / ((Nat.totient q : ℕ) : ℝ) ^ 2) := by
+    refine Finset.sum_comm' fun q d => ?_
+    rw [Finset.mem_filter, Finset.mem_filter, Nat.mem_divisors]
+    constructor
+    · intro h
+      exact ⟨⟨h.1, h.2.2⟩, h.2.1⟩
+    · intro h
+      exact ⟨h.1.1, ⟨h.2, h.1.2⟩⟩
+  rw [Finset.sum_congr rfl (fun q hq => key q hq), hswap]
+  refine Finset.sum_congr rfl fun d _ => ?_
+  rw [Finset.mul_sum]
+
 end Ramanujan
 
 
