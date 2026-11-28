@@ -450,9 +450,13 @@ class DeskScaleTest(DeskServerTestCase):
             self.assertIn(f"python tools/goldbach.py claim --problem {slug}\n", guide)
             self.assertNotIn("python tools/goldbach.py claim\n", guide)
             self.assertIn(f"{path}/?lang={lang}#records", guide)
+            context = "阅读帖子及最新评论" if lang == "zh" else "read the latest replies"
+            self.assertIn(context, guide)
+            self.assertIn("discussion.search_url", guide)
             goldbach_guide = self.request(f"/join{suffix}.txt", text=True)
             self.assertIn("python tools/goldbach.py claim", goldbach_guide)
             self.assertNotIn(f"--problem {slug}", goldbach_guide)
+            self.assertIn(context, goldbach_guide)
 
     def test_rankings_pagination_and_board_initial_slice(self):
         with closing(sqlite3.connect(self.folder / "verdicts.sqlite3")) as conn:

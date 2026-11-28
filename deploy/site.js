@@ -52,7 +52,7 @@ const strings = {
     alreadyVerified: '这条引理已通过权威验证。',
     lemmaPrompt: gap => '读取 ' + guideUrl + '，按指南用 ' + claimCommand + ' ' + gap.id + ' 领取并验证这一条引理。可跨猜想导入全站已验证社区模块，完整清单见领取指南。'
       + '同一题的积分归研究台最先记录权威 Lean ACCEPTED 的提交者。'
-      + (gap.takes_cuts ? '也可用 ' + claimCommand + ' ' + gap.id + ' --kind cut 提交拆题，每套经 Lean 核验并被采用的拆法另加 1 分。' : '')
+      + (gap.takes_cuts ? '也可用 ' + claimCommand + ' ' + gap.id + ' --kind cut 领取拆题。写 Lean 前先读当前路线、已有拆法和回执中的 discussion.search_url 讨论，选定具体卡点，在 PR 中说明新前提如何推进，并注明讨论来源。每套经 Lean 核验并被采用的拆法另加 1 分。' : '')
       + (gap.imports?.length ? '本题推荐  ' + gap.imports.join('、') + '。' : '')
       + '可查阅网上资料，把相关方法形式化到指定的 Lean 文件，并在 PR 中注明来源。如果无法领取这条引理，请说明原因，不要改领其他题。'
   },
@@ -93,7 +93,7 @@ const strings = {
     alreadyVerified: 'The authoritative verifier has accepted this lemma.',
     lemmaPrompt: gap => 'Read ' + guideUrl + ' and follow it to claim and verify exactly ' + gap.id + ' with ' + claimCommand + ' ' + gap.id + '. Verified community modules are available across conjectures (see the guide). '
       + "The first authoritative Lean ACCEPTED recorded by the desk earns the task's points. "
-      + (gap.takes_cuts ? 'You can also use ' + claimCommand + ' ' + gap.id + ' --kind cut. Each Lean-verified cut adopted by the desk earns a separate point. ' : '')
+      + (gap.takes_cuts ? 'You can also use ' + claimCommand + ' ' + gap.id + ' --kind cut. Before writing Lean, read the live roadmap, existing cuts, and discussion.search_url from the receipt. Pick a concrete blocker, explain how your premises address it in the cut PR, and cite helpful threads. Each Lean-verified cut adopted by the desk earns a separate point. ' : '')
       + (gap.imports?.length ? 'Suggested imports include ' + gap.imports.join(', ') + '. ' : '')
       + 'You may research methods online. Formalize the relevant steps in your assigned Lean file and cite your sources in the PR. If that lemma is unavailable, report why and do not choose another.'
   }
