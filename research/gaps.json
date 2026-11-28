@@ -15378,6 +15378,56 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-reflected-continuous-distribution",
+      "statement": "by\n  classical\n  let e := fun t : ℝ => Complex.exp (((2*Real.pi*t : ℝ) : ℂ)*Complex.I)\n  let S := fun (N : ℕ) (t : ℝ) => ∑ p ∈ (Finset.range (N+1)).filter Nat.Prime, (Real.log (p : ℝ) : ℂ) * e ((p : ℝ)*t)\n  let arcs := fun N : ℕ => let k := Nat.log 2 (N+2); {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ k ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a : ℝ)/(q : ℝ)| ≤ ((k^3 : ℕ) : ℝ)/((q : ℝ)*(N : ℝ))}\n  let A := fun N m : ℕ => (intervalIntegral ((arcs N).indicator (fun t : ℝ => (S N t)^2 * e (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume).re\n  let C₂ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1/((p : ℝ)-1)^2 else 1\n  let band := fun N m : ℕ => 4*N ≤ 3*m ∧ 2*m ≤ 3*N ∧ Even m\n  let R := fun N m : ℕ => A N m / (2*(N:ℝ)-(m:ℝ))\n  let B := fun N : ℕ => (Finset.Icc N (2*N)).filter (band N)\n  let avg := fun (F : Finset ℕ) (f : ℕ → ℝ) => (∑ m ∈ F, f m)/(F.card:ℝ)\n  exact ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧ ∃ T : ℕ, ∀ N : ℕ, T ≤ N → ∀ z : ℝ,\n    (((B N).filter (fun m => |R N m-z| ≤ δ)).card:ℝ) ≤ ε*((B N).card:ℝ)",
+      "plain_statement": {
+        "zh": "证明归一化大弧系数不会有正比例集中在任意足够窄的实区间内。",
+        "en": "Prove uniform anti-concentration for the actual major-arc coefficient."
+      },
+      "brief": {
+        "zh": "#4275 的尖锐下界并不给出系数取值的集中度。可截取有限个素数，用 CRT 比较独立整除事件，再控制剩余局部因子的影响。需要对区间中心 z 一致；仅证明单点不等于下界不够。",
+        "en": "Transfer to products over finitely many primes, control the discarded tail, and prove absence of atoms using independent prime divisibility. The scale must work simultaneously for all interval centers."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4275",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-reflected-major-sharp-floor"
+      ],
+      "module": "Conjectures.Goldbach.ReflectedContinuousDistribution",
+      "file": "lean/Conjectures/Goldbach/ReflectedContinuousDistribution.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-reflected-lower-tail-density",
+      "statement": "by\n  classical\n  let e := fun t : ℝ => Complex.exp (((2*Real.pi*t : ℝ) : ℂ)*Complex.I)\n  let S := fun (N : ℕ) (t : ℝ) => ∑ p ∈ (Finset.range (N+1)).filter Nat.Prime, (Real.log (p : ℝ) : ℂ) * e ((p : ℝ)*t)\n  let arcs := fun N : ℕ => let k := Nat.log 2 (N+2); {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ k ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a : ℝ)/(q : ℝ)| ≤ ((k^3 : ℕ) : ℝ)/((q : ℝ)*(N : ℝ))}\n  let A := fun N m : ℕ => (intervalIntegral ((arcs N).indicator (fun t : ℝ => (S N t)^2 * e (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume).re\n  let C₂ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1/((p : ℝ)-1)^2 else 1\n  let band := fun N m : ℕ => 4*N ≤ 3*m ∧ 2*m ≤ 3*N ∧ Even m\n  let R := fun N m : ℕ => A N m / (2*(N:ℝ)-(m:ℝ))\n  let B := fun N : ℕ => (Finset.Icc N (2*N)).filter (band N)\n  let avg := fun (F : Finset ℕ) (f : ℕ → ℝ) => (∑ m ∈ F, f m)/(F.card:ℝ)\n  exact ∀ ε : ℝ, 0 < ε → ∃ δ₀ : ℝ, 0 < δ₀ ∧ ∀ δ : ℝ, 0 < δ → δ < δ₀ → ∃ T : ℕ, ∀ N : ℕ, T ≤ N →\n    let P := (((B N).filter (fun m => R N m ≤ 2*C₂+δ)).card:ℝ)/((B N).card:ℝ)\n    |Real.log (1/δ)*P - 2*Real.exp (-Real.eulerMascheroniConstant)| ≤ ε",
+      "plain_statement": {
+        "zh": "精确计算距离最优下界 δ 以内的偶目标所占比例的一阶常数。",
+        "en": "Find the first-order lower-tail density at the sharp floor."
+      },
+      "brief": {
+        "zh": "#4275 用二的幂说明下界可逼近；本题预测比例约为 2e^(−γ)/log(1/δ)。避开至约 1/δ 的奇素数产生 Mertens 因子，须在这个筛过的样本内估计更大素因子的贡献，并按先 N 后 δ 的次序取极限。",
+        "en": "Powers of two give witnesses in #4275. For the frequency, sieve out odd prime factors up to scale 1/δ, then bound the conditional tail from larger primes. The order of limits is N first, δ second."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4275",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-reflected-major-sharp-floor"
+      ],
+      "module": "Conjectures.Goldbach.ReflectedLowerTailDensity",
+      "file": "lean/Conjectures/Goldbach/ReflectedLowerTailDensity.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-reflected-major-sharp-floor",
       "statement": "by\n  classical\n  let e := fun t : ℝ => Complex.exp (((2*Real.pi*t : ℝ) : ℂ)*Complex.I)\n  let S := fun (N : ℕ) (t : ℝ) => ∑ p ∈ (Finset.range (N+1)).filter Nat.Prime, (Real.log (p : ℝ) : ℂ) * e ((p : ℝ)*t)\n  let arcs := fun N : ℕ => let k := Nat.log 2 (N+2); {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ k ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a : ℝ)/(q : ℝ)| ≤ ((k^3 : ℕ) : ℝ)/((q : ℝ)*(N : ℝ))}\n  let A := fun N m : ℕ => (intervalIntegral ((arcs N).indicator (fun t : ℝ => (S N t)^2 * e (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume).re\n  let C₂ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1/((p : ℝ)-1)^2 else 1\n  let band := fun N m : ℕ => 4*N ≤ 3*m ∧ 2*m ≤ 3*N ∧ Even m\n  exact ∀ ε : ℝ, 0 < ε →\n    (∃ T : ℕ, ∀ N m : ℕ, T ≤ N → band N m → (2*C₂-ε)*(2*(N : ℝ)-(m : ℝ)) ≤ A N m) ∧\n    (∀ T : ℕ, ∃ N m : ℕ, T ≤ N ∧ 1 ≤ N ∧ band N m ∧ A N m ≤ (2*C₂+ε)*(2*(N : ℝ)-(m : ℝ)))",
       "plain_statement": {
@@ -15398,6 +15448,106 @@
       "depends_on": [],
       "module": "Conjectures.Goldbach.ReflectedMajorSharpFloor",
       "file": "lean/Conjectures/Goldbach/ReflectedMajorSharpFloor.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-reflected-mean-square-euler-tail",
+      "statement": "by\n  classical\n  let e := fun t : ℝ => Complex.exp (((2*Real.pi*t : ℝ) : ℂ)*Complex.I)\n  let S := fun (N : ℕ) (t : ℝ) => ∑ p ∈ (Finset.range (N+1)).filter Nat.Prime, (Real.log (p : ℝ) : ℂ) * e ((p : ℝ)*t)\n  let arcs := fun N : ℕ => let k := Nat.log 2 (N+2); {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ k ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a : ℝ)/(q : ℝ)| ≤ ((k^3 : ℕ) : ℝ)/((q : ℝ)*(N : ℝ))}\n  let A := fun N m : ℕ => (intervalIntegral ((arcs N).indicator (fun t : ℝ => (S N t)^2 * e (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume).re\n  let C₂ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1/((p : ℝ)-1)^2 else 1\n  let band := fun N m : ℕ => 4*N ≤ 3*m ∧ 2*m ≤ 3*N ∧ Even m\n  let R := fun N m : ℕ => A N m / (2*(N:ℝ)-(m:ℝ))\n  let B := fun N : ℕ => (Finset.Icc N (2*N)).filter (band N)\n  let avg := fun (F : Finset ℕ) (f : ℕ → ℝ) => (∑ m ∈ F, f m)/(F.card:ℝ)\n  exact ∃ C : ℝ, 0 < C ∧ ∀ y : ℕ, 3 ≤ y → ∃ T : ℕ, ∀ N : ℕ, T ≤ N →\n    let P := fun m : ℕ => 2*C₂ * ∏ p ∈ m.primeFactors.filter (fun p => 2 < p ∧ p ≤ y), (1+1/((p:ℝ)-2))\n    avg (B N) (fun m => (R N m-P m)^2) ≤ C/(y:ℝ)^2",
+      "plain_statement": {
+        "zh": "用不超过 y 的奇素因子预测实际大弧系数，在偶目标带上证明均方误差为 O(y⁻²)。",
+        "en": "Bound mean-square error of the small-prime model by O(y⁻²) on the reflected band."
+      },
+      "brief": {
+        "zh": "固定 y 后让 N 增长。有限模型只读目标的少量局部信息；误差上界要求绝对常数独立于 y。可先对截断 Ramanujan 和做正交，再把有限素因子模型与完整二阶 Euler 乘积比较。",
+        "en": "After fixing y take N large. Bound the actual coefficient in mean square by a model using only small prime divisors, with an absolute constant. Try Ramanujan orthogonality followed by a second-moment Euler product tail estimate."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4275",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-reflected-major-sharp-floor"
+      ],
+      "module": "Conjectures.Goldbach.ReflectedMeanSquareEulerTail",
+      "file": "lean/Conjectures/Goldbach/ReflectedMeanSquareEulerTail.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-reflected-shifted-pair-moment",
+      "statement": "by\n  classical\n  let e := fun t : ℝ => Complex.exp (((2*Real.pi*t : ℝ) : ℂ)*Complex.I)\n  let S := fun (N : ℕ) (t : ℝ) => ∑ p ∈ (Finset.range (N+1)).filter Nat.Prime, (Real.log (p : ℝ) : ℂ) * e ((p : ℝ)*t)\n  let arcs := fun N : ℕ => let k := Nat.log 2 (N+2); {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ k ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a : ℝ)/(q : ℝ)| ≤ ((k^3 : ℕ) : ℝ)/((q : ℝ)*(N : ℝ))}\n  let A := fun N m : ℕ => (intervalIntegral ((arcs N).indicator (fun t : ℝ => (S N t)^2 * e (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume).re\n  let C₂ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1/((p : ℝ)-1)^2 else 1\n  let band := fun N m : ℕ => 4*N ≤ 3*m ∧ 2*m ≤ 3*N ∧ Even m\n  let R := fun N m : ℕ => A N m / (2*(N:ℝ)-(m:ℝ))\n  let B := fun N : ℕ => (Finset.Icc N (2*N)).filter (band N)\n  let avg := fun (F : Finset ℕ) (f : ℕ → ℝ) => (∑ m ∈ F, f m)/(F.card:ℝ)\n  exact ∀ ε : ℝ, 0 < ε → ∃ T : ℕ, ∀ N h : ℕ, T ≤ N → h^3 ≤ N →\n    let F := (B N).filter (fun m => band N (m+2*h))\n    let E := (2*C₂)^2 * ∏' p : ℕ, if Nat.Prime p ∧ 2<p then (let u : ℝ := 1/((p:ℝ)-2); 1+2*u/(p:ℝ)+(if p ∣ h then u^2/(p:ℝ) else 0)) else 1\n    |avg F (fun m => R N m * R N (m+2*h)) - E| ≤ ε",
+      "plain_statement": {
+        "zh": "求相距 2h 的两个大弧系数的混合二阶矩，对 h³≤N 一致。",
+        "en": "Determine the shifted second moment uniformly for h³≤N."
+      },
+      "brief": {
+        "zh": "#4275 只控制单点下界。若 p∤h，则 p 不能同时整除 m 和 m+2h；若 p|h，则两条件重合，这给出不同的局部二阶项。须证明有限分母截断误差对移动的 h 一致。h=0 包含真正的二阶矩。",
+        "en": "Use intersection versus exclusion of the two divisibility events at odd p. Control the cutoff uniformly as h varies; h=0 recovers the unshifted second moment. The average is over the intersection of the two reflected bands."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4275",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-reflected-major-sharp-floor"
+      ],
+      "module": "Conjectures.Goldbach.ReflectedShiftedPairMoment",
+      "file": "lean/Conjectures/Goldbach/ReflectedShiftedPairMoment.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-reflected-short-progression-mean",
+      "statement": "by\n  classical\n  let e := fun t : ℝ => Complex.exp (((2*Real.pi*t : ℝ) : ℂ)*Complex.I)\n  let S := fun (N : ℕ) (t : ℝ) => ∑ p ∈ (Finset.range (N+1)).filter Nat.Prime, (Real.log (p : ℝ) : ℂ) * e ((p : ℝ)*t)\n  let arcs := fun N : ℕ => let k := Nat.log 2 (N+2); {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ k ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a : ℝ)/(q : ℝ)| ≤ ((k^3 : ℕ) : ℝ)/((q : ℝ)*(N : ℝ))}\n  let A := fun N m : ℕ => (intervalIntegral ((arcs N).indicator (fun t : ℝ => (S N t)^2 * e (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume).re\n  let C₂ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1/((p : ℝ)-1)^2 else 1\n  let band := fun N m : ℕ => 4*N ≤ 3*m ∧ 2*m ≤ 3*N ∧ Even m\n  let R := fun N m : ℕ => A N m / (2*(N:ℝ)-(m:ℝ))\n  let B := fun N : ℕ => (Finset.Icc N (2*N)).filter (band N)\n  let avg := fun (F : Finset ℕ) (f : ℕ → ℝ) => (∑ m ∈ F, f m)/(F.card:ℝ)\n  exact ∀ d a : ℕ, Odd d → a < d → ∀ θ : ℝ, 0 < θ → θ < 1 → ∀ ε : ℝ, 0 < ε → ∃ T : ℕ, ∀ N x H : ℕ, T ≤ N → 4*N ≤ 3*x → 2*(x+H) ≤ 3*N → (N:ℝ)^θ ≤ (H:ℝ) →\n    let F := ((B N) ∩ Finset.Icc x (x+H)).filter (fun m => m%d=a)\n    let E := 2 * ∏ p ∈ d.primeFactors, ((if p ∣ a then 1+1/((p:ℝ)-2) else 1)/(1+1/((p:ℝ)*((p:ℝ)-2))))\n    |avg F (R N) - E| ≤ ε",
+      "plain_statement": {
+        "zh": "在任意固定奇模剩余类、任意幂长短区间上求实际大弧系数的局部均值。",
+        "en": "Determine the mean in each fixed odd residue class uniformly in polynomial-length windows."
+      },
+      "brief": {
+        "zh": "把 #4275 的一致转移代入算术行，按同余条件平均 Ramanujan 和。p 整除模数时按 p 是否整除 a 固定局部因子；其余素数需控制短窗端点误差。取 d=1 时预测均值为 2。",
+        "en": "Use the uniform transfer of #4275, average the truncated Ramanujan sums in a progression and bound endpoint losses. Condition each prime dividing d on the target residue. For d=1 the expected mean is 2."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4275",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-reflected-major-sharp-floor"
+      ],
+      "module": "Conjectures.Goldbach.ReflectedShortProgressionMean",
+      "file": "lean/Conjectures/Goldbach/ReflectedShortProgressionMean.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-reflected-upper-envelope",
+      "statement": "by\n  classical\n  let e := fun t : ℝ => Complex.exp (((2*Real.pi*t : ℝ) : ℂ)*Complex.I)\n  let S := fun (N : ℕ) (t : ℝ) => ∑ p ∈ (Finset.range (N+1)).filter Nat.Prime, (Real.log (p : ℝ) : ℂ) * e ((p : ℝ)*t)\n  let arcs := fun N : ℕ => let k := Nat.log 2 (N+2); {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ k ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a : ℝ)/(q : ℝ)| ≤ ((k^3 : ℕ) : ℝ)/((q : ℝ)*(N : ℝ))}\n  let A := fun N m : ℕ => (intervalIntegral ((arcs N).indicator (fun t : ℝ => (S N t)^2 * e (-(m : ℝ)*t))) (0 : ℝ) 1 MeasureTheory.volume).re\n  let C₂ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1/((p : ℝ)-1)^2 else 1\n  let band := fun N m : ℕ => 4*N ≤ 3*m ∧ 2*m ≤ 3*N ∧ Even m\n  let R := fun N m : ℕ => A N m / (2*(N:ℝ)-(m:ℝ))\n  let B := fun N : ℕ => (Finset.Icc N (2*N)).filter (band N)\n  exact ∀ ε : ℝ, 0 < ε → ∃ T : ℕ, ∀ N : ℕ, T ≤ N →\n    (∀ m ∈ B N, R N m ≤ (1+ε)*Real.log (Real.log (N:ℝ))) ∧\n    (∃ m ∈ B N, (1-ε)*Real.log (Real.log (N:ℝ)) ≤ R N m)",
+      "plain_statement": {
+        "zh": "证明每一条充分大的反射带上，大弧系数最大值的主项为 log log N。",
+        "en": "Identify the leading maximum of the major-arc coefficient on every sufficiently large reflected band."
+      },
+      "brief": {
+        "zh": "与 #4275 的最小值互补。上界可比较截断的 μ²(q)/φ(q) 之和；下界在带内寻找一个被小素数连乘整除的偶数。必须控制不能强迫整除的剩余分母，其符号可能为负。",
+        "en": "Complement the minimum in #4275. Majorize by the squarefree reciprocal-totient sum. For the lower bound choose a multiple of a suitable primorial inside each band and control the remaining signed denominators."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/4275",
+      "track": "exceptions",
+      "program": "exceptions",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "depends_on": [
+        "L-goldbach-reflected-major-sharp-floor"
+      ],
+      "module": "Conjectures.Goldbach.ReflectedUpperEnvelope",
+      "file": "lean/Conjectures/Goldbach/ReflectedUpperEnvelope.lean",
       "route_source": "exceptions"
     },
     {
