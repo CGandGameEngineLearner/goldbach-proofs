@@ -14,7 +14,4 @@ theorem Conjectures.Cuts.Cutf52d0483603880dd1f2e7b6f
   obtain ⟨N0, hN0⟩ := h₁
   refine ⟨N0, ?_⟩
   intro n hn hEven
-  dsimp only at hN0 h₂ ⊢
-  have h1 := hN0 n hn hEven
-  have h2 := h₂ n
-  linarith
+  exact le_trans (h₂ n) (hN0 n hn hEven)
