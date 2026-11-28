@@ -5,28 +5,6 @@ open Finset
 
 -- The only analytic input in the combination is the verified mean-square estimate.
 -- No independence of the discrepancy and the sieve event is used.
-private theorem threshold_transport (F : Finset ℕ) (x z : ℕ → ℝ)
-    (a b s : ℝ) (hs : 0 < s) (hab : a+s ≤ b) :
-    (((F.filter (fun m => x m ≤ a)).card : ℝ)/F.card) ≤
-    (((F.filter (fun m => z m ≤ b)).card : ℝ)/F.card) +
-      (1/s^2)*((∑ m ∈ F, (x m-z m)^2)/(F.card:ℝ)) := by
-  classical
-  have h := Finset.sum_le_sum (s := F) (fun m _ => show
-      (if x m ≤ a then (1:ℝ) else 0) ≤
-        (if z m ≤ b then (1:ℝ) else 0) + (1/s^2)*(x m-z m)^2 by
-      have hn : 0 ≤ (1/s^2)*(x m-z m)^2 := by positivity
-      split_ifs with hx hz hz
-      · linarith
-      · have hsq := mul_self_le_mul_self hs.le (show s ≤ z m - x m by linarith)
-        have hsq' : s^2 ≤ (x m-z m)^2 := by nlinarith only [hsq]
-        rw [zero_add, one_div_mul_eq_div]
-        exact (one_le_div (by positivity)).mpr hsq'
-      · linarith
-      · linarith)
-  simp only [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_boole] at h
-  simpa only [add_div, mul_div_assoc] using
-    (div_le_div_of_nonneg_right h (Nat.cast_nonneg F.card : 0 ≤ (F.card:ℝ)))
-
 -- child 1 zh: 奇素数 Mertens 乘积：在截点 ⌊1/δ⌋，乘积乘 log(1/δ) 的极限为 2 exp(−γ)。
 -- child 1 en: Odd-prime Mertens product at cutoff floor(1/d), including the leading constant.
 -- child 2 zh: 有限欧拉模型的筛比较：半宽和双宽两个阈值下的频率，从两侧夹住奇素数筛乘积，归一化误差至多 η。
@@ -63,6 +41,27 @@ theorem Conjectures.Cuts.Cut266b0f4c1d036f599cb7cf5d
     let P := (((B N).filter (fun m => R N m ≤ 2*C₂+δ)).card:ℝ)/((B N).card:ℝ)
     |Real.log (1/δ)*P - 2*Real.exp (-Real.eulerMascheroniConstant)| ≤ ε) := by
   classical
+  have threshold_transport (F : Finset ℕ) (x z : ℕ → ℝ)
+      (a b s : ℝ) (hs : 0 < s) (hab : a+s ≤ b) :
+      (((F.filter (fun m => x m ≤ a)).card : ℝ)/F.card) ≤
+      (((F.filter (fun m => z m ≤ b)).card : ℝ)/F.card) +
+        (1/s^2)*((∑ m ∈ F, (x m-z m)^2)/(F.card:ℝ)) := by
+    classical
+    have h := Finset.sum_le_sum (s := F) (fun m _ => show
+        (if x m ≤ a then (1:ℝ) else 0) ≤
+          (if z m ≤ b then (1:ℝ) else 0) + (1/s^2)*(x m-z m)^2 by
+        have hn : 0 ≤ (1/s^2)*(x m-z m)^2 := by positivity
+        split_ifs with hx hz hz
+        · linarith
+        · have hsq := mul_self_le_mul_self hs.le (show s ≤ z m - x m by linarith)
+          have hsq' : s^2 ≤ (x m-z m)^2 := by nlinarith only [hsq]
+          rw [zero_add, one_div_mul_eq_div]
+          exact (one_le_div (by positivity)).mpr hsq'
+        · linarith
+        · linarith)
+    simp only [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_boole] at h
+    simpa only [add_div, mul_div_assoc] using
+      (div_le_div_of_nonneg_right h (Nat.cast_nonneg F.card : 0 ≤ (F.card:ℝ)))
   let c : ℝ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1/((p : ℝ)-1)^2 else 1
   let band := fun N : ℕ => (Finset.Icc N (2*N)).filter (fun m => 4*N ≤ 3*m ∧ 2*m ≤ 3*N ∧ Even m)
   let model := fun (y m : ℕ) => 2*c * ∏ p ∈ m.primeFactors.filter (fun p => 2 < p ∧ p ≤ y), (1+1/((p:ℝ)-2))
