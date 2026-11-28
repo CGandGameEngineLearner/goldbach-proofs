@@ -2593,6 +2593,83 @@ lemma csum_eq_divisor_moebius (q n : ℕ) (hq : 0 < q) :
     exact ⟨⟨h1, hq.ne'⟩, h2⟩
   rw [hfil]
 
+/-- The Ramanujan sum is an integer, exhibited as an `ℤ`-cast. -/
+lemma csum_eq_intCast (q n : ℕ) (hq : 0 < q) :
+    csum q n = ((∑ d ∈ Nat.divisors (Nat.gcd q n),
+      ArithmeticFunction.moebius (q / d) * (d : ℤ) : ℤ) : ℂ) := by
+  rw [csum_eq_divisor_moebius q n hq, Int.cast_sum]
+  exact Finset.sum_congr rfl fun d _ => (Int.cast_mul _ _).symm
+
+/-- The Ramanujan sum has zero imaginary part. -/
+lemma csum_im_eq_zero (q n : ℕ) (hq : 0 < q) : (csum q n).im = 0 := by
+  rw [csum_eq_intCast q n hq]
+  rfl
+
+/-- For squarefree `q`, the real Ramanujan sum satisfies `c_q(n) ≥ -φ((q,n))`. -/
+lemma csum_re_ge_neg_totient (q n : ℕ) (hq : 0 < q) (hsq : Squarefree q) :
+    -((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) ≤ (csum q n).re := by
+  have hg0 : 0 < Nat.gcd q n := Nat.gcd_pos_of_pos_left n hq
+  have hval : (csum q n).re
+      = ((ArithmeticFunction.moebius (q / Nat.gcd q n) : ℤ) : ℝ)
+        * ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) := by
+    rw [csum_eq_moebius_totient q n hq hsq, Complex.mul_re]
+    simp
+  have hgsq : Squarefree (q / Nat.gcd q n) :=
+    Squarefree.squarefree_of_dvd (Nat.div_dvd_of_dvd (Nat.gcd_dvd_left q n)) hsq
+  have hunit : ArithmeticFunction.moebius (q / Nat.gcd q n) = 1
+      ∨ ArithmeticFunction.moebius (q / Nat.gcd q n) = -1 :=
+    sq_eq_one_iff.mp (ArithmeticFunction.moebius_sq_eq_one_of_squarefree hgsq)
+  rw [hval]
+  have hφ : 0 ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) := Nat.cast_nonneg _
+  rcases hunit with h | h
+  · rw [h, Int.cast_one, one_mul]
+    linarith
+  · rw [h, Int.cast_neg, Int.cast_one, neg_one_mul]
+
+open Classical in
+/-- Conditional model-sum floor: with nonnegative weights on squarefree moduli, the
+weighted Ramanujan model sum is bounded below by minus the mass of its negative part.
+Since `|c_q(n)| = φ((q,n))`, bounding that negative part by `ε*n` is precisely the
+remaining signed-cancellation problem for the skirt. -/
+lemma model_sum_floor_of_neg_bound (s : Finset ℕ) (n : ℕ) (ε : ℝ) (w : ℕ → ℝ)
+    (hq : ∀ q ∈ s, 0 < q) (hsq : ∀ q ∈ s, Squarefree q) (hw : ∀ q ∈ s, 0 ≤ w q)
+    (hbound : ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+        ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) * w q ≤ ε * (n : ℝ)) :
+    ∑ q ∈ s, (csum q n).re * w q ≥ -(ε * (n : ℝ)) := by
+  classical
+  have hdisj : Disjoint (s.filter (fun q => (csum q n).re < 0))
+      (s.filter (fun q => ¬((csum q n).re < 0))) :=
+    Finset.disjoint_left.mpr fun a ha hb => by
+      simp only [Finset.mem_filter] at ha hb
+      exact absurd ha.2 hb.2
+  have hsplit : ∑ q ∈ s, (csum q n).re * w q
+      = ∑ q ∈ s.filter (fun q => (csum q n).re < 0), (csum q n).re * w q
+        + ∑ q ∈ s.filter (fun q => ¬((csum q n).re < 0)), (csum q n).re * w q := by
+    rw [← Finset.sum_union hdisj, Finset.filter_union_filter_not_eq]
+  have hpos : 0 ≤ ∑ q ∈ s.filter (fun q => ¬((csum q n).re < 0)), (csum q n).re * w q :=
+    Finset.sum_nonneg fun q hq' => by
+      have hq'' : q ∈ s := (Finset.mem_filter.mp hq').1
+      exact mul_nonneg (le_of_not_gt (Finset.mem_filter.mp hq').2) (hw q hq'')
+  have hfinal : ∑ q ∈ s, (csum q n).re * w q
+      ≥ -∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+          ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) * w q := by
+    rw [hsplit]
+    have h1 : ∑ q ∈ s.filter (fun q => (csum q n).re < 0), (csum q n).re * w q
+        ≥ ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+            (-((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)) * w q :=
+      Finset.sum_le_sum fun q hq' => by
+        have hq'' : q ∈ s := (Finset.mem_filter.mp hq').1
+        exact mul_le_mul_of_nonneg_right (csum_re_ge_neg_totient q n (hq q hq'') (hsq q hq''))
+          (hw q hq'')
+    have h2 : ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+        (-((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)) * w q
+        = -∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+            ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) * w q := by
+      rw [Finset.sum_congr rfl (fun q _ => neg_mul ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) (w q)),
+        Finset.sum_neg_distrib]
+    linarith [hpos, h1, h2]
+  exact ge_trans hfinal (neg_le_neg hbound)
+
 end Ramanujan
 
 
