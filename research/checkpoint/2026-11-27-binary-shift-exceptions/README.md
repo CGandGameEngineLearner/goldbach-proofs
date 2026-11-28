@@ -42,7 +42,9 @@ $$
 
 `coefficient_sub_retained` 逐个分母写出完整主弧模型减去所选矩形的精确余项。求和保留每个至少有一个零点落在矩形外的配对的符号、解析重数、Gauss 因子与有限弧积分。在两个虚部接近互为相反数时，`beta_opposite_ordinates` 给出 Beta 因子的指数衰减。具体地，若 $|\gamma|\ge16$、$|\gamma+\gamma'|\le |\gamma|/2$ 且两实部在 $[5/8,1]$，则衰减因子至多为 $(3/4)^{\lfloor |\gamma|/8\rfloor}$，乘以常数 $B(5/8,5/8)$。[Pintz 关于高零点的主弧估计](https://arxiv.org/html/1804.05561v1#S10)
 
-对任意符号的虚部，`beta_uniform_height` 给出一致衰减率 $O(\max(|\gamma|,|\gamma'|)^{-1/16})$。这比 Pintz 在公式 (10.25) 中给出的 $-1/2$ 指数弱，但足以做固定高度截断。具体地，对每个 $0<b<1$ 和任意 $\varepsilon>0$，可先选取与 $Q$ 无关的高度 $T$，使 $Q^b$ 与 $T$ 两张表的带符号 Beta 主项之差至多为 $\varepsilon\mathfrak S(n)n$。该界对全部正整数目标和所有分母截断值同时成立。Lean 声明为 `polynomial_catalogue_beta_truncation`。这个估计控制的是完成 Fourier 反演后的 Beta 主项；原题中的有限主弧余项还需要单独控制。[Pintz I，公式 (10.24) 至 (10.27)](https://arxiv.org/html/1804.05561v1#S10)
+对任意符号的虚部，`beta_uniform_height` 给出一致衰减率 $O(\max(|\gamma|,|\gamma'|)^{-1/16})$。这比 Pintz 在公式 (10.25) 中给出的 $-1/2$ 指数弱，但足以做固定高度截断。具体地，对每个 $0<b<1$ 和任意 $\varepsilon>0$，可先选取与 $Q$ 无关的高度 $T$，使 $Q^b$ 与 $T$ 两张表的带符号 Beta 主项之差至多为 $\varepsilon\mathfrak S(n)n$。该界对全部正整数目标和所有分母截断值同时成立。Lean 声明为 `polynomial_catalogue_beta_truncation`。[Pintz I，公式 (10.24) 至 (10.27)](https://arxiv.org/html/1804.05561v1#S10)
+
+对每个条带宽度 $H\ge 0$，`polynomial_catalogue_arc_saving` 给出 $0<b\le1/2$ 和 $\kappa>0$，使高度 $Q^b$ 内真实有限主弧积分与该表 Beta 主项之差至多为 $C\mathfrak S(n)X^{1-\kappa}$。证明把逐对积分估计中的高度代价显式控制为 $(1+T)^4$，再用平方根高度内的零点重数界统一选择分母截断。由此，给定 $\varepsilon>0$，对充分大的 $Q$ 和 $X/2\le n\le X$ 内每个正偶数，可以把这部分有限积分替换成固定高度的带符号 Beta 主项，误差至多为 $\varepsilon\mathfrak S(n)n$。Lean 声明为 `polynomial_arc_to_bounded_beta`。更高零点和条带以外零点的有限积分仍须估计。[Pintz I，第 10 节](https://arxiv.org/html/1804.05561v1#S10)
 
 `binaryShiftExceptionUnion_of_catalogue_estimates` 已按注册表中原题的完整类型核对。若能选定矩形 $H,T$ 和 $0<\eta\le1$，使共同模数上的指数加权分类平方和至多为 $1-\eta$，并使余项实部至少为 $-\eta X/16$，即可推出 $S(X)^5\le X^4$。两项估计分别允许 $O(X^{19/24})$ 个例外。它们仍是待证的解析输入。[Zhao 的零点分类估计](https://arxiv.org/html/2511.05631v1) · [Pintz 的显式公式](https://arxiv.org/abs/1804.05561)
 

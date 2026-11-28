@@ -6543,11 +6543,9 @@ open scoped Interval
 noncomputable section
 namespace GoldbachTwistedMellin
 
-/-- On bounded-height residues, each local integral has error at most a
-constant times `w*X + 1/w`. In particular it can be summed uniformly on
-the denominators well below the arc cutoff. -/
-theorem residuePair_arc_uniform {T : ℝ} (hT : 0 ≤ T) :
-    ∃ C : ℝ, 0 < C ∧ ∀ (m : ℕ) (z t : Option ℂ) (n w : ℝ),
+/-- The local arc approximation has a fourth-power cost in the common ordinate bound. -/
+theorem residuePair_arc_height_cost {T : ℝ} (hT : 0 ≤ T) :
+    ∃ C : ℝ, 0 < C ∧ C ≤ 1000*(1+T)^4 ∧ ∀ (m : ℕ) (z t : Option ℂ) (n w : ℝ),
       0 < n → n < (m+3 : ℕ) → 0 < w → w ≤ 1/2 →
       5/8 ≤ (z.getD 1).re → (z.getD 1).re ≤ 1 → |(z.getD 1).im| ≤ T →
       5/8 ≤ (t.getD 1).re → (t.getD 1).re ≤ 1 → |(t.getD 1).im| ≤ T →
@@ -6561,7 +6559,10 @@ theorem residuePair_arc_uniform {T : ℝ} (hT : 0 ≤ T) :
   have hE : 0 ≤ E := by dsimp [E]; positivity
   have hD : 0 < D := by dsimp [D]; positivity
   have hA : 0 ≤ A := by dsimp [A]; positivity
-  refine ⟨C, by dsimp [C]; positivity, ?_⟩
+  have fee : C ≤ 1000*(1+T)^4 := by
+    dsimp only [C,A,D,E]
+    nlinarith only [hT,sq_nonneg T,pow_nonneg hT 3,pow_nonneg hT 4]
+  refine ⟨C, by dsimp [C]; positivity, fee, ?_⟩
   intro m z t n w hn hb hw hw1 hs hs1 his ht ht1 hit
   have eBound (v : Option ℂ) (hi : |(v.getD 1).im| ≤ T) :
       0 ≤ residueEndpointError v ∧ residueEndpointError v ≤ E := by
@@ -6622,6 +6623,20 @@ theorem residuePair_arc_uniform {T : ℝ} (hT : 0 ≤ T) :
   change 2*w*(A*B)+8*(D*D)*(1/w) ≤ C*(w*B+1/w)
   dsimp only [C]
   nlinarith only [show 0 ≤ A*(1/w) by positivity, show 0 ≤ (D*D)*(w*B) by positivity]
+
+/-- On bounded-height residues, each local integral has error at most a
+constant times `w*X + 1/w`. In particular it can be summed uniformly on
+the denominators well below the arc cutoff. -/
+theorem residuePair_arc_uniform {T : ℝ} (hT : 0 ≤ T) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (m : ℕ) (z t : Option ℂ) (n w : ℝ),
+      0 < n → n < (m+3 : ℕ) → 0 < w → w ≤ 1/2 →
+      5/8 ≤ (z.getD 1).re → (z.getD 1).re ≤ 1 → |(z.getD 1).im| ≤ T →
+      5/8 ≤ (t.getD 1).re → (t.getD 1).re ≤ 1 → |(t.getD 1).im| ≤ T →
+      ‖(∫ u in -w..w, phase (-2*Real.pi*n) u * (residueProfile m z u * residueProfile m t u)) -
+        (n:ℂ)^((z.getD 1)+(t.getD 1)-1)*Complex.betaIntegral (z.getD 1) (t.getD 1)‖
+        ≤ C * (w*(m+3 : ℕ) + 1/w) := by
+  obtain ⟨C,hC,_,rule⟩ := residuePair_arc_height_cost hT
+  exact ⟨C,hC,rule⟩
 
 end GoldbachTwistedMellin
 end
@@ -12364,12 +12379,10 @@ noncomputable section
 namespace Conjectures.Goldbach.BinaryShiftMajorModel
 open TwistedGoldbachSingularSeries TwistedGoldbachCoefficientProduct
 
-/-- A fixed bounded-height residue pair can be replaced, after summing its
-actual arcs over ambient denominators, by the complete primitive singular
-series times its beta factor. The lower denominators use Fourier decay and
-the upper denominators use the normalized Euler-product tail. -/
-theorem residuePair_denominator_sum {T δ : ℝ} (hT : 0 ≤ T) (hδ : 0 < δ) :
-    ∃ A D : ℝ, 0 < A ∧ 0 < D ∧ ∀ (r s : ℕ) [NeZero r] [NeZero s]
+/-- The denominator sums preserve that fourth-power height cost for every positive tail exponent. -/
+theorem residuePair_denominator_height_cost {δ : ℝ} (hδ : 0 < δ) :
+    ∃ K : ℝ, 0 < K ∧ ∀ T : ℝ, 0 ≤ T → ∃ A D : ℝ, 0 < A ∧ 0 < D ∧
+      A ≤ K*(1+T)^4 ∧ D ≤ K*(1+T)^4 ∧ ∀ (r s : ℕ) [NeZero r] [NeZero s]
       (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s),
       α.IsPrimitive → β.IsPrimitive → ∀ (m n J Q : ℕ) (P : ℝ) (z t : Option ℂ),
       let X : ℝ := (m+2 : ℕ)
@@ -12386,11 +12399,24 @@ theorem residuePair_denominator_sum {T δ : ℝ} (hT : 0 ≤ T) (hδ : 0 < δ) :
         S*((n:ℂ)^(a+b-1)*Complex.betaIntegral a b)‖ ≤
         ‖S‖*(A*(2*P + (L*J : ℕ)*X/P) + D*(X/(X^(δ/2)))) := by
   classical
-  obtain ⟨C, hC, kernel⟩ := residuePair_arc_uniform hT
   obtain ⟨D, hD, tail⟩ := TwistedGoldbachDenominatorTail.power_cutoff hδ
   let B := ‖Complex.betaIntegral ((5/8:ℝ):ℂ) ((5/8:ℝ):ℂ)‖
   have hB : 0 ≤ B := norm_nonneg _
-  refine ⟨4*C, (2*C+B)*D, by positivity, by positivity, ?_⟩
+  let K := 4000+(2000+B)*D
+  have kp : 0 < K := by dsimp only [K];positivity
+  refine ⟨K,kp,?_⟩
+  intro T hT
+  obtain ⟨C,hC,fee,kernel⟩ := residuePair_arc_height_cost hT
+  have h1 : (1:ℝ) ≤ (1+T)^4 := one_le_pow₀ (le_add_of_nonneg_right hT)
+  have e1 : 4*C ≤ K*(1+T)^4 := calc
+    _ ≤ 4000*(1+T)^4 := by linarith only [fee]
+    _ ≤ _ := mul_le_mul_of_nonneg_right (by dsimp only [K];have := mul_nonneg (by linarith only [hB] : 0 ≤ 2000+B) hD.le;linarith only [this]) (by positivity)
+  have e2 : (2*C+B)*D ≤ K*(1+T)^4 := calc
+    _ ≤ ((2000+B)*(1+T)^4)*D := mul_le_mul_of_nonneg_right (by
+      have z := mul_le_mul_of_nonneg_left h1 hB
+      nlinarith only [fee,z]) hD.le
+    _ ≤ _ := by dsimp only [K];nlinarith only [h1]
+  refine ⟨4*C,(2*C+B)*D,by positivity,by positivity,e1,e2,?_⟩
   intro r s _ _ α β hα hβ m n J Q P z t X L a b S w hn hnX he hP hPX hQ hJ hcut ha ha' haz hb hb' hbt
   let c := TwistedGoldbachSingularSeries.coefficient α β n
   let V := (n:ℂ)^(a+b-1)*Complex.betaIntegral a b
@@ -12466,6 +12492,31 @@ theorem residuePair_denominator_sum {T δ : ℝ} (hT : 0 ≤ T) (hδ : 0 < δ) :
   dsimp only [E, F, X, S, c, L]
   ring
 
+/-- A fixed bounded-height residue pair can be replaced, after summing its
+actual arcs over ambient denominators, by the complete primitive singular
+series times its beta factor. The lower denominators use Fourier decay and
+the upper denominators use the normalized Euler-product tail. -/
+theorem residuePair_denominator_sum {T δ : ℝ} (hT : 0 ≤ T) (hδ : 0 < δ) :
+    ∃ A D : ℝ, 0 < A ∧ 0 < D ∧ ∀ (r s : ℕ) [NeZero r] [NeZero s]
+      (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s),
+      α.IsPrimitive → β.IsPrimitive → ∀ (m n J Q : ℕ) (P : ℝ) (z t : Option ℂ),
+      let X : ℝ := (m+2 : ℕ)
+      let L := Nat.lcm r s
+      let a := z.getD 1
+      let b := t.getD 1
+      let S := ∑' d, TwistedGoldbachSingularSeries.coefficient α β n d
+      let w (j : ℕ) := P/(((L*j : ℕ):ℝ)*X)
+      0 < n → n ≤ m+2 → Even n → 0 < P → 2*P ≤ X → (L*Q : ℕ) ≤ P →
+      J ≤ Q+1 → X^δ ≤ (J:ℝ) →
+      5/8 ≤ a.re → a.re ≤ 1 → |a.im| ≤ T → 5/8 ≤ b.re → b.re ≤ 1 → |b.im| ≤ T →
+      ‖(∑ j ∈ range (Q+1), TwistedGoldbachSingularSeries.coefficient α β n (L*j) *
+          ∫ u in -(w j)..w j, phase (-2*Real.pi*(n:ℝ)) u * (residueProfile m z u * residueProfile m t u)) -
+        S*((n:ℂ)^(a+b-1)*Complex.betaIntegral a b)‖ ≤
+        ‖S‖*(A*(2*P + (L*J : ℕ)*X/P) + D*(X/(X^(δ/2)))) := by
+  obtain ⟨K,_,law⟩ := residuePair_denominator_height_cost hδ
+  obtain ⟨A,D,hA,hD,_,_,est⟩ := law T hT
+  exact ⟨A,D,hA,hD,est⟩
+
 end Conjectures.Goldbach.BinaryShiftMajorModel
 end
 end
@@ -12485,12 +12536,9 @@ def primitiveResidueContribution {r s : ℕ} (α : DirichletCharacter ℂ r)
   ∑ j ∈ range (⌊P/(L:ℝ)⌋₊+1), TwistedGoldbachSingularSeries.coefficient α β n (L*j) *
     ∫ u in -(w j)..w j, phase (-2*Real.pi*(n:ℝ)) u * (residueProfile m z u * residueProfile m t u)
 
-/-- A single arc cutoff gives a power saving, relative to its own
-singular series, for every bounded-height residue pair in any bounded
-family of conductors. Both the exponent and the constant are uniform in
-the conductors, characters, residues and target. -/
-theorem residuePair_common_power_saving (B : ℕ) {T : ℝ} (hT : 0 ≤ T) :
-    ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧ ∀ m : ℕ, 2 ≤ m → ∀ R : Finset ℕ, R.card ≤ B →
+/-- For a bounded number of conductor levels the saving exponent is uniform in the ordinate cutoff. -/
+theorem residuePair_common_height_saving (B : ℕ) :
+    ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧ ∀ T : ℝ, 0 ≤ T → ∀ m : ℕ, 2 ≤ m → ∀ R : Finset ℕ, R.card ≤ B →
       let X : ℝ := (m+2 : ℕ)
       ∃ P : ℝ, X^(11/40:ℝ) ≤ P ∧ P ≤ X^(3/10:ℝ) ∧
       ∀ (r s : ℕ) [NeZero r] [NeZero s] (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s),
@@ -12501,14 +12549,16 @@ theorem residuePair_common_power_saving (B : ℕ) {T : ℝ} (hT : 0 ≤ T) :
         let S := ∑' d, TwistedGoldbachSingularSeries.coefficient α β n d
         5/8 ≤ a.re → a.re ≤ 1 → |a.im| ≤ T → 5/8 ≤ b.re → b.re ≤ 1 → |b.im| ≤ T →
         ‖primitiveResidueContribution α β m n P z t -
-          S*((n:ℂ)^(a+b-1)*Complex.betaIntegral a b)‖ ≤ ‖S‖*(C*X^(1-κ)) := by
+          S*((n:ℂ)^(a+b-1)*Complex.betaIntegral a b)‖ ≤ ‖S‖*(C*(1+T)^4*X^(1-κ)) := by
   obtain ⟨δ,hδ,chooseP⟩ := conductor_lcm_arc_gap B
   let e := min δ (1/5:ℝ)
   have he : 0 < e := lt_min hδ (by norm_num)
   have heδ : e ≤ δ := min_le_left ..
   have he' : e ≤ 1/5 := min_le_right ..
-  obtain ⟨A,D,hA,hD,estimate⟩ := residuePair_denominator_sum hT (show 0 < e/2 by positivity)
-  refine ⟨e/4, 4*A+D, by positivity, by positivity, ?_⟩
+  obtain ⟨K,hK,cost⟩ := residuePair_denominator_height_cost (show 0 < e/2 by positivity)
+  refine ⟨e/4,5*K,by positivity,by positivity,?_⟩
+  intro T hT
+  obtain ⟨A,D,hA,hD,afee,dfee,estimate⟩ := cost T hT
   intro m hm R hR X
   have hX4 : 4 ≤ X := by dsimp only [X]; exact_mod_cast (show 4 ≤ m+2 by omega)
   have hX : 1 < X := by linarith only [hX4]
@@ -12565,7 +12615,28 @@ theorem residuePair_common_power_saving (B : ℕ) {T : ℝ} (hT : 0 ≤ T) :
   calc
     _ ≤ A*(2*V+2*V)+D*V := add_le_add (mul_le_mul_of_nonneg_left (add_le_add (by linarith only [pV]) Jcost) hA.le)
       (mul_le_mul_of_nonneg_left tailEq.le hD.le)
-    _ = _ := by ring
+    _ = (4*A+D)*V := by ring
+    _ ≤ _ := mul_le_mul_of_nonneg_right (by linarith only [afee,dfee]) (Real.rpow_nonneg hx.le _)
+
+/-- A single arc cutoff gives a power saving, relative to its own
+singular series, for every bounded-height residue pair in any bounded
+family of conductors. Both the exponent and the constant are uniform in
+the conductors, characters, residues and target. -/
+theorem residuePair_common_power_saving (B : ℕ) {T : ℝ} (hT : 0 ≤ T) :
+    ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧ ∀ m : ℕ, 2 ≤ m → ∀ R : Finset ℕ, R.card ≤ B →
+      let X : ℝ := (m+2 : ℕ)
+      ∃ P : ℝ, X^(11/40:ℝ) ≤ P ∧ P ≤ X^(3/10:ℝ) ∧
+      ∀ (r s : ℕ) [NeZero r] [NeZero s] (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s),
+        r ∈ R → s ∈ R → (Nat.lcm r s:ℝ) ≤ P → α.IsPrimitive → β.IsPrimitive →
+        ∀ (n : ℕ) (z t : Option ℂ), 0 < n → n ≤ m+2 → Even n →
+        let a := z.getD 1
+        let b := t.getD 1
+        let S := ∑' d, TwistedGoldbachSingularSeries.coefficient α β n d
+        5/8 ≤ a.re → a.re ≤ 1 → |a.im| ≤ T → 5/8 ≤ b.re → b.re ≤ 1 → |b.im| ≤ T →
+        ‖primitiveResidueContribution α β m n P z t -
+          S*((n:ℂ)^(a+b-1)*Complex.betaIntegral a b)‖ ≤ ‖S‖*(C*X^(1-κ)) := by
+  obtain ⟨κ,K,hκ,hK,law⟩ := residuePair_common_height_saving B
+  exact ⟨κ,K*(1+T)^4,hκ,by positivity,law T hT⟩
 
 end Conjectures.Goldbach.BinaryShiftMajorModel
 end
@@ -18729,6 +18800,168 @@ theorem polynomial_catalogue_beta_truncation (H b ε : ℝ) (hH : 0 ≤ H)
   calc
     _ = ((∑ v ∈ Z, ‖catalogueWeight v‖)^2*(A/Real.sqrt U))*(S*(n:ℝ)) := by ring
     _ ≤ _ := mul_le_mul_of_nonneg_right ((mul_le_mul_of_nonneg_right square a0).trans small) ma
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+
+section
+open Complex Finset DirichletCharacter Filter Goldbach GoldbachTwistedMellin
+open scoped Classical
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+open TwistedGoldbachLocalProduct
+
+private theorem catalogue_card_le_mass (m Q X : ℕ) (H T : ℝ) :
+    let Z := nearOneCatalogue m Q X H T
+    (Z.card:ℝ) ≤ ∑ v ∈ Z, ‖catalogueWeight v‖ := by
+  intro Z
+  calc
+    _ = ∑ _v ∈ Z, (1:ℝ) := by simp
+    _ ≤ _ := by
+      apply sum_le_sum
+      intro v hv
+      cases v with
+      | none => simp [catalogueWeight]
+      | some v =>
+        obtain ⟨p,z⟩ := v
+        obtain ⟨_,_,root⟩ := (catalogue_some_member m Q X H T p z).mp hv
+        have zero := ((mem_exceptionalZeros ..).mp (mem_filter.mp root).1).2.2
+        have genuine := (ExceptionalZeroCatalogue.regular_zero p.2 z).mp zero
+        have pos := (ExceptionalZeroCatalogue.order_positive p.2 genuine).1
+        change 0 < analyticOrderNatAt (regularizedL p.2) z at pos
+        simp only [catalogueWeight,norm_neg,norm_natCast]
+        exact_mod_cast pos
+
+/-- Within the square-root rectangle every lower height, allowed to vary
+with the other parameters, shares a single bound for mass and cardinality. -/
+private theorem catalogue_mass_below_sqrt (H : ℝ) (hH : 0 ≤ H) :
+    ∃ B : ℕ, 0 < B ∧ ∀ᶠ Q : ℕ in atTop, ∀ m X : ℕ, Q ≤ X → ∀ T : ℝ,
+      0 ≤ T → T ≤ (Q:ℝ)^(1/2:ℝ) → let Z := nearOneCatalogue m Q X H T
+      Z.card ≤ B ∧ (∑ v ∈ Z, ‖catalogueWeight v‖) ≤ (B:ℝ) := by
+  obtain ⟨C,hC,law⟩ := nearOne_all_power_height H (1/2) hH (by norm_num) (by norm_num)
+  obtain ⟨B,hB⟩ := exists_nat_ge (1+C)
+  have bp : (0:ℝ) < B := by linarith only [hB,hC]
+  refine ⟨B,by exact_mod_cast bp,?_⟩
+  filter_upwards [law] with Q mass
+  intro m X QX T t0 ht Z
+  let Z' := nearOneCatalogue m Q X H ((Q:ℝ)^(1/2:ℝ))
+  have sub : Z ⊆ Z' := by
+    change nearOneCatalogue m Q X H T ⊆ nearOneCatalogue m Q X H _
+    rw [←catalogue_height_filter m Q X H _ T t0 ht]
+    exact filter_subset _ _
+  have lim : (∑ v ∈ Z', ‖catalogueWeight v‖) ≤ B := by
+    dsimp only [Z'];rw [catalogue_mass]
+    exact (add_le_add_right (mass m X QX) 1).trans hB
+  have bound := (sum_le_sum_of_subset_of_nonneg sub (fun v _ _ => norm_nonneg (catalogueWeight v))).trans lim
+  exact ⟨by exact_mod_cast (catalogue_card_le_mass m Q X H T).trans bound,bound⟩
+
+/-- One polynomial-height rectangle admits the actual finite-arc to Beta
+replacement with a uniform power saving. Its positive height exponent is
+chosen after bounding the whole square-root catalogue. -/
+theorem polynomial_catalogue_arc_saving (H : ℝ) (hH : 0 ≤ H) :
+    ∃ b κ C : ℝ, 0 < b ∧ b ≤ 1/2 ∧ 0 < κ ∧ 0 < C ∧ ∀ᶠ Q : ℕ in atTop, ∀ m : ℕ, 2 ≤ m → Q ≤ m+2 →
+      let X : ℝ := (m+2:ℕ)
+      let Z := nearOneCatalogue m Q (m+2) H ((Q:ℝ)^b)
+      ∃ P : ℝ, X^(11/40:ℝ) ≤ P ∧ P ≤ X^(3/10:ℝ) ∧ ∀ n : ℕ, 0 < n → n ≤ m+2 → Even n →
+        let S := (series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n).re
+        ‖cataloguePairSum Z P (catalogueArcTerm m n P)-cataloguePairSum Z P (catalogueBetaTerm n)‖ ≤
+          S*(C*X^(1-κ)) := by
+  obtain ⟨B,bp,limit⟩ := catalogue_mass_below_sqrt H hH
+  obtain ⟨κ,C,hκ,hC,common⟩ := BinaryShiftMajorModel.residuePair_common_height_saving B
+  let b := min (1/2) (κ/8)
+  have bo : 0 < b := lt_min (by norm_num) (by positivity)
+  have half : b ≤ 1/2 := min_le_left ..
+  have budget : 4*b ≤ κ/2 := by have s : b ≤ κ/8 := min_le_right ..;linarith only [s]
+  refine ⟨b,κ/2,(B:ℝ)^2*(16*C),bo,half,by positivity,by positivity,?_⟩
+  filter_upwards [limit,eventually_ge_atTop (1:ℕ)] with Q lim Q1
+  intro m hm QX X Z
+  let T := (Q:ℝ)^b
+  have q1 : (1:ℝ) ≤ Q := by exact_mod_cast Q1
+  have x1 : (1:ℝ) ≤ X := q1.trans (Nat.cast_le.mpr QX)
+  have xp := zero_lt_one.trans_le x1
+  have t0 : 0 ≤ T := Real.rpow_nonneg (Nat.cast_nonneg _) _
+  obtain ⟨card,mass⟩ := lim m (m+2) QX T t0 (Real.rpow_le_rpow_of_exponent_le q1 half)
+  let R := Z.image catalogueLevel
+  obtain ⟨P,lo,hi,estimate⟩ := common T t0 m hm R (card_image_le.trans card)
+  refine ⟨P,lo,hi,?_⟩
+  intro n hn nx ev S
+  have s0 : 0 ≤ S := (norm_nonneg _).trans
+    (TwistedGoldbachSingularSeries.infinite_domination isPrimitive_one_level_one isPrimitive_one_level_one n hn)
+  let cost := (16*C)*X^(1-κ/2)
+  have cp : 0 ≤ cost := by dsimp only [cost];positivity
+  have val : C*(1+T)^4*X^(1-κ) ≤ cost := by
+    have tX : T ≤ X^b := Real.rpow_le_rpow (Nat.cast_nonneg _) (Nat.cast_le.mpr QX) bo.le
+    have lower := Real.one_le_rpow x1 bo.le
+    have ht : 1+T ≤ 2*X^b := by linarith only [tX,lower]
+    calc
+      _ ≤ C*(2*X^b)^4*X^(1-κ) := by gcongr
+      _ = (16*C)*X^(4*b+(1-κ)) := by rw [mul_pow,←Real.rpow_mul_natCast xp.le,Real.rpow_add xp,mul_comm b];norm_num;ring
+      _ ≤ _ := mul_le_mul_of_nonneg_left (Real.rpow_le_rpow_of_exponent_le x1 (by linarith only [budget])) (by positivity)
+  have localCost (v : CatalogueEntry) (hv : v ∈ Z) (w : CatalogueEntry) (hw : w ∈ Z)
+      (cut : (Nat.lcm (catalogueLevel v) (catalogueLevel w):ℝ) ≤ P) :
+      ‖catalogueArcTerm m n P v w-catalogueBetaTerm n v w‖ ≤ S*cost := by
+    obtain ⟨_,pv,lv,rv,tv⟩ := catalogue_properties m Q (m+2) H T t0 v hv
+    obtain ⟨_,pw,lw,rw',tw⟩ := catalogue_properties m Q (m+2) H T t0 w hw
+    have bd := estimate _ _ (catalogueCharacter v)⁻¹ (catalogueCharacter w)⁻¹ (mem_image_of_mem _ hv)
+      (mem_image_of_mem _ hw) cut pv.inv pw.inv n (catalogueRoot v) (catalogueRoot w) hn nx ev lv rv tv lw rw' tw
+    exact bd.trans (mul_le_mul (TwistedGoldbachSingularSeries.infinite_domination pv.inv pw.inv n hn) val (by positivity) s0)
+  have all := catalogue_pair_sum_error Z P _ (mul_nonneg s0 cp) _ _ localCost
+  apply all.trans
+  exact (mul_le_mul_of_nonneg_right (pow_le_pow_left₀ (sum_nonneg (fun _ _ => norm_nonneg _)) mass 2)
+    (mul_nonneg s0 cp)).trans_eq (by dsimp only [cost];ring)
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset DirichletCharacter Filter Goldbach GoldbachTwistedMellin
+open scoped Topology
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+open TwistedGoldbachLocalProduct
+
+/-- On the upper half of the interval, the actual near-one arcs up to a
+positive power of the conductor parameter can be approximated by a
+fixed-height signed Beta sum with arbitrarily small relative error. -/
+theorem polynomial_arc_to_bounded_beta (H : ℝ) (hH : 0 ≤ H) :
+    ∃ b : ℝ, 0 < b ∧ b ≤ 1/2 ∧ ∀ ε : ℝ, 0 < ε → ∃ T : ℝ, 1 ≤ T ∧
+      ∀ᶠ Q : ℕ in atTop, ∀ m : ℕ, 2 ≤ m → Q ≤ m+2 →
+      let X : ℝ := (m+2:ℕ)
+      ∃ P : ℝ, X^(11/40:ℝ) ≤ P ∧ P ≤ X^(3/10:ℝ) ∧ ∀ n : ℕ, 0 < n → n ≤ m+2 → m+2 ≤ 2*n → Even n →
+        let S := (series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n).re
+        ‖cataloguePairSum (nearOneCatalogue m Q (m+2) H ((Q:ℝ)^b)) P (catalogueArcTerm m n P)-
+          cataloguePairSum (nearOneCatalogue m Q (m+2) H T) P (catalogueBetaTerm n)‖ ≤ ε*(S*(n:ℝ)) := by
+  obtain ⟨b,κ,C,hb,half,hκ,hC,arc⟩ := polynomial_catalogue_arc_saving H hH
+  refine ⟨b,hb,half,?_⟩
+  intro ε hε
+  obtain ⟨T,hT,beta⟩ := polynomial_catalogue_beta_truncation H b (ε/2) hH hb
+    (half.trans_lt (by norm_num)) (by positivity)
+  have lim : Tendsto (fun x : ℕ => C*(x:ℝ)^(-κ)) atTop (𝓝 0) := by
+    simpa only [Function.comp_apply,mul_zero] using
+      (tendsto_rpow_neg_atTop hκ |>.comp tendsto_natCast_atTop_atTop).const_mul C
+  obtain ⟨N,sm⟩ := eventually_atTop.mp (lim.eventually (Iio_mem_nhds (by positivity : (0:ℝ) < ε/4)))
+  refine ⟨T,hT,?_⟩
+  filter_upwards [arc,beta,eventually_ge_atTop N] with Q estimate truncate hN
+  intro m hm hQ X
+  obtain ⟨P,lo,hi,approx⟩ := estimate m hm hQ
+  refine ⟨P,lo,hi,?_⟩
+  intro n hn nx xn he S
+  let main := cataloguePairSum (nearOneCatalogue m Q (m+2) H ((Q:ℝ)^b)) P (catalogueBetaTerm n)
+  have xp : 0 < X := by dsimp only [X];positivity
+  have s0 : 0 ≤ S := zero_le_one.trans (TwistedGoldbachMixedPrincipal.ordinary_at_least_one n hn he)
+  have size : X ≤ 2*(n:ℝ) := by dsimp only [X];exact_mod_cast xn
+  have small : C*X^(-κ) ≤ ε/4 := (sm (m+2) (hN.trans hQ)).le
+  have power : C*X^(1-κ) ≤ (n:ℝ)*(ε/2) := calc
+    _ = X*(C*X^(-κ)) := by rw [sub_eq_add_neg,Real.rpow_add xp,Real.rpow_one];ring
+    _ ≤ (2*(n:ℝ))*(ε/4) := mul_le_mul size small (mul_nonneg hC.le (Real.rpow_nonneg xp.le _)) (by positivity)
+    _ = _ := by ring
+  have a := (approx n hn nx he).trans (mul_le_mul_of_nonneg_left power s0)
+  have d := truncate m (m+2) hQ n hn P
+  apply (norm_sub_le_norm_sub_add_norm_sub _ main _).trans ((add_le_add a d).trans_eq ?_)
+  ring
 
 end Conjectures.Goldbach.BinaryShiftZeroDensity
 end
