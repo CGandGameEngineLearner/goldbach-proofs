@@ -16938,6 +16938,28 @@
       "route_source": "finite-rfc-third"
     },
     {
+      "id": "L-goldbach-rfc11-top316-lower-seam-extension",
+      "statement": "(fun (lo hi : ℕ) => ∀ n : ℕ, lo≤n → n<hi → 2∣n → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p+q=n) (10^316-32768) (10^316-24576)",
+      "plain_statement": {
+        "zh": "新路线 · V17 · 把顶部连续覆盖向下扩展 4096 个偶数到 [10^316-32768, 10^316-24576)",
+        "en": "New route · V17 · Extend the top contiguous coverage by 4096 evens down to [10^316-32768, 10^316-24576)"
+      },
+      "brief": {
+        "zh": "与 V11–V13 的证书拼接后，把 [10^316-32768, 10^316) 内全部偶数用大素数锚与小素数见证覆盖。对 i=12289..16384 令 n=10^316-2i，取 33 个已核验偏移与 5 个新偏移 t，使 10^316-t 与 t-2i 均为素数并回放全部素性证书；小素数用不超过 211 的试除积核验。属于第四章“已经取得全段证明或具体见证的子域交接”。",
+        "en": "Together with V11-V13 this covers every even n in [10^316-32768, 10^316) with large-prime anchors and small-prime witnesses. For i=12289..16384 write n=10^316-2i and choose 33 verified offsets plus 5 fresh offsets t such that both 10^316-t and t-2i are prime, replaying all primality certificates; small primes are checked against the product of primes up to 211. This is a witnessed subdomain handoff in the sense of section 4."
+      },
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/main/research/checkpoint/%E5%93%A5%E5%BE%B7%E5%B7%B4%E8%B5%AB%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%864.md",
+      "program": "correlation",
+      "role": "lemma",
+      "parallel": true,
+      "depends_on": [],
+      "imports": [],
+      "module": "Conjectures.Goldbach.Rfc11Top316LowerSeamExtension",
+      "file": "lean/Conjectures/Goldbach/Rfc11Top316LowerSeamExtension.lean",
+      "track": "finite-rfc-third",
+      "route_source": "finite-rfc-third"
+    },
+    {
       "id": "L-goldbach-rfc11-top316-six-repairs",
       "statement": "(fun (lo hi : ℕ) => ∀ n : ℕ, lo≤n → n<hi → 2∣n → ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p+q=n) (10^316-24576) (10^316)",
       "plain_statement": {
