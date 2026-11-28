@@ -594,6 +594,7 @@ button, a, input, select { -webkit-tap-highlight-color: transparent; }
   font-size: .82rem;
 }
 .footer a { white-space: nowrap; }
+.footer-filing { flex-basis: 100%; text-align: center; }
 .footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1.25rem; }
 .footer-credit-line { display: block; margin-top: .42rem; }
 .footer-credit-line .colophon-credits { font-size: .82rem; gap: .32rem .62rem; }

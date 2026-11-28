@@ -1586,6 +1586,13 @@ class Handler(BaseHTTPRequestHandler):
         page = page.replace("<!-- hero origin -->",
                             sponsors.hero_origin_note(lang, goldbach=(slug == "goldbach")), 1)
         page = page.replace("<!-- footer credit -->", sponsors.footer_credit(ZHIHU.db, lang, prefix), 1)
+        host = self.headers.get("Host", "").partition(":")[0].lower().rstrip(".")
+        icp_filing = (
+            '<div class="footer-filing"><a href="https://beian.miit.gov.cn/">'
+            '蜀ICP备2026010437号-3</a></div>'
+            if host in {"goldbach.tech", "www.goldbach.tech"} else ""
+        )
+        page = page.replace("<!-- icp filing -->", icp_filing, 1)
         if "<!-- site dock -->" in page:
             page = page.replace("<!-- site dock -->", site_dock(lang, prefix, inline=True), 1)
         else:
