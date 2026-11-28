@@ -600,7 +600,7 @@ theorem secondDiffPoly_ne_zero (P : Polynomial ℤ) (h₁ h₂ ℓ : ℤ)
     have hsum : ∑ i ∈ range (H.natDegree + 1), H.coeff i * z ^ i =
         ∑ i ∈ range 3, H.coeff i * z ^ i := by
       symm
-      apply Finset.sum_subset (Finset.range_mono hrange)
+      apply Finset.sum_subset (Finset.range_subset.mpr hrange)
       intro i hi hnot
       have hgt : H.natDegree < i := by
         rw [Finset.mem_range] at hi hnot
@@ -840,7 +840,7 @@ theorem eval_secondDiff_ne_zero_of_large (P : Polynomial ℤ) (hdeg : 3 ≤ P.na
     have hcomb : m * |∑ j ∈ Ico 2 P.natDegree, P.coeff j * binomDiff j m a b| <
         m * (|P.coeff P.natDegree| * binomDiff P.natDegree m a b) :=
       lt_of_le_of_lt ((mul_le_mul_of_nonneg_left hlow_abs (by omega)).trans hmul_low) hstrict
-    exact (mul_lt_mul_left (by omega : 0 < m)).mp hcomb
+    nlinarith only [hcomb, hm1]
   intro heq
   have hneg : ∑ j ∈ Ico 2 P.natDegree, P.coeff j * binomDiff j m a b =
       -(P.coeff P.natDegree * binomDiff P.natDegree m a b) := by
@@ -1061,28 +1061,29 @@ theorem matchedLocalPairs_zero_card_le (P : Polynomial ℤ) (B : Finset ℤ)
     have hfst : (tag q₁).2 = (tag q₂).2 := congrArg (fun z => z.2) heq
     dsimp only [tag] at hidx hval hother hfst
     split_ifs at hidx hval hother hfst with c1 c2 c3 d1 d2 d3 <;>
-      first
-      | (exfalso; revert hidx; decide)
-      | (have eA : q₁.1.1 = q₂.1.1 := by have := hpos _ hx1₁; have := hpos _ hx1₂; omega
-         have eB : q₁.2.1 = q₂.2.1 := hother
-         have eC : q₁.1.2 = q₂.1.2 := hfst
-         have eD : q₁.2.2 = q₂.2.2 := by omega
-         exact Prod.ext (Prod.ext eA eC) (Prod.ext eB eD))
-      | (have eA : q₁.1.2 = q₂.1.2 := by have := hpos _ hx2₁; have := hpos _ hx2₂; omega
-         have eB : q₁.2.1 = q₂.2.1 := hother
-         have eC : q₁.1.1 = q₂.1.1 := hfst
-         have eD : q₁.2.2 = q₂.2.2 := by omega
-         exact Prod.ext (Prod.ext eC eA) (Prod.ext eB eD))
-      | (have eA : q₁.2.1 = q₂.2.1 := by have := hpos _ hy1₁; have := hpos _ hy1₂; omega
-         have eB : q₁.1.1 = q₂.1.1 := hother
-         have eC : q₁.2.2 = q₂.2.2 := hfst
-         have eD : q₁.1.2 = q₂.1.2 := by omega
-         exact Prod.ext (Prod.ext eB eD) (Prod.ext eA eC))
-      | (have eA : q₁.2.2 = q₂.2.2 := by have := hpos _ hy2₁; have := hpos _ hy2₂; omega
-         have eB : q₁.1.1 = q₂.1.1 := hother
-         have eC : q₁.2.1 = q₂.2.1 := hfst
-         have eD : q₁.1.2 = q₂.1.2 := by omega
-         exact Prod.ext (Prod.ext eB eD) (Prod.ext eC eA))
+      · dsimp only at hidx hval hother hfst
+        first
+        | (exfalso; revert hidx; decide)
+        | (have eA : q₁.1.1 = q₂.1.1 := by have := hpos _ hx1₁; have := hpos _ hx1₂; omega
+           have eB : q₁.2.1 = q₂.2.1 := hother
+           have eC : q₁.1.2 = q₂.1.2 := hfst
+           have eD : q₁.2.2 = q₂.2.2 := by omega
+           exact Prod.ext (Prod.ext eA eC) (Prod.ext eB eD))
+        | (have eA : q₁.1.2 = q₂.1.2 := by have := hpos _ hx2₁; have := hpos _ hx2₂; omega
+           have eB : q₁.2.1 = q₂.2.1 := hother
+           have eC : q₁.1.1 = q₂.1.1 := hfst
+           have eD : q₁.2.2 = q₂.2.2 := by omega
+           exact Prod.ext (Prod.ext eC eA) (Prod.ext eB eD))
+        | (have eA : q₁.2.1 = q₂.2.1 := by have := hpos _ hy1₁; have := hpos _ hy1₂; omega
+           have eB : q₁.1.1 = q₂.1.1 := hother
+           have eC : q₁.2.2 = q₂.2.2 := hfst
+           have eD : q₁.1.2 = q₂.1.2 := by omega
+           exact Prod.ext (Prod.ext eB eD) (Prod.ext eA eC))
+        | (have eA : q₁.2.2 = q₂.2.2 := by have := hpos _ hy2₁; have := hpos _ hy2₂; omega
+           have eB : q₁.1.1 = q₂.1.1 := hother
+           have eC : q₁.2.1 = q₂.2.1 := hfst
+           have eD : q₁.1.2 = q₂.1.2 := by omega
+           exact Prod.ext (Prod.ext eB eD) (Prod.ext eC eA))
   calc
     (matchedLocalPairs P B 0).card ≤ (T.sigma R).card :=
       Finset.card_le_card_of_injOn tag hmaps hinj
@@ -1112,13 +1113,14 @@ private theorem two_complement_pair (i₁ i₂ : Fin 4) (hi : i₁ ≠ i₂) :
     | exact ⟨1, 3, by decide, fun k => by fin_cases k <;> decide⟩
     | exact ⟨2, 3, by decide, fun k => by fin_cases k <;> decide⟩
 
-private theorem pair_eq_zero_card_le (P : Polynomial ℤ) (A : Finset ℕ) :
-    (((liftSupport A ×ˢ liftSupport A) ×ˢ (liftSupport A ×ˢ liftSupport A)).filter fun q =>
-      P.eval q.1.1 + P.eval q.1.2 = P.eval q.2.1 + P.eval q.2.2).card =
+private theorem pair_eq_zero_card_le (P : Polynomial ℤ) (A : Finset ℕ)
+    (Q0 : Finset ((ℤ × ℤ) × (ℤ × ℤ)))
+    (hQ0 : ∀ q, q ∈ Q0 ↔ q ∈ (liftSupport A ×ˢ liftSupport A) ×ˢ (liftSupport A ×ˢ liftSupport A) ∧
+      P.eval q.1.1 + P.eval q.1.2 = P.eval q.2.1 + P.eval q.2.2) :
+    Q0.card =
       ({z ∈ (Finset.univ : Finset ((Fin 2 → ↥A) × (Fin 2 → ↥A))) |
         (∑ i : Fin 2, P.eval ((z.1 i : ℕ) : ℤ)) =
           ∑ i : Fin 2, P.eval ((z.2 i : ℕ) : ℤ)}).card := by
-  classical
   let B := liftSupport A
   let mapFn (z : (Fin 2 → ↥A) × (Fin 2 → ↥A)) : (ℤ × ℤ) × (ℤ × ℤ) :=
     ((((z.1 0 : ℕ) : ℤ), ((z.1 1 : ℕ) : ℤ)), (((z.2 0 : ℕ) : ℤ), ((z.2 1 : ℕ) : ℤ)))
@@ -1128,7 +1130,7 @@ private theorem pair_eq_zero_card_le (P : Polynomial ℤ) (A : Finset ℕ) :
   · intro z hz
     have hsum := (Finset.mem_filter.mp hz).2
     rw [Fin.sum_univ_two, Fin.sum_univ_two] at hsum
-    exact Finset.mem_filter.mpr ⟨Finset.mem_product.mpr
+    exact (hQ0 (mapFn z)).mpr ⟨Finset.mem_product.mpr
       ⟨Finset.mem_product.mpr ⟨hmem _, hmem _⟩, Finset.mem_product.mpr ⟨hmem _, hmem _⟩⟩, hsum⟩
   · intro z₁ _ z₂ _ heq
     apply Prod.ext
@@ -1143,7 +1145,7 @@ private theorem pair_eq_zero_card_le (P : Polynomial ℤ) (A : Finset ℕ) :
       · exact Int.ofNat.inj (congrArg (fun u => u.2.1) heq)
       · exact Int.ofNat.inj (congrArg (fun u => u.2.2) heq)
   · intro q hq
-    obtain ⟨hp, hsum⟩ := Finset.mem_filter.mp hq
+    obtain ⟨hp, hsum⟩ := (hQ0 q).mp hq
     obtain ⟨hp1, hp2⟩ := Finset.mem_product.mp hp
     obtain ⟨a, ha, hae⟩ := mem_liftSupport.mp (Finset.mem_product.mp hp1).1
     obtain ⟨b, hb, hbe⟩ := mem_liftSupport.mp (Finset.mem_product.mp hp1).2
@@ -1230,8 +1232,7 @@ theorem local_pairSum_convolution_bound (P : Polynomial ℤ) (hdeg : 3 ≤ P.nat
       exact Finset.mem_product.mpr ⟨Finset.mem_filter.mpr ⟨hp1, hsum, h11, h12, h21, h22, hd1⟩,
         Finset.mem_filter.mpr ⟨hp2, hd2⟩⟩
     have hQ0 : (Q0.card : ℝ) ≤ C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 2 := by
-      dsimp only [Q0, Q, B]
-      rw [pair_eq_zero_card_le P A]
+      rw [pair_eq_zero_card_le P A Q0 (fun q => Finset.mem_filter)]
       exact b2 M hM A hA
     have hM0 : ((matchedLocalPairs P B 0).card : ℝ) ≤ 4 * K * D * (A.card : ℝ) := by
       rw [← hBcard]
@@ -1315,8 +1316,9 @@ theorem local_pairSum_convolution_bound (P : Polynomial ℤ) (hdeg : 3 ≤ P.nat
               congr 1
               rw [← Real.rpow_natCast_mul (by positivity)]
               congr 1
-              dsimp [δ, D]
-              field_simp
+              dsimp [δ]
+              change (D : ℝ) * (2 * (ε / (2 * D))) = ε
+              field_simp [hD.ne']
       have hm_pos : 0 < (diff2 q2).natAbs := Int.natAbs_pos.mpr hnz
       have hdiv_le : (((diff2 q2).natAbs.divisors.card : ℝ)) ^ 2 ≤
           Cdiv ^ 2 * ((diff2 q2).natAbs : ℝ) ^ (2 * δ) := by
@@ -1328,7 +1330,7 @@ theorem local_pairSum_convolution_bound (P : Polynomial ℤ) (hdeg : 3 ≤ P.nat
           _ = Cdiv ^ 2 * (((diff2 q2).natAbs : ℝ) ^ δ) ^ 2 := by ring
           _ = Cdiv ^ 2 * ((diff2 q2).natAbs : ℝ) ^ (2 * δ) := by
               congr 1
-              rw [← Real.rpow_natCast_mul (Nat.cast_nonneg _)]
+              rw [← Real.rpow_natCast, ← Real.rpow_mul (Nat.cast_nonneg _)]
               congr 1
               ring
       calc
@@ -1411,58 +1413,45 @@ theorem prove_child1_pair_sum : (∀ (x1 : Polynomial ℤ),   (3 : ℕ) ≤ x1.n
         ext k
         simp only [Finset.mem_insert, Finset.mem_singleton, Finset.mem_univ, iff_true]
         exact hcov k
+      have hs3 : a₃ ∉ ({a₄} : Finset (Fin 4)) := by simp [h34]
+      have hs2 : a₂ ∉ ({a₃, a₄} : Finset (Fin 4)) := by simp [h23, h24]
+      have hs1 : a₁ ∉ ({a₂, a₃, a₄} : Finset (Fin 4)) := by simp [h12, h13, h14]
       dsimp only [w]
-      rw [← huniv, Finset.sum_insert, Finset.sum_insert, Finset.sum_insert, Finset.sum_singleton]
-      · ring
-      · simp [h34]
-      · simp [h23, h24]
-      · simp [h12, h13, h14]
-    have hdisjI : i₁ ≠ i₃ ∧ i₁ ≠ i₄ ∧ i₂ ≠ i₃ ∧ i₂ ≠ i₄ := by
-      have hcard : ({i₁, i₂, i₃, i₄} : Finset (Fin 4)).card = 4 := by
-        have huniv : ({i₁, i₂, i₃, i₄} : Finset (Fin 4)) = Finset.univ := by
-          ext k; simp [hcovI k]
+      rw [← huniv, Finset.sum_insert hs1, Finset.sum_insert hs2, Finset.sum_insert hs3,
+        Finset.sum_singleton]
+      ring
+    have hdisj_cov (a₁ a₂ a₃ a₄ : Fin 4)
+        (hcov : ∀ k : Fin 4, k = a₁ ∨ k = a₂ ∨ k = a₃ ∨ k = a₄) :
+        a₁ ≠ a₃ ∧ a₁ ≠ a₄ ∧ a₂ ≠ a₃ ∧ a₂ ≠ a₄ := by
+      have hcard : ({a₁, a₂, a₃, a₄} : Finset (Fin 4)).card = 4 := by
+        have huniv : ({a₁, a₂, a₃, a₄} : Finset (Fin 4)) = Finset.univ := by
+          ext k; simp [hcov k]
         rw [huniv, Finset.card_univ, Fintype.card_fin]
-      by_contra hbad
-      have hle : ({i₁, i₂, i₃, i₄} : Finset (Fin 4)).card ≤ 3 := by
-        rcases not_and_or.mp hbad with rfl | hbad
-        · have : ({i₁, i₂, i₁, i₄} : Finset (Fin 4)) = {i₁, i₂, i₄} := by ext k; simp; tauto
-          rw [this]
-          exact (Finset.card_insert_le _ _).trans (Nat.succ_le_succ ((Finset.card_insert_le _ _).trans (by simp)))
-        · rcases not_and_or.mp hbad with rfl | hbad
-          · have : ({i₁, i₂, i₃, i₁} : Finset (Fin 4)) = {i₁, i₂, i₃} := by ext k; simp; tauto
-            rw [this]
-            exact (Finset.card_insert_le _ _).trans (Nat.succ_le_succ ((Finset.card_insert_le _ _).trans (by simp)))
-          · rcases not_and_or.mp hbad with rfl | rfl
-            · have : ({i₁, i₂, i₂, i₄} : Finset (Fin 4)) = {i₁, i₂, i₄} := by ext k; simp; tauto
-              rw [this]
-              exact (Finset.card_insert_le _ _).trans (Nat.succ_le_succ ((Finset.card_insert_le _ _).trans (by simp)))
-            · have : ({i₁, i₂, i₃, i₂} : Finset (Fin 4)) = {i₁, i₂, i₃} := by ext k; simp; tauto
-              rw [this]
-              exact (Finset.card_insert_le _ _).trans (Nat.succ_le_succ ((Finset.card_insert_le _ _).trans (by simp)))
-      omega
-    have hdisjJ : j₁ ≠ j₃ ∧ j₁ ≠ j₄ ∧ j₂ ≠ j₃ ∧ j₂ ≠ j₄ := by
-      have hcard : ({j₁, j₂, j₃, j₄} : Finset (Fin 4)).card = 4 := by
-        have huniv : ({j₁, j₂, j₃, j₄} : Finset (Fin 4)) = Finset.univ := by
-          ext k; simp [hcovJ k]
-        rw [huniv, Finset.card_univ, Fintype.card_fin]
-      by_contra hbad
-      have hle : ({j₁, j₂, j₃, j₄} : Finset (Fin 4)).card ≤ 3 := by
-        rcases not_and_or.mp hbad with rfl | hbad
-        · have : ({j₁, j₂, j₁, j₄} : Finset (Fin 4)) = {j₁, j₂, j₄} := by ext k; simp; tauto
-          rw [this]
-          exact (Finset.card_insert_le _ _).trans (Nat.succ_le_succ ((Finset.card_insert_le _ _).trans (by simp)))
-        · rcases not_and_or.mp hbad with rfl | hbad
-          · have : ({j₁, j₂, j₃, j₁} : Finset (Fin 4)) = {j₁, j₂, j₃} := by ext k; simp; tauto
-            rw [this]
-            exact (Finset.card_insert_le _ _).trans (Nat.succ_le_succ ((Finset.card_insert_le _ _).trans (by simp)))
-          · rcases not_and_or.mp hbad with rfl | rfl
-            · have : ({j₁, j₂, j₂, j₄} : Finset (Fin 4)) = {j₁, j₂, j₄} := by ext k; simp; tauto
-              rw [this]
-              exact (Finset.card_insert_le _ _).trans (Nat.succ_le_succ ((Finset.card_insert_le _ _).trans (by simp)))
-            · have : ({j₁, j₂, j₃, j₂} : Finset (Fin 4)) = {j₁, j₂, j₃} := by ext k; simp; tauto
-              rw [this]
-              exact (Finset.card_insert_le _ _).trans (Nat.succ_le_succ ((Finset.card_insert_le _ _).trans (by simp)))
-      omega
+      have hle3 (x y z : Fin 4) : ({x, y, z} : Finset (Fin 4)).card ≤ 3 :=
+        (Finset.card_insert_le _ _).trans (Nat.succ_le_succ ((Finset.card_insert_le _ _).trans (by simp)))
+      refine ⟨?_, ?_, ?_, ?_⟩
+      · intro h; subst h
+        have he : ({a₁, a₂, a₁, a₄} : Finset (Fin 4)) = {a₁, a₂, a₄} := by ext k; simp; tauto
+        have h4 : ({a₁, a₂, a₄} : Finset (Fin 4)).card = 4 := he ▸ hcard
+        have h3 := hle3 a₁ a₂ a₄
+        omega
+      · intro h; subst h
+        have he : ({a₁, a₂, a₃, a₁} : Finset (Fin 4)) = {a₁, a₂, a₃} := by ext k; simp; tauto
+        have h4 : ({a₁, a₂, a₃} : Finset (Fin 4)).card = 4 := he ▸ hcard
+        have h3 := hle3 a₁ a₂ a₃
+        omega
+      · intro h; subst h
+        have he : ({a₁, a₂, a₂, a₄} : Finset (Fin 4)) = {a₁, a₂, a₄} := by ext k; simp; tauto
+        have h4 : ({a₁, a₂, a₄} : Finset (Fin 4)).card = 4 := he ▸ hcard
+        have h3 := hle3 a₁ a₂ a₄
+        omega
+      · intro h; subst h
+        have he : ({a₁, a₂, a₃, a₂} : Finset (Fin 4)) = {a₁, a₂, a₃} := by ext k; simp; tauto
+        have h4 : ({a₁, a₂, a₃} : Finset (Fin 4)).card = 4 := he ▸ hcard
+        have h3 := hle3 a₁ a₂ a₃
+        omega
+    have hdisjI := hdisj_cov i₁ i₂ i₃ i₄ hcovI
+    have hdisjJ := hdisj_cov j₁ j₂ j₃ j₄ hcovJ
     let embed (z : (Fin 4 → ℕ) × (Fin 4 → ℕ)) :
         ((ℤ × ℤ) × (ℤ × ℤ)) × ((ℤ × ℤ) × (ℤ × ℤ)) :=
       ((((z.1 i₁ : ℤ), (z.1 i₂ : ℤ)), ((z.2 j₁ : ℤ), (z.2 j₂ : ℤ))),
@@ -1502,8 +1491,10 @@ theorem prove_child1_pair_sum : (∀ (x1 : Polynomial ℤ),   (3 : ℕ) ≤ x1.n
         · exact Int.ofNat.inj (congrArg (fun p => p.2.2.1) heq)
         · exact Int.ofNat.inj (congrArg (fun p => p.2.2.2) heq)
   have hPos_card : Pos.card ≤ 256 := by
-    have h1 := Finset.card_le_card (Finset.filter_subset _ _)
-    simpa [Fintype.card_prod, Fintype.card_fin] using h1
+    have h1 := Finset.card_le_card (Finset.filter_subset _ (Finset.univ : Finset ((Fin 4 × Fin 4) × (Fin 4 × Fin 4))))
+    simp only [Finset.card_univ, Fintype.card_prod, Fintype.card_fin] at h1
+    norm_num at h1
+    exact h1
   have hS_nat : S.card ≤ 256 * L.card := by
     calc
       S.card ≤ (Pos.biUnion slice).card := Finset.card_le_card hcover
