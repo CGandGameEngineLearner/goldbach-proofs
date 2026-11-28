@@ -14,7 +14,8 @@ theorem Conjectures.Cuts.Cutd5bb5c97f936994868304587
   let S := fun (f : ℕ → ℤ) (A : Finset ℕ) (t : ℝ) => ∑ j : (↥A), Complex.exp (2*(Real.pi:ℂ)*Complex.I*(f j:ℂ)*(t:ℂ))
   exact ∀ (f : ℕ → ℤ) (A : Finset ℕ) (r : ℕ),
     let w := fun u : Fin r → (↥A) => ∑ j : Fin r, f (u j)
-    (∫ t in (0:ℝ)..1, ‖S f A t‖^(2*r)) = (((Finset.univ : Finset ((Fin r → (↥A)) × (Fin r → (↥A)))).filter (fun z => w z.1 = w z.2)).card : ℝ))
+    let U : Finset (Fin r → (↥A)) := Finset.univ
+    (∫ t in (0:ℝ)..1, ‖S f A t‖^(2*r)) = (((U.product U).filter (fun z => w z.1 = w z.2)).card : ℝ))
    (h₂ : by
   classical
   let S := fun (P : Polynomial ℤ) (A : Finset ℕ) (t : ℝ) => ∑ j : (↥A), Complex.exp (2*(Real.pi:ℂ)*Complex.I*((P.eval (j.val:ℤ):ℤ):ℂ)*(t:ℂ))
@@ -50,6 +51,8 @@ theorem Conjectures.Cuts.Cutd5bb5c97f936994868304587
     dsimp [T]; linarith
   have horth := h₁ (fun n => P.eval (n:ℤ)) A 3
   change (∫ t in (0:ℝ)..1, ‖s t‖^6) = _ at horth
+  have hall : (Finset.univ : Finset (Fin 3 → (↥A))).product Finset.univ = (Finset.univ : Finset ((Fin 3 → (↥A)) × (Fin 3 → (↥A)))) := by ext z; simp
+  rw [hall] at horth
   change _ ≤ (C+P.natDegree)*(M:ℝ)^ε*k^3
   rw [← horth]
   have hsmall : (∫ t in (0:ℝ)..1, ‖s t‖^2) ≤ (P.natDegree:ℝ)*k := h₂ P (by omega) A
