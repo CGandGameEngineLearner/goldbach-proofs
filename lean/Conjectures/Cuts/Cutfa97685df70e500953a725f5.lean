@@ -8,21 +8,21 @@ import Mathlib
 -- child 3 zh: 将所有前缀傅里叶和的一致上界转移到扰动频率，损失因子至多为 1 + 2πN|e|。
 
 theorem Conjectures.Cuts.Cutfa97685df70e500953a725f5
-    (hVar : let V (w : ℕ → ℝ) (X p : ℕ) :=
-      let row (c j : ℕ) := ∑ m ∈ (Finset.range X).filter (fun m => Nat.mod m (p^2) = c + p*j), w m
+    (hVar : let V := fun (w : ℕ → ℝ) (X p : ℕ) =>
+      let row := fun (c j : ℕ) => ∑ m ∈ (Finset.range X).filter (fun (m : ℕ) => m % (p^2) = c + p*j), w m
       ∑ c ∈ Finset.range p, ∑ j ∈ Finset.range p,
         (row c j - (∑ k ∈ Finset.range p, row c k) / (p:ℝ))^2
     ∀ δ : ℝ, 0 < δ → ∃ N₀ : ℕ, ∀ N p : ℕ, N₀ ≤ N → 2 ≤ N → p.Prime →
       (p^2)^2 ≤ N → N ≤ 4*(p^2)^2 → ∀ X ≤ N,
         V (fun m => ArithmeticFunction.vonMangoldt m) X p ≤ (N:ℝ)^(1+δ))
-    (hOrth : let S (w : ℕ → ℝ) (X : ℕ) (x : ℝ) := ∑ m ∈ Finset.range X, (w m : ℂ) * Complex.exp (((2 * Real.pi * (m : ℝ) * x : ℝ) : ℂ) * Complex.I)
-    let V (w : ℕ → ℝ) (X p : ℕ) :=
-      let row (c j : ℕ) := ∑ m ∈ (Finset.range X).filter (fun m => Nat.mod m (p^2) = c + p*j), w m
+    (hOrth : let S := fun (w : ℕ → ℝ) (X : ℕ) (x : ℝ) => ∑ m ∈ Finset.range X, (w m : ℂ) * Complex.exp (((2 * Real.pi * (m : ℝ) * x : ℝ) : ℂ) * Complex.I)
+    let V := fun (w : ℕ → ℝ) (X p : ℕ) =>
+      let row := fun (c j : ℕ) => ∑ m ∈ (Finset.range X).filter (fun (m : ℕ) => m % (p^2) = c + p*j), w m
       ∑ c ∈ Finset.range p, ∑ j ∈ Finset.range p,
         (row c j - (∑ k ∈ Finset.range p, row c k) / (p:ℝ))^2
     ∀ (w : ℕ → ℝ) (X p : ℕ) (a : ℤ), p.Prime → a.natAbs.Coprime (p^2) →
       ‖S w X ((a:ℝ)/((p^2:ℕ):ℝ))‖ ≤ (p:ℝ)*Real.sqrt (V w X p))
-    (hAbel : let S (w : ℕ → ℝ) (X : ℕ) (x : ℝ) := ∑ m ∈ Finset.range X, (w m : ℂ) * Complex.exp (((2 * Real.pi * (m : ℝ) * x : ℝ) : ℂ) * Complex.I)
+    (hAbel : let S := fun (w : ℕ → ℝ) (X : ℕ) (x : ℝ) => ∑ m ∈ Finset.range X, (w m : ℂ) * Complex.exp (((2 * Real.pi * (m : ℝ) * x : ℝ) : ℂ) * Complex.I)
     ∀ (w : ℕ → ℝ) (N : ℕ) (x e B : ℝ), 0 ≤ B →
       (∀ X ≤ N, ‖S w X x‖ ≤ B) →
       ‖S w N (x+e)‖ ≤ (1 + 2*Real.pi*(N:ℝ)*|e|)*B) : (let S := fun (N : ℕ) (x : ℝ) => ∑ m ∈ Finset.range N, ((ArithmeticFunction.vonMangoldt m : ℝ) : ℂ) * Complex.exp (((2*Real.pi*(m : ℝ)*x : ℝ) : ℂ)*Complex.I); ∀ η : ℝ, 0 < η → ∃ N₀ : ℕ, ∀ N p : ℕ, N₀ ≤ N → 2 ≤ N → Nat.Prime p → let q := p^2; q^2 ≤ N → N ≤ 4*q^2 → ∀ a : ℤ, Nat.Coprime a.natAbs q → ∀ e : ℝ, |e| ≤ 1/((q : ℝ)*Real.sqrt (N : ℝ)) → ‖S N ((a : ℝ)/(q : ℝ)+e)‖ ≤ (N : ℝ)^((3 : ℝ)/4+η)) := by
@@ -73,7 +73,7 @@ theorem Conjectures.Cuts.Cutfa97685df70e500953a725f5
   intro N p hN hN2 hp q hlo hhi a ha e he
   have hvar := h₁ N p ((le_max_left _ _).trans hN) hN2 hp hlo hhi
   let V (X : ℕ) :=
-    let row (c j : ℕ) := ∑ m ∈ (Finset.range X).filter (fun m => Nat.mod m (p^2) = c+p*j),
+    let row := fun (c j : ℕ) => ∑ m ∈ (Finset.range X).filter (fun (m : ℕ) => m % (p^2) = c+p*j),
       ArithmeticFunction.vonMangoldt m
     ∑ c ∈ Finset.range p, ∑ j ∈ Finset.range p,
       (row c j - (∑ k ∈ Finset.range p, row c k) / (p:ℝ))^2
