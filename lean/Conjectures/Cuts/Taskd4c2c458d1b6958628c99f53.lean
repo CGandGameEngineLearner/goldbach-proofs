@@ -804,8 +804,8 @@ theorem endpoint_negligible (ε : ℝ) (hε : 0 < ε) :
         convert hupper using 1
         unfold B
         ring
-      _ ≤ (ε/2)*mainTerm n n.sqrt + (ε/2)*mainTerm n n.sqrt :=
-        add_le_add (mul_le_mul_of_nonneg_right hconst (mainTerm_nonneg _ _))
+      _ ≤ (ε/2)*mainTerm n n.sqrt + (ε/2)*mainTerm n n.sqrt := by
+        exact add_le_add (mul_le_mul_of_nonneg_right hconst (mainTerm_nonneg _ _))
           ((rounding_bound n (by omega)).trans hrem)
       _ = _ := by ring
   obtain ⟨N,hN⟩ := eventually_atTop.mp heventual
