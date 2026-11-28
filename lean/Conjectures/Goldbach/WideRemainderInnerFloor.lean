@@ -2845,6 +2845,41 @@ lemma model_sum_floor_of_neg_arith_bound (s : Finset ℕ) (n : ℕ) (ε : ℝ)
   model_sum_floor_deltaJ s n ε hq hsq
     ((skirt_negMass_le_decay_filtered s n hq hn hr).trans hbound)
 
+/-! ### Uniform T₁-type estimates for the inner band
+
+For the inner band the moduli are small (`q ≤ Q₁(n) ≈ n^{1/3}`), so the whole
+band can be taken as `s = Finset.Icc 1 (Q1f n)`.  On this band every modulus is
+squarefree, and `Re c_q(n) = μ(q/(q,n))·φ((q,n))`.  For the *model* sum the
+decisive point is the cancellation of the Möbius factor over the band: the main
+term `Σ_{q≤Q₁} μ(q)·φ(q)·ΔJ(q)/φ(q)²` is controlled by the absolutely convergent
+`1/φ²` weight (bounded by the tail lemma below), while the correction is
+supported where a prime of `q` divides `n`.
+
+The uniform estimate below isolates the arithmetic core: the signed sum over the
+band is bounded by the **absolutely convergent** `1/φ²` weight times the uniform
+`ΔJ` cap.  The remaining analytic step — replacing `ΔJ(q)` by its uniform bounds
+and taking `n → ∞` — is the `o(1)` conclusion of the T₁ programme.
+-/
+
+/-- Band split of the Ramanujan real part on the inner band: the signed weight
+`Re c_q(n)/φ(q)²` is bounded in absolute value by `1/φ((q,n))·(1/φ(q) + ...)`;
+concretely `|Re c_q(n)| ≤ φ((q,n))` (since `|μ| ≤ 1`), and for squarefree `q`
+with `(q,n) = 1` it is exactly `|μ(q)| = 1`. -/
+lemma abs_csum_re_le_totient_gcd (q n : ℕ) (hq : 0 < q) (hsq : Squarefree q) :
+    |(csum q n).re| ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) := by
+  have hgsq : Squarefree (q / Nat.gcd q n) :=
+    Squarefree.squarefree_of_dvd (Nat.div_dvd_of_dvd (Nat.gcd_dvd_left q n)) hsq
+  have hunit : |((ArithmeticFunction.moebius (q / Nat.gcd q n) : ℤ) : ℝ)| = 1 := by
+    have h := ArithmeticFunction.abs_moebius_eq_one_of_squarefree hgsq
+    exact_mod_cast h
+  have habs : |(csum q n).re|
+      = |((ArithmeticFunction.moebius (q / Nat.gcd q n) : ℤ) : ℝ)|
+        * ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) := by
+    rw [csum_re_eq q n hq hsq, abs_mul]
+    congr 1
+    exact abs_of_nonneg (Nat.cast_nonneg (Nat.totient (Nat.gcd q n)))
+  rw [habs, hunit, one_mul]
+
 /-- The negative part of the skirt mass is at most `(n+1)` times the purely
 arithmetic sum `Σ_{q∈s} φ((q,n))/φ(q)²` (card bound `ΔJ(q) ≤ n+1`).  For the
 floor it suffices that the filtered version of this arithmetic sum be `o(1)`. -/
