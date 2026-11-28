@@ -79,7 +79,7 @@ theorem map_ladder {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S)
   induction k generalizing m with
   | zero => simp [ladder,Coords.map]
   | succ k ih =>
-    by_cases h : Nat.mod m 2=1 <;> simp only [ladder,h,ite_true,ite_false,map_mixed,map_dbl,ih]
+    by_cases h : m % 2=1 <;> simp only [ladder,h,ite_true,ite_false,map_mixed,map_dbl,ih]
 
 section Geometry
 variable {F : Type*} [Field F] [DecidableEq F]
@@ -143,7 +143,7 @@ private theorem ladder_rep (a b u v : F) (hQ : (curve a b).toJacobian.Nonsingula
   | succ k ih =>
     have hhalf : m/2 < 2^k := by rw [pow_succ] at hm; omega
     have hd := dbl_rep (ih (m/2) hhalf)
-    by_cases hbit : Nat.mod m 2=1
+    by_cases hbit : m % 2=1
     · simp only [ladder,hbit,ite_true]
       have ha := mixed_rep hQ hd
       rwa [← add_nsmul, ← succ_nsmul, show m/2+m/2+1=m by omega] at ha
