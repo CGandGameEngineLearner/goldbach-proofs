@@ -5,17 +5,10 @@ namespace GoldbachChildDegenSupport
 open Finset Polynomial
 open scoped BigOperators
 
-private theorem finset_eq_insert_of_nonempty {S : Finset ℕ} (hS : S.Nonempty) :
-    ∃ a ∈ S, ∃ S' : Finset ℕ, a ∉ S' ∧ insert a S' = S ∧ S'.card + 1 = S.card := by
-  induction S using Finset.induction_on with
-  | empty => exact absurd hS (by simp)
-  | insert a s ha _ =>
-    exact ⟨a, Finset.mem_insert.mpr (Or.inl rfl), s, ha, rfl,
-      (by simp [ha] : (insert a s).card = s.card + 1).symm⟩
-
 private theorem finset_cover_by_fin :
     ∀ (r : ℕ) (S : Finset ℕ) (d : ℕ), S.card ≤ r →
       ∃ g : Fin r → ℕ, (∀ i, g i ∈ insert d S) ∧ ∀ x ∈ S, ∃ i, g i = x := by
+  classical
   intro r
   induction r with
   | zero =>
@@ -26,8 +19,24 @@ private theorem finset_cover_by_fin :
   | succ r ih =>
     intro S d hcard
     by_cases hne : S.Nonempty
-    · obtain ⟨a, haS, S', haS', hins, hcardS'⟩ := finset_eq_insert_of_nonempty hne
-      have hle : S'.card ≤ r := by omega
+    · obtain ⟨a, haS⟩ := hne
+      let S' := S.filter (· ≠ a)
+      have haS' : a ∉ S' := by simp [S']
+      have hins : insert a S' = S := by
+        ext x
+        simp only [S', Finset.mem_insert, Finset.mem_filter]
+        constructor
+        · rintro (rfl | ⟨hx, _⟩)
+          · exact haS
+          · exact hx
+        · intro hx
+          by_cases hxa : x = a
+          · exact Or.inl hxa
+          · exact Or.inr ⟨hx, hxa⟩
+      have hle : S'.card ≤ r := by
+        have hc : (insert a S').card = S'.card + 1 := by simp [haS']
+        rw [hins] at hc
+        omega
       obtain ⟨g', hg'mem, hg'cov⟩ := ih S' a hle
       let g : Fin (r + 1) → ℕ := fun i =>
         if h : i.val = 0 then a else g' ⟨i.val - 1, by omega⟩
@@ -69,10 +78,10 @@ private theorem exists_degen_encoding (r : ℕ) (A : Finset ℕ) (u v : Fin 4 �
     (huA : ∀ j : Fin 4, u j ∈ A) (hvA : ∀ j : Fin 4, v j ∈ A)
     (hdisj : ∀ q : Fin 4 × Fin 4, u q.1 ≠ v q.2)
     (hcard : (Finset.image u Finset.univ ∪ Finset.image v Finset.univ).card ≤ r + 1) :
-    ∃ (α : Fin 4 → Option (Fin r)) (β : Fin 4 → Option (Fin r)) (g : Fin r → ℕ),
-      α 0 = none ∧ (∀ j : Fin 4, β j ≠ none) ∧ (∀ i : Fin r, g i ∈ A) ∧
-      (∀ j : Fin 4, pickVal (u 0) g (α j) = u j) ∧
-      (∀ j : Fin 4, pickVal (u 0) g (β j) = v j) := by
+    ∃ b : ((Fin 4 → Option (Fin r)) × (Fin 4 → Option (Fin r))) × (Fin r → ℕ),
+      b.1.1 0 = none ∧ (∀ j : Fin 4, b.1.2 j ≠ none) ∧ (∀ i : Fin r, b.2 i ∈ A) ∧
+      (∀ j : Fin 4, pickVal (u 0) b.2 (b.1.1 j) = u j) ∧
+      (∀ j : Fin 4, pickVal (u 0) b.2 (b.1.2 j) = v j) := by
   classical
   let V := Finset.image u Finset.univ ∪ Finset.image v Finset.univ
   let m := u 0
@@ -111,7 +120,7 @@ private theorem exists_degen_encoding (r : ℕ) (A : Finset ℕ) (u v : Fin 4 �
     some (Classical.choose (hg_cov (v j) (Finset.mem_filter.mpr
       ⟨Finset.mem_union_right _ (Finset.mem_image.mpr ⟨j, Finset.mem_univ j, rfl⟩),
         (hdisj (0, j)).symm⟩)))
-  refine ⟨α, β, g, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨((α, β), g), ?_, ?_, ?_, ?_, ?_⟩
   · simp [α, m]
   · intro j
     simp [β]
@@ -190,36 +199,28 @@ theorem prove_degen_support :
     have hlead : P.coeff P.natDegree ≠ 0 := by
       rw [Polynomial.coeff_natDegree]
       exact Polynomial.leadingCoeff_ne_zero.mpr hP0
-    have hC0 : ((Polynomial.C ((∑ j : Fin 4, valAt b.2 (b.1.2 j)) -
-        (∑ j : Fin 4, valAt b.2 (b.1.1 j))) : Polynomial ℤ).coeff P.natDegree) = 0 :=
-      Polynomial.coeff_C_of_ne_zero (by omega)
     intro hzero
     have hcoeff := congrArg (fun q : Polynomial ℤ => q.coeff P.natDegree) hzero
     dsimp only [polyOf] at hcoeff
-    rw [Polynomial.coeff_sub, Polynomial.coeff_C_mul, hC0, sub_zero, Polynomial.coeff_zero] at hcoeff
+    rw [Polynomial.coeff_sub, Polynomial.coeff_C_mul,
+      Polynomial.coeff_C_of_ne_zero (by omega), sub_zero, Polynomial.coeff_zero] at hcoeff
     exact (mul_ne_zero hc_ne hlead) hcoeff
   have hbound (G : Finset ((Fin 4 → ℕ) × (Fin 4 → ℕ)))
       (hG : ∀ z ∈ G, z ∈ T.product T ∧ w z.1 = w z.2 ∧
         (∀ q : Fin 4 × Fin 4, z.1 q.1 ≠ z.2 q.2) ∧
         (Finset.image z.1 Finset.univ ∪ Finset.image z.2 Finset.univ).card ≤ K) :
       G.card ≤ BaseLeft.card * P.natDegree * A.card ^ r := by
-    have hex : ∀ z ∈ G, ∃ (α : Fin 4 → Option (Fin r)) (β : Fin 4 → Option (Fin r)) (g : Fin r → ℕ),
-        α 0 = none ∧ (∀ j : Fin 4, β j ≠ none) ∧ (∀ i : Fin r, g i ∈ A) ∧
-        (∀ j : Fin 4, pickVal (z.1 0) g (α j) = z.1 j) ∧
-        (∀ j : Fin 4, pickVal (z.1 0) g (β j) = z.2 j) := by
+    have hex : ∀ z ∈ G, ∃ b : Pat × (Fin r → ℕ),
+        b.1.1 0 = none ∧ (∀ j : Fin 4, b.1.2 j ≠ none) ∧ (∀ i : Fin r, b.2 i ∈ A) ∧
+        (∀ j : Fin 4, pickVal (z.1 0) b.2 (b.1.1 j) = z.1 j) ∧
+        (∀ j : Fin 4, pickVal (z.1 0) b.2 (b.1.2 j) = z.2 j) := by
       intro z hz
       obtain ⟨hzT, _, hdisj, hcard⟩ := hG z hz
       obtain ⟨hz1, hz2⟩ := Finset.mem_product.mp hzT
       exact exists_degen_encoding r A z.1 z.2
         (Fintype.mem_piFinset.mp hz1) (Fintype.mem_piFinset.mp hz2) hdisj (hKr ▸ hcard)
     let encode (z : (Fin 4 → ℕ) × (Fin 4 → ℕ)) : Σ _ : Pat × (Fin r → ℕ), ℤ :=
-      if hz : z ∈ G then
-        let α := Classical.choose (hex z hz)
-        let h1 := Classical.choose_spec (hex z hz)
-        let β := Classical.choose h1
-        let h2 := Classical.choose_spec h1
-        let g := Classical.choose h2
-        ⟨((α, β), g), (z.1 0 : ℤ)⟩
+      if hz : z ∈ G then ⟨Classical.choose (hex z hz), (z.1 0 : ℤ)⟩
       else ⟨((fun _ => none, fun _ => none), fun _ => 0), 0⟩
     have hspec_cov {z : (Fin 4 → ℕ) × (Fin 4 → ℕ)} (hz : z ∈ G) :
         (∀ j : Fin 4, pickVal (z.1 0) (encode z).1.2 ((encode z).1.1.1 j) = z.1 j) ∧
@@ -227,8 +228,7 @@ theorem prove_degen_support :
         (encode z).1 ∈ Base ∧ (encode z).2 = (z.1 0 : ℤ) := by
       dsimp only [encode]
       rw [dif_pos hz]
-      have h2 := Classical.choose_spec (Classical.choose_spec (hex z hz))
-      have hspec := Classical.choose_spec h2
+      have hspec := Classical.choose_spec (hex z hz)
       refine ⟨hspec.2.2.2.1, hspec.2.2.2.2, ?_, rfl⟩
       exact Finset.mem_product.mpr ⟨Finset.mem_filter.mpr ⟨Finset.mem_univ _, hspec.1, hspec.2.1⟩,
         Fintype.mem_piFinset.mpr hspec.2.2.1⟩
@@ -248,16 +248,12 @@ theorem prove_degen_support :
           P.eval (z.1 j : ℤ) = (if π.1 j = none then P.eval (m : ℤ) else 0) + valAt g (π.1 j) := by
         have hpick := hu_eq j
         rw [← hpick]
-        cases hopt : π.1 j with
-        | none => simp [pickVal, valAt]
-        | some i => simp [pickVal, valAt]
+        cases hopt : π.1 j <;> simp [hopt, pickVal, valAt]
       have hterm2 (j : Fin 4) : P.eval (z.2 j : ℤ) = valAt g (π.2 j) := by
         have hpick := hv_eq j
         have hne : π.2 j ≠ none := (Finset.mem_filter.mp (Finset.mem_product.mp hb_mem).1).2.2 j
         rw [← hpick]
-        cases hopt : π.2 j with
-        | none => exact absurd hopt hne
-        | some i => rfl
+        cases hopt : π.2 j <;> simp_all [pickVal, valAt]
       have hsum1 : w z.1 =
           ((Finset.univ.filter fun j : Fin 4 => π.1 j = none).card : ℤ) * P.eval (m : ℤ) +
             ∑ j : Fin 4, valAt g (π.1 j) := by
@@ -273,8 +269,10 @@ theorem prove_degen_support :
       intro z₁ hz₁ z₂ hz₂ heq
       obtain ⟨hu₁, hv₁, _, hm₁⟩ := hspec_cov hz₁
       obtain ⟨hu₂, hv₂, _, hm₂⟩ := hspec_cov hz₂
-      have hbase : (encode z₁).1 = (encode z₂).1 := congrArg Sigma.fst heq
-      have hfval : (encode z₁).2 = (encode z₂).2 := congrArg Sigma.snd heq
+      have hbase : (encode z₁).1 = (encode z₂).1 :=
+        congrArg (fun p : Σ _ : Pat × (Fin r → ℕ), ℤ => p.1) heq
+      have hfval : (encode z₁).2 = (encode z₂).2 :=
+        congrArg (fun p : Σ _ : Pat × (Fin r → ℕ), ℤ => p.2) heq
       have hm_nat : z₁.1 0 = z₂.1 0 := Int.ofNat.inj (hm₁.symm.trans (hfval.trans hm₂))
       have hπ : (encode z₁).1.1 = (encode z₂).1.1 := congrArg Prod.fst hbase
       have hg : (encode z₁).1.2 = (encode z₂).1.2 := congrArg Prod.snd hbase
