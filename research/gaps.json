@@ -16174,6 +16174,29 @@
       "route_source": "farey-inverse-sieve"
     },
     {
+      "id": "L-goldbach-farey-buchstab-reflected-limit",
+      "statement": "by\n  classical\n  exact let I := fun n : ℕ => Finset.Icc ((n+2)/3) ((2*n)/3); let P := fun z : ℕ => (Finset.Icc 2 z).filter Nat.Prime; let V := fun n z : ℕ => ((I n).card:ℝ)*(n.totient:ℝ)/n * ∏ p ∈ (P z).filter (fun p => ¬ p ∣ n), (1-2/(p:ℝ)); let S := fun n z : ℕ => ((I n).filter (fun u => u.Coprime n ∧ z < (u*(n-u)).minFac)).card; let Z₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let K : ℝ := (Real.exp Real.eulerMascheroniConstant*(1+Real.log 2)/3)^2; ∀ ε : ℝ, 0 < ε → ∃ T : ℕ, ∀ n ≥ T, Even n → |(S n (Z₁ n):ℝ)/V n (Z₁ n)-K| ≤ ε",
+      "plain_statement": {
+        "zh": "对每个充分大的偶数，确定中央反射窗口中立方根粗糙数对的归一化极限。",
+        "en": "A pointwise Buchstab-product limit for reflected cube-root-rough pairs."
+      },
+      "brief": {
+        "zh": "讨论 #3819 指出旧下界的相对损失预算约为 1/18。Kai Fan（arXiv:2306.03347）的单变量结果给出 ω(3)=(1+log 2)/3。这里提出检验经本项目局部密度 V 修正后两坐标的联合常数。预计值略大于 1，若得证可推进原下界。最大的未知是逐偶数的相关性；把单变量公式平方不能证明此命题。",
+        "en": "Discussion #3819 identifies a tight loss budget. Fan (arXiv:2306.03347) gives the one-variable rough-number framework; ω(3)=(1+log 2)/3. Test the predicted joint constant after local normalization. Correlation at each individual even target is an additional requirement."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/discussions/3819",
+      "program": "correlation",
+      "track": "farey-inverse-sieve",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.FareyBuchstabReflectedLimit",
+      "file": "lean/Conjectures/Goldbach/FareyBuchstabReflectedLimit.lean",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
       "id": "L-goldbach-farey-coprime-progression-count",
       "statement": "∀ n d b l h : ℕ, 0 < n → 0 < d → d.Coprime n → b < d → l ≤ h → |((((Finset.Icc l h).filter (fun u => u%d = b ∧ u.Coprime n)).card : ℝ) - ((h-l+1 : ℕ) : ℝ)*(n.totient:ℝ)/((d:ℝ)*n))| ≤ (n.divisors.card:ℝ)",
       "plain_statement": {
@@ -16604,6 +16627,29 @@
       "route_source": "farey-inverse-sieve"
     },
     {
+      "id": "L-goldbach-farey-matched-semiprime-cofactors",
+      "statement": "by\n  classical\n  exact let I := fun n : ℕ => Finset.Icc ((n+2)/3) ((2*n)/3); let P := fun z : ℕ => (Finset.Icc 2 z).filter Nat.Prime; let V := fun n z : ℕ => ((I n).card:ℝ)*(n.totient:ℝ)/n * ∏ p ∈ (P z).filter (fun p => ¬ p ∣ n), (1-2/(p:ℝ)); let S := fun n z : ℕ => ((I n).filter (fun u => u.Coprime n ∧ z < (u*(n-u)).minFac)).card; let Z₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let B := fun X : ℕ => (Finset.Icc X (2*X)).filter Even; let good := fun n u : ℕ => u.Coprime n ∧ (Z₁ n) < (u*(n-u)).minFac ∧ u.primeFactorsList.length=2 ∧ (n-u).primeFactorsList.length=2 ∧ u.minFac ≤ 2*(n-u).minFac ∧ (n-u).minFac ≤ 2*u.minFac; ∃ κ δ : ℝ, 0 < κ ∧ 0 < δ ∧ δ < 1 ∧ ∃ T : ℕ, ∀ X ≥ T, (((B X).filter (fun n => (((I n).filter (good n)).card:ℝ) < κ*(n:ℝ)/(Real.log (n:ℝ))^3)).card:ℝ) ≤ (X:ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "在立方根筛后，两个半素数的最小素因子相差不超过两倍；证明多数偶目标仍有 ≫n/log³n 个这样的表示，并取得幂节省例外界。",
+        "en": "Power-saving exceptional sets for reflected rough semiprimes whose least factors differ by at most a factor of two."
+      },
+      "brief": {
+        "zh": "在最小因子相对接近的细对角带中研究反射相关。因子指数带宽约为 1/log n，比固定指数矩形更薄；固定矩形的渐近式无法直接给出此结论。先对相邻倍区间做双线性估计，再求和并控制例外。",
+        "en": "This is a shrinking diagonal strip of exponent width O(1/log n), finer than fixed rectangles. Sum bilinear estimates on adjacent dyadic factor intervals and retain power-saving control of exceptional even targets."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/discussions/3819",
+      "program": "correlation",
+      "track": "farey-inverse-sieve",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.FareyMatchedSemiprimeCofactors",
+      "file": "lean/Conjectures/Goldbach/FareyMatchedSemiprimeCofactors.lean",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
       "id": "L-goldbach-farey-return-digit-line",
       "statement": "∀ n u : ℕ, 1≤u → u<n → (n-1+u)/(n-u) = (2*n-1)/(n-u)-1",
       "plain_statement": {
@@ -16623,6 +16669,52 @@
       "module": "Conjectures.Goldbach.FareyReturnDigitLine",
       "file": "lean/Conjectures/Goldbach/FareyReturnDigitLine.lean",
       "track": "farey-inverse-sieve",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-semiprime-factor-rectangle",
+      "statement": "by\n  classical\n  exact let I := fun n : ℕ => Finset.Icc ((n+2)/3) ((2*n)/3); let P := fun z : ℕ => (Finset.Icc 2 z).filter Nat.Prime; let V := fun n z : ℕ => ((I n).card:ℝ)*(n.totient:ℝ)/n * ∏ p ∈ (P z).filter (fun p => ¬ p ∣ n), (1-2/(p:ℝ)); let S := fun n z : ℕ => ((I n).filter (fun u => u.Coprime n ∧ z < (u*(n-u)).minFac)).card; let Z₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let B := fun X : ℕ => (Finset.Icc X (2*X)).filter Even; let box := fun (n u : ℕ) (a b : ℝ) => u.primeFactorsList.length=2 ∧ (n:ℝ)^a < (u.minFac:ℝ) ∧ (u.minFac:ℝ) ≤ (n:ℝ)^b; let w := fun a b : ℝ => Real.log ((b*(1-a))/(a*(1-b))); ∀ a b c d : ℝ, 1/3 ≤ a → a < b → b ≤ 1/2 → 1/3 ≤ c → c < d → d ≤ 1/2 → ∀ ε : ℝ, 0 < ε → ∃ T : ℕ, ∀ X ≥ T, let R := fun n : ℕ => ((I n).filter (fun u => u.Coprime n ∧ box n u a b ∧ box n (n-u) c d)).card; let K := (Real.exp Real.eulerMascheroniConstant/3)^2*w a b*w c d; (∑ n ∈ B X, |(R n:ℝ)/V n (Z₁ n)-K|) ≤ ε*((B X).card:ℝ)",
+      "plain_statement": {
+        "zh": "分别指定两个半素数最小素因子的指数区间，求中央反射窗内计数的平均绝对误差。",
+        "en": "A joint factor-window law for both semiprimes in the central reflected interval."
+      },
+      "brief": {
+        "zh": "对最小素因子指数 t 的单侧候选密度为 dt/(t(1−t))，积分给出 w；不能假设两侧独立。#3819 的总幸存数混合了素数与半素数，本题可检验半素数—半素数分量在何处提供主质量。规范化取同一 V(n,Z₁)，允许例外目标但要求其误差总量可控。",
+        "en": "Integrating dt/(t(1−t)) gives the one-coordinate semiprime factor weight. Test the joint law for two separately specified rectangles without assuming independence. This resolves a component of the survivor count in #3819 and controls errors in mean absolute value."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/discussions/3819",
+      "program": "correlation",
+      "track": "farey-inverse-sieve",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.FareySemiprimeFactorRectangle",
+      "file": "lean/Conjectures/Goldbach/FareySemiprimeFactorRectangle.lean",
+      "route_source": "farey-inverse-sieve"
+    },
+    {
+      "id": "L-goldbach-farey-short-window-rough-variance",
+      "statement": "by\n  classical\n  exact let I := fun n : ℕ => Finset.Icc ((n+2)/3) ((2*n)/3); let P := fun z : ℕ => (Finset.Icc 2 z).filter Nat.Prime; let V := fun n z : ℕ => ((I n).card:ℝ)*(n.totient:ℝ)/n * ∏ p ∈ (P z).filter (fun p => ¬ p ∣ n), (1-2/(p:ℝ)); let S := fun n z : ℕ => ((I n).filter (fun u => u.Coprime n ∧ z < (u*(n-u)).minFac)).card; let Z₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let K : ℝ := (Real.exp Real.eulerMascheroniConstant*(1+Real.log 2)/3)^2; ∀ ε : ℝ, 0 < ε → ∃ T : ℕ, ∀ X H : ℕ, T ≤ X → X ≤ H^2 → H ≤ X → let D := (Finset.Icc X (X+H)).filter Even; (∑ n ∈ D, ((S n (Z₁ n):ℝ)/V n (Z₁ n)-K)^2) ≤ ε*(D.card:ℝ)",
+      "plain_statement": {
+        "zh": "在每个长度至少 √X 的目标窗口，证明立方根粗糙数对模型的均方误差趋零。",
+        "en": "Vanishing mean-square discrepancy for reflected rough pairs in every square-root-length target window."
+      },
+      "brief": {
+        "zh": "这是逐偶数极限的可独立推进的弱化，仍须超越 Kai Fan（arXiv:2306.03347）的单坐标估计。展开平方会得到两对反射拆分的相关和；用 n 自己的 V 和移动筛点再做窗口平均。小均方误差可控制窗口中未达到旧筛下界的目标比例。",
+        "en": "A mesoscopic intermediate goal for #3819. Expand the square into two reflected pairs, retaining the moving sieve cutoff and each target’s local normalization. Fan’s single-coordinate estimate does not control this four-variable correlation."
+      },
+      "depends_on": [],
+      "imports": [],
+      "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/discussions/3819",
+      "program": "correlation",
+      "track": "farey-inverse-sieve",
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.FareyShortWindowRoughVariance",
+      "file": "lean/Conjectures/Goldbach/FareyShortWindowRoughVariance.lean",
       "route_source": "farey-inverse-sieve"
     },
     {
