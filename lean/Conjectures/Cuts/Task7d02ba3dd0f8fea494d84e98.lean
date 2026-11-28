@@ -16,7 +16,7 @@ theorem Conjectures.Cuts.Task7d02ba3dd0f8fea494d84e98 : (∀ (x1 : Finset (ℕ �
       rw [Finset.card_insert_of_notMem (by simp [huv, huw]),
         Finset.card_insert_of_notMem (by simp [hvw]), Finset.card_singleton]
     have h4 := Finset.card_le_card hsub
-    have h5 := hcol u.1
+    have h5 := hrow u.1
     omega
   have row3 : ∀ u v w : ℕ × ℕ, u ∈ T → v ∈ T → w ∈ T → u ≠ v → u ≠ w → v ≠ w →
       u.2 = v.2 → u.2 = w.2 → False := by
@@ -32,7 +32,7 @@ theorem Conjectures.Cuts.Task7d02ba3dd0f8fea494d84e98 : (∀ (x1 : Finset (ℕ �
       rw [Finset.card_insert_of_notMem (by simp [huv, huw]),
         Finset.card_insert_of_notMem (by simp [hvw]), Finset.card_singleton]
     have h4 := Finset.card_le_card hsub
-    have h5 := hrow u.2
+    have h5 := hcol u.2
     omega
   have lexne : ∀ u v : ℕ × ℕ, (u.1 < v.1 ∨ u.1 = v.1 ∧ u.2 < v.2) → u ≠ v := by
     intro u v h he
@@ -53,7 +53,7 @@ theorem Conjectures.Cuts.Task7d02ba3dd0f8fea494d84e98 : (∀ (x1 : Finset (ℕ �
           intro he
           have hs : a.2 = c.2 := by rw [he]
           rcases hbc with h' | ⟨h', h''⟩ <;> omega
-        exact col3 a b c ha hb hc hne_ab hac hne_bc h.symm hca.symm
+        exact col3 a b c ha hb hc hne_ab hac hne_bc h hca.symm
   have h2' : b.1 < c.1 := by
     rcases hbc with h | ⟨h, h2c⟩
     · exact h
@@ -75,5 +75,5 @@ theorem Conjectures.Cuts.Task7d02ba3dd0f8fea494d84e98 : (∀ (x1 : Finset (ℕ �
         intro heq
         have hs : a.1 = c.1 := by rw [heq]
         omega
-      exact row3 a b c ha hb hc hne_ab hac hne_bc he hca
+      exact row3 a b c ha hb hc hne_ab hac hne_bc he hca.symm
   exact ⟨h1, h2', h3⟩
