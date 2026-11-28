@@ -104,7 +104,8 @@ theorem shared_card_le (A : Finset ℕ) (f : ℕ → ℤ) (k : ℕ) :
       (restore (positions p).2 p.2 p'.2 hsecond hright)
   have hcard : target.card = (k + 1) ^ 2 * A.card * (collisions A f k).card := by
     simp only [target, Finset.card_product, Finset.card_univ, Fintype.card_prod,
-      Fintype.card_fin, pow_two, Nat.mul_assoc]
+      Fintype.card_fin]
+    ring
   exact (Finset.card_le_card_of_injOn pack pack_mem pack_inj).trans hcard.le
 
 theorem collision_card_le (A : Finset ℕ) (f : ℕ → ℤ) (k : ℕ) :
@@ -179,7 +180,7 @@ theorem collisions_card_eq_integral (A : Finset ℕ) (f : ℕ → ℤ) (k : ℕ)
     apply sum_congr rfl
     intro i _
     ring
-  let P := Q.product Q
+  let P := Q ×ˢ Q
   let delta (p : (Fin k → ℕ) × (Fin k → ℕ)) := F p.1 - F p.2
   have hpoint (t : ℝ) : ((‖K t‖ ^ (2 * k) : ℝ) : ℂ) = ∑ p ∈ P, mode (delta p) t := by
     rw [show ‖K t‖ ^ (2 * k) = ‖K t ^ k‖ ^ 2 by rw [norm_pow, ← pow_mul, mul_comm],
@@ -379,16 +380,20 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
     rw [pair_collisions_card_eq_subtype P A]
     convert b2 M hM A hA
   have hSumBound : (Ssum.card : ℝ) ≤ Csum * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by
+    dsimp only [Ssum, T, w, f, pSum, tuples, score]
     convert bSum M hM A hA
   have hSqBound : (Ssq.card : ℝ) ≤ Csq * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by
+    dsimp only [Ssq, T, w, f, pSq, tuples, score]
     convert bSq M hM A hA
   have hResBound : (Sres.card : ℝ) ≤
       Cres * (M : ℝ) ^ ε * (A.card : ℝ) ^ (if P.natDegree = 3 then (5 : ℕ) else 4) := by
+    dsimp only [Sres, T, w, f, pSum, pSq, tuples, score]
     convert bRes M hM A hA
   let k : ℕ := if P.natDegree = 3 then 5 else 4
   have hpow4 : (A.card : ℝ) ^ 4 ≤ (A.card : ℝ) ^ k := by
     by_cases hz : A.card = 0
-    · simp [k, hz]
+    · dsimp [k]
+      split_ifs <;> simp [hz]
     · have hone : (1 : ℝ) ≤ A.card := by exact_mod_cast (show 1 ≤ A.card by omega)
       apply pow_le_pow_right₀ hone
       dsimp [k]
