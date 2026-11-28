@@ -12,7 +12,7 @@ open scoped Topology
 theorem Conjectures.Cuts.Cutdd4d88f6b67ef6c3c20a3c82
     (hSmooth : ∀ A b : ℝ, 0 < A → 0 < b → ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, ∀ X ≥ N,
       let E := fun q : ℕ => ((Finset.range q).sup fun a =>
-        if a.Coprime q then (NNReal.mk (|(∑ k ∈ (Finset.Ioc 0 X).filter (fun k => k%q = a), ArithmeticFunction.vonMangoldt k) -
+        if a.Coprime q then (NNReal.mk (|(∑ k ∈ (Finset.Ioc 0 X).filter (fun k => k % q = a), ArithmeticFunction.vonMangoldt k) -
           (X:ℝ)/q.totient|) (abs_nonneg _)) else 0)
       let hi := ⌊(X:ℝ)^(1/2:ℝ)⌋₊
       let lo := ⌊(X:ℝ)^(1/2:ℝ)/(Real.log X)^b⌋₊
@@ -20,7 +20,7 @@ theorem Conjectures.Cuts.Cutdd4d88f6b67ef6c3c20a3c82
         ≤ C*(X:ℝ)/(Real.log X)^A)
     (hSwitched : ∀ A b : ℝ, 0 < A → 0 < b → ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, ∀ X ≥ N,
       let E := fun q : ℕ => ((Finset.range q).sup fun a =>
-        if a.Coprime q then (NNReal.mk (|(∑ k ∈ (Finset.Ioc 0 X).filter (fun k => k%q = a), ArithmeticFunction.vonMangoldt k) -
+        if a.Coprime q then (NNReal.mk (|(∑ k ∈ (Finset.Ioc 0 X).filter (fun k => k % q = a), ArithmeticFunction.vonMangoldt k) -
           (X:ℝ)/q.totient|) (abs_nonneg _)) else 0)
       let hi := ⌊(X:ℝ)^(1/2:ℝ)⌋₊
       let lo := ⌊(X:ℝ)^(1/2:ℝ)/(Real.log X)^b⌋₊
@@ -36,7 +36,7 @@ theorem Conjectures.Cuts.Cutdd4d88f6b67ef6c3c20a3c82
   have majorize (X q a : ℕ) (hq : 0 < q) (ha : a.Coprime q) :
       |(∑ k ∈ (Icc 1 X).filter (fun k => k % q = a % q), ArithmeticFunction.vonMangoldt k)
          - (X : ℝ) / q.totient| ≤ err X q := by
-    have hc : (a%q).Coprime q := by simpa [Nat.Coprime] using ha
+    have hc : (a % q).Coprime q := by simpa [Nat.Coprime] using ha
     have h := endpointClassError_le X (Nat.mod_lt a hq) hc
     have heq : Ioc 0 X = Icc 1 X := by
       ext k
