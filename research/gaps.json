@@ -14961,6 +14961,29 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-digit-set-intrinsic-square-root",
+      "track": "exceptions",
+      "statement": "∀ b : ℕ, 2 ≤ b → ∀ D : Finset ℕ, D ⊆ Finset.range b → 2 ≤ D.card → ∃ C : ℝ, 0 < C ∧ ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → let A := (Finset.Icc 1 X).filter (fun n => (b.digits n).all (fun d => decide (d ∈ D))); let bad := fun n : ℕ => Even n ∧ ¬ ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p+q=n; ((@Finset.filter ℕ bad (Classical.decPred bad) A).card : ℝ) ≤ C * Real.sqrt (A.card : ℝ)",
+      "plain_statement": {
+        "zh": "对每个固定进制和至少含两个数字的字母表 D，证明缺少双素数表示的允许偶数，至多为所有允许正整数个数的平方根乘以常数。",
+        "en": "Bound exceptional even targets among integers supported on a fixed digit alphabet by a constant times the square root of the alphabet-restricted population."
+      },
+      "brief": {
+        "zh": "Cumberbatch 的定理给出按允许数字集合大小计算的幂节省。本题固定指数 1/2，对稀疏字母表也按实际大小归一化。研究数字 Fourier 乘积对主弧有理点的聚集，再控制它与哥猜例外指示的相关。分母按所有允许正整数计数；标准进制表示不补前导零。",
+        "en": "Cumberbatch obtains a saving in the intrinsic population. Target exponent 1/2 even for thin alphabets. Use the digit Fourier product to locate concentrations at rational arcs and estimate their interaction with Goldbach exceptions. The population includes all allowed positive integers in their standard representation, without padded leading zeroes."
+      },
+      "source": "https://arxiv.org/abs/2402.07921",
+      "imports": [],
+      "depends_on": [],
+      "role": "target",
+      "parallel": true,
+      "program": "correlation",
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.DigitSetIntrinsicSquareRoot",
+      "file": "lean/Conjectures/Goldbach/DigitSetIntrinsicSquareRoot.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-near-extremal-partner-count",
       "statement": "by\n  classical\n  let S := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    ∑' q : ℕ, if hq : q ≠ 0 then\n      let _ : NeZero q := ⟨hq⟩\n      if h : r ∣ q ∧ s ∣ q then\n        let A := DirichletCharacter.changeLevel h.1 α\n        let B := DirichletCharacter.changeLevel h.2 β\n        gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar *\n          gaussSum (A*B)⁻¹ (ZMod.stdAddChar.mulShift (-(m:ZMod q))) / (q.totient:ℂ)^2\n      else 0\n    else 0\n  let O := S (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1)\n  exact ∀ (r : ℕ) [NeZero r] (α : DirichletCharacter ℂ r), α.IsPrimitive →\n    ∀ m : ℕ, 0 < m → Even m →\n    ∀ F : Finset (Σ s : ℕ, DirichletCharacter ℂ s),\n    (∀ b ∈ F, b.1 ≠ 0 ∧ b.2.IsPrimitive ∧ ‖O m‖ < Real.sqrt 2 * ‖S α b.2 m‖) →\n    F.card ≤ 24",
       "plain_statement": {
@@ -15061,6 +15084,29 @@
       "role": "lemma",
       "module": "Conjectures.Goldbach.ShortSquareWindowCollision",
       "file": "lean/Conjectures/Goldbach/ShortSquareWindowCollision.lean",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-two-gaussian-norm-prime-exceptions",
+      "track": "exceptions",
+      "statement": "let lp := fun p : ℕ => Nat.Prime p ∧ ∃ a b : ℕ, p=a^2+b^2+1; let bad := fun n : ℕ => Even n ∧ n%9 ≠ 5 ∧ n%9 ≠ 8 ∧ ¬ ∃ p q : ℕ, lp p ∧ lp q ∧ p+q=n; ∃ δ : ℝ, 0 < δ ∧ δ < 1 ∧ ∃ X₀ : ℕ, ∀ X : ℕ, X₀ ≤ X → ((@Finset.filter ℕ bad (Classical.decPred bad) (Finset.Icc 2 X)).card : ℝ) ≤ (X : ℝ)^(1-δ)",
+      "plain_statement": {
+        "zh": "对模 9 非 5、8 的偶数，证明不能写成两个 x²+y²+1 型素数之和的例外总数具有幂节省。",
+        "en": "Obtain a power-saving exceptional set for sums of two primes of the form x²+y²+1 over even targets outside residues 5 and 8 modulo 9."
+      },
+      "brief": {
+        "zh": "Teräväinen 定理 1.1 给出同一目标集上的 o(X)。不增加坐标互素条件；否则局部可容许类会改变。尝试在半维筛中保留可量化的傅里叶误差及异常特征贡献。计数对象是失败的偶数，各坐标表示不重复计分。",
+        "en": "Theorem 1.1 gives o(X) on the same admissible targets. Keep unrestricted coordinates on both sides. Quantify the Fourier and exceptional-character errors in the half-dimensional sieve. Count exceptional targets rather than lattice witnesses."
+      },
+      "source": "https://www.cambridge.org/core/journals/mathematika/article/abs/goldbach-problem-for-primes-that-are-sums-of-two-squares-plus-one/4A5250357B50082F9203DAE01A3CDAC3",
+      "imports": [],
+      "depends_on": [],
+      "role": "target",
+      "parallel": true,
+      "program": "correlation",
+      "challenge_only": true,
+      "module": "Conjectures.Goldbach.TwoGaussianNormPrimeExceptions",
+      "file": "lean/Conjectures/Goldbach/TwoGaussianNormPrimeExceptions.lean",
       "route_source": "exceptions"
     },
     {
