@@ -15070,7 +15070,10 @@
       "parallel": true,
       "challenge_only": true,
       "depends_on": [],
-      "imports": []
+      "imports": [],
+      "module": "Conjectures.Goldbach.ChenCubicResidueSummands",
+      "file": "lean/Conjectures/Goldbach/ChenCubicResidueSummands.lean",
+      "route_source": "exceptions"
     },
     {
       "id": "L-goldbach-chen-forced-three",
