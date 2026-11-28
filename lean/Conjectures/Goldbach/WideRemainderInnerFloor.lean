@@ -2752,6 +2752,74 @@ theorem deltaJ_le (n q : ℕ) (hn : 0 < n) (hq : 0 < q)
   le_min (deltaJ_le_card n q hn hq h)
     (le_min (deltaJ_le_length n q hn hq) (deltaJ_le_decay n q hn hq h))
 
+/-- The real part of the Ramanujan sum on a squarefree modulus is
+`μ(q/(q,n))·φ((q,n))`. -/
+lemma csum_re_eq (q n : ℕ) (hq : 0 < q) (hsq : Squarefree q) :
+    (csum q n).re
+      = ((ArithmeticFunction.moebius (q / Nat.gcd q n) : ℤ) : ℝ)
+          * ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) := by
+  rw [csum_eq_moebius_totient q n hq hsq]
+  simp [Complex.mul_re]
+
+/-- The skirt model-sum floor with the concrete kernel-mass weights:
+if the negative part of the weighted Ramanujan sums is at most `εn`, then the
+whole skirt model sum is at least `-εn`. -/
+lemma model_sum_floor_deltaJ (s : Finset ℕ) (n : ℕ) (ε : ℝ)
+    (hq : ∀ q ∈ s, 0 < q) (hsq : ∀ q ∈ s, Squarefree q)
+    (hbound : ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+        ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * (deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2) ≤ ε * (n : ℝ)) :
+    ∑ q ∈ s, (csum q n).re * (deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≥ -(ε * (n : ℝ)) :=
+  model_sum_floor_of_neg_bound s n ε (fun q => deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+    hq hsq (fun q _ => div_nonneg (deltaJ_nonneg n q)
+      (sq_nonneg ((Nat.totient q : ℕ) : ℝ))) hbound
+
+/-- The negative part of the skirt mass is bounded termwise by the decay bound
+`ΔJ(q) ≤ qn/(2Q)`, turning the analytic condition into a purely arithmetic sum. -/
+lemma skirt_negMass_le_decay (s : Finset ℕ) (n : ℕ)
+    (hq : ∀ q ∈ s, 0 < q) (hn : 0 < n)
+    (hr : ∀ q ∈ s, (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) ≤ 1/2) :
+    ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+        ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * (deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≤ ∑ q ∈ s, ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * ((q:ℝ)*(n:ℝ)/(2*(Qf n:ℝ)) / ((Nat.totient q : ℕ) : ℝ) ^ 2) := by
+  have hl : 0 < Nat.log 2 (n+2) := Nat.log_pos (by norm_num) (by omega)
+  have hQ0 : 0 < (Qf n:ℝ) := by
+    unfold Qf
+    rw [pow_two]
+    exact_mod_cast Nat.mul_pos hl hl
+  have hnonneg : ∀ q ∈ s, 0 ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+        * ((q:ℝ)*(n:ℝ)/(2*(Qf n:ℝ)) / ((Nat.totient q : ℕ) : ℝ) ^ 2) := by
+    intro q hq'
+    have hq0 : 0 < q := hq q hq'
+    exact mul_nonneg (by positivity : 0 ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ))
+      (div_nonneg (div_nonneg (mul_nonneg (by exact_mod_cast hq0.le) (by exact_mod_cast hn.le))
+        (mul_nonneg zero_le_two hQ0.le))
+        (by positivity : 0 ≤ ((Nat.totient q : ℕ) : ℝ) ^ 2))
+  refine (Finset.sum_le_sum fun q hq' => ?_).trans
+    (Finset.sum_le_sum_of_subset_of_nonneg
+      (Finset.filter_subset (fun q => (csum q n).re < 0) s)
+      (fun i hi _ => hnonneg i hi))
+  have hq0 : 0 < q := hq q ((Finset.mem_filter.mp hq').1)
+  have hrq := hr q ((Finset.mem_filter.mp hq').1)
+  exact mul_le_mul_of_nonneg_left
+    (div_le_div_of_nonneg_right (deltaJ_le_decay n q hn hq0 hrq)
+      (by positivity : 0 ≤ ((Nat.totient q : ℕ) : ℝ) ^ 2))
+    (by positivity : 0 ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ))
+
+/-- End-to-end conditional skirt floor: a purely arithmetic bound on the
+negative-part sum implies the model-sum floor. -/
+lemma model_sum_floor_of_arith_bound (s : Finset ℕ) (n : ℕ) (ε : ℝ)
+    (hq : ∀ q ∈ s, 0 < q) (hsq : ∀ q ∈ s, Squarefree q) (hn : 0 < n)
+    (hr : ∀ q ∈ s, (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) ≤ 1/2)
+    (hbound : ∑ q ∈ s, ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * ((q:ℝ)*(n:ℝ)/(2*(Qf n:ℝ)) / ((Nat.totient q : ℕ) : ℝ) ^ 2) ≤ ε * (n : ℝ)) :
+    ∑ q ∈ s, (csum q n).re * (deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≥ -(ε * (n : ℝ)) :=
+  model_sum_floor_deltaJ s n ε hq hsq ((skirt_negMass_le_decay s n hq hn hr).trans hbound)
+
 end Ramanujan
 
 
