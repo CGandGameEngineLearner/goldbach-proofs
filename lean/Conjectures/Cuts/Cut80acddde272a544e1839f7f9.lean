@@ -162,7 +162,7 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
       apply Finset.sum_congr rfl
       intro i _
       ring
-    let ProdQ := Q ×ˢ Q
+    let ProdQ := (tuples k).product (tuples k)
     let delta (p : (Fin k → ℕ) × (Fin k → ℕ)) := score p.1 - score p.2
     have hpoint (t : ℝ) : ((‖K t‖ ^ (2 * k) : ℝ) : ℂ) =
         ∑ p ∈ ProdQ, DyadicMixedB4Fourier.mode (delta p) t := by
@@ -183,8 +183,10 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
             intervalIntegral.integral_finsetSum fun p _ =>
               (DyadicMixedB4Fourier.continuous_mode _).intervalIntegrable _ _
       _ = (((collisions k).card : ℝ) : ℂ) := by
+            dsimp only [collisions, ProdQ, Q]
             simp only [DyadicMixedB4Fourier.mode_integral, delta, sub_eq_zero,
-              ← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_one]
+              ← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_one,
+              Finset.filter_congr_decidable]
             norm_cast
   have hCS : ((collisions 3).card : ℝ) ^ 2 ≤
       ((collisions 2).card : ℝ) * ((collisions 4).card : ℝ) := by
@@ -201,12 +203,9 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
       let E4 : ℝ := ((collisions 4).card : ℝ)
       have hnonneg : 0 ≤ ∫ t in (0 : ℝ)..1, (E2 * ‖K t‖ ^ 4 - E3 * ‖K t‖ ^ 2) ^ 2 :=
         intervalIntegral.integral_nonneg (by norm_num) fun t _ => sq_nonneg _
-      have hI2 : ∫ t in (0 : ℝ)..1, ‖K t‖ ^ 4 = E2 := by
-        simpa [E2] using hMoment 2
-      have hI3 : ∫ t in (0 : ℝ)..1, ‖K t‖ ^ 6 = E3 := by
-        simpa [E3] using hMoment 3
-      have hI4 : ∫ t in (0 : ℝ)..1, ‖K t‖ ^ 8 = E4 := by
-        simpa [E4] using hMoment 4
+      have hI2 : ∫ t in (0 : ℝ)..1, ‖K t‖ ^ 4 = E2 := hMoment 2
+      have hI3 : ∫ t in (0 : ℝ)..1, ‖K t‖ ^ 6 = E3 := hMoment 3
+      have hI4 : ∫ t in (0 : ℝ)..1, ‖K t‖ ^ 8 = E4 := hMoment 4
       have hcont8 : IntervalIntegrable (fun t : ℝ => ‖K t‖ ^ 8) MeasureTheory.volume 0 1 :=
         (hKcont.norm.pow 8).intervalIntegrable 0 1
       have hcont6 : IntervalIntegrable (fun t : ℝ => ‖K t‖ ^ 6) MeasureTheory.volume 0 1 :=
@@ -228,7 +227,11 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
           intervalIntegral.integral_const_mul, hI4, hI3, hI2]
         ring
       rw [hexpand] at hnonneg
-      nlinarith only [hnonneg, hE2pos]
+      change E3 ^ 2 ≤ E2 * E4
+      by_contra! hlt
+      have hneg : E2 * (E2 * E4 - E3 ^ 2) < 0 :=
+        mul_neg_of_pos_of_neg hE2pos (by linarith only [hlt])
+      linarith only [hnonneg, hneg]
     · have hEmpty : A = ∅ := Finset.not_nonempty_iff_eq_empty.mp hA
       have h3 : (collisions 3).card = 0 := by
         rw [Finset.card_eq_zero, Finset.eq_empty_iff_forall_not_mem]
@@ -255,14 +258,28 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
     have hE3nn : 0 ≤ E3 := Nat.cast_nonneg _
     have hE4nn : 0 ≤ E4 := Nat.cast_nonneg _
     have hSquared : (16 * Z * E3) ^ 2 ≤ (E4 / 2 + 128 * Z ^ 2 * E2) ^ 2 := by
+      have hsqid : (E4 / 2 + 128 * Z ^ 2 * E2) ^ 2 - (256 * Z ^ 2) * (E2 * E4) =
+          (E4 / 2 - 128 * Z ^ 2 * E2) ^ 2 := by ring
+      have hsqnn : 0 ≤ (E4 / 2 - 128 * Z ^ 2 * E2) ^ 2 := sq_nonneg _
       calc
         (16 * Z * E3) ^ 2 = (256 * Z ^ 2) * E3 ^ 2 := by ring
         _ ≤ (256 * Z ^ 2) * (E2 * E4) :=
           mul_le_mul_of_nonneg_left hCS (by positivity)
-        _ ≤ (E4 / 2 + 128 * Z ^ 2 * E2) ^ 2 := by
-          nlinarith only [sq_nonneg (E4 / 2 - 128 * Z ^ 2 * E2)]
+        _ ≤ (E4 / 2 + 128 * Z ^ 2 * E2) ^ 2 := by linarith only [hsqid, hsqnn]
     have hAbsorb : 16 * Z * E3 ≤ E4 / 2 + 128 * Z ^ 2 * E2 := by
-      nlinarith only [hSquared, hZ, hE2nn, hE3nn, hE4nn]
+      by_contra! hlt
+      have hsum_pos : 0 < 16 * Z * E3 + (E4 / 2 + 128 * Z ^ 2 * E2) := by
+        have h1 : 0 ≤ E4 / 2 + 128 * Z ^ 2 * E2 := by positivity
+        linarith only [hlt, h1]
+      have hdiff_pos : 0 < 16 * Z * E3 - (E4 / 2 + 128 * Z ^ 2 * E2) := by
+        linarith only [hlt]
+      have hdiff : (16 * Z * E3) ^ 2 - (E4 / 2 + 128 * Z ^ 2 * E2) ^ 2 =
+          (16 * Z * E3 - (E4 / 2 + 128 * Z ^ 2 * E2)) *
+            (16 * Z * E3 + (E4 / 2 + 128 * Z ^ 2 * E2)) := by ring
+      have hgt : 0 < (16 * Z * E3) ^ 2 - (E4 / 2 + 128 * Z ^ 2 * E2) ^ 2 := by
+        rw [hdiff]
+        exact mul_pos hdiff_pos hsum_pos
+      linarith only [hSquared, hgt]
     linarith only [hCount, hAbsorb]
   have hcard2 : (collisions 2).card =
       ({z ∈ (Finset.univ : Finset ((Fin 2 → ↥A) × (Fin 2 → ↥A))) |
@@ -292,7 +309,9 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
         Finset.mem_filter.mpr ⟨Finset.mem_univ _, hsum⟩, rfl⟩
   have hE2 : ((collisions 2).card : ℝ) ≤ C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 2 := by
     rw [hcard2]
-    convert b2 M hM A hA
+    have h := b2 M hM A hA
+    dsimp only at h
+    simpa only [Finset.filter_congr_decidable] using h
   let T4 := Fintype.piFinset (fun _ : Fin 4 => A)
   let w4 := fun u : Fin 4 → ℕ => ∑ j : Fin 4, P.eval (u j : ℤ)
   let Ssum := (T4.product T4).filter (fun z => w4 z.1 = w4 z.2 ∧
@@ -312,6 +331,8 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
   have hoff : off.card ≤ (collisions 4).card := by
     apply Finset.card_le_card
     intro z hz
+    dsimp only [off, T4, w4] at hz
+    dsimp only [collisions, tuples, score, f]
     obtain ⟨hm, heq, _⟩ := Finset.mem_filter.mp hz
     exact Finset.mem_filter.mpr ⟨hm, heq⟩
   have hcover : disjoint 4 ⊆ Ssum ∪ Ssq ∪ Sres := by
@@ -338,13 +359,21 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
         (Nat.add_le_add_right (Finset.card_union_le _ _) _))
     exact_mod_cast hNat
   have hSumBound : (Ssum.card : ℝ) ≤ Csum * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by
-    convert bSum M hM A hA
+    have h := bSum M hM A hA
+    dsimp only [Ssum, T4, w4]
+    dsimp only at h
+    simpa only [Finset.filter_congr_decidable] using h
   have hSqBound : (Ssq.card : ℝ) ≤ Csq * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by
-    convert bSq M hM A hA
-  have hResBound : (Sres.card : ℝ) ≤
-      Cres * (M : ℝ) ^ ε * (A.card : ℝ) ^ (if P.natDegree = 3 then (5 : ℕ) else 4) := by
-    convert bRes M hM A hA
+    have h := bSq M hM A hA
+    dsimp only [Ssq, T4, w4]
+    dsimp only at h
+    simpa only [Finset.filter_congr_decidable] using h
   let k : ℕ := if P.natDegree = 3 then 5 else 4
+  have hResBound : (Sres.card : ℝ) ≤ Cres * (M : ℝ) ^ ε * (A.card : ℝ) ^ k := by
+    have h := bRes M hM A hA
+    dsimp only [Sres, T4, w4, k]
+    dsimp only at h
+    simpa only [Finset.filter_congr_decidable] using h
   have hpow4 : (A.card : ℝ) ^ 4 ≤ (A.card : ℝ) ^ k := by
     by_cases hz : A.card = 0
     · dsimp [k]
@@ -354,11 +383,19 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
       dsimp [k]
       split_ifs <;> decide
   have hm_nonneg : 0 ≤ (M : ℝ) ^ ε := by positivity
-  have h4toK : (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 ≤ (M : ℝ) ^ ε * (A.card : ℝ) ^ k :=
-    mul_le_mul_of_nonneg_left hpow4 hm_nonneg
+  have h1 : Csum * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 ≤ Csum * (M : ℝ) ^ ε * (A.card : ℝ) ^ k := by
+    rw [mul_assoc Csum, mul_assoc Csum]
+    exact mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hpow4 hm_nonneg) hCsum.le
+  have h2 : Csq * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 ≤ Csq * (M : ℝ) ^ ε * (A.card : ℝ) ^ k := by
+    rw [mul_assoc Csq, mul_assoc Csq]
+    exact mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hpow4 hm_nonneg) hCsq.le
+  have h3 : 256 * C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 ≤
+      256 * C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ k := by
+    rw [mul_assoc (256 * C2), mul_assoc (256 * C2)]
+    exact mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hpow4 hm_nonneg) (by positivity)
   have hStep1 : (off.card : ℝ) ≤
       2 * ((Ssum.card : ℝ) + (Ssq.card : ℝ) + (Sres.card : ℝ)) +
-        256 * (A.card : ℝ) ^ 2 * (C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 2) := by
+        256 * C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by
     have hoffR : (off.card : ℝ) ≤ ((collisions 4).card : ℝ) := by exact_mod_cast hoff
     have h2disj : 2 * ((disjoint 4).card : ℝ) ≤
         2 * ((Ssum.card : ℝ) + (Ssq.card : ℝ) + (Sres.card : ℝ)) :=
@@ -366,17 +403,23 @@ theorem Conjectures.Cuts.Cut80acddde272a544e1839f7f9
     have h2e2 : 256 * (A.card : ℝ) ^ 2 * ((collisions 2).card : ℝ) ≤
         256 * (A.card : ℝ) ^ 2 * (C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 2) :=
       mul_le_mul_of_nonneg_left hE2 (by positivity)
-    linarith only [hoffR, hInterp, h2disj, h2e2]
-  have h1 : Csum * ((M : ℝ) ^ ε * (A.card : ℝ) ^ 4) ≤ Csum * ((M : ℝ) ^ ε * (A.card : ℝ) ^ k) :=
-    mul_le_mul_of_nonneg_left h4toK hCsum.le
-  have h2 : Csq * ((M : ℝ) ^ ε * (A.card : ℝ) ^ 4) ≤ Csq * ((M : ℝ) ^ ε * (A.card : ℝ) ^ k) :=
-    mul_le_mul_of_nonneg_left h4toK hCsq.le
-  have h3 : 256 * C2 * ((M : ℝ) ^ ε * (A.card : ℝ) ^ 4) ≤
-      256 * C2 * ((M : ℝ) ^ ε * (A.card : ℝ) ^ k) :=
-    mul_le_mul_of_nonneg_left h4toK (by positivity)
-  change (off.card : ℝ) ≤
-    (2 * Csum + 2 * Csq + 2 * Cres + 256 * C2) * (M : ℝ) ^ ε * (A.card : ℝ) ^ k
-  have hmul : 256 * (A.card : ℝ) ^ 2 * (C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 2) =
-      256 * C2 * ((M : ℝ) ^ ε * (A.card : ℝ) ^ 4) := by ring
-  rw [hmul] at hStep1
-  linarith only [hStep1, hSumBound, hSqBound, hResBound, h1, h2, h3]
+    have hmul : 256 * (A.card : ℝ) ^ 2 * (C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 2) =
+        256 * C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ 4 := by ring
+    linarith only [hoffR, hInterp, h2disj, h2e2, hmul]
+  have hFinal : (off.card : ℝ) ≤
+      (2 * Csum + 2 * Csq + 2 * Cres + 256 * C2) * (M : ℝ) ^ ε * (A.card : ℝ) ^ k := by
+    have hcomb : (off.card : ℝ) ≤
+        2 * (Csum * (M : ℝ) ^ ε * (A.card : ℝ) ^ k +
+             Csq * (M : ℝ) ^ ε * (A.card : ℝ) ^ k +
+             Cres * (M : ℝ) ^ ε * (A.card : ℝ) ^ k) +
+          256 * C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ k := by
+      linarith only [hStep1, hSumBound, hSqBound, hResBound, h1, h2, h3]
+    have hfactor : 2 * (Csum * (M : ℝ) ^ ε * (A.card : ℝ) ^ k +
+             Csq * (M : ℝ) ^ ε * (A.card : ℝ) ^ k +
+             Cres * (M : ℝ) ^ ε * (A.card : ℝ) ^ k) +
+          256 * C2 * (M : ℝ) ^ ε * (A.card : ℝ) ^ k =
+        (2 * Csum + 2 * Csq + 2 * Cres + 256 * C2) * (M : ℝ) ^ ε * (A.card : ℝ) ^ k := by ring
+    linarith only [hcomb, hfactor]
+  dsimp only [k] at hFinal
+  dsimp only
+  simpa only [Finset.filter_congr_decidable] using hFinal
