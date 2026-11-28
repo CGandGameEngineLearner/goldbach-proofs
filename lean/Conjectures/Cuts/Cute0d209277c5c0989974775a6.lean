@@ -1,0 +1,20 @@
+import Mathlib
+
+-- child 1 zh: 对充分大的偶数 n，深次弧主系数有线性下界：-(e/2)·n ≤ Re(deepMinor n)（对任意 e>0，最终成立）。
+-- child 1 en: For every e > 0 and all sufficiently large even n, the deep-minor coefficient is bounded below: -(e/2)*n <= Re(deepMinor n).
+-- child 2 zh: 若上述线性下界成立，则取零权 ω ≡ 0 即可满足 L² 质量约束与加权不等式（初等转接）。
+-- child 2 en: Given that lower bound, the zero weight ω ≡ 0 already satisfies the L² mass constraint and the weighted inequality (elementary transfer).
+
+theorem Conjectures.Cuts.Cute0d209277c5c0989974775a6
+    (hLower : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ (η : ℝ) (N : ℕ), 0 < η ∧ ∀ n : ℕ, N ≤ n → Even n → -(e / 2) * (n : ℝ) ≤ (deepMinor n).re)
+    (hZero : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ (η : ℝ) (N : ℕ), 0 < η ∧ ∀ n : ℕ, N ≤ n → Even n → -(e / 2) * (n : ℝ) ≤ (deepMinor n).re →
+      (∃ ω : ℕ → ℝ, (∀ m : ℕ, 0 ≤ ω m) ∧ ((∑ m ∈ Finset.Icc n (2 * n), (ω m) ^ 2) * (n : ℝ) ^ (8 / 3 + (1 : ℝ)) ≤ ((e / 2) * (n : ℝ)) ^ 2)  ∧ (∑ m ∈ Finset.Icc n (2 * n), ω m * (deepCoeff n m).re) - (e / 2) * (n : ℝ) ≤ (deepMinor n).re)) :
+    (let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let deepMinor := fun n : ℕ => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume; let deepCoeff := fun (n m : ℕ) => intervalIntegral (fun t => (wideArcs n)ᶜ.indicator (fun u => (S n w u)^2 * E (-(m:ℝ)*u)) t) (0:ℝ) 1 MeasureTheory.volume; ∀ e : ℝ, 0 < e → ∃ (η : ℝ) (N : ℕ), 0 < η ∧ ∀ n : ℕ, N ≤ n → Even n → ∃ ω : ℕ → ℝ, (∀ m : ℕ, 0 ≤ ω m) ∧ ((∑ m ∈ Finset.Icc n (2 * n), (ω m) ^ 2) * (n : ℝ) ^ (8 / 3 + η) ≤ ((e / 2) * (n : ℝ)) ^ 2) ∧ (∑ m ∈ Finset.Icc n (2 * n), ω m * (deepCoeff n m).re) - (e / 2) * (n : ℝ) ≤ (deepMinor n).re) := by
+  simp only [] at hLower hZero ⊢
+  intro e he
+  obtain ⟨_, N, _, hN⟩ := hLower e he
+  obtain ⟨_, N', _, hrest⟩ := hZero e he
+  refine ⟨1, max N N', one_pos, ?_⟩
+  intro n hn hEven
+  exact hrest n (Nat.le_trans (Nat.le_max_right _ _) hn) hEven
+    (hN n (Nat.le_trans (Nat.le_max_left _ _) hn) hEven)
