@@ -2809,6 +2809,59 @@ lemma skirt_negMass_le_decay (s : Finset ℕ) (n : ℕ)
       (by positivity : 0 ≤ ((Nat.totient q : ℕ) : ℝ) ^ 2))
     (by positivity : 0 ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ))
 
+/-- The negative part of the skirt mass is at most `(n+1)` times the purely
+arithmetic sum `Σ_{q∈s} φ((q,n))/φ(q)²` (card bound `ΔJ(q) ≤ n+1`).  For the
+floor it suffices that the filtered version of this arithmetic sum be `o(1)`. -/
+lemma skirt_negMass_le_card (s : Finset ℕ) (n : ℕ)
+    (hq : ∀ q ∈ s, 0 < q) (hn : 0 < n)
+    (hr : ∀ q ∈ s, (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) ≤ 1/2) :
+    ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+        ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * (deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≤ (n + 1 : ℝ)
+        * ∑ q ∈ s, ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+            / ((Nat.totient q : ℕ) : ℝ) ^ 2 := by
+  have hstep1 : ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+      ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+        * (deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≤ ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+      (n + 1 : ℝ) * (((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+        / ((Nat.totient q : ℕ) : ℝ) ^ 2) := by
+    refine Finset.sum_le_sum fun q hq' => ?_
+    have hq0 : 0 < q := hq q ((Finset.mem_filter.mp hq').1)
+    have hrq := hr q ((Finset.mem_filter.mp hq').1)
+    have hA : deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2
+        ≤ (n + 1 : ℝ) / ((Nat.totient q : ℕ) : ℝ) ^ 2 :=
+      div_le_div_of_nonneg_right (deltaJ_le_card n q hn hq0 hrq)
+        (by positivity : 0 ≤ ((Nat.totient q : ℕ) : ℝ) ^ 2)
+    calc ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * (deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+        ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * ((n + 1 : ℝ) / ((Nat.totient q : ℕ) : ℝ) ^ 2) :=
+      mul_le_mul_of_nonneg_left hA (by positivity : 0 ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ))
+      _ = (n + 1 : ℝ) * (((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          / ((Nat.totient q : ℕ) : ℝ) ^ 2) := by
+        rw [mul_comm, div_mul_eq_mul_div, mul_div_assoc']
+  have hstep2 : (n + 1 : ℝ) * ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+      (((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≤ (n + 1 : ℝ) * ∑ q ∈ s, (((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+        / ((Nat.totient q : ℕ) : ℝ) ^ 2) :=
+    mul_le_mul_of_nonneg_left
+      (Finset.sum_le_sum_of_subset_of_nonneg
+        (Finset.filter_subset (fun q => (csum q n).re < 0) s)
+        (fun i hi _ => div_nonneg (by positivity : 0 ≤ ((Nat.totient (Nat.gcd i n) : ℕ) : ℝ))
+          (by positivity : 0 ≤ ((Nat.totient i : ℕ) : ℝ) ^ 2)))
+      (by positivity : 0 ≤ (n + 1 : ℝ))
+  have hstep3 : ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+      (n + 1 : ℝ) * (((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+        / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≤ (n + 1 : ℝ) * ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+        (((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) / ((Nat.totient q : ℕ) : ℝ) ^ 2) :=
+    (Finset.mul_sum (s.filter (fun q => (csum q n).re < 0))
+      (fun q => ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ) / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      (n + 1 : ℝ)).symm.le
+  exact hstep1.trans (hstep3.trans hstep2)
+
 /-- End-to-end conditional skirt floor: a purely arithmetic bound on the
 negative-part sum implies the model-sum floor. -/
 lemma model_sum_floor_of_arith_bound (s : Finset ℕ) (n : ℕ) (ε : ℝ)
