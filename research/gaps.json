@@ -15007,6 +15007,29 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-fixed-shift-sextic-goldbach",
+      "statement": "∃ N : ℕ, ∀ n : ℕ, N ≤ n → ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ p + q = 2*n^6",
+      "plain_statement": {
+        "zh": "证明每个充分大的 2n⁶ 都有两个素数之和的表示。",
+        "en": "Represent every sufficiently large twice-sixth-power as the sum of two primes."
+      },
+      "brief": {
+        "zh": "对标第 5 节末尾明确提出的 β=0 情形。定理 1 对 P(x)=x⁶ 允许 O(N^(6/7+ε)) 个例外；新题要求例外有限，严格推出该特例。几乎处处平移的结论不能指定 β=0。可先研究素数侧次弧大值和六次幂相位的相关性；只处理素数 n 或有限区间均不足。",
+        "en": "Section 5 explicitly identifies the fixed shift β=0. For P(x)=x⁶, Theorem 1 allows O(N^(6/7+ε)) bad indices. Finiteness recovers this special case and eliminates all large exceptions. Almost-everywhere translation does not select zero. Seek cancellation against the sixth-power phase at the remaining exceptional indices."
+      },
+      "source": "https://arxiv.org/html/2611.09386v1",
+      "program": "exceptions",
+      "track": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.FixedShiftSexticGoldbach",
+      "file": "lean/Conjectures/Goldbach/FixedShiftSexticGoldbach.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-near-extremal-partner-count",
       "statement": "by\n  classical\n  let S := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    ∑' q : ℕ, if hq : q ≠ 0 then\n      let _ : NeZero q := ⟨hq⟩\n      if h : r ∣ q ∧ s ∣ q then\n        let A := DirichletCharacter.changeLevel h.1 α\n        let B := DirichletCharacter.changeLevel h.2 β\n        gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar *\n          gaussSum (A*B)⁻¹ (ZMod.stdAddChar.mulShift (-(m:ZMod q))) / (q.totient:ℂ)^2\n      else 0\n    else 0\n  let O := S (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1)\n  exact ∀ (r : ℕ) [NeZero r] (α : DirichletCharacter ℂ r), α.IsPrimitive →\n    ∀ m : ℕ, 0 < m → Even m →\n    ∀ F : Finset (Σ s : ℕ, DirichletCharacter ℂ s),\n    (∀ b ∈ F, b.1 ≠ 0 ∧ b.2.IsPrimitive ∧ ‖O m‖ < Real.sqrt 2 * ‖S α b.2 m‖) →\n    F.card ≤ 24",
       "plain_statement": {
@@ -15059,6 +15082,29 @@
       "route_source": "exceptions"
     },
     {
+      "id": "L-goldbach-polynomial-eighth-moment-support",
+      "statement": "by\n  classical\n  exact ∀ P : Polynomial ℤ, 3 ≤ P.natDegree → ∀ ε : ℝ, 0 < ε → ∃ C : ℝ, 0 < C ∧ ∀ M : ℕ, 2 ≤ M → ∀ A : Finset ℕ, A ⊆ Finset.Icc 1 M →\n    let K := fun t : ℝ => ∑ n ∈ A, Complex.exp (2 * (Real.pi : ℂ) * Complex.I * ((P.eval (n : ℤ) : ℤ) : ℂ) * (t : ℂ))\n    intervalIntegral (fun t : ℝ => ‖K t‖^8) 0 1 MeasureTheory.volume ≤ C * (M : ℝ)^ε * (A.card : ℝ)^(if P.natDegree = 3 then (5 : ℕ) else 4)",
+      "plain_statement": {
+        "zh": "对任意三次及以上整系数多项式和任意指标子集，证明指数和八阶矩至多为 C M^ε |A|⁵（三次）或 C M^ε |A|⁴（四次及以上）。",
+        "en": "Control the eighth moment on arbitrary subsets by M^ε times the fifth power of their size in degree three and its fourth power in higher degrees."
+      },
+      "brief": {
+        "zh": "对标预印本第 3 节定理 F 的 M^(1+ε)|A|⁴。因 |A|≤M，三次目标收回原界并在稀疏集上改进；更高次数直接省 M。由正交性改为估计四项和相等的八元组，可从分离对角解与凸序列关联估计入手。代回式 (4.6)，对三、四次的例外指标指数均可降至 1/2+ε，须保留原文所用素数侧输入。",
+        "en": "Compare Theorem F in section 3. Cardinality is at most M, so the cubic estimate recovers the old bound and saves on sparse sets; higher degrees save a factor M. Count equal four-term sums and separate diagonal solutions. In (4.6), keeping the prime-side hypotheses, both cubic and quartic exceptional exponents would become 1/2+ε."
+      },
+      "source": "https://arxiv.org/html/2611.09386v1",
+      "program": "exceptions",
+      "track": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.PolynomialEighthMomentSupport",
+      "file": "lean/Conjectures/Goldbach/PolynomialEighthMomentSupport.lean",
+      "route_source": "exceptions"
+    },
+    {
       "id": "L-goldbach-primitive-partner-cubic-mass",
       "statement": "by\n  classical\n  let S := fun {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (m : ℕ) =>\n    ∑' q : ℕ, if hq : q ≠ 0 then\n      let _ : NeZero q := ⟨hq⟩\n      if h : r ∣ q ∧ s ∣ q then\n        let A := DirichletCharacter.changeLevel h.1 α\n        let B := DirichletCharacter.changeLevel h.2 β\n        gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar *\n          gaussSum (A*B)⁻¹ (ZMod.stdAddChar.mulShift (-(m:ZMod q))) / (q.totient:ℂ)^2\n      else 0\n    else 0\n  let O := S (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1)\n  exact ∀ (r : ℕ) [NeZero r] (α : DirichletCharacter ℂ r), α.IsPrimitive →\n    ∀ m : ℕ, 0 < m → Even m →\n    ∀ F : Finset (Σ s : ℕ, DirichletCharacter ℂ s),\n    (∀ b ∈ F, b.1 ≠ 0 ∧ b.2.IsPrimitive) →\n    (∑ b ∈ F, ‖S α b.2 m‖^3) ≤ 3 * ‖O m‖^3",
       "plain_statement": {
@@ -15081,6 +15127,29 @@
       "module": "Conjectures.Goldbach.PrimitivePartnerCubicMass",
       "file": "lean/Conjectures/Goldbach/PrimitivePartnerCubicMass.lean",
       "track": "exceptions",
+      "route_source": "exceptions"
+    },
+    {
+      "id": "L-goldbach-quadratic-values-many-prime-pairs",
+      "statement": "by\n  classical\n  let reps := fun z : ℤ => ((Finset.Icc 2 z.toNat).filter (fun p => Nat.Prime p ∧ Nat.Prime (z.toNat-p))).card\n  exact ∀ P : Polynomial ℤ, P.natDegree = 2 → 0 < P.leadingCoeff → ∃ c : ℝ, 0 < c ∧ ∀ ε : ℝ, 0 < ε → ∃ C : ℝ, 0 < C ∧ ∀ N : ℕ, 2 ≤ N →\n    (((Finset.Icc 1 N).filter (fun n => let z := 2 * P.eval (n : ℤ); z ≤ 2 ∨ (reps z : ℝ) < c * (z : ℝ) / (Real.log (z : ℝ))^2)).card : ℝ) ≤ C*(N : ℝ)^((3 : ℝ)/7+ε)",
+      "plain_statement": {
+        "zh": "对每个正首项的整系数二次多项式，大部分 2P(n) 至少有 c·2P(n)/log²(2P(n)) 个有序素数表示，坏指标不超过 O(N^(3/7+ε))。",
+        "en": "For any fixed positive-leading quadratic, all but O(N^(3/7+ε)) indices give 2P(n) at least c·2P(n)/log²(2P(n)) ordered prime representations."
+      },
+      "brief": {
+        "zh": "对标定理 1 二次情形的 1/2+ε。所有无表示指标均计入坏集（包括非正目标），因此新界推出旧界。少数表示也计作坏点，用主弧下界与次弧误差之间的差距代替完全消失。指数降至 3/7 需要素数权与二次稀疏集合的额外抵消，不能只代入原第四矩。",
+        "en": "Theorem 1 gives an exceptional exponent 1/2 for quadratics. Nonpositive and unrepresented targets are included in the bad set. Compare the main term with the minor arcs even where a few representations survive. The saving to 3/7 requires cancellation beyond the existing fourth-moment argument."
+      },
+      "source": "https://arxiv.org/html/2611.09386v1",
+      "program": "exceptions",
+      "track": "exceptions",
+      "role": "target",
+      "challenge_only": true,
+      "parallel": true,
+      "imports": [],
+      "depends_on": [],
+      "module": "Conjectures.Goldbach.QuadraticValuesManyPrimePairs",
+      "file": "lean/Conjectures/Goldbach/QuadraticValuesManyPrimePairs.lean",
       "route_source": "exceptions"
     },
     {
