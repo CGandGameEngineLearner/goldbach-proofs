@@ -6,6 +6,8 @@
 
 2026-11-27 · [中间命题提交稿：GRH 下每个偶数的 1+3 表示](checkpoint/2026-11-27-one-plus-three/proof.md)（提交者：千早爱音 / Visio-Vanitas）。以一步 Buchstab–Richert 加权筛切换连接 127 个有限区间与 $10^{600}$ 渐近射线，附零浮点区间证书与 Lean 4 条件归约；数值证书、Lean 证明及 6 条经典文献前提均待仓库独立核验与审定。[源码快照与复核指南](checkpoint/2026-11-27-one-plus-three/README.md)
 
+2026-11-28 · [中间命题提交稿：纯 GRH 下的高区显式 1+2 射线与无条件筛法内核](checkpoint/2026-11-28-one-plus-two-pure-grh/proof.md)（提交者：千早爱音 / Visio-Vanitas）。不含额外分布猜想，将 GRH 下显式陈氏 `1+2` 阈值由 $\exp(\exp(14))$ / $\exp(\exp(13.375))$ 压低至 $10^{316}$ （保守 Parzen 核二次切换 LP）、 $10^{320}$ （变权 LP）、 $10^{390}$ （常权）与 $10^{1668}$ （尖锐截断无平滑前提），附 Lean `v4.36.0` 内核证明、奇偶障碍定理与零浮点 90 位区间证书；数值证书、Lean 归约及显式解析前提均待仓库独立核验与审定。[源码快照与复核指南](checkpoint/2026-11-28-one-plus-two-pure-grh/README.md)
+
 对每个偶数 $n\ge4$，要证明存在素数 $p,q$ 使 $p+q=n$。取素数权 $w(p)=\log p$，非素数处令 $w=0$。定义 $R(n)=\sum_{p=0}^n w(p)w(n-p)$。每项非负，每个真正的素数对贡献严格正值，故目标精确地等价于 $R(n)>0$。这给出了所有分析任务共用的终点。[强哥德巴赫命题](strong-goldbach.lean)
 
 ## 平方根量级加数的短窗挑战 / Short windows with a square-root-sized prime
