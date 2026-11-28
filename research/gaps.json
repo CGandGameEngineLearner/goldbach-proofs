@@ -22451,6 +22451,27 @@
       "file": "lean/Conjectures/Goldbach/WideSignedUnconditional.lean",
       "module": "Conjectures.Goldbach.WideSignedUnconditional",
       "route_source": "wide-arc-signed-remainder"
+    },
+    {
+      "id": "L-goldbach-midwall-block-class-l2",
+      "file": "lean/Conjectures/Goldbach/MidwallBlockClassL2.lean",
+      "module": "Conjectures.Goldbach.MidwallBlockClassL2",
+      "statement": "let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let L := fun n : ℕ => ⌊(n:ℝ)^(2/3:ℝ)/(Real.log (n:ℝ))^2⌋₊; let classMass := fun (n q t : ℕ) => ∑ k ∈ (Finset.range (L n)).filter (fun k => (k+1) % q = t), w (k+1); let devL2 := fun (n q : ℕ) => ∑ t ∈ Finset.range q, (classMass n q t - (L n : ℝ) / (Nat.totient q : ℝ))^2; ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → (∑ q ∈ Finset.Ioc (Q n) (Q₁ n), (Nat.totient q : ℝ)⁻¹ * devL2 n q) ≤ e * (n : ℝ) / Real.log (n : ℝ)",
+      "plain_statement": {
+        "zh": "中段墙的块级 ℓ² 均分（中弧宽弧裙边的解析核心）：块长 L≈n^(2/3)/log²n、模数 q∈((log₂n)², n^(1/3)] 时，短块素数质量在 φ(q) 个既约类上的方差按 φ(q)⁻¹ 加权求和为 o(n/log n)。",
+        "en": "Block-level l2 equidistribution of short-block prime mass over reduced residue classes: for block length L≈n^(2/3)/(log n)^2 and moduli q in ((log2 n)^2, n^(1/3)], the sum over q of phi(q)^{-1} times the variance of the block's prime mass across the phi(q) reduced classes is o(n/log n)."
+      },
+      "brief": {
+        "zh": "这是中弧宽弧裙边（skirt-medium-moduli）的干净解析核心。块频率的精确恒等式 A_q=q·Σ_t classMass² 把裙边误差化为块级类方差；大筛单独差 log²，而逐 q 版比自然尺度小 n^(1/3) 倍（两者均已在私有 Lean 开发中机检）。",
+        "en": "The clean analytic core of the medium-modulus wide-arc skirt. The exact identity A_q = q * sum_t classMass^2 turns the skirt error into block-level class variance; the large sieve alone misses by a factor log^2, and the per-q form is a factor n^(1/3) below the natural scale (both machine-checked in a private Lean development)."
+      },
+      "source": "https://www.goldbach.tech/?lemma=L-goldbach-arc-minor-saving#roadmap",
+      "program": "correlation",
+      "parallel": true,
+      "imports": [],
+      "track": "frontier-medium-arc-scales",
+      "role": "target",
+      "challenge_only": true
     }
   ],
   "tracks": [
