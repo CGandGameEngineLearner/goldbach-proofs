@@ -18,7 +18,8 @@
     "L-goldbach-farey-first-hit-middle-lower"
   ],
   "imports": [
-    "Conjectures.Goldbach.FareyInitialSieveLower"
+    "Conjectures.Goldbach.FareyInitialSieveLower",
+    "Conjectures.Goldbach.FareyInitialSieveUpper"
   ],
   "challenge_only": false,
   "file": "lean/Conjectures/Goldbach/FareyFirstHitMiddleReduction.lean",
