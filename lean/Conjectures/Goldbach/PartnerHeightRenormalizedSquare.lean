@@ -2563,9 +2563,9 @@ by
     let P : DirichletCharacter ℂ 1 := 1
     apply height_ordinary_factorial_limit m
       (TwistedGoldbachSingularSeries.coefficient P P m)
-    · simpa only [one_mul] using TwistedGoldbachSingularSeries.partial_limit P P m hm 1 one_ne_zero
+    · simpa only [one_mul, O, S, TwistedGoldbachLocalProduct.series] using TwistedGoldbachSingularSeries.partial_limit P P m hm 1 one_ne_zero
     · intro q _
-      simpa only [P, map_one] using (TwistedGoldbachSingularSeries.ambient_sum
+      simpa only [P, map_one, heightNormalizedPrincipal, heightPrincipJacobi, TwistedGoldbachSingularSeries.normalized] using (TwistedGoldbachSingularSeries.ambient_sum
         (α := (1 : DirichletCharacter ℂ 1)) (β := (1 : DirichletCharacter ℂ 1))
         isPrimitive_one_level_one isPrimitive_one_level_one (one_dvd q) (one_dvd q) m)
     · intro q _
