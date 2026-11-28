@@ -2559,6 +2559,40 @@ lemma csum_reduced_sq_sum (q n : ℕ) (hq : 0 < q) (hsq : Squarefree q) :
       ArithmeticFunction.moebius_sq_eq_one_of_squarefree hsq, Int.cast_one, one_mul]
   rw [Finset.sum_congr rfl hconst, csum]
 
+/-- Divisor form of the Ramanujan sum: `c_q(n) = ∑_{d | (q,n)} d · μ(q/d)`. -/
+lemma csum_eq_divisor_moebius (q n : ℕ) (hq : 0 < q) :
+    csum q n = ∑ d ∈ Nat.divisors (Nat.gcd q n),
+      ((ArithmeticFunction.moebius (q / d) : ℤ) : ℂ) * ((d : ℕ) : ℂ) := by
+  classical
+  have hg : 0 < Nat.gcd q n := by
+    rw [Nat.gcd_comm]
+    exact Nat.gcd_pos_of_pos_right n hq
+  rw [csum_eq_moebius q n hq]
+  have hmap : Nat.divisors q = (Nat.divisors q).image (fun d => q / d) := by
+    ext e
+    rw [Nat.mem_divisors, Finset.mem_image]
+    constructor
+    · intro he
+      refine ⟨q / e, Nat.mem_divisors.mpr ⟨Nat.div_dvd_of_dvd he.1, he.2⟩,
+        Nat.div_div_self he.1 he.2⟩
+    · rintro ⟨d, hd, hde⟩
+      obtain ⟨hdq, hne⟩ := Nat.mem_divisors.mp hd
+      rw [← hde]
+      exact ⟨Nat.div_dvd_of_dvd hdq, hne⟩
+  rw [hmap, Finset.sum_image (fun d hd e he h => by
+    rw [← Nat.div_div_self (Nat.dvd_of_mem_divisors hd) hq.ne', h,
+      Nat.div_div_self (Nat.dvd_of_mem_divisors he) hq.ne'])]
+  rw [Finset.sum_congr rfl (fun e he => by
+    rw [Nat.div_div_self (Nat.dvd_of_mem_divisors he) hq.ne'])]
+  simp only [mul_ite_zero, ← Finset.sum_filter]
+  have hfil : (Nat.divisors q).filter (fun e => e ∣ n) = Nat.divisors (Nat.gcd q n) := by
+    ext e
+    rw [Finset.mem_filter, Nat.mem_divisors, Nat.mem_divisors]
+    refine ⟨fun h => ⟨Nat.dvd_gcd h.1.1 h.2, hg.ne'⟩, fun h => ?_⟩
+    obtain ⟨h1, h2⟩ := Nat.dvd_gcd_iff.mp h.1
+    exact ⟨⟨h1, hq.ne'⟩, h2⟩
+  rw [hfil]
+
 end Ramanujan
 
 
