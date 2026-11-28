@@ -11,52 +11,6 @@ by 11H/10 and BH = n/8, the product term is at most 121n/800; hence 217n/1600
 for the central pair mass is the exact threshold that leaves the budget -n/64.
 -/
 
-private lemma cell_identity (H : ℕ) (a b : ℕ → ℝ) :
-    (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H,
-        (a s - a t) * (b s - b t))
-      = 2 * ((H : ℝ) * (∑ s ∈ Finset.range H, a s * b s)
-          - (∑ s ∈ Finset.range H, a s) * (∑ t ∈ Finset.range H, b t)) := by
-  have hexp : ∀ s t : ℕ,
-      (a s - a t) * (b s - b t)
-        = a s * b s - a s * b t - a t * b s + a t * b t := by
-    intro s t
-    ring
-  have h1 : (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H, a s * b s)
-      = (H : ℝ) * ∑ s ∈ Finset.range H, a s * b s := by
-    have hinner : ∀ s : ℕ,
-        (∑ t ∈ Finset.range H, a s * b s) = (H : ℝ) * (a s * b s) := by
-      intro s
-      rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
-    simp only [hinner]
-    rw [← Finset.mul_sum]
-  have h2 : (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H, a s * b t)
-      = (∑ s ∈ Finset.range H, a s) * (∑ t ∈ Finset.range H, b t) := by
-    rw [Finset.sum_mul_sum]
-  have h3 : (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H, a t * b s)
-      = (∑ s ∈ Finset.range H, a s) * (∑ t ∈ Finset.range H, b t) := by
-    rw [Finset.sum_comm]
-    rw [Finset.sum_mul_sum]
-  have h4 : (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H, a t * b t)
-      = (H : ℝ) * ∑ s ∈ Finset.range H, a s * b s := by
-    rw [Finset.sum_comm]
-    have hinner : ∀ t : ℕ,
-        (∑ s ∈ Finset.range H, a t * b t) = (H : ℝ) * (a t * b t) := by
-      intro t
-      rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
-    simp only [hinner]
-    rw [← Finset.mul_sum]
-  simp only [hexp, Finset.sum_add_distrib, Finset.sum_sub_distrib, h1, h2, h3, h4]
-  ring
-
-private lemma cell_term (H : ℕ) (hH : 0 < H) (a b : ℕ → ℝ) :
-    (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H,
-        (a s - a t) * (b s - b t)) / (2 * (H : ℝ))
-      = (∑ s ∈ Finset.range H, a s * b s)
-          - (∑ s ∈ Finset.range H, a s) * (∑ t ∈ Finset.range H, b t) / (H : ℝ) := by
-  rw [cell_identity]
-  have hH' : (H : ℝ) ≠ 0 := by exact_mod_cast hH.ne'
-  field_simp
-
 theorem Conjectures.Cuts.Cutce62ba08925c6b3499363ed6
     -- child 1 zh: 二次幂反射块的短区间素数对数质量上界
     -- child 1 en: Uniform upper bound for prime-log mass on the reflected short cells
@@ -102,6 +56,50 @@ theorem Conjectures.Cuts.Cutce62ba08925c6b3499363ed6
             (a j s-a j t) * (b j s-b j t)) / (2*(H : ℝ))) := by
   dsimp only
   let w : ℕ → ℝ := fun p => if Nat.Prime p then Real.log (p : ℝ) else 0
+  have cell_identity (H : ℕ) (a b : ℕ → ℝ) :
+      (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H,
+          (a s - a t) * (b s - b t))
+        = 2 * ((H : ℝ) * (∑ s ∈ Finset.range H, a s * b s)
+            - (∑ s ∈ Finset.range H, a s) * (∑ t ∈ Finset.range H, b t)) := by
+    have hexp : ∀ s t : ℕ,
+        (a s - a t) * (b s - b t)
+          = a s * b s - a s * b t - a t * b s + a t * b t := by
+      intro s t
+      ring
+    have h1 : (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H, a s * b s)
+        = (H : ℝ) * ∑ s ∈ Finset.range H, a s * b s := by
+      have hinner : ∀ s : ℕ,
+          (∑ t ∈ Finset.range H, a s * b s) = (H : ℝ) * (a s * b s) := by
+        intro s
+        rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+      simp only [hinner]
+      rw [← Finset.mul_sum]
+    have h2 : (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H, a s * b t)
+        = (∑ s ∈ Finset.range H, a s) * (∑ t ∈ Finset.range H, b t) := by
+      rw [Finset.sum_mul_sum]
+    have h3 : (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H, a t * b s)
+        = (∑ s ∈ Finset.range H, a s) * (∑ t ∈ Finset.range H, b t) := by
+      rw [Finset.sum_comm]
+      rw [Finset.sum_mul_sum]
+    have h4 : (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H, a t * b t)
+        = (H : ℝ) * ∑ s ∈ Finset.range H, a s * b s := by
+      rw [Finset.sum_comm]
+      have hinner : ∀ t : ℕ,
+          (∑ s ∈ Finset.range H, a t * b t) = (H : ℝ) * (a t * b t) := by
+        intro t
+        rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+      simp only [hinner]
+      rw [← Finset.mul_sum]
+    simp only [hexp, Finset.sum_add_distrib, Finset.sum_sub_distrib, h1, h2, h3, h4]
+    ring
+  have cell_term (H : ℕ) (hH : 0 < H) (a b : ℕ → ℝ) :
+      (∑ s ∈ Finset.range H, ∑ t ∈ Finset.range H,
+          (a s - a t) * (b s - b t)) / (2 * (H : ℝ))
+        = (∑ s ∈ Finset.range H, a s * b s)
+            - (∑ s ∈ Finset.range H, a s) * (∑ t ∈ Finset.range H, b t) / (H : ℝ) := by
+    rw [cell_identity]
+    have hH' : (H : ℝ) ≠ 0 := by exact_mod_cast hH.ne'
+    field_simp
   rcases h_cell_mass with ⟨K₁, hmass⟩
   rcases h_pair_mass with ⟨K₂, hpair⟩
   refine ⟨max 12 (max K₁ K₂), ?_⟩
