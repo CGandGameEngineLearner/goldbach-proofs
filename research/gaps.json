@@ -18705,6 +18705,52 @@
       "route_source": "minor-truncation"
     },
     {
+      "id": "L-goldbach-linnik-five-unconditional",
+      "statement": "∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ ∃ a : Fin 5 → ℕ, N = p + q + ∑ i : Fin 5, 2 ^ (a i + 1)",
+      "plain_statement": {
+        "zh": "无条件把每个充分大偶数表示为两个素数与恰好五个正指数二幂之和。",
+        "en": "Represent every sufficiently large even integer by two primes and five positive powers of two unconditionally."
+      },
+      "brief": {
+        "zh": "Li–Liu 定理 1.2 在 GRH 下达到五幂，定理 1.1 无条件达到六幂。尝试找出五幂反射积分的无条件主弧下界，并与次弧损失作定量比较。#4232 控制的是模 30 模型修正项，替换成真正素数后的误差仍需证明。",
+        "en": "Li–Liu Theorem 1.2 reaches five under GRH and Theorem 1.1 reaches six unconditionally. Seek a positive unconditional margin between the five-power major and minor arcs. PR #4232 only treats a wheel-model correction; the prime-weighted transfer needs its own bound."
+      },
+      "source": "https://arxiv.org/html/2610.15784v1#S1",
+      "program": "correlation",
+      "track": "minor-truncation",
+      "depends_on": [],
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "module": "Conjectures.Goldbach.LinnikFiveUnconditional",
+      "file": "lean/Conjectures/Goldbach/LinnikFiveUnconditional.lean",
+      "route_source": "minor-truncation"
+    },
+    {
+      "id": "L-goldbach-linnik-six-subpower-shift",
+      "statement": "∀ ε : ℝ, 0 < ε → ∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ ∃ a : Fin 6 → ℕ, N = p + q + ∑ i : Fin 6, 2 ^ (a i + 1) ∧ ((∑ i : Fin 6, (2 : ℕ) ^ (a i + 1) : ℕ) : ℝ) ≤ (N : ℝ) ^ ε",
+      "plain_statement": {
+        "zh": "把六幂偏移的总和压进任意固定的 N^ε 窗口，对每个充分大偶数成立。",
+        "en": "Place the entire six-power correction inside N^ε for every fixed positive ε and every sufficiently large even N."
+      },
+      "brief": {
+        "zh": "本题保留定理 1.1 的六项并限制总偏移。因此每个大偶数 N 左侧的短区间内都要有一个二素数和，而且其距离具有六幂结构。应先将二幂和截到 ε log₂ N 的长度，在这个新长度下分别重算大值集和反射积分的损失。阈值可依赖 ε。",
+        "en": "Retain six terms but constrain their sum. A Goldbach number must lie just below every even N at a distance with six-term binary structure. Truncate the lacunary sum at a length proportional to ε log₂ N and reassess the large-value and reflection losses. The threshold may depend on ε."
+      },
+      "source": "https://arxiv.org/html/2610.15784v1#S1",
+      "program": "correlation",
+      "track": "minor-truncation",
+      "depends_on": [],
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "module": "Conjectures.Goldbach.LinnikSixSubpowerShift",
+      "file": "lean/Conjectures/Goldbach/LinnikSixSubpowerShift.lean",
+      "route_source": "minor-truncation"
+    },
+    {
       "id": "L-goldbach-linnik-six-unconditional",
       "statement": "∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ ∃ a : Fin 6 → ℕ, N = p + q + ∑ i : Fin 6, 2 ^ (a i + 1)",
       "plain_statement": {
@@ -18712,10 +18758,10 @@
         "en": "Unconditionally represent every sufficiently large even integer as two primes and exactly six positive powers of two (repetitions allowed)."
       },
       "brief": {
-        "zh": "对标 Johnston–Trudgian 定理 1，去掉 GRH。与 #4089 的长间距素数相关和共享倍频结构。可将六项分成两组三项，通过论文 (24) 的反射卷积研究正性；也可研究一个负相关的单侧界。六项偏移必须保留，不把移位后的表示误记为强哥猜的逐点证明。",
-        "en": "Remove GRH from Theorem 1. Split six powers into two triples and use the reflected convolution in (24). The dyadic spectrum also occurs in #4089. Positivity with a six-power shift does not give an unshifted representation."
+        "zh": "Li–Liu 预印本定理 1.1 的加权六幂表示数给出了无条件基线。本题保留原冻结命题，供形式化。可沿论文的主弧下界、次弧大值估计和反射不等式逐段实现。",
+        "en": "Li and Liu's preprint, Theorem 1.1, gives the unconditional six-power baseline via a weighted count. Formalize the frozen target using the major-arc lower bound, minor-arc large values and reflection inequality."
       },
-      "source": "https://arxiv.org/html/2605.17825v2#S1.SS1",
+      "source": "https://arxiv.org/html/2610.15784v1#S1",
       "program": "correlation",
       "track": "minor-truncation",
       "depends_on": [],
