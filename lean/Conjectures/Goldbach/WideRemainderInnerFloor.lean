@@ -524,5 +524,106 @@ theorem JG_target_floor (n : ℕ) {ε : ℝ} (hε : 0 < ε)
   have hpart := JG_partition n hsub1 hsub2 hsub3
   linarith
 
+/-!
+### Route 2: character mean-square dilution
+
+The engine for the "character mean-square (L²) → pointwise transfer" route over the
+medium-modulus band: summing `‖∑_χ c_χ χ(a)‖²` over all residue classes `a mod q`
+dilutes a single exceptional character by a factor `φ(q)` (Dirichlet character
+orthogonality). Together with the signed-pair coefficient bound
+`‖τ(χ⁻¹)τ(ψ⁻¹)G_q(χψ,−n)/φ(q)²‖ ≤ √(dχ dψ)/φ(q)` this isolates the remaining
+large-sieve / zero-free-strip input as an explicit hypothesis.
+-/
+section Route2
+open scoped ComplexConjugate
+open scoped Classical
+open Finset MulChar
+
+/-- `(‖z‖ : ℂ)² = z * conj z` unfolds to the real norm square via `re`. -/
+theorem norm_sq_eq_re_mul_conj (z : ℂ) : ‖z‖ ^ 2 = (z * conj z).re := by
+  have h1 : ‖z‖ ^ 2 = (z.re * z.re + z.im * z.im : ℝ) := RCLike.norm_sq_eq_def_ax z
+  rw [h1, Complex.mul_re, Complex.conj_re, Complex.conj_im]
+  ring
+
+/-- A Dirichlet character value at `a` conjugates to the inverse character at `a`. -/
+theorem conj_char_apply_eq_inv {q : ℕ} (χ : DirichletCharacter ℂ q) (a : ZMod q) :
+    conj (χ a) = χ⁻¹ a := by
+  rw [MulChar.inv_apply_eq_inv']
+  by_cases ha : IsUnit a
+  · have h1 : ‖χ a‖ = 1 := by
+      rw [← ha.unit_spec]
+      exact χ.unit_norm_eq_one ha.unit
+    have hnz : χ a ≠ 0 := by
+      intro hc
+      rw [hc] at h1
+      simp at h1
+    have hz : (χ a) * conj (χ a) = (χ a) * (χ a)⁻¹ := by
+      rw [RCLike.mul_conj, h1]
+      norm_num
+      rw [mul_inv_cancel₀ hnz]
+    exact mul_left_cancel₀ hnz hz
+  · rw [MulCharClass.map_nonunit χ ha, inv_zero, map_zero (starRingEnd ℂ)]
+
+/-- `re (z * k) = re z * k` for a natural scalar. -/
+theorem re_mul_natCast' (z : ℂ) (k : ℕ) : (z * (k : ℂ)).re = z.re * k := by
+  rw [Complex.mul_re, Complex.natCast_re, Complex.natCast_im, mul_zero, sub_zero]
+
+/-- **Character mean-square dilution.** For coefficients `c : DirichletCharacter ℂ q → ℂ`,
+`∑_a ‖∑_χ c_χ χ(a)‖² = φ(q) · ∑_χ ‖c_χ‖²`. A single exceptional character carries a
+`1/φ(q)` fraction of the total arc mass — the dilution mechanism of the L² route. -/
+theorem char_L2_dilution (q : ℕ) [NeZero q] (c : DirichletCharacter ℂ q → ℂ) :
+    ∑ a : ZMod q, ‖∑ χ : DirichletCharacter ℂ q, c χ * χ a‖ ^ 2
+      = (q.totient : ℝ) * ∑ χ : DirichletCharacter ℂ q, ‖c χ‖ ^ 2 := by
+  have hexp : ∀ a : ZMod q, (∑ χ : DirichletCharacter ℂ q, c χ * χ a)
+      * conj (∑ ψ : DirichletCharacter ℂ q, c ψ * ψ a)
+      = ∑ χ : DirichletCharacter ℂ q, ∑ ψ : DirichletCharacter ℂ q,
+          c χ * conj (c ψ) * ((χ * ψ⁻¹) a) := by
+    intro a
+    rw [map_sum (starRingEnd ℂ), Finset.sum_mul_sum]
+    refine Finset.sum_congr rfl fun χ _ => Finset.sum_congr rfl fun ψ _ => ?_
+    rw [map_mul (starRingEnd ℂ), conj_char_apply_eq_inv, MulChar.mul_apply]
+    ring
+  have hinner : ∀ χ ψ : DirichletCharacter ℂ q,
+      ∑ a : ZMod q, (χ * ψ⁻¹) a = if χ = ψ then ((q.totient : ℂ)) else 0 := by
+    intro χ ψ
+    by_cases h : χ = ψ
+    · subst h
+      rw [if_pos rfl, mul_inv_cancel, MulChar.sum_one_eq_card_units, ZMod.card_units_eq_totient]
+    · rw [if_neg h, MulChar.sum_eq_zero_of_ne_one]
+      intro h1
+      exact h (mul_inv_eq_one.mp h1)
+  have hswap : ∑ a : ZMod q, ∑ χ : DirichletCharacter ℂ q, ∑ ψ : DirichletCharacter ℂ q,
+      c χ * conj (c ψ) * ((χ * ψ⁻¹) a)
+      = ∑ χ : DirichletCharacter ℂ q, ∑ ψ : DirichletCharacter ℂ q, ∑ a : ZMod q,
+          c χ * conj (c ψ) * ((χ * ψ⁻¹) a) := by
+    rw [Finset.sum_comm]
+    exact Finset.sum_congr rfl fun χ _ => Finset.sum_comm
+  have hif : ∀ χ ψ : DirichletCharacter ℂ q,
+      c χ * conj (c ψ) * (if χ = ψ then ((q.totient : ℂ)) else 0)
+        = if χ = ψ then c χ * conj (c ψ) * ((q.totient : ℂ)) else 0 := by
+    intro χ ψ
+    by_cases h : χ = ψ <;> simp [h]
+  -- main computation
+  rw [Finset.sum_congr rfl fun a _ => norm_sq_eq_re_mul_conj (∑ χ : DirichletCharacter ℂ q, c χ * χ a)]
+  rw [← Complex.re_sum]
+  have hbig : ∑ a : ZMod q, (∑ χ : DirichletCharacter ℂ q, c χ * χ a)
+      * conj (∑ ψ : DirichletCharacter ℂ q, c ψ * ψ a)
+      = ∑ χ : DirichletCharacter ℂ q, ∑ ψ : DirichletCharacter ℂ q, ∑ a : ZMod q,
+          c χ * conj (c ψ) * ((χ * ψ⁻¹) a) := by
+    rw [Finset.sum_congr rfl fun a _ => hexp a]
+    exact hswap
+  rw [hbig]
+  rw [Finset.sum_congr rfl fun χ _ => Finset.sum_congr rfl fun ψ _ => by
+    rw [← Finset.mul_sum, hinner χ ψ, hif χ ψ]]
+  rw [Finset.sum_congr rfl fun χ _ => Finset.sum_ite_eq Finset.univ χ
+    (fun ψ => c χ * conj (c ψ) * ((q.totient : ℂ)))]
+  simp only [Finset.mem_univ, if_true]
+  rw [Complex.re_sum]
+  rw [Finset.sum_congr rfl fun χ _ => re_mul_natCast' (c χ * conj (c χ)) q.totient]
+  rw [Finset.sum_congr rfl fun χ _ => by rw [(norm_sq_eq_re_mul_conj (c χ)).symm]]
+  rw [← Finset.sum_mul, mul_comm]
+
+end Route2
+
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
   sorry
