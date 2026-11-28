@@ -1,0 +1,22 @@
+{
+  "id": "L-goldbach-finite-paired-wheel-sifted-support",
+  "statement": "let small : Finset ℕ := {7,11,13,17,19,23,29}\nlet pairs : Finset (ℕ × ℕ) := {(31,37),(41,43),(47,53),(59,61),(67,71),(73,79),(83,89),(97,101),(103,107),(109,113)}\nlet singles : Finset ℕ := (Finset.Ico 114 7643).filter Nat.Prime\nlet row (H : Finset ℕ) : Finset ℕ := (Finset.Icc 30 1926574681).filter fun p =>\n  p.Prime ∧ ∀ q∈small, (q∈H ↔ q/2<p % q)\nlet one (S : Finset ℕ) (q : ℕ) : ℕ := (Finset.range q).sup fun a =>\n  (S.filter (fun p => p % q=a)).card\nlet two (S : Finset ℕ) (d : ℕ × ℕ) : ℕ := ((Finset.range d.1) ×ˢ (Finset.range d.2)).sup fun ab =>\n  (S.filter (fun p => p % d.1=ab.1 ∨ p % d.2=ab.2)).card\nlet balance (H : Finset ℕ) : ℕ := (row H).card -\n  ((∑ q∈singles,one (row H) q)+(∑ d∈pairs,two (row H) d))\nlet separate (H : Finset ℕ) : ℕ := (row H).card -\n  ((∑ q∈singles,one (row H) q)+(∑ d∈pairs,(one (row H) d.1+one (row H) d.2)))\nlet floor : ℕ := small.powerset.inf' (Finset.powerset_nonempty small) balance\nlet individual : ℕ := small.powerset.inf' (Finset.powerset_nonempty small) separate\nlet evenSmall : Finset ℕ := {3,5,7,11,13,17,19}\nlet evenSingles : Finset ℕ := (Finset.Ico 20 1721).filter Nat.Prime\nlet evenRow (H : Finset ℕ) : Finset ℕ := (Finset.Icc 20 100000000).filter fun p =>\n  p.Prime ∧ ∀ q∈evenSmall, (q∈H ↔ q/2<p % q)\nlet evenBalance (H : Finset ℕ) : ℕ := (evenRow H).card - ∑ q∈evenSingles,one (evenRow H) q\nlet evenFloor : ℕ := evenSmall.powerset.inf' (Finset.powerset_nonempty evenSmall) evenBalance\nindividual≤floor ∧\n(∀ n : ℕ, 100000002≤n → Even n →\n  ∃ T : Finset ℕ, evenFloor≤T.card ∧ ∀ p∈T, p.Prime ∧ p≤100000000 ∧ 2≤n-p ∧\n    ∀ q : ℕ, q.Prime → q∣n-p → 1721≤q) ∧\n(∀ n : ℕ, 1926574683≤n → 30∣n →\n  ∃ T : Finset ℕ, floor≤T.card ∧ ∀ p∈T, p.Prime ∧ p≤1926574681 ∧ 2≤n-p ∧\n    ∀ q : ℕ, q.Prime → q∣n-p → 7643≤q) ∧\n(∀ n : ℕ, 4000000000000000000<n → 30∣n → (n:ℝ)<Real.exp (Real.exp (19/5)) →\n  ∃ T : Finset ℕ, floor-4≤T.card ∧ ∀ p∈T, p.Prime ∧ p≤1926574681 ∧ ¬p∣n ∧ 2≤n-p ∧\n    (n-p).primeFactorsList.length≤4 ∧ ((Finset.Ico 2 7643).filter\n      (fun q => Nat.Prime q ∧ q∣n-p))=∅)",
+  "plain_statement": {
+    "zh": "将有限筛中的障碍成对计数，给出 FR-9018 四因子候选数的下界",
+    "en": "Pair residue obstructions to lower-bound the four-factor support of the FR-9018 sieve"
+  },
+  "brief": {
+    "zh": "对任意大偶数和 FR-9018 的 30 倍数分别使用 128 张按小素数余数分半的表。用固定表上的最小值给出一致候选数。对 31 至 113 的十对素数，取两个禁用纤维之并的最大基数。证明这在每张表上均不劣于分开收费，并在 D* 扣去至多四个整除 n 的素数。两个外部程序将偶数表和配对表的最小值分别算为 1504、2045。冻结声明保留精确有限公式，数值重放单列。可直接导入已验证的粗数因子界。",
+    "en": "Partition the actual bounded primes into 128 tables using the upper and lower halves of their residues at small primes. Take the least remaining count over the tables. For the multiples of 30 in FR-9018, charge the maximum union of the two forbidden fibers for each of ten prime pairs from 31 through 113. Compare it with separate charges and remove at most four summands dividing n on D*. Independent replays give minima 1504 on the all-even tables and 2045 on the paired tables. The frozen statement retains the exact finite expressions. The verified rough-factor bound is available as an import."
+  },
+  "source": "https://github.com/CGandGameEngineLearner/goldbach-proofs/blob/ffe27af00c8df03bd77f7afd279cd836b6cbb1ee/research/checkpoint/%E5%93%A5%E5%BE%B7%E5%B7%B4%E8%B5%AB%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%864.md#L125-L165",
+  "program": "correlation",
+  "role": "lemma",
+  "parallel": true,
+  "depends_on": [
+    "L-goldbach-finite-rough-factor-power"
+  ],
+  "imports": [
+    "PEqualNP.Outside.L_goldbach_finite_rough_factor_power"
+  ]
+}
