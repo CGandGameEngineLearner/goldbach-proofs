@@ -71,6 +71,11 @@ HARNESS_NAMES = (
 
 REPO = "CGandGameEngineLearner/goldbach-proofs"
 SITE = "https://www.movan.tech/goldbach"
+# The desk answers are tiny, but the shared link can be slow.  A lost response *after*
+# the desk has already created a lease permanently retires the handle (the lease never
+# expires and release is token-gated, see discussion #4593), so be patient by default.
+# Override with GOLDBACH_HTTP_TIMEOUT (seconds).
+HTTP_TIMEOUT = float(os.environ.get("GOLDBACH_HTTP_TIMEOUT", "120"))
 GAP_ID = re.compile(r"L-[a-z0-9]+(?:-[a-z0-9]+)*")
 AGENT_REVIEW_TAG = re.compile(r"^\[agent-review(?:\|[^\]\r\n]+)?\](?:\s+|$)")
 UUID_PREFIX = re.compile(
@@ -176,7 +181,7 @@ def fetch_models(problem="goldbach", query="", provider="", offset=0, limit=30, 
         headers={"Accept": "application/json", "Accept-Encoding": "gzip"},
     )
     try:
-        with urllib.request.build_opener(NoRedirect()).open(request, timeout=15) as response:
+        with urllib.request.build_opener(NoRedirect()).open(request, timeout=HTTP_TIMEOUT) as response:
             raw = response.read()
             if response.headers.get("Content-Encoding", "").lower() == "gzip":
                 raw = gzip.decompress(raw)
@@ -249,7 +254,7 @@ def desk(action, data, token=None, *, problem="goldbach"):
         f"{SITE}{prefix}/api/desk/{action}", data=json.dumps(data).encode(), headers=headers
     )
     try:
-        with urllib.request.build_opener(NoRedirect()).open(request, timeout=20) as response:
+        with urllib.request.build_opener(NoRedirect()).open(request, timeout=HTTP_TIMEOUT) as response:
             return json.loads(response.read())
     except urllib.error.HTTPError as error:
         try:
@@ -259,8 +264,14 @@ def desk(action, data, token=None, *, problem="goldbach"):
         if token:
             message = str(message).replace(token, "[hidden]")
         raise DeskRefusal(action, error.code, message) from None
-    except urllib.error.URLError as error:
-        raise SystemExit(f"Could not reach the Goldbach desk: {error.reason}") from None
+    except (urllib.error.URLError, OSError) as error:
+        reason = getattr(error, "reason", error)
+        raise DeskRefusal(
+            action, "network",
+            f"no response from the desk ({reason}). The request may still have been processed"
+            f" server-side: if this was a claim, the handle may now hold an unsubmitted lease,"
+            f" and a blind retry returns 409 handle_already_active.",
+        ) from None
 
 
 def save(path, state):
@@ -284,7 +295,7 @@ def authenticated_login():
 
 def load_public_json(opener, url):
     request = urllib.request.Request(url, headers={"Accept": "application/json", "Accept-Encoding": "gzip"})
-    with opener.open(request, timeout=30) as response:
+    with opener.open(request, timeout=HTTP_TIMEOUT) as response:
         content = response.read()
         if response.headers.get("Content-Encoding") == "gzip":
             content = gzip.decompress(content)
@@ -475,7 +486,28 @@ def claim(path, requested, problem, kind="prove"):
     request = {"handle": handle, "kind": kind}
     if requested:
         request["gap"] = requested
-    response = desk("claim", request, problem=problem)
+    # Persist the intent *before* the request: if the response is lost after the desk has
+    # inserted the lease, the token is gone for good and only the intent can tell the
+    # difference between "never happened" and "happened, response lost" (discussion #4593).
+    intent = path.parent / "goldbach-claim-intent.json"
+    intent.write_text(
+        json.dumps({"handle": handle, "gap": requested, "kind": kind,
+                    "problem": problem, "base": base}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    try:
+        response = desk("claim", request, problem=problem)
+    except DeskRefusal as refusal:
+        if refusal.reason == "network":
+            raise SystemExit(
+                f"{refusal}\n"
+                f"Claim intent kept in {intent}. Do not retry blindly: if the desk already"
+                f" created the lease, retrying returns 409 handle_already_active and the"
+                f" lease can only be released with the token lost with the response."
+            ) from None
+        intent.unlink(missing_ok=True)
+        raise
+    intent.unlink(missing_ok=True)
     gap = response["gap"]
     lease = response["lease"]
     expected = next((item for item in registry["gaps"] if item["id"] == gap["id"]), None)
