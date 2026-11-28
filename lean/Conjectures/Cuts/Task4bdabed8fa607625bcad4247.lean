@@ -13,9 +13,16 @@ private theorem finset_cover_by_fin :
   induction r with
   | zero =>
     intro S d hcard
-    have h0 : S = ∅ := Finset.card_eq_zero.mp (Nat.le_zero.mp hcard)
+    have hx_not : ∀ x, x ∉ S := fun x hx => by
+      have h1 : ({x} : Finset ℕ).card ≤ S.card :=
+        Finset.card_le_card (Finset.singleton_subset_iff.mpr hx)
+      simp at h1
+      omega
+    have h0 : S = ∅ := by
+      ext x
+      exact ⟨fun hx => absurd hx (hx_not x), fun hx => by simp at hx⟩
     subst h0
-    exact ⟨Fin.elim0, fun i => Fin.elim0 i, fun _ hx => by simp at hx⟩
+    exact ⟨Fin.elim0, fun i => Fin.elim0 i, fun x hx => absurd hx (hx_not x)⟩
   | succ r ih =>
     intro S d hcard
     by_cases hne : S.Nonempty
@@ -59,7 +66,7 @@ private theorem finset_cover_by_fin :
           dsimp only [g]
           have hne0 : (⟨j.val + 1, by omega⟩ : Fin (r + 1)).val ≠ 0 := by simp
           rw [dif_neg hne0]
-          have hidx : (⟨(j.val + 1) - 1, by omega⟩ : Fin r) = j := by
+          have hidx : (⟨(⟨j.val + 1, by omega⟩ : Fin (r + 1)).val - 1, by omega⟩ : Fin r) = j := by
             ext
             simp
           rw [hidx, hj]
@@ -73,6 +80,33 @@ private def pickVal {r : ℕ} (m : ℕ) (g : Fin r → ℕ) (o : Option (Fin r))
   match o with
   | none => m
   | some i => g i
+
+private def repeatPoly : ℕ → Polynomial ℤ → Polynomial ℤ
+  | 0, _ => 0
+  | n + 1, P => P + repeatPoly n P
+
+private theorem repeatPoly_eval (n : ℕ) (P : Polynomial ℤ) (x : ℤ) :
+    (repeatPoly n P).eval x = (n : ℤ) * P.eval x := by
+  induction n with
+  | zero => simp [repeatPoly]
+  | succ n ih =>
+    simp only [repeatPoly, Polynomial.eval_add, ih, Nat.cast_succ]
+    ring
+
+private theorem repeatPoly_natDegree_le (n : ℕ) (P : Polynomial ℤ) :
+    (repeatPoly n P).natDegree ≤ P.natDegree := by
+  induction n with
+  | zero => simp [repeatPoly]
+  | succ n ih =>
+    exact (Polynomial.natDegree_add_le _ _).trans (max_le le_rfl ih)
+
+private theorem repeatPoly_coeff (n : ℕ) (P : Polynomial ℤ) (k : ℕ) :
+    (repeatPoly n P).coeff k = (n : ℤ) * P.coeff k := by
+  induction n with
+  | zero => simp [repeatPoly]
+  | succ n ih =>
+    simp only [repeatPoly, Polynomial.coeff_add, ih, Nat.cast_succ]
+    ring
 
 private theorem exists_degen_encoding (r : ℕ) (A : Finset ℕ) (u v : Fin 4 → ℕ)
     (huA : ∀ j : Fin 4, u j ∈ A) (hvA : ∀ j : Fin 4, v j ∈ A)
@@ -102,6 +136,7 @@ private theorem exists_degen_encoding (r : ℕ) (A : Finset ℕ) (u v : Fin 4 �
   have hm_not : m ∉ V' := by simp [V']
   have hV'card : V'.card ≤ r := by
     have h1 : (insert m V').card = V'.card + 1 := by simp [hm_not]
+    rw [hins] at h1
     omega
   obtain ⟨g, hg_mem, hg_cov⟩ := finset_cover_by_fin r V' m hV'card
   have hVA : ∀ x ∈ V, x ∈ A := by
@@ -176,23 +211,24 @@ theorem prove_degen_support :
     | none => 0
     | some i => P.eval (g i : ℤ)
   let polyOf (π : Pat) (g : Fin r → ℕ) : Polynomial ℤ :=
-    let c : ℤ := ((Finset.univ.filter fun j : Fin 4 => π.1 j = none).card : ℤ)
+    let c : ℕ := (Finset.univ.filter fun j : Fin 4 => π.1 j = none).card
     let rhs : ℤ := (∑ j : Fin 4, valAt g (π.2 j)) - (∑ j : Fin 4, valAt g (π.1 j))
-    Polynomial.C c * P - Polynomial.C rhs
+    repeatPoly c P - Polynomial.C rhs
   let Base := BaseLeft.product (Fintype.piFinset (fun _ : Fin r => A))
   let Fib (b : Pat × (Fin r → ℕ)) : Finset ℤ := (polyOf b.1 b.2).roots.toFinset
   have hpoly_deg (π : Pat) (g : Fin r → ℕ) : (polyOf π g).natDegree ≤ P.natDegree := by
     dsimp only [polyOf]
     exact (Polynomial.natDegree_sub_le _ _).trans
-      (max_le ((Polynomial.natDegree_mul_le).trans (by simp)) (by simp))
+      (max_le (repeatPoly_natDegree_le _ P) (by simp))
   have hpoly_ne (b : Pat × (Fin r → ℕ)) (hb : b ∈ Base) : polyOf b.1 b.2 ≠ 0 := by
     have hbL := (Finset.mem_filter.mp (Finset.mem_product.mp hb).1).2
     have h0mem : (0 : Fin 4) ∈ Finset.univ.filter (fun j : Fin 4 => b.1.1 j = none) :=
       Finset.mem_filter.mpr ⟨Finset.mem_univ 0, hbL.1⟩
-    have hc_pos : 0 < (Finset.univ.filter (fun j : Fin 4 => b.1.1 j = none)).card :=
-      Finset.card_pos.mpr ⟨0, h0mem⟩
-    have hc_ne : ((Finset.univ.filter (fun j : Fin 4 => b.1.1 j = none)).card : ℤ) ≠ 0 :=
-      Int.ofNat_ne_zero.mpr hc_pos.ne'
+    have hc_pos : 1 ≤ (Finset.univ.filter (fun j : Fin 4 => b.1.1 j = none)).card := by
+      have h1 := Finset.card_le_card (Finset.singleton_subset_iff.mpr h0mem)
+      simpa using h1
+    have hc_ne : ((Finset.univ.filter (fun j : Fin 4 => b.1.1 j = none)).card : ℤ) ≠ 0 := by
+      omega
     have hP0 : P ≠ 0 := by
       intro he
       simp [he] at hdeg
@@ -202,7 +238,7 @@ theorem prove_degen_support :
     intro hzero
     have hcoeff := congrArg (fun q : Polynomial ℤ => q.coeff P.natDegree) hzero
     dsimp only [polyOf] at hcoeff
-    rw [Polynomial.coeff_sub, Polynomial.coeff_C_mul,
+    rw [Polynomial.coeff_sub, repeatPoly_coeff,
       Polynomial.coeff_C_of_ne_zero (by omega), sub_zero, Polynomial.coeff_zero] at hcoeff
     exact (mul_ne_zero hc_ne hlead) hcoeff
   have hbound (G : Finset ((Fin 4 → ℕ) × (Fin 4 → ℕ)))
@@ -240,7 +276,7 @@ theorem prove_degen_support :
       refine ⟨hb_mem, Multiset.mem_toFinset.mpr ((Polynomial.mem_roots (hpoly_ne _ hb_mem)).mpr ?_)⟩
       rw [hm_eq]
       dsimp only [polyOf]
-      simp only [Polynomial.eval_sub, Polynomial.eval_mul, Polynomial.eval_C]
+      rw [Polynomial.eval_sub, repeatPoly_eval, Polynomial.eval_C]
       let π := (encode z).1.1
       let g := (encode z).1.2
       let m := z.1 0
@@ -306,17 +342,13 @@ theorem prove_degen_support :
     have hC_ge : (BaseLeft.card : ℝ) * (P.natDegree : ℝ) ≤ C := by
       dsimp only [C]
       linarith
-    have hstep1 : (BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (A.card : ℝ) ^ r ≤
-        (BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (M : ℝ) ^ ε * (A.card : ℝ) ^ r := by
-      have h1 : (BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (A.card : ℝ) ^ r =
-          ((BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (A.card : ℝ) ^ r) * 1 := by ring
-      have h2 := mul_le_mul_of_nonneg_left hpowM
-        (show 0 ≤ (BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (A.card : ℝ) ^ r by positivity)
-      linarith [h1, h2]
-    have hstep2 : (BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (M : ℝ) ^ ε * (A.card : ℝ) ^ r ≤
-        C * (M : ℝ) ^ ε * (A.card : ℝ) ^ r := by
-      gcongr
-    exact hstep1.trans hstep2
+    calc
+      (BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (A.card : ℝ) ^ r
+        = ((BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (A.card : ℝ) ^ r) * 1 := by ring
+      _ ≤ ((BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (A.card : ℝ) ^ r) * (M : ℝ) ^ ε :=
+        mul_le_mul_of_nonneg_left hpowM (by positivity)
+      _ = (BaseLeft.card : ℝ) * (P.natDegree : ℝ) * (M : ℝ) ^ ε * (A.card : ℝ) ^ r := by ring
+      _ ≤ C * (M : ℝ) ^ ε * (A.card : ℝ) ^ r := by gcongr
 
 end GoldbachChildDegenSupport
 
