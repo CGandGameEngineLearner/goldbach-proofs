@@ -15,7 +15,9 @@
   "role": "target",
   "parallel": true,
   "challenge_only": true,
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.ReflectedMajorSharpFloor"
+  ],
   "depends_on": [
     "L-goldbach-reflected-major-sharp-floor"
   ]
