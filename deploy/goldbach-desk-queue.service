@@ -1,0 +1,19 @@
+[Unit]
+Description=Dispatch Goldbach verification queue
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+DynamicUser=yes
+LoadCredential=webhook:/etc/goldbach-web/webhook
+LoadCredential=github-token:/etc/goldbach-web/queue-github-token
+Environment=DESK_URL=https://www.movan.tech/goldbach/api/desk
+Environment=REPO=CGandGameEngineLearner/goldbach-proofs
+Environment=DEFAULT_BRANCH=main
+ExecStart=/usr/bin/python3 /usr/local/libexec/goldbach/dispatch_queue.py
+TimeoutStartSec=5min
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
