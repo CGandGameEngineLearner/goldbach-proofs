@@ -159,13 +159,13 @@ class CutFlow(DeskServerTestCase):
         _, first = self.submit_task(PARENT, "cut", "split-one", [A, B])
         _, second = self.submit_task(PARENT, "cut", "split-two", [C, B])
         def gaps():
-            return {g["id"]: g for g in self.request("/api/status")["gaps"]}
+            return {g["id"]: g for g in self.request("/fixture-status")["gaps"]}
         board = gaps()
         left, right = [c["children"] for c in board[PARENT]["cuts"]]
         self.assertEqual(self.request(f"/api/task?lemma={PARENT}")["cuts"], board[PARENT]["cuts"])
         child = left[0]
         self.assertEqual(self.request(f"/api/task?lemma={child}")["statement"], board[child]["statement"])
-        delta = self.request("/api/status?view=board-index-delta-gzip")
+        delta = self.request("/api/task-page?focus=" + child)
         child_row = next(row for row in delta["gaps"] if row["id"] == child)
         self.assertEqual(child_row["plain_statement"], board[child]["plain_statement"])
         self.assertNotIn("statement", child_row)
@@ -187,7 +187,7 @@ class CutFlow(DeskServerTestCase):
         self.assertEqual(board[a]["refutation"]["handle"], "counterexample")
         self.assertTrue(board[a]["resolved"])
         self.assertIsNone(board[a]["points"])
-        rankings = self.request("/api/status")["desk"]["rankings"]["all_time"]
+        rankings = self.request("/fixture-status")["desk"]["rankings"]["all_time"]
         scores = {r["handle"]: (r["accepted"], r["points"], r.get("cuts", 0)) for r in rankings}
         self.assertEqual(scores, {"counterexample": (1, 1, 0), "split-one": (0, 1, 1), "split-two": (0, 1, 1)})
         self.request(DESK + "claim", {"gap": a, "kind": "prove", "handle": "late"}, expected=409)
@@ -212,7 +212,7 @@ class CutFlow(DeskServerTestCase):
         late = self.submit_task(OTHER, "cut", "late-cut", [P, C], defer=True)
         self.submit_task(NEGATIVE, "prove", "legacy-refuter", "")
         late()
-        status = self.request("/api/status")
+        status = self.request("/fixture-status")
         gaps = {g["id"]: g for g in status["gaps"]}
         self.assertTrue(gaps[NEGATIVE]["proved"])
         self.assertTrue(gaps[PARENT]["resolved"])
@@ -228,11 +228,11 @@ class CutFlow(DeskServerTestCase):
         self.native = False
         self.submit_task(PARENT, "cut", "bad-route", [A, B, "Exclusive"])
         self.submit_task(PARENT, "cut", "good-route", [B, C])
-        before = {g["id"]: g for g in self.request("/api/status")["gaps"]}
+        before = {g["id"]: g for g in self.request("/fixture-status")["gaps"]}
         first, second = before[PARENT]["cuts"]
         bad, shared, exclusive = first["children"]
         self.submit_task(bad, "refute", "refuter", f"¬ ({A})")
-        after = {g["id"]: g for g in self.request("/api/status")["gaps"]}
+        after = {g["id"]: g for g in self.request("/fixture-status")["gaps"]}
         self.assertEqual([cut["status"] for cut in after[PARENT]["cuts"]], ["refuted", "live"])
         self.assertTrue(after[exclusive]["claims_closed"])
         self.assertFalse(after[shared].get("claims_closed", False))
@@ -248,14 +248,14 @@ class CutFlow(DeskServerTestCase):
         overflow = self.submit_task(PARENT, "cut", "overflow", ["D", "E"], defer=True)
         self.submit_task(PARENT, "cut", "c3", [A, C])
         overflow()
-        gaps = {g["id"]: g for g in self.request("/api/status")["gaps"]}
+        gaps = {g["id"]: g for g in self.request("/fixture-status")["gaps"]}
         cuts = gaps[PARENT]["cuts"]
         self.assertEqual(cuts[2]["reason"], "duplicate_cut")
         self.assertEqual(cuts[3]["reason"], "cut_limit")
         self.assertFalse(cuts[3]["children"])
         self.assertEqual(gaps[PARENT]["reductions_live"], 3)
         self.assertEqual([cut.get("points", 0) for cut in cuts], [1, 1, 0, 0, 1])
-        rankings = self.request("/api/status")["desk"]
+        rankings = self.request("/fixture-status")["desk"]
         for period in ("hour", "all_time"):
             self.assertEqual({r["handle"]: (r["accepted"], r["points"], r["cuts"])
                               for r in rankings["rankings"][period]}, {"c1": (0, 1, 1), "c2": (0, 1, 1), "c3": (0, 1, 1)})
@@ -271,7 +271,7 @@ class CutFlow(DeskServerTestCase):
         self.assertFalse(gaps[reused]["takes_cuts"])
         self.submit_task(a, "cut", "recursive", ["X", "Y"])
         self.submit_task(a, "cut", "cycle", [P, "Z"])
-        board = self.request("/api/status?view=board-delta-gzip")
+        board = self.request("/fixture-status?view=board-delta-gzip")
         by_id = {g["id"]: g for g in board["gaps"]}
         self.assertEqual(by_id[a]["cuts"][1]["reason"], "cyclic_cut")
         for child in by_id[a]["cuts"][0]["children"]:
@@ -279,7 +279,7 @@ class CutFlow(DeskServerTestCase):
             self.assertEqual(by_id[child]["cut_reason"], "cut_depth_limit")
 
         self.submit_task(PARENT, "prove", "first-proof", P)
-        scores = {r["handle"]: r for r in self.request("/api/status")["desk"]["rankings"]["all_time"]}
+        scores = {r["handle"]: r for r in self.request("/fixture-status")["desk"]["rankings"]["all_time"]}
         self.assertEqual(scores["first-proof"]["accepted"], 1)
         self.assertNotIn("cuts", scores["first-proof"])
         self.assertEqual(scores["c1"]["points"], 1)
@@ -307,7 +307,7 @@ class CutFlow(DeskServerTestCase):
                     self.assertEqual(cli.current_branch(), receipt["branch"])
                     self.assertIn("expires_at", cli.desk("beat", {}, receipt["token"]))
                     cli.desk("release", {"reason": "statement_seems_false"}, receipt["token"])
-                self.assertFalse(any(g.get("refutation") for g in self.request("/api/status")["gaps"] if g["id"] == PARENT))
+                self.assertFalse(any(g.get("refutation") for g in self.request("/fixture-status")["gaps"] if g["id"] == PARENT))
 
     @skipUnless(os.environ.get("GOLDBACH_TEST_LEAN") == "1", "requires pinned Lean and built mathlib cache")
     def test_kernel_flow(self):
@@ -348,7 +348,7 @@ class CutFlow(DeskServerTestCase):
         self.request(DESK + "assembly-complete", dict(result, plan_hash="a" * 64), signed=True, expected=409)
         for _ in range(2):
             self.request(DESK + "assembly-complete", result, signed=True)
-        parent = next(g for g in self.request("/api/status")["gaps"] if g["id"] == PARENT)
+        parent = next(g for g in self.request("/fixture-status")["gaps"] if g["id"] == PARENT)
         self.assertTrue(parent["proved"])
         self.assertEqual(parent["assembly"]["proof"], plan["proof"])
         self.assertEqual([c["status"] for c in parent["cuts"]], ["refuted", "completed"])

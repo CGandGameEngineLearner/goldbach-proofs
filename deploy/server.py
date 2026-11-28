@@ -8,12 +8,11 @@ import re
 import sqlite3
 import ssl
 import time
-from collections import OrderedDict
+from collections import Counter
 from contextlib import closing
 from datetime import datetime
 from functools import lru_cache
 from html import escape
-from math import ceil
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import BoundedSemaphore, Lock, Thread
@@ -477,41 +476,6 @@ STATUS_BUILD = BoundedSemaphore(1)
 WEB_SNAPSHOTS = {}
 
 
-RAW_STATUS_CLIENTS = OrderedDict()
-RAW_STATUS_LOCK = Lock()
-
-FULL_STATUS_TRANSFERS = OrderedDict()
-FULL_STATUS_LOCK = Lock()
-FULL_STATUS_BURST_BYTES = 32 * 1024**2
-FULL_STATUS_REFILL_PER_SECOND = 1024**2 / 60
-FULL_STATUS_MIN_BYTES = 128 * 1024
-
-
-def full_status_retry_after(client, size):
-    now = time.monotonic()
-    charge = min(size, FULL_STATUS_BURST_BYTES)
-    with FULL_STATUS_LOCK:
-        credit, updated = FULL_STATUS_TRANSFERS.pop(client, (FULL_STATUS_BURST_BYTES, now))
-        credit = min(FULL_STATUS_BURST_BYTES, credit + (now - updated) * FULL_STATUS_REFILL_PER_SECOND)
-        wait = ceil(max(0, charge - credit) / FULL_STATUS_REFILL_PER_SECOND)
-        FULL_STATUS_TRANSFERS[client] = (credit if wait else credit - charge, now)
-        if len(FULL_STATUS_TRANSFERS) > 4096:
-            FULL_STATUS_TRANSFERS.popitem(last=False)
-        return wait
-
-
-def raw_status_allowed(ip):
-    now = time.monotonic()
-    with RAW_STATUS_LOCK:
-        credit, last = RAW_STATUS_CLIENTS.pop(ip, (4, now))
-        credit = min(4, credit + (now - last) / 30)
-        allowed = credit >= 1
-        RAW_STATUS_CLIENTS[ip] = (credit - int(allowed), now)
-        if len(RAW_STATUS_CLIENTS) > 4096:
-            RAW_STATUS_CLIENTS.popitem(last=False)
-        return allowed
-
-
 def accepts_gzip(value):
     for item in value.split(","):
         coding, _, params = item.strip().lower().partition(";")
@@ -560,7 +524,7 @@ def task_detail(desk, gap_id):
         return {key: gap[key] for key in TASK_DETAIL_FIELDS if key in gap}
 
 
-def available_tasks(desk, limit):
+def available_tasks(desk, limit, offset=0):
     with desk.transaction() as conn:
         now = int(time.time())
         catalogue = reductions.catalogue(conn, desk.gaps)
@@ -573,7 +537,7 @@ def available_tasks(desk, limit):
     available.sort(key=lambda gap: (-(scores[gap["id"]] or 0), gap["id"]))
     fields = ("id", "plain_statement", "track", "role", "challenge_only")
     tasks = [{**{key: gap[key] for key in fields if key in gap}, "points": scores[gap["id"]]}
-             for gap in available[:limit]]
+             for gap in available[offset:offset+limit]]
     return {"problem": desk.slug, "available": len(available), "tasks": tasks}
 
 
@@ -587,30 +551,155 @@ def search_task_details(desk, query, lang, scope):
     ]}
 
 
-def status_body(desk, web_view, board=False, compress=False, delta=False, index=False):
-    key = (desk, web_view, board, delta, index)
-    cached = WEB_SNAPSHOTS.get(key) if compress else None
+def board_snapshot(desk):
+    cached = WEB_SNAPSHOTS.get(desk)
     if cached and cached[0] > time.monotonic():
         return cached[1]
     with STATUS_BUILD:
-        if compress:
-            cached = WEB_SNAPSHOTS.get(key)
-            if cached and cached[0] > time.monotonic():
-                return cached[1]
-        status = research_status(desk, compact=web_view, board=board, index=index)
-        if index:
-            status["gaps"] = [task_index(gap, delta=delta) for gap in status["gaps"]]
-        elif delta:
-            fields = ("id", "latest", "proved", "resolved", "points", "takes_cuts", "cut_reason", "reductions_live", "cuts", "refutation", "assembly")
-            status["gaps"] = [gap if gap.get("route_parent") else {k: gap[k] for k in fields if k in gap}
-                              for gap in status["gaps"]]
-        if delta:
-            status.pop("tracks", None)
-        body = json.dumps(status, ensure_ascii=False, separators=(",", ":")).encode()
-        if compress:
-            body = gzip.compress(body, compresslevel=5, mtime=0)
-            WEB_SNAPSHOTS[key] = (time.monotonic() + 10, body)
-        return body
+        cached = WEB_SNAPSHOTS.get(desk)
+        if cached and cached[0] > time.monotonic():
+            return cached[1]
+        data = research_status(desk, compact=True, board=True, index=True)
+        WEB_SNAPSHOTS[desk] = (time.monotonic() + 10, data)
+        return data
+
+
+ENDPOINT = "L-goldbach-binary-pointwise-positivity"
+
+
+def program_key(gap):
+    return gap["route_id"] if gap["route_id"] != "unclassified" else gap.get("track") or gap.get("program") or "unclassified"
+
+
+def map_route(desk, gap):
+    if desk is not DESK:
+        return "program-" + program_key(gap)
+    return gap.get("track") or ("__goal" if gap["id"] == ENDPOINT else "__core")
+
+
+def claimable(gap, assignments):
+    return not any(gap.get(k) for k in ("proved", "resolved", "claims_closed", "refutation")) and (
+        gap["id"] not in assignments or gap.get("parallel") is True
+    )
+
+
+def task_state(gap, assignments):
+    if gap.get("refutation"):
+        return "refuted" if gap["refutation"]["status"] == "verified" else "progress"
+    if gap["proved"] or gap["resolved"]:
+        return "verified"
+    if gap.get("claims_closed"):
+        return "closed"
+    if gap["id"] in assignments:
+        return "progress"
+    return "target" if gap.get("role") == "target" else "available"
+
+
+def board_overview(desk, data):
+    assignments = data["desk"]["assignments"]
+    routes, programs, panels = {}, {}, {}
+    for gap in data["gaps"]:
+        active = assignments.get(gap["id"])
+        state = task_state(gap, assignments)
+        route = routes.setdefault(map_route(desk, gap), {})
+        group = (program_key(gap) if desk is not DESK else gap.get("program") or "unclassified")
+        metrics = route.setdefault(group, Counter())
+        metrics.update((state, "total"))
+        if not any(gap.get(k) for k in ("proved", "resolved", "refutation")):
+            metrics["open"] += 1
+            if gap.get("role") == "target":
+                metrics["open_target"] += 1
+        program = programs.setdefault(program_key(gap), Counter())
+        program["total"] += 1
+        program["verified"] += int(gap["proved"])
+        program["active"] += int(bool(active))
+        panel = panels.setdefault(gap["route_id"], Counter())
+        if gap["proved"]:
+            panel["proved"] += 1
+        elif active:
+            panel[active] += 1
+    return {
+        **{k: v for k, v in data.items() if k not in {"gaps", "desk"}},
+        "desk": {k: v for k, v in data["desk"].items() if k != "assignments"},
+        "route_counts": routes, "program_counts": programs, "panel_counts": panels,
+        "available": sum(claimable(g, assignments) for g in data["gaps"]),
+    }
+
+
+def board_task(desk, data, gap):
+    return {**task_index(gap, delta=False), "map_route": map_route(desk, gap),
+            "assignment": data["desk"]["assignments"].get(gap["id"])}
+
+
+def task_page(desk, data, query):
+    source = data["gaps"]
+    assignments = data["desk"]["assignments"]
+    lang = query.get("lang", "en")
+    route = query.get("route")
+    panel = query.get("panel")
+    program = query.get("program")
+    q = query.get("q", "").strip().lower()
+    state = query.get("state", "all")
+    focus = query.get("focus")
+    limit = int(query.get("limit", "24"))
+    page = int(query.get("page", "1"))
+    if route:
+        source = [gap for gap in source if map_route(desk, gap) == route]
+    if panel:
+        source = [gap for gap in source if gap["route_id"] == panel]
+    if program:
+        source = [gap for gap in source if program_key(gap) == program]
+    # Order the full route before slicing, so graph depth does not change between pages.
+    graph = {gap["id"]: gap.get("depends_on", []) for gap in source} if route else {}
+    if graph:
+        depths = {}
+        def depth(key, seen):
+            if key in seen or key not in graph:
+                return 0
+            if key not in depths:
+                depths[key] = max((1 + depth(parent, seen | {key}) for parent in graph[key] if parent in graph), default=0)
+            return depths[key]
+        rank = {"target": 2, "conditional": 1}
+        source = sorted(source, key=lambda g: (-rank.get(g.get("role"), 0), -depth(g["id"], set()), g["id"]))
+    if state == "chain":
+        related = {focus}
+        while True:
+            extra = {parent for key in related for parent in graph.get(key, ()) if parent in graph}
+            if extra <= related:
+                break
+            related.update(extra)
+        descendants = {focus}
+        while True:
+            extra = {key for key, deps in graph.items() if descendants.intersection(deps)}
+            if extra <= descendants:
+                break
+            descendants.update(extra)
+        source = [gap for gap in source if gap["id"] in related | descendants]
+    elif state != "all":
+        def keep(gap):
+            if state == "available":
+                return claimable(gap, assignments)
+            if state == "progress":
+                return gap["id"] in assignments
+            if state == "proved":
+                return gap["proved"]
+            if state == "target" and gap.get("role") != "target":
+                return False
+            return not gap["proved"] and (not route or not (gap.get("resolved") or gap.get("refutation")))
+        source = [gap for gap in source if keep(gap)]
+    if q:
+        source = [gap for gap in source if any(q in text.lower() for text in (
+            gap["id"], gap["plain_statement"].get(lang, ""), gap.get("brief", {}).get(lang, ""),
+            *(() if route else (gap["statement"], gap["plain_statement"].get("zh", ""),
+                                 gap["plain_statement"].get("en", ""), program_key(gap))),
+        ))]
+    if focus:
+        page = next((i // limit + 1 for i, gap in enumerate(source) if gap["id"] == focus), page)
+    total = len(source)
+    page = min(page, max(1, (total + limit - 1) // limit))
+    return {"page": page, "total": total,
+            "has_edges": any(parent in graph for parents in graph.values() for parent in parents),
+            "gaps": [board_task(desk, data, gap) for gap in source[(page - 1) * limit:page * limit]]}
 
 
 def desk_routes(slug, lang):
@@ -676,20 +765,12 @@ def route_panels(slug, lang):
     zh = lang == "zh"
     sections = []
     for key, title, description, tasks, feeds in desk_routes(slug, lang):
-        links = []
-        for task, label in tasks.items():
-            role = DESKS[slug].gaps[task].get("role")
-            prefix = {"target": "待突破 · " if zh else "Research target · ",
-                      "conditional": "条件归约 · " if zh else "Conditional · "}.get(role, "")
-            ident = escape(task)
-            links.append(f'<a href="?lang={lang}&amp;lemma={ident}#roadmap" data-roadmap-task="{ident}">'
-                         f'{prefix}{escape(label)}</a>')
         targets = " · ".join(f'<a href="#track-{escape(k)}">{escape(v)}</a>' for k, v in feeds)
         following = f'<p>{"用于" if zh else "Feeds into"}　{targets}</p>' if targets else ""
-        sections.append(f'<details class="route-panel" id="track-{escape(key)}"><summary>'
+        sections.append(f'<details class="route-panel" id="track-{escape(key)}" data-route-panel="{escape(key)}"><summary>'
                         f'<strong>{escape(title)}</strong>{route_refutations(slug, tasks, lang)}<span class="route-meta">{len(tasks)} '
                         f'{"题" if zh else "tasks"}<span data-route-status></span></span></summary>'
-                        f'<p>{escape(description)}</p>{following}<div class="roadmap-tasks">{"".join(links)}</div></details>')
+                        f'<p>{escape(description)}</p>{following}<div class="roadmap-tasks"></div></details>')
     return '<div class="goldbach-tracks"><h3>' + ("按子命题领取" if zh else "Choose a proof task") + '</h3>' + "".join(sections) + '</div>'
 
 
@@ -780,7 +861,7 @@ def problem_page(page, slug, lang):
             '<p class="lpf-evidence" id="lpf-kind"></p><p id="lpf-verified"></p>'
             f'<p class="lpf-condition">{condition}</p>'
             f'<a href="{escape(BASELINE["source_url"])}">{source}</a>'
-            f'<noscript> · <a href="api/status">{status_link}</a></noscript>'
+            f'<noscript> · <a href="api/overview">{status_link}</a></noscript>'
             '<p id="lpf-notice" role="status"></p></div>'
             f'<a id="lpf-news-open" href="{article}">{news} · 1.323</a>'
             '<dialog class="rankings-dialog lpf-news" id="lpf-news" aria-labelledby="lpf-news-title">'
@@ -1076,20 +1157,11 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write(body)
 
     def public_conditional(self, body, content_type="application/json", encoding=None, cache="public, max-age=10",
-                           vary=False, limit_full_status=False):
+                           vary=False):
         etag = '"' + hashlib.sha256(body).hexdigest() + '"'
         validators = {item.strip().removeprefix("W/") for item in self.headers.get("If-None-Match", "").split(",")}
         if etag in validators or "*" in validators:
             return self.reply(304, b"", content_type, cache=cache, etag=etag, vary=vary)
-        if limit_full_status and self.command == "GET" and len(body) >= FULL_STATUS_MIN_BYTES:
-            client = self.client_ip()
-            wait = 0 if client.is_loopback else full_status_retry_after(client, len(body))
-            if wait:
-                return self.reply(
-                    429, b'{"error":"Full status transfer limit. Use /api/tasks for available tasks, '
-                    b'or send If-None-Match with the last ETag to check for changes."}',
-                    vary=vary, retry_after=wait,
-                )
         return self.reply(200, body, content_type, encoding=encoding, cache=cache, etag=etag, vary=vary)
 
     def public_json(self, payload, cache="public, max-age=10"):
@@ -1211,11 +1283,12 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/tasks":
             query = parse_qs(url.query, keep_blank_values=True)
             limit = query.get("limit", ["20"])
-            if (not set(query) <= {"limit"} or len(limit) != 1
+            offset = query.get("offset", ["0"])
+            if (not set(query) <= {"limit", "offset"} or len(offset) != 1 or not re.fullmatch(r"[0-9]{1,6}", offset[0]) or len(limit) != 1
                     or not re.fullmatch(r"[1-9][0-9]{0,2}", limit[0]) or not 1 <= int(limit[0]) <= 100):
                 return self.reply(400, b'{"error":"invalid limit"}')
             try:
-                return self.public_json(available_tasks(desk, int(limit[0])))
+                return self.public_json(available_tasks(desk, int(limit[0]), int(offset[0])))
             except sqlite3.Error:
                 return self.reply(503, b'{"error":"tasks unavailable"}')
         if path == "/api/task":
@@ -1225,6 +1298,13 @@ class Handler(BaseHTTPRequestHandler):
                 return self.reply(400, b'{"error":"invalid lemma"}')
             try:
                 detail = task_detail(desk, key[0])
+                if detail is not None:
+                    data = board_snapshot(desk)
+                    gap = next((g for g in data["gaps"] if g["id"] == key[0]), None)
+                    if gap is not None:
+                        detail = {**board_task(desk, data, gap), **detail, "dependents": [
+                            other["id"] for other in data["gaps"] if key[0] in other.get("depends_on", [])
+                        ]}
             except sqlite3.Error:
                 return self.reply(503, b'{"error":"task unavailable"}')
             if detail is None:
@@ -1381,24 +1461,34 @@ class Handler(BaseHTTPRequestHandler):
                 return self.reply(200, gzip.compress(body, compresslevel=3), encoding="gzip")
             return self.reply(200, body)
         if path == "/api/status":
+            return self.reply(410, b'{"error":"Status export retired","overview":"api/overview","tasks":"api/tasks","task":"api/task?lemma=ID","catalogue":"api/catalogue-status"}',
+                              cache="public, max-age=300")
+        if path in {"/api/overview", "/api/task-page", "/api/catalogue-status"}:
+            params = parse_qs(url.query, keep_blank_values=True)
+            allowed = {"route", "panel", "program", "state", "q", "lang", "page", "limit", "focus"} if path == "/api/task-page" else set()
+            if not set(params) <= allowed or any(len(v) != 1 or len(v[0]) > 500 for v in params.values()):
+                return self.reply(400, b'{"error":"invalid board query"}')
+            query = {key: values[0] for key, values in params.items()}
+            if (query.get("lang", "en") not in {"en", "zh"}
+                    or query.get("state", "all") not in {"all", "open", "target", "proved", "progress", "available", "chain"}
+                    or not re.fullmatch(r"[1-9][0-9]{0,5}", query.get("page", "1"))
+                    or not re.fullmatch(r"[1-9][0-9]?", query.get("limit", "24"))
+                    or int(query.get("limit", "24")) > 48):
+                return self.reply(400, b'{"error":"invalid board query"}')
             try:
-                view = parse_qs(url.query).get("view")
-                delta = view in (["board-delta-gzip"], ["board-index-delta-gzip"])
-                index = view in (["board-index-gzip"], ["board-index-delta-gzip"])
-                board = delta or index or view == ["board-gzip"]
-                web_view = board or view == ["web-gzip"]
-                compress = web_view or accepts_gzip(self.headers.get("Accept-Encoding", ""))
-                if (not compress and self.command == "GET" and not self.client_ip().is_loopback
-                        and not raw_status_allowed(self.client_ip())):
-                    return self.reply(429, b'{"error":"Use Accept-Encoding: gzip for frequent status requests"}',
-                                      vary=True, retry_after=30)
-                body = status_body(desk, web_view, board, compress=compress, delta=delta, index=index)
-            except sqlite3.Error as error:
-                self.log_error("Unable to read verdicts: %s", error)
-                return self.reply(503, b'{"error":"verdicts unavailable"}')
-            return self.public_conditional(
-                body, encoding="gzip" if compress else None, vary=True, limit_full_status=not web_view,
-            )
+                data = board_snapshot(desk)
+                if path == "/api/overview":
+                    payload = board_overview(desk, data)
+                elif path == "/api/task-page":
+                    payload = task_page(desk, data, query)
+                else:
+                    payload = {"catalogue_revision": RELEASE_SHA,
+                               "desk": {"assignments": data["desk"]["assignments"]},
+                               "gaps": [{"id": g["id"], "proved": g["proved"], "generated": g["id"] not in desk.gaps,
+                                         "statement_sha256": reductions.digest(g["statement"])} for g in data["gaps"]]}
+                return self.public_json(payload)
+            except sqlite3.Error:
+                return self.reply(503, b'{"error":"board unavailable"}')
         if path == "/platform-logo.svg":
             path = "/goldbach-icon.svg"
         if path in ASSETS:
