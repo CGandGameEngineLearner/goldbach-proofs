@@ -40,7 +40,7 @@ theorem Conjectures.Cuts.Cut582b0f018e2d379d49c04e22
   calc
     δ/2 * (n : ℝ) = (2/3 - δ/2) * n + (-2/3 + δ) * n := by ring
     _ ≤ (∑ p ∈ I, (2*w p + 2*w (n-p) - 4)) + ∑ p ∈ I, (w p - 2) * (w (n-p) - 2) :=
-      add_le_add h₁k h₂k
+      by linarith only [h₁k, h₂k]
     _ = ∑ p ∈ I, w p * w (n-p) := by
       rw [← Finset.sum_add_distrib]
       apply Finset.sum_congr rfl
