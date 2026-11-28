@@ -488,6 +488,14 @@ class DeskScaleTest(DeskServerTestCase):
         overview = self.request("/api/overview")
         self.assertEqual(overview["counts"], board["counts"])
         self.assertEqual(overview["tracks"], board["tracks"])
+        localized = self.request("/api/overview?lang=zh&known_tracks=old")
+        self.assertEqual([row["id"] for row in localized["tracks"]],
+                         [row["id"] for row in overview["tracks"]])
+        for row, original in zip(localized["tracks"], overview["tracks"]):
+            self.assertEqual(row["title"], {"zh": original["title"]["zh"]})
+            self.assertEqual(row["description"], {"zh": original["description"]["zh"]})
+        self.assertNotIn("leaderboard", localized["desk"])
+        self.assertEqual(localized["desk"]["rankings"], overview["desk"]["rankings"])
         self.assertEqual(overview["desk"]["rankings"], board["desk"]["rankings"])
         self.assertNotIn("gaps", overview)
         self.assertNotIn("assignments", overview["desk"])

@@ -608,7 +608,7 @@ def task_state(gap, assignments):
     return "target" if gap.get("role") == "target" else "available"
 
 
-def board_overview(desk, data):
+def board_overview(desk, data, lang=None, known_tracks=None):
     assignments = data["desk"]["assignments"]
     routes, programs, panels = {}, {}, {}
     for gap in data["gaps"]:
@@ -631,12 +631,22 @@ def board_overview(desk, data):
             panel["proved"] += 1
         elif active:
             panel[active] += 1
-    return {
+    overview = {
         **{k: v for k, v in data.items() if k not in {"gaps", "desk"}},
         "desk": {k: v for k, v in data["desk"].items() if k != "assignments"},
         "route_counts": routes, "program_counts": programs, "panel_counts": panels,
         "available": sum(claimable(g, assignments) for g in data["gaps"]),
     }
+    if lang:
+        overview["desk"].pop("leaderboard", None)
+        if known_tracks and known_tracks == data.get("catalogue_revision"):
+            overview.pop("tracks", None)
+        elif "tracks" in overview:
+            overview["tracks"] = [
+                {**track, **{key: {lang: track[key][lang]} for key in ("title", "description")}}
+                for track in overview["tracks"]
+            ]
+    return overview
 
 
 def board_task(desk, data, gap):
@@ -1486,6 +1496,8 @@ class Handler(BaseHTTPRequestHandler):
         if path in {"/api/overview", "/api/task-page", "/api/catalogue-status"}:
             params = parse_qs(url.query, keep_blank_values=True)
             allowed = {"route", "panel", "program", "state", "q", "lang", "page", "limit", "focus"} if path == "/api/task-page" else set()
+            if path == "/api/overview":
+                allowed = {"lang", "known_tracks"}
             if not set(params) <= allowed or any(len(v) != 1 or len(v[0]) > 500 for v in params.values()):
                 return self.reply(400, b'{"error":"invalid board query"}')
             query = {key: values[0] for key, values in params.items()}
@@ -1498,7 +1510,7 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 data = board_snapshot(desk)
                 if path == "/api/overview":
-                    payload = board_overview(desk, data)
+                    payload = board_overview(desk, data, query.get("lang"), query.get("known_tracks"))
                 elif path == "/api/task-page":
                     payload = task_page(desk, data, query)
                 else:

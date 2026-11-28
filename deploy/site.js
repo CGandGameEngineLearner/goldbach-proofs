@@ -1510,6 +1510,7 @@ return {update,setProgram(value){field=value;if(initialized&&!currentTrack)rende
 })();
 
 let cachedRevision;
+let overviewTracks = [];
 let lastOverviewAt = 0;
 const OVERVIEW_MIN_INTERVAL = 30000;
 
@@ -1519,7 +1520,9 @@ async function loadStatus() {
   const request = new AbortController();
   const timeout = window.setTimeout(() => request.abort(), 30000);
   try {
-    const response = await fetch('api/overview', {signal: request.signal});
+    const params = new URLSearchParams({lang});
+    if (cachedRevision) params.set('known_tracks', cachedRevision);
+    const response = await fetch('api/overview?' + params, {signal: request.signal});
     if (!response.ok) throw new Error('Status request failed');
     const data = await response.json();
     lastOverviewAt = Date.now();
@@ -1541,7 +1544,8 @@ async function loadStatus() {
       ? latest.lemma_id + (latest.kind && latest.kind !== 'prove' ? ' · ' + latest.kind : '') + ' · ' + (latest.verdict === 'ACCEPTED' ? strings.accepted : strings.rejected)
       : strings.noRecords;
     updateRouteActivity(data.panel_counts);
-    researchMap.update(data.tracks || [], data.route_counts, counts.published);
+    if (data.tracks) overviewTracks = data.tracks;
+    researchMap.update(overviewTracks, data.route_counts, counts.published);
     renderProgramCounts(data.program_counts);
     if (lastGaps === null) {
       const requested = new URLSearchParams(window.location.search).get('lemma');
