@@ -14,7 +14,9 @@
   "role": "target",
   "challenge_only": true,
   "parallel": true,
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.PrimitivePartnerCubicMass"
+  ],
   "depends_on": [
     "L-goldbach-primitive-partner-cubic-mass"
   ],
