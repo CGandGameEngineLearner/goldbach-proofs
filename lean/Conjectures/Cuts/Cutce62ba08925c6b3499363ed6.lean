@@ -7,8 +7,9 @@ This cut separates the one-point mass control from the two-point arithmetic inpu
 The mixed-difference identity turns their difference into the required covariance
 budget.  The pair-mass premise is deliberately stated on the reflected central
 cells, where it is the genuinely Goldbach-type input.  With cell masses bounded
-by 11H/10 and BH = n/8, the product term is at most 121n/800; hence 217n/1600
-for the central pair mass is the exact threshold that leaves the budget -n/64.
+by 101H/100 and BH = n/8, the product term is at most 10201n/80000; hence
+8951n/80000 for the central pair mass is the exact threshold that leaves the
+budget -n/64.
 -/
 
 theorem Conjectures.Cuts.Cutce62ba08925c6b3499363ed6
@@ -25,9 +26,9 @@ theorem Conjectures.Cuts.Cutce62ba08925c6b3499363ed6
         let b := fun j t : ℕ => w (n-p j t);
         ∀ j ∈ Finset.range B,
           (0 ≤ ∑ s ∈ Finset.range H, a j s ∧
-            (∑ s ∈ Finset.range H, a j s) ≤ 11*(H : ℝ)/10) ∧
+            (∑ s ∈ Finset.range H, a j s) ≤ 101*(H : ℝ)/100) ∧
           (0 ≤ ∑ s ∈ Finset.range H, b j s ∧
-            (∑ s ∈ Finset.range H, b j s) ≤ 11*(H : ℝ)/10))
+            (∑ s ∈ Finset.range H, b j s) ≤ 101*(H : ℝ)/100))
     -- child 2 zh: 中心反射带内的二元素数相关下界
     -- child 2 en: Binary prime correlation floor on the central reflected band
     (h_pair_mass :
@@ -39,7 +40,7 @@ theorem Conjectures.Cuts.Cutce62ba08925c6b3499363ed6
         let p := fun j t : ℕ => n/2 + j*H + t;
         let a := fun j t : ℕ => w (p j t);
         let b := fun j t : ℕ => w (n-p j t);
-        217*(n : ℝ)/1600 ≤
+        8951*(n : ℝ)/80000 ≤
           ∑ j ∈ Finset.range B, ∑ s ∈ Finset.range H, a j s * b j s)
     :
     (let w := fun p : ℕ => if Nat.Prime p then Real.log (p : ℝ) else 0;
@@ -133,11 +134,11 @@ theorem Conjectures.Cuts.Cutce62ba08925c6b3499363ed6
     linarith
   have hmass_k : ∀ j ∈ Finset.range B,
       (0 ≤ ∑ s ∈ Finset.range H, a j s ∧
-        (∑ s ∈ Finset.range H, a j s) ≤ 11*(H : ℝ)/10) ∧
+        (∑ s ∈ Finset.range H, a j s) ≤ 101*(H : ℝ)/100) ∧
       (0 ≤ ∑ s ∈ Finset.range H, b j s ∧
-        (∑ s ∈ Finset.range H, b j s) ≤ 11*(H : ℝ)/10) := by
+        (∑ s ∈ Finset.range H, b j s) ≤ 101*(H : ℝ)/100) := by
     simpa [w, hn, hH, hB, hp, ha, hb] using hmass k hk₁
-  have hpair_k : 217*(n : ℝ)/1600 ≤
+  have hpair_k : 8951*(n : ℝ)/80000 ≤
       ∑ j ∈ Finset.range B, ∑ s ∈ Finset.range H, a j s * b j s := by
     simpa [w, hn, hH, hB, hp, ha, hb] using hpair k hk₂
   have hmain_eq :
@@ -161,25 +162,25 @@ theorem Conjectures.Cuts.Cutce62ba08925c6b3499363ed6
       (∑ j ∈ Finset.range B,
         (∑ s ∈ Finset.range H, a j s) *
           (∑ t ∈ Finset.range H, b j t) / (H : ℝ))
-        ≤ (121 : ℝ)/800 * (n : ℝ) := by
+        ≤ (10201 : ℝ)/80000 * (n : ℝ) := by
     calc
-      _ ≤ ∑ j ∈ Finset.range B, (121 : ℝ)/100 * (H : ℝ) := by
+      _ ≤ ∑ j ∈ Finset.range B, (10201 : ℝ)/10000 * (H : ℝ) := by
             apply Finset.sum_le_sum
             intro j hj
             rcases hmass_k j hj with ⟨⟨hA0, hA⟩, ⟨hB0, hB⟩⟩
-            have hU0 : 0 ≤ 11*(H : ℝ)/10 := by positivity
+            have hU0 : 0 ≤ 101*(H : ℝ)/100 := by positivity
             have hAB :
                 (∑ s ∈ Finset.range H, a j s) *
                     (∑ t ∈ Finset.range H, b j t)
-                  ≤ (11*(H : ℝ)/10) * (11*(H : ℝ)/10) :=
+                  ≤ (101*(H : ℝ)/100) * (101*(H : ℝ)/100) :=
               mul_le_mul hA hB hB0 hU0
             rw [div_le_iff₀ hHreal]
             nlinarith [hAB]
-      _ = (B : ℝ) * ((121 : ℝ)/100 * (H : ℝ)) := by
+      _ = (B : ℝ) * ((10201 : ℝ)/10000 * (H : ℝ)) := by
             rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
-      _ = (121 : ℝ)/100 * ((B : ℝ) * (H : ℝ)) := by ring
-      _ = (121 : ℝ)/100 * ((n : ℝ)/8) := by rw [hBHreal]
-      _ = (121 : ℝ)/800 * (n : ℝ) := by ring
+      _ = (10201 : ℝ)/10000 * ((B : ℝ) * (H : ℝ)) := by ring
+      _ = (10201 : ℝ)/10000 * ((n : ℝ)/8) := by rw [hBHreal]
+      _ = (10201 : ℝ)/80000 * (n : ℝ) := by ring
   have htarget :
       -(n : ℝ)/64 ≤
         ∑ j ∈ Finset.range B,
