@@ -15154,3 +15154,1181 @@ theorem catalogueArc_by_denominators (Z : Finset CatalogueEntry) (m n : ℕ) (P 
 end Conjectures.Goldbach.BinaryShiftZeroDensity
 end
 end
+
+section
+open Complex Finset DirichletCharacter Goldbach GoldbachTwistedMellin
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+
+/-- The character label of a retained pole or zero at an ambient modulus. -/
+def catalogueLift (q : ℕ) (v : CatalogueEntry) : DirichletCharacter ℂ q :=
+  if h : catalogueLevel v ∣ q then changeLevel h (catalogueCharacter v) else 1
+
+private theorem packed_eq_of_lifts {r t q : ℕ} [NeZero q] (α : DirichletCharacter ℂ r)
+    (β : DirichletCharacter ℂ t) (hα : α.IsPrimitive) (hβ : β.IsPrimitive) (hr : r ∣ q) (ht : t ∣ q)
+    (eqn : changeLevel hr α = changeLevel ht β) :
+    (⟨r,α⟩ : Σ d : ℕ, DirichletCharacter ℂ d) = ⟨t,β⟩ := by
+  have e := congrArg DirichletCharacter.conductor eqn
+  rw [conductor_changeLevel,conductor_changeLevel,hα,hβ] at e
+  subst t
+  exact congrArg (Sigma.mk r) (changeLevel_injective hr eqn)
+
+private theorem packed_primitive_lift (q : ℕ) [NeZero q] (v : CatalogueEntry)
+    (hv : catalogueLevel v ∣ q) (hp : (catalogueCharacter v).IsPrimitive) :
+    (⟨(catalogueLift q v).conductor,(catalogueLift q v).primitiveCharacter⟩ : Σ d : ℕ, DirichletCharacter ℂ d) =
+      ⟨catalogueLevel v,catalogueCharacter v⟩ := by
+  apply packed_eq_of_lifts _ _ (catalogueLift q v).primitiveCharacter_isPrimitive hp (catalogueLift q v).conductor_dvd_level hv
+  rw [changeLevel_primitiveCharacter,catalogueLift,dite_eq_left hv]
+
+private theorem root_transport {r t : ℕ} [NeZero r] [NeZero t] {α : DirichletCharacter ℂ r} {β : DirichletCharacter ℂ t}
+    (e : (⟨r,α⟩ : Σ d : ℕ, DirichletCharacter ℂ d) = ⟨t,β⟩) (z : ℂ) (B : ℝ) :
+    exceptionalZeros α B = exceptionalZeros β B ∧
+      analyticOrderNatAt (regularizedL α) z = analyticOrderNatAt (regularizedL β) z := by
+  obtain rfl : r=t := congrArg Sigma.fst e
+  obtain rfl : α=β := eq_of_heq (Sigma.mk.inj_iff.mp e).2
+  exact ⟨rfl,rfl⟩
+
+/-- Each global catalogue label that occurs at q is an actual local
+Dirichlet residue with the same signed analytic multiplicity. -/
+theorem catalogueLift_residue (m Q X : ℕ) (H T : ℝ) (hT : 0 ≤ T) (v : CatalogueEntry)
+    (hv : v ∈ nearOneCatalogue m Q X H T) (q : ℕ) [NeZero q] (hq : catalogueLevel v ∣ q) :
+    catalogueRoot v ∈ BinaryShiftMajorModel.characterResidues m (catalogueLift q v) ∧
+      BinaryShiftMajorModel.residueMultiplier (catalogueLift q v) (catalogueRoot v) = catalogueWeight v := by
+  classical
+  have prim := (catalogue_properties m Q X H T hT v hv).2.1
+  have e := packed_primitive_lift q v hq prim
+  let _ : NeZero (catalogueLift q v).conductor := ⟨(catalogueLift q v).conductor_ne_zero⟩
+  cases v with
+  | none =>
+    have principal : catalogueLift q none = 1 := by
+      simp only [catalogueLift,dite_eq_left hq,catalogueCharacter,map_one]
+    exact ⟨mem_insert_self ..,by simp [BinaryShiftMajorModel.residueMultiplier,principal,catalogueWeight,catalogueRoot]⟩
+  | some v =>
+    obtain ⟨p,z⟩ := v
+    have hz : (⟨p,z⟩ : Σ _ : PositiveLevelCharacter, ℂ) ∈ (nearOneCharacters m Q (1-H/Real.log X) T).sigma
+        (fun a => nearOneRoots m a.2 (1-H/Real.log X) T) := by simpa [nearOneCatalogue] using hv
+    have root := (Finset.mem_filter.mp (Finset.mem_sigma.mp hz).2).1
+    have pair := root_transport e z (modelHeight (m+2:ℕ))
+    constructor
+    · apply mem_insert_of_mem
+      apply mem_image_of_mem
+      rw [pair.1]
+      exact root
+    · simp only [BinaryShiftMajorModel.residueMultiplier,catalogueRoot,catalogueWeight,pair.2,catalogueCharacter]
+      rfl
+
+/-- At a positive modulus, retaining primitive catalogue labels cannot
+count any local character/residue pair twice. -/
+theorem catalogueLift_injective (m Q X : ℕ) (H T : ℝ) (hT : 0 ≤ T) (q : ℕ) [NeZero q] :
+    Set.InjOn (fun v : CatalogueEntry => (catalogueLift q v,catalogueRoot v))
+      ((nearOneCatalogue m Q X H T).filter (fun v => catalogueLevel v ∣ q) : Finset CatalogueEntry) := by
+  classical
+  intro v hv w hw eqn
+  obtain ⟨hv,dv⟩ := mem_filter.mp hv
+  obtain ⟨hw,dw⟩ := mem_filter.mp hw
+  have pv := (catalogue_properties m Q X H T hT v hv).2.1
+  have pw := (catalogue_properties m Q X H T hT w hw).2.1
+  have lifts := congrArg Prod.fst eqn
+  have roots := congrArg Prod.snd eqn
+  change catalogueRoot v = catalogueRoot w at roots
+  have same : (⟨catalogueLevel v,catalogueCharacter v⟩ : Σ d : ℕ, DirichletCharacter ℂ d) =
+      ⟨catalogueLevel w,catalogueCharacter w⟩ := packed_eq_of_lifts _ _ pv pw dv dw (by simpa only [catalogueLift,dite_eq_left dv,dite_eq_left dw] using lifts)
+  cases v with
+  | none =>
+    cases w with
+    | none => rfl
+    | some t => simp [catalogueRoot] at roots
+  | some v =>
+    cases w with
+    | none => simp [catalogueRoot] at roots
+    | some w =>
+      obtain ⟨p,z⟩ := v
+      obtain ⟨t,v⟩ := w
+      have ep : p=t := positiveLevel_injective same
+      obtain rfl : z=v := Option.some.inj roots
+      subst t
+      rfl
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset Filter DirichletCharacter Goldbach GoldbachTwistedMellin
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+
+private theorem coefficient_symmetric {r t : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ t) (n d : ℕ) :
+    TwistedGoldbachSingularSeries.coefficient α β n d = TwistedGoldbachSingularSeries.coefficient β α n d := by
+  classical
+  by_cases hd : d=0
+  · simp [hd,TwistedGoldbachSingularSeries.coefficient]
+  let _ : NeZero d := ⟨hd⟩
+  simp only [TwistedGoldbachSingularSeries.coefficient,dite_eq_left hd]
+  by_cases h : r ∣ d ∧ t ∣ d
+  · simp only [dite_eq_left h,dite_eq_left h.symm,TwistedGoldbachSingularSeries.gaussCoefficient]
+    rw [mul_comm (changeLevel h.1 α) (changeLevel h.2 β),mul_comm (gaussSum _ _) (gaussSum _ _)]
+  · simp [h,show ¬(t ∣ d ∧ r ∣ d) from fun e => h e.symm]
+
+private theorem catalogueBetaTerm_swap (n : ℕ) (v w : CatalogueEntry) :
+    catalogueBetaTerm n v w = catalogueBetaTerm n w v := by
+  dsimp only [catalogueBetaTerm]
+  rw [add_comm ((catalogueRoot v).getD 1) ((catalogueRoot w).getD 1),
+    Complex.betaIntegral_symm ((catalogueRoot w).getD 1) ((catalogueRoot v).getD 1)]
+  exact congrArg (· * _) (tsum_congr (coefficient_symmetric _ _ n))
+
+private theorem mixed_series_decay {r : ℕ} [NeZero r] (χ : DirichletCharacter ℂ r) (hp : χ.IsPrimitive)
+    (n : ℕ) (hn : 0 < n) (he : Even n) :
+    ‖∑' d, TwistedGoldbachSingularSeries.coefficient χ (1 : DirichletCharacter ℂ 1) n d‖ ≤
+      (1152*(r:ℝ)^(-(1/2:ℝ))) *
+        (∑' d, TwistedGoldbachSingularSeries.coefficient (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n d).re := by
+  let S := (∑' d, TwistedGoldbachSingularSeries.coefficient (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n d)
+  have dom : ‖S‖ ≤ S.re := TwistedGoldbachSingularSeries.infinite_domination isPrimitive_one_level_one isPrimitive_one_level_one n hn
+  have r0 : 0 < (r:ℝ) := Nat.cast_pos.mpr (NeZero.pos _)
+  have small : 2*(r:ℝ)/(r.totient:ℝ)^2 ≤ 1152*(r:ℝ)^(-(1/2:ℝ)) := calc
+    _ = (2*(r:ℝ))*(1/(r.totient:ℝ)^2) := by ring
+    _ ≤ _ := mul_le_mul_of_nonneg_left (TwistedGoldbachSingularSeries.totient_weight (NeZero.pos r)) (by positivity : 0 ≤ 2*(r:ℝ))
+    _ = _ := by
+      rw [show -(1/2:ℝ) = 1+ -(3/2:ℝ) by norm_num,Real.rpow_add r0,Real.rpow_one];ring
+  exact (TwistedGoldbachMixedPrincipal.mixed_bound χ hp n hn he).trans
+    (mul_le_mul small dom (norm_nonneg _) (by positivity))
+
+/-- A pole paired with a true near-one zero receives a power saving from
+the primitive conductor, uniformly for every even target. -/
+theorem catalogue_mixed_beta_decay (H T : ℝ) (hH : 0 ≤ H) (hT : 0 ≤ T) :
+    ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧ ∀ (m Q X n : ℕ), 1 < X → 0 < n → n ≤ X → Even n →
+      ∀ v ∈ nearOneCatalogue m Q X H T, v ≠ none →
+      ‖catalogueBetaTerm n v none‖ ≤
+        (∑' d, TwistedGoldbachSingularSeries.coefficient (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n d).re *
+        (C*(X:ℝ)^(1-κ)) := by
+  classical
+  obtain ⟨c,hc,conductor⟩ := nearOne_zero_conductor_bound
+  let k := c/(2*(H+1))
+  let A := 2*(2+T)
+  have hA : 0 < A := by dsimp only [A];linarith
+  have hk : 0 < k := by dsimp only [k];positivity
+  refine ⟨k,2304*A^(1/2:ℝ),hk,by positivity,?_⟩
+  intro m Q X n hX hn hnX he v hv hv'
+  cases v with
+  | none => exact (hv' rfl).elim
+  | some v =>
+    obtain ⟨p,z⟩ := v
+    let χ := p.2
+    let r := p.1+1
+    let S := (∑' d, TwistedGoldbachSingularSeries.coefficient (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n d).re
+    have membership : (⟨p,z⟩ : Σ _ : PositiveLevelCharacter, ℂ) ∈ (nearOneCharacters m Q (1-H/Real.log X) T).sigma
+        (fun a => nearOneRoots m a.2 (1-H/Real.log X) T) := by simpa [nearOneCatalogue] using hv
+    obtain ⟨hχ,hz⟩ := mem_sigma.mp membership
+    have hp : χ.IsPrimitive := (mem_filter.mp (mem_sigma.mp hχ).2).2.1
+    obtain ⟨root,near,height⟩ := mem_filter.mp hz
+    obtain ⟨left,_,zero⟩ := (mem_exceptionalZeros ..).mp root
+    have x1 : 1 < (X:ℝ) := by exact_mod_cast hX
+    have x0 := zero_lt_one.trans x1
+    have lpos := Real.log_pos x1
+    have r0 : 0 < (r:ℝ) := by dsimp only [r];positivity
+    have hs := re_lt_one_of_regularizedL_zero χ zero
+    have widened : 1-(H+1)/Real.log X ≤ z.re := by
+      linarith only [near,div_le_div_of_nonneg_right (le_add_of_nonneg_right zero_le_one : H ≤ H+1) lpos.le]
+    have big := conductor r χ hp X (H+1) T z x1 (by positivity) height widened zero
+    have scale : (X:ℝ)^(c/(H+1)) ≤ A*(r:ℝ) := big.le.trans_eq (by dsimp only [A];ring)
+    have save : (r:ℝ)^(-(1/2:ℝ)) ≤ A^(1/2:ℝ)*(X:ℝ)^(-k) := calc
+      _ = A^(1/2:ℝ)*(A*(r:ℝ))^(-(1/2:ℝ)) := by
+        rw [Real.mul_rpow hA.le r0.le,←mul_assoc,←Real.rpow_add hA,add_neg_cancel,Real.rpow_zero,one_mul]
+      _ ≤ A^(1/2:ℝ)*((X:ℝ)^(c/(H+1)))^(-(1/2:ℝ)) := mul_le_mul_of_nonneg_left
+        (Real.rpow_le_rpow_of_nonpos (Real.rpow_pos_of_pos x0 _) scale (by norm_num)) (Real.rpow_nonneg hA.le _)
+      _ = _ := by rw [←Real.rpow_mul x0.le,show c/(H+1)*(-(1/2:ℝ)) = -k by dsimp only [k];rw [div_mul_eq_div_div_swap];ring]
+    have absre : (1/2:ℝ) ≤ ‖z‖ := (by linarith only [left] : (1/2:ℝ) ≤ z.re).trans (Complex.re_le_norm _)
+    have inv : ‖z⁻¹‖ ≤ 2 := by
+      rw [norm_inv,inv_le_comm₀ (by linarith only [absre]) (by norm_num : (0:ℝ)<2)]
+      simpa only [one_div] using absre
+    have np : ‖(n:ℂ)^z‖ ≤ (X:ℝ) := by
+      rw [norm_natCast_cpow_of_pos hn]
+      exact (Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast hn : 1 ≤ (n:ℝ)) hs.le).trans
+        ((Real.rpow_one (n:ℝ)).le.trans (Nat.cast_le.mpr hnX))
+    have mag := mixed_series_decay χ⁻¹ hp.inv n hn he
+    have s0 : 0 ≤ S := (norm_nonneg _).trans (TwistedGoldbachSingularSeries.infinite_domination isPrimitive_one_level_one isPrimitive_one_level_one n hn)
+    change ‖(∑' d, TwistedGoldbachSingularSeries.coefficient χ⁻¹ (1 : DirichletCharacter ℂ 1)⁻¹ n d) *
+      ((n:ℂ)^(z+1-1)*Complex.betaIntegral z 1)‖ ≤ S*_
+    rw [inv_one,add_sub_cancel_right,Complex.betaIntegral_eval_one_right (by linarith only [left]),one_div,norm_mul,norm_mul]
+    apply (mul_le_mul mag (mul_le_mul np inv (norm_nonneg _) x0.le) (mul_nonneg (norm_nonneg _) (norm_nonneg _))
+      (mul_nonneg (by positivity) s0)).trans
+    change 1152*(r:ℝ)^(-(1/2:ℝ))*S*((X:ℝ)*2) ≤ _
+    apply (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left save (by norm_num : (0:ℝ) ≤ 1152)) s0)
+      (by positivity : 0 ≤ (X:ℝ)*2)).trans_eq
+    rw [sub_eq_add_neg,Real.rpow_add x0,Real.rpow_one];ring
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset Filter DirichletCharacter Goldbach GoldbachTwistedMellin
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+
+private def unmixedBetaTerm (n : ℕ) (v w : CatalogueEntry) : ℂ :=
+  if v.isSome = w.isSome then catalogueBetaTerm n v w else 0
+
+private theorem catalogue_pole_term (n : ℕ) :
+    catalogueBetaTerm n none none = (∑' d, TwistedGoldbachSingularSeries.coefficient
+      (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n d) * (n:ℂ) := by
+  change (∑' d, TwistedGoldbachSingularSeries.coefficient (1 : DirichletCharacter ℂ 1)⁻¹ (1 : DirichletCharacter ℂ 1)⁻¹ n d) *
+    ((n:ℂ)^((1:ℂ)+1-1)*Complex.betaIntegral 1 1) = _
+  rw [inv_one,add_sub_cancel_right,Complex.cpow_one,Complex.betaIntegral_eval_one_right (by norm_num)]
+  simp only [div_one,mul_one]
+
+private theorem unmixed_sum (Z : Finset CatalogueEntry) (n : ℕ) (P : ℝ) (hZ : none ∈ Z) (hP : 1 ≤ P) :
+    cataloguePairSum Z P (unmixedBetaTerm n) = catalogueBetaTerm n none none +
+      cataloguePairSum (Z.erase none) P (catalogueBetaTerm n) := by
+  classical
+  let W := Z.erase none
+  have nz : none ∉ W := Finset.notMem_erase none Z
+  have someOf (v : CatalogueEntry) (hv : v ∈ W) : v.isSome = true := by
+    cases v with
+    | none => exact (nz hv).elim
+    | some v => rfl
+  have levels : ((Nat.lcm (catalogueLevel none) (catalogueLevel none):ℕ):ℝ) ≤ P := by simpa [catalogueLevel] using hP
+  have zsplit : Z = insert none W := (insert_erase hZ).symm
+  have rwZ := congrArg (fun U => cataloguePairSum U P (unmixedBetaTerm n)) zsplit
+  rw [rwZ,cataloguePairSum,cataloguePairSum,sum_insert nz,sum_insert nz]
+  simp only [ite_eq_left levels,show catalogueWeight none = 1 by rfl,one_mul]
+  have row0 : (∑ w ∈ W, if (Nat.lcm (catalogueLevel none) (catalogueLevel w):ℝ) ≤ P then
+      catalogueWeight w * unmixedBetaTerm n none w else 0) = 0 := by
+    apply sum_eq_zero
+    intro w hw
+    simp [unmixedBetaTerm,someOf w hw]
+  rw [row0,add_zero]
+  change catalogueBetaTerm n none none + _ = _
+  apply congrArg (_+·)
+  apply sum_congr rfl
+  intro v hv
+  rw [sum_insert nz]
+  have first : (if (Nat.lcm (catalogueLevel v) (catalogueLevel none):ℝ) ≤ P then
+      catalogueWeight v * catalogueWeight none * unmixedBetaTerm n v none else 0) = 0 := by
+    simp [unmixedBetaTerm,someOf v hv]
+  rw [first,zero_add]
+  apply sum_congr rfl
+  intro w hw
+  simp only [unmixedBetaTerm,someOf v hv,someOf w hw,ite_true]
+
+/-- After removing all pole--zero interactions, the retained major arcs
+are the ordinary main term plus a sum over pairs of actual zeros. The
+remainder saves a positive power uniformly at every positive even target. -/
+theorem nearOneCatalogue_pole_and_zero_pairs (H T : ℝ) (hH : 0 ≤ H) (hT : 0 ≤ T) :
+    ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧ ∀ᶠ Q : ℕ in atTop, ∀ m : ℕ, 2 ≤ m → Q ≤ m+2 →
+      let X : ℝ := (m+2:ℕ)
+      let Z := nearOneCatalogue m Q (m+2) H T
+      ∃ P : ℝ, X^(11/40:ℝ) ≤ P ∧ P ≤ X^(3/10:ℝ) ∧ ∀ n : ℕ, 0 < n → n ≤ m+2 → Even n →
+        let S := ∑' d, TwistedGoldbachSingularSeries.coefficient
+          (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n d
+        ‖cataloguePairSum Z P (catalogueArcTerm m n P) -
+          (S*(n:ℂ) + cataloguePairSum (Z.erase none) P (catalogueBetaTerm n))‖ ≤
+            S.re*(C*X^(1-κ)) := by
+  classical
+  obtain ⟨a,A,ha,hA,arcs⟩ := nearOneCatalogue_summed_power_saving H T hH hT
+  obtain ⟨b,B,hb,hB,mixed⟩ := catalogue_mixed_beta_decay H T hH hT
+  obtain ⟨D,hD,mass⟩ := nearOne_zero_multiplicity_bounded H T hH hT
+  refine ⟨min a b,A+(1+D)^2*B,lt_min ha hb,by positivity,?_⟩
+  filter_upwards [arcs,mass] with Q arc total
+  intro m hm hQ X Z
+  obtain ⟨P,hP,hP',rule⟩ := arc m hm hQ
+  refine ⟨P,hP,hP',?_⟩
+  intro n hn hn' he S
+  have x1 : 1 ≤ X := by dsimp only [X];exact_mod_cast (by omega : 1 ≤ m+2)
+  have s0 : 0 ≤ S.re := (norm_nonneg _).trans (TwistedGoldbachSingularSeries.infinite_domination isPrimitive_one_level_one isPrimitive_one_level_one n hn)
+  have factor : 0 ≤ S.re*(B*X^(1-b)) := by positivity
+  have point (i : CatalogueEntry) (hi : i ∈ Z) (j : CatalogueEntry) (hj : j ∈ Z)
+      (_ : (Nat.lcm (catalogueLevel i) (catalogueLevel j):ℝ) ≤ P) :
+      ‖catalogueBetaTerm n i j - unmixedBetaTerm n i j‖ ≤ S.re*(B*X^(1-b)) := by
+    by_cases h : i.isSome = j.isSome
+    · simpa only [unmixedBetaTerm,ite_eq_left h,sub_self,norm_zero] using factor
+    · simp only [unmixedBetaTerm,ite_eq_right h,sub_zero]
+      cases i with
+      | none =>
+        cases j with
+        | none => exact (h rfl).elim
+        | some j => rw [catalogueBetaTerm_swap];exact mixed m Q (m+2) n (by omega) hn hn' he _ hj (by simp)
+      | some i =>
+        cases j with
+        | none => exact mixed m Q (m+2) n (by omega) hn hn' he _ hi (by simp)
+        | some j => exact (h rfl).elim
+  have hsum : (∑ i ∈ Z, ‖catalogueWeight i‖) ≤ 1+D := by
+    change (∑ i ∈ nearOneCatalogue m Q (m+2) H T, _) ≤ _
+    rw [catalogue_mass]
+    exact add_le_add_right (total m (m+2) hQ) 1
+  have approx := (catalogue_pair_sum_error Z P _ factor _ _ point).trans
+    (mul_le_mul_of_nonneg_right (pow_le_pow_left₀ (sum_nonneg (fun _ _ => norm_nonneg _)) hsum 2) factor)
+  have zmem : none ∈ Z := by change none ∈ nearOneCatalogue ..;exact mem_insert_self ..
+  have p1 : 1 ≤ P := (Real.one_le_rpow x1 (by norm_num : 0 ≤ (11/40:ℝ))).trans hP
+  rw [unmixed_sum Z n P zmem p1,catalogue_pole_term] at approx
+  apply (norm_sub_le_norm_sub_add_norm_sub _ (cataloguePairSum Z P (catalogueBetaTerm n)) _).trans ((add_le_add (rule n hn hn' he) approx).trans ?_)
+  have pa := Real.rpow_le_rpow_of_exponent_le x1 (sub_le_sub_left (min_le_left a b) 1)
+  have pb := Real.rpow_le_rpow_of_exponent_le x1 (sub_le_sub_left (min_le_right a b) 1)
+  calc
+    _ = S.re*(A*X^(1-a)) + ((1+D)^2*(S.re*B))*X^(1-b) := by ring
+    _ ≤ S.re*(A*X^(1-min a b)) + ((1+D)^2*(S.re*B))*X^(1-min a b) := add_le_add
+      (mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left pa hA.le) s0)
+      (mul_le_mul_of_nonneg_left pb (by positivity))
+    _ = _ := by ring
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset DirichletCharacter
+open scoped ComplexConjugate
+noncomputable section
+namespace Conjectures.Goldbach.TwistedGoldbachPairMean
+open TwistedGoldbachLocalProduct TwistedGoldbachMixedPrincipal TwistedGoldbachSingularSeries
+
+/-- Sum of squared target-frequency Gauss sums over an entire residue period. -/
+private theorem gauss_target_energy {L : ℕ} [NeZero L] (χ : DirichletCharacter ℂ L) :
+    (∑ u : ZMod L, ‖gaussSum χ (ZMod.stdAddChar.mulShift (-u))‖^2) ≤ (L:ℝ)^2 := by
+  let K (r u : ZMod L) : ℂ := ZMod.stdAddChar (-u*r)
+  have conjPhase (v : ZMod L) : conj (ZMod.stdAddChar v) = ZMod.stdAddChar (-v) := by
+    rw [ZMod.stdAddChar_apply,ZMod.stdAddChar_apply,AddChar.map_neg_eq_inv,Circle.coe_inv_eq_conj]
+  have cols (r s : ZMod L) : (∑ u : ZMod L, conj (K r u)*K s u) = if r=s then (L:ℂ) else 0 := by
+    have prod (u : ZMod L) : conj (K r u)*K s u = ZMod.stdAddChar ((r-s)*u) := by
+      change conj (ZMod.stdAddChar (-u*r)) * ZMod.stdAddChar (-u*s) = _
+      rw [conjPhase,←AddChar.map_add_eq_mul]
+      exact congrArg ZMod.stdAddChar (by ring)
+    simp_rw [prod]
+    by_cases h : r=s
+    · simp [h]
+    · rw [ite_eq_right h]
+      exact AddChar.sum_eq_zero_of_ne_one (ZMod.isPrimitive_stdAddChar L (sub_ne_zero.mpr h))
+  have energy := GoldbachGRHWindow.norm_energy_of_columns K (fun _ => (L:ℝ)) (by simpa only [Complex.ofReal_natCast] using cols) (fun r => χ r)
+  change (∑ u : ZMod L, ‖∑ r : ZMod L, χ r*K r u‖^2) ≤ _
+  rw [energy,←mul_sum]
+  have h : (∑ r : ZMod L, ‖χ r‖^2) ≤ (L:ℝ) := calc
+    _ ≤ ∑ _r : ZMod L, (1:ℝ)^2 := sum_le_sum (fun r _ => pow_le_pow_left₀ (norm_nonneg _) (χ.norm_le_one r) 2)
+    _ = _ := by simp
+  exact (mul_le_mul_of_nonneg_left h (Nat.cast_nonneg L)).trans_eq (sq _).symm
+
+/-- Twice the absolute least-denominator Fourier coefficient. This is a
+periodic majorant for the ratio to the ordinary singular series at positive even targets. -/
+def relativeMajorant {L : ℕ} [NeZero L] (A B : DirichletCharacter ℂ L) (u : ZMod L) : ℝ :=
+  2*‖gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar *
+    gaussSum (A*B)⁻¹ (ZMod.stdAddChar.mulShift (-u))/(L.totient:ℂ)^2‖
+
+theorem relativeMajorant_energy {L : ℕ} [NeZero L] (A B : DirichletCharacter ℂ L) :
+    (∑ u : ZMod L, relativeMajorant A B u ^ 2) ≤ 4*((L:ℝ)/L.totient)^4 := by
+  let Z := (A*B)⁻¹
+  let F := 2*‖gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar‖/(L.totient:ℝ)^2
+  have point (u : ZMod L) : relativeMajorant A B u ^ 2 = F^2 * ‖gaussSum Z (ZMod.stdAddChar.mulShift (-u))‖^2 := by
+    dsimp only [F,relativeMajorant,Z];rw [norm_div,norm_pow,Complex.norm_natCast,norm_mul];ring
+  have amp (χ : DirichletCharacter ℂ L) : ‖gaussSum χ ZMod.stdAddChar‖ ≤ Real.sqrt L :=
+    (B13BilateralVaughanReductionProof.DyadicMixedB4CharacterFactorBound.norm_dirichlet_gauss_standard χ).trans
+      (Real.sqrt_le_sqrt (by exact_mod_cast Nat.le_of_dvd (NeZero.pos L) χ.conductor_dvd_level))
+  have fbound : F ≤ 2*(L:ℝ)/(L.totient:ℝ)^2 := by
+    apply div_le_div_of_nonneg_right _ (sq_nonneg _)
+    apply mul_le_mul_of_nonneg_left _ (by norm_num : (0:ℝ) ≤ 2)
+    rw [norm_mul]
+    exact (mul_le_mul (amp A) (amp B) (norm_nonneg _) (Real.sqrt_nonneg _)).trans_eq (Real.mul_self_sqrt (Nat.cast_nonneg L))
+  have f0 : 0 ≤ F := by dsimp only [F];positivity
+  simp_rw [point]
+  rw [←mul_sum]
+  apply (mul_le_mul (pow_le_pow_left₀ f0 fbound 2) (gauss_target_energy Z) (sum_nonneg (fun _ _ => sq_nonneg _)) (sq_nonneg _)).trans_eq
+  ring
+
+/-- The normalized infinite singular series is pointwise dominated by a single
+periodic function at the *least* common conductor. -/
+theorem series_le_relativeMajorant {r s : ℕ} [NeZero r] [NeZero s] {α : DirichletCharacter ℂ r}
+    {β : DirichletCharacter ℂ s} (hα : α.IsPrimitive) (hβ : β.IsPrimitive) (n : ℕ) (hn : 0 < n) (he : Even n) :
+    let L := Nat.lcm r s
+    let _ : NeZero L := ⟨(Nat.lcm_pos (NeZero.pos r) (NeZero.pos s)).ne'⟩
+    ‖series α β n / series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n‖ ≤
+      relativeMajorant (changeLevel (Nat.dvd_lcm_left r s) α) (changeLevel (Nat.dvd_lcm_right r s) β) (n:ZMod L) := by
+  intro L inst
+  let _ : NeZero L := inst
+  let A := changeLevel (Nat.dvd_lcm_left r s) α
+  let B := changeLevel (Nat.dvd_lcm_right r s) β
+  let R := series α β n / series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n
+  have h := TwistedGoldbachCoefficientProduct.partial_sums hα hβ (Nat.dvd_lcm_left r s) (Nat.dvd_lcm_right r s) n hn he
+  rw [sum_eq_single_of_mem L (Nat.mem_divisors_self L (NeZero.ne L))] at h
+  · have point : ‖coefficient α β n L‖ = ‖R‖ * |ordinaryWeight L n| := by
+      rw [h,norm_mul,Complex.norm_real,Real.norm_eq_abs]
+    have low : 1/2 ≤ ordinaryWeight L n := by
+      apply le_trans _ (uniform_weight L n he);split <;> norm_num
+    have low' : (1/2:ℝ) ≤ |ordinaryWeight L n| := low.trans (le_abs_self _)
+    have cmp := (mul_le_mul_of_nonneg_left low' (norm_nonneg R)).trans_eq point.symm
+    change ‖R‖ ≤ relativeMajorant A B (n:ZMod L)
+    have eqnorm : relativeMajorant A B (n:ZMod L) = 2*‖coefficient α β n L‖ := by
+      have div : r ∣ L ∧ s ∣ L := ⟨Nat.dvd_lcm_left ..,Nat.dvd_lcm_right ..⟩
+      simp only [relativeMajorant,coefficient,dite_eq_left (NeZero.ne L),dite_eq_left div,gaussCoefficient,A,B]
+      rfl
+    rw [eqnorm];linarith only [cmp]
+  · intro d hd ne
+    apply TwistedGoldbachCoefficientProduct.off_level
+    intro div
+    exact ne (Nat.dvd_antisymm (Nat.dvd_of_mem_divisors hd) div)
+
+end Conjectures.Goldbach.TwistedGoldbachPairMean
+end
+end
+
+section
+open Complex Finset DirichletCharacter
+noncomputable section
+namespace Conjectures.Goldbach.TwistedGoldbachPairMean
+open TwistedGoldbachLocalProduct
+
+private theorem periodic_energy {L : ℕ} [NeZero L] (f : ZMod L → ℝ) (X : ℕ) :
+    (∑ n ∈ range (X+1), f n ^ 2) ≤ ((X:ℝ)/L+1)*(∑ u : ZMod L, f u ^ 2) := by
+  let B := X/L+1
+  have cover : X+1 ≤ L*B := by
+    have h := (Nat.div_lt_iff_lt_mul (NeZero.pos L)).mp (Nat.lt_succ_self (X/L))
+    simpa only [B,Nat.mul_comm (X/L+1) L,Nat.succ_eq_add_one] using Nat.succ_le_of_lt h
+  calc
+    _ ≤ ∑ n ∈ range (L*B), f n ^ 2 := sum_le_sum_of_subset_of_nonneg (range_mono cover) (fun _ _ _ => sq_nonneg _)
+    _ = (B:ℝ)*(∑ u : ZMod L, f u ^ 2) := by
+      rw [B13BilateralVaughanReductionProof.DyadicMixedB4GaussLift.sum_range_blocks]
+      simp only [Nat.cast_add,Nat.cast_mul,ZMod.natCast_self,zero_mul,zero_add,sum_const,card_range,nsmul_eq_mul]
+      exact congrArg ((B:ℝ)*·) (B13BilateralVaughanReductionProof.DyadicMixedB4DualCharacter.sum_natCast_range_eq_zmod (fun u : ZMod L => f u ^ 2))
+    _ ≤ _ := mul_le_mul_of_nonneg_right (by simpa only [B,Nat.cast_add,Nat.cast_one] using
+      (add_le_add_left (Nat.cast_div_le (α := ℝ) (m := X) (n := L)) 1)) (sum_nonneg (fun _ _ => sq_nonneg _))
+
+def largePairTargets {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) (X : ℕ) (η : ℝ) : Finset ℕ := by
+  classical
+  exact (range (X+1)).filter (fun n => 0 < n ∧ Even n ∧
+    η ≤ ‖series α β n / series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n‖)
+
+/-- For a fixed pair, a singular series comparable to the ordinary one can
+occur on only a small number of targets per least-conductor period. -/
+theorem largePairTargets_card {r s : ℕ} [NeZero r] [NeZero s] {α : DirichletCharacter ℂ r}
+    {β : DirichletCharacter ℂ s} (hα : α.IsPrimitive) (hβ : β.IsPrimitive) (X : ℕ) (η : ℝ) (hη : 0 < η) :
+    let L := Nat.lcm r s
+    ((largePairTargets α β X η).card:ℝ)*η^2 ≤ ((X:ℝ)/L+1)*(4*((L:ℝ)/L.totient)^4) := by
+  classical
+  intro L
+  let _ : NeZero L := ⟨(Nat.lcm_pos (NeZero.pos r) (NeZero.pos s)).ne'⟩
+  let A := changeLevel (Nat.dvd_lcm_left r s) α
+  let B := changeLevel (Nat.dvd_lcm_right r s) β
+  let D := largePairTargets α β X η
+  calc
+    _ = ∑ _n ∈ D, η^2 := by rw [sum_const,nsmul_eq_mul]
+    _ ≤ ∑ n ∈ D, relativeMajorant A B (n:ZMod L)^2 := by
+      apply sum_le_sum
+      intro n hn
+      obtain ⟨_,hn,he,big⟩ := mem_filter.mp hn
+      exact pow_le_pow_left₀ hη.le (big.trans (series_le_relativeMajorant hα hβ n hn he)) 2
+    _ ≤ ∑ n ∈ range (X+1), relativeMajorant A B (n:ZMod L)^2 :=
+      sum_le_sum_of_subset_of_nonneg (filter_subset ..) (fun _ _ _ => sq_nonneg _)
+    _ ≤ _ := (periodic_energy (relativeMajorant A B) X).trans
+      (mul_le_mul_of_nonneg_left (relativeMajorant_energy A B) (by positivity))
+
+/-- A least common conductor at least X^a costs at most O(X^(1-a+ε))
+exceptional targets, uniformly in both primitive characters. -/
+theorem largePairTargets_power (a ε η : ℝ) (hε : 0 < ε) (hη : 0 < η) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (X r s : ℕ) [NeZero r] [NeZero s] (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s),
+      α.IsPrimitive → β.IsPrimitive → 0 < X → (X:ℝ)^a ≤ Nat.lcm r s → Nat.lcm r s ≤ X →
+        ((largePairTargets α β X η).card:ℝ) ≤ C*(X:ℝ)^(1-a+ε) := by
+  let M := 8+4/(ε/4)
+  have hm : 0 < M := by dsimp only [M];positivity
+  refine ⟨8*M^4/η^2,by positivity,?_⟩
+  intro X r s _ _ α β hα hβ hX low high
+  let L := Nat.lcm r s
+  have l0 : 0 < L := Nat.lcm_pos (NeZero.pos r) (NeZero.pos s)
+  have lpos : 0 < (L:ℝ) := Nat.cast_pos.mpr l0
+  have x0 : 0 < (X:ℝ) := Nat.cast_pos.mpr hX
+  have lx : (L:ℝ) ≤ X := Nat.cast_le.mpr high
+  have block : (X:ℝ)/L + 1 ≤ 2*(X:ℝ)^(1-a) := calc
+    _ ≤ (X:ℝ)/L + X/L := add_le_add_right ((one_le_div lpos).mpr lx) _
+    _ ≤ 2*((X:ℝ)/(X:ℝ)^a) := by
+      have h := div_le_div_of_nonneg_left x0.le (Real.rpow_pos_of_pos x0 a) low
+      linarith only [h]
+    _ = _ := by rw [Real.rpow_sub x0,Real.rpow_one]
+  have phi : (L:ℝ)/L.totient ≤ M*(X:ℝ)^(ε/4) :=
+    (DeepThreeQuarters.totient_ratio_le_rpow (show 0 < ε/4 by positivity) L l0).trans
+      (mul_le_mul_of_nonneg_left (Real.rpow_le_rpow lpos.le lx (by positivity)) hm.le)
+  have four : ((L:ℝ)/L.totient)^4 ≤ M^4*(X:ℝ)^ε := by
+    apply (pow_le_pow_left₀ (by positivity) phi 4).trans_eq
+    rw [mul_pow,←Real.rpow_mul_natCast x0.le];congr 2;ring
+  have combined := (largePairTargets_card hα hβ X η hη).trans
+    (mul_le_mul block (mul_le_mul_of_nonneg_left four (by norm_num : (0:ℝ) ≤ 4)) (by positivity) (by positivity))
+  calc
+    _ ≤ (2*(X:ℝ)^(1-a)*(4*(M^4*(X:ℝ)^ε)))/η^2 := (le_div_iff₀ (sq_pos_of_pos hη)).mpr combined
+    _ = _ := by rw [Real.rpow_add x0];ring
+
+end Conjectures.Goldbach.TwistedGoldbachPairMean
+end
+end
+
+section
+open Complex Finset DirichletCharacter
+noncomputable section
+namespace Conjectures.Goldbach.TwistedGoldbachPairMean
+open TwistedGoldbachSingularSeries TwistedGoldbachMixedPrincipal B13BilateralVaughanReductionProof
+
+/-- Additive order of the target reduced modulo the least common conductor. -/
+def targetOrder (L n : ℕ) := L / n.gcd L
+
+private theorem order_data {L : ℕ} [NeZero L] (n : ℕ) :
+    0 < targetOrder L n ∧ targetOrder L n ∣ L ∧
+      L/(targetOrder L n)*(n/(n.gcd L)) = n ∧ (n/(n.gcd L)).Coprime (targetOrder L n) := by
+  let g := n.gcd L
+  let R := targetOrder L n
+  have gd : g ∣ L := Nat.gcd_dvd_right ..
+  have pos := Nat.div_pos (Nat.le_of_dvd (NeZero.pos L) gd) (Nat.gcd_pos_of_pos_right n (NeZero.pos L))
+  have rg : R*g = L := Nat.div_mul_cancel gd
+  have quotient : L/R = g := (congrArg (·/R) rg.symm).trans (Nat.mul_div_cancel_left g (show 0 < R from pos))
+  exact ⟨pos,Nat.div_dvd_of_dvd gd,by change L/R*(n/g)=n; rw [quotient,Nat.mul_div_cancel' (Nat.gcd_dvd_left ..)],
+    Nat.coprime_div_gcd_div_gcd (Nat.gcd_pos_of_pos_right n (NeZero.pos L))⟩
+
+/-- Descent to the denominator of the target frequency enforces divisibility
+by the product conductor and bounds the surviving Gauss sum sharply. -/
+private theorem target_gauss_bound {L : ℕ} [NeZero L] (χ : DirichletCharacter ℂ L) (n : ℕ) :
+    let R := targetOrder L n
+    ‖gaussSum χ (ZMod.stdAddChar.mulShift (-(n:ZMod L)))‖/(L.totient:ℝ) ≤
+      if χ.conductor ∣ R then Real.sqrt R / R.totient else 0 := by
+  classical
+  intro R
+  obtain ⟨pos,div,nrepr,cop⟩ := order_data (L := L) n
+  let _ : NeZero R := ⟨pos.ne'⟩
+  let k := n/(n.gcd L)
+  have bound : ‖gaussSum χ (ZMod.stdAddChar.mulShift (-(n:ZMod L)))‖/(L.totient:ℝ) ≤ ‖amplitude χ n‖ := by
+    rw [amplitude,norm_div,Complex.norm_natCast]
+    exact div_le_div_of_nonneg_right (DyadicMixedB4CharacterFactorBound.norm_gauss_neg_shift_le χ (n:ZMod L)) (Nat.cast_nonneg _)
+  apply bound.trans
+  have eqn := amplitude_at_divisor div χ k
+  change L/R*k=n at nrepr
+  rw [nrepr] at eqn
+  rw [eqn]
+  split_ifs with h cd cd
+  · let θ : DirichletCharacter ℂ R := h.χ₀
+    have gauss : gaussSum θ (ZMod.stdAddChar.mulShift (k:ZMod R)) = θ⁻¹ (k:ZMod R)*gaussSum θ ZMod.stdAddChar :=
+      gaussSum_mulShift_eq θ ZMod.stdAddChar (ZMod.unitOfCoprime k cop)
+    change ‖amplitude θ k‖ ≤ _
+    rw [amplitude,norm_div,Complex.norm_natCast,gauss,norm_mul]
+    apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)
+    have g : ‖gaussSum θ ZMod.stdAddChar‖ ≤ Real.sqrt R := (DyadicMixedB4CharacterFactorBound.norm_dirichlet_gauss_standard θ).trans
+      (Real.sqrt_le_sqrt (by exact_mod_cast Nat.le_of_dvd pos θ.conductor_dvd_level))
+    exact (mul_le_mul (θ⁻¹.norm_le_one _) g (norm_nonneg _) zero_le_one).trans_eq (one_mul _)
+  · exact (cd (conductor_dvd_of_mem_conductorSet χ h)).elim
+  · simp only [norm_zero];positivity
+  · simp only [norm_zero,le_refl]
+
+private theorem phi_prod (q : ℕ) (hq : 0 < q) :
+    (q:ℝ)/q.totient = ∏ p ∈ q.primeFactors, (p:ℝ)/((p:ℝ)-1) := by
+  have nz : (∏ p ∈ q.primeFactors, ((p:ℝ)-1)) ≠ 0 := by
+    apply ne_of_gt;apply prod_pos;intro p h
+    exact sub_pos.mpr (by exact_mod_cast (Nat.prime_of_mem_primeFactors h).one_lt)
+  have φ : (q.totient:ℝ) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.totient_pos.mpr hq).ne'
+  have id := congrArg (fun v : ℕ => (v:ℝ)) (Nat.totient_mul_prod_primeFactors q)
+  simp only [Nat.cast_mul,Nat.cast_prod] at id
+  have prod : (∏ p ∈ q.primeFactors, ((p-1:ℕ):ℝ)) = ∏ p ∈ q.primeFactors, ((p:ℝ)-1) := by
+    apply prod_congr rfl
+    intro p hp
+    rw [Nat.cast_sub (Nat.prime_of_mem_primeFactors hp).one_le,Nat.cast_one]
+  rw [prod] at id
+  rw [prod_div_distrib,div_eq_div_iff φ nz];linarith only [id]
+
+/-- The local factors at primes dividing the target exactly absorb the
+ordinary totient loss. Only primes of the reduced target order remain. -/
+theorem phi_relative_weight {L : ℕ} [NeZero L] (n : ℕ) (he : Even n) :
+    let R := targetOrder L n
+    (L:ℝ)/L.totient ≤ ordinaryWeight L n * ((R:ℝ)/R.totient)^2 := by
+  classical
+  intro R
+  obtain ⟨r0,rl,_,_⟩ := order_data (L := L) n
+  let F (p : ℕ) : ℝ := (p:ℝ)/((p:ℝ)-1)
+  let V (p : ℕ) := if p ∈ R.primeFactors then F p ^ 2 else 1
+  have pos (p : ℕ) (hp : p.Prime) : 0 < (p:ℝ)-1 := sub_pos.mpr (by exact_mod_cast hp.one_lt)
+  have one (p : ℕ) (hp : p.Prime) : 1 ≤ F p := (one_le_div (pos p hp)).mpr (sub_le_self _ zero_le_one)
+  have step (p : ℕ) (hp : p ∈ L.primeFactors) : F p ≤ localWeight n p * V p := by
+    have pr := Nat.prime_of_mem_primeFactors hp
+    by_cases hn : p ∣ n
+    · have v : 1 ≤ V p := by
+        dsimp only [V];split_ifs
+        · exact one_le_pow₀ (one p pr)
+        · rfl
+      have eqn : localWeight n p = F p := by simp only [localWeight,ite_eq_left hn,F]
+      rw [eqn];simpa only [mul_one] using mul_le_mul_of_nonneg_left v (zero_le_one.trans (one p pr))
+    · have hR : p ∣ R := by
+        have d := Nat.dvd_of_mem_primeFactors hp
+        have rg : R*n.gcd L=L := Nat.div_mul_cancel (Nat.gcd_dvd_right ..)
+        rw [←rg] at d
+        exact (pr.dvd_mul.mp d).resolve_right (fun e => hn (e.trans (Nat.gcd_dvd_left ..)))
+      have mem : p ∈ R.primeFactors := Nat.mem_primeFactors.mpr ⟨pr,hR,r0.ne'⟩
+      have p3 : 3 ≤ p := by
+        have h2 : p ≠ 2 := fun e => hn (e ▸ even_iff_two_dvd.mp he)
+        have := pr.two_le
+        omega
+      have pp : (3:ℝ) ≤ p := by exact_mod_cast p3
+      rw [show V p = F p^2 from ite_eq_left mem,localWeight,ite_eq_right hn]
+      dsimp only [F]
+      field_simp [show (0:ℝ)<(p:ℝ)-1 from pos p pr]
+      nlinarith only [mul_nonneg (by positivity : 0 ≤ (p:ℝ)) (by linarith only [pp] : 0 ≤ (p:ℝ)-3)]
+  have subset : R.primeFactors ⊆ L.primeFactors := Nat.primeFactors_mono rl (NeZero.ne L)
+  have prodV : (∏ p ∈ L.primeFactors, V p) = (∏ p ∈ R.primeFactors, F p)^2 := by
+    simp only [V,prod_ite_mem,inter_eq_right.mpr subset,prod_pow]
+  rw [phi_prod L (NeZero.pos L),ordinary_product,phi_prod R r0,←prodV,←prod_mul_distrib]
+  exact prod_le_prod₀ (fun p hp => zero_le_one.trans (one p (Nat.prime_of_mem_primeFactors hp))) step
+
+end Conjectures.Goldbach.TwistedGoldbachPairMean
+end
+end
+
+section
+open Complex Finset DirichletCharacter
+noncomputable section
+namespace Conjectures.Goldbach.TwistedGoldbachPairMean
+open TwistedGoldbachSingularSeries TwistedGoldbachMixedPrincipal TwistedGoldbachLocalProduct B13BilateralVaughanReductionProof
+
+/-- Conductor of the product after the two primitive source characters have
+been lifted to their least common level. -/
+def jointConductor {r s : ℕ} (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s) :=
+  (changeLevel (Nat.dvd_lcm_left r s) α * changeLevel (Nat.dvd_lcm_right r s) β).conductor
+
+/-- Uniform decay with the additive order of the target. The conductor of
+the product of the two lifted characters must divide this order for the
+infinite singular series to contribute. -/
+theorem relative_order_bound {r s : ℕ} [NeZero r] [NeZero s] {α : DirichletCharacter ℂ r}
+    {β : DirichletCharacter ℂ s} (hα : α.IsPrimitive) (hβ : β.IsPrimitive) (n : ℕ) (hn : 0 < n) (he : Even n) :
+    let R := targetOrder (Nat.lcm r s) n
+    ‖series α β n / series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n‖ ≤
+      if jointConductor α β ∣ R then ((R:ℝ)/R.totient)^3 * (R:ℝ)^(-(1/2:ℝ)) else 0 := by
+  intro R
+  let L := Nat.lcm r s
+  let _ : NeZero L := ⟨(Nat.lcm_pos (NeZero.pos r) (NeZero.pos s)).ne'⟩
+  let A := changeLevel (Nat.dvd_lcm_left r s) α
+  let B := changeLevel (Nat.dvd_lcm_right r s) β
+  let Z := (A*B)⁻¹
+  let F := (R:ℝ)/R.totient
+  let rel := series α β n / series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n
+  let W := ordinaryWeight L n
+  have r0 : 0 < R := (order_data (L := L) n).1
+  have rp : 0 < (R:ℝ) := Nat.cast_pos.mpr r0
+  have φL : 0 < (L.totient:ℝ) := Nat.cast_pos.mpr (Nat.totient_pos.mpr (NeZero.pos L))
+  have w0 : 0 < W := by
+    apply lt_of_lt_of_le _ (uniform_weight L n he);split <;> norm_num
+  have id := TwistedGoldbachCoefficientProduct.partial_sums hα hβ (Nat.dvd_lcm_left r s) (Nat.dvd_lcm_right r s) n hn he
+  rw [sum_eq_single_of_mem L (Nat.mem_divisors_self L (NeZero.ne L))] at id
+  rotate_left
+  · intro d hd hne
+    apply TwistedGoldbachCoefficientProduct.off_level;intro dv
+    exact hne (Nat.dvd_antisymm (Nat.dvd_of_mem_divisors hd) dv)
+  have absid : ‖rel‖*W = ‖coefficient α β n L‖ := by
+    rw [id,norm_mul,Complex.norm_real,Real.norm_eq_abs,abs_of_nonneg w0.le]
+  let G := ‖gaussSum Z (ZMod.stdAddChar.mulShift (-(n:ZMod L)))‖/(L.totient:ℝ)
+  have product : ‖coefficient α β n L‖ =
+      (‖gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar‖/(L.totient:ℝ))*G := by
+    have div : r ∣ L ∧ s ∣ L := ⟨Nat.dvd_lcm_left ..,Nat.dvd_lcm_right ..⟩
+    simp only [coefficient,dite_eq_left (NeZero.ne L),dite_eq_left div,gaussCoefficient,norm_div,norm_pow,Complex.norm_natCast]
+    change ‖(gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar)*_‖ / (L.totient:ℝ)^2 = _
+    rw [norm_mul];dsimp only [G,Z];ring
+  have amp (χ : DirichletCharacter ℂ L) : ‖gaussSum χ ZMod.stdAddChar‖ ≤ Real.sqrt L :=
+    (DyadicMixedB4CharacterFactorBound.norm_dirichlet_gauss_standard χ).trans
+      (Real.sqrt_le_sqrt (by exact_mod_cast Nat.le_of_dvd (NeZero.pos L) χ.conductor_dvd_level))
+  have pair : ‖gaussSum A ZMod.stdAddChar * gaussSum B ZMod.stdAddChar‖/(L.totient:ℝ) ≤ (L:ℝ)/L.totient := by
+    apply div_le_div_of_nonneg_right _ φL.le;rw [norm_mul]
+    exact (mul_le_mul (amp A) (amp B) (norm_nonneg _) (Real.sqrt_nonneg _)).trans_eq (Real.mul_self_sqrt (Nat.cast_nonneg L))
+  have gauss := target_gauss_bound Z n
+  have joint : Z.conductor = jointConductor α β := conductor_inv _
+  change G ≤ if Z.conductor ∣ R then Real.sqrt R / R.totient else 0 at gauss
+  rw [joint] at gauss
+  have major := (absid.trans product).le.trans (mul_le_mul pair gauss (by dsimp only [G];positivity) (div_nonneg (Nat.cast_nonneg _) φL.le))
+  by_cases hd : jointConductor α β ∣ R
+  · rw [ite_eq_left hd] at major ⊢
+    have phi := phi_relative_weight (L := L) n he
+    have mult := major.trans (mul_le_mul_of_nonneg_right phi (by positivity : 0 ≤ Real.sqrt R/(R.totient:ℝ)))
+    have final : F^2*(Real.sqrt R/(R.totient:ℝ)) = F^3*(R:ℝ)^(-(1/2:ℝ)) := by
+      rw [Real.rpow_neg rp.le,←Real.sqrt_eq_rpow]
+      dsimp only [F]
+      field_simp [Nat.cast_ne_zero.mpr (Nat.totient_pos.mpr r0).ne',(Real.sqrt_pos.mpr rp).ne']
+      nlinarith only [Real.sq_sqrt rp.le]
+    apply le_of_mul_le_mul_right _ w0
+    calc
+      _ ≤ (W*F^2)*(Real.sqrt R/(R.totient:ℝ)) := mult
+      _ = W*(F^2*(Real.sqrt R/(R.totient:ℝ))) := mul_assoc ..
+      _ = _ := by rw [final,mul_comm]
+  · rw [ite_eq_right hd,mul_zero] at major
+    rw [ite_eq_right hd]
+    exact le_of_mul_le_mul_right (major.trans_eq (zero_mul W).symm) w0
+
+/-- A fixed constant controls the full singular-series ratio by the inverse
+fourth root of the reduced target order, for every pair and every even target. -/
+theorem relative_order_decay {r s : ℕ} [NeZero r] [NeZero s] {α : DirichletCharacter ℂ r}
+    {β : DirichletCharacter ℂ s} (hα : α.IsPrimitive) (hβ : β.IsPrimitive) (n : ℕ) (hn : 0 < n) (he : Even n) :
+    let R := targetOrder (Nat.lcm r s) n
+    ‖series α β n / series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n‖ ≤
+      if jointConductor α β ∣ R then 56^3 * (R:ℝ)^(-(1/4:ℝ)) else 0 := by
+  intro R
+  let _ : NeZero (Nat.lcm r s) := ⟨(Nat.lcm_pos (NeZero.pos r) (NeZero.pos s)).ne'⟩
+  have pos : 0 < R := (order_data (L := Nat.lcm r s) n).1
+  have rp : 0 < (R:ℝ) := Nat.cast_pos.mpr pos
+  have h := DeepThreeQuarters.totient_ratio_le_rpow (show (0:ℝ) < 1/12 by norm_num) R pos
+  norm_num at h
+  apply (relative_order_bound hα hβ n hn he).trans
+  change (if jointConductor α β ∣ R then _ else (0:ℝ)) ≤ _
+  split_ifs with hd
+  · apply (mul_le_mul_of_nonneg_right (pow_le_pow_left₀ (by positivity) h 3) (Real.rpow_nonneg rp.le _)).trans_eq
+    rw [mul_pow,←Real.rpow_mul_natCast rp.le,mul_assoc,←Real.rpow_add rp]
+    norm_num
+  · rfl
+
+end Conjectures.Goldbach.TwistedGoldbachPairMean
+end
+end
+
+section
+open Complex Finset Filter DirichletCharacter Goldbach GoldbachTwistedMellin
+noncomputable section
+namespace Conjectures.Goldbach.TwistedGoldbachPairMean
+open TwistedGoldbachLocalProduct
+
+/-- The same fixed multiplier works for all pairs and targets. A correction
+of a prescribed relative size forces both the least common level to divide
+K times the target and the product conductor to divide K. -/
+theorem large_series_forces_levels (η : ℝ) (hη : 0 < η) :
+    ∃ K : ℕ, 0 < K ∧ ∀ (r s : ℕ) [NeZero r] [NeZero s] (α : DirichletCharacter ℂ r)
+      (β : DirichletCharacter ℂ s), α.IsPrimitive → β.IsPrimitive → ∀ n : ℕ, 0 < n → Even n →
+      η ≤ ‖series α β n / series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n‖ →
+        Nat.lcm r s ∣ K*n ∧ jointConductor α β ∣ K := by
+  let A : ℝ := 56^3
+  let M := ⌈(A/η)^4⌉₊
+  refine ⟨M.factorial,Nat.factorial_pos _,?_⟩
+  intro r s _ _ α β hα hβ n hn he big
+  let L := Nat.lcm r s
+  let R := targetOrder L n
+  have lpos : 0 < L := Nat.lcm_pos (NeZero.pos r) (NeZero.pos s)
+  have gpos := Nat.gcd_pos_of_pos_right n lpos
+  have rpos : 0 < R := Nat.div_pos (Nat.le_of_dvd lpos (Nat.gcd_dvd_right ..)) gpos
+  have rp : 0 < (R:ℝ) := Nat.cast_pos.mpr rpos
+  have bd := big.trans (relative_order_decay hα hβ n hn he)
+  change η ≤ if jointConductor α β ∣ R then A*(R:ℝ)^(-(1/4:ℝ)) else 0 at bd
+  split_ifs at bd with div
+  · rw [Real.rpow_neg rp.le,←div_eq_mul_inv] at bd
+    have width : (R:ℝ)^(1/4:ℝ) ≤ A/η := (le_div_iff₀ hη).mpr
+      ((mul_comm _ _).trans_le ((le_div_iff₀ (Real.rpow_pos_of_pos rp _)).mp bd))
+    have raised := pow_le_pow_left₀ (Real.rpow_nonneg rp.le _) width 4
+    rw [←Real.rpow_mul_natCast rp.le,show (1/4:ℝ)*(4:ℕ) = 1 by norm_num,Real.rpow_one] at raised
+    have rM : R ≤ M := Nat.cast_le.mp (raised.trans (Nat.le_ceil _))
+    have rK := Nat.dvd_factorial rpos rM
+    have base : R*n.gcd L = L := Nat.div_mul_cancel (Nat.gcd_dvd_right ..)
+    have both : R*n.gcd L ∣ M.factorial*n := Nat.mul_dvd_mul rK (Nat.gcd_dvd_left ..)
+    rw [base] at both
+    exact ⟨both,div.trans rK⟩
+  · exact (hη.not_ge bd).elim
+
+end Conjectures.Goldbach.TwistedGoldbachPairMean
+
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+open TwistedGoldbachPairMean TwistedGoldbachLocalProduct
+
+/-- Portion of the zero-pair term supported on levels dividing K*n and on
+pairs whose product character has conductor dividing the fixed integer K. -/
+def relatedBetaTerm (K n : ℕ) (v w : CatalogueEntry) : ℂ :=
+  if Nat.lcm (catalogueLevel v) (catalogueLevel w) ∣ K*n ∧
+    jointConductor (catalogueCharacter v)⁻¹ (catalogueCharacter w)⁻¹ ∣ K then
+    catalogueBetaTerm n v w else 0
+
+/-- Every bounded-height near-one zero pair failing either arithmetic
+condition can be discarded. Their combined effect is at most ε times the
+ordinary main term, uniformly in the common major-arc width. -/
+theorem nearOne_unrelated_pairs_small (H T ε : ℝ) (hH : 0 ≤ H) (hT : 0 ≤ T) (hε : 0 < ε) :
+    ∃ K : ℕ, 0 < K ∧ ∀ᶠ Q : ℕ in atTop, ∀ m X : ℕ, Q ≤ X →
+      let Z := (nearOneCatalogue m Q X H T).erase none
+      ∀ (n : ℕ) (P : ℝ), 0 < n → Even n →
+      let S := series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n
+      ‖cataloguePairSum Z P (catalogueBetaTerm n)-cataloguePairSum Z P (relatedBetaTerm K n)‖ ≤ S.re*((n:ℝ)*ε) := by
+  classical
+  obtain ⟨D,hD,total⟩ := nearOne_zero_multiplicity_bounded H T hH hT
+  let B := 1+‖Complex.betaIntegral (5/8:ℂ) (5/8:ℂ)‖
+  have b0 : 0 < B := by dsimp only [B];positivity
+  let η := ε/((1+D)^2*B)
+  have hη : 0 < η := by dsimp only [η];positivity
+  obtain ⟨K,hK,force⟩ := large_series_forces_levels η hη
+  refine ⟨K,hK,?_⟩
+  filter_upwards [total] with Q mass
+  intro m X hQ Z n P hn he S
+  have unit : 1 ≤ S.re := TwistedGoldbachMixedPrincipal.ordinary_at_least_one n hn he
+  have sn : ‖S‖ ≤ S.re := TwistedGoldbachSingularSeries.infinite_domination isPrimitive_one_level_one isPrimitive_one_level_one n hn
+  have nz : S ≠ 0 := fun eqn => by rw [eqn,Complex.zero_re] at unit;norm_num at unit
+  have hpos : 0 ≤ S.re := zero_le_one.trans unit
+  have nn : 1 ≤ (n:ℝ) := by exact_mod_cast hn
+  have factor : 0 ≤ (η*S.re)*((n:ℝ)*B) := by positivity
+  have point (i : CatalogueEntry) (hi : i ∈ Z) (j : CatalogueEntry) (hj : j ∈ Z)
+      (_ : (Nat.lcm (catalogueLevel i) (catalogueLevel j):ℝ) ≤ P) :
+      ‖catalogueBetaTerm n i j-relatedBetaTerm K n i j‖ ≤ (η*S.re)*((n:ℝ)*B) := by
+    unfold relatedBetaTerm
+    split_ifs with keep
+    · simpa only [sub_self,norm_zero] using factor
+    rw [sub_zero]
+    have pi := (catalogue_properties m Q X H T hT i (mem_of_mem_erase hi)).2
+    have pj := (catalogue_properties m Q X H T hT j (mem_of_mem_erase hj)).2
+    let α := (catalogueCharacter i)⁻¹
+    let β := (catalogueCharacter j)⁻¹
+    have small : ‖series α β n / S‖ < η := lt_of_not_ge (fun h => keep (force _ _ α β pi.1.inv pj.1.inv n hn he h))
+    have ser : ‖series α β n‖ ≤ η*S.re := calc
+      _ = ‖series α β n / S‖*‖S‖ := by rw [←norm_mul,div_mul_cancel₀ _ nz]
+      _ ≤ _ := mul_le_mul small.le sn (norm_nonneg _) hη.le
+    let s := (catalogueRoot i).getD 1
+    let t := (catalogueRoot j).getD 1
+    have pow : ‖(n:ℂ)^(s+t-1)‖ ≤ n := by
+      rw [norm_natCast_cpow_of_pos hn,sub_re,add_re,one_re]
+      have ls : s.re ≤ 1 := pi.2.2.1
+      have lt : t.re ≤ 1 := pj.2.2.1
+      simpa using Real.rpow_le_rpow_of_exponent_le nn (show s.re+t.re-1 ≤ 1 by linarith only [ls,lt])
+    have beta : ‖Complex.betaIntegral s t‖ ≤ B := by
+      apply (BinaryShiftCircle.norm_betaIntegral_le_diagonal (by norm_num : 0 < (5/8:ℝ)) pi.2.1 pj.2.1).trans
+      change ‖Complex.betaIntegral ((5/8:ℝ):ℂ) ((5/8:ℝ):ℂ)‖ ≤ 1+‖Complex.betaIntegral (5/8:ℂ) (5/8:ℂ)‖
+      push_cast;linarith
+    change ‖series α β n*((n:ℂ)^(s+t-1)*Complex.betaIntegral s t)‖ ≤ _
+    rw [norm_mul,norm_mul]
+    exact mul_le_mul ser (mul_le_mul pow beta (norm_nonneg _) (Nat.cast_nonneg _)) (mul_nonneg (norm_nonneg _) (norm_nonneg _)) (mul_nonneg hη.le hpos)
+  have weight : (∑ v ∈ Z, ‖catalogueWeight v‖) ≤ 1+D := calc
+    _ ≤ ∑ v ∈ nearOneCatalogue m Q X H T, ‖catalogueWeight v‖ :=
+      sum_le_sum_of_subset_of_nonneg (erase_subset ..) (fun _ _ _ => norm_nonneg _)
+    _ ≤ _ := by rw [catalogue_mass];exact add_le_add_right (mass m X hQ) 1
+  apply (catalogue_pair_sum_error Z P _ factor _ _ point).trans
+  apply (mul_le_mul_of_nonneg_right (pow_le_pow_left₀ (sum_nonneg (fun _ _ => norm_nonneg _)) weight 2) factor).trans_eq
+  dsimp only [η]
+  field_simp [b0.ne',show 1+D ≠ 0 by positivity]
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset Filter DirichletCharacter Goldbach GoldbachTwistedMellin
+open scoped Topology
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+open TwistedGoldbachPairMean TwistedGoldbachLocalProduct
+
+/-- On the entire upper half of the target interval the bounded-height near-one
+arcs equal the ordinary main term plus the arithmetically retained pairs,
+to within an arbitrarily small fixed fraction of the ordinary main term. -/
+theorem nearOne_related_formula (H T ε : ℝ) (hH : 0 ≤ H) (hT : 0 ≤ T) (hε : 0 < ε) :
+    ∃ K : ℕ, 0 < K ∧ ∀ᶠ Q : ℕ in atTop, ∀ m : ℕ, 2 ≤ m → Q ≤ m+2 →
+      let X : ℝ := (m+2:ℕ)
+      let Z := nearOneCatalogue m Q (m+2) H T
+      ∃ P : ℝ, X^(11/40:ℝ) ≤ P ∧ P ≤ X^(3/10:ℝ) ∧ ∀ n : ℕ, 0 < n → n ≤ m+2 → m+2 ≤ 2*n → Even n →
+        let S := series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n
+        ‖cataloguePairSum Z P (catalogueArcTerm m n P) -
+          (S*(n:ℂ) + cataloguePairSum (Z.erase none) P (relatedBetaTerm K n))‖ ≤ S.re*((n:ℝ)*ε) := by
+  obtain ⟨κ,C,hκ,hC,arc⟩ := nearOneCatalogue_pole_and_zero_pairs H T hH hT
+  obtain ⟨K,hK,res⟩ := nearOne_unrelated_pairs_small H T (ε/2) hH hT (by positivity)
+  have lim : Tendsto (fun x : ℕ => C*(x:ℝ)^(-κ)) atTop (𝓝 0) := by
+    simpa only [Function.comp_apply,mul_zero] using (tendsto_rpow_neg_atTop hκ |>.comp tendsto_natCast_atTop_atTop).const_mul C
+  obtain ⟨N,sm⟩ := eventually_atTop.mp (lim.eventually (Iio_mem_nhds (by positivity : (0:ℝ) < ε/4)))
+  refine ⟨K,hK,?_⟩
+  filter_upwards [arc,res,eventually_ge_atTop N] with Q exactArc rest hN
+  intro m hm hQ X Z
+  obtain ⟨P,hP,hP',rule⟩ := exactArc m hm hQ
+  refine ⟨P,hP,hP',?_⟩
+  intro n hn nX xn he S
+  have pos : 0 < X := by dsimp only [X];positivity
+  have s0 : 0 ≤ S.re := zero_le_one.trans (TwistedGoldbachMixedPrincipal.ordinary_at_least_one n hn he)
+  have half : X ≤ 2*(n:ℝ) := by dsimp only [X];exact_mod_cast xn
+  have small : C*X^(-κ) ≤ ε/4 := (sm (m+2) (hN.trans hQ)).le
+  have power : C*X^(1-κ) ≤ (n:ℝ)*(ε/2) := calc
+    _ = X*(C*X^(-κ)) := by rw [sub_eq_add_neg,Real.rpow_add pos,Real.rpow_one];ring
+    _ ≤ (2*(n:ℝ))*(ε/4) := mul_le_mul half small (mul_nonneg hC.le (Real.rpow_nonneg pos.le _)) (by positivity)
+    _ = _ := by ring
+  let U := S*(n:ℂ)+cataloguePairSum (Z.erase none) P (catalogueBetaTerm n)
+  have a := (rule n hn nX he).trans (mul_le_mul_of_nonneg_left power s0)
+  have b := rest m (m+2) hQ n P hn he
+  change ‖cataloguePairSum Z P (catalogueArcTerm m n P)-U‖ ≤ S.re*((n:ℝ)*(ε/2)) at a
+  have b' : ‖U-(S*(n:ℂ)+cataloguePairSum (Z.erase none) P (relatedBetaTerm K n))‖ ≤ S.re*((n:ℝ)*(ε/2)) := by
+    simpa only [U,add_sub_add_left_eq_sub] using b
+  apply (norm_sub_le_norm_sub_add_norm_sub _ U _).trans ((add_le_add a b').trans_eq ?_)
+  ring
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset DirichletCharacter
+open scoped Classical
+noncomputable section
+namespace Conjectures.Goldbach.TwistedGoldbachPairMean
+
+/-- Small twists at a common positive modulus: the range of the characters
+lifted from the greatest common divisor with the fixed multiplier. -/
+def lowCharacters (q K : ℕ) : Subgroup (DirichletCharacter ℂ q) :=
+  (changeLevel (R := ℂ) (Nat.gcd_dvd_left q K)).range
+
+def classOf (q K : ℕ) : DirichletCharacter ℂ q →* ((DirichletCharacter ℂ q) ⧸ lowCharacters q K) :=
+  QuotientGroup.mk' (lowCharacters q K)
+
+private theorem low_iff {q : ℕ} [NeZero q] (K : ℕ) (χ : DirichletCharacter ℂ q) :
+    χ ∈ lowCharacters q K ↔ χ.conductor ∣ K := by
+  constructor
+  · rintro ⟨θ,rfl⟩
+    rw [conductor_changeLevel]
+    exact θ.conductor_dvd_level.trans (Nat.gcd_dvd_right ..)
+  · intro dvd
+    have factor : χ.FactorsThrough (q.gcd K) := (χ.mem_conductorSet_iff_conductor_dvd (Nat.gcd_dvd_left ..)).mpr
+      (Nat.dvd_gcd χ.conductor_dvd_level dvd)
+    exact ⟨factor.χ₀,factor.eq_changeLevel.symm⟩
+
+/-- Two labels at any common modulus give a retained product conductor
+exactly when their classes are inverse in the quotient by small twists. -/
+theorem inverse_classes_iff {r s q : ℕ} [NeZero q] (K : ℕ) (α : DirichletCharacter ℂ r) (β : DirichletCharacter ℂ s)
+    (hr : r ∣ q) (hs : s ∣ q) :
+    classOf q K (changeLevel hr α) * classOf q K (changeLevel hs β) = 1 ↔ jointConductor α⁻¹ β⁻¹ ∣ K := by
+  rw [←map_mul]
+  change QuotientGroup.mk (changeLevel hr α * changeLevel hs β) = (1 : (DirichletCharacter ℂ q) ⧸ lowCharacters q K) ↔ _
+  rw [QuotientGroup.eq_one_iff,low_iff]
+  let L := Nat.lcm r s
+  have lq : L ∣ q := Nat.lcm_dvd hr hs
+  have stab : changeLevel lq (changeLevel (Nat.dvd_lcm_left r s) α * changeLevel (Nat.dvd_lcm_right r s) β) =
+      changeLevel hr α * changeLevel hs β := by rw [map_mul,←changeLevel_trans,←changeLevel_trans]
+  rw [←stab,conductor_changeLevel]
+  simp only [jointConductor,map_inv,←mul_inv,conductor_inv]
+
+/-- Energy of the classes that occur, including the inverse classes so
+that inversion permutes the indexing finset. -/
+def classEnergy {ι G : Type*} [CommGroup G] (Z : Finset ι) (f : ι → G) (w : ι → ℝ) : ℝ := by
+  classical
+  exact ∑ c ∈ Z.image f ∪ Z.image (fun i => (f i)⁻¹), (∑ i ∈ Z.filter (fun i => f i=c), w i)^2
+
+/-- The total product of weights over inverse-class pairs is controlled by
+the sum of squared masses of the individual classes, even when the original
+catalogue has different numbers of zeros in the two inverse classes. -/
+theorem inverse_pairs_le_classEnergy {ι G : Type*} [CommGroup G]
+    (Z : Finset ι) (f : ι → G) (w : ι → ℝ) :
+    (∑ i ∈ Z, ∑ j ∈ Z, if f i*f j=1 then w i*w j else 0) ≤ classEnergy Z f w := by
+  classical
+  let S := Z.image f ∪ Z.image (fun i => (f i)⁻¹)
+  let W (c : G) := ∑ i ∈ Z.filter (fun i => f i=c), w i
+  have cover (i : ι) (hi : i ∈ Z) : f i ∈ S := mem_union_left _ (mem_image_of_mem _ hi)
+  have closed (c : G) (hc : c ∈ S) : c⁻¹ ∈ S := by
+    rcases mem_union.mp hc with h|h
+    · obtain ⟨i,hi,rfl⟩ := mem_image.mp h;exact mem_union_right _ (mem_image_of_mem _ hi)
+    · obtain ⟨i,hi,rfl⟩ := mem_image.mp h;simpa only [inv_inv] using cover i hi
+  have invsum : (∑ c ∈ S, W (c⁻¹)^2) = ∑ c ∈ S, W c^2 := by
+    apply sum_bij (fun c _ => c⁻¹)
+    · exact closed
+    · intro i hi j hj h;exact inv_injective h
+    · intro i hi;exact ⟨i⁻¹,closed i hi,inv_inv _⟩
+    · intros;rfl
+  have row (i : ι) : (∑ j ∈ Z, if f i*f j=1 then w i*w j else 0) = w i*W ((f i)⁻¹) := by
+    change _ = w i * ∑ j ∈ Z.filter (fun j => f j = (f i)⁻¹), w j
+    rw [Finset.mul_sum,Finset.sum_filter]
+    apply sum_congr rfl
+    intro j _
+    have eqn : f i * f j = 1 ↔ f j=(f i)⁻¹ := ⟨eq_inv_of_mul_eq_one_right,fun h => by rw [h,mul_inv_cancel]⟩
+    simp only [eqn]
+  have group_sum : (∑ i ∈ Z, w i*W ((f i)⁻¹)) = ∑ c ∈ S, W c*W (c⁻¹) := by
+    calc
+      _ = ∑ c ∈ S, ∑ i ∈ Z.filter (fun i => f i=c), w i*W ((f i)⁻¹) := (sum_fiberwise_of_maps_to cover _).symm
+      _ = _ := by
+        apply sum_congr rfl;intro c hc
+        rw [show W c = ∑ i ∈ Z.filter (fun i => f i=c), w i from rfl,Finset.sum_mul]
+        apply sum_congr rfl
+        intro i hi
+        rw [(mem_filter.mp hi).2]
+  simp_rw [row]
+  rw [group_sum]
+  unfold classEnergy
+  change _ ≤ ∑ c ∈ S, W c^2
+  have pair := sum_le_sum (s := S) (fun c _ => show 2*(W c * W (c⁻¹)) ≤ W c^2+W (c⁻¹)^2 by nlinarith only [sq_nonneg (W c-W (c⁻¹))])
+  rw [←Finset.mul_sum,Finset.sum_add_distrib,invsum] at pair
+  linarith only [pair]
+
+end Conjectures.Goldbach.TwistedGoldbachPairMean
+end
+end
+
+section
+open Complex Finset DirichletCharacter
+open scoped Classical
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+open TwistedGoldbachPairMean TwistedGoldbachLocalProduct
+
+def activeEntries (Z : Finset CatalogueEntry) (K n : ℕ) : Finset CatalogueEntry :=
+  Z.filter (fun v => catalogueLevel v ∣ K*n)
+
+def catalogueClass (q K : ℕ) (v : CatalogueEntry) := classOf q K (catalogueLift q v)
+
+def zeroWeight (n : ℕ) (v : CatalogueEntry) : ℝ :=
+  ‖catalogueWeight v‖ * (n:ℝ)^(((catalogueRoot v).getD 1).re-1)
+
+private theorem related_terms_supported (Z : Finset CatalogueEntry) (K n : ℕ) (P : ℝ) :
+    cataloguePairSum Z P (relatedBetaTerm K n) = cataloguePairSum (activeEntries Z K n) P (relatedBetaTerm K n) := by
+  classical
+  let V := activeEntries Z K n
+  let f (i j : CatalogueEntry) := if (Nat.lcm (catalogueLevel i) (catalogueLevel j):ℝ) ≤ P then
+    catalogueWeight i*catalogueWeight j*relatedBetaTerm K n i j else 0
+  have missing (i : CatalogueEntry) (hi : i ∈ Z) (no : i ∉ V) : ¬catalogueLevel i ∣ K*n :=
+    fun dv => no (mem_filter.mpr ⟨hi,dv⟩)
+  have zero (i j : CatalogueEntry) (no : ¬Nat.lcm (catalogueLevel i) (catalogueLevel j) ∣ K*n) : f i j=0 := by
+    simp only [f,relatedBetaTerm,not_and_of_not_left _ no,ite_false,mul_zero,ite_self]
+  change (∑ i ∈ Z, ∑ j ∈ Z, f i j) = ∑ i ∈ V, ∑ j ∈ V, f i j
+  calc
+    _ = ∑ i ∈ V, ∑ j ∈ Z, f i j := (sum_subset (filter_subset ..) (fun i hi no => sum_eq_zero (fun j _ =>
+      zero i j (fun dv => missing i hi no ((Nat.dvd_lcm_left ..).trans dv))))).symm
+    _ = _ := sum_congr rfl (fun i _ => (sum_subset (filter_subset ..) (fun j hj no =>
+      zero i j (fun dv => missing j hj no ((Nat.dvd_lcm_right ..).trans dv)))).symm)
+
+/-- Actual signed multiplicities enter the nonnegative zero weight. Uniformly
+bounding the Beta factor leaves precisely a class energy. -/
+theorem related_pairs_le_energy {q : ℕ} [NeZero q] (Z : Finset CatalogueEntry) (K n : ℕ) (P B : ℝ)
+    (hn : 0 < n) (hB : 0 ≤ B)
+    (level : ∀ v ∈ activeEntries Z K n, catalogueLevel v ∣ q)
+    (prim : ∀ v ∈ activeEntries Z K n, (catalogueCharacter v).IsPrimitive)
+    (beta : ∀ i ∈ activeEntries Z K n, ∀ j ∈ activeEntries Z K n,
+      ‖Complex.betaIntegral ((catalogueRoot i).getD 1) ((catalogueRoot j).getD 1)‖ ≤ B) :
+    let S := series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n
+    ‖cataloguePairSum Z P (relatedBetaTerm K n)‖ ≤
+      (S.re*(n:ℝ)*B) * classEnergy (activeEntries Z K n) (catalogueClass q K) (zeroWeight n) := by
+  classical
+  intro S
+  let V := activeEntries Z K n
+  let c := catalogueClass q K
+  let w := zeroWeight n
+  let M := S.re*(n:ℝ)*B
+  have s0 : 0 ≤ S.re := (norm_nonneg _).trans (TwistedGoldbachSingularSeries.infinite_domination isPrimitive_one_level_one isPrimitive_one_level_one n hn)
+  have m0 : 0 ≤ M := by dsimp only [M];positivity
+  have w0 (v : CatalogueEntry) : 0 ≤ w v := by dsimp only [w,zeroWeight];positivity
+  have actual (i : CatalogueEntry) (hi : i ∈ V) (j : CatalogueEntry) (hj : j ∈ V) :
+      ‖catalogueWeight i*catalogueWeight j*catalogueBetaTerm n i j‖ ≤ M*(w i*w j) := by
+    let s := (catalogueRoot i).getD 1
+    let t := (catalogueRoot j).getD 1
+    have npos : 0 < (n:ℝ) := Nat.cast_pos.mpr hn
+    have power : ‖(n:ℂ)^(s+t-1)‖ = (n:ℝ)*((n:ℝ)^(s.re-1)*(n:ℝ)^(t.re-1)) := by
+      rw [norm_natCast_cpow_of_pos hn,sub_re,add_re,one_re,←Real.rpow_add npos]
+      conv_rhs => lhs;rw [←Real.rpow_one (n:ℝ)]
+      rw [←Real.rpow_add npos];congr 1;ring
+    have dom := TwistedGoldbachSingularSeries.infinite_domination (prim i hi).inv (prim j hj).inv n hn
+    let C := series (catalogueCharacter i)⁻¹ (catalogueCharacter j)⁻¹ n
+    change ‖C‖ ≤ S.re at dom
+    change ‖catalogueWeight i*catalogueWeight j*(C*((n:ℂ)^(s+t-1)*Complex.betaIntegral s t))‖ ≤ _
+    simp only [norm_mul,power]
+    have pos : 0 ≤ (n:ℝ)*((n:ℝ)^(s.re-1)*(n:ℝ)^(t.re-1)) := by positivity
+    apply (mul_le_mul_of_nonneg_left (mul_le_mul dom (mul_le_mul_of_nonneg_left (beta i hi j hj) pos)
+      (mul_nonneg pos (norm_nonneg _)) s0) (mul_nonneg (norm_nonneg _) (norm_nonneg _))).trans_eq
+    dsimp only [M,w,zeroWeight,s,t];ring
+  let f (i j : CatalogueEntry) := if (Nat.lcm (catalogueLevel i) (catalogueLevel j):ℝ) ≤ P then
+    catalogueWeight i*catalogueWeight j*relatedBetaTerm K n i j else 0
+  let g (i j : CatalogueEntry) := if c i*c j=1 then w i*w j else 0
+  have g0 (i j : CatalogueEntry) : 0 ≤ g i j := by dsimp only [g];split_ifs;exact mul_nonneg (w0 _) (w0 _);rfl
+  have each (i : CatalogueEntry) (hi : i ∈ V) (j : CatalogueEntry) (hj : j ∈ V) : ‖f i j‖ ≤ M*g i j := by
+    dsimp only [f,relatedBetaTerm]
+    split_ifs with cut keep
+    · have same := (inverse_classes_iff K (catalogueCharacter i) (catalogueCharacter j) (level i hi) (level j hj)).mpr keep.2
+      have eqn : c i*c j=1 := by simpa only [c,catalogueClass,catalogueLift,dite_eq_left (level i hi),dite_eq_left (level j hj)] using same
+      rw [show g i j = w i*w j from ite_eq_left eqn]
+      exact actual i hi j hj
+    all_goals simp only [mul_zero,norm_zero]; exact mul_nonneg m0 (g0 i j)
+  rw [related_terms_supported]
+  change ‖∑ i ∈ V, ∑ j ∈ V, f i j‖ ≤ _
+  calc
+    _ ≤ ∑ i ∈ V, ∑ j ∈ V, M*g i j := (norm_sum_le ..).trans (sum_le_sum (fun i hi =>
+      (norm_sum_le ..).trans (sum_le_sum (each i hi))))
+    _ = M*(∑ i ∈ V, ∑ j ∈ V, g i j) := by simp_rw [←Finset.mul_sum]
+    _ ≤ _ := by
+      apply mul_le_mul_of_nonneg_left _ m0
+      apply le_trans _ (inverse_pairs_le_classEnergy V c w)
+      apply sum_le_sum;intro i hi
+      apply sum_le_sum;intro j hj
+      by_cases h : c i*c j=1 <;> simp only [g,h,ite_true,ite_false,le_refl]
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end
+
+section
+open Complex Finset Filter DirichletCharacter Goldbach GoldbachTwistedMellin
+open scoped Topology Classical
+noncomputable section
+namespace Conjectures.Goldbach.BinaryShiftZeroDensity
+open TwistedGoldbachPairMean TwistedGoldbachLocalProduct
+
+/-- The common modulus for the characters with levels dividing the fixed
+multiplier times a particular target. -/
+def activeModulus (m Q X : ℕ) (H T : ℝ) (K n : ℕ) :=
+  ((nearOneConductors m Q X H T).filter (fun r => r ∣ K*n)).lcm id
+
+private theorem activeModulus_pos (m Q X : ℕ) (H T : ℝ) (K n : ℕ) : 0 < activeModulus m Q X H T K n := by
+  apply Nat.pos_of_ne_zero;apply Finset.lcm_ne_zero_iff.mpr
+  intro r hr;obtain ⟨h,_⟩ := mem_filter.mp hr
+  rcases mem_insert.mp h with rfl|mem
+  · decide
+  · obtain ⟨p,_,rfl⟩ := mem_image.mp mem;exact Nat.succ_ne_zero _
+
+private theorem actual_zero_strip (m Q X : ℕ) (H T : ℝ) (v : CatalogueEntry)
+    (hv : v ∈ (nearOneCatalogue m Q X H T).erase none) : 1-H/Real.log X ≤ ((catalogueRoot v).getD 1).re := by
+  classical
+  obtain ⟨ne,mem⟩ := mem_erase.mp hv
+  cases v with
+  | none => exact (ne rfl).elim
+  | some v =>
+    have root : v ∈ (nearOneCharacters m Q (1-H/Real.log X) T).sigma
+        (fun a => nearOneRoots m a.2 (1-H/Real.log X) T) := by simpa [nearOneCatalogue] using mem
+    exact (mem_filter.mp (mem_sigma.mp root).2).2.1
+
+/-- Apart from O(X^(3/4)) targets the surviving characters share a single
+modulus below X^(1/4). A deficit in the weighted zero-class energy then gives
+a positive lower bound on the retained part of the *actual* signed arcs. -/
+theorem nearOne_class_energy_floor (H T η : ℝ) (hH : 0 ≤ H) (hT : 0 ≤ T) (hη : 0 < η) :
+    ∃ (K : ℕ) (C : ℝ), 0 < K ∧ 0 < C ∧ ∀ᶠ Q : ℕ in atTop, ∀ m : ℕ, 2 ≤ m → Q ≤ m+2 →
+      let X : ℝ := (m+2:ℕ)
+      let Z := nearOneCatalogue m Q (m+2) H T
+      ∃ (P : ℝ) (D : Finset ℕ), X^(11/40:ℝ) ≤ P ∧ P ≤ X^(3/10:ℝ) ∧ (D.card:ℝ) ≤ C*X^(3/4:ℝ) ∧
+        ∀ n : ℕ, 0 < n → n ≤ m+2 → m+2 ≤ 2*n → Even n → n ∉ D →
+          let q := activeModulus m Q (m+2) H T K n
+          let V := activeEntries (Z.erase none) K n
+          0 < q ∧ (q:ℝ) < X^(1/4:ℝ) ∧ (∀ v ∈ V, catalogueLevel v ∣ q) ∧
+            (classEnergy V (catalogueClass q K) (zeroWeight n) ≤ 1-η →
+              (η/2)*((series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n).re*(n:ℝ)) ≤
+                (cataloguePairSum Z P (catalogueArcTerm m n P)).re) := by
+  obtain ⟨K,hK,formula⟩ := nearOne_related_formula H T (η/4) hH hT (by positivity)
+  obtain ⟨B,hNum⟩ := nearOneCharacters_bounded H T hH hT
+  obtain ⟨d,hd,kernel⟩ := BinaryShiftCircle.norm_betaIntegral_le_one_add (show 0 < η/4 by positivity)
+  have ltend := Real.tendsto_log_atTop.comp (tendsto_natCast_atTop_atTop (R := ℝ))
+  obtain ⟨N,logs⟩ := eventually_atTop.mp (ltend.eventually_ge_atTop (H/d))
+  refine ⟨K,2^(B+1)*((K:ℝ)+1),hK,by positivity,?_⟩
+  filter_upwards [formula,hNum,eventually_ge_atTop N] with Q exactArc size hN
+  intro m hm hQ X Z
+  obtain ⟨P,hP,hP',rule⟩ := exactArc m hm hQ
+  let R := nearOneConductors m Q (m+2) H T
+  let D := BinaryShiftCircle.conductorOutliers (m+2) K R
+  have count : R.card ≤ B+1 := (Finset.card_insert_le ..).trans
+    (Nat.add_le_add_right (Finset.card_image_le.trans (size m (m+2) hQ)) 1)
+  have cd := BinaryShiftCircle.conductorOutliers_card_le (m+2) K R (by omega) hK
+  have total : (D.card:ℝ) ≤ 2^(B+1)*((K:ℝ)+1)*X^(3/4:ℝ) := cd.trans (mul_le_mul_of_nonneg_right
+    (mul_le_mul_of_nonneg_right (pow_le_pow_right₀ (by norm_num : (1:ℝ) ≤ 2) count) (by positivity)) (Real.rpow_nonneg (Nat.cast_nonneg _) _))
+  refine ⟨P,D,hP,hP',total,?_⟩
+  intro n hn nX xn he notbad q V
+  have qp : 0 < q := activeModulus_pos ..
+  let _ : NeZero q := ⟨qp.ne'⟩
+  have pre (v : CatalogueEntry) (hv : v ∈ V) : v ∈ Z.erase none ∧ catalogueLevel v ∣ K*n := mem_filter.mp hv
+  have raw (v : CatalogueEntry) (hv : v ∈ V) := catalogue_properties m Q (m+2) H T hT v (mem_of_mem_erase (pre v hv).1)
+  have lev (v : CatalogueEntry) (hv : v ∈ V) : catalogueLevel v ∣ q :=
+    Finset.dvd_lcm (mem_filter.mpr ⟨(raw v hv).1,(pre v hv).2⟩)
+  refine ⟨qp,BinaryShiftCircle.small_lcm_of_not_mem_conductorOutliers nX notbad,lev,?_⟩
+  intro energy
+  have x1 : 1 < X := by dsimp only [X];exact_mod_cast (by omega : 1 < m+2)
+  have hlog : H/d ≤ Real.log X := logs (m+2) (hN.trans hQ)
+  have strip (i : CatalogueEntry) (hi : i ∈ V) : 1-d ≤ ((catalogueRoot i).getD 1).re := by
+    have low := actual_zero_strip m Q (m+2) H T i (pre i hi).1
+    have h : H/Real.log X ≤ d := (div_le_iff₀ (Real.log_pos x1)).mpr
+      (((div_le_iff₀ hd).mp hlog).trans_eq (mul_comm ..))
+    exact (sub_le_sub_left h 1).trans low
+  let S := series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) n
+  let E := cataloguePairSum (Z.erase none) P (relatedBetaTerm K n)
+  let A := cataloguePairSum Z P (catalogueArcTerm m n P)
+  have sn : 0 ≤ S.re := zero_le_one.trans (TwistedGoldbachMixedPrincipal.ordinary_at_least_one n hn he)
+  have s0 : 0 ≤ S.re*(n:ℝ) := mul_nonneg sn (Nat.cast_nonneg _)
+  have e := related_pairs_le_energy (Z.erase none) K n P (1+η/4) hn (by positivity) lev
+    (fun i hi => (raw i hi).2.1) (fun i hi j hj => kernel _ _ (strip i hi) (strip j hj))
+  change ‖E‖ ≤ S.re*(n:ℝ)*(1+η/4)*classEnergy V (catalogueClass q K) (zeroWeight n) at e
+  have loss := e.trans (mul_le_mul_of_nonneg_left energy (mul_nonneg s0 (by positivity)))
+  have err := rule n hn nX xn he
+  change ‖A-(S*(n:ℂ)+E)‖ ≤ S.re*((n:ℝ)*(η/4)) at err
+  have reE := ((Complex.re_le_norm (-E)).trans_eq (norm_neg E)).trans loss
+  have reA := ((Complex.re_le_norm (-(A-(S*(n:ℂ)+E)))).trans_eq (norm_neg _)).trans err
+  simp only [Complex.neg_re,Complex.sub_re,Complex.add_re,Complex.mul_re,Complex.natCast_re,Complex.natCast_im,mul_zero,sub_zero] at reE reA
+  change (η/2)*(S.re*(n:ℝ)) ≤ A.re
+  nlinarith only [reE,reA,mul_nonneg (sq_nonneg η) s0]
+
+end Conjectures.Goldbach.BinaryShiftZeroDensity
+end
+end

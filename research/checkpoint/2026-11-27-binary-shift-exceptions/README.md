@@ -16,7 +16,13 @@
 
 令 $X=m+2$。在 $X^{11/40}\le P\le X^{3/10}$ 中可以选取同一个截断位置，使表内所有导子最小公倍数不超过 $P$ 的零点对都适用同一幂次节省。每一对的有限主弧积分等于扭曲奇异级数乘以 Beta 主项，再加一个误差。极点也参加配对。把这些配对按带符号的解析重数加总后，误差至多为普通奇异级数乘以 $C_{H,T}X^{1-\kappa_{H,T}}$，其中 $\kappa_{H,T}>0$。Lean 声明是 `nearOneCatalogue_summed_power_saving`。[有理弧显式公式与奇异级数的方法](https://arxiv.org/abs/1804.05561) · [复用的显式公式证明](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/3316) · [复用的零点区域与算术引理](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/3782)
 
-要推出冻结声明 $S(X)^5\le X^4$，还须控制上述矩形以外的贡献，并证明主弧上全部带符号零点修正后的实部下界。源码在 `binaryShiftExceptionUnion_of_zeroCorrections` 中给出了足以推出原题的精确条件。另一条计数归约可直接使用 Pintz 发表的普通例外集 $Y^{18/25}$ 界，项目允许导入的 Lean 依赖还缺这条无条件界。[Pintz 的普通例外集定理](https://arxiv.org/abs/1804.09084)
+## 哪些零点对仍会影响主项
+
+在正偶数目标 $n$ 处，设 $L$ 是两个本原导子的最小公倍数，$R=L/\gcd(n,L)$。扭曲奇异级数的绝对值与普通奇异级数之比至多为 $56^3 R^{-1/4}$。若两个提升后的特征的乘积导子不整除 $R$，该比值为零。对任意固定比例 $\delta>0$，因此可以选一个与特征和目标无关的整数 $K$，使比值达到 $\delta$ 的每一对都满足 $L\mid Kn$，乘积导子也整除 $K$。Lean 声明是 `relative_order_decay` 和 `large_series_forces_levels`。对一个完整周期求平方和还给出了 `largePairTargets_power`。当 $X^a\le L\le X$ 时，至多 $O_{\delta,\varepsilon}(X^{1-a+\varepsilon})$ 个正偶数目标达到该比例。[Pintz 的奇异级数估计，第 7 节](https://arxiv.org/html/1804.05561v1)
+
+极点与单个零点的配对在每个正偶数上都有幂次节省。结合零点总重数界，在 $X/2\le n\le X$ 内，表内主弧贡献等于普通主项加上满足上述整除条件的零点对总和，误差至多为普通主项的任意给定比例。除至多 $O(X^{3/4})$ 个目标外，这些零点所涉及的导子共用一个小于 $X^{1/4}$ 的模数 $q$。在这个模数上按小导子特征分类，每个零点的权重为其重数乘以 $n^{\operatorname{Re}\rho-1}$。若各类的总权重平方之和至多为 $1-\eta$，则表内主弧部分的实部至少为普通主项的 $\eta/2$ 倍。Lean 声明是 `nearOne_related_formula` 和 `nearOne_class_energy_floor`。[Pintz 的零点分类，第 2 节](https://arxiv.org/html/1804.09084v2)
+
+要推出冻结声明 $S(X)^5\le X^4$，还须估计近 1 矩形以外的贡献，并为实际零点的分类权重证明上述严格小于 1 的界。源码在 `binaryShiftExceptionUnion_of_zeroCorrections` 中保留了足以推出原题的条件。另一条计数归约可直接使用 Pintz 发表的普通例外集 $Y^{18/25}$ 界，项目允许导入的 Lean 依赖还缺这条无条件界。[Pintz 的普通例外集定理](https://arxiv.org/abs/1804.09084)
 
 ## 复现
 
