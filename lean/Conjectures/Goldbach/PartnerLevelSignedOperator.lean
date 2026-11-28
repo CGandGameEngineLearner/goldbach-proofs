@@ -20,13 +20,13 @@ open TwistedGoldbachConductorRatio
 open scoped Classical
 
 theorem count_eq (D m : ℕ) [NeZero D] :
-    ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(x%D)).Coprime D)).card =
+    ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(Nat.mod x D)).Coprime D)).card =
       (Finset.univ.filter (admissible (m : ZMod D))).card := by
   classical
   have bridge (x : ℕ) (hx : x < D) :
-      (x.Coprime D ∧ (m+D-(x%D)).Coprime D) ↔ admissible (m : ZMod D) (x : ZMod D) := by
+      (x.Coprime D ∧ (m+D-(Nat.mod x D)).Coprime D) ↔ admissible (m : ZMod D) (x : ZMod D) := by
     change _ ↔ IsUnit (x : ZMod D) ∧ IsUnit ((m:ZMod D) - x)
-    rw [Nat.mod_eq_of_lt hx, ← ZMod.isUnit_iff_coprime, ← ZMod.isUnit_iff_coprime,
+    rw [show Nat.mod x D = x from Nat.mod_eq_of_lt hx, ← ZMod.isUnit_iff_coprime, ← ZMod.isUnit_iff_coprime,
       Nat.cast_sub (by omega : x ≤ m+D), Nat.cast_add, ZMod.natCast_self, add_zero]
   apply Finset.card_bij (fun (x : ℕ) _ => (x : ZMod D))
   · intro x hx
@@ -44,11 +44,11 @@ theorem count_eq (D m : ℕ) [NeZero D] :
 
 theorem norm_eq_count (D m : ℕ) [NeZero D] :
     ‖J (1 : DirichletCharacter ℂ D) 1 (m:ZMod D)‖ =
-      (((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(x%D)).Coprime D)).card:ℝ) := by
+      (((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(Nat.mod x D)).Coprime D)).card:ℝ) := by
   rw [principal_card, Complex.norm_natCast, count_eq]
 
 theorem count_pos (D m : ℕ) [NeZero D] (he : Even m) :
-    0 < ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(x%D)).Coprime D)).card := by
+    0 < ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(Nat.mod x D)).Coprime D)).card := by
   rw [count_eq]
   obtain ⟨x,hx⟩ := admissible_even D m he
   exact card_pos.mpr ⟨x, mem_filter.mpr ⟨mem_univ _, hx⟩⟩
@@ -298,13 +298,13 @@ by
   let P := (1 : DirichletCharacter ℂ 1)
   let B := Σ s : ℕ, DirichletCharacter ℂ s
   let valid := fun b : B => b.1 ≠ 0 ∧ b.2.IsPrimitive
-  exact ∀ D m : ℕ, 0 < D → 0 < m → Even m → ∃ F : Finset B, (∀ b, b ∈ F ↔ valid b ∧ b.1 ∣ D) ∧ (let H := ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(x%D)).Coprime D)).card; let scale := ‖O m‖*(D.totient:ℝ)/(H:ℝ); let normSq := fun w : B → ℂ => ∑ a ∈ F, ‖w a‖^2; let applyRow := fun (w : B → ℂ) (a : B) => ∑ b ∈ F, S a.2 b.2 m * w b; (∀ w : B → ℂ, normSq (applyRow w) ≤ scale^2 * normSq w) ∧ ∃ w : B → ℂ, 0 < normSq w ∧ normSq (applyRow w) = scale^2 * normSq w)
+  exact ∀ D m : ℕ, 0 < D → 0 < m → Even m → ∃ F : Finset B, (∀ b, b ∈ F ↔ valid b ∧ b.1 ∣ D) ∧ (let H := ((Finset.range D).filter (fun x => x.Coprime D ∧ (m+D-(Nat.mod x D)).Coprime D)).card; let scale := ‖O m‖*(D.totient:ℝ)/(H:ℝ); let normSq := fun w : B → ℂ => ∑ a ∈ F, ‖w a‖^2; let applyRow := fun (w : B → ℂ) (a : B) => ∑ b ∈ F, S a.2 b.2 m * w b; (∀ w : B → ℂ, normSq (applyRow w) ≤ scale^2 * normSq w) ∧ ∃ w : B → ℂ, 0 < normSq w ∧ normSq (applyRow w) = scale^2 * normSq w)
 ) := by
   classical
   dsimp only
   intro D m hD hm he
   let _ : NeZero D := ⟨hD.ne'⟩
-  let H := ((Finset.range D).filter fun x => x.Coprime D ∧ (m+D-(x%D)).Coprime D).card
+  let H := ((Finset.range D).filter fun x => x.Coprime D ∧ (m+D-(Nat.mod x D)).Coprime D).card
   let O := series (1 : DirichletCharacter ℂ 1) (1 : DirichletCharacter ℂ 1) m
   let c := O / (H : ℂ)
   let g := origin (D := D)
