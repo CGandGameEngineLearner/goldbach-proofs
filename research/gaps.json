@@ -14059,8 +14059,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.AsgbFixedFiberMatrixClassification",
       "file": "lean/Conjectures/Goldbach/AsgbFixedFiberMatrixClassification.lean",
+      "module": "Conjectures.Goldbach.AsgbFixedFiberMatrixClassification",
       "track": "dyadic-reflection",
       "route_source": "dyadic-reflection"
     },
@@ -14083,8 +14083,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.BalancedChenPrimePairs",
       "file": "lean/Conjectures/Goldbach/BalancedChenPrimePairs.lean",
+      "module": "Conjectures.Goldbach.BalancedChenPrimePairs",
       "route_source": "dyadic-reflection"
     },
     {
@@ -14670,8 +14670,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.DyadicExceptionLittleOSqrt",
       "file": "lean/Conjectures/Goldbach/DyadicExceptionLittleOSqrt.lean",
+      "module": "Conjectures.Goldbach.DyadicExceptionLittleOSqrt",
       "route_source": "exceptional-set-four-sevenths"
     },
     {
@@ -14778,8 +14778,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LogSquareWindowDensity",
       "file": "lean/Conjectures/Goldbach/LogSquareWindowDensity.lean",
+      "module": "Conjectures.Goldbach.LogSquareWindowDensity",
       "route_source": "exceptional-set-four-sevenths"
     },
     {
@@ -14801,8 +14801,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.BalancedLinearSquareRoot",
       "file": "lean/Conjectures/Goldbach/BalancedLinearSquareRoot.lean",
+      "module": "Conjectures.Goldbach.BalancedLinearSquareRoot",
       "route_source": "exceptions"
     },
     {
@@ -14980,8 +14980,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.BinaryShiftSimultaneousRichness",
       "file": "lean/Conjectures/Goldbach/BinaryShiftSimultaneousRichness.lean",
+      "module": "Conjectures.Goldbach.BinaryShiftSimultaneousRichness",
       "route_source": "exceptions"
     },
     {
@@ -15025,8 +15025,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.ChenCommonPrimeTwoTargets",
       "file": "lean/Conjectures/Goldbach/ChenCommonPrimeTwoTargets.lean",
+      "module": "Conjectures.Goldbach.ChenCommonPrimeTwoTargets",
       "route_source": "exceptions"
     },
     {
@@ -15048,8 +15048,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.ChenCoprimeShiftProducts",
       "file": "lean/Conjectures/Goldbach/ChenCoprimeShiftProducts.lean",
+      "module": "Conjectures.Goldbach.ChenCoprimeShiftProducts",
       "route_source": "exceptions"
     },
     {
@@ -15071,8 +15071,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.ChenCubicResidueSummands",
       "file": "lean/Conjectures/Goldbach/ChenCubicResidueSummands.lean",
+      "module": "Conjectures.Goldbach.ChenCubicResidueSummands",
       "route_source": "exceptions"
     },
     {
@@ -15094,8 +15094,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenForcedThree",
       "file": "lean/Conjectures/Goldbach/ChenForcedThree.lean",
+      "module": "Conjectures.Goldbach.ChenForcedThree",
       "route_source": "exceptions"
     },
     {
@@ -15117,8 +15117,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.ChenMovingAsymmetricBand",
       "file": "lean/Conjectures/Goldbach/ChenMovingAsymmetricBand.lean",
+      "module": "Conjectures.Goldbach.ChenMovingAsymmetricBand",
       "route_source": "exceptions"
     },
     {
@@ -15140,8 +15140,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.ChenOppositeShifts",
       "file": "lean/Conjectures/Goldbach/ChenOppositeShifts.lean",
+      "module": "Conjectures.Goldbach.ChenOppositeShifts",
       "route_source": "exceptions"
     },
     {
@@ -15163,8 +15163,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenPrescribedProgressions",
       "file": "lean/Conjectures/Goldbach/ChenPrescribedProgressions.lean",
+      "module": "Conjectures.Goldbach.ChenPrescribedProgressions",
       "route_source": "exceptions"
     },
     {
@@ -15186,8 +15186,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenShortTargetWindow",
       "file": "lean/Conjectures/Goldbach/ChenShortTargetWindow.lean",
+      "module": "Conjectures.Goldbach.ChenShortTargetWindow",
       "route_source": "exceptions"
     },
     {
@@ -15209,8 +15209,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.ChenSparseCubicTargets",
       "file": "lean/Conjectures/Goldbach/ChenSparseCubicTargets.lean",
+      "module": "Conjectures.Goldbach.ChenSparseCubicTargets",
       "route_source": "exceptions"
     },
     {
@@ -15232,8 +15232,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenSquareTargets",
       "file": "lean/Conjectures/Goldbach/ChenSquareTargets.lean",
+      "module": "Conjectures.Goldbach.ChenSquareTargets",
       "route_source": "exceptions"
     },
     {
@@ -15255,8 +15255,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.ChenTwinOnOneSide",
       "file": "lean/Conjectures/Goldbach/ChenTwinOnOneSide.lean",
+      "module": "Conjectures.Goldbach.ChenTwinOnOneSide",
       "route_source": "exceptions"
     },
     {
@@ -15278,8 +15278,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenTwoFactorWindows",
       "file": "lean/Conjectures/Goldbach/ChenTwoFactorWindows.lean",
+      "module": "Conjectures.Goldbach.ChenTwoFactorWindows",
       "route_source": "exceptions"
     },
     {
@@ -15301,8 +15301,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.CubicBalancedGoldbachValues",
       "file": "lean/Conjectures/Goldbach/CubicBalancedGoldbachValues.lean",
+      "module": "Conjectures.Goldbach.CubicBalancedGoldbachValues",
       "route_source": "exceptions"
     },
     {
@@ -15324,8 +15324,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.CubicFixedLinearDefect",
       "file": "lean/Conjectures/Goldbach/CubicFixedLinearDefect.lean",
+      "module": "Conjectures.Goldbach.CubicFixedLinearDefect",
       "route_source": "exceptions"
     },
     {
@@ -15347,8 +15347,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.CubicShortIntervalRigidity",
       "file": "lean/Conjectures/Goldbach/CubicShortIntervalRigidity.lean",
+      "module": "Conjectures.Goldbach.CubicShortIntervalRigidity",
       "route_source": "exceptions"
     },
     {
@@ -15370,8 +15370,8 @@
       "parallel": true,
       "program": "correlation",
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.DigitSetIntrinsicSquareRoot",
       "file": "lean/Conjectures/Goldbach/DigitSetIntrinsicSquareRoot.lean",
+      "module": "Conjectures.Goldbach.DigitSetIntrinsicSquareRoot",
       "route_source": "exceptions"
     },
     {
@@ -15393,8 +15393,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.DigitalCentralRepresentations",
       "file": "lean/Conjectures/Goldbach/DigitalCentralRepresentations.lean",
+      "module": "Conjectures.Goldbach.DigitalCentralRepresentations",
       "route_source": "exceptions"
     },
     {
@@ -15416,8 +15416,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.DigitalForbiddenNeighbors",
       "file": "lean/Conjectures/Goldbach/DigitalForbiddenNeighbors.lean",
+      "module": "Conjectures.Goldbach.DigitalForbiddenNeighbors",
       "route_source": "exceptions"
     },
     {
@@ -15439,8 +15439,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.DigitalMirrorExceptions",
       "file": "lean/Conjectures/Goldbach/DigitalMirrorExceptions.lean",
+      "module": "Conjectures.Goldbach.DigitalMirrorExceptions",
       "route_source": "exceptions"
     },
     {
@@ -15462,8 +15462,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.DigitalMovingAlphabets",
       "file": "lean/Conjectures/Goldbach/DigitalMovingAlphabets.lean",
+      "module": "Conjectures.Goldbach.DigitalMovingAlphabets",
       "route_source": "exceptions"
     },
     {
@@ -15485,8 +15485,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.DigitalSparseWeightSlices",
       "file": "lean/Conjectures/Goldbach/DigitalSparseWeightSlices.lean",
+      "module": "Conjectures.Goldbach.DigitalSparseWeightSlices",
       "route_source": "exceptions"
     },
     {
@@ -15508,8 +15508,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.DigitalUnbalancedPrime",
       "file": "lean/Conjectures/Goldbach/DigitalUnbalancedPrime.lean",
+      "module": "Conjectures.Goldbach.DigitalUnbalancedPrime",
       "route_source": "exceptions"
     },
     {
@@ -15540,8 +15540,8 @@
         "Conjectures.Goldbach.ThreeQuartersExceptionalDirichletWindows",
         "PEqualNP.Outside.L_goldbach_frontier_no_siegel_zero"
       ],
-      "module": "Conjectures.Goldbach.FixedModulusZeroClassSquare",
       "file": "lean/Conjectures/Goldbach/FixedModulusZeroClassSquare.lean",
+      "module": "Conjectures.Goldbach.FixedModulusZeroClassSquare",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -15564,8 +15564,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.FixedShiftSexticGoldbach",
       "file": "lean/Conjectures/Goldbach/FixedShiftSexticGoldbach.lean",
+      "module": "Conjectures.Goldbach.FixedShiftSexticGoldbach",
       "route_source": "exceptions"
     },
     {
@@ -15587,8 +15587,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.LinnikAsymmetricSupportSurplus",
       "file": "lean/Conjectures/Goldbach/LinnikAsymmetricSupportSurplus.lean",
+      "module": "Conjectures.Goldbach.LinnikAsymmetricSupportSurplus",
       "route_source": "exceptions"
     },
     {
@@ -15610,8 +15610,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.LocalDensityHalfEndpoint",
       "file": "lean/Conjectures/Goldbach/LocalDensityHalfEndpoint.lean",
+      "module": "Conjectures.Goldbach.LocalDensityHalfEndpoint",
       "route_source": "exceptions"
     },
     {
@@ -15635,8 +15635,8 @@
       "imports": [
         "Conjectures.Goldbach.NearExtremalReducedConductor"
       ],
-      "module": "Conjectures.Goldbach.NearExtremalPartnerCount",
       "file": "lean/Conjectures/Goldbach/NearExtremalPartnerCount.lean",
+      "module": "Conjectures.Goldbach.NearExtremalPartnerCount",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -15661,8 +15661,8 @@
       "imports": [
         "Conjectures.Goldbach.SharpSingularSeriesRatios"
       ],
-      "module": "Conjectures.Goldbach.NearExtremalReducedConductor",
       "file": "lean/Conjectures/Goldbach/NearExtremalReducedConductor.lean",
+      "module": "Conjectures.Goldbach.NearExtremalReducedConductor",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -15689,8 +15689,8 @@
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerDyadicZeroBlock",
       "file": "lean/Conjectures/Goldbach/PartnerDyadicZeroBlock.lean",
+      "module": "Conjectures.Goldbach.PartnerDyadicZeroBlock",
       "route_source": "exceptions"
     },
     {
@@ -15714,8 +15714,8 @@
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerHeightRenormalizedSquare",
       "file": "lean/Conjectures/Goldbach/PartnerHeightRenormalizedSquare.lean",
+      "module": "Conjectures.Goldbach.PartnerHeightRenormalizedSquare",
       "route_source": "exceptions"
     },
     {
@@ -15739,8 +15739,8 @@
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerLevelParseval",
       "file": "lean/Conjectures/Goldbach/PartnerLevelParseval.lean",
+      "module": "Conjectures.Goldbach.PartnerLevelParseval",
       "route_source": "exceptions"
     },
     {
@@ -15764,8 +15764,8 @@
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerLevelSignedOperator",
       "file": "lean/Conjectures/Goldbach/PartnerLevelSignedOperator.lean",
+      "module": "Conjectures.Goldbach.PartnerLevelSignedOperator",
       "route_source": "exceptions"
     },
     {
@@ -15792,8 +15792,8 @@
         "L-goldbach-partner-sharp-cubic-level"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerOptimalGlobalCubic",
       "file": "lean/Conjectures/Goldbach/PartnerOptimalGlobalCubic.lean",
+      "module": "Conjectures.Goldbach.PartnerOptimalGlobalCubic",
       "route_source": "exceptions"
     },
     {
@@ -15817,8 +15817,8 @@
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerPrincipalAmplitudeTail",
       "file": "lean/Conjectures/Goldbach/PartnerPrincipalAmplitudeTail.lean",
+      "module": "Conjectures.Goldbach.PartnerPrincipalAmplitudeTail",
       "route_source": "exceptions"
     },
     {
@@ -15842,8 +15842,8 @@
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerPrincipalRowPhase",
       "file": "lean/Conjectures/Goldbach/PartnerPrincipalRowPhase.lean",
+      "module": "Conjectures.Goldbach.PartnerPrincipalRowPhase",
       "route_source": "exceptions"
     },
     {
@@ -15867,8 +15867,8 @@
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerQuadraticObstruction",
       "file": "lean/Conjectures/Goldbach/PartnerQuadraticObstruction.lean",
+      "module": "Conjectures.Goldbach.PartnerQuadraticObstruction",
       "route_source": "exceptions"
     },
     {
@@ -15892,8 +15892,8 @@
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerSharpCubicLevel",
       "file": "lean/Conjectures/Goldbach/PartnerSharpCubicLevel.lean",
+      "module": "Conjectures.Goldbach.PartnerSharpCubicLevel",
       "route_source": "exceptions"
     },
     {
@@ -15917,8 +15917,8 @@
         "L-goldbach-partner-level-parseval"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerSignedHeightCancellation",
       "file": "lean/Conjectures/Goldbach/PartnerSignedHeightCancellation.lean",
+      "module": "Conjectures.Goldbach.PartnerSignedHeightCancellation",
       "route_source": "exceptions"
     },
     {
@@ -15942,8 +15942,8 @@
         "L-goldbach-primitive-partner-cubic-mass"
       ],
       "track": "exceptions",
-      "module": "Conjectures.Goldbach.PartnerSuperquadratic",
       "file": "lean/Conjectures/Goldbach/PartnerSuperquadratic.lean",
+      "module": "Conjectures.Goldbach.PartnerSuperquadratic",
       "route_source": "exceptions"
     },
     {
@@ -15965,8 +15965,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.PolynomialEighthMomentSupport",
       "file": "lean/Conjectures/Goldbach/PolynomialEighthMomentSupport.lean",
+      "module": "Conjectures.Goldbach.PolynomialEighthMomentSupport",
       "route_source": "exceptions"
     },
     {
@@ -15988,8 +15988,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.PolynomialFourierTransference",
       "file": "lean/Conjectures/Goldbach/PolynomialFourierTransference.lean",
+      "module": "Conjectures.Goldbach.PolynomialFourierTransference",
       "route_source": "exceptions"
     },
     {
@@ -16011,8 +16011,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.PolynomialTripleCollisions",
       "file": "lean/Conjectures/Goldbach/PolynomialTripleCollisions.lean",
+      "module": "Conjectures.Goldbach.PolynomialTripleCollisions",
       "route_source": "exceptions"
     },
     {
@@ -16034,8 +16034,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.PrimeLocalCompatibleColors",
       "file": "lean/Conjectures/Goldbach/PrimeLocalCompatibleColors.lean",
+      "module": "Conjectures.Goldbach.PrimeLocalCompatibleColors",
       "route_source": "exceptions"
     },
     {
@@ -16058,8 +16058,8 @@
       "depends_on": [
         "L-goldbach-near-extremal-partner-count"
       ],
-      "module": "Conjectures.Goldbach.PrimitivePartnerCubicMass",
       "file": "lean/Conjectures/Goldbach/PrimitivePartnerCubicMass.lean",
+      "module": "Conjectures.Goldbach.PrimitivePartnerCubicMass",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -16082,8 +16082,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.QuadraticValuesManyPrimePairs",
       "file": "lean/Conjectures/Goldbach/QuadraticValuesManyPrimePairs.lean",
+      "module": "Conjectures.Goldbach.QuadraticValuesManyPrimePairs",
       "route_source": "exceptions"
     },
     {
@@ -16105,8 +16105,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.QuarticProgressionGoldbachValues",
       "file": "lean/Conjectures/Goldbach/QuarticProgressionGoldbachValues.lean",
+      "module": "Conjectures.Goldbach.QuarticProgressionGoldbachValues",
       "route_source": "exceptions"
     },
     {
@@ -16128,8 +16128,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.QuarticSquareSlice",
       "file": "lean/Conjectures/Goldbach/QuarticSquareSlice.lean",
+      "module": "Conjectures.Goldbach.QuarticSquareSlice",
       "route_source": "exceptions"
     },
     {
@@ -16153,8 +16153,8 @@
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedContinuousDistribution",
       "file": "lean/Conjectures/Goldbach/ReflectedContinuousDistribution.lean",
+      "module": "Conjectures.Goldbach.ReflectedContinuousDistribution",
       "route_source": "exceptions"
     },
     {
@@ -16178,8 +16178,8 @@
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedLowerTailDensity",
       "file": "lean/Conjectures/Goldbach/ReflectedLowerTailDensity.lean",
+      "module": "Conjectures.Goldbach.ReflectedLowerTailDensity",
       "route_source": "exceptions"
     },
     {
@@ -16201,8 +16201,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ReflectedMajorSharpFloor",
       "file": "lean/Conjectures/Goldbach/ReflectedMajorSharpFloor.lean",
+      "module": "Conjectures.Goldbach.ReflectedMajorSharpFloor",
       "route_source": "exceptions"
     },
     {
@@ -16226,8 +16226,8 @@
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedMeanSquareEulerTail",
       "file": "lean/Conjectures/Goldbach/ReflectedMeanSquareEulerTail.lean",
+      "module": "Conjectures.Goldbach.ReflectedMeanSquareEulerTail",
       "route_source": "exceptions"
     },
     {
@@ -16251,8 +16251,8 @@
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedShiftedPairMoment",
       "file": "lean/Conjectures/Goldbach/ReflectedShiftedPairMoment.lean",
+      "module": "Conjectures.Goldbach.ReflectedShiftedPairMoment",
       "route_source": "exceptions"
     },
     {
@@ -16276,8 +16276,8 @@
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedShortProgressionMean",
       "file": "lean/Conjectures/Goldbach/ReflectedShortProgressionMean.lean",
+      "module": "Conjectures.Goldbach.ReflectedShortProgressionMean",
       "route_source": "exceptions"
     },
     {
@@ -16301,8 +16301,8 @@
       "depends_on": [
         "L-goldbach-reflected-major-sharp-floor"
       ],
-      "module": "Conjectures.Goldbach.ReflectedUpperEnvelope",
       "file": "lean/Conjectures/Goldbach/ReflectedUpperEnvelope.lean",
+      "module": "Conjectures.Goldbach.ReflectedUpperEnvelope",
       "route_source": "exceptions"
     },
     {
@@ -16324,8 +16324,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.RomanovCriticalTwoShiftScale",
       "file": "lean/Conjectures/Goldbach/RomanovCriticalTwoShiftScale.lean",
+      "module": "Conjectures.Goldbach.RomanovCriticalTwoShiftScale",
       "route_source": "exceptions"
     },
     {
@@ -16347,8 +16347,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.RomanovLocalUnique",
       "file": "lean/Conjectures/Goldbach/RomanovLocalUnique.lean",
+      "module": "Conjectures.Goldbach.RomanovLocalUnique",
       "route_source": "exceptions"
     },
     {
@@ -16370,8 +16370,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.RomanovSeparatedBandSupport",
       "file": "lean/Conjectures/Goldbach/RomanovSeparatedBandSupport.lean",
+      "module": "Conjectures.Goldbach.RomanovSeparatedBandSupport",
       "route_source": "exceptions"
     },
     {
@@ -16393,8 +16393,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.RomanovShortWindowDensity",
       "file": "lean/Conjectures/Goldbach/RomanovShortWindowDensity.lean",
+      "module": "Conjectures.Goldbach.RomanovShortWindowDensity",
       "route_source": "exceptions"
     },
     {
@@ -16422,8 +16422,8 @@
         "Conjectures.Goldbach.DeepThreeQuartersExceptionalZeroCriterion",
         "Conjectures.Goldbach.BinaryShiftOrderTail"
       ],
-      "module": "Conjectures.Goldbach.SharpSingularSeriesRatios",
       "file": "lean/Conjectures/Goldbach/SharpSingularSeriesRatios.lean",
+      "module": "Conjectures.Goldbach.SharpSingularSeriesRatios",
       "track": "exceptions",
       "route_source": "exceptions"
     },
@@ -16467,8 +16467,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.ThinPrimeReservoir",
       "file": "lean/Conjectures/Goldbach/ThinPrimeReservoir.lean",
+      "module": "Conjectures.Goldbach.ThinPrimeReservoir",
       "route_source": "exceptions"
     },
     {
@@ -16490,8 +16490,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.TransferenceFourthObstruction",
       "file": "lean/Conjectures/Goldbach/TransferenceFourthObstruction.lean",
+      "module": "Conjectures.Goldbach.TransferenceFourthObstruction",
       "route_source": "exceptions"
     },
     {
@@ -16513,8 +16513,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.TransferenceLinearFloor",
       "file": "lean/Conjectures/Goldbach/TransferenceLinearFloor.lean",
+      "module": "Conjectures.Goldbach.TransferenceLinearFloor",
       "route_source": "exceptions"
     },
     {
@@ -16536,8 +16536,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.TransferenceLogEndpoint",
       "file": "lean/Conjectures/Goldbach/TransferenceLogEndpoint.lean",
+      "module": "Conjectures.Goldbach.TransferenceLogEndpoint",
       "route_source": "exceptions"
     },
     {
@@ -16559,8 +16559,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.TransferenceMixedRestriction",
       "file": "lean/Conjectures/Goldbach/TransferenceMixedRestriction.lean",
+      "module": "Conjectures.Goldbach.TransferenceMixedRestriction",
       "route_source": "exceptions"
     },
     {
@@ -16582,8 +16582,8 @@
       "parallel": true,
       "program": "correlation",
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.TwoGaussianNormPrimeExceptions",
       "file": "lean/Conjectures/Goldbach/TwoGaussianNormPrimeExceptions.lean",
+      "module": "Conjectures.Goldbach.TwoGaussianNormPrimeExceptions",
       "route_source": "exceptions"
     },
     {
@@ -16626,8 +16626,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.WindowAdmissiblePrimeClasses",
       "file": "lean/Conjectures/Goldbach/WindowAdmissiblePrimeClasses.lean",
+      "module": "Conjectures.Goldbach.WindowAdmissiblePrimeClasses",
       "route_source": "exceptions"
     },
     {
@@ -16649,8 +16649,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.WindowMovingPrimeCenter",
       "file": "lean/Conjectures/Goldbach/WindowMovingPrimeCenter.lean",
+      "module": "Conjectures.Goldbach.WindowMovingPrimeCenter",
       "route_source": "exceptions"
     },
     {
@@ -16672,8 +16672,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.WindowOneEighteenth",
       "file": "lean/Conjectures/Goldbach/WindowOneEighteenth.lean",
+      "module": "Conjectures.Goldbach.WindowOneEighteenth",
       "route_source": "exceptions"
     },
     {
@@ -16695,8 +16695,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.WindowPowerException",
       "file": "lean/Conjectures/Goldbach/WindowPowerException.lean",
+      "module": "Conjectures.Goldbach.WindowPowerException",
       "route_source": "exceptions"
     },
     {
@@ -16718,8 +16718,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.WindowSharedPrimeOffset",
       "file": "lean/Conjectures/Goldbach/WindowSharedPrimeOffset.lean",
+      "module": "Conjectures.Goldbach.WindowSharedPrimeOffset",
       "route_source": "exceptions"
     },
     {
@@ -16741,8 +16741,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.WindowThinBasis",
       "file": "lean/Conjectures/Goldbach/WindowThinBasis.lean",
+      "module": "Conjectures.Goldbach.WindowThinBasis",
       "route_source": "exceptions"
     },
     {
@@ -16786,6 +16786,147 @@
       "module": "Conjectures.Goldbach.ExplicitModeledMajorFloor",
       "file": "lean/Conjectures/Goldbach/ExplicitModeledMajorFloor.lean",
       "route_source": "explicit-major-and-ten-billion"
+    },
+    {
+      "id": "L-goldbach-abel-theta-to-pi-li",
+      "statement": "let π := fun x : ℝ => (((Finset.Icc 1 ⌊x⌋₊).filter Nat.Prime).card : ℝ); let θ := fun x : ℝ => ∑ p ∈ (Finset.Icc 1 ⌊x⌋₊).filter Nat.Prime, Real.log (p : ℝ); ∀ (x₀ x : ℝ) (E : ℝ → ℝ), 2 ≤ x₀ → x₀ ≤ x → ContinuousOn E (Set.Icc x₀ x) → (∀ t ∈ Set.Icc x₀ x, |θ t - t| ≤ E t) → |(π x - π x₀) - ∫ t in x₀..x, 1 / Real.log t| ≤ E x / Real.log x + E x₀ / Real.log x₀ + ∫ t in x₀..x, E t / (t * (Real.log t) ^ 2)",
+      "plain_statement": {
+        "en": "On any interval [x₀, x] with 2 ≤ x₀ ≤ x, any continuous pointwise envelope |θ(t) - t| ≤ E(t) transfers by Abel summation to an explicit bound on |(π(x) - π(x₀)) - ∫_{x₀}^x dt / log t|.",
+        "zh": "对任意满足 2 ≤ x₀ ≤ x 的区间 [x₀, x]，若连续函数 E(t) 在区间上控制 |θ(t) − t| ≤ E(t)，则经分部求和可得 |(π(x) − π(x₀)) − ∫_{x₀}^x dt / log t| 的显式误差上界。"
+      },
+      "brief": {
+        "en": "Apply discrete Abel summation on primes p ∈ (x₀, x] with weight 1 / log p, rewrite ∑_{x₀ < p ≤ x} 1 = (θ(x) - θ(x₀)) / log x + ∫_{x₀}^x (θ(t) - θ(x₀)) / (t log² t) dt via Fundamental Theorem of Calculus, and subtract the exact integration-by-parts identity for ∫_{x₀}^x dt / log t.",
+        "zh": "对区间 (x₀, x] 内的素数以 1 / log p 作离散 Abel 分部求和，并减去 ∫_{x₀}^x dt / log t 的分部积分恒等式，按三角不等式逐项代入 |θ(t) − t| ≤ E(t) 即可完成证明。"
+      },
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.AbelThetaToPiLi",
+      "file": "lean/Conjectures/Goldbach/AbelThetaToPiLi.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-explicit-psi-sub-theta",
+      "statement": "let ψ := fun x : ℝ => ∑ n ∈ Finset.Icc 1 ⌊x⌋₊, ArithmeticFunction.vonMangoldt n; let θ := fun x : ℝ => ∑ p ∈ (Finset.Icc 1 ⌊x⌋₊).filter Nat.Prime, Real.log (p : ℝ); ∀ x : ℝ, 2 ≤ x → 0 ≤ ψ x - θ x ∧ ψ x - θ x ≤ Real.log 4 * Real.sqrt x + 2 * x ^ (1 / 3 : ℝ) * Real.log x",
+      "plain_statement": {
+        "en": "For every real x ≥ 2, the Chebyshev prime-power difference ψ(x) - θ(x) is nonnegative and at most (log 4) √x + 2 x^(1/3) log x.",
+        "zh": "对任意实数 x ≥ 2，切比雪夫素数幂差 ψ(x) − θ(x) 非负且至多为 (log 4)√x + 2 x^(1/3) log x。"
+      },
+      "brief": {
+        "en": "Decompose the non-prime support of Λ(n) into prime powers p^k (k ≥ 2) using PEqualNP.Outside.L_goldbach_mangoldt_power_support, bound θ(x^(1/2)) via primorial ≤ 4^n (Rosser–Schoenfeld 1962), and bound each higher k ≥ 3 term uniformly by θ(x^(1/3)) ≤ (log 4) x^(1/3).",
+        "zh": "利用已证模块 PEqualNP.Outside.L_goldbach_mangoldt_power_support 将 Λ−素数权 拆为高次素数幂 p^k (k ≥ 2)，借助素数阶乘 ∏_{p≤n} p ≤ 4^n 控制 θ(√x)，并用 θ(x^(1/3)) 统一控制 k ≥ 3 的所有高次幂之和。"
+      },
+      "program": "foundation",
+      "depends_on": [
+        "L-goldbach-mangoldt-power-support"
+      ],
+      "imports": [
+        "PEqualNP.Outside.L_goldbach_mangoldt_power_support"
+      ],
+      "parallel": true,
+      "source": "https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-6/issue-1/Approximate-formulas-for-some-functions-of-prime-numbers/10.1215/ijm/1255631807.full",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.ExplicitPsiSubTheta",
+      "file": "lean/Conjectures/Goldbach/ExplicitPsiSubTheta.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-gm-primitive-euler-loss",
+      "statement": "∀ (q d : ℕ) [NeZero q] [NeZero d] (χ : DirichletCharacter ℂ q) (χ' : DirichletCharacter ℂ d), d ∣ q → (∀ n : ℕ, Nat.Coprime n q → χ (n : ZMod q) = χ' (n : ZMod d)) → ∀ x : ℝ, 1 ≤ x → ‖(∑ n ∈ Finset.Icc 1 ⌊x⌋₊, (ArithmeticFunction.vonMangoldt n : ℂ) * χ (n : ZMod q)) - (∑ n ∈ Finset.Icc 1 ⌊x⌋₊, (ArithmeticFunction.vonMangoldt n : ℂ) * χ' (n : ZMod d))‖ ≤ (q.primeFactors.card : ℝ) * Real.log x",
+      "plain_statement": {
+        "en": "Replacing a Dirichlet character χ mod q by a character χ' mod d (with d ∣ q) that agrees with χ on all integers coprime to q changes the twisted Chebyshev sum ψ(x, χ) by at most ω(q) log x.",
+        "zh": "将模 q 的狄利克雷特征 χ 替换为在所有与 q 互素整数上取相同值的诱导特征 χ' mod d（d ∣ q）时，特征加权切比雪夫和 ψ(x, χ) 的偏差至多为 ω(q) log x。"
+      },
+      "brief": {
+        "en": "Terms with gcd(n, q) = 1 cancel identically; terms with gcd(n, q) > 1 and Λ(n) ≠ 0 must be prime powers p^k with p ∈ q.primeFactors and χ(p^k) = 0. Bound ‖χ'(p^k)‖ ≤ 1 and sum Λ(p^k) = log p over p^k ≤ x using PEqualNP.Outside.L_goldbach_euler_loss_power_loss.",
+        "zh": "与 q 互素的项精确相消；余下非零项必为素因子 p ∣ q 的素数幂 p^k。利用 ‖χ'(p^k)‖ ≤ 1 与 PEqualNP.Outside.L_goldbach_euler_loss_power_loss，每个坏素因子 p 贡献至多 log x。"
+      },
+      "program": "foundation",
+      "depends_on": [
+        "L-goldbach-euler-loss-power-loss"
+      ],
+      "imports": [
+        "PEqualNP.Outside.L_goldbach_euler_loss_power_loss"
+      ],
+      "parallel": true,
+      "source": "https://doi.org/10.1007/s11139-018-0023-x",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.GmPrimitiveEulerLoss",
+      "file": "lean/Conjectures/Goldbach/GmPrimitiveEulerLoss.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-gm-smoothing-kernel-mellin",
+      "statement": "∀ (δ : ℝ) (s : ℂ), 0 < δ → s ≠ 0 → let M : ℂ := ∫ v in (-δ)..δ, (((1 / δ) * (1 - |v| / δ) : ℝ) : ℂ) * Complex.exp (s * (v : ℂ)); M = ((Complex.exp (((δ / 2 : ℝ) : ℂ) * s) - Complex.exp (((-(δ / 2) : ℝ) : ℂ) * s)) / ((δ : ℂ) * s)) ^ 2 ∧ ‖M‖ ≤ min (Real.exp (δ * |s.re|)) (4 * Real.exp (δ * |s.re|) / (δ ^ 2 * ‖s‖ ^ 2))",
+      "plain_statement": {
+        "en": "For δ > 0 and s ≠ 0, the Mellin transform M(s) of the compact triangular smoothing kernel (1/δ)(1 - |v|/δ) on [-δ, δ] equals ((e^(δs/2) - e^(-δs/2)) / (δs))² and satisfies ‖M(s)‖ ≤ min(e^(δ|Re s|), 4 e^(δ|Re s|) / (δ² ‖s‖²)).",
+        "zh": "对 δ > 0 与 s ≠ 0，支撑在 [−δ, δ] 的三角光滑核 (1/δ)(1 − |v|/δ) 的 Mellin 变换等于 ((e^(δs/2) − e^(−δs/2)) / (δs))²，且其模长满足 ‖M(s)‖ ≤ min(e^(δ|Re s|), 4 e^(δ|Re s|) / (δ² ‖s‖²))。"
+      },
+      "brief": {
+        "en": "Split the integral at v = 0 into [-δ, 0] and [0, δ], integrate (a + bv)e^(sv) explicitly via Fundamental Theorem of Calculus, factor as a square, and combine the triangle inequality for exp(±δs/2) with ∫_{-δ}^δ (1/δ)(1 - |v|/δ) dv = 1.",
+        "zh": "纯微积分引理：在 v = 0 处拆分为 [−δ, 0] 与 [0, δ]，用牛顿–莱布尼茨公式直接积分线性函数乘指数函数，化为平方形式，再由积分绝对值不等式与单位质量 ∫ = 1 得两条衰减界。"
+      },
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1007/s11139-018-0023-x",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.GmSmoothingKernelMellin",
+      "file": "lean/Conjectures/Goldbach/GmSmoothingKernelMellin.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-mertens-abel-bridge",
+      "statement": "let θ := fun x : ℝ => ∑ p ∈ (Finset.Icc 1 ⌊x⌋₊).filter Nat.Prime, Real.log (p : ℝ); ∀ (x₀ x : ℝ) (E : ℝ → ℝ), 2 ≤ x₀ → x₀ ≤ x → ContinuousOn E (Set.Icc x₀ x) → (∀ t ∈ Set.Icc x₀ x, |θ t - t| ≤ E t) → |(∑ p ∈ (Finset.Ioc ⌊x₀⌋₊ ⌊x⌋₊).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) - (Real.log (Real.log x) - Real.log (Real.log x₀))| ≤ E x / (x * Real.log x) + E x₀ / (x₀ * Real.log x₀) + ∫ t in x₀..x, E t * (Real.log t + 1) / (t ^ 2 * (Real.log t) ^ 2)",
+      "plain_statement": {
+        "en": "On any interval [x₀, x] with 2 ≤ x₀ ≤ x, any continuous pointwise bound |θ(t) - t| ≤ E(t) transfers by Stieltjes/Abel summation to an explicit two-sided bound on ∑_{x₀ < p ≤ x} 1/p - (log log x - log log x₀).",
+        "zh": "对任意满足 2 ≤ x₀ ≤ x 的区间 [x₀, x]，若连续函数 E(t) 控制 |θ(t) − t| ≤ E(t)，则经 Stieltjes/Abel 分部求和可直接给出 ∑_{x₀ < p ≤ x} 1/p − (log log x − log log x₀) 的显式双边误差界。"
+      },
+      "brief": {
+        "en": "Apply discrete Abel summation on primes p ∈ (x₀, x] with weight 1 / (p log p), whose derivative is -(log t + 1) / (t² log² t), and compare with ∫_{x₀}^x dt / (t log t) = log(log x) - log(log x₀).",
+        "zh": "对区间 (x₀, x] 内的素数以权函数 1 / (t log t) 作分部求和（其导数为 −(log t + 1) / (t² log² t)），再与 ∫_{x₀}^x dt / (t log t) = log log x − log log x₀ 相减并用 |θ(t) − t| ≤ E(t) 逐项定界。"
+      },
+      "program": "foundation",
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2208.01229",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.MertensAbelBridge",
+      "file": "lean/Conjectures/Goldbach/MertensAbelBridge.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-multiplicative-large-sieve",
+      "statement": "letI := Classical.propDecidable; ∀ (M N Q : ℕ) (c : ℕ → ℂ), (∑ q ∈ Finset.range Q, ((q + 1 : ℝ) / (Nat.totient (q + 1) : ℝ)) * ∑ χ : DirichletCharacter ℂ (q + 1), if χ.IsPrimitive then ‖∑ k ∈ Finset.Ico M (M + N), c k * χ (k : ZMod (q + 1))‖ ^ 2 else 0) ≤ (Real.pi * (N : ℝ) + (Q : ℝ) ^ 2) * ∑ k ∈ Finset.Ico M (M + N), ‖c k‖ ^ 2",
+      "plain_statement": {
+        "en": "Montgomery–Vaughan multiplicative large sieve: for N consecutive integers, the sum of (q / φ(q)) |∑ c_k χ(k)|² over all primitive Dirichlet characters χ mod q with 1 ≤ q ≤ Q is at most (πN + Q²) ∑ |c_k|².",
+        "zh": "Montgomery–Vaughan 乘性大筛不等式：对 N 个连续整数上的任意复系数序列，在所有 1 ≤ q ≤ Q 的本原狄利克雷特征 χ mod q 上求和，(q / φ(q)) |∑ c_k χ(k)|² 之总和不超过 (πN + Q²) ∑ |c_k|²。"
+      },
+      "brief": {
+        "en": "Reuse Conjectures.Goldbach.AnalyticLargeSieve (L-goldbach-analytic-large-sieve): for each primitive χ mod q, expand χ(k) via Gauss sums τ(χ̄) χ(k) = ∑_{a mod q, (a,q)=1} χ̄(a) e(ak/q) with |τ(χ)|² = q, then sum over all characters mod q using character orthogonality to obtain ∑_{χ prim} |S(χ)|² ≤ (φ(q)/q) ∑_{(a,q)=1} |S(a/q)|².",
+        "zh": "直接复用已证模块 Conjectures.Goldbach.AnalyticLargeSieve：对每个本原特征 χ mod q 用高斯和展开且 |τ(χ)|² = q，再按特征正交性对全体模 q 特征求和，得 ∑_{χ本原} |S(χ)|² ≤ (φ(q)/q) ∑_{(a,q)=1} |S(a/q)|²，代入解析大筛即证。"
+      },
+      "program": "correlation",
+      "depends_on": [
+        "L-goldbach-analytic-large-sieve"
+      ],
+      "imports": [
+        "Conjectures.Goldbach.AnalyticLargeSieve"
+      ],
+      "parallel": true,
+      "source": "https://doi.org/10.1112/S0025579300004708",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.MultiplicativeLargeSieve",
+      "file": "lean/Conjectures/Goldbach/MultiplicativeLargeSieve.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
     },
     {
       "id": "L-goldbach-finite-phase-abel-two-ranges",
@@ -16984,8 +17125,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.CentralRoughChenMass",
       "file": "lean/Conjectures/Goldbach/CentralRoughChenMass.lean",
+      "module": "Conjectures.Goldbach.CentralRoughChenMass",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -17007,8 +17148,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.FareyBuchstabReflectedLimit",
       "file": "lean/Conjectures/Goldbach/FareyBuchstabReflectedLimit.lean",
+      "module": "Conjectures.Goldbach.FareyBuchstabReflectedLimit",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -17413,8 +17554,8 @@
       "imports": [
         "Conjectures.Goldbach.FareyLateFirstHitFactorSwitch"
       ],
-      "module": "Conjectures.Goldbach.FareyLatePositiveExcess",
       "file": "lean/Conjectures/Goldbach/FareyLatePositiveExcess.lean",
+      "module": "Conjectures.Goldbach.FareyLatePositiveExcess",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -17460,8 +17601,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.FareyMatchedSemiprimeCofactors",
       "file": "lean/Conjectures/Goldbach/FareyMatchedSemiprimeCofactors.lean",
+      "module": "Conjectures.Goldbach.FareyMatchedSemiprimeCofactors",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -17481,8 +17622,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.FareyReturnDigitLine",
       "file": "lean/Conjectures/Goldbach/FareyReturnDigitLine.lean",
+      "module": "Conjectures.Goldbach.FareyReturnDigitLine",
       "track": "farey-inverse-sieve",
       "route_source": "farey-inverse-sieve"
     },
@@ -17505,8 +17646,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.FareySemiprimeFactorRectangle",
       "file": "lean/Conjectures/Goldbach/FareySemiprimeFactorRectangle.lean",
+      "module": "Conjectures.Goldbach.FareySemiprimeFactorRectangle",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -17528,8 +17669,8 @@
       "role": "target",
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.FareyShortWindowRoughVariance",
       "file": "lean/Conjectures/Goldbach/FareyShortWindowRoughVariance.lean",
+      "module": "Conjectures.Goldbach.FareyShortWindowRoughVariance",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -17646,8 +17787,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.MovingWindowTwoFactorChen",
       "file": "lean/Conjectures/Goldbach/MovingWindowTwoFactorChen.lean",
+      "module": "Conjectures.Goldbach.MovingWindowTwoFactorChen",
       "route_source": "farey-inverse-sieve"
     },
     {
@@ -18242,8 +18383,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.FinitePostBoundaryThrough524288",
       "file": "lean/Conjectures/Goldbach/FinitePostBoundaryThrough524288.lean",
+      "module": "Conjectures.Goldbach.FinitePostBoundaryThrough524288",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18479,8 +18620,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11CmParameterLocalDensity",
       "file": "lean/Conjectures/Goldbach/Rfc11CmParameterLocalDensity.lean",
+      "module": "Conjectures.Goldbach.Rfc11CmParameterLocalDensity",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18501,8 +18642,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11CompatibleTwoFieldClasses",
       "file": "lean/Conjectures/Goldbach/Rfc11CompatibleTwoFieldClasses.lean",
+      "module": "Conjectures.Goldbach.Rfc11CompatibleTwoFieldClasses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18523,8 +18664,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DescendingTail",
       "file": "lean/Conjectures/Goldbach/Rfc11DescendingTail.lean",
+      "module": "Conjectures.Goldbach.Rfc11DescendingTail",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18545,8 +18686,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DyadicCmPrimeAnchors",
       "file": "lean/Conjectures/Goldbach/Rfc11DyadicCmPrimeAnchors.lean",
+      "module": "Conjectures.Goldbach.Rfc11DyadicCmPrimeAnchors",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18567,8 +18708,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DyadicCover",
       "file": "lean/Conjectures/Goldbach/Rfc11DyadicCover.lean",
+      "module": "Conjectures.Goldbach.Rfc11DyadicCover",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18589,8 +18730,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11DyadicLeftEndpointWitnesses",
       "file": "lean/Conjectures/Goldbach/Rfc11DyadicLeftEndpointWitnesses.lean",
+      "module": "Conjectures.Goldbach.Rfc11DyadicLeftEndpointWitnesses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18611,8 +18752,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11ExtendedDyadicEdgeWitnesses",
       "file": "lean/Conjectures/Goldbach/Rfc11ExtendedDyadicEdgeWitnesses.lean",
+      "module": "Conjectures.Goldbach.Rfc11ExtendedDyadicEdgeWitnesses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18633,8 +18774,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Primorial757Repairs",
       "file": "lean/Conjectures/Goldbach/Rfc11Primorial757Repairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11Primorial757Repairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18655,8 +18796,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11ResidualDomainGlue",
       "file": "lean/Conjectures/Goldbach/Rfc11ResidualDomainGlue.lean",
+      "module": "Conjectures.Goldbach.Rfc11ResidualDomainGlue",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18677,8 +18818,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Rfc12CutpointWitness",
       "file": "lean/Conjectures/Goldbach/Rfc11Rfc12CutpointWitness.lean",
+      "module": "Conjectures.Goldbach.Rfc11Rfc12CutpointWitness",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18699,8 +18840,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11SeamSixRepairs",
       "file": "lean/Conjectures/Goldbach/Rfc11SeamSixRepairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11SeamSixRepairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18721,8 +18862,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11SecondBlockExceptionRepair",
       "file": "lean/Conjectures/Goldbach/Rfc11SecondBlockExceptionRepair.lean",
+      "module": "Conjectures.Goldbach.Rfc11SecondBlockExceptionRepair",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18743,8 +18884,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11ThirdBlockSeventyOneRepairs",
       "file": "lean/Conjectures/Goldbach/Rfc11ThirdBlockSeventyOneRepairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11ThirdBlockSeventyOneRepairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18765,8 +18906,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11TopFirst4096Witnesses",
       "file": "lean/Conjectures/Goldbach/Rfc11TopFirst4096Witnesses.lean",
+      "module": "Conjectures.Goldbach.Rfc11TopFirst4096Witnesses",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18787,8 +18928,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Top316AnchorBank",
       "file": "lean/Conjectures/Goldbach/Rfc11Top316AnchorBank.lean",
+      "module": "Conjectures.Goldbach.Rfc11Top316AnchorBank",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18809,8 +18950,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Top316FirstBankCover",
       "file": "lean/Conjectures/Goldbach/Rfc11Top316FirstBankCover.lean",
+      "module": "Conjectures.Goldbach.Rfc11Top316FirstBankCover",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18831,8 +18972,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11Top316SixRepairs",
       "file": "lean/Conjectures/Goldbach/Rfc11Top316SixRepairs.lean",
+      "module": "Conjectures.Goldbach.Rfc11Top316SixRepairs",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -18853,8 +18994,8 @@
       "parallel": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.Rfc11WheelConvolutionMain",
       "file": "lean/Conjectures/Goldbach/Rfc11WheelConvolutionMain.lean",
+      "module": "Conjectures.Goldbach.Rfc11WheelConvolutionMain",
       "track": "finite-rfc-third",
       "route_source": "finite-rfc-third"
     },
@@ -19300,8 +19441,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.MixedB13ShortEvenMean",
       "file": "lean/Conjectures/Goldbach/MixedB13ShortEvenMean.lean",
+      "module": "Conjectures.Goldbach.MixedB13ShortEvenMean",
       "route_source": "frontier-type2-dyadic-matrix"
     },
     {
@@ -19517,8 +19658,8 @@
       "parallel": true,
       "challenge_only": true,
       "source": "https://arxiv.org/html/2606.29559v1#S2",
-      "module": "Conjectures.Goldbach.FractionShiftedMangoldtSecondMoment",
       "file": "lean/Conjectures/Goldbach/FractionShiftedMangoldtSecondMoment.lean",
+      "module": "Conjectures.Goldbach.FractionShiftedMangoldtSecondMoment",
       "route_source": "large-sieve-dispersion"
     },
     {
@@ -20001,8 +20142,8 @@
       "depends_on": [],
       "parallel": true,
       "challenge_only": true,
-      "module": "Conjectures.Goldbach.DyadicTailEntropyFloor",
       "file": "lean/Conjectures/Goldbach/DyadicTailEntropyFloor.lean",
+      "module": "Conjectures.Goldbach.DyadicTailEntropyFloor",
       "route_source": "minor-truncation"
     },
     {
@@ -20142,8 +20283,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LinnikFiveUnconditional",
       "file": "lean/Conjectures/Goldbach/LinnikFiveUnconditional.lean",
+      "module": "Conjectures.Goldbach.LinnikFiveUnconditional",
       "route_source": "minor-truncation"
     },
     {
@@ -20165,8 +20306,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LinnikSixSubpowerShift",
       "file": "lean/Conjectures/Goldbach/LinnikSixSubpowerShift.lean",
+      "module": "Conjectures.Goldbach.LinnikSixSubpowerShift",
       "route_source": "minor-truncation"
     },
     {
@@ -20188,8 +20329,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LinnikSixUnconditional",
       "file": "lean/Conjectures/Goldbach/LinnikSixUnconditional.lean",
+      "module": "Conjectures.Goldbach.LinnikSixUnconditional",
       "route_source": "minor-truncation"
     },
     {
@@ -20211,8 +20352,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.LinnikTripleCenteredEnergy",
       "file": "lean/Conjectures/Goldbach/LinnikTripleCenteredEnergy.lean",
+      "module": "Conjectures.Goldbach.LinnikTripleCenteredEnergy",
       "route_source": "minor-truncation"
     },
     {
@@ -21717,8 +21858,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.ShiftedPrimePairSieve566",
       "file": "lean/Conjectures/Goldbach/ShiftedPrimePairSieve566.lean",
+      "module": "Conjectures.Goldbach.ShiftedPrimePairSieve566",
       "route_source": "minor-truncation"
     },
     {
@@ -21762,8 +21903,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.WheelModelLogSquareDecay",
       "file": "lean/Conjectures/Goldbach/WheelModelLogSquareDecay.lean",
+      "module": "Conjectures.Goldbach.WheelModelLogSquareDecay",
       "route_source": "minor-truncation"
     },
     {
@@ -21990,8 +22131,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.ChenPairAdmissibleShifts",
       "file": "lean/Conjectures/Goldbach/ChenPairAdmissibleShifts.lean",
+      "module": "Conjectures.Goldbach.ChenPairAdmissibleShifts",
       "route_source": "progressions"
     },
     {
@@ -22013,8 +22154,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.PrescribedResiduesSquareRootModuli",
       "file": "lean/Conjectures/Goldbach/PrescribedResiduesSquareRootModuli.lean",
+      "module": "Conjectures.Goldbach.PrescribedResiduesSquareRootModuli",
       "route_source": "progressions"
     },
     {
@@ -22036,8 +22177,8 @@
       "parallel": true,
       "challenge_only": true,
       "source": "https://arxiv.org/html/2606.29559v1#S4.SS2",
-      "module": "Conjectures.Goldbach.SevenFactorProductShift",
       "file": "lean/Conjectures/Goldbach/SevenFactorProductShift.lean",
+      "module": "Conjectures.Goldbach.SevenFactorProductShift",
       "route_source": "progressions"
     },
     {
@@ -22102,8 +22243,8 @@
       "parallel": true,
       "challenge_only": true,
       "source": "https://arxiv.org/html/2606.29559v1#S1",
-      "module": "Conjectures.Goldbach.BalancedThreeFactorGap",
       "file": "lean/Conjectures/Goldbach/BalancedThreeFactorGap.lean",
+      "module": "Conjectures.Goldbach.BalancedThreeFactorGap",
       "route_source": "representations"
     },
     {
@@ -22125,8 +22266,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.BeattyCommonExceptions",
       "file": "lean/Conjectures/Goldbach/BeattyCommonExceptions.lean",
+      "module": "Conjectures.Goldbach.BeattyCommonExceptions",
       "route_source": "representations"
     },
     {
@@ -23349,8 +23490,8 @@
       "challenge_only": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.MixedPiatetskiShapiroAsymptotic",
       "file": "lean/Conjectures/Goldbach/MixedPiatetskiShapiroAsymptotic.lean",
+      "module": "Conjectures.Goldbach.MixedPiatetskiShapiroAsymptotic",
       "route_source": "representations"
     },
     {
@@ -23485,8 +23626,8 @@
       "imports": [],
       "depends_on": [],
       "track": "rh-grh-windows",
-      "module": "Conjectures.Goldbach.CenteredTriangleLogSaving",
       "file": "lean/Conjectures/Goldbach/CenteredTriangleLogSaving.lean",
+      "module": "Conjectures.Goldbach.CenteredTriangleLogSaving",
       "route_source": "rh-grh-windows"
     },
     {
@@ -23508,8 +23649,8 @@
       "parallel": true,
       "imports": [],
       "depends_on": [],
-      "module": "Conjectures.Goldbach.SelbergThetaSingleLog",
       "file": "lean/Conjectures/Goldbach/SelbergThetaSingleLog.lean",
+      "module": "Conjectures.Goldbach.SelbergThetaSingleLog",
       "route_source": "rh-grh-windows"
     },
     {
@@ -24372,8 +24513,8 @@
       "parallel": true,
       "challenge_only": true,
       "imports": [],
-      "module": "Conjectures.Goldbach.MangoldtDenominatorDecay",
       "file": "lean/Conjectures/Goldbach/MangoldtDenominatorDecay.lean",
+      "module": "Conjectures.Goldbach.MangoldtDenominatorDecay",
       "route_source": "vaughan-bilinear"
     },
     {
@@ -24395,8 +24536,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.PrimeSquareDenominatorCancellation",
       "file": "lean/Conjectures/Goldbach/PrimeSquareDenominatorCancellation.lean",
+      "module": "Conjectures.Goldbach.PrimeSquareDenominatorCancellation",
       "route_source": "vaughan-bilinear"
     },
     {
@@ -24481,8 +24622,8 @@
       "challenge_only": true,
       "depends_on": [],
       "imports": [],
-      "module": "Conjectures.Goldbach.WorstNumeratorQuadraticMean",
       "file": "lean/Conjectures/Goldbach/WorstNumeratorQuadraticMean.lean",
+      "module": "Conjectures.Goldbach.WorstNumeratorQuadraticMean",
       "route_source": "vaughan-bilinear"
     },
     {
@@ -24504,8 +24645,8 @@
         "zh": "讨论 #3806 更正后尝试把负部单独压到 o(N)。本题检验其障碍：固定奇素数 p，N 为不含 p 的素数连乘，取 q=pd、d|N，则 q 平方自由且 c_q(N)=−φ(d)。在 Q<q≤2Q 时积分应包含一个远离零点、长度与 1/N 同阶的区间。另需证明该倍段内有正比例的平方自由、与 p 互素、素因子不超过 y 的 d。常数可依赖 p。若得证，仅排除丢弃正项的估计，原带符号下界仍开放。",
         "en": "Discussion #3806 proposes discarding the positive model terms. At a primorial missing p take q=pd with d dividing N. Then q is squarefree and its Ramanujan sum at N is −φ(d). Bound the kernel mass below on a fixed interval scaled by 1/N and count y-smooth squarefree divisors in the moving dyadic window. Constants may depend on p. A proof rules out the negative-only estimate while leaving the signed floor open."
       },
-      "module": "Conjectures.Goldbach.SkirtOmittedPrimeNegativeMass",
       "file": "lean/Conjectures/Goldbach/SkirtOmittedPrimeNegativeMass.lean",
+      "module": "Conjectures.Goldbach.SkirtOmittedPrimeNegativeMass",
       "route_source": "wide-arc-signed-remainder"
     },
     {
@@ -25162,6 +25303,24 @@
         "representations"
       ],
       "route_source": "explicit-major-and-ten-billion"
+    },
+    {
+      "id": "explicit-sieve-analytic-inputs",
+      "title": {
+        "en": "Explicit sieve and prime-counting analytic inputs",
+        "zh": "显式筛法与素数分布解析输入"
+      },
+      "description": {
+        "en": "Standalone explicit prime-power differences, Abel summation bridges (Chebyshev θ to π/li and reciprocal prime sums), primitive-character Euler-factor loss, compact smoothing-kernel Mellin bounds, and multiplicative large sieve lifting for explicit Goldbach and Chen-type sieves.",
+        "zh": "为显式哥德巴赫与陈氏筛提供通用的独立解析输入：显式素数幂差、切比雪夫函数到素数计数与素数倒数和的分部求和桥、本原特征欧拉因子损失、紧支撑光滑核 Mellin 衰减界，以及由加法大筛提升的乘性大筛不等式。"
+      },
+      "feeds": [
+        "rh-grh-windows",
+        "progressions",
+        "finite-rfc-third",
+        "large-sieve-dispersion"
+      ],
+      "route_source": "explicit-sieve-analytic-inputs"
     },
     {
       "id": "explicit-skirt-inputs",

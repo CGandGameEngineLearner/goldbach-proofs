@@ -1,0 +1,18 @@
+{
+  "id": "L-goldbach-abel-theta-to-pi-li",
+  "statement": "let π := fun x : ℝ => (((Finset.Icc 1 ⌊x⌋₊).filter Nat.Prime).card : ℝ); let θ := fun x : ℝ => ∑ p ∈ (Finset.Icc 1 ⌊x⌋₊).filter Nat.Prime, Real.log (p : ℝ); ∀ (x₀ x : ℝ) (E : ℝ → ℝ), 2 ≤ x₀ → x₀ ≤ x → ContinuousOn E (Set.Icc x₀ x) → (∀ t ∈ Set.Icc x₀ x, |θ t - t| ≤ E t) → |(π x - π x₀) - ∫ t in x₀..x, 1 / Real.log t| ≤ E x / Real.log x + E x₀ / Real.log x₀ + ∫ t in x₀..x, E t / (t * (Real.log t) ^ 2)",
+  "plain_statement": {
+    "en": "On any interval [x₀, x] with 2 ≤ x₀ ≤ x, any continuous pointwise envelope |θ(t) - t| ≤ E(t) transfers by Abel summation to an explicit bound on |(π(x) - π(x₀)) - ∫_{x₀}^x dt / log t|.",
+    "zh": "对任意满足 2 ≤ x₀ ≤ x 的区间 [x₀, x]，若连续函数 E(t) 在区间上控制 |θ(t) − t| ≤ E(t)，则经分部求和可得 |(π(x) − π(x₀)) − ∫_{x₀}^x dt / log t| 的显式误差上界。"
+  },
+  "brief": {
+    "en": "Apply discrete Abel summation on primes p ∈ (x₀, x] with weight 1 / log p, rewrite ∑_{x₀ < p ≤ x} 1 = (θ(x) - θ(x₀)) / log x + ∫_{x₀}^x (θ(t) - θ(x₀)) / (t log² t) dt via Fundamental Theorem of Calculus, and subtract the exact integration-by-parts identity for ∫_{x₀}^x dt / log t.",
+    "zh": "对区间 (x₀, x] 内的素数以 1 / log p 作离散 Abel 分部求和，并减去 ∫_{x₀}^x dt / log t 的分部积分恒等式，按三角不等式逐项代入 |θ(t) − t| ≤ E(t) 即可完成证明。"
+  },
+  "program": "foundation",
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

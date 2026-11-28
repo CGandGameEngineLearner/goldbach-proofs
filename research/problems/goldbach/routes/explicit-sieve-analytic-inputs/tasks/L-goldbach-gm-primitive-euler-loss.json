@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-gm-primitive-euler-loss",
+  "statement": "∀ (q d : ℕ) [NeZero q] [NeZero d] (χ : DirichletCharacter ℂ q) (χ' : DirichletCharacter ℂ d), d ∣ q → (∀ n : ℕ, Nat.Coprime n q → χ (n : ZMod q) = χ' (n : ZMod d)) → ∀ x : ℝ, 1 ≤ x → ‖(∑ n ∈ Finset.Icc 1 ⌊x⌋₊, (ArithmeticFunction.vonMangoldt n : ℂ) * χ (n : ZMod q)) - (∑ n ∈ Finset.Icc 1 ⌊x⌋₊, (ArithmeticFunction.vonMangoldt n : ℂ) * χ' (n : ZMod d))‖ ≤ (q.primeFactors.card : ℝ) * Real.log x",
+  "plain_statement": {
+    "en": "Replacing a Dirichlet character χ mod q by a character χ' mod d (with d ∣ q) that agrees with χ on all integers coprime to q changes the twisted Chebyshev sum ψ(x, χ) by at most ω(q) log x.",
+    "zh": "将模 q 的狄利克雷特征 χ 替换为在所有与 q 互素整数上取相同值的诱导特征 χ' mod d（d ∣ q）时，特征加权切比雪夫和 ψ(x, χ) 的偏差至多为 ω(q) log x。"
+  },
+  "brief": {
+    "en": "Terms with gcd(n, q) = 1 cancel identically; terms with gcd(n, q) > 1 and Λ(n) ≠ 0 must be prime powers p^k with p ∈ q.primeFactors and χ(p^k) = 0. Bound ‖χ'(p^k)‖ ≤ 1 and sum Λ(p^k) = log p over p^k ≤ x using PEqualNP.Outside.L_goldbach_euler_loss_power_loss.",
+    "zh": "与 q 互素的项精确相消；余下非零项必为素因子 p ∣ q 的素数幂 p^k。利用 ‖χ'(p^k)‖ ≤ 1 与 PEqualNP.Outside.L_goldbach_euler_loss_power_loss，每个坏素因子 p 贡献至多 log x。"
+  },
+  "program": "foundation",
+  "depends_on": [
+    "L-goldbach-euler-loss-power-loss"
+  ],
+  "imports": [
+    "PEqualNP.Outside.L_goldbach_euler_loss_power_loss"
+  ],
+  "parallel": true,
+  "source": "https://doi.org/10.1007/s11139-018-0023-x",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

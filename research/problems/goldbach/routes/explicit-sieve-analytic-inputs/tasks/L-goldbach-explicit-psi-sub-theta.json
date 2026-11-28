@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-explicit-psi-sub-theta",
+  "statement": "let ψ := fun x : ℝ => ∑ n ∈ Finset.Icc 1 ⌊x⌋₊, ArithmeticFunction.vonMangoldt n; let θ := fun x : ℝ => ∑ p ∈ (Finset.Icc 1 ⌊x⌋₊).filter Nat.Prime, Real.log (p : ℝ); ∀ x : ℝ, 2 ≤ x → 0 ≤ ψ x - θ x ∧ ψ x - θ x ≤ Real.log 4 * Real.sqrt x + 2 * x ^ (1 / 3 : ℝ) * Real.log x",
+  "plain_statement": {
+    "en": "For every real x ≥ 2, the Chebyshev prime-power difference ψ(x) - θ(x) is nonnegative and at most (log 4) √x + 2 x^(1/3) log x.",
+    "zh": "对任意实数 x ≥ 2，切比雪夫素数幂差 ψ(x) − θ(x) 非负且至多为 (log 4)√x + 2 x^(1/3) log x。"
+  },
+  "brief": {
+    "en": "Decompose the non-prime support of Λ(n) into prime powers p^k (k ≥ 2) using PEqualNP.Outside.L_goldbach_mangoldt_power_support, bound θ(x^(1/2)) via primorial ≤ 4^n (Rosser–Schoenfeld 1962), and bound each higher k ≥ 3 term uniformly by θ(x^(1/3)) ≤ (log 4) x^(1/3).",
+    "zh": "利用已证模块 PEqualNP.Outside.L_goldbach_mangoldt_power_support 将 Λ−素数权 拆为高次素数幂 p^k (k ≥ 2)，借助素数阶乘 ∏_{p≤n} p ≤ 4^n 控制 θ(√x)，并用 θ(x^(1/3)) 统一控制 k ≥ 3 的所有高次幂之和。"
+  },
+  "program": "foundation",
+  "depends_on": [
+    "L-goldbach-mangoldt-power-support"
+  ],
+  "imports": [
+    "PEqualNP.Outside.L_goldbach_mangoldt_power_support"
+  ],
+  "parallel": true,
+  "source": "https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-6/issue-1/Approximate-formulas-for-some-functions-of-prime-numbers/10.1215/ijm/1255631807.full",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

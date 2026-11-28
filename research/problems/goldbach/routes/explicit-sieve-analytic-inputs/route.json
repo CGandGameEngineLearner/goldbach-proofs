@@ -1,0 +1,17 @@
+{
+  "id": "explicit-sieve-analytic-inputs",
+  "title": {
+    "en": "Explicit sieve and prime-counting analytic inputs",
+    "zh": "显式筛法与素数分布解析输入"
+  },
+  "description": {
+    "en": "Standalone explicit prime-power differences, Abel summation bridges (Chebyshev θ to π/li and reciprocal prime sums), primitive-character Euler-factor loss, compact smoothing-kernel Mellin bounds, and multiplicative large sieve lifting for explicit Goldbach and Chen-type sieves.",
+    "zh": "为显式哥德巴赫与陈氏筛提供通用的独立解析输入：显式素数幂差、切比雪夫函数到素数计数与素数倒数和的分部求和桥、本原特征欧拉因子损失、紧支撑光滑核 Mellin 衰减界，以及由加法大筛提升的乘性大筛不等式。"
+  },
+  "feeds": [
+    "rh-grh-windows",
+    "progressions",
+    "finite-rfc-third",
+    "large-sieve-dispersion"
+  ]
+}

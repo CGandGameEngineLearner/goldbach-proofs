@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-multiplicative-large-sieve",
+  "statement": "letI := Classical.propDecidable; ∀ (M N Q : ℕ) (c : ℕ → ℂ), (∑ q ∈ Finset.range Q, ((q + 1 : ℝ) / (Nat.totient (q + 1) : ℝ)) * ∑ χ : DirichletCharacter ℂ (q + 1), if χ.IsPrimitive then ‖∑ k ∈ Finset.Ico M (M + N), c k * χ (k : ZMod (q + 1))‖ ^ 2 else 0) ≤ (Real.pi * (N : ℝ) + (Q : ℝ) ^ 2) * ∑ k ∈ Finset.Ico M (M + N), ‖c k‖ ^ 2",
+  "plain_statement": {
+    "en": "Montgomery–Vaughan multiplicative large sieve: for N consecutive integers, the sum of (q / φ(q)) |∑ c_k χ(k)|² over all primitive Dirichlet characters χ mod q with 1 ≤ q ≤ Q is at most (πN + Q²) ∑ |c_k|².",
+    "zh": "Montgomery–Vaughan 乘性大筛不等式：对 N 个连续整数上的任意复系数序列，在所有 1 ≤ q ≤ Q 的本原狄利克雷特征 χ mod q 上求和，(q / φ(q)) |∑ c_k χ(k)|² 之总和不超过 (πN + Q²) ∑ |c_k|²。"
+  },
+  "brief": {
+    "en": "Reuse Conjectures.Goldbach.AnalyticLargeSieve (L-goldbach-analytic-large-sieve): for each primitive χ mod q, expand χ(k) via Gauss sums τ(χ̄) χ(k) = ∑_{a mod q, (a,q)=1} χ̄(a) e(ak/q) with |τ(χ)|² = q, then sum over all characters mod q using character orthogonality to obtain ∑_{χ prim} |S(χ)|² ≤ (φ(q)/q) ∑_{(a,q)=1} |S(a/q)|².",
+    "zh": "直接复用已证模块 Conjectures.Goldbach.AnalyticLargeSieve：对每个本原特征 χ mod q 用高斯和展开且 |τ(χ)|² = q，再按特征正交性对全体模 q 特征求和，得 ∑_{χ本原} |S(χ)|² ≤ (φ(q)/q) ∑_{(a,q)=1} |S(a/q)|²，代入解析大筛即证。"
+  },
+  "program": "correlation",
+  "depends_on": [
+    "L-goldbach-analytic-large-sieve"
+  ],
+  "imports": [
+    "Conjectures.Goldbach.AnalyticLargeSieve"
+  ],
+  "parallel": true,
+  "source": "https://doi.org/10.1112/S0025579300004708",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

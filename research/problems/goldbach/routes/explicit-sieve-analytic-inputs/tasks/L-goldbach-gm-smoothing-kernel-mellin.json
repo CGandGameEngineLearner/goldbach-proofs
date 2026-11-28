@@ -1,0 +1,18 @@
+{
+  "id": "L-goldbach-gm-smoothing-kernel-mellin",
+  "statement": "∀ (δ : ℝ) (s : ℂ), 0 < δ → s ≠ 0 → let M : ℂ := ∫ v in (-δ)..δ, (((1 / δ) * (1 - |v| / δ) : ℝ) : ℂ) * Complex.exp (s * (v : ℂ)); M = ((Complex.exp (((δ / 2 : ℝ) : ℂ) * s) - Complex.exp (((-(δ / 2) : ℝ) : ℂ) * s)) / ((δ : ℂ) * s)) ^ 2 ∧ ‖M‖ ≤ min (Real.exp (δ * |s.re|)) (4 * Real.exp (δ * |s.re|) / (δ ^ 2 * ‖s‖ ^ 2))",
+  "plain_statement": {
+    "en": "For δ > 0 and s ≠ 0, the Mellin transform M(s) of the compact triangular smoothing kernel (1/δ)(1 - |v|/δ) on [-δ, δ] equals ((e^(δs/2) - e^(-δs/2)) / (δs))² and satisfies ‖M(s)‖ ≤ min(e^(δ|Re s|), 4 e^(δ|Re s|) / (δ² ‖s‖²)).",
+    "zh": "对 δ > 0 与 s ≠ 0，支撑在 [−δ, δ] 的三角光滑核 (1/δ)(1 − |v|/δ) 的 Mellin 变换等于 ((e^(δs/2) − e^(−δs/2)) / (δs))²，且其模长满足 ‖M(s)‖ ≤ min(e^(δ|Re s|), 4 e^(δ|Re s|) / (δ² ‖s‖²))。"
+  },
+  "brief": {
+    "en": "Split the integral at v = 0 into [-δ, 0] and [0, δ], integrate (a + bv)e^(sv) explicitly via Fundamental Theorem of Calculus, factor as a square, and combine the triangle inequality for exp(±δs/2) with ∫_{-δ}^δ (1/δ)(1 - |v|/δ) dv = 1.",
+    "zh": "纯微积分引理：在 v = 0 处拆分为 [−δ, 0] 与 [0, δ]，用牛顿–莱布尼茨公式直接积分线性函数乘指数函数，化为平方形式，再由积分绝对值不等式与单位质量 ∫ = 1 得两条衰减界。"
+  },
+  "program": "foundation",
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1007/s11139-018-0023-x",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

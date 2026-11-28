@@ -1,0 +1,18 @@
+{
+  "id": "L-goldbach-mertens-abel-bridge",
+  "statement": "let θ := fun x : ℝ => ∑ p ∈ (Finset.Icc 1 ⌊x⌋₊).filter Nat.Prime, Real.log (p : ℝ); ∀ (x₀ x : ℝ) (E : ℝ → ℝ), 2 ≤ x₀ → x₀ ≤ x → ContinuousOn E (Set.Icc x₀ x) → (∀ t ∈ Set.Icc x₀ x, |θ t - t| ≤ E t) → |(∑ p ∈ (Finset.Ioc ⌊x₀⌋₊ ⌊x⌋₊).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) - (Real.log (Real.log x) - Real.log (Real.log x₀))| ≤ E x / (x * Real.log x) + E x₀ / (x₀ * Real.log x₀) + ∫ t in x₀..x, E t * (Real.log t + 1) / (t ^ 2 * (Real.log t) ^ 2)",
+  "plain_statement": {
+    "en": "On any interval [x₀, x] with 2 ≤ x₀ ≤ x, any continuous pointwise bound |θ(t) - t| ≤ E(t) transfers by Stieltjes/Abel summation to an explicit two-sided bound on ∑_{x₀ < p ≤ x} 1/p - (log log x - log log x₀).",
+    "zh": "对任意满足 2 ≤ x₀ ≤ x 的区间 [x₀, x]，若连续函数 E(t) 控制 |θ(t) − t| ≤ E(t)，则经 Stieltjes/Abel 分部求和可直接给出 ∑_{x₀ < p ≤ x} 1/p − (log log x − log log x₀) 的显式双边误差界。"
+  },
+  "brief": {
+    "en": "Apply discrete Abel summation on primes p ∈ (x₀, x] with weight 1 / (p log p), whose derivative is -(log t + 1) / (t² log² t), and compare with ∫_{x₀}^x dt / (t log t) = log(log x) - log(log x₀).",
+    "zh": "对区间 (x₀, x] 内的素数以权函数 1 / (t log t) 作分部求和（其导数为 −(log t + 1) / (t² log² t)），再与 ∫_{x₀}^x dt / (t log t) = log log x − log log x₀ 相减并用 |θ(t) − t| ≤ E(t) 逐项定界。"
+  },
+  "program": "foundation",
+  "imports": [],
+  "parallel": true,
+  "source": "https://arxiv.org/abs/2208.01229",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}
