@@ -382,10 +382,10 @@ private theorem weight_eq (a n : ℕ) :
       dsimp [flips]; exact (card_le_card (filter_subset _ _)).trans_eq (card_range n)
     by_cases h : a.testBit n = a.testBit (n+1)
     · have he : flips (n+1) a = flips n a := by simp [flips, range_add_one, filter_insert, h]
-      rw [weight, if_pos h, ih, he, show n+1-flips n a = n-flips n a+1 by omega, pow_succ]
+      rw [weight, ite_eq_left h, ih, he, show n+1-flips n a = n-flips n a+1 by omega, pow_succ]
       ring
     · have he : flips (n+1) a = flips n a + 1 := by simp [flips, range_add_one, filter_insert, h]
-      rw [weight, if_neg h, ih, he, show n+1-(flips n a+1) = n-flips n a by omega, pow_succ]
+      rw [weight, ite_eq_right h, ih, he, show n+1-(flips n a+1) = n-flips n a by omega, pow_succ]
       ring
 
 private def certSum : ℕ → ℕ → ℤ
@@ -521,12 +521,12 @@ private theorem poly_entry (b : Bool) (r : ℕ) (hr : r < 2^15) :
   have hr' : r < 32768 := hr
   cases b
   · have h : r ≤ 65536-r := by omega
-    norm_num [put, scaledLoss, min_eq_left h, coeff, coeffs, sum_range_succ] <;> ring
+    norm_num [put, scaledLoss, min_eq_left h, coeff, coeffs, sum_range_succ]; ring
   · have hd : min (put 15 true r) (65536 - put 15 true r) = 32768-r := by
       change min (32768+r) (65536-(32768+r)) = 32768-r
       omega
     simp only [scaledLoss, hd, Nat.cast_sub (by omega : r ≤ 32768)]
-    norm_num [coeff, coeffs, sum_range_succ] <;> ring
+    norm_num [coeff, coeffs, sum_range_succ]; ring
 
 private theorem block_sum (b : Bool) :
     ∑ r ∈ range (2^15), (weight (put 15 b r) 15 : ℤ) * scaledLoss (put 15 b r) =
@@ -545,7 +545,7 @@ private theorem block_sum (b : Bool) :
       apply sum_congr rfl
       intro j hj
       rw [← mul_sum, ← moments_eq_entry 15 j b (by decide) (mem_range.mp hj)]
-      simp [moments]
+      simp only [moments, Nat.cast_sum, Nat.cast_mul, Nat.cast_pow]
 
 set_option maxHeartbeats 0 in
 private theorem numerical_via_moments :
