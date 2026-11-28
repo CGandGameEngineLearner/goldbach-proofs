@@ -14,7 +14,9 @@
   "role": "target",
   "challenge_only": true,
   "parallel": true,
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.PartnerLevelParseval"
+  ],
   "depends_on": [
     "L-goldbach-partner-level-parseval"
   ],
