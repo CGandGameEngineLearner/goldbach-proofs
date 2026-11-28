@@ -205,6 +205,34 @@ class CutFlow(DeskServerTestCase):
     def test_desk_flow(self):
         self.exercise(False)
 
+    def test_runner_interruption_allows_retry_on_same_head(self):
+        receipt = self.request(DESK + "claim", {"gap": PARENT, "kind": "cut", "handle": "retry-user"}, expected=201)
+        gap, token = receipt["gap"], receipt["lease"]["token"]
+        pr, head = 1051, "a" * 40
+        self.request(DESK + "submit", {"pr": pr, "head": head, "agent": {"model": "test", "harness": "codex"}}, token=token)
+        auth = {"pr": pr, "head": head, "gap": PARENT, "handle": "retry-user", "kind": "cut",
+                "module": gap["module"], "statement_sha256": hashlib.sha256(P.encode()).hexdigest()}
+        self.request(DESK + "authorize", dict(auth, run_id=11), signed=True)
+        failed = {"pr": pr, "head_sha": head, "run_id": 11}
+        self.request(DESK + "check-failed", failed, expected=401)
+        self.request(DESK + "check-failed", failed, signed=True)
+        detail = self.request("/api/task?lemma=" + PARENT)
+        self.assertIsNone(detail["assignment"])
+        status = self.request("/api/overview")
+        self.assertEqual(status["counts"]["attempts"], 0)
+        self.assertTrue(any(x["kind"] == "error" and x.get("pr") == pr for x in status["desk"]["activities"]))
+        self.request(DESK + "authorize", dict(auth, run_id=12), signed=True)
+        self.request(DESK + "check-failed", failed, signed=True)
+        proof = {"lemma_id": PARENT, "kind": "cut", "module": gap["module"], "head_sha": head,
+                 "verdict": "ACCEPTED", "run_id": 12, "run_attempt": 1,
+                 "manifest": {"rests_on": [{"module": gap["module"], "sha256": "b" * 64}],
+                              "defs": [], "children": [A, B]}}
+        self.request("/api/verdict", proof, signed=True)
+        self.request(DESK + "check-failed", dict(failed, run_id=12), signed=True)
+        detail = self.request("/api/task?lemma=" + PARENT)
+        self.assertFalse(detail["proved"])
+        self.assertEqual([(x["run_id"], x["points"]) for x in detail["cuts"]], [(12, 1)])
+
     def test_catalogued_negative_proof_settles_original_and_blocks_dependent_cuts(self):
         self.native = False
         self.submit_task(PARENT, "cut", "split-original", [A, B])

@@ -36,7 +36,7 @@ const strings = {
     justNow: '刚刚',
     participant: '参与者',
     activities: {
-      claimed: '领取引理', submitted: '登记提交', checking: '开始验证',
+      claimed: '领取引理', submitted: '登记提交', checking: '开始验证', error: '核验中断，可重试',
       released: '归还引理', accepted: '验证通过', rejected: '验证拒绝', expired: '任务凭证过期'
     },
     event: '任务状态更新',
@@ -77,7 +77,7 @@ const strings = {
     justNow: 'Just now',
     participant: 'Participant',
     activities: {
-      claimed: 'Claimed a lemma', submitted: 'Registered a submission', checking: 'Started verification',
+      claimed: 'Claimed a lemma', submitted: 'Registered a submission', checking: 'Started verification', error: 'Verification interrupted · retry available',
       released: 'Returned a lemma', accepted: 'Proof accepted', rejected: 'Proof rejected', expired: 'Lease expired'
     },
     event: 'Task status changed',

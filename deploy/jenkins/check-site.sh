@@ -22,3 +22,5 @@ python3 -B -m unittest \
   deploy.test_landau \
   deploy.test_publish_catalogue \
   research.test_catalogue
+
+PYTHONPATH=deploy/jenkins python3 -B -m unittest discover -s deploy/jenkins -p test_proof_refusals.py

@@ -1605,6 +1605,17 @@ class Handler(BaseHTTPRequestHandler):
                 with scope.transaction(write=True) as conn:
                     stored = reductions.complete(conn, scope, body)
                 status, result = (200, {"status": "stored"}) if stored else (409, {"error": "stale_plan"})
+            elif path == "/api/desk/check-failed" and slug == "goldbach":
+                if not desk.signed(self.headers.get("X-Goldbach-Signature", ""), raw):
+                    return self.reply(401, b'{}')
+                pr, head, run = body.get("pr"), body.get("head_sha"), body.get("run_id")
+                if (type(pr) is not int or not 1 <= pr <= 9_999_999 or type(run) is not int
+                        or not 1 <= run < 2**53 or not isinstance(head, str)
+                        or not re.fullmatch(r"[a-f0-9]{40}", head)):
+                    raise ValueError()
+                for scope in DESKS.values():
+                    scope.record_check_failure(pr, head, run, int(time.time()))
+                status, result = 200, {"status": "stored"}
             elif path == "/api/desk/pending" and slug == "goldbach":
                 status, result = queue_pending(raw, self.headers)
             else:
@@ -1697,6 +1708,7 @@ class Handler(BaseHTTPRequestHandler):
             conn.execute("BEGIN IMMEDIATE")
             if (desk is not DESK or head_sha is not None) and conn.execute(
                 "SELECT 1 FROM goldbach_leases WHERE run_id = ? AND gap = ? AND kind = ? AND (? IS NULL OR head = ?)"
+                " AND NOT EXISTS (SELECT 1 FROM goldbach_check_failures f WHERE f.run_id=goldbach_leases.run_id)"
                 " AND ((? = 'prove' AND (? IS NULL OR target_module IS NULL)) OR target_module = ?)",
                 (run_id, lemma, kind, head_sha, head_sha, kind, record.get("module"), record.get("module")),
             ).fetchone() is None:
