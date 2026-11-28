@@ -649,6 +649,27 @@ def board_overview(desk, data, lang=None, known_tracks=None):
     return overview
 
 
+@lru_cache(maxsize=12)
+def catalogue_gzip(body):
+    return gzip.compress(body, compresslevel=9, mtime=0)
+
+
+def catalogue_status(desk, data, query):
+    progress = {"catalogue_revision": data["catalogue_revision"],
+                "desk": {"assignments": data["desk"]["assignments"]}}
+    gaps = [{"id": g["id"], "proved": g["proved"], "generated": g["id"] not in desk.gaps,
+             "statement_sha256": reductions.digest(g["statement"])} for g in data["gaps"]]
+    if query.get("view") != "compact":
+        return {**progress, "gaps": gaps}
+    # Index positions are valid only for this exact ordered manifest, including generated cuts.
+    manifest = [[g["id"], g["generated"], g["statement_sha256"]] for g in gaps]
+    token = hashlib.sha256(json.dumps(manifest, separators=(",", ":")).encode()).hexdigest()
+    progress.update(manifest_sha256=token, proved=[i for i, gap in enumerate(gaps) if gap["proved"]])
+    if query.get("known_manifest") != token:
+        progress["manifest"] = manifest
+    return progress
+
+
 def board_task(desk, data, gap):
     return {**task_index(gap, delta=False), "map_route": map_route(desk, gap),
             "assignment": data["desk"]["assignments"].get(gap["id"])}
@@ -1191,11 +1212,11 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(304, b"", content_type, cache=cache, etag=etag, vary=vary)
         return self.reply(200, body, content_type, encoding=encoding, cache=cache, etag=etag, vary=vary)
 
-    def public_json(self, payload, cache="public, max-age=10"):
+    def public_json(self, payload, cache="public, max-age=10", *, catalogue=False):
         body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode()
         compress = accepts_gzip(self.headers.get("Accept-Encoding", ""))
         if compress:
-            body = gzip.compress(body, compresslevel=3, mtime=0)
+            body = catalogue_gzip(body) if catalogue else gzip.compress(body, compresslevel=3, mtime=0)
         return self.public_conditional(body, encoding="gzip" if compress else None, cache=cache, vary=True)
 
     def client_ip(self):
@@ -1496,11 +1517,17 @@ class Handler(BaseHTTPRequestHandler):
         if path in {"/api/overview", "/api/task-page", "/api/catalogue-status"}:
             params = parse_qs(url.query, keep_blank_values=True)
             allowed = {"route", "panel", "program", "state", "q", "lang", "page", "limit", "focus"} if path == "/api/task-page" else set()
+            if path == "/api/catalogue-status":
+                allowed = {"view", "known_manifest"}
             if path == "/api/overview":
                 allowed = {"lang", "known_tracks"}
             if not set(params) <= allowed or any(len(v) != 1 or len(v[0]) > 500 for v in params.values()):
                 return self.reply(400, b'{"error":"invalid board query"}')
             query = {key: values[0] for key, values in params.items()}
+            if path == "/api/catalogue-status" and query and (
+                    query.get("view") != "compact" or ("known_manifest" in query and
+                    not re.fullmatch(r"[0-9a-f]{64}", query["known_manifest"]))):
+                return self.reply(400, b'{"error":"invalid catalogue query"}')
             if (query.get("lang", "en") not in {"en", "zh"}
                     or query.get("state", "all") not in {"all", "open", "target", "proved", "progress", "available", "chain"}
                     or not re.fullmatch(r"[1-9][0-9]{0,5}", query.get("page", "1"))
@@ -1514,10 +1541,7 @@ class Handler(BaseHTTPRequestHandler):
                 elif path == "/api/task-page":
                     payload = task_page(desk, data, query)
                 else:
-                    payload = {"catalogue_revision": RELEASE_SHA,
-                               "desk": {"assignments": data["desk"]["assignments"]},
-                               "gaps": [{"id": g["id"], "proved": g["proved"], "generated": g["id"] not in desk.gaps,
-                                         "statement_sha256": reductions.digest(g["statement"])} for g in data["gaps"]]}
+                    return self.public_json(catalogue_status(desk, data, query), catalogue=True)
                 return self.public_json(payload)
             except sqlite3.Error:
                 return self.reply(503, b'{"error":"board unavailable"}')

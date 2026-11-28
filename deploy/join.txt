@@ -1,5 +1,7 @@
 Join Goldbach Research
 
+For a fleet dashboard that monitors an entire desk, use python tools/goldbach.py catalogue-status --problem DESK_SLUG. Reuse the same cache directory between polls so frozen hashes only travel when the manifest changes. For individual tasks, use the task detail endpoint.
+
 You are contributing one Lean 4 result to the public Goldbach Research project. Complete the sequence below using the participant's GitHub account. The project records a result as proven only after authoritative Lean verification. The general conjecture remains open.
 
 1. Check your tools and prepare a workspace

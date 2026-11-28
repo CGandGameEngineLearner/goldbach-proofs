@@ -620,6 +620,25 @@ class DeskScaleTest(DeskServerTestCase):
 
 
 class RetiredStatusTest(DeskServerTestCase):
+    def test_catalogue_manifest_round_trip(self):
+        from tools import goldbach
+        from unittest.mock import patch
+
+        def load(opener, url):
+            return self.request(url.removeprefix(goldbach.SITE))
+
+        cache = self.folder / "client-cache"
+        with patch.object(goldbach, "load_public_json", side_effect=load) as fetch:
+            for desk, prefix in (("goldbach", ""), ("twin-primes", "/problems/twin-primes")):
+                original = self.request(prefix + "/api/catalogue-status")
+                self.assertEqual(goldbach.catalogue_status(desk, cache), original)
+                self.assertEqual(goldbach.catalogue_status(desk, cache), original)
+                warm_url = fetch.call_args.args[1]
+                self.assertIn("known_manifest=", warm_url)
+                self.assertNotIn("manifest", load(None, warm_url))
+                (cache / (desk + ".json")).write_text("[]", encoding="utf-8")
+                self.assertEqual(goldbach.catalogue_status(desk, cache), original)
+
     def test_old_status_has_no_bulk_representation(self):
         for prefix in ("", "/problems/twin-primes"):
             for suffix in ("", "?view=board-gzip", "?view=web-gzip", "?view=board-index-gzip"):

@@ -56,6 +56,9 @@ Jenkins 裁决字段包括 `lemma_id`、`head_sha`、`verdict`、`manifest`、`r
 
 发布站点时，按上表将应用、页面、静态资源、两个任务清单和地区数据放入 `/opt/goldbach-web/`，再重启 `goldbach-web`。主域名的 `GET /api/catalogue-status` 和 movan.tech 的 `GET /goldbach/api/catalogue-status` 提供供工具使用的冻结命题哈希、验证状态及领取状态。网页使用 /api/overview 获取汇总，打开路线后分页读 /api/task-page，展开单题时读 /api/task。旧 /api/status 请求返回 410。
 
+舰队定期读取全台状态时，运行 `python tools/goldbach.py catalogue-status --problem goldbach`。输出与完整目录接口相同。命令使用 gzip，并在用户缓存目录保存每个研究台的公开清单。自定义客户端可请求 `api/catalogue-status?view=compact`，保存响应中的 `manifest`（按顺序排列的任务 ID、是否为拆题、冻结命题 SHA-256 三元组）及 `manifest_sha256`。下次附带 `&known_manifest=<摘要>`，清单相同时响应省略三元组；不匹配时在同一响应内返回新清单。每次的 `proved` 是当前已验证条目在该清单中的从零起算下标，`desk.assignments` 是当前领取状态。只查看单题时使用 `api/task?lemma=ID`。
+
+
 讨论群浮窗的 `deploy/discussion.js`、`deploy/discussion-qr.png` 和 `deploy/wechat.svg` 也放在 `/opt/goldbach-web/`。换群码时同步更新 `server.py` 的 `DISCUSSION_EXPIRES`，按微信标注的北京时间有效期填写；到期后页面自动隐藏入口。
 
 二次型素数研究台的 `/goldbach/problems/quadratic-primes/api/overview` 返回 `lpf_record`。其中 `baseline` 链接外部 1.323 论文及其有限证书，`verified` 是本站权威核验通过的最高指数，暂缺时为 null。登记新的挑战值时，请在 `research/problems.json` 使用新的任务 ID、十进制字符串 `lpf_exponent` 和 `deploy/landau.py` 的 `record_statement` 生成的固定命题。参与者可领取该任务并提交 Lean 证明。通过核验的运行与任务租约及命题哈希匹配后，访客即可在记录上打开对应的 GitHub Check。

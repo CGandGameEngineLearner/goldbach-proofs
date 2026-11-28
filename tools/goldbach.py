@@ -282,27 +282,56 @@ def authenticated_login():
     return command("gh", "api", "user", "--jq", ".login")
 
 
+def load_public_json(opener, url):
+    request = urllib.request.Request(url, headers={"Accept": "application/json", "Accept-Encoding": "gzip"})
+    with opener.open(request, timeout=30) as response:
+        content = response.read()
+        if response.headers.get("Content-Encoding") == "gzip":
+            content = gzip.decompress(content)
+    return json.loads(content)
+
+
+def manifest_digest(manifest):
+    return hashlib.sha256(json.dumps(manifest, separators=(",", ":")).encode()).hexdigest()
+
+
+def catalogue_status(problem, cache_dir):
+    prefix = "" if problem == "goldbach" else "/problems/" + problem
+    url = f"{SITE}{prefix}/api/catalogue-status?view=compact"
+    cache = cache_dir / (problem + ".json")
+    try:
+        manifest = json.loads(cache.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        manifest = None
+    if isinstance(manifest, list):
+        url += "&known_manifest=" + manifest_digest(manifest)
+    data = load_public_json(urllib.request.build_opener(NoRedirect()), url)
+    if "manifest" in data:
+        manifest = data["manifest"]
+    if not isinstance(manifest, list) or manifest_digest(manifest) != data["manifest_sha256"]:
+        raise ValueError("Catalogue manifest does not match the returned status")
+    if "manifest" in data:
+        try:
+            cache_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+            save(cache, manifest)
+        except OSError:
+            pass  # A read-only cache still permits a complete response.
+    proved = set(data["proved"])
+    return {"catalogue_revision": data["catalogue_revision"], "desk": data["desk"],
+            "gaps": [{"id": ident, "generated": generated, "statement_sha256": digest, "proved": i in proved}
+                     for i, (ident, generated, digest) in enumerate(manifest)]}
+
+
 def list_tasks(problem, limit):
     prefix = "" if problem == "goldbach" else "/problems/" + problem
     opener = urllib.request.build_opener(NoRedirect())
-
-    def load(path):
-        request = urllib.request.Request(
-            f"{SITE}{prefix}{path}",
-            headers={"Accept": "application/json", "Accept-Encoding": "gzip"},
-        )
-        with opener.open(request, timeout=20) as response:
-            content = response.read()
-            if response.headers.get("Content-Encoding") == "gzip":
-                content = gzip.decompress(content)
-        return json.loads(content)
 
     tasks = []
     while len(tasks) < limit:
         path = f"/api/tasks?limit={min(100, limit - len(tasks))}"
         if tasks:
             path += f"&offset={len(tasks)}"
-        payload = load(path)
+        payload = load_public_json(opener, SITE + prefix + path)
         tasks.extend(payload["tasks"])
         if not payload["tasks"] or len(tasks) >= payload["available"]:
             break
@@ -587,6 +616,8 @@ def main():
     listing = modes.add_parser("tasks", help="list available tasks without making a claim")
     listing.add_argument("--problem", default="goldbach", help="problem slug, e.g. twin-primes")
     listing.add_argument("--limit", type=int, default=20)
+    catalogue = modes.add_parser("catalogue-status", help="read public proof and assignment status using a cached manifest")
+    catalogue.add_argument("--problem", default="goldbach")
     modes.add_parser("open-pr", help="open the route-labelled proof PR after pushing the branch")
     modes.add_parser("beat", help="renew the current lease")
     release = modes.add_parser("release", help="return an unfinished lemma")
@@ -617,6 +648,16 @@ def main():
     reviews_parser.add_argument("pr", type=int)
     reviews_parser.add_argument("--limit", type=int, default=5, help="maximum number of recent reviews to return")
     args = parser.parse_args()
+    if args.action == "catalogue-status":
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", args.problem):
+            parser.error("Provide a valid problem slug.")
+        try:
+            cache_dir = Path(os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache") / "goldbach" / "manifests-v1"
+            result = catalogue_status(args.problem, cache_dir)
+        except (OSError, ValueError) as error:
+            parser.exit(1, f"Could not read the {args.problem} catalogue: {error}\n")
+        print(json.dumps(result, ensure_ascii=False))
+        return
     if args.action == "tasks":
         if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", args.problem) or args.limit < 1:
             parser.error("Provide a valid problem slug and a positive limit.")
