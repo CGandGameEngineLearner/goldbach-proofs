@@ -1,0 +1,20 @@
+{
+  "id": "L-goldbach-linnik-six-unconditional",
+  "statement": "∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ ∃ a : Fin 6 → ℕ, N = p + q + ∑ i : Fin 6, 2 ^ (a i + 1)",
+  "plain_statement": {
+    "zh": "无条件证明每个充分大的偶数都是两个素数与恰好六个二的正整数次幂之和；允许幂重复。",
+    "en": "Unconditionally represent every sufficiently large even integer as two primes and exactly six positive powers of two (repetitions allowed)."
+  },
+  "brief": {
+    "zh": "对标 Johnston–Trudgian 定理 1，去掉 GRH。与 #4089 的长间距素数相关和共享倍频结构。可将六项分成两组三项，通过论文 (24) 的反射卷积研究正性；也可研究一个负相关的单侧界。六项偏移必须保留，不把移位后的表示误记为强哥猜的逐点证明。",
+    "en": "Remove GRH from Theorem 1. Split six powers into two triples and use the reflected convolution in (24). The dyadic spectrum also occurs in #4089. Positivity with a six-power shift does not give an unshifted representation."
+  },
+  "source": "https://arxiv.org/html/2605.17825v2#S1.SS1",
+  "program": "correlation",
+  "track": "minor-truncation",
+  "depends_on": [],
+  "role": "target",
+  "parallel": true,
+  "challenge_only": true,
+  "imports": []
+}

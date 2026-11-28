@@ -18178,6 +18178,52 @@
       "route_source": "minor-truncation"
     },
     {
+      "id": "L-goldbach-linnik-six-unconditional",
+      "statement": "∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → ∃ p q : ℕ, Nat.Prime p ∧ Nat.Prime q ∧ ∃ a : Fin 6 → ℕ, N = p + q + ∑ i : Fin 6, 2 ^ (a i + 1)",
+      "plain_statement": {
+        "zh": "无条件证明每个充分大的偶数都是两个素数与恰好六个二的正整数次幂之和；允许幂重复。",
+        "en": "Unconditionally represent every sufficiently large even integer as two primes and exactly six positive powers of two (repetitions allowed)."
+      },
+      "brief": {
+        "zh": "对标 Johnston–Trudgian 定理 1，去掉 GRH。与 #4089 的长间距素数相关和共享倍频结构。可将六项分成两组三项，通过论文 (24) 的反射卷积研究正性；也可研究一个负相关的单侧界。六项偏移必须保留，不把移位后的表示误记为强哥猜的逐点证明。",
+        "en": "Remove GRH from Theorem 1. Split six powers into two triples and use the reflected convolution in (24). The dyadic spectrum also occurs in #4089. Positivity with a six-power shift does not give an unshifted representation."
+      },
+      "source": "https://arxiv.org/html/2605.17825v2#S1.SS1",
+      "program": "correlation",
+      "track": "minor-truncation",
+      "depends_on": [],
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "module": "Conjectures.Goldbach.LinnikSixUnconditional",
+      "file": "lean/Conjectures/Goldbach/LinnikSixUnconditional.lean",
+      "route_source": "minor-truncation"
+    },
+    {
+      "id": "L-goldbach-linnik-triple-centered-energy",
+      "statement": "let L := fun N : ℕ => Nat.log 2 N; let r := fun N m : ℕ => ∑ a ∈ Finset.Icc 1 (L N), ∑ b ∈ Finset.Icc 1 (L N), ∑ c ∈ Finset.Icc 1 (L N), let p := m - (2^a + 2^b + 2^c); if Nat.Prime p then Real.log (p : ℝ) else 0; ∃ δ : ℝ, 0 < δ ∧ δ < 1 ∧ ∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → (∑ m ∈ (Finset.range (N+1)).filter (fun m => Odd m), (r N m - 2*(L N : ℝ)^3)^2) ≤ (1-δ)*2*(N : ℝ)*(L N : ℝ)^6",
+      "plain_statement": {
+        "zh": "无条件证明：一个素数加三个二幂的对数加权表示函数，在奇数上的中心二阶矩，比临界值 2N⌊log₂N⌋⁶ 至少小一个固定比例。",
+        "en": "Unconditionally bound the centered second moment of the log-weighted prime plus three powers representation function on odd targets by a fixed factor below 2N floor(log₂N)^6."
+      },
+      "brief": {
+        "zh": "对照 (13)、(24)–(26)，每个三元组有序，减法下溢时 p=0 自动不计。保留倍频核与大素数和在次弧上的联合分布，避免把两个最坏值直接相乘。严格余量配合已知一阶矩和 Cauchy–Schwarz 可令反射卷积为正。这里的改进是无条件跨过 1 的临界系数，不声称改进 GRH 下的数值。",
+        "en": "Track the joint large values of the dyadic kernel and the prime sum rather than multiplying their separate maxima. Tuples are ordered. A fixed margin below the critical coefficient absorbs the first-moment error and proves positivity of (24) by reflected Cauchy–Schwarz. Compare the unconditional specialization of (26)."
+      },
+      "source": "https://arxiv.org/html/2605.17825v2#S3.SS1",
+      "program": "correlation",
+      "track": "minor-truncation",
+      "depends_on": [],
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "module": "Conjectures.Goldbach.LinnikTripleCenteredEnergy",
+      "file": "lean/Conjectures/Goldbach/LinnikTripleCenteredEnergy.lean",
+      "route_source": "minor-truncation"
+    },
+    {
       "id": "L-goldbach-major-denominator-dilation-refute",
       "statement": "¬ (let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (w : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (w k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let A := fun (n : ℕ) (r : ℕ → ℕ → ℝ) => {t : ℝ | ∃ q a : ℕ, 1 ≤ q ∧ q ≤ Q n ∧ a ≤ q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ r q a * (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let M := fun (n : ℕ) (r : ℕ → ℕ → ℝ) => (intervalIntegral (fun t => (A n r).indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; ∃ N : ℕ, ∀ n ≥ N, Even n → ∀ r : ℕ → ℝ, (∀ q, (1/2:ℝ) ≤ r q ∧ r q ≤ 2) → (n:ℝ) ≤ M n (fun q _ => r q))",
       "plain_statement": {
@@ -19658,6 +19704,29 @@
       "role": "lemma",
       "module": "Conjectures.Goldbach.PacketWheelSmoothEnvelope",
       "file": "lean/Conjectures/Goldbach/PacketWheelSmoothEnvelope.lean",
+      "route_source": "minor-truncation"
+    },
+    {
+      "id": "L-goldbach-shifted-prime-pair-sieve-566",
+      "statement": "let C₀ : ℝ := ∏' p : ℕ, if Nat.Prime p ∧ 2 < p then 1 - 1 / ((p : ℝ) - 1)^2 else 1; ∀ ε : ℝ, 0 < ε → ∃ N₀ : ℕ, ∀ N h : ℕ, N₀ ≤ N → 0 < h → h < N → let pairs := (Finset.range (N+1)).filter (fun p => Nat.Prime p ∧ p+h ≤ N ∧ Nat.Prime (p+h)); let localFactor : ℝ := ∏ p ∈ h.primeFactors.filter (fun p => 2 < p), ((p : ℝ)-1)/((p : ℝ)-2); (pairs.card : ℝ) ≤ ((283/50 : ℝ)+ε)*C₀*(N : ℝ)*localFactor/(Real.log (N : ℝ))^2",
+      "plain_statement": {
+        "zh": "一致控制所有 0<h<N 的素数差对计数，把显式筛上界中的常数从 6.7814 降至 5.66，保留局部奇异因子和任意 ε 损失。",
+        "en": "Improve the uniform prime-difference sieve constant to 5.66 for every 0<h<N, preserving the local factors and an arbitrary epsilon loss."
+      },
+      "brief": {
+        "zh": "对标命题 2 的 R(N,h)，按较小素数 p 计数，p+h 也须不超过 N。尝试在可分解筛权中分离大素因子，再对移动剩余类 −h 保持一致估计。5.66 严格小于表 1 无条件六项的 5.672 门槛；只控制固定 h 或对 h 平均都不够。",
+        "en": "Use Proposition 2 with the smaller prime as the parameter. Separate the large prime factors of the sieve moduli and retain uniformity in the moving residue −h. Table 1 puts the unconditional six-power threshold at 5.672. A fixed-shift estimate cannot be substituted."
+      },
+      "source": "https://arxiv.org/html/2605.17825v2#S2.SS2",
+      "program": "correlation",
+      "track": "minor-truncation",
+      "depends_on": [],
+      "role": "target",
+      "parallel": true,
+      "challenge_only": true,
+      "imports": [],
+      "module": "Conjectures.Goldbach.ShiftedPrimePairSieve566",
+      "file": "lean/Conjectures/Goldbach/ShiftedPrimePairSieve566.lean",
       "route_source": "minor-truncation"
     },
     {
