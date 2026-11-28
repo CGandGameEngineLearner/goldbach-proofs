@@ -17,7 +17,7 @@ private noncomputable def weight (p : ℕ) : ℝ :=
   if p.Prime then Real.log p else 0
 
 private def window (n : ℕ) : Finset ℕ :=
-  (range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ p%2 = 1)
+  (range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ Nat.mod p 2 = 1)
 
 private theorem card_bound (n : ℕ) : 6*(window n).card ≤ n+12 := by
   have bound : (window n).card ≤ (Icc (n/6) (n/3)).card := by
@@ -30,17 +30,22 @@ private theorem card_bound (n : ℕ) : 6*(window n).card ≤ n+12 := by
     · intro p hp t ht heq
       have hpo := (mem_filter.mp hp).2.2.2
       have hto := (mem_filter.mp ht).2.2.2
+      change p % 2 = 1 at hpo
+      change t % 2 = 1 at hto
       change p/2 = t/2 at heq
       omega
   rw [Nat.card_Icc] at bound
   omega
 
-private theorem reflection (n : ℕ) (hn : n%2 = 0) :
+private theorem reflection (n : ℕ) (hn : Nat.mod n 2 = 0) :
     (∑ p ∈ window n, weight (n-p)) = ∑ p ∈ window n, weight p := by
+  change n % 2 = 0 at hn
   have closed (p : ℕ) (hp : p ∈ window n) : n-p ∈ window n := by
     obtain ⟨hpr,hlo,hhi,hodd⟩ := mem_filter.mp hp
     have hpn := mem_range.mp hpr
-    exact mem_filter.mpr ⟨mem_range.mpr (by omega), by omega, by omega, by omega⟩
+    change p % 2 = 1 at hodd
+    exact mem_filter.mpr ⟨mem_range.mpr (by omega), by omega, by omega,
+      (show (n-p) % 2 = 1 by omega)⟩
   apply sum_bij (fun p _ => n-p)
   · exact closed
   · intro p hp z hz h
