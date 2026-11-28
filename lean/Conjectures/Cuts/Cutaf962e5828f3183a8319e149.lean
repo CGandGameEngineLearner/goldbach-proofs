@@ -26,7 +26,7 @@ theorem Conjectures.Cuts.Cutaf962e5828f3183a8319e149
     (htransport : by
       classical
       exact ∀ X e : ℕ, 4 ≤ X → e ∈ Finset.Icc 1 (Nat.log 2 X / 2) →
-        ∀ P : ℕ → Prop,
+        ∀ P : ℕ → Prop, ∀ [DecidablePred P],
           ((Finset.Ico X (2*X)).filter (fun n => Even n ∧ P (n-2^e))).card ≤
             ((Finset.Ico (X/2) (2*X)).filter (fun m => Even m ∧ P m)).card) : (
 have x1 : ℕ → ℕ := fun (x1 : ℕ) => {x2 ∈ Finset.Icc (2 : ℕ) x1 | Nat.Prime x2 ∧ Nat.Prime (x1 - x2)}.card; ∃ (x2 : ℝ) (x3 : ℝ), (0 : ℝ) < x2 ∧ (0 : ℝ) < x3 ∧ ∃ (x4 : ℕ), ∀ x5 ≥ x4, ∀ x7 ∈ Finset.Icc (1 : ℕ) (Nat.log (2 : ℕ) x5 / (2 : ℕ)), ↑{x9 ∈ Finset.Ico x5 ((2 : ℕ) * x5) | Even x9 ∧ ↑(x1 (x9 - (2 : ℕ) ^ x7)) < x2 * ↑x5 / Real.log ↑x5 ^ (2 : ℕ)}.card ≤ x3 * ↑x5 ^ (37 / 50 : ℝ)
