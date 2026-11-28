@@ -71,3 +71,5 @@ theorem Conjectures.Cuts.Cutb173a1f5c8529f1eeab03ebf
         ≤ C₁ * (X : ℝ) / (Real.log (X : ℝ)) ^ A + C₂ * (X : ℝ) / (Real.log (X : ℝ)) ^ A := by
           linarith
       _ = (C₁ + C₂) * (X : ℝ) / (Real.log (X : ℝ)) ^ A := by ring
+
+-- Retry note: the same proof, re-submitted after a verification-runner fault (no Lean verdict was issued).
