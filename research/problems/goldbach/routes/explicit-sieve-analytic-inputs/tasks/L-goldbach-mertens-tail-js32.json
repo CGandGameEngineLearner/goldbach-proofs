@@ -13,7 +13,9 @@
   "depends_on": [
     "L-goldbach-mertens-abel-bridge"
   ],
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.MertensAbelBridge"
+  ],
   "parallel": true,
   "source": "https://arxiv.org/abs/2208.01229",
   "track": "explicit-sieve-analytic-inputs",
