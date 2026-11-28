@@ -1,0 +1,19 @@
+{
+  "id": "L-goldbach-sharp-multiplicative-large-sieve",
+  "statement": "letI := Classical.propDecidable; ∀ (M L Q : ℕ) (a : ℕ → ℂ), ∑ q ∈ Finset.Icc 1 Q, ((q : ℝ) / (Nat.totient q : ℝ)) * ∑ χ ∈ (Finset.univ : Finset (DirichletCharacter ℂ q)).filter (·.IsPrimitive), ‖∑ n ∈ Finset.Ico M (M + L), a n * χ (n : ZMod q)‖ ^ 2 ≤ ((L : ℝ) + (Q : ℝ) ^ 2) * ∑ n ∈ Finset.Ico M (M + L), ‖a n‖ ^ 2",
+  "plain_statement": {
+    "en": "Optimal Montgomery–Vaughan (1973) multiplicative large sieve: without the factor π on L, ∑_{1 ≤ q ≤ Q} (q/φ(q)) ∑_{χ prim mod q} |∑_{M ≤ n < M+L} a_n χ(n)|² ≤ (L + Q²) ∑ |a_n|², matching MultiplicativeLargeSievePremise verbatim.",
+    "zh": "最优常数版 Montgomery–Vaughan（1973）乘性大筛不等式：在区间 [M, M+L) 上对 1 ≤ q ≤ Q 的全部本原特征求 (q/φ(q)) 加权平方和，上界为 (L + Q²) ∑ |a_n|²（去掉 L 前系数 π），直接对接 1+2 路线前提。"
+  },
+  "brief": {
+    "en": "Prove Montgomery–Vaughan's sharp additive large sieve (L - 1 + δ⁻¹ ≤ L + Q² for δ = Q⁻², via Hilbert's inequality / Selberg's majorant or Montgomery–Vaughan 1973 weight theorem) and lift to primitive characters via Gauss sums τ(χ̄) with |τ(χ)|² = q. Note: `Finset.Icc 1 Q` yields `q ≥ 1` (`NeZero q` if cast, or proves directly via `DirichletCharacter ℂ q`). Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "证明锐利常数版（无 π）加法大筛不等式（Selberg 优函数或 Montgomery–Vaughan 1973 加权 Hilbert 不等式得常数 N − 1 + Q²），再由本原特征高斯和展开 |τ(χ)|² = q 提升至乘性特征和。允许导入已验证社区模块（≤ 16 个）。"
+  },
+  "program": "correlation",
+  "depends_on": [],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1112/S0025579300004708",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

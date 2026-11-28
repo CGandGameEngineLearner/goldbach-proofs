@@ -1,0 +1,19 @@
+{
+  "id": "L-goldbach-mertens-small-range-cert",
+  "statement": "let M0 : ℝ := Real.eulerMascheroniConstant + ∑' p : Nat.Primes, (Real.log (1 - 1 / (p.1 : ℝ)) + 1 / (p.1 : ℝ)); (0.261497 ≤ M0 ∧ M0 ≤ 0.261498) ∧ ∀ x : ℝ, 2 ≤ x → x ≤ Real.exp 10 → Real.log (Real.log x) + M0 - (2.964e-6 : ℝ) / Real.log x ≤ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ∧ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ≤ Real.log (Real.log x) + M0 + (if Real.log x > 8.9 then (1.614e-3 : ℝ) else (1 : ℝ))",
+  "plain_statement": {
+    "en": "Unconditional finite-range certification of Mertens' constant M0 ∈ [0.261497, 0.261498] and explicit two-sided bounds on ∑_{p < x} 1/p for all 2 ≤ x ≤ exp(10) (≈ 22,026.47), matching Johnston–Starichkova Lemma 3.2 (3.2)–(3.3).",
+    "zh": "无条件有限区间核验：证明 Meissel–Mertens 常数满足 0.261497 ≤ M₀ ≤ 0.261498，并在 2 ≤ x ≤ exp(10)（约 22,026）上给出 ∑_{p < x} 1/p 相对于 log log x + M₀ 的精确双边显式界。"
+  },
+  "brief": {
+    "en": "Certify M0 ∈ [0.261497, 0.261498] using finite prime tails + ζ(2) acceleration (or Euler–Maclaurin), then check ∑_{p < x} 1/p monotonically on each interval between consecutive primes up to 22,029 (note e^10 < 22027). Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "先用有限素数尾和与 ∑_{p} 1/p² ≤ ζ(2) 认证 M₀ ∈ [0.261497, 0.261498]；在 [2, 22027] 内因 ∑_{p < x} 1/p 仅在素数处跳跃，按素数间隙分点检验单调极值即可全覆盖（仅需整数算术与可证对数上下界）。"
+  },
+  "program": "foundation",
+  "depends_on": [],
+  "imports": [],
+  "parallel": true,
+  "source": "https://arxiv.org/abs/2208.01229",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

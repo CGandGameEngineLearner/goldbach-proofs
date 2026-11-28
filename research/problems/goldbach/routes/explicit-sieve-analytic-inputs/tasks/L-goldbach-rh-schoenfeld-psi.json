@@ -1,0 +1,22 @@
+{
+  "id": "L-goldbach-rh-schoenfeld-psi",
+  "statement": "(∀ s : ℂ, 1 / 2 < s.re → s ≠ 1 → riemannZeta s ≠ 0) → ∀ x : ℝ, (73.2 : ℝ) ≤ x → |(∑ n ∈ Finset.Icc 1 ⌊x⌋₊, ArithmeticFunction.vonMangoldt n) - x| ≤ Real.sqrt x * (Real.log x) ^ 2 / (8 * Real.pi)",
+  "plain_statement": {
+    "en": "Schoenfeld (1976, Theorem 10): assuming RH for riemannZeta, |ψ(x) - x| ≤ √x log² x / (8π) for all real x ≥ 73.2.",
+    "zh": "Schoenfeld（1976，定理 10）：在黎曼猜想下，对一切实数 x ≥ 73.2 成立 |ψ(x) − x| ≤ √x log² x / (8π)。"
+  },
+  "brief": {
+    "en": "For large x, difference ψ₁(x + h) - ψ₁(x) via L-goldbach-zeta-truncated-explicit-psi and sum 1/|ρ| over critical-line zeros via Stieltjes integration against L-goldbach-zeta-zero-count-explicit; verify intermediate x ≥ 73.2 directly or via finite numerical intervals. Contributors may import any verified module from https://jenkins-hook.goldbach.tech/verified-imports.json (≤ 16 transitive).",
+    "zh": "大 x 段对 L-goldbach-zeta-truncated-explicit-psi 的 ψ₁ 取差商并用 L-goldbach-zeta-zero-count-explicit 做 Stieltjes 积分估计 ∑_{Re ρ = 1/2} 1/|ρ(ρ+1)|；有限段 x ≥ 73.2 可作离散核验。允许导入全站已验证模块（≤ 16 个）。"
+  },
+  "program": "grh",
+  "depends_on": [
+    "L-goldbach-zeta-zero-count-explicit",
+    "L-goldbach-zeta-truncated-explicit-psi"
+  ],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "conditional"
+}

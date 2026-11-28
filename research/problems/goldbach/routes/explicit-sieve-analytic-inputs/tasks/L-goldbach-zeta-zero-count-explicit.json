@@ -1,0 +1,19 @@
+{
+  "id": "L-goldbach-zeta-zero-count-explicit",
+  "statement": "∀ T : ℝ, 3 ≤ T → ∃ Z : Finset ℂ, (∀ s : ℂ, s ∈ Z ↔ 0 < s.re ∧ s.re < 1 ∧ 0 < s.im ∧ s.im ≤ T ∧ riemannZeta s = 0) ∧ |((∑ ρ ∈ Z, analyticOrderNatAt riemannZeta ρ : ℕ) : ℝ) - ((T / (2 * Real.pi)) * Real.log (T / (2 * Real.pi * Real.exp 1)) + 7 / 8)| ≤ 0.2 * Real.log T + 5",
+  "plain_statement": {
+    "en": "Unconditional explicit Riemann–von Mangoldt formula for N(T): for T ≥ 3, the multiplicity-weighted count of nontrivial zeros ρ of ζ(s) with 0 < Im(ρ) ≤ T differs from (T/(2π)) log(T/(2πe)) + 7/8 by at most 0.2 log T + 5.",
+    "zh": "无条件显式 Riemann–von Mangoldt 零点计数公式：对 T ≥ 3，ζ(s) 在 0 < Im(ρ) ≤ T 内按重数计的非平凡零点总数 N(T) 与 (T/(2π)) log(T/(2πe)) + 7/8 之差至多为 0.2 log T + 5。"
+  },
+  "brief": {
+    "en": "Prove Backlund / Rosser's explicit argument-principle bound on N(T) via Stirling's formula for log Γ(s/2 + 1) and Jensen's inequality / Littlewood lemma for S(T) = π⁻¹ arg ζ(1/2 + iT). Contributors may import any verified module from https://jenkins-hook.goldbach.tech/verified-imports.json within the 16-module closure.",
+    "zh": "由辐角原理将 N(T) 拆为 Γ(s/2+1) 的 Stirling 显式估计与 S(T) = π⁻¹ arg ζ(1/2+iT) 的 Backlund 界，给出保守可控常数 0.2 log T + 5。可从 https://jenkins-hook.goldbach.tech/verified-imports.json 导入已验证社区模块（传递闭包 ≤ 16）。"
+  },
+  "program": "foundation",
+  "depends_on": [],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.2307/2371491",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

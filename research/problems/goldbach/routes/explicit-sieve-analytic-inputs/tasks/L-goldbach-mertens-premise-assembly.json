@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-mertens-premise-assembly",
+  "statement": "let M0 : ℝ := Real.eulerMascheroniConstant + ∑' p : Nat.Primes, (Real.log (1 - 1 / (p.1 : ℝ)) + 1 / (p.1 : ℝ)); let E_lo : ℝ → ℝ := fun x => (2.964e-6 : ℝ) / Real.log x; let E_hi : ℝ → ℝ := fun x => if x > (10 : ℝ) ^ 12 then (6.836e-6 : ℝ) / Real.log x else if Real.log x > 10 then 2 / (Real.sqrt x * Real.log x) else if Real.log x > 8.9 then (1.614e-3 : ℝ) else (1 : ℝ); (0.261497 ≤ M0 ∧ M0 ≤ 0.261498) ∧ ∀ x : ℝ, 2 ≤ x → Real.log (Real.log x) + M0 - E_lo x ≤ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ∧ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ≤ Real.log (Real.log x) + M0 + E_hi x",
+  "plain_statement": {
+    "en": "Unconditional piecewise assembly of BuchstabSwitching.External.MertensPrimeSumPremise meisselMertensConst across [2, exp 10], (exp 10, 10¹²], and (10¹², ∞).",
+    "zh": "无条件三段总装 MertensPrimeSumPremise meisselMertensConst：拼接 [2, exp 10]、(exp 10, 10¹²] 与 (10¹², ∞) 三段显式 Mertens 界，直接交付 1+3 形式化所需的全部无条件素数倒数和前提。"
+  },
+  "brief": {
+    "en": "Pure piecewise case split on x ≤ exp 10, exp 10 < x ≤ 10¹², and 10¹² < x combining L-goldbach-mertens-small-range-cert, L-goldbach-mertens-mid-range-bjv16, and L-goldbach-mertens-tail-js32 (using Real.exp_lt_exp / Real.log_lt_log monotonicity to match `Real.log x > 10`).",
+    "zh": "按 x ≤ exp 10、exp 10 < x ≤ 10¹²、10¹² < x 做纯分情况拼接，依次调用 L-goldbach-mertens-small-range-cert、L-goldbach-mertens-mid-range-bjv16 与 L-goldbach-mertens-tail-js32 即可直接总装。"
+  },
+  "program": "foundation",
+  "depends_on": [
+    "L-goldbach-mertens-small-range-cert",
+    "L-goldbach-mertens-mid-range-bjv16",
+    "L-goldbach-mertens-tail-js32"
+  ],
+  "imports": [],
+  "parallel": true,
+  "source": "https://arxiv.org/abs/2208.01229",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

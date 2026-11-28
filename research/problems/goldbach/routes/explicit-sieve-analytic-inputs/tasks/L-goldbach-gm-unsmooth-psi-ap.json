@@ -1,0 +1,22 @@
+{
+  "id": "L-goldbach-gm-unsmooth-psi-ap",
+  "statement": "(∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (s : ℂ), 1 / 2 < s.re → (χ ≠ 1 ∨ s ≠ 1) → DirichletCharacter.LFunction χ s ≠ 0) → ∀ (x : ℝ) (d a : ℕ), 100 ≤ x → 3 ≤ d → Nat.Coprime a d → |(∑ n ∈ (Finset.Icc 1 ⌊x⌋₊).filter (fun n => Nat.ModEq d n a), ArithmeticFunction.vonMangoldt n) - x / (Nat.totient d : ℝ)| ≤ Real.sqrt x * ((Real.log x) ^ 2 / (8 * Real.pi) + Real.log (d : ℝ) * Real.log x / (2 * Real.pi) + (3 / 4 : ℝ) * Real.log x + (1 / 2 : ℝ) * Real.log (d : ℝ))",
+  "plain_statement": {
+    "en": "Grenié–Molteni (2019, Corollary 1) explicit GRH bound for ψ(x; d, a): for x ≥ 100, d ≥ 3, and (a, d) = 1, |ψ(x; d, a) - x/φ(d)| ≤ √x (log² x / (8π) + log d log x / (2π) + 3/4 log x + 1/2 log d).",
+    "zh": "Grenié–Molteni（2019，推论 1）算术级数显式 GRH 界：对 x ≥ 100、d ≥ 3 且 gcd(a, d) = 1，成立 |ψ(x; d, a) − x/φ(d)| ≤ √x (log² x / (8π) + log d log x / (2π) + 3/4 log x + 1/2 log d)。"
+  },
+  "brief": {
+    "en": "Combine orthogonality of characters mod d, L-goldbach-gm-primitive-euler-loss (induction to primitive χ*), L-goldbach-gm-smoothed-explicit-formula (optimizing δ to absorb unsmoothing error over x ∈ [e^(-δ)X, e^(δ)X]), and Schoenfeld / RH at q = 1 for the principal character. Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "按模 d 特征正交展开 ψ(x; d, a)，用 L-goldbach-gm-primitive-euler-loss 化归到本原特征 χ*，结合 L-goldbach-gm-smoothed-explicit-formula 与优化参数 δ 消去光滑化误差（主特征由 q = 1 给出）。可导入已验证社区模块（≤ 16 个）。"
+  },
+  "program": "grh",
+  "depends_on": [
+    "L-goldbach-gm-primitive-euler-loss",
+    "L-goldbach-gm-smoothed-explicit-formula"
+  ],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1016/j.jnt.2018.12.005",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "conditional"
+}

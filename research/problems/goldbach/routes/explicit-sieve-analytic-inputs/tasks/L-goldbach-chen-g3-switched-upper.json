@@ -1,0 +1,19 @@
+{
+  "id": "L-goldbach-chen-g3-switched-upper",
+  "statement": "letI := Classical.propDecidable; let C2 : ℝ := ∏' p : Nat.Primes, if 2 < p.1 then (1 - 1 / ((p.1 : ℝ) - 1) ^ 2) else 1; let Θ : ℕ → ℝ := fun N => (C2 * ∏ p ∈ N.primeFactors.filter (2 < ·), (((p : ℝ) - 1) / ((p : ℝ) - 2))) * (N : ℝ) / (Real.log (N : ℝ)) ^ 2; ∀ τ ε η : ℝ, 1 / 3 < τ → τ < 1 / 2 → 0 < ε → ε < 1 / 10 → 0 < η → ∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → (((Finset.Ico (2 : ℕ) N).filter (fun p : ℕ => p.Prime ∧ (p : ℝ) < (1 - ε) * (N : ℝ) ∧ ∃ r q : ℕ, r.Prime ∧ q.Prime ∧ r < q ∧ (N : ℝ) ^ τ ≤ (r : ℝ) ∧ Nat.Coprime (r * q) N ∧ N - p = r * q)).card : ℝ) ≤ ((8 : ℝ) * Real.log ((1 - τ) / τ) + η) * Θ N",
+  "plain_statement": {
+    "en": "Unconditional classical Chen (1973) switched-semiprime upper bound (K = 8): for 1/3 < τ < 1/2 and 0 < ε < 1/10, primes p < (1-ε)N with N - p = rq (r < q primes, r ≥ N^τ, (rq, N) = 1) have count at most (8 log((1-τ)/τ) + η) Θ(N) for large even N.",
+    "zh": "无条件经典陈景润（1973）切换三因子半素数经典上界（K = 8）：对 1/3 < τ < 1/2 与 0 < ε < 1/10，满足 p < (1−ε)N 且 N − p = rq（r < q 为素数、r ≥ N^τ、(rq, N)=1）的表示数渐近不超过 8 log((1−τ)/τ) Θ(N)。"
+  },
+  "brief": {
+    "en": "Apply Chen's role-switching method together with the linear / Selberg upper sieve (`F(1) ≤ 8` / Rosser–Iwaniec `2 e^γ / (1/2) < 8` after Bombieri–Vinogradov distribution level 1/2) and partial summation over r ∈ [N^τ, √N]. Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "运用陈氏切换技巧：固定合数端 rq 的算术级数并用线性筛/Selberg 上界筛结合 Bombieri–Vinogradov 定理（水平 1/2）控制素数 p，再对 r ∈ [N^τ, √N] 积分求和即得经典常数 8。可导入已验证社区模块（≤ 16 个）。"
+  },
+  "program": "correlation",
+  "depends_on": [],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1360/ya1973-16-2-157",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

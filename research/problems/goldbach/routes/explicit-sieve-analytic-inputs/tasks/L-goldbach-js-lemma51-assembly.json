@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-js-lemma51-assembly",
+  "statement": "(∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (s : ℂ), 1 / 2 < s.re → (χ ≠ 1 ∨ s ≠ 1) → DirichletCharacter.LFunction χ s ≠ 0) → let li2 : ℝ := Real.eulerMascheroniConstant + Real.log (Real.log 2) + ∑' k : ℕ, (Real.log 2) ^ (k + 1) / (((k + 1 : ℕ) : ℝ) * ((k + 1).factorial : ℝ)); ∀ X₂ : ℝ, 4 * (10 : ℝ) ^ 18 ≤ X₂ → let c_pi : ℝ := 3 / (8 * Real.pi) + (6 + 1 / Real.pi) / (4 * Real.log X₂) + 6 / (Real.log X₂) ^ 2 + li2 / (Real.sqrt X₂ * Real.log X₂); ∀ x : ℝ, X₂ ≤ x → ∀ d a : ℕ, 3 ≤ d → (d : ℝ) ≤ Real.sqrt x → Nat.Coprime a d → |(((Finset.range (Nat.floor x + 1)).filter (fun p => p.Prime ∧ Nat.ModEq d p a)).card : ℝ) - (∫ t in (2 : ℝ)..x, 1 / Real.log t) / (Nat.totient d : ℝ)| ≤ c_pi * Real.sqrt x * Real.log x",
+  "plain_statement": {
+    "en": "Johnston–Starichkova (arXiv:2208.01229, Lemma 5.1) AP prime-counting assembly under Mathlib-only GRH: for X₂ ≥ 4·10¹⁸, x ≥ X₂, 3 ≤ d ≤ √x, and (a, d) = 1, |π(x; d, a) - Li(x)/φ(d)| ≤ c_π(X₂) √x log x, matching JSLemma51Premise canonicalLi2 verbatim.",
+    "zh": "Johnston–Starichkova（Lemma 5.1）算术级数素数计数总装：在纯 Mathlib GRH 下，对 X₂ ≥ 4·10¹⁸、x ≥ X₂、3 ≤ d ≤ √x 且 gcd(a, d) = 1，成立 |π(x; d, a) − Li(x)/φ(d)| ≤ c_π(X₂) √x log x，与 JSLemma51Premise canonicalLi2 接口逐字一致。"
+  },
+  "brief": {
+    "en": "Use L-goldbach-gm-unsmooth-psi-ap with d ≤ √x (so log d ≤ (1/2) log x), subtract prime powers p^k (k ≥ 2) via L-goldbach-explicit-psi-sub-theta, apply Abel summation (as in L-goldbach-abel-theta-to-pi-li) on [2, x], and absorb |li(2)|/φ(d) ≤ li2/2 into the c_pi(X₂) tail. Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "在 L-goldbach-gm-unsmooth-psi-ap 中代入 log d ≤ (1/2) log x，用 L-goldbach-explicit-psi-sub-theta 扣去高次素数幂 p^k (k ≥ 2)，按 L-goldbach-abel-theta-to-pi-li 作分部求和并用 li(2)/φ(d) 吸收常数偏差，即精确装配出 c_π(X₂)。"
+  },
+  "program": "grh",
+  "depends_on": [
+    "L-goldbach-explicit-psi-sub-theta",
+    "L-goldbach-abel-theta-to-pi-li",
+    "L-goldbach-gm-unsmooth-psi-ap"
+  ],
+  "imports": [],
+  "parallel": true,
+  "source": "https://arxiv.org/abs/2208.01229",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "conditional"
+}

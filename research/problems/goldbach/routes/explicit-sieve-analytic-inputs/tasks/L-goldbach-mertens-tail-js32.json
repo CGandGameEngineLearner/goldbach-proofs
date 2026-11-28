@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-mertens-tail-js32",
+  "statement": "let M0 : ℝ := Real.eulerMascheroniConstant + ∑' p : Nat.Primes, (Real.log (1 - 1 / (p.1 : ℝ)) + 1 / (p.1 : ℝ)); ∀ x : ℝ, (10 : ℝ) ^ 12 < x → Real.log (Real.log x) + M0 - (2.964e-6 : ℝ) / Real.log x ≤ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ∧ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ≤ Real.log (Real.log x) + M0 + (6.836e-6 : ℝ) / Real.log x",
+  "plain_statement": {
+    "en": "Unconditional asymptotic tail of Johnston–Starichkova (arXiv:2208.01229, Lemma 3.2): for x > 10¹², log log x + M0 - 2.964e-6 / log x ≤ ∑_{p < x} 1/p ≤ log log x + M0 + 6.836e-6 / log x.",
+    "zh": "无条件大尺度 Mertens 尾项（Johnston–Starichkova 引理 3.2）：对 x > 10¹²，成立 log log x + M₀ − 2.964×10⁻⁶ / log x ≤ ∑_{p < x} 1/p ≤ log log x + M₀ + 6.836×10⁻⁶ / log x。"
+  },
+  "brief": {
+    "en": "Integrate explicit unconditional Chebyshev bounds |θ(t) - t| ≤ ε(t) t (e.g. Broadbent–Kadiri–Lumley–Ng–Wilk 2021 / Platt–Trudgian on t > 10¹²) via L-goldbach-mertens-abel-bridge over [x, ∞), keeping track of the 1/log x lower/upper asymmetries. Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "由 Broadbent–Kadiri–Lumley–Ng–Wilk（2021）在 t > 10¹² 的无条件显式切比雪夫界，代入 L-goldbach-mertens-abel-bridge 在 [x, ∞) 积分并保留上下界非对称常数，即得 JS 引理 3.2 尾项。可导入已验证社区模块（≤ 16 个）。"
+  },
+  "program": "foundation",
+  "depends_on": [
+    "L-goldbach-mertens-abel-bridge"
+  ],
+  "imports": [],
+  "parallel": true,
+  "source": "https://arxiv.org/abs/2208.01229",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

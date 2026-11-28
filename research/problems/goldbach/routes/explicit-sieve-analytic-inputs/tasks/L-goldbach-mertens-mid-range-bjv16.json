@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-mertens-mid-range-bjv16",
+  "statement": "let M0 : ℝ := Real.eulerMascheroniConstant + ∑' p : Nat.Primes, (Real.log (1 - 1 / (p.1 : ℝ)) + 1 / (p.1 : ℝ)); ∀ x : ℝ, Real.exp 10 < x → x ≤ (10 : ℝ) ^ 12 → Real.log (Real.log x) + M0 - (2.964e-6 : ℝ) / Real.log x ≤ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ∧ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ≤ Real.log (Real.log x) + M0 + 2 / (Real.sqrt x * Real.log x)",
+  "plain_statement": {
+    "en": "Unconditional mid-range Mertens bound (BJV22 Lemma 16 & JS Lemma 3.2): for exp(10) < x ≤ 10¹², log log x + M0 - 2.964e-6 / log x ≤ ∑_{p < x} 1/p ≤ log log x + M0 + 2 / (√x log x).",
+    "zh": "无条件中段 Mertens 界（BJV22 引理 16 与 JS 引理 3.2）：对 exp(10) < x ≤ 10¹²，成立 log log x + M₀ − 2.964×10⁻⁶ / log x ≤ ∑_{p < x} 1/p ≤ log log x + M₀ + 2 / (√x log x)。"
+  },
+  "brief": {
+    "en": "Apply L-goldbach-mertens-abel-bridge together with Rosser–Schoenfeld / Schoenfeld–style explicit Chebyshev bounds |θ(t) - t| ≤ 1.0001 √t (or finite verification of θ(x) < x for x ≤ 10¹²) integrated from x to ∞ (using M₀ convergence). Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "利用 L-goldbach-mertens-abel-bridge 在区间 [x, ∞) 配合 Rosser–Schoenfeld / Büthe 等 10¹² 以内的无条件显式切比雪夫界（如 Büthe 2018 对 x ≤ 10¹⁹ 的显式 θ(x)−x 估计）与分部求和即可推出。可导入全站已验证模块（≤ 16 个）。"
+  },
+  "program": "foundation",
+  "depends_on": [
+    "L-goldbach-mertens-abel-bridge"
+  ],
+  "imports": [],
+  "parallel": true,
+  "source": "https://arxiv.org/abs/2207.09452",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

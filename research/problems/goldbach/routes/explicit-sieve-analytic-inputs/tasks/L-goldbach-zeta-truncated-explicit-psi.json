@@ -1,0 +1,21 @@
+{
+  "id": "L-goldbach-zeta-truncated-explicit-psi",
+  "statement": "∀ x T : ℝ, 2 ≤ x → 3 ≤ T → ∃ Z : Finset ℂ, (∀ s : ℂ, s ∈ Z ↔ 0 < s.re ∧ s.re < 1 ∧ |s.im| ≤ T ∧ riemannZeta s = 0) ∧ ‖((∑ n ∈ Finset.Icc 1 ⌊x⌋₊, (x - (n : ℝ)) * ArithmeticFunction.vonMangoldt n : ℝ) : ℂ) - (((x ^ 2 / 2 : ℝ) : ℂ) - ∑ ρ ∈ Z, ((analyticOrderNatAt riemannZeta ρ : ℕ) : ℂ) * (x : ℂ) ^ (ρ + 1) / (ρ * (ρ + 1)))‖ ≤ 2 * x ^ 2 * (Real.log T + 5) / T + 4 * x",
+  "plain_statement": {
+    "en": "Unconditional first-integrated explicit formula for ψ₁(x) = ∑_{n ≤ x} (x - n) Λ(n): for x ≥ 2 and T ≥ 3, subtracting x²/2 and the truncated sum over ζ-zeros with |Im(ρ)| ≤ T leaves an explicit error at most 2x²(log T + 5)/T + 4x.",
+    "zh": "无条件一阶积分切比雪夫显式公式：对 x ≥ 2 与 T ≥ 3，ψ₁(x) = ∑_{n ≤ x} (x − n)Λ(n) 减去主项 x²/2 及 |Im(ρ)| ≤ T 的 ζ 非平凡零点截断和后，显式误差不超过 2x²(log T + 5)/T + 4x。"
+  },
+  "brief": {
+    "en": "Use the absolutely convergent Perron integral (1/(2πi)) ∫ (−ζ'/ζ)(s) x^(s+1)/(s(s+1)) ds, shift contours to Re(s) = -1/2 avoiding zeros via L-goldbach-zeta-zero-count-explicit, and bound the |Im(ρ)| > T tail cleanly without Gibbs oscillations. Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "使用绝对收敛的积分核 x^(s+1)/(s(s+1))（消除 Gibbs 跳跃），将积分围道左移至 Re(s) = −1/2，结合 L-goldbach-zeta-zero-count-explicit 控制 |Im(ρ)| > T 尾项。可引用全站已验证模块（≤ 16 个）。"
+  },
+  "program": "foundation",
+  "depends_on": [
+    "L-goldbach-zeta-zero-count-explicit"
+  ],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

@@ -5,8 +5,8 @@
     "zh": "显式筛法与素数分布解析输入"
   },
   "description": {
-    "en": "Standalone explicit prime-power differences, Abel summation bridges (Chebyshev θ to π/li and reciprocal prime sums), primitive-character Euler-factor loss, compact smoothing-kernel Mellin bounds, and multiplicative large sieve lifting for explicit Goldbach and Chen-type sieves.",
-    "zh": "为显式哥德巴赫与陈氏筛提供通用的独立解析输入：显式素数幂差、切比雪夫函数到素数计数与素数倒数和的分部求和桥、本原特征欧拉因子损失、紧支撑光滑核 Mellin 衰减界，以及由加法大筛提升的乘性大筛不等式。"
+    "en": "Complete explicit analytic & sieve prerequisite suite (21 tasks): Schoenfeld RH prime-counting (L-A1..L-A6), Grenié–Molteni / Johnston–Starichkova GRH primes in arithmetic progressions (L-B1..L-B6), unconditional explicit Mertens reciprocal prime sums (L-C1..L-C5), Montgomery–Vaughan multiplicative large sieve (πN + Q² and sharp N + Q²), and unconditional Pan–Ding / Chen switched semiprime upper bounds.",
+    "zh": "面向显式哥德巴赫与陈氏筛的完整解析与筛法前置题组（共 21 题）：Schoenfeld RH 素数计数链（L-A1..L-A6）、Grenié–Molteni / Johnston–Starichkova GRH 算术级数素数链（L-B1..L-B6）、无条件显式 Mertens 素数倒数和链（L-C1..L-C5）、Montgomery–Vaughan 乘性大筛不等式（πN + Q² 与锐利 N + Q²），以及潘承洞–丁夏畦/陈景润无条件切换半素数经典上界。"
   },
   "feeds": [
     "rh-grh-windows",

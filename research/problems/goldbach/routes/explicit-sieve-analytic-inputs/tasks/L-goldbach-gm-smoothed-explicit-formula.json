@@ -1,0 +1,22 @@
+{
+  "id": "L-goldbach-gm-smoothed-explicit-formula",
+  "statement": "(∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (s : ℂ), 1 / 2 < s.re → (χ ≠ 1 ∨ s ≠ 1) → DirichletCharacter.LFunction χ s ≠ 0) → ∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q), 2 ≤ q → χ.IsPrimitive → ∀ (x δ T : ℝ), 2 ≤ x → 0 < δ → δ ≤ 1 / 2 → 2 ≤ T → let Φ : ℝ → ℝ := fun w => if w ≤ -δ then 1 else if w ≤ 0 then 1 - (w + δ) ^ 2 / (2 * δ ^ 2) else if w < δ then (δ - w) ^ 2 / (2 * δ ^ 2) else 0; let M : ℂ → ℂ := fun s => ((Complex.exp (((δ / 2 : ℝ) : ℂ) * s) - Complex.exp (((-(δ / 2) : ℝ) : ℂ) * s)) / ((δ : ℂ) * s)) ^ 2; ∃ Z : Finset ℂ, (∀ s : ℂ, s ∈ Z ↔ 0 < s.re ∧ s.re < 1 ∧ |s.im| ≤ T ∧ DirichletCharacter.LFunction χ s = 0) ∧ ‖(∑ n ∈ Finset.Icc 1 ⌊Real.exp δ * x⌋₊, ((ArithmeticFunction.vonMangoldt n * Φ (Real.log ((n : ℝ) / x)) : ℝ) : ℂ) * χ (n : ZMod q)) + ∑ ρ ∈ Z, ((analyticOrderNatAt (DirichletCharacter.LFunction χ) ρ : ℕ) : ℂ) * (x : ℂ) ^ ρ * M ρ / ρ‖ ≤ 32 * Real.sqrt x * Real.exp (δ / 2) * (Real.log ((q : ℝ) * T) + 6) / (δ ^ 2 * T ^ 2) + 16 * (Real.log ((q : ℝ) * x / δ) + 4) ^ 2",
+  "plain_statement": {
+    "en": "Grenié–Molteni (2019) smoothed explicit formula for primitive non-principal χ mod q (q ≥ 2) under GRH: the smoothed character-weighted Chebyshev sum ∑ Λ(n) Φ(log(n/x)) χ(n) equals minus the truncated zero sum over |Im(ρ)| ≤ T up to an explicit quadratic-decay tail in δT.",
+    "zh": "GRH 下 Grenié–Molteni（2019）光滑加权显式公式：对非平凡本原特征 χ mod q（q ≥ 2），三角核积分光滑窗 Φ(log(n/x)) 加权素数和等于负的 |Im(ρ)| ≤ T 零点截断和加上关于 (δT)⁻² 衰减的显式余项。"
+  },
+  "brief": {
+    "en": "Express Φ(log(n/x)) as the Mellin inverse of (M(s)/s) x^s where M(s) is bounded in L-goldbach-gm-smoothing-kernel-mellin, shift the integral of (-L'/L)(s, χ) x^s M(s)/s left past the critical line (picking up Re(ρ) = 1/2 zeros), and bound the |Im(ρ)| > T tail using L-goldbach-gm-dirichlet-zero-count and ‖M(ρ)‖ ≤ 4 exp(δ/2)/(δ²‖ρ‖²). Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "将光滑权重 Φ(log(n/x)) 写作 (M(s)/s)x^s 的 Mellin 逆变换，调用 L-goldbach-gm-smoothing-kernel-mellin 的衰减界把围道推至临界线左侧并吸收 |Im(ρ)| > T 尾项（配合 L-goldbach-gm-dirichlet-zero-count）。可导入全站已验证模块（≤ 16 个）。"
+  },
+  "program": "grh",
+  "depends_on": [
+    "L-goldbach-gm-smoothing-kernel-mellin",
+    "L-goldbach-gm-dirichlet-zero-count"
+  ],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1016/j.jnt.2018.12.005",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "conditional"
+}

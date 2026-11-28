@@ -16804,8 +16804,30 @@
       "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.AbelThetaToPiLi",
       "file": "lean/Conjectures/Goldbach/AbelThetaToPiLi.lean",
+      "module": "Conjectures.Goldbach.AbelThetaToPiLi",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-chen-g3-switched-upper",
+      "statement": "letI := Classical.propDecidable; let C2 : ℝ := ∏' p : Nat.Primes, if 2 < p.1 then (1 - 1 / ((p.1 : ℝ) - 1) ^ 2) else 1; let Θ : ℕ → ℝ := fun N => (C2 * ∏ p ∈ N.primeFactors.filter (2 < ·), (((p : ℝ) - 1) / ((p : ℝ) - 2))) * (N : ℝ) / (Real.log (N : ℝ)) ^ 2; ∀ τ ε η : ℝ, 1 / 3 < τ → τ < 1 / 2 → 0 < ε → ε < 1 / 10 → 0 < η → ∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → (((Finset.Ico (2 : ℕ) N).filter (fun p : ℕ => p.Prime ∧ (p : ℝ) < (1 - ε) * (N : ℝ) ∧ ∃ r q : ℕ, r.Prime ∧ q.Prime ∧ r < q ∧ (N : ℝ) ^ τ ≤ (r : ℝ) ∧ Nat.Coprime (r * q) N ∧ N - p = r * q)).card : ℝ) ≤ ((8 : ℝ) * Real.log ((1 - τ) / τ) + η) * Θ N",
+      "plain_statement": {
+        "en": "Unconditional classical Chen (1973) switched-semiprime upper bound (K = 8): for 1/3 < τ < 1/2 and 0 < ε < 1/10, primes p < (1-ε)N with N - p = rq (r < q primes, r ≥ N^τ, (rq, N) = 1) have count at most (8 log((1-τ)/τ) + η) Θ(N) for large even N.",
+        "zh": "无条件经典陈景润（1973）切换三因子半素数经典上界（K = 8）：对 1/3 < τ < 1/2 与 0 < ε < 1/10，满足 p < (1−ε)N 且 N − p = rq（r < q 为素数、r ≥ N^τ、(rq, N)=1）的表示数渐近不超过 8 log((1−τ)/τ) Θ(N)。"
+      },
+      "brief": {
+        "en": "Apply Chen's role-switching method together with the linear / Selberg upper sieve (`F(1) ≤ 8` / Rosser–Iwaniec `2 e^γ / (1/2) < 8` after Bombieri–Vinogradov distribution level 1/2) and partial summation over r ∈ [N^τ, √N]. Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "运用陈氏切换技巧：固定合数端 rq 的算术级数并用线性筛/Selberg 上界筛结合 Bombieri–Vinogradov 定理（水平 1/2）控制素数 p，再对 r ∈ [N^τ, √N] 积分求和即得经典常数 8。可导入已验证社区模块（≤ 16 个）。"
+      },
+      "program": "correlation",
+      "depends_on": [],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1360/ya1973-16-2-157",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.ChenG3SwitchedUpper",
+      "file": "lean/Conjectures/Goldbach/ChenG3SwitchedUpper.lean",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -16830,8 +16852,30 @@
       "source": "https://projecteuclid.org/journals/illinois-journal-of-mathematics/volume-6/issue-1/Approximate-formulas-for-some-functions-of-prime-numbers/10.1215/ijm/1255631807.full",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.ExplicitPsiSubTheta",
       "file": "lean/Conjectures/Goldbach/ExplicitPsiSubTheta.lean",
+      "module": "Conjectures.Goldbach.ExplicitPsiSubTheta",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-gm-dirichlet-zero-count",
+      "statement": "∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q), χ.IsPrimitive → ∀ T : ℝ, 2 ≤ T → ∃ Z : Finset ℂ, (∀ s : ℂ, s ∈ Z ↔ 0 < s.re ∧ s.re < 1 ∧ |s.im| ≤ T ∧ DirichletCharacter.LFunction χ s = 0) ∧ |((∑ ρ ∈ Z, analyticOrderNatAt (DirichletCharacter.LFunction χ) ρ : ℕ) : ℝ) - (T / Real.pi) * Real.log ((q : ℝ) * T / (2 * Real.pi * Real.exp 1))| ≤ 0.35 * Real.log ((q : ℝ) * T) + 6.5",
+      "plain_statement": {
+        "en": "Trudgian (2015, Theorem 1) explicit zero-counting formula N(T, χ) for primitive Dirichlet characters χ mod q: for T ≥ 2, the number of zeros with 0 < Re(ρ) < 1 and |Im(ρ)| ≤ T satisfies |N(T, χ) - (T/π) log(qT/(2πe))| ≤ 0.35 log(qT) + 6.5.",
+        "zh": "Trudgian（2015，定理 1）本原狄利克雷特征 L 函数显式零点计数：对任意本原特征 χ mod q 与 T ≥ 2，带状区域内 |Im(ρ)| ≤ T 的零点重数总和 N(T, χ) 满足 |N(T, χ) − (T/π) log(qT/(2πe))| ≤ 0.35 log(qT) + 6.5。"
+      },
+      "brief": {
+        "en": "Apply the argument principle to the completed L-function Λ(s, χ) on the symmetric rectangle [-η, 1 + η] × [-T, T], bounding Δ arg Γ((s + κ)/2) via Stirling's formula and S(T, χ) via Backlund/Trudgian's Jensen argument (0.317 log(qT) + 6.401 ≤ 0.35 log(qT) + 6.5). Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "对对称矩形框 [-η, 1+η] × [-T, T] 上完备化 L 函数 Λ(s, χ) 应用辐角原理（因非实特征不一定共轭对称，故取双侧 |Im(ρ)| ≤ T），用 Stirling 与 Trudgian 辐角界即得。允许导入已验证社区模块（≤ 16 个）。"
+      },
+      "program": "foundation",
+      "depends_on": [],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1090/S0025-5718-2014-02898-6",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.GmDirichletZeroCount",
+      "file": "lean/Conjectures/Goldbach/GmDirichletZeroCount.lean",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -16856,8 +16900,33 @@
       "source": "https://doi.org/10.1007/s11139-018-0023-x",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.GmPrimitiveEulerLoss",
       "file": "lean/Conjectures/Goldbach/GmPrimitiveEulerLoss.lean",
+      "module": "Conjectures.Goldbach.GmPrimitiveEulerLoss",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-gm-smoothed-explicit-formula",
+      "statement": "(∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (s : ℂ), 1 / 2 < s.re → (χ ≠ 1 ∨ s ≠ 1) → DirichletCharacter.LFunction χ s ≠ 0) → ∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q), 2 ≤ q → χ.IsPrimitive → ∀ (x δ T : ℝ), 2 ≤ x → 0 < δ → δ ≤ 1 / 2 → 2 ≤ T → let Φ : ℝ → ℝ := fun w => if w ≤ -δ then 1 else if w ≤ 0 then 1 - (w + δ) ^ 2 / (2 * δ ^ 2) else if w < δ then (δ - w) ^ 2 / (2 * δ ^ 2) else 0; let M : ℂ → ℂ := fun s => ((Complex.exp (((δ / 2 : ℝ) : ℂ) * s) - Complex.exp (((-(δ / 2) : ℝ) : ℂ) * s)) / ((δ : ℂ) * s)) ^ 2; ∃ Z : Finset ℂ, (∀ s : ℂ, s ∈ Z ↔ 0 < s.re ∧ s.re < 1 ∧ |s.im| ≤ T ∧ DirichletCharacter.LFunction χ s = 0) ∧ ‖(∑ n ∈ Finset.Icc 1 ⌊Real.exp δ * x⌋₊, ((ArithmeticFunction.vonMangoldt n * Φ (Real.log ((n : ℝ) / x)) : ℝ) : ℂ) * χ (n : ZMod q)) + ∑ ρ ∈ Z, ((analyticOrderNatAt (DirichletCharacter.LFunction χ) ρ : ℕ) : ℂ) * (x : ℂ) ^ ρ * M ρ / ρ‖ ≤ 32 * Real.sqrt x * Real.exp (δ / 2) * (Real.log ((q : ℝ) * T) + 6) / (δ ^ 2 * T ^ 2) + 16 * (Real.log ((q : ℝ) * x / δ) + 4) ^ 2",
+      "plain_statement": {
+        "en": "Grenié–Molteni (2019) smoothed explicit formula for primitive non-principal χ mod q (q ≥ 2) under GRH: the smoothed character-weighted Chebyshev sum ∑ Λ(n) Φ(log(n/x)) χ(n) equals minus the truncated zero sum over |Im(ρ)| ≤ T up to an explicit quadratic-decay tail in δT.",
+        "zh": "GRH 下 Grenié–Molteni（2019）光滑加权显式公式：对非平凡本原特征 χ mod q（q ≥ 2），三角核积分光滑窗 Φ(log(n/x)) 加权素数和等于负的 |Im(ρ)| ≤ T 零点截断和加上关于 (δT)⁻² 衰减的显式余项。"
+      },
+      "brief": {
+        "en": "Express Φ(log(n/x)) as the Mellin inverse of (M(s)/s) x^s where M(s) is bounded in L-goldbach-gm-smoothing-kernel-mellin, shift the integral of (-L'/L)(s, χ) x^s M(s)/s left past the critical line (picking up Re(ρ) = 1/2 zeros), and bound the |Im(ρ)| > T tail using L-goldbach-gm-dirichlet-zero-count and ‖M(ρ)‖ ≤ 4 exp(δ/2)/(δ²‖ρ‖²). Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "将光滑权重 Φ(log(n/x)) 写作 (M(s)/s)x^s 的 Mellin 逆变换，调用 L-goldbach-gm-smoothing-kernel-mellin 的衰减界把围道推至临界线左侧并吸收 |Im(ρ)| > T 尾项（配合 L-goldbach-gm-dirichlet-zero-count）。可导入全站已验证模块（≤ 16 个）。"
+      },
+      "program": "grh",
+      "depends_on": [
+        "L-goldbach-gm-smoothing-kernel-mellin",
+        "L-goldbach-gm-dirichlet-zero-count"
+      ],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1016/j.jnt.2018.12.005",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "conditional",
+      "module": "Conjectures.Goldbach.GmSmoothedExplicitFormula",
+      "file": "lean/Conjectures/Goldbach/GmSmoothedExplicitFormula.lean",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -16877,8 +16946,59 @@
       "source": "https://doi.org/10.1007/s11139-018-0023-x",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.GmSmoothingKernelMellin",
       "file": "lean/Conjectures/Goldbach/GmSmoothingKernelMellin.lean",
+      "module": "Conjectures.Goldbach.GmSmoothingKernelMellin",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-gm-unsmooth-psi-ap",
+      "statement": "(∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (s : ℂ), 1 / 2 < s.re → (χ ≠ 1 ∨ s ≠ 1) → DirichletCharacter.LFunction χ s ≠ 0) → ∀ (x : ℝ) (d a : ℕ), 100 ≤ x → 3 ≤ d → Nat.Coprime a d → |(∑ n ∈ (Finset.Icc 1 ⌊x⌋₊).filter (fun n => Nat.ModEq d n a), ArithmeticFunction.vonMangoldt n) - x / (Nat.totient d : ℝ)| ≤ Real.sqrt x * ((Real.log x) ^ 2 / (8 * Real.pi) + Real.log (d : ℝ) * Real.log x / (2 * Real.pi) + (3 / 4 : ℝ) * Real.log x + (1 / 2 : ℝ) * Real.log (d : ℝ))",
+      "plain_statement": {
+        "en": "Grenié–Molteni (2019, Corollary 1) explicit GRH bound for ψ(x; d, a): for x ≥ 100, d ≥ 3, and (a, d) = 1, |ψ(x; d, a) - x/φ(d)| ≤ √x (log² x / (8π) + log d log x / (2π) + 3/4 log x + 1/2 log d).",
+        "zh": "Grenié–Molteni（2019，推论 1）算术级数显式 GRH 界：对 x ≥ 100、d ≥ 3 且 gcd(a, d) = 1，成立 |ψ(x; d, a) − x/φ(d)| ≤ √x (log² x / (8π) + log d log x / (2π) + 3/4 log x + 1/2 log d)。"
+      },
+      "brief": {
+        "en": "Combine orthogonality of characters mod d, L-goldbach-gm-primitive-euler-loss (induction to primitive χ*), L-goldbach-gm-smoothed-explicit-formula (optimizing δ to absorb unsmoothing error over x ∈ [e^(-δ)X, e^(δ)X]), and Schoenfeld / RH at q = 1 for the principal character. Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "按模 d 特征正交展开 ψ(x; d, a)，用 L-goldbach-gm-primitive-euler-loss 化归到本原特征 χ*，结合 L-goldbach-gm-smoothed-explicit-formula 与优化参数 δ 消去光滑化误差（主特征由 q = 1 给出）。可导入已验证社区模块（≤ 16 个）。"
+      },
+      "program": "grh",
+      "depends_on": [
+        "L-goldbach-gm-primitive-euler-loss",
+        "L-goldbach-gm-smoothed-explicit-formula"
+      ],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1016/j.jnt.2018.12.005",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "conditional",
+      "module": "Conjectures.Goldbach.GmUnsmoothPsiAp",
+      "file": "lean/Conjectures/Goldbach/GmUnsmoothPsiAp.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-js-lemma51-assembly",
+      "statement": "(∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (s : ℂ), 1 / 2 < s.re → (χ ≠ 1 ∨ s ≠ 1) → DirichletCharacter.LFunction χ s ≠ 0) → let li2 : ℝ := Real.eulerMascheroniConstant + Real.log (Real.log 2) + ∑' k : ℕ, (Real.log 2) ^ (k + 1) / (((k + 1 : ℕ) : ℝ) * ((k + 1).factorial : ℝ)); ∀ X₂ : ℝ, 4 * (10 : ℝ) ^ 18 ≤ X₂ → let c_pi : ℝ := 3 / (8 * Real.pi) + (6 + 1 / Real.pi) / (4 * Real.log X₂) + 6 / (Real.log X₂) ^ 2 + li2 / (Real.sqrt X₂ * Real.log X₂); ∀ x : ℝ, X₂ ≤ x → ∀ d a : ℕ, 3 ≤ d → (d : ℝ) ≤ Real.sqrt x → Nat.Coprime a d → |(((Finset.range (Nat.floor x + 1)).filter (fun p => p.Prime ∧ Nat.ModEq d p a)).card : ℝ) - (∫ t in (2 : ℝ)..x, 1 / Real.log t) / (Nat.totient d : ℝ)| ≤ c_pi * Real.sqrt x * Real.log x",
+      "plain_statement": {
+        "en": "Johnston–Starichkova (arXiv:2208.01229, Lemma 5.1) AP prime-counting assembly under Mathlib-only GRH: for X₂ ≥ 4·10¹⁸, x ≥ X₂, 3 ≤ d ≤ √x, and (a, d) = 1, |π(x; d, a) - Li(x)/φ(d)| ≤ c_π(X₂) √x log x, matching JSLemma51Premise canonicalLi2 verbatim.",
+        "zh": "Johnston–Starichkova（Lemma 5.1）算术级数素数计数总装：在纯 Mathlib GRH 下，对 X₂ ≥ 4·10¹⁸、x ≥ X₂、3 ≤ d ≤ √x 且 gcd(a, d) = 1，成立 |π(x; d, a) − Li(x)/φ(d)| ≤ c_π(X₂) √x log x，与 JSLemma51Premise canonicalLi2 接口逐字一致。"
+      },
+      "brief": {
+        "en": "Use L-goldbach-gm-unsmooth-psi-ap with d ≤ √x (so log d ≤ (1/2) log x), subtract prime powers p^k (k ≥ 2) via L-goldbach-explicit-psi-sub-theta, apply Abel summation (as in L-goldbach-abel-theta-to-pi-li) on [2, x], and absorb |li(2)|/φ(d) ≤ li2/2 into the c_pi(X₂) tail. Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "在 L-goldbach-gm-unsmooth-psi-ap 中代入 log d ≤ (1/2) log x，用 L-goldbach-explicit-psi-sub-theta 扣去高次素数幂 p^k (k ≥ 2)，按 L-goldbach-abel-theta-to-pi-li 作分部求和并用 li(2)/φ(d) 吸收常数偏差，即精确装配出 c_π(X₂)。"
+      },
+      "program": "grh",
+      "depends_on": [
+        "L-goldbach-explicit-psi-sub-theta",
+        "L-goldbach-abel-theta-to-pi-li",
+        "L-goldbach-gm-unsmooth-psi-ap"
+      ],
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2208.01229",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "conditional",
+      "module": "Conjectures.Goldbach.JsLemma51Assembly",
+      "file": "lean/Conjectures/Goldbach/JsLemma51Assembly.lean",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -16898,8 +17018,104 @@
       "source": "https://arxiv.org/abs/2208.01229",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.MertensAbelBridge",
       "file": "lean/Conjectures/Goldbach/MertensAbelBridge.lean",
+      "module": "Conjectures.Goldbach.MertensAbelBridge",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-mertens-mid-range-bjv16",
+      "statement": "let M0 : ℝ := Real.eulerMascheroniConstant + ∑' p : Nat.Primes, (Real.log (1 - 1 / (p.1 : ℝ)) + 1 / (p.1 : ℝ)); ∀ x : ℝ, Real.exp 10 < x → x ≤ (10 : ℝ) ^ 12 → Real.log (Real.log x) + M0 - (2.964e-6 : ℝ) / Real.log x ≤ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ∧ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ≤ Real.log (Real.log x) + M0 + 2 / (Real.sqrt x * Real.log x)",
+      "plain_statement": {
+        "en": "Unconditional mid-range Mertens bound (BJV22 Lemma 16 & JS Lemma 3.2): for exp(10) < x ≤ 10¹², log log x + M0 - 2.964e-6 / log x ≤ ∑_{p < x} 1/p ≤ log log x + M0 + 2 / (√x log x).",
+        "zh": "无条件中段 Mertens 界（BJV22 引理 16 与 JS 引理 3.2）：对 exp(10) < x ≤ 10¹²，成立 log log x + M₀ − 2.964×10⁻⁶ / log x ≤ ∑_{p < x} 1/p ≤ log log x + M₀ + 2 / (√x log x)。"
+      },
+      "brief": {
+        "en": "Apply L-goldbach-mertens-abel-bridge together with Rosser–Schoenfeld / Schoenfeld–style explicit Chebyshev bounds |θ(t) - t| ≤ 1.0001 √t (or finite verification of θ(x) < x for x ≤ 10¹²) integrated from x to ∞ (using M₀ convergence). Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "利用 L-goldbach-mertens-abel-bridge 在区间 [x, ∞) 配合 Rosser–Schoenfeld / Büthe 等 10¹² 以内的无条件显式切比雪夫界（如 Büthe 2018 对 x ≤ 10¹⁹ 的显式 θ(x)−x 估计）与分部求和即可推出。可导入全站已验证模块（≤ 16 个）。"
+      },
+      "program": "foundation",
+      "depends_on": [
+        "L-goldbach-mertens-abel-bridge"
+      ],
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2207.09452",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.MertensMidRangeBjv16",
+      "file": "lean/Conjectures/Goldbach/MertensMidRangeBjv16.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-mertens-premise-assembly",
+      "statement": "let M0 : ℝ := Real.eulerMascheroniConstant + ∑' p : Nat.Primes, (Real.log (1 - 1 / (p.1 : ℝ)) + 1 / (p.1 : ℝ)); let E_lo : ℝ → ℝ := fun x => (2.964e-6 : ℝ) / Real.log x; let E_hi : ℝ → ℝ := fun x => if x > (10 : ℝ) ^ 12 then (6.836e-6 : ℝ) / Real.log x else if Real.log x > 10 then 2 / (Real.sqrt x * Real.log x) else if Real.log x > 8.9 then (1.614e-3 : ℝ) else (1 : ℝ); (0.261497 ≤ M0 ∧ M0 ≤ 0.261498) ∧ ∀ x : ℝ, 2 ≤ x → Real.log (Real.log x) + M0 - E_lo x ≤ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ∧ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ≤ Real.log (Real.log x) + M0 + E_hi x",
+      "plain_statement": {
+        "en": "Unconditional piecewise assembly of BuchstabSwitching.External.MertensPrimeSumPremise meisselMertensConst across [2, exp 10], (exp 10, 10¹²], and (10¹², ∞).",
+        "zh": "无条件三段总装 MertensPrimeSumPremise meisselMertensConst：拼接 [2, exp 10]、(exp 10, 10¹²] 与 (10¹², ∞) 三段显式 Mertens 界，直接交付 1+3 形式化所需的全部无条件素数倒数和前提。"
+      },
+      "brief": {
+        "en": "Pure piecewise case split on x ≤ exp 10, exp 10 < x ≤ 10¹², and 10¹² < x combining L-goldbach-mertens-small-range-cert, L-goldbach-mertens-mid-range-bjv16, and L-goldbach-mertens-tail-js32 (using Real.exp_lt_exp / Real.log_lt_log monotonicity to match `Real.log x > 10`).",
+        "zh": "按 x ≤ exp 10、exp 10 < x ≤ 10¹²、10¹² < x 做纯分情况拼接，依次调用 L-goldbach-mertens-small-range-cert、L-goldbach-mertens-mid-range-bjv16 与 L-goldbach-mertens-tail-js32 即可直接总装。"
+      },
+      "program": "foundation",
+      "depends_on": [
+        "L-goldbach-mertens-small-range-cert",
+        "L-goldbach-mertens-mid-range-bjv16",
+        "L-goldbach-mertens-tail-js32"
+      ],
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2208.01229",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.MertensPremiseAssembly",
+      "file": "lean/Conjectures/Goldbach/MertensPremiseAssembly.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-mertens-small-range-cert",
+      "statement": "let M0 : ℝ := Real.eulerMascheroniConstant + ∑' p : Nat.Primes, (Real.log (1 - 1 / (p.1 : ℝ)) + 1 / (p.1 : ℝ)); (0.261497 ≤ M0 ∧ M0 ≤ 0.261498) ∧ ∀ x : ℝ, 2 ≤ x → x ≤ Real.exp 10 → Real.log (Real.log x) + M0 - (2.964e-6 : ℝ) / Real.log x ≤ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ∧ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ≤ Real.log (Real.log x) + M0 + (if Real.log x > 8.9 then (1.614e-3 : ℝ) else (1 : ℝ))",
+      "plain_statement": {
+        "en": "Unconditional finite-range certification of Mertens' constant M0 ∈ [0.261497, 0.261498] and explicit two-sided bounds on ∑_{p < x} 1/p for all 2 ≤ x ≤ exp(10) (≈ 22,026.47), matching Johnston–Starichkova Lemma 3.2 (3.2)–(3.3).",
+        "zh": "无条件有限区间核验：证明 Meissel–Mertens 常数满足 0.261497 ≤ M₀ ≤ 0.261498，并在 2 ≤ x ≤ exp(10)（约 22,026）上给出 ∑_{p < x} 1/p 相对于 log log x + M₀ 的精确双边显式界。"
+      },
+      "brief": {
+        "en": "Certify M0 ∈ [0.261497, 0.261498] using finite prime tails + ζ(2) acceleration (or Euler–Maclaurin), then check ∑_{p < x} 1/p monotonically on each interval between consecutive primes up to 22,029 (note e^10 < 22027). Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "先用有限素数尾和与 ∑_{p} 1/p² ≤ ζ(2) 认证 M₀ ∈ [0.261497, 0.261498]；在 [2, 22027] 内因 ∑_{p < x} 1/p 仅在素数处跳跃，按素数间隙分点检验单调极值即可全覆盖（仅需整数算术与可证对数上下界）。"
+      },
+      "program": "foundation",
+      "depends_on": [],
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2208.01229",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.MertensSmallRangeCert",
+      "file": "lean/Conjectures/Goldbach/MertensSmallRangeCert.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-mertens-tail-js32",
+      "statement": "let M0 : ℝ := Real.eulerMascheroniConstant + ∑' p : Nat.Primes, (Real.log (1 - 1 / (p.1 : ℝ)) + 1 / (p.1 : ℝ)); ∀ x : ℝ, (10 : ℝ) ^ 12 < x → Real.log (Real.log x) + M0 - (2.964e-6 : ℝ) / Real.log x ≤ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ∧ (∑ p ∈ (Finset.range (Nat.ceil x)).filter Nat.Prime, (1 : ℝ) / (p : ℝ)) ≤ Real.log (Real.log x) + M0 + (6.836e-6 : ℝ) / Real.log x",
+      "plain_statement": {
+        "en": "Unconditional asymptotic tail of Johnston–Starichkova (arXiv:2208.01229, Lemma 3.2): for x > 10¹², log log x + M0 - 2.964e-6 / log x ≤ ∑_{p < x} 1/p ≤ log log x + M0 + 6.836e-6 / log x.",
+        "zh": "无条件大尺度 Mertens 尾项（Johnston–Starichkova 引理 3.2）：对 x > 10¹²，成立 log log x + M₀ − 2.964×10⁻⁶ / log x ≤ ∑_{p < x} 1/p ≤ log log x + M₀ + 6.836×10⁻⁶ / log x。"
+      },
+      "brief": {
+        "en": "Integrate explicit unconditional Chebyshev bounds |θ(t) - t| ≤ ε(t) t (e.g. Broadbent–Kadiri–Lumley–Ng–Wilk 2021 / Platt–Trudgian on t > 10¹²) via L-goldbach-mertens-abel-bridge over [x, ∞), keeping track of the 1/log x lower/upper asymmetries. Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "由 Broadbent–Kadiri–Lumley–Ng–Wilk（2021）在 t > 10¹² 的无条件显式切比雪夫界，代入 L-goldbach-mertens-abel-bridge 在 [x, ∞) 积分并保留上下界非对称常数，即得 JS 引理 3.2 尾项。可导入已验证社区模块（≤ 16 个）。"
+      },
+      "program": "foundation",
+      "depends_on": [
+        "L-goldbach-mertens-abel-bridge"
+      ],
+      "imports": [],
+      "parallel": true,
+      "source": "https://arxiv.org/abs/2208.01229",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.MertensTailJs32",
+      "file": "lean/Conjectures/Goldbach/MertensTailJs32.lean",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -16924,8 +17140,149 @@
       "source": "https://doi.org/10.1112/S0025579300004708",
       "track": "explicit-sieve-analytic-inputs",
       "role": "lemma",
-      "module": "Conjectures.Goldbach.MultiplicativeLargeSieve",
       "file": "lean/Conjectures/Goldbach/MultiplicativeLargeSieve.lean",
+      "module": "Conjectures.Goldbach.MultiplicativeLargeSieve",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-panding-endpoint-bound",
+      "statement": "letI := Classical.propDecidable; let C2 : ℝ := ∏' p : Nat.Primes, if 2 < p.1 then (1 - 1 / ((p.1 : ℝ) - 1) ^ 2) else 1; let Θ : ℕ → ℝ := fun N => (C2 * ∏ p ∈ N.primeFactors.filter (2 < ·), (((p : ℝ) - 1) / ((p : ℝ) - 2))) * (N : ℝ) / (Real.log (N : ℝ)) ^ 2; ∀ a ε η : ℝ, 3 / 2 < a → a < 2 → 0 < ε → ε < min (1 / 10) ((a - 1) / (3 * a)) → 0 < η → let τ := (a - 1) / a - ε; ∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → (((Finset.Ico (2 : ℕ) N).filter (fun p : ℕ => p.Prime ∧ (1 - ε) * (N : ℝ) ≤ (p : ℝ) ∧ ∃ r q : ℕ, r.Prime ∧ q.Prime ∧ r < q ∧ (N : ℝ) ^ τ ≤ (r : ℝ) ∧ Nat.Coprime (r * q) N ∧ N - p = r * q)).card : ℝ) ≤ ((9 : ℝ) * ε * Real.log ((1 - τ) / τ) + η) * Θ N",
+      "plain_statement": {
+        "en": "Unconditional Pan–Ding (1975) WEH(1/2) switched-semiprime endpoint bound: for 3/2 < a < 2 and small ε > 0, primes p ≥ (1 - ε)N with N - p = r q (r < q primes, r ≥ N^τ, (rq, N) = 1) have count at most (9ε log((1-τ)/τ) + η) Θ(N) for large even N.",
+        "zh": "无条件潘承洞–丁夏畦（1975）WEH(1/2) 端点半素数上界：对 3/2 < a < 2 与充分小 ε > 0，满足 p ≥ (1−ε)N 且 N − p = rq（r < q 为素数、r ≥ N^τ、(rq, N) = 1）的表示数至多为 (9ε log((1−τ)/τ) + η) Θ(N)。"
+      },
+      "brief": {
+        "en": "Invert the role of p and rq using N - p ≤ εN and Bombieri–Vinogradov (or Brun–Titchmarsh upper sieve on p ≡ N (mod rq) for small-interval primes of length εN, combined with Buchstab/Selberg upper sieve on rq ∈ [N^τ, N^(1/2)]). Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "将 N − p = rq 且 N − p ≤ εN 的条件逆转为短区间 p ∈ [(1−ε)N, N) 内算术级数素数上界（由 WEH(1/2) / Bombieri–Vinogradov 与线性/Selberg 上界筛控制 rq），按 τ=(a−1)/a−ε 对齐即得常数 9ε。可导入已验证社区模块（≤ 16 个）。"
+      },
+      "program": "correlation",
+      "depends_on": [],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1007/BF02006964",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.PandingEndpointBound",
+      "file": "lean/Conjectures/Goldbach/PandingEndpointBound.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-rh-schoenfeld-pi-assembly",
+      "statement": "(∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (s : ℂ), 1 / 2 < s.re → (χ ≠ 1 ∨ s ≠ 1) → DirichletCharacter.LFunction χ s ≠ 0) → let li2 : ℝ := Real.eulerMascheroniConstant + Real.log (Real.log 2) + ∑' k : ℕ, (Real.log 2) ^ (k + 1) / (((k + 1 : ℕ) : ℝ) * ((k + 1).factorial : ℝ)); ∀ x : ℝ, 2657 ≤ x → |(((Finset.range (Nat.floor x + 1)).filter Nat.Prime).card : ℝ) - ((∫ t in (2 : ℝ)..x, 1 / Real.log t) + li2)| ≤ Real.sqrt x * Real.log x / (8 * Real.pi)",
+      "plain_statement": {
+        "en": "Schoenfeld (1976, Corollary 1) prime-counting bound under Mathlib-only GRH/RH: for all x ≥ 2657, |π(x) - (Li(x) + li(2))| ≤ √x log x / (8π), matching BuchstabSwitching.External.SchoenfeldPrimePremise canonicalLi2 verbatim.",
+        "zh": "纯 Mathlib GRH/RH 下的 Schoenfeld（1976，推论 1）素数计数总装界：对一切 x ≥ 2657，|π(x) − (Li(x) + li(2))| ≤ √x log x / (8π)，与 SchoenfeldPrimePremise canonicalLi2 接口严格一致。"
+      },
+      "brief": {
+        "en": "Instantiate N = 1 (L(s, 1) = ζ(s)) from the GRH hypothesis to invoke L-goldbach-rh-schoenfeld-psi, subtract prime powers via L-goldbach-explicit-psi-sub-theta, transfer |θ(t) - t| to |π(x) - Li(x) - li(2)| via L-goldbach-abel-theta-to-pi-li for large x, and check finite interval [2657, X₀]. Verified community imports (≤ 16 transitive) are allowed.",
+        "zh": "取 N = 1 从 GRH 前提得到 ζ(s) 的 RH 从而调用 L-goldbach-rh-schoenfeld-psi，再用 L-goldbach-explicit-psi-sub-theta 扣除素数幂并经 L-goldbach-abel-theta-to-pi-li 转至 π(x) − (Li(x)+li(2))，有限段 [2657, X₀] 核验后总装完成。"
+      },
+      "program": "grh",
+      "depends_on": [
+        "L-goldbach-explicit-psi-sub-theta",
+        "L-goldbach-abel-theta-to-pi-li",
+        "L-goldbach-rh-schoenfeld-psi"
+      ],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "conditional",
+      "module": "Conjectures.Goldbach.RhSchoenfeldPiAssembly",
+      "file": "lean/Conjectures/Goldbach/RhSchoenfeldPiAssembly.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-rh-schoenfeld-psi",
+      "statement": "(∀ s : ℂ, 1 / 2 < s.re → s ≠ 1 → riemannZeta s ≠ 0) → ∀ x : ℝ, (73.2 : ℝ) ≤ x → |(∑ n ∈ Finset.Icc 1 ⌊x⌋₊, ArithmeticFunction.vonMangoldt n) - x| ≤ Real.sqrt x * (Real.log x) ^ 2 / (8 * Real.pi)",
+      "plain_statement": {
+        "en": "Schoenfeld (1976, Theorem 10): assuming RH for riemannZeta, |ψ(x) - x| ≤ √x log² x / (8π) for all real x ≥ 73.2.",
+        "zh": "Schoenfeld（1976，定理 10）：在黎曼猜想下，对一切实数 x ≥ 73.2 成立 |ψ(x) − x| ≤ √x log² x / (8π)。"
+      },
+      "brief": {
+        "en": "For large x, difference ψ₁(x + h) - ψ₁(x) via L-goldbach-zeta-truncated-explicit-psi and sum 1/|ρ| over critical-line zeros via Stieltjes integration against L-goldbach-zeta-zero-count-explicit; verify intermediate x ≥ 73.2 directly or via finite numerical intervals. Contributors may import any verified module from https://jenkins-hook.goldbach.tech/verified-imports.json (≤ 16 transitive).",
+        "zh": "大 x 段对 L-goldbach-zeta-truncated-explicit-psi 的 ψ₁ 取差商并用 L-goldbach-zeta-zero-count-explicit 做 Stieltjes 积分估计 ∑_{Re ρ = 1/2} 1/|ρ(ρ+1)|；有限段 x ≥ 73.2 可作离散核验。允许导入全站已验证模块（≤ 16 个）。"
+      },
+      "program": "grh",
+      "depends_on": [
+        "L-goldbach-zeta-zero-count-explicit",
+        "L-goldbach-zeta-truncated-explicit-psi"
+      ],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "conditional",
+      "module": "Conjectures.Goldbach.RhSchoenfeldPsi",
+      "file": "lean/Conjectures/Goldbach/RhSchoenfeldPsi.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-sharp-multiplicative-large-sieve",
+      "statement": "letI := Classical.propDecidable; ∀ (M L Q : ℕ) (a : ℕ → ℂ), ∑ q ∈ Finset.Icc 1 Q, ((q : ℝ) / (Nat.totient q : ℝ)) * ∑ χ ∈ (Finset.univ : Finset (DirichletCharacter ℂ q)).filter (·.IsPrimitive), ‖∑ n ∈ Finset.Ico M (M + L), a n * χ (n : ZMod q)‖ ^ 2 ≤ ((L : ℝ) + (Q : ℝ) ^ 2) * ∑ n ∈ Finset.Ico M (M + L), ‖a n‖ ^ 2",
+      "plain_statement": {
+        "en": "Optimal Montgomery–Vaughan (1973) multiplicative large sieve: without the factor π on L, ∑_{1 ≤ q ≤ Q} (q/φ(q)) ∑_{χ prim mod q} |∑_{M ≤ n < M+L} a_n χ(n)|² ≤ (L + Q²) ∑ |a_n|², matching MultiplicativeLargeSievePremise verbatim.",
+        "zh": "最优常数版 Montgomery–Vaughan（1973）乘性大筛不等式：在区间 [M, M+L) 上对 1 ≤ q ≤ Q 的全部本原特征求 (q/φ(q)) 加权平方和，上界为 (L + Q²) ∑ |a_n|²（去掉 L 前系数 π），直接对接 1+2 路线前提。"
+      },
+      "brief": {
+        "en": "Prove Montgomery–Vaughan's sharp additive large sieve (L - 1 + δ⁻¹ ≤ L + Q² for δ = Q⁻², via Hilbert's inequality / Selberg's majorant or Montgomery–Vaughan 1973 weight theorem) and lift to primitive characters via Gauss sums τ(χ̄) with |τ(χ)|² = q. Note: `Finset.Icc 1 Q` yields `q ≥ 1` (`NeZero q` if cast, or proves directly via `DirichletCharacter ℂ q`). Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "证明锐利常数版（无 π）加法大筛不等式（Selberg 优函数或 Montgomery–Vaughan 1973 加权 Hilbert 不等式得常数 N − 1 + Q²），再由本原特征高斯和展开 |τ(χ)|² = q 提升至乘性特征和。允许导入已验证社区模块（≤ 16 个）。"
+      },
+      "program": "correlation",
+      "depends_on": [],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1112/S0025579300004708",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.SharpMultiplicativeLargeSieve",
+      "file": "lean/Conjectures/Goldbach/SharpMultiplicativeLargeSieve.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-zeta-truncated-explicit-psi",
+      "statement": "∀ x T : ℝ, 2 ≤ x → 3 ≤ T → ∃ Z : Finset ℂ, (∀ s : ℂ, s ∈ Z ↔ 0 < s.re ∧ s.re < 1 ∧ |s.im| ≤ T ∧ riemannZeta s = 0) ∧ ‖((∑ n ∈ Finset.Icc 1 ⌊x⌋₊, (x - (n : ℝ)) * ArithmeticFunction.vonMangoldt n : ℝ) : ℂ) - (((x ^ 2 / 2 : ℝ) : ℂ) - ∑ ρ ∈ Z, ((analyticOrderNatAt riemannZeta ρ : ℕ) : ℂ) * (x : ℂ) ^ (ρ + 1) / (ρ * (ρ + 1)))‖ ≤ 2 * x ^ 2 * (Real.log T + 5) / T + 4 * x",
+      "plain_statement": {
+        "en": "Unconditional first-integrated explicit formula for ψ₁(x) = ∑_{n ≤ x} (x - n) Λ(n): for x ≥ 2 and T ≥ 3, subtracting x²/2 and the truncated sum over ζ-zeros with |Im(ρ)| ≤ T leaves an explicit error at most 2x²(log T + 5)/T + 4x.",
+        "zh": "无条件一阶积分切比雪夫显式公式：对 x ≥ 2 与 T ≥ 3，ψ₁(x) = ∑_{n ≤ x} (x − n)Λ(n) 减去主项 x²/2 及 |Im(ρ)| ≤ T 的 ζ 非平凡零点截断和后，显式误差不超过 2x²(log T + 5)/T + 4x。"
+      },
+      "brief": {
+        "en": "Use the absolutely convergent Perron integral (1/(2πi)) ∫ (−ζ'/ζ)(s) x^(s+1)/(s(s+1)) ds, shift contours to Re(s) = -1/2 avoiding zeros via L-goldbach-zeta-zero-count-explicit, and bound the |Im(ρ)| > T tail cleanly without Gibbs oscillations. Verified community imports (≤ 16 transitive) are permitted.",
+        "zh": "使用绝对收敛的积分核 x^(s+1)/(s(s+1))（消除 Gibbs 跳跃），将积分围道左移至 Re(s) = −1/2，结合 L-goldbach-zeta-zero-count-explicit 控制 |Im(ρ)| > T 尾项。可引用全站已验证模块（≤ 16 个）。"
+      },
+      "program": "foundation",
+      "depends_on": [
+        "L-goldbach-zeta-zero-count-explicit"
+      ],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.ZetaTruncatedExplicitPsi",
+      "file": "lean/Conjectures/Goldbach/ZetaTruncatedExplicitPsi.lean",
+      "route_source": "explicit-sieve-analytic-inputs"
+    },
+    {
+      "id": "L-goldbach-zeta-zero-count-explicit",
+      "statement": "∀ T : ℝ, 3 ≤ T → ∃ Z : Finset ℂ, (∀ s : ℂ, s ∈ Z ↔ 0 < s.re ∧ s.re < 1 ∧ 0 < s.im ∧ s.im ≤ T ∧ riemannZeta s = 0) ∧ |((∑ ρ ∈ Z, analyticOrderNatAt riemannZeta ρ : ℕ) : ℝ) - ((T / (2 * Real.pi)) * Real.log (T / (2 * Real.pi * Real.exp 1)) + 7 / 8)| ≤ 0.2 * Real.log T + 5",
+      "plain_statement": {
+        "en": "Unconditional explicit Riemann–von Mangoldt formula for N(T): for T ≥ 3, the multiplicity-weighted count of nontrivial zeros ρ of ζ(s) with 0 < Im(ρ) ≤ T differs from (T/(2π)) log(T/(2πe)) + 7/8 by at most 0.2 log T + 5.",
+        "zh": "无条件显式 Riemann–von Mangoldt 零点计数公式：对 T ≥ 3，ζ(s) 在 0 < Im(ρ) ≤ T 内按重数计的非平凡零点总数 N(T) 与 (T/(2π)) log(T/(2πe)) + 7/8 之差至多为 0.2 log T + 5。"
+      },
+      "brief": {
+        "en": "Prove Backlund / Rosser's explicit argument-principle bound on N(T) via Stirling's formula for log Γ(s/2 + 1) and Jensen's inequality / Littlewood lemma for S(T) = π⁻¹ arg ζ(1/2 + iT). Contributors may import any verified module from https://jenkins-hook.goldbach.tech/verified-imports.json within the 16-module closure.",
+        "zh": "由辐角原理将 N(T) 拆为 Γ(s/2+1) 的 Stirling 显式估计与 S(T) = π⁻¹ arg ζ(1/2+iT) 的 Backlund 界，给出保守可控常数 0.2 log T + 5。可从 https://jenkins-hook.goldbach.tech/verified-imports.json 导入已验证社区模块（传递闭包 ≤ 16）。"
+      },
+      "program": "foundation",
+      "depends_on": [],
+      "imports": [],
+      "parallel": true,
+      "source": "https://doi.org/10.2307/2371491",
+      "track": "explicit-sieve-analytic-inputs",
+      "role": "lemma",
+      "module": "Conjectures.Goldbach.ZetaZeroCountExplicit",
+      "file": "lean/Conjectures/Goldbach/ZetaZeroCountExplicit.lean",
       "route_source": "explicit-sieve-analytic-inputs"
     },
     {
@@ -25311,8 +25668,8 @@
         "zh": "显式筛法与素数分布解析输入"
       },
       "description": {
-        "en": "Standalone explicit prime-power differences, Abel summation bridges (Chebyshev θ to π/li and reciprocal prime sums), primitive-character Euler-factor loss, compact smoothing-kernel Mellin bounds, and multiplicative large sieve lifting for explicit Goldbach and Chen-type sieves.",
-        "zh": "为显式哥德巴赫与陈氏筛提供通用的独立解析输入：显式素数幂差、切比雪夫函数到素数计数与素数倒数和的分部求和桥、本原特征欧拉因子损失、紧支撑光滑核 Mellin 衰减界，以及由加法大筛提升的乘性大筛不等式。"
+        "en": "Complete explicit analytic & sieve prerequisite suite (21 tasks): Schoenfeld RH prime-counting (L-A1..L-A6), Grenié–Molteni / Johnston–Starichkova GRH primes in arithmetic progressions (L-B1..L-B6), unconditional explicit Mertens reciprocal prime sums (L-C1..L-C5), Montgomery–Vaughan multiplicative large sieve (πN + Q² and sharp N + Q²), and unconditional Pan–Ding / Chen switched semiprime upper bounds.",
+        "zh": "面向显式哥德巴赫与陈氏筛的完整解析与筛法前置题组（共 21 题）：Schoenfeld RH 素数计数链（L-A1..L-A6）、Grenié–Molteni / Johnston–Starichkova GRH 算术级数素数链（L-B1..L-B6）、无条件显式 Mertens 素数倒数和链（L-C1..L-C5）、Montgomery–Vaughan 乘性大筛不等式（πN + Q² 与锐利 N + Q²），以及潘承洞–丁夏畦/陈景润无条件切换半素数经典上界。"
       },
       "feeds": [
         "rh-grh-windows",

@@ -1,0 +1,23 @@
+{
+  "id": "L-goldbach-rh-schoenfeld-pi-assembly",
+  "statement": "(∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N) (s : ℂ), 1 / 2 < s.re → (χ ≠ 1 ∨ s ≠ 1) → DirichletCharacter.LFunction χ s ≠ 0) → let li2 : ℝ := Real.eulerMascheroniConstant + Real.log (Real.log 2) + ∑' k : ℕ, (Real.log 2) ^ (k + 1) / (((k + 1 : ℕ) : ℝ) * ((k + 1).factorial : ℝ)); ∀ x : ℝ, 2657 ≤ x → |(((Finset.range (Nat.floor x + 1)).filter Nat.Prime).card : ℝ) - ((∫ t in (2 : ℝ)..x, 1 / Real.log t) + li2)| ≤ Real.sqrt x * Real.log x / (8 * Real.pi)",
+  "plain_statement": {
+    "en": "Schoenfeld (1976, Corollary 1) prime-counting bound under Mathlib-only GRH/RH: for all x ≥ 2657, |π(x) - (Li(x) + li(2))| ≤ √x log x / (8π), matching BuchstabSwitching.External.SchoenfeldPrimePremise canonicalLi2 verbatim.",
+    "zh": "纯 Mathlib GRH/RH 下的 Schoenfeld（1976，推论 1）素数计数总装界：对一切 x ≥ 2657，|π(x) − (Li(x) + li(2))| ≤ √x log x / (8π)，与 SchoenfeldPrimePremise canonicalLi2 接口严格一致。"
+  },
+  "brief": {
+    "en": "Instantiate N = 1 (L(s, 1) = ζ(s)) from the GRH hypothesis to invoke L-goldbach-rh-schoenfeld-psi, subtract prime powers via L-goldbach-explicit-psi-sub-theta, transfer |θ(t) - t| to |π(x) - Li(x) - li(2)| via L-goldbach-abel-theta-to-pi-li for large x, and check finite interval [2657, X₀]. Verified community imports (≤ 16 transitive) are allowed.",
+    "zh": "取 N = 1 从 GRH 前提得到 ζ(s) 的 RH 从而调用 L-goldbach-rh-schoenfeld-psi，再用 L-goldbach-explicit-psi-sub-theta 扣除素数幂并经 L-goldbach-abel-theta-to-pi-li 转至 π(x) − (Li(x)+li(2))，有限段 [2657, X₀] 核验后总装完成。"
+  },
+  "program": "grh",
+  "depends_on": [
+    "L-goldbach-explicit-psi-sub-theta",
+    "L-goldbach-abel-theta-to-pi-li",
+    "L-goldbach-rh-schoenfeld-psi"
+  ],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1090/S0025-5718-1976-0457374-X",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "conditional"
+}

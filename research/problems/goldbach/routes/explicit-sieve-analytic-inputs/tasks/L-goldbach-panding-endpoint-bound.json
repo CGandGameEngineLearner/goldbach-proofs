@@ -1,0 +1,19 @@
+{
+  "id": "L-goldbach-panding-endpoint-bound",
+  "statement": "letI := Classical.propDecidable; let C2 : ℝ := ∏' p : Nat.Primes, if 2 < p.1 then (1 - 1 / ((p.1 : ℝ) - 1) ^ 2) else 1; let Θ : ℕ → ℝ := fun N => (C2 * ∏ p ∈ N.primeFactors.filter (2 < ·), (((p : ℝ) - 1) / ((p : ℝ) - 2))) * (N : ℝ) / (Real.log (N : ℝ)) ^ 2; ∀ a ε η : ℝ, 3 / 2 < a → a < 2 → 0 < ε → ε < min (1 / 10) ((a - 1) / (3 * a)) → 0 < η → let τ := (a - 1) / a - ε; ∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N → Even N → (((Finset.Ico (2 : ℕ) N).filter (fun p : ℕ => p.Prime ∧ (1 - ε) * (N : ℝ) ≤ (p : ℝ) ∧ ∃ r q : ℕ, r.Prime ∧ q.Prime ∧ r < q ∧ (N : ℝ) ^ τ ≤ (r : ℝ) ∧ Nat.Coprime (r * q) N ∧ N - p = r * q)).card : ℝ) ≤ ((9 : ℝ) * ε * Real.log ((1 - τ) / τ) + η) * Θ N",
+  "plain_statement": {
+    "en": "Unconditional Pan–Ding (1975) WEH(1/2) switched-semiprime endpoint bound: for 3/2 < a < 2 and small ε > 0, primes p ≥ (1 - ε)N with N - p = r q (r < q primes, r ≥ N^τ, (rq, N) = 1) have count at most (9ε log((1-τ)/τ) + η) Θ(N) for large even N.",
+    "zh": "无条件潘承洞–丁夏畦（1975）WEH(1/2) 端点半素数上界：对 3/2 < a < 2 与充分小 ε > 0，满足 p ≥ (1−ε)N 且 N − p = rq（r < q 为素数、r ≥ N^τ、(rq, N) = 1）的表示数至多为 (9ε log((1−τ)/τ) + η) Θ(N)。"
+  },
+  "brief": {
+    "en": "Invert the role of p and rq using N - p ≤ εN and Bombieri–Vinogradov (or Brun–Titchmarsh upper sieve on p ≡ N (mod rq) for small-interval primes of length εN, combined with Buchstab/Selberg upper sieve on rq ∈ [N^τ, N^(1/2)]). Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "将 N − p = rq 且 N − p ≤ εN 的条件逆转为短区间 p ∈ [(1−ε)N, N) 内算术级数素数上界（由 WEH(1/2) / Bombieri–Vinogradov 与线性/Selberg 上界筛控制 rq），按 τ=(a−1)/a−ε 对齐即得常数 9ε。可导入已验证社区模块（≤ 16 个）。"
+  },
+  "program": "correlation",
+  "depends_on": [],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1007/BF02006964",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}

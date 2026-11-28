@@ -1,0 +1,19 @@
+{
+  "id": "L-goldbach-gm-dirichlet-zero-count",
+  "statement": "∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q), χ.IsPrimitive → ∀ T : ℝ, 2 ≤ T → ∃ Z : Finset ℂ, (∀ s : ℂ, s ∈ Z ↔ 0 < s.re ∧ s.re < 1 ∧ |s.im| ≤ T ∧ DirichletCharacter.LFunction χ s = 0) ∧ |((∑ ρ ∈ Z, analyticOrderNatAt (DirichletCharacter.LFunction χ) ρ : ℕ) : ℝ) - (T / Real.pi) * Real.log ((q : ℝ) * T / (2 * Real.pi * Real.exp 1))| ≤ 0.35 * Real.log ((q : ℝ) * T) + 6.5",
+  "plain_statement": {
+    "en": "Trudgian (2015, Theorem 1) explicit zero-counting formula N(T, χ) for primitive Dirichlet characters χ mod q: for T ≥ 2, the number of zeros with 0 < Re(ρ) < 1 and |Im(ρ)| ≤ T satisfies |N(T, χ) - (T/π) log(qT/(2πe))| ≤ 0.35 log(qT) + 6.5.",
+    "zh": "Trudgian（2015，定理 1）本原狄利克雷特征 L 函数显式零点计数：对任意本原特征 χ mod q 与 T ≥ 2，带状区域内 |Im(ρ)| ≤ T 的零点重数总和 N(T, χ) 满足 |N(T, χ) − (T/π) log(qT/(2πe))| ≤ 0.35 log(qT) + 6.5。"
+  },
+  "brief": {
+    "en": "Apply the argument principle to the completed L-function Λ(s, χ) on the symmetric rectangle [-η, 1 + η] × [-T, T], bounding Δ arg Γ((s + κ)/2) via Stirling's formula and S(T, χ) via Backlund/Trudgian's Jensen argument (0.317 log(qT) + 6.401 ≤ 0.35 log(qT) + 6.5). Verified community imports (≤ 16 transitive) are permitted.",
+    "zh": "对对称矩形框 [-η, 1+η] × [-T, T] 上完备化 L 函数 Λ(s, χ) 应用辐角原理（因非实特征不一定共轭对称，故取双侧 |Im(ρ)| ≤ T），用 Stirling 与 Trudgian 辐角界即得。允许导入已验证社区模块（≤ 16 个）。"
+  },
+  "program": "foundation",
+  "depends_on": [],
+  "imports": [],
+  "parallel": true,
+  "source": "https://doi.org/10.1090/S0025-5718-2014-02898-6",
+  "track": "explicit-sieve-analytic-inputs",
+  "role": "lemma"
+}
