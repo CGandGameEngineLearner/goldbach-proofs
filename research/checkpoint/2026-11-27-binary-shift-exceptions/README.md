@@ -10,6 +10,14 @@
 - 对每个固定的 $A>0$，当 $X$ 充分大时，$S(X)\le (2/\log 2)X(\log X)^{-A}$。证明把普通例外集的 $A+1$ 阶对数节省传给移位例外集。[已验收的 Estermann 界](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/3615)
 - 若 $E(Y)=O(Y^\alpha)$ 对某个 $\alpha<4/5$ 成立，则 $S(X)^5\le X^4$ 对充分大的 $X$ 成立。仓库中以 Dirichlet GRH 为前提的已验收估计取 $\varepsilon=1/4$ 就给出 $\alpha=3/4$。源码显式保留这个前提。[已验收的 GRH 条件界](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/82)
 
+对题单引用的 Pintz 定理，取 $Y=2X$ 可得 $E(2X)<(2X)^{18/25}$。对充分大的 $X$，每个允许的移位满足 $2^e\le\sqrt X$，所以失败的 $n-2^e$ 是 $[4,2X]$ 内的普通例外。固定指数 $e$ 和例外 $m$ 就唯一确定 $n=m+2^e$。于是
+
+$$
+S(X)\le \frac{2^{18/25}}{2\log 2}X^{18/25}\log X.
+$$
+
+由于 $4/5-18/25=2/25>0$，右边与 $X^{4/5}$ 的比值趋于零。取五次方即得原题。Lean 已核对从这个普通例外界到冻结声明的推导，普通例外界本身是这里援引的文献定理。[Pintz，定理 1](https://arxiv.org/html/1804.09084v2#S1)
+
 ## 主弧上的近 1 零点
 
 令 $q\le Q$ 遍历本原特征的导子。固定 $H,T\ge0$，对充分大的 $Q$ 以及所有 $X\ge Q$，把显式公式中满足 $\operatorname{Re}\rho\ge1-H/\log X$、$|\operatorname{Im}\rho|\le T$ 的零点放入一个表中，同一零点按其解析重数计入。表的总重数有一个只依赖 $H,T$ 的上界。Lean 声明是 `nearOne_zero_multiplicity_bounded`。证明使用两组有限 Selberg 筛权。不同本原特征的交叉项由周期性控制，同一特征的交叉项由虚部间距控制，一个小矩形内的重数由对数导数估计控制。[筛权的已验收实现](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/1734) · [Pintz 的零点密度方法](https://arxiv.org/abs/1804.05552)
@@ -22,7 +30,13 @@
 
 极点与单个零点的配对在每个正偶数上都有幂次节省。结合零点总重数界，在 $X/2\le n\le X$ 内，表内主弧贡献等于普通主项加上满足上述整除条件的零点对总和，误差至多为普通主项的任意给定比例。除至多 $O(X^{3/4})$ 个目标外，这些零点所涉及的导子共用一个小于 $X^{1/4}$ 的模数 $q$。在这个模数上按小导子特征分类，每个零点的权重为其重数乘以 $n^{\operatorname{Re}\rho-1}$。若各类的总权重平方之和至多为 $1-\eta$，则表内主弧部分的实部至少为普通主项的 $\eta/2$ 倍。Lean 声明是 `nearOne_related_formula` 和 `nearOne_class_energy_floor`。[Pintz 的零点分类，第 2 节](https://arxiv.org/html/1804.09084v2)
 
-要推出冻结声明 $S(X)^5\le X^4$，还须估计近 1 矩形以外的贡献，并为实际零点的分类权重证明上述严格小于 1 的界。源码在 `binaryShiftExceptionUnion_of_zeroCorrections` 中保留了足以推出原题的条件。另一条计数归约可直接使用 Pintz 发表的普通例外集 $Y^{18/25}$ 界，项目允许导入的 Lean 依赖还缺这条无条件界。[Pintz 的普通例外集定理](https://arxiv.org/abs/1804.09084)
+## 导子、筛权与例外指数
+
+`primitive_zero_prefix_square_root` 用 Pólya–Vinogradov 特征和界缩短了检测零点所需的有限求和区间。给定 $H,T,a\ge 0$ 和任意 $\delta,\eta>0$，当 $VW\le Q^a$、$Y\ge Q^{1/2+a+\delta}$ 且 $Q$ 充分大时，每个导子不超过 $Q$ 的本原非主特征在所选零点处的加权前缀绝对值至多为 $\eta$。`primitive_nearOne_quantitative` 给出间隔零点族关于条带宽度的显式指数上界。同一小导子特征类中，`class_sieve_correlation` 把不同本原特征之间的筛权内积归结到导子整除固定整数 $K$ 的相关特征。[已验收的 Pólya–Vinogradov 估计](https://github.com/CGandGameEngineLearner/goldbach-proofs/pull/3771)
+
+`nearOne_most_targets` 证明，对任意固定矩形 $H,T$ 和任意相对误差 $\varepsilon>0$，除 $O_{H,T,\varepsilon}(X^{1-a})$ 个目标外，矩形内实际零点与极点的主弧贡献和普通主项的差至多为普通主项的 $\varepsilon$ 倍，其中 $a>0$。`nearOne_class_energy_floor_at` 可将共同模数截在 $X^\theta$，按此筛掉的目标数至多为 $O(X^{1-\theta})$。取 $\theta=5/24$，得到 $19/24<4/5$。此时 `nearOne_energy_exponential_weight` 将分类权重控制在解析重数乘 $e^{-(24/5)(1-\beta)\log q}$ 的任意小相对损失内。Zhao 的定理给出了这类权重的平方和上界。[Zhao，定理 1.2](https://arxiv.org/html/2511.05631v1)
+
+要在 Lean 中完成冻结声明，还须估计近 1 矩形以外的贡献，并为实际零点的分类权重证明上述严格小于 1 的界。`binaryShiftExceptionUnion_of_zeroCorrections` 给出了足以推出原题的条件。通过普通例外集计数的另一条路线，则需要在项目允许导入的依赖中建立 Pintz 的无条件幂次界。[Pintz 的普通例外集定理](https://arxiv.org/abs/1804.09084)
 
 ## 复现
 
@@ -34,11 +48,12 @@ lake exe cache get
 lake build +Conjectures.Goldbach.B13BilateralVaughanReduction:olean \
   +Conjectures.Goldbach.EstermannAlmostAllPolylog:olean \
   +Conjectures.Goldbach.MaskedPrimeCutoffLoss:olean \
+  +Conjectures.Goldbach.RoughFifthMass:olean \
   +PEqualNP.Outside.L_goldbach_central_positive_density:olean \
   +PEqualNP.Outside.L_goldbach_continuous_parseval:olean \
   +PEqualNP.Outside.L_goldbach_frontier_no_siegel_zero:olean \
   +PEqualNP.Outside.L_goldbach_frontier_uncond_deep_second_moment:olean \
   +PEqualNP.Outside.L_goldbach_grh_goldbach_exception_density:olean
-lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -DmaxHeartbeats=4000000 \
+lake env lean -j2 -DautoImplicit=false -DrelaxedAutoImplicit=false -DmaxHeartbeats=4000000 \
   ../research/checkpoint/2026-11-27-binary-shift-exceptions/BinaryShiftExceptionUnion.lean
 ```
