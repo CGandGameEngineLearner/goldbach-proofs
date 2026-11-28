@@ -2809,6 +2809,42 @@ lemma skirt_negMass_le_decay (s : Finset ℕ) (n : ℕ)
       (by positivity : 0 ≤ ((Nat.totient q : ℕ) : ℝ) ^ 2))
     (by positivity : 0 ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ))
 
+/-- The filtered arithmetic reduction: the negative part of the skirt mass is
+bounded by the decay bound applied **on the negative set only**.  Unlike the
+unfiltered `skirt_negMass_le_decay`, this hypothesis stays true for primorial
+`n` (where the positive `q ∣ n` terms make the full sum linear in `Q₁`). -/
+lemma skirt_negMass_le_decay_filtered (s : Finset ℕ) (n : ℕ)
+    (hq : ∀ q ∈ s, 0 < q) (hn : 0 < n)
+    (hr : ∀ q ∈ s, (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) ≤ 1/2) :
+    ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+        ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * (deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≤ ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+        ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * ((q:ℝ)*(n:ℝ)/(2*(Qf n:ℝ)) / ((Nat.totient q : ℕ) : ℝ) ^ 2) := by
+  refine Finset.sum_le_sum fun q hq' => ?_
+  have hq0 : 0 < q := hq q ((Finset.mem_filter.mp hq').1)
+  have hrq := hr q ((Finset.mem_filter.mp hq').1)
+  exact mul_le_mul_of_nonneg_left
+    (div_le_div_of_nonneg_right (deltaJ_le_decay n q hn hq0 hrq)
+      (by positivity : 0 ≤ ((Nat.totient q : ℕ) : ℝ) ^ 2))
+    (by positivity : 0 ≤ ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ))
+
+/-- The sharp conditional skirt floor: if the **negative-set** arithmetic sum
+`Σ_{q∈s, c_q(n)<0} φ((q,n))·qn/(2Q·φ(q)²)` is at most `εn`, then the skirt
+model sum is at least `−εn`.  This is the primorial-compatible interface. -/
+lemma model_sum_floor_of_neg_arith_bound (s : Finset ℕ) (n : ℕ) (ε : ℝ)
+    (hq : ∀ q ∈ s, 0 < q) (hsq : ∀ q ∈ s, Squarefree q) (hn : 0 < n)
+    (hr : ∀ q ∈ s, (Qf n:ℝ)*(n:ℝ)^(1/6:ℝ)/((q:ℝ)*(n:ℝ)) ≤ 1/2)
+    (hbound : ∑ q ∈ s.filter (fun q => (csum q n).re < 0),
+        ((Nat.totient (Nat.gcd q n) : ℕ) : ℝ)
+          * ((q:ℝ)*(n:ℝ)/(2*(Qf n:ℝ)) / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≤ ε * (n : ℝ)) :
+    ∑ q ∈ s, (csum q n).re * (deltaJ n q / ((Nat.totient q : ℕ) : ℝ) ^ 2)
+      ≥ -(ε * (n : ℝ)) :=
+  model_sum_floor_deltaJ s n ε hq hsq
+    ((skirt_negMass_le_decay_filtered s n hq hn hr).trans hbound)
+
 /-- The negative part of the skirt mass is at most `(n+1)` times the purely
 arithmetic sum `Σ_{q∈s} φ((q,n))/φ(q)²` (card bound `ΔJ(q) ≤ n+1`).  For the
 floor it suffices that the filtered version of this arithmetic sum be `o(1)`. -/
