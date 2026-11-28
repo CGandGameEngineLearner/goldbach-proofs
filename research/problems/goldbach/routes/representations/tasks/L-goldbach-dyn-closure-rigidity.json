@@ -17,7 +17,9 @@
   ],
   "module": "Conjectures.Goldbach.DynClosureRigidity",
   "file": "lean/Conjectures/Goldbach/DynClosureRigidity.lean",
-  "imports": [],
+  "imports": [
+    "Conjectures.Goldbach.DynWindowTrap"
+  ],
   "track": "representations",
   "role": "lemma"
 }

@@ -23186,7 +23186,9 @@
       ],
       "module": "Conjectures.Goldbach.DynClosureRigidity",
       "file": "lean/Conjectures/Goldbach/DynClosureRigidity.lean",
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.DynWindowTrap"
+      ],
       "track": "representations",
       "role": "lemma",
       "route_source": "representations"
@@ -23526,7 +23528,9 @@
       ],
       "module": "Conjectures.Goldbach.DynSurplusCertificate",
       "file": "lean/Conjectures/Goldbach/DynSurplusCertificate.lean",
-      "imports": [],
+      "imports": [
+        "Conjectures.Goldbach.DynCarrySplit"
+      ],
       "track": "representations",
       "role": "lemma",
       "route_source": "representations"
