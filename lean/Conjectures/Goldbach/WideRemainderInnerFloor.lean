@@ -508,5 +508,21 @@ lemma JG_partition (n : ℕ)
   rw [h2] at h1
   linarith
 
+/-- **Route checklist.** The frozen floor for the target band follows from the four
+route bounds: the major arcs capture the weighted count up to `εn/2`, and each of
+the low skirt, the outer skirt and the deep minor arcs contributes at most `εn/6`.
+Every route sub-task supplies exactly one of these hypotheses. -/
+theorem JG_target_floor (n : ℕ) {ε : ℝ} (hε : 0 < ε)
+    (hsub1 : arcsRegion n ⊆ wideArcsRegion n)
+    (hsub2 : lowWideArcsRegion n ⊆ wideArcsRegion n)
+    (hsub3 : innerRegion n ⊆ wideArcsRegion n)
+    (harcs : JG n (arcsRegion n) ≤ JG n Set.univ + ε / 2 * n)
+    (hlow : JG n (lowPartRegion n) ≤ ε / 6 * n)
+    (houter : JG n (remainderRegion n \ innerRegion n) ≤ ε / 6 * n)
+    (hdeep : JG n (Set.univ \ wideArcsRegion n) ≤ ε / 6 * n) :
+    -(ε * n) ≤ JG n (remainderRegion n ∩ innerRegion n) := by
+  have hpart := JG_partition n hsub1 hsub2 hsub3
+  linarith
+
 theorem WideRemainderInnerFloor : let w := fun k : ℕ => if Nat.Prime k then Real.log (k:ℝ) else 0; let E := fun x : ℝ => Complex.exp (((2*Real.pi*x:ℝ):ℂ)*Complex.I); let S := fun (n : ℕ) (u : ℕ → ℝ) (t : ℝ) => Finset.sum (Finset.range (n+1)) (fun k => (u k:ℂ)*E ((k:ℝ)*t)); let Q := fun n : ℕ => (Nat.log 2 (n+2))^2; let arcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n:ℝ)/((q:ℝ)*(n:ℝ))}; let f := fun (n : ℕ) (t : ℝ) => (S n w t)^2*E (-(n:ℝ)*t); let Q₁ := fun n : ℕ => ⌊(n:ℝ)^(1/3:ℝ)⌋₊; let H := fun n : ℕ => 256 * Q₁ n * Q n; let wideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowWideArcs := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (H n:ℝ)/((q:ℝ)*(n:ℝ))}; let lowPart := fun n : ℕ => lowWideArcs n \ arcs n; let remainder := fun n : ℕ => (wideArcs n \ arcs n) \ lowPart n; let inner := fun n : ℕ => {t : ℝ | ∃ q a : ℕ, 1≤q ∧ q≤Q₁ n ∧ a≤q ∧ Nat.Coprime a q ∧ |t-(a:ℝ)/(q:ℝ)| ≤ (Q n : ℝ) * (n : ℝ)^(1/6 : ℝ) / ((q:ℝ)*(n:ℝ))}; let J := fun (n : ℕ) (A : Set ℝ) => (intervalIntegral (fun t => A.indicator (f n) t) (0:ℝ) 1 MeasureTheory.volume).re; let floor := fun (A : ℕ → Set ℝ) => ∀ e : ℝ, 0 < e → ∃ N : ℕ, ∀ n : ℕ, N ≤ n → Even n → -(e * (n:ℝ)) ≤ J n (A n); floor (fun n => remainder n ∩ inner n) := by
   sorry
