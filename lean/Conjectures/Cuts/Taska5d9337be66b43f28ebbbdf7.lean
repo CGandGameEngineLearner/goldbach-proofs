@@ -25,7 +25,7 @@ private lemma central_theta_lower (ε : ℝ) (he : 0 < ε) :
 
 private lemma central_weight_lower (n : ℕ) (hn : 9 ≤ n) :
     Chebyshev.theta (2*(n:ℝ)/3) - Chebyshev.theta ((n:ℝ)/3) ≤
-      ∑ p ∈ ((Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ p%2=1)),
+      ∑ p ∈ ((Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ Nat.mod p 2 = 1)),
         (if Nat.Prime p then Real.log (p:ℝ) else 0) := by
   have hf : ⌊(n:ℝ)/3⌋₊ ≤ ⌊2*(n:ℝ)/3⌋₊ :=
     Nat.floor_mono (by have := Nat.cast_nonneg (α := ℝ) n; linarith)
@@ -48,9 +48,9 @@ private lemma central_weight_lower (n : ℕ) (hn : 9 ≤ n) :
     exact Real.log_nonneg (by exact_mod_cast (Finset.mem_filter.mp hp).2.one_le)
 
 private lemma central_card_upper (n : ℕ) :
-    (((Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ p%2=1)).card : ℝ)
+    (((Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ Nat.mod p 2 = 1)).card : ℝ)
       ≤ (n:ℝ)/6+2 := by
-  let s := (Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ p%2=1)
+  let s := (Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ Nat.mod p 2 = 1)
   change (s.card : ℝ) ≤ _
   have hcard : s.card ≤ (Finset.Icc (n/6) (n/3)).card := by
     apply Finset.card_le_card_of_injOn (fun p : ℕ => p/2)
@@ -70,10 +70,10 @@ private lemma central_card_upper (n : ℕ) :
   linarith
 
 private lemma central_reflection (n : ℕ) (hn : Even n) (w : ℕ → ℝ) :
-    let A := (Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ p%2=1)
+    let A := (Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ Nat.mod p 2 = 1)
     ∑ p ∈ A, w (n-p) = ∑ p ∈ A, w p := by
   intro A
-  have mem (p : ℕ) : p ∈ A ↔ p < n+1 ∧ n ≤ 3*p ∧ 3*p ≤ 2*n ∧ p%2=1 := by
+  have mem (p : ℕ) : p ∈ A ↔ p < n+1 ∧ n ≤ 3*p ∧ 3*p ≤ 2*n ∧ Nat.mod p 2 = 1 := by
     simp [A]
   obtain ⟨m, hm⟩ := hn
   have maps : ∀ p ∈ A, n-p ∈ A := by
@@ -89,7 +89,7 @@ private lemma central_reflection (n : ℕ) (hn : Even n) (w : ℕ → ℝ) :
 
 private lemma central_finish (ε : ℝ) (n : ℕ) (hn : Even n) (w : ℕ → ℝ)
     (hbudget : 16 ≤ ε * (n:ℝ)) :
-    let A := (Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ p%2=1)
+    let A := (Finset.range (n+1)).filter (fun p => n ≤ 3*p ∧ 3*p ≤ 2*n ∧ Nat.mod p 2 = 1)
     (1/3-ε/8)*(n:ℝ) ≤ ∑ p ∈ A, w p →
     (A.card : ℝ) ≤ (n:ℝ)/6+2 →
     (2/3-ε)*(n:ℝ) ≤ ∑ p ∈ A, (2*w p + 2*w (n-p) - 4) := by
